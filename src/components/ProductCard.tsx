@@ -57,7 +57,7 @@ export function ProductCard({ product }: { product: Product }) {
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
         <div className="mt-auto flex items-end justify-between pt-3">
           <div>
-            <p className="text-lg font-semibold tabular-nums">€{product.price.toFixed(2)}</p>
+            <p className="text-lg font-semibold tabular-nums mx-0 my-0">€{product.price.toFixed(2)}</p>
             <p className="text-[10px] text-muted-foreground">{t.moq}</p>
           </div>
 
