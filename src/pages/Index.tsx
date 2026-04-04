@@ -6,7 +6,6 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { useProducts } from '@/hooks/useProducts';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
-import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
