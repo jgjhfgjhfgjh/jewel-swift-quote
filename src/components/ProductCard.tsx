@@ -38,7 +38,7 @@ export function ProductCard({ product }: { product: Product }) {
             src={product.img}
             alt={product.name}
             loading="lazy"
-            className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105 bg-neutral-50 font-mono border-0 border-slate-50 border-none"
+            className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105 font-mono border-0 border-slate-50 border-none bg-white"
             onError={() => setImgError(true)}
           />
         ) : (
