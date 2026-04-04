@@ -72,11 +72,14 @@ export function CartDrawer() {
                           </div>
                           <div className="text-right">
                             {item.discountPercent > 0 && (
-                              <p className="text-[10px] text-destructive line-through">€{(item.product.price * item.quantity).toFixed(2)}</p>
+                              <div className="flex items-center justify-end gap-1.5">
+                                <span className="text-xs text-muted-foreground line-through tabular-nums">€{item.product.price.toFixed(2)}</span>
+                                <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-semibold text-destructive">-{item.discountPercent}%</span>
+                              </div>
                             )}
-                            <p className="text-sm font-semibold tabular-nums">€{(discounted * item.quantity).toFixed(2)}</p>
-                            {item.discountPercent > 0 && (
-                              <p className="text-[10px] text-primary">-{item.discountPercent}%</p>
+                            <p className="text-sm font-bold tabular-nums">€{discounted.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/ks</span></p>
+                            {item.quantity > 1 && (
+                              <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{(discounted * item.quantity).toFixed(2)}</p>
                             )}
                           </div>
                         </div>
