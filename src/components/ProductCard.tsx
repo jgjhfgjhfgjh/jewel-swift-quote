@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-md">
+    <div className="group flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <div className="relative aspect-square overflow-hidden bg-muted">
         {!imgError ? (
           <img
