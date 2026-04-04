@@ -56,7 +56,7 @@ export function CartDrawer() {
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
                       {/* Image */}
                       <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
-                        <img src={item.product.img} alt="" className="h-full w-full object-contain p-1" />
+                        <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
                       </div>
                       {/* Info */}
                       <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
