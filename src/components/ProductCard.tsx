@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Plus, Minus, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useStore } from '@/lib/store';
@@ -7,9 +7,28 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, addToCart } = useStore();
+  const { lang, cart, addToCart, updateQuantity, removeFromCart } = useStore();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
+
+  const cartItem = cart.find((i) => i.product.id === product.id);
+  const qty = cartItem?.quantity ?? 0;
+
+  const handleAdd = () => {
+    addToCart(product);
+  };
+
+  const handleIncrement = () => {
+    updateQuantity(product.id, qty + 1);
+  };
+
+  const handleDecrement = () => {
+    if (qty <= 1) {
+      removeFromCart(product.id);
+    } else {
+      updateQuantity(product.id, qty - 1);
+    }
+  };
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-md">
@@ -41,14 +60,36 @@ export function ProductCard({ product }: { product: Product }) {
             <p className="text-lg font-semibold tabular-nums">€{product.price.toFixed(2)}</p>
             <p className="text-[10px] text-muted-foreground">{t.moq}</p>
           </div>
-          <Button
-            size="sm"
-            className="h-8 gap-1 bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={() => addToCart(product)}
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline text-xs">{t.addToCart}</span>
-          </Button>
+
+          {qty === 0 ? (
+            <Button
+              size="sm"
+              className="h-8 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+              onClick={handleAdd}
+            >
+              <ShoppingCart className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline text-xs">{t.addToCart}</span>
+              <Plus className="h-3 w-3 sm:hidden" />
+            </Button>
+          ) : (
+            <div className="flex items-center gap-1.5 transition-all duration-200 animate-in fade-in slide-in-from-right-2">
+              <button
+                onClick={handleDecrement}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <span className="min-w-[1.5rem] text-center text-sm font-semibold tabular-nums">
+                {qty}
+              </span>
+              <button
+                onClick={handleIncrement}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
