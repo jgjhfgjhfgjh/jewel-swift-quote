@@ -49,44 +49,48 @@ export function CartDrawer() {
         ) : (
           <>
             <ScrollArea className="flex-1 scrollbar-thin">
-              <div className="divide-y p-4">
+              <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
                   const discounted = item.product.price * (1 - item.discountPercent / 100);
                   return (
-                    <div key={item.product.id} className="flex gap-3 py-3">
-                      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
+                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
+                      {/* Image */}
+                      <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
                         <img src={item.product.img} alt="" className="h-full w-full object-contain p-1" />
                       </div>
-                      <div className="flex flex-1 flex-col min-w-0">
+                      {/* Info */}
+                      <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
-                        <div className="mt-auto flex items-center justify-between">
-                          <div className="flex items-center gap-1">
-                            <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-8 text-center text-sm tabular-nums">{item.quantity}</span>
-                            <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                          <div className="text-right">
-                            {item.discountPercent > 0 && (
-                              <div className="flex items-center justify-end gap-1.5">
-                                <span className="text-xs text-muted-foreground line-through tabular-nums">€{item.product.price.toFixed(2)}</span>
-                                <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-semibold text-destructive">-{item.discountPercent}%</span>
-                              </div>
-                            )}
-                            <p className="text-sm font-bold tabular-nums">€{discounted.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/ks</span></p>
-                            {item.quantity > 1 && (
-                              <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{(discounted * item.quantity).toFixed(2)}</p>
-                            )}
-                          </div>
-                        </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-6 w-6 self-start text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
+                      {/* Delete */}
+                      <Button variant="ghost" size="icon" className="h-6 w-6 flex-shrink-0 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
+                      {/* Quantity + Price row - full width on mobile */}
+                      <div className="flex w-full items-center justify-between gap-2 pl-0 sm:pl-[calc(3.5rem+0.75rem)]">
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="w-7 text-center text-sm tabular-nums">{item.quantity}</span>
+                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          {item.discountPercent > 0 && (
+                            <div className="flex items-center justify-end gap-1.5">
+                              <span className="text-xs text-muted-foreground line-through tabular-nums">€{item.product.price.toFixed(2)}</span>
+                              <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-semibold text-destructive">-{item.discountPercent}%</span>
+                            </div>
+                          )}
+                          <p className="text-sm font-bold tabular-nums">€{discounted.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/ks</span></p>
+                          {item.quantity > 1 && (
+                            <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{(discounted * item.quantity).toFixed(2)}</p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
