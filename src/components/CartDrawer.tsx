@@ -74,7 +74,7 @@ export function CartDrawer() {
                             <Minus className="h-3 w-3" />
                           </Button>
                           <span className="w-7 text-center text-sm tabular-nums">{item.quantity}</span>
-                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
+                          <Button variant="outline" size="icon" className="h-6 w-6" disabled={item.quantity >= item.product.stock} onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
                             <Plus className="h-3 w-3" />
                           </Button>
                         </div>

@@ -41,7 +41,9 @@ export const useStore = create<AppState>((set, get) => ({
   }),
   removeFromCart: (id) => set((s) => ({ cart: s.cart.filter((i) => i.product.id !== id) })),
   updateQuantity: (id, qty) => set((s) => ({
-    cart: qty <= 0 ? s.cart.filter((i) => i.product.id !== id) : s.cart.map((i) => i.product.id === id ? { ...i, quantity: qty } : i),
+    cart: qty <= 0
+      ? s.cart.filter((i) => i.product.id !== id)
+      : s.cart.map((i) => i.product.id === id ? { ...i, quantity: Math.min(qty, i.product.stock) } : i),
   })),
   clearCart: () => set({ cart: [] }),
 
