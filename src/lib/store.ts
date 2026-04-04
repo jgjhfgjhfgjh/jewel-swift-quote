@@ -6,7 +6,7 @@ interface AppState {
   lang: Lang;
   setLang: (l: Lang) => void;
   isAdmin: boolean;
-  toggleAdmin: () => void;
+  setAdmin: (v: boolean) => void;
 
   cart: CartItem[];
   addToCart: (product: Product) => void;
