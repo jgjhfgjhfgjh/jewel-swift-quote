@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,10 +55,7 @@ export function Navbar() {
           </Button>
 
           <h1 className="font-display text-xl font-semibold tracking-tight">
-            <span className="text-primary">swelt.</span>
-            <span className="ml-2 text-xs font-sans font-medium uppercase tracking-widest text-muted-foreground">
-              {t.wholesale}
-            </span>
+            <img src={logo} alt="swelt." className="h-8 object-contain" />
           </h1>
 
           <div className="flex-1" />
