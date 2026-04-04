@@ -133,7 +133,7 @@ export function CartDrawer() {
                 </div>
                 {brandDiscounts.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
-                    {brandDiscounts.map((d) => (
+                {brandDiscounts.map((d: { brand: string; percent: number }) => (
                       <button
                         key={d.brand}
                         onClick={() => removeBrandDiscount(d.brand)}
