@@ -65,6 +65,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     applyDiscount: 'Apply Discount',
     discount: 'Discount',
     generateQuote: 'Generate B2B Quote',
+    soldOut: 'Sold Out',
+    stockCount: 'In Stock',
     stockOnly: 'In Stock Only',
     wholesale: 'Wholesale',
     catalog: 'Catalog',
