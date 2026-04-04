@@ -10,8 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
-  const { lang, isAdmin, toggleAdmin } = useStore();
-  const t = translations[lang];
+  const { lang } = useStore();
 
   const [search, setSearch] = useState('');
   const [selectedBrand, setSelectedBrand] = useState('');
