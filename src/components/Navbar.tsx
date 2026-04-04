@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,8 +14,8 @@ import {
 } from '@/components/ui/dialog';
 
 // Hardcoded credentials — ready to swap for Supabase Auth
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'password123';
+const ADMIN_USERNAME = 'michal';
+const ADMIN_PASSWORD = '1234';
 
 export function Navbar() {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin } = useStore();
@@ -34,8 +35,9 @@ export function Navbar() {
       setUsername('');
       setPassword('');
       setError('');
+      toast.success('Admin access granted');
     } else {
-      setError(t.loginError);
+      setError('Nesprávné jméno nebo heslo');
     }
   };
 
