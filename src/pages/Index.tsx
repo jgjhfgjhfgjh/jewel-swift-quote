@@ -62,14 +62,6 @@ const Index = () => {
         />
       </div>
       <CartDrawer />
-
-      {/* Admin toggle in footer */}
-      <footer className="border-t px-4 py-3">
-        <div className="flex items-center justify-end gap-2">
-          <span className="text-[10px] text-muted-foreground">{t.adminMode}</span>
-          <Switch checked={isAdmin} onCheckedChange={toggleAdmin} className="scale-75" />
-        </div>
-      </footer>
     </div>
   );
 };
