@@ -28,7 +28,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         {product.inStock && (
-          <Badge className="absolute left-2 top-2 bg-emerald-500/90 text-white text-[10px] font-medium">
+          <Badge className="absolute left-2 top-2 bg-primary text-primary-foreground text-[10px] font-medium">
             {t.inStock}
           </Badge>
         )}

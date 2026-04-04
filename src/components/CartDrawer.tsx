@@ -76,7 +76,7 @@ export function CartDrawer() {
                             )}
                             <p className="text-sm font-semibold tabular-nums">€{(discounted * item.quantity).toFixed(2)}</p>
                             {item.discountPercent > 0 && (
-                              <p className="text-[10px] text-emerald-600">-{item.discountPercent}%</p>
+                              <p className="text-[10px] text-primary">-{item.discountPercent}%</p>
                             )}
                           </div>
                         </div>
