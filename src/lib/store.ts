@@ -6,7 +6,7 @@ interface AppState {
   lang: Lang;
   setLang: (l: Lang) => void;
   isAdmin: boolean;
-  toggleAdmin: () => void;
+  setAdmin: (v: boolean) => void;
 
   cart: CartItem[];
   addToCart: (product: Product) => void;
@@ -28,7 +28,7 @@ export const useStore = create<AppState>((set, get) => ({
   lang: 'cs',
   setLang: (lang) => set({ lang }),
   isAdmin: false,
-  toggleAdmin: () => set((s) => ({ isAdmin: !s.isAdmin })),
+  setAdmin: (v) => set({ isAdmin: v }),
 
   cart: [],
   addToCart: (product) => set((s) => {
