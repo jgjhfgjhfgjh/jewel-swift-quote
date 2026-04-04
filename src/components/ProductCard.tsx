@@ -55,7 +55,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-1 flex-col p-3">
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
-        <div className="mt-auto flex items-end justify-between pt-3">
+        <div className="mt-auto flex flex-col gap-2 pt-3">
           <div>
             <p className="text-lg font-semibold tabular-nums mx-0 my-0">€{product.price.toFixed(2)}</p>
             <p className="text-[10px] text-muted-foreground">{t.moq}</p>
@@ -64,18 +64,17 @@ export function ProductCard({ product }: { product: Product }) {
           {qty === 0 ? (
             <Button
               size="sm"
-              className="h-8 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+              className="h-8 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
               onClick={handleAdd}
             >
               <ShoppingCart className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline text-xs">{t.addToCart}</span>
-              <Plus className="h-3 w-3 sm:hidden" />
+              <span className="text-xs">{t.addToCart}</span>
             </Button>
           ) : (
-            <div className="flex items-center gap-1.5 transition-all duration-200 animate-in fade-in slide-in-from-right-2">
+            <div className="flex w-full items-center justify-center gap-2 transition-all duration-200 animate-in fade-in">
               <button
                 onClick={handleDecrement}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <Minus className="h-3.5 w-3.5" />
               </button>
@@ -84,7 +83,7 @@ export function ProductCard({ product }: { product: Product }) {
               </span>
               <button
                 onClick={handleIncrement}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <Plus className="h-3.5 w-3.5" />
               </button>
