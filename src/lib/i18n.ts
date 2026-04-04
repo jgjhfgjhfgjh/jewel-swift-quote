@@ -101,6 +101,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     applyDiscount: 'Nota afslátt',
     discount: 'Afsláttur',
     generateQuote: 'Búa til B2B tilboð',
+    soldOut: 'Uppselt',
+    stockCount: 'Til á lager',
     stockOnly: 'Aðeins á lager',
     wholesale: 'Heildsala',
     catalog: 'Vörulisti',
