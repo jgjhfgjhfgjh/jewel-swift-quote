@@ -14,8 +14,8 @@ import {
 } from '@/components/ui/dialog';
 
 // Hardcoded credentials — ready to swap for Supabase Auth
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'password123';
+const ADMIN_USERNAME = 'michal';
+const ADMIN_PASSWORD = '1234';
 
 export function Navbar() {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin } = useStore();
