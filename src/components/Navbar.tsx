@@ -35,8 +35,9 @@ export function Navbar() {
       setUsername('');
       setPassword('');
       setError('');
+      toast.success('Admin access granted');
     } else {
-      setError(t.loginError);
+      setError('Nesprávné jméno nebo heslo');
     }
   };
 
