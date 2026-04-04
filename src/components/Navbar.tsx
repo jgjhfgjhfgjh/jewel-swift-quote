@@ -55,7 +55,7 @@ export function Navbar() {
           </Button>
 
           <h1 className="font-display text-xl font-semibold tracking-tight">
-            <img src={logo} alt="swelt." className="h-12 object-contain" />
+            <img src={logo} alt="swelt." className="h-12 object-contain px-0 py-[10px]" />
           </h1>
 
           <div className="flex-1" />
