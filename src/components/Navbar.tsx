@@ -49,13 +49,13 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-        <div className="flex h-14 items-center gap-3 px-4">
+        <div className="h-14 gap-3 px-4 items-center justify-start flex flex-row">
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
 
           <h1 className="font-display text-xl font-semibold tracking-tight">
-            <img src={logo} alt="swelt." className="h-12 object-contain py-[10px] px-[20px] -my-[28px] -mx-[30px]" />
+            <img src={logo} alt="swelt." className="h-12 object-contain mx-0 my-0 py-0 px-0" />
           </h1>
 
           <div className="flex-1" />
