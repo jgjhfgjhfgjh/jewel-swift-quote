@@ -29,6 +29,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     applyDiscount: 'Použít slevu',
     discount: 'Sleva',
     generateQuote: 'Generovat B2B nabídku',
+    soldOut: 'Vyprodáno',
+    stockCount: 'Skladem',
     stockOnly: 'Pouze skladem',
     wholesale: 'Velkoobchod',
     catalog: 'Katalog',
