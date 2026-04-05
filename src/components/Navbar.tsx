@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
 import logo from '@/assets/logo.png';
