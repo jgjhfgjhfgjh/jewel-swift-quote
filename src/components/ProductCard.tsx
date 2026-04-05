@@ -49,7 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         {product.inStock && !isOutOfStock && (
-          <Badge className="absolute left-2 top-2 bg-primary text-primary-foreground text-[10px] font-medium">
+          <Badge className="absolute left-2 top-2 text-primary-foreground text-[10px] font-medium bg-green-600">
             {t.inStock}
           </Badge>
         )}
