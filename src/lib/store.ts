@@ -7,6 +7,8 @@ interface AppState {
   setLang: (l: Lang) => void;
   isAdmin: boolean;
   setAdmin: (v: boolean) => void;
+  isAuthenticated: boolean;
+  setAuthenticated: (v: boolean) => void;
 
   cart: CartItem[];
   addToCart: (product: Product) => void;
