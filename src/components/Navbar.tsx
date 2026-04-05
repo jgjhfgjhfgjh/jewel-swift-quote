@@ -46,6 +46,8 @@ export function Navbar() {
 
   const handleLogout = () => {
     setAdmin(false);
+    setAuthenticated(false);
+    navigate('/');
   };
 
   return (
