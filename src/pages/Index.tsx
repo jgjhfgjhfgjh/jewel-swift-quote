@@ -40,6 +40,7 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
+      <div className="h-14" />
       <div className="flex flex-1 overflow-hidden">
         <FilterSidebar
           manufacturers={manufacturers}
