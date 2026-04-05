@@ -61,7 +61,7 @@ export function FilterSidebar({
           <div key={tier.value} className="flex items-center justify-between">
             <span className="text-sm font-medium">{tier.label}</span>
             <Switch
-              checked={minDiscount >= tier.value}
+              checked={minDiscount === tier.value}
               onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
             />
           </div>
