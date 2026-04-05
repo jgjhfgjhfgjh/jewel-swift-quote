@@ -7,8 +7,6 @@ interface AppState {
   setLang: (l: Lang) => void;
   isAdmin: boolean;
   setAdmin: (v: boolean) => void;
-  isAuthenticated: boolean;
-  setAuthenticated: (v: boolean) => void;
 
   cart: CartItem[];
   addToCart: (product: Product) => void;
@@ -31,8 +29,6 @@ export const useStore = create<AppState>((set, get) => ({
   setLang: (lang) => set({ lang }),
   isAdmin: false,
   setAdmin: (v) => set({ isAdmin: v }),
-  isAuthenticated: false,
-  setAuthenticated: (v) => set({ isAuthenticated: v }),
 
   cart: [],
   addToCart: (product) => set((s) => {

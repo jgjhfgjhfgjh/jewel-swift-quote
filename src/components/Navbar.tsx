@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
 import logo from '@/assets/logo.png';
@@ -20,8 +19,7 @@ const ADMIN_USERNAME = 'michal';
 const ADMIN_PASSWORD = '1234';
 
 export function Navbar() {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin, setAuthenticated } = useStore();
-  const navigate = useNavigate();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin } = useStore();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
 
@@ -46,8 +44,6 @@ export function Navbar() {
 
   const handleLogout = () => {
     setAdmin(false);
-    setAuthenticated(false);
-    navigate('/');
   };
 
   return (
