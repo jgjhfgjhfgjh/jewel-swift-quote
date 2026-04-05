@@ -85,7 +85,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     total: 'Samtals',
     clearCart: 'Hreinsa',
     moq: 'Verð',
-    inStock: 'Til á lager',
+    inStock: 'Í beinni',
     outOfStock: 'Ekki á lager',
     pcs: 'stk',
     filters: 'Síur',

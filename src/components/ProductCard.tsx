@@ -49,9 +49,12 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         {product.inStock && !isOutOfStock && (
-          <Badge className="absolute left-2 top-2 text-primary-foreground text-[10px] font-medium bg-green-600">
-            {t.inStock}
-          </Badge>
+          <div className="absolute left-2 top-2 flex items-center gap-1.5">
+            <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-[11px] font-semibold text-foreground drop-shadow-sm">
+              {t.inStock}
+            </span>
+          </div>
         )}
       </div>
       <div className="flex flex-1 flex-col p-3">
