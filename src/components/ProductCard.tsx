@@ -87,7 +87,7 @@ export function ProductCard({ product }: { product: Product }) {
               <span className="text-xs text-muted-foreground">
                 {t.voc}: €{product.wholesale.toFixed(2)}
               </span>
-              <span className="text-xs text-muted-foreground line-through">
+              <span className="text-xs text-muted-foreground">
                 {t.moq}: €{product.price.toFixed(2)}
               </span>
             </div>
