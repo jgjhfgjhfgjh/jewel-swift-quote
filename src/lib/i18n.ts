@@ -67,7 +67,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     generateQuote: 'Generate B2B Quote',
     soldOut: 'Sold Out',
     stockCount: 'Live Offer Now',
-    stockOnly: 'Live Offer Now Only',
+    stockOnly: 'Live Offer Only',
     wholesale: 'Wholesale',
     catalog: 'Catalog',
     removeFromCart: 'Remove',
