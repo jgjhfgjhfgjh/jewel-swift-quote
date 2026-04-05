@@ -115,7 +115,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     generateQuote: 'Búa til B2B tilboð',
     soldOut: 'Uppselt',
     stockCount: 'Til á lager',
-    stockOnly: 'Aðeins á lager',
+    stockOnly: 'Aðeins í beinni',
     wholesale: 'Heildsala',
     catalog: 'Vörulisti',
     removeFromCart: 'Fjarlægja',

@@ -19,9 +19,18 @@ export function CartDrawer() {
 
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
-  const subtotal = cart.reduce((sum, item) => {
-    const discounted = item.product.price * (1 - item.discountPercent / 100);
-    return sum + discounted * item.quantity;
+  // Calculate totals based on wholesale (VOC)
+  const totalVOC = cart.reduce((sum, item) => {
+    const adminDiscount = item.discountPercent;
+    const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
+    return sum + vocAfterDiscount * item.quantity;
+  }, 0);
+
+  const totalMargin = cart.reduce((sum, item) => {
+    const adminDiscount = item.discountPercent;
+    const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
+    const margin = item.product.price - vocAfterDiscount;
+    return sum + margin * item.quantity;
   }, 0);
 
   if (!cartOpen) return null;
@@ -51,7 +60,13 @@ export function CartDrawer() {
             <ScrollArea className="flex-1 scrollbar-thin">
               <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
-                  const discounted = item.product.price * (1 - item.discountPercent / 100);
+                  const baseMargin = item.product.price - item.product.wholesale;
+                  const basePct = item.product.price > 0 ? ((baseMargin / item.product.price) * 100) : 0;
+                  const adminDiscount = item.discountPercent;
+                  const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
+                  const effectiveMargin = item.product.price - vocAfterDiscount;
+                  const rowTotal = vocAfterDiscount * item.quantity;
+
                   return (
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
                       {/* Image */}
@@ -62,12 +77,30 @@ export function CartDrawer() {
                       <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
+                        {/* Pricing details */}
+                        <div className="mt-1 space-y-0.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
+                            <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
+                            {basePct > 0 && (
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(basePct)}%</span>
+                            )}
+                          </div>
+                          {adminDiscount > 0 && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
+                              <span className="rounded bg-primary/10 px-1 py-0.5 text-[9px] font-semibold text-primary">Admin -{adminDiscount}%</span>
+                              <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
+                            </div>
+                          )}
+                          <p className="text-xs font-bold text-primary tabular-nums">{t.margin}: €{effectiveMargin.toFixed(2)}</p>
+                        </div>
                       </div>
                       {/* Delete */}
                       <Button variant="ghost" size="icon" className="h-6 w-6 flex-shrink-0 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
-                      {/* Quantity + Price row - full width on mobile */}
+                      {/* Quantity + Subtotal row */}
                       <div className="flex w-full items-center justify-between gap-2 pl-0 sm:pl-[calc(3.5rem+0.75rem)]">
                         <div className="flex items-center gap-1 flex-shrink-0">
                           <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
@@ -79,15 +112,9 @@ export function CartDrawer() {
                           </Button>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          {item.discountPercent > 0 && (
-                            <div className="flex items-center justify-end gap-1.5">
-                              <span className="text-xs text-muted-foreground line-through tabular-nums">€{item.product.price.toFixed(2)}</span>
-                              <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-semibold text-destructive">-{item.discountPercent}%</span>
-                            </div>
-                          )}
-                          <p className="text-sm font-bold tabular-nums">€{discounted.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/ks</span></p>
+                          <p className="text-sm font-bold tabular-nums">€{vocAfterDiscount.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/{t.pcs}</span></p>
                           {item.quantity > 1 && (
-                            <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{(discounted * item.quantity).toFixed(2)}</p>
+                            <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{rowTotal.toFixed(2)}</p>
                           )}
                         </div>
                       </div>
@@ -156,9 +183,13 @@ export function CartDrawer() {
 
             {/* Total */}
             <div className="border-t p-4">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm text-muted-foreground">{t.total} ({t.voc})</span>
+                <span className="text-lg font-bold tabular-nums">€{totalVOC.toFixed(2)}</span>
+              </div>
               <div className="flex items-center justify-between mb-3">
-                <span className="font-display text-lg font-semibold">{t.total}</span>
-                <span className="text-xl font-bold tabular-nums">€{subtotal.toFixed(2)}</span>
+                <span className="text-sm text-muted-foreground">{t.margin}</span>
+                <span className="text-sm font-semibold tabular-nums text-primary">€{totalMargin.toFixed(2)}</span>
               </div>
               <Button className="w-full bg-gold text-accent-foreground hover:bg-gold/90 font-semibold">
                 {t.generateQuote}
