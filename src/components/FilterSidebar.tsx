@@ -83,7 +83,6 @@ export function FilterSidebar({
                 className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${selectedCategory === c.name ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-muted'}`}
               >
                 <span className="truncate">{c.name}</span>
-                <Badge variant="secondary" className="ml-1 h-5 min-w-6 justify-center text-[10px]">{c.count}</Badge>
               </button>
             ))}
           </div>
