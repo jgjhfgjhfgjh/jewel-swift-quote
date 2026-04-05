@@ -7,7 +7,6 @@ const Landing = () => {
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/10">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <span className="text-white font-bold text-lg tracking-wider uppercase">FollowTheMove</span>
         </div>
 
         {/* Nav Links */}
