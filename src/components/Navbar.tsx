@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
 import logo from '@/assets/logo.png';
