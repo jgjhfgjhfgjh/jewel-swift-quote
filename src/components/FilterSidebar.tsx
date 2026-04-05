@@ -1,7 +1,6 @@
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useStore } from '@/lib/store';
@@ -18,15 +17,23 @@ interface Props {
   setSearch: (v: string) => void;
   stockOnly: boolean;
   setStockOnly: (v: boolean) => void;
+  minDiscount: number;
+  setMinDiscount: (v: number) => void;
 }
 
 export function FilterSidebar({
   manufacturers, categories, selectedBrand, setSelectedBrand,
   selectedCategory, setSelectedCategory, search, setSearch,
-  stockOnly, setStockOnly,
+  stockOnly, setStockOnly, minDiscount, setMinDiscount,
 }: Props) {
   const { lang, sidebarOpen, setSidebarOpen } = useStore();
   const t = translations[lang];
+
+  const discountTiers = [
+    { label: t.discount70, value: 70 },
+    { label: t.discount60, value: 60 },
+    { label: t.discount50, value: 50 },
+  ];
 
   const content = (
     <div className="flex h-full flex-col">
@@ -45,6 +52,20 @@ export function FilterSidebar({
       <div className="flex items-center justify-between px-4 py-2">
         <span className="text-sm font-medium">{t.stockOnly}</span>
         <Switch checked={stockOnly} onCheckedChange={setStockOnly} />
+      </div>
+
+      {/* Discount tier filters */}
+      <div className="px-4 py-2 space-y-2">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.discountTiers}</h3>
+        {discountTiers.map((tier) => (
+          <div key={tier.value} className="flex items-center justify-between">
+            <span className="text-sm font-medium">{tier.label}</span>
+            <Switch
+              checked={minDiscount >= tier.value}
+              onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
+            />
+          </div>
+        ))}
       </div>
 
       <ScrollArea className="flex-1 scrollbar-thin">
@@ -93,12 +114,10 @@ export function FilterSidebar({
 
   return (
     <>
-      {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card">
         {content}
       </aside>
 
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />

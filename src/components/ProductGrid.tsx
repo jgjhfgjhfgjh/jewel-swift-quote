@@ -13,15 +13,16 @@ interface Props {
   selectedBrand: string;
   selectedCategory: string;
   stockOnly: boolean;
+  minDiscount: number;
 }
 
-export function ProductGrid({ products, search, selectedBrand, selectedCategory, stockOnly }: Props) {
+export function ProductGrid({ products, search, selectedBrand, selectedCategory, stockOnly, minDiscount }: Props) {
   const { lang } = useStore();
   const t = translations[lang];
   const [page, setPage] = useState(1);
 
   // Reset page when filters change
-  useMemo(() => { setPage(1); }, [search, selectedBrand, selectedCategory, stockOnly]);
+  useMemo(() => { setPage(1); }, [search, selectedBrand, selectedCategory, stockOnly, minDiscount]);
 
   const filtered = useMemo(() => {
     let result = products;
@@ -36,8 +37,14 @@ export function ProductGrid({ products, search, selectedBrand, selectedCategory,
     if (selectedBrand) result = result.filter((p) => p.manufacturer === selectedBrand);
     if (selectedCategory) result = result.filter((p) => p.category.startsWith(selectedCategory));
     if (stockOnly) result = result.filter((p) => p.inStock);
+    if (minDiscount > 0) {
+      result = result.filter((p) => {
+        const pct = p.price > 0 ? ((p.price - p.wholesale) / p.price) * 100 : 0;
+        return pct >= minDiscount;
+      });
+    }
     return result;
-  }, [products, search, selectedBrand, selectedCategory, stockOnly]);
+  }, [products, search, selectedBrand, selectedCategory, stockOnly, minDiscount]);
 
   const paginated = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filtered.length;
