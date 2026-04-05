@@ -7,9 +7,6 @@ const Landing = () => {
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/10">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#ff6600] flex items-center justify-center text-white font-bold text-sm tracking-tight">
-            FTM
-          </div>
           <span className="text-white font-bold text-lg tracking-wider uppercase">FollowTheMove</span>
         </div>
 
