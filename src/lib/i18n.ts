@@ -36,6 +36,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     catalog: 'Katalog',
     removeFromCart: 'Odebrat',
     quantity: 'Množství',
+    margin: 'Zisk',
+    voc: 'VOC',
+    discountTiers: 'Slevy',
+    discount70: 'Sleva 70%+',
+    discount60: 'Sleva 60%+',
+    discount50: 'Sleva 50%+',
   },
   en: {
     search: 'Search products...',
@@ -72,6 +78,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     catalog: 'Catalog',
     removeFromCart: 'Remove',
     quantity: 'Quantity',
+    margin: 'Margin',
+    voc: 'VOC',
+    discountTiers: 'Discounts',
+    discount70: 'Discount 70%+',
+    discount60: 'Discount 60%+',
+    discount50: 'Discount 50%+',
   },
   is: {
     search: 'Leita að vörum...',
@@ -108,6 +120,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     catalog: 'Vörulisti',
     removeFromCart: 'Fjarlægja',
     quantity: 'Magn',
+    margin: 'Hagnaður',
+    voc: 'VOC',
+    discountTiers: 'Afsláttur',
+    discount70: 'Afsláttur 70%+',
+    discount60: 'Afsláttur 60%+',
+    discount50: 'Afsláttur 50%+',
   },
 };
 

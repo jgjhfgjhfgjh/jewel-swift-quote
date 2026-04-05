@@ -5,7 +5,6 @@ import { ProductGrid } from '@/components/ProductGrid';
 import { CartDrawer } from '@/components/CartDrawer';
 import { useProducts } from '@/hooks/useProducts';
 import { useStore } from '@/lib/store';
-import { translations } from '@/lib/i18n';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
@@ -16,6 +15,7 @@ const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [stockOnly, setStockOnly] = useState(false);
+  const [minDiscount, setMinDiscount] = useState(0);
 
   if (loading) {
     return (
@@ -53,6 +53,8 @@ const Index = () => {
           setSearch={setSearch}
           stockOnly={stockOnly}
           setStockOnly={setStockOnly}
+          minDiscount={minDiscount}
+          setMinDiscount={setMinDiscount}
         />
         <ProductGrid
           products={products}
@@ -60,6 +62,7 @@ const Index = () => {
           selectedBrand={selectedBrand}
           selectedCategory={selectedCategory}
           stockOnly={stockOnly}
+          minDiscount={minDiscount}
         />
       </div>
       <CartDrawer />

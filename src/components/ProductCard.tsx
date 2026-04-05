@@ -16,6 +16,9 @@ export function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = product.stock <= 0;
   const atMax = qty >= product.stock;
 
+  const margin = product.price - product.wholesale;
+  const discountPct = product.price > 0 ? ((margin / product.price) * 100) : 0;
+
   const handleAdd = () => {
     if (!isOutOfStock) addToCart(product);
   };
@@ -56,6 +59,12 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
+        {/* Discount badge */}
+        {discountPct > 0 && (
+          <Badge className="absolute right-2 top-2 bg-destructive text-destructive-foreground text-[10px] font-bold">
+            -{Math.round(discountPct)}%
+          </Badge>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-3">
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
@@ -67,9 +76,21 @@ export function ProductCard({ product }: { product: Product }) {
         </p>
 
         <div className="mt-auto flex flex-col gap-2 pt-3">
+          {/* B2B Pricing */}
           <div>
-            <p className="text-lg font-semibold tabular-nums mx-0 my-0">€{product.price.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">{t.moq}</p>
+            {/* Margin - primary focus */}
+            <p className="text-lg font-bold tabular-nums text-primary">
+              {t.margin}: €{margin.toFixed(2)}
+            </p>
+            {/* VOC & MOC */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-xs text-muted-foreground">
+                {t.voc}: €{product.wholesale.toFixed(2)}
+              </span>
+              <span className="text-xs text-muted-foreground line-through">
+                {t.moq}: €{product.price.toFixed(2)}
+              </span>
+            </div>
           </div>
 
           {qty === 0 ? (
