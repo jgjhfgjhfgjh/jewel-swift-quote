@@ -31,6 +31,8 @@ export const useStore = create<AppState>((set, get) => ({
   setLang: (lang) => set({ lang }),
   isAdmin: false,
   setAdmin: (v) => set({ isAdmin: v }),
+  isAuthenticated: false,
+  setAuthenticated: (v) => set({ isAuthenticated: v }),
 
   cart: [],
   addToCart: (product) => set((s) => {
