@@ -20,7 +20,9 @@ const ADMIN_USERNAME = 'michal';
 const ADMIN_PASSWORD = '1234';
 
 export function Navbar() {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin, setAuthenticated } = useStore();
+  const navigate = useNavigate();
+  const t = translations[lang];
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
 
