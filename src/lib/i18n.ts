@@ -13,7 +13,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     total: 'Celkem',
     clearCart: 'Vyprázdnit',
     moq: 'MOC',
-    inStock: 'Skladem',
+    inStock: 'Živá Nabídka',
     outOfStock: 'Není skladem',
     pcs: 'ks',
     filters: 'Filtry',
