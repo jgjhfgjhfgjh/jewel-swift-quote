@@ -49,7 +49,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     total: 'Total',
     clearCart: 'Clear',
     moq: 'RRP',
-    inStock: '​Live Offer Now',
+    inStock: 'Live',
     outOfStock: 'Out of Stock',
     pcs: 'pcs',
     filters: 'Filters',
