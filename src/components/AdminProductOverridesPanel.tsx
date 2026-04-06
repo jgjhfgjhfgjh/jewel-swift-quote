@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Package, X, RotateCcw, Save } from 'lucide-react';
+import { ChevronDown, ChevronUp, Package, X, RotateCcw, Save, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
-import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
+import { getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 
 interface Props {
@@ -16,16 +15,15 @@ export function AdminProductOverridesPanel({ products }: Props) {
   const {
     lang, productDiscounts, setProductDiscount, brandDiscounts,
     salesCustomer, salesProductDiscounts, setSalesProductDiscount, salesBrandDiscounts,
-    savePermanentProduct, setSavePermanentProduct,
   } = useStore();
   const { isAdmin } = useAuthContext();
   const { saveProductDiscount } = useCustomerDiscounts();
   const [open, setOpen] = useState(false);
+  const [savedProducts, setSavedProducts] = useState<Record<string, boolean>>({});
 
   if (!isAdmin) return null;
 
   const effectiveProductDiscounts = salesCustomer ? salesProductDiscounts : productDiscounts;
-  const effectiveBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
   const customerDiscount = salesCustomer?.base_discount ?? 0;
 
   const overriddenIds = Object.keys(effectiveProductDiscounts);
@@ -58,7 +56,11 @@ export function AdminProductOverridesPanel({ products }: Props) {
     if (!salesCustomer) return;
     const percent = effectiveProductDiscounts[productId];
     if (percent !== undefined) {
-      await saveProductDiscount(salesCustomer.user_id, productId, percent);
+      const ok = await saveProductDiscount(salesCustomer.user_id, productId, percent);
+      if (ok) {
+        setSavedProducts((prev) => ({ ...prev, [productId]: true }));
+        setTimeout(() => setSavedProducts((prev) => ({ ...prev, [productId]: false })), 2000);
+      }
     }
   };
 
@@ -97,29 +99,12 @@ export function AdminProductOverridesPanel({ products }: Props) {
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
-          {salesCustomer && (
-            <div className="mb-2 flex items-center gap-2">
-              <Checkbox
-                id="save-permanent-product"
-                checked={savePermanentProduct}
-                onCheckedChange={(v) => setSavePermanentProduct(!!v)}
-              />
-              <label htmlFor="save-permanent-product" className="text-[11px] font-medium text-blue-600 cursor-pointer flex items-center gap-1">
-                <Save className="h-3 w-3" />
-                Uložit trvale do profilu zákazníka
-              </label>
-            </div>
-          )}
-
           <div className="space-y-2 pr-1">
             {overriddenProducts.map((product) => {
               const overridePercent = effectiveProductDiscounts[product.id];
-              const baseDiscount = product.price > 0
-                ? ((product.price - product.wholesale) / product.price) * 100
-                : 0;
               const effectiveVoc = getFinalVoc(product.price, overridePercent, customerDiscount);
-              const feedVoc = getFinalVoc(product.price, baseDiscount, customerDiscount);
               const marginEur = product.price - effectiveVoc;
+              const isSaved = savedProducts[product.id];
 
               return (
                 <div key={product.id} className="flex items-center gap-2 rounded-lg border bg-white p-2">
@@ -150,14 +135,15 @@ export function AdminProductOverridesPanel({ products }: Props) {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    {salesCustomer && savePermanentProduct && (
+                    {salesCustomer && (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-6 text-[9px] px-1.5 text-blue-600 border-blue-300 hover:bg-blue-50"
+                        className={`h-6 w-6 p-0 transition-colors ${isSaved ? 'border-green-500 text-green-600 bg-green-50' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
                         onClick={() => handleSavePermanent(product.id)}
+                        title="Uložit trvale"
                       >
-                        <Save className="h-2.5 w-2.5" />
+                        {isSaved ? <Check className="h-2.5 w-2.5" /> : <Save className="h-2.5 w-2.5" />}
                       </Button>
                     )}
                     <Button
