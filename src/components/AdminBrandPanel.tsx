@@ -89,8 +89,19 @@ export function AdminBrandPanel({ manufacturers }: Props) {
     activeBrandDiscounts.find((d) => d.brand === brand)?.percent;
 
   const handleGlobalReset = () => {
-    if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
+    if (!window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) return;
+
+    if (salesCustomer) {
+      // Only remove non-permanent brand discounts
+      const toRemove = salesBrandDiscounts.filter((d) => !permanentBrands[d.brand]);
+      for (const d of toRemove) removeSalesBrandDiscount(d.brand);
+    } else {
       clearAllAdminDiscounts();
+    }
+
+    const hadPermanent = Object.values(permanentBrands).some(Boolean);
+    if (hadPermanent) {
+      toast('Dočasné úpravy byly resetovány. Trvalé slevy zůstaly zachovány.');
     }
   };
 
