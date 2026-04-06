@@ -7,8 +7,14 @@ import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import { useState } from 'react';
 
-function getEffectiveDiscount(item: { discountPercent: number; manualDiscountPercent?: number }) {
-  return item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : item.discountPercent;
+function getFeedDiscount(product: { price: number; wholesale: number }) {
+  return product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+}
+
+function getFinalDiscount(item: { product: { price: number; wholesale: number }; discountPercent: number; manualDiscountPercent?: number }) {
+  if (item.manualDiscountPercent !== undefined) return item.manualDiscountPercent;
+  if (item.discountPercent > 0) return item.discountPercent;
+  return getFeedDiscount(item.product);
 }
 
 export function CartDrawer() {
