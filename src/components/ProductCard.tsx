@@ -1,4 +1,4 @@
-import { Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { translations } from '@/lib/i18n';
 import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function ProductCard({ product }: { product: Product }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
