@@ -5,42 +5,14 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
+import { getActiveDiscount } from '@/lib/discount';
 import { useState } from 'react';
-
-/**
- * Discount hierarchy (replacement, NOT additive):
- * 1. Manual individual discount (highest priority)
- * 2. Admin brand discount
- * 3. Base feed discount (lowest / default)
- */
-function getActiveDiscount(
-  item: { product: { price: number; wholesale: number; manufacturer: string }; discountPercent: number; manualDiscountPercent?: number },
-  brandDiscounts: { brand: string; percent: number }[]
-): { percent: number; source: 'manual' | 'brand' | 'feed' } {
-  const baseDiscount = item.product.price > 0
-    ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
-    : 0;
-
-  // Priority 1: Manual individual override
-  if (item.manualDiscountPercent !== undefined) {
-    return { percent: item.manualDiscountPercent, source: 'manual' };
-  }
-
-  // Priority 2: Admin brand discount
-  const brandDiscount = brandDiscounts.find((d) => d.brand === item.product.manufacturer);
-  if (brandDiscount) {
-    return { percent: brandDiscount.percent, source: 'brand' };
-  }
-
-  // Priority 3: Base feed discount
-  return { percent: baseDiscount, source: 'feed' };
-}
 
 export function CartDrawer() {
   const {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
-    clearCart, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount,
-    setItemDiscount,
+    clearCart, isAdmin, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
+    setProductDiscount,
   } = useStore();
   const t = translations[lang];
 
@@ -50,13 +22,13 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
     const voc = item.product.price * (1 - percent / 100);
     return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
     const voc = item.product.price * (1 - percent / 100);
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
@@ -91,7 +63,7 @@ export function CartDrawer() {
                   const baseDiscount = item.product.price > 0
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
                     : 0;
-                  const { percent: activePercent, source } = getActiveDiscount(item, brandDiscounts);
+                  const { percent: activePercent, source } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
                   const vocAfterDiscount = item.product.price * (1 - activePercent / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
@@ -118,19 +90,18 @@ export function CartDrawer() {
                               </span>
                             )}
                           </div>
-                          {/* Only show override line if discount differs from feed */}
                           {isOverridden && (
                             <div className="flex items-center gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
                               <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${
-                                source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'
+                                source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-blue-400/10 text-blue-500'
                               }`}>
-                                {source === 'manual' ? 'Manual' : 'Admin'} -{Math.round(activePercent)}%
+                                {source === 'manual' ? 'Manual' : 'Brand'} -{Math.round(activePercent)}%
                               </span>
                               <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
                             </div>
                           )}
-                          <p className={`text-xs font-bold tabular-nums ${source === 'manual' ? 'text-blue-600' : 'text-primary'}`}>
+                          <p className={`text-xs font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
                             {item.quantity > 1 ? t.marginTotal : t.margin}: €{(effectiveMargin * item.quantity).toFixed(2)}
                           </p>
                           {item.quantity > 1 && (
@@ -151,13 +122,13 @@ export function CartDrawer() {
                             min="0"
                             max="100"
                             placeholder="%"
-                            value={item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : ''}
+                            value={item.product.id in productDiscounts ? productDiscounts[item.product.id] : ''}
                             onChange={(e) => {
                               const val = e.target.value;
                               if (val === '') {
-                                setItemDiscount(item.product.id, undefined);
+                                setProductDiscount(item.product.id, undefined);
                               } else {
-                                setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
+                                setProductDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
                             className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
@@ -235,7 +206,7 @@ export function CartDrawer() {
                       <button
                         key={d.brand}
                         onClick={() => removeBrandDiscount(d.brand)}
-                        className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary hover:bg-primary/20 transition-colors"
+                        className="inline-flex items-center gap-1 rounded bg-blue-500/10 px-2 py-0.5 text-[10px] font-medium text-blue-600 hover:bg-blue-500/20 transition-colors"
                       >
                         {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
                       </button>

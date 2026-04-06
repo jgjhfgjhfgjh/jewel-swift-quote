@@ -1,31 +1,31 @@
-import { Plus, Minus, ShoppingCart } from 'lucide-react'; // v2
+import { Plus, Minus, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
+import { getActiveDiscount } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, cart, brandDiscounts, addToCart, updateQuantity, removeFromCart } = useStore();
+  const { lang, cart, brandDiscounts, productDiscounts, isAdmin, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
+  const [editingDiscount, setEditingDiscount] = useState(false);
+  const [discountInput, setDiscountInput] = useState('');
 
   const cartItem = cart.find((i) => i.product.id === product.id);
   const qty = cartItem?.quantity ?? 0;
   const isOutOfStock = product.stock <= 0;
   const atMax = qty >= product.stock;
 
-  // Discount hierarchy: Manual item > Brand > Feed
-  const feedDiscount = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
-  const brandDiscount = brandDiscounts.find((d) => d.brand === product.manufacturer);
-  const manualDiscount = cartItem?.manualDiscountPercent;
-  const activeDiscount = manualDiscount ?? brandDiscount?.percent ?? feedDiscount;
-  
+  const { percent: activeDiscount, source } = getActiveDiscount(product, productDiscounts, brandDiscounts);
+
   const effectiveVoc = product.price * (1 - activeDiscount / 100);
   const unitMargin = product.price - effectiveVoc;
   const totalMargin = unitMargin * Math.max(qty, 1);
-  const discountPct = activeDiscount;
+  const isOverridden = source === 'manual' || source === 'brand';
 
   const handleAdd = () => {
     if (!isOutOfStock) addToCart(product);
@@ -41,6 +41,22 @@ export function ProductCard({ product }: { product: Product }) {
     } else {
       updateQuantity(product.id, qty - 1);
     }
+  };
+
+  const handleDiscountSubmit = () => {
+    if (discountInput === '') {
+      setProductDiscount(product.id, undefined);
+    } else {
+      const val = Math.min(100, Math.max(0, Number(discountInput)));
+      setProductDiscount(product.id, val);
+    }
+    setEditingDiscount(false);
+  };
+
+  const handleBadgeClick = () => {
+    if (!isAdmin) return;
+    setDiscountInput(source === 'manual' ? String(Math.round(activeDiscount)) : '');
+    setEditingDiscount(true);
   };
 
   return (
@@ -67,11 +83,36 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
-        {/* Discount badge */}
-        {discountPct > 0 && (
-          <Badge className="absolute right-2 top-2 bg-destructive text-destructive-foreground text-[10px] font-bold">
-            -{Math.round(discountPct)}%
-          </Badge>
+        {/* Discount badge - editable in admin mode */}
+        {activeDiscount > 0 && (
+          editingDiscount && isAdmin ? (
+            <div className="absolute right-1 top-1 flex items-center gap-0.5">
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                autoFocus
+                value={discountInput}
+                onChange={(e) => setDiscountInput(e.target.value)}
+                onBlur={handleDiscountSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handleDiscountSubmit()}
+                className="w-14 h-6 text-[10px] px-1 text-center border-blue-500 bg-white"
+              />
+            </div>
+          ) : (
+            <Badge
+              onClick={handleBadgeClick}
+              className={`absolute right-2 top-2 text-[10px] font-bold ${
+                isAdmin ? 'cursor-pointer hover:scale-110 transition-transform' : ''
+              } ${
+                isOverridden
+                  ? 'bg-blue-500 text-white hover:bg-blue-600'
+                  : 'bg-destructive text-destructive-foreground'
+              }`}
+            >
+              -{Math.round(activeDiscount)}%
+            </Badge>
+          )
         )}
       </div>
       <div className="flex flex-1 flex-col p-3">
@@ -86,8 +127,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto flex flex-col gap-2 pt-3">
           {/* B2B Pricing */}
           <div>
-            {/* Margin - primary focus */}
-            <p className="text-lg font-bold tabular-nums text-primary">
+            <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
               {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
             </p>
             {qty > 1 && (
@@ -95,7 +135,6 @@ export function ProductCard({ product }: { product: Product }) {
                 {t.marginPerPc}: €{unitMargin.toFixed(2)}
               </p>
             )}
-            {/* VOC & MOC */}
             <div className="flex items-baseline gap-2">
               <span className="text-xs text-muted-foreground">
                 {t.voc}: €{effectiveVoc.toFixed(2)}

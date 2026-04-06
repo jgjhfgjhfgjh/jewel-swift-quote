@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/Navbar';
+import { AdminBrandPanel } from '@/components/AdminBrandPanel';
 import { FilterSidebar } from '@/components/FilterSidebar';
 import { ProductGrid } from '@/components/ProductGrid';
 import { CartDrawer } from '@/components/CartDrawer';
@@ -40,6 +41,7 @@ const Index = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="h-14" />
+      <AdminBrandPanel manufacturers={manufacturers} />
       <div className="flex flex-1 overflow-hidden">
         <FilterSidebar
           manufacturers={manufacturers}

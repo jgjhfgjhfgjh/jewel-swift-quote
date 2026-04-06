@@ -44,6 +44,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount70: 'Sleva 70%+',
     discount60: 'Sleva 60%+',
     discount50: 'Sleva 50%+',
+    brandDiscountPanel: 'Hromadné slevy značek',
+    setDiscount: 'Nastavit',
   },
   en: {
     search: 'Search products...',
@@ -88,6 +90,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount70: 'Discount 70%+',
     discount60: 'Discount 60%+',
     discount50: 'Discount 50%+',
+    brandDiscountPanel: 'Bulk Brand Discounts',
+    setDiscount: 'Set',
   },
   is: {
     search: 'Leita að vörum...',
@@ -132,6 +136,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount70: 'Afsláttur 70%+',
     discount60: 'Afsláttur 60%+',
     discount50: 'Afsláttur 50%+',
+    brandDiscountPanel: 'Heildsöluafsláttur vörumerkja',
+    setDiscount: 'Stilla',
   },
 };
 

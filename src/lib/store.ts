@@ -16,6 +16,10 @@ interface AppState {
   setItemDiscount: (productId: string, percent: number | undefined) => void;
   clearCart: () => void;
 
+  // Individual product discount overrides (single source of truth)
+  productDiscounts: Record<string, number>;
+  setProductDiscount: (productId: string, percent: number | undefined) => void;
+
   brandDiscounts: BrandDiscount[];
   setBrandDiscount: (brand: string, percent: number) => void;
   removeBrandDiscount: (brand: string) => void;
@@ -62,10 +66,34 @@ export const useStore = create<AppState>()(
           ? s.cart.filter((i) => i.product.id !== id)
           : s.cart.map((i) => i.product.id === id ? { ...i, quantity: Math.min(qty, i.product.stock) } : i),
       })),
-      setItemDiscount: (id, percent) => set((s) => ({
-        cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
-      })),
+      setItemDiscount: (id, percent) => set((s) => {
+        const next = { ...s.productDiscounts };
+        if (percent === undefined) {
+          delete next[id];
+        } else {
+          next[id] = percent;
+        }
+        return {
+          productDiscounts: next,
+          cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
+        };
+      }),
       clearCart: () => set({ cart: [] }),
+
+      productDiscounts: {},
+      setProductDiscount: (id, percent) => set((s) => {
+        const next = { ...s.productDiscounts };
+        if (percent === undefined) {
+          delete next[id];
+        } else {
+          next[id] = percent;
+        }
+        // Also sync to cart item if present
+        return {
+          productDiscounts: next,
+          cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
+        };
+      }),
 
       brandDiscounts: [],
       setBrandDiscount: (brand, percent) => set((s) => {
@@ -103,6 +131,7 @@ export const useStore = create<AppState>()(
         isAdmin: state.isAdmin,
         cart: state.cart,
         brandDiscounts: state.brandDiscounts,
+        productDiscounts: state.productDiscounts,
         search: state.search,
         selectedBrands: state.selectedBrands,
         selectedCategory: state.selectedCategory,
