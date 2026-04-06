@@ -131,8 +131,13 @@ export function CartDrawer() {
                             </div>
                           )}
                           <p className={`text-xs font-bold tabular-nums ${source === 'manual' ? 'text-blue-600' : 'text-primary'}`}>
-                            {t.margin}: €{effectiveMargin.toFixed(2)}
+                            {item.quantity > 1 ? t.marginTotal : t.margin}: €{(effectiveMargin * item.quantity).toFixed(2)}
                           </p>
+                          {item.quantity > 1 && (
+                            <p className="text-[10px] text-muted-foreground tabular-nums">
+                              {t.marginPerPc}: €{effectiveMargin.toFixed(2)}
+                            </p>
+                          )}
                         </div>
                       </div>
                       {/* Delete + Admin inline discount */}
