@@ -37,20 +37,23 @@ export function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="h-14 gap-2 sm:gap-3 px-3 sm:px-4 items-center justify-start flex flex-row">
-        <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
-          <Menu className="h-5 w-5" />
-        </Button>
+      <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
+        {/* Left group: hamburger + logo */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-5 w-5" />
+          </Button>
 
-        <Link to="/" className="shrink-0">
-          <h1 className="font-display text-xl font-semibold tracking-tight">
-            <img src={logo} alt="swelt." className="h-16 sm:h-24 object-contain my-0 px-0 py-0 mx-0" />
-          </h1>
-        </Link>
+          <Link to="/" className="shrink-0">
+            <h1 className="font-display text-xl font-semibold tracking-tight">
+              <img src={logo} alt="swelt." className="h-16 sm:h-24 object-contain my-0 px-0 py-0 mx-0" />
+            </h1>
+          </Link>
+        </div>
 
-        {/* Search bar - hidden on mobile, visible on md+ */}
-        <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg xl:max-w-xl mx-4">
-          <div className="relative w-full">
+        {/* Center: Search bar - hidden on mobile */}
+        <div className="hidden md:flex flex-1 justify-center mx-4">
+          <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
@@ -61,7 +64,9 @@ export function Navbar() {
             />
           </div>
         </div>
-        <div className="flex-1 md:hidden" />
+
+        {/* Right group: auth, lang, cart */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
 
         {/* User welcome or discount info */}
         {user && profile && (
@@ -140,6 +145,7 @@ export function Navbar() {
             )}
           </Button>
         )}
+        </div>
       </div>
     </header>
   );
