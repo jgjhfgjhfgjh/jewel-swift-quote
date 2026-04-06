@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -41,9 +42,13 @@ export default function Register() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Link to="/" className="absolute left-4 top-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <ArrowLeft className="h-4 w-4" />
+        Zpět na katalog
+      </Link>
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <img src={logo} alt="swelt." className="mx-auto h-20 object-contain" />
+          <Link to="/"><img src={logo} alt="swelt." className="mx-auto h-20 object-contain cursor-pointer" /></Link>
           <h1 className="mt-4 font-display text-2xl font-semibold">B2B Registrace</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Vytvořte si firemní účet
