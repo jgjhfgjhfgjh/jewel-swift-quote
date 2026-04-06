@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,15 @@ export function FilterSidebar({
 }: Props) {
   const { lang, sidebarOpen, setSidebarOpen } = useStore();
   const t = translations[lang];
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   const discountTiers = [
     { label: t.discount70, value: 70 },
@@ -149,16 +158,18 @@ export function FilterSidebar({
       </aside>
 
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 lg:hidden" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl">
-            <div className="flex items-center justify-between border-b p-4">
+          <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl flex flex-col h-full overflow-hidden">
+            <div className="flex items-center justify-between border-b p-4 shrink-0">
               <h2 className="font-display font-semibold">{t.filters}</h2>
               <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            {content}
+            <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {content}
+            </div>
           </aside>
         </div>
       )}
