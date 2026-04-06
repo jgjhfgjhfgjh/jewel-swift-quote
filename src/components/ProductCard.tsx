@@ -7,7 +7,7 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, cart, addToCart, updateQuantity, removeFromCart } = useStore();
+  const { lang, cart, brandDiscounts, addToCart, updateQuantity, removeFromCart } = useStore();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
 
@@ -16,8 +16,16 @@ export function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = product.stock <= 0;
   const atMax = qty >= product.stock;
 
-  const margin = product.price - product.wholesale;
-  const discountPct = product.price > 0 ? ((margin / product.price) * 100) : 0;
+  // Discount hierarchy: Manual item > Brand > Feed
+  const feedDiscount = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+  const brandDiscount = brandDiscounts.find((d) => d.brand === product.manufacturer);
+  const manualDiscount = cartItem?.manualDiscountPercent;
+  const activeDiscount = manualDiscount ?? brandDiscount?.percent ?? feedDiscount;
+  
+  const effectiveVoc = product.price * (1 - activeDiscount / 100);
+  const unitMargin = product.price - effectiveVoc;
+  const totalMargin = unitMargin * Math.max(qty, 1);
+  const discountPct = activeDiscount;
 
   const handleAdd = () => {
     if (!isOutOfStock) addToCart(product);
@@ -80,12 +88,17 @@ export function ProductCard({ product }: { product: Product }) {
           <div>
             {/* Margin - primary focus */}
             <p className="text-lg font-bold tabular-nums text-primary">
-              {t.margin}: €{margin.toFixed(2)}
+              {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
             </p>
+            {qty > 1 && (
+              <p className="text-[11px] text-muted-foreground tabular-nums">
+                {t.marginPerPc}: €{unitMargin.toFixed(2)}
+              </p>
+            )}
             {/* VOC & MOC */}
             <div className="flex items-baseline gap-2">
               <span className="text-xs text-muted-foreground">
-                {t.voc}: €{product.wholesale.toFixed(2)}
+                {t.voc}: €{effectiveVoc.toFixed(2)}
               </span>
               <span className="text-xs text-muted-foreground">
                 {t.moq}: €{product.price.toFixed(2)}
