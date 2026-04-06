@@ -17,6 +17,17 @@ export function AdminBrandPanel({ manufacturers }: Props) {
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [brandSearch, setBrandSearch] = useState('');
 
+  const sortedBrands = useMemo(() =>
+    [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
+    [manufacturers]
+  );
+
+  const filteredBrands = useMemo(() => {
+    if (!brandSearch.trim()) return sortedBrands;
+    const q = brandSearch.toLowerCase();
+    return sortedBrands.filter(({ name }) => name.toLowerCase().includes(q));
+  }, [sortedBrands, brandSearch]);
+
   if (!isAdmin) return null;
 
   const sortedBrands = useMemo(() =>
