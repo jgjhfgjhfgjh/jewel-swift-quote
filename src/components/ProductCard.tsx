@@ -88,12 +88,17 @@ export function ProductCard({ product }: { product: Product }) {
           <div>
             {/* Margin - primary focus */}
             <p className="text-lg font-bold tabular-nums text-primary">
-              {t.margin}: €{margin.toFixed(2)}
+              {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
             </p>
+            {qty > 1 && (
+              <p className="text-[11px] text-muted-foreground tabular-nums">
+                {t.marginPerPc}: €{unitMargin.toFixed(2)}
+              </p>
+            )}
             {/* VOC & MOC */}
             <div className="flex items-baseline gap-2">
               <span className="text-xs text-muted-foreground">
-                {t.voc}: €{product.wholesale.toFixed(2)}
+                {t.voc}: €{effectiveVoc.toFixed(2)}
               </span>
               <span className="text-xs text-muted-foreground">
                 {t.moq}: €{product.price.toFixed(2)}

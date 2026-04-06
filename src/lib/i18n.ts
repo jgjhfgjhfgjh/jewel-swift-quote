@@ -125,6 +125,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     removeFromCart: 'Fjarlægja',
     quantity: 'Magn',
     margin: 'Hagnaður',
+    marginTotal: 'Heildarhagnaður',
+    marginPerPc: 'Hagnaður á stk',
     voc: 'VOC',
     discountTiers: 'Afsláttur',
     discount70: 'Afsláttur 70%+',
