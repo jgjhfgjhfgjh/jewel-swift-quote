@@ -12,6 +12,7 @@ interface AppState {
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, qty: number) => void;
+  setItemDiscount: (productId: string, percent: number | undefined) => void;
   clearCart: () => void;
 
   brandDiscounts: BrandDiscount[];
