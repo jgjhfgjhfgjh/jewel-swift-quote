@@ -37,7 +37,7 @@ export function CartDrawer() {
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
 
-  if (!cartOpen) return null;
+  if (!cartOpen || !user) return null;
 
   return (
     <div className="fixed inset-0 z-50">
