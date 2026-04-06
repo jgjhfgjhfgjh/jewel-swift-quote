@@ -9,7 +9,15 @@ export function useProducts() {
     fetch('/products.json')
       .then((r) => r.json())
       .then((data: Product[]) => {
-        setProducts(data);
+        // Exclude dropshipping products and products with empty manufacturers
+        const cleaned = data.filter((p) => {
+          const cat = (p.category || '').toLowerCase();
+          const mfr = (p.manufacturer || '').trim();
+          if (!mfr) return false;
+          if (cat.includes('dropshipping')) return false;
+          return true;
+        });
+        setProducts(cleaned);
         setLoading(false);
       })
       .catch(() => setLoading(false));
