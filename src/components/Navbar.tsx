@@ -1,27 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
-import { ShoppingCart, Menu, Lock, LogOut } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { ShoppingCart, Menu, LogIn, LogOut, Users } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { translations, flags, type Lang } from '@/lib/i18n';
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-} from '@/components/ui/dialog';
-
-// Hardcoded credentials — ready to swap for Supabase Auth
-const ADMIN_USERNAME = 'michal';
-const ADMIN_PASSWORD = '1234';
 
 export function Navbar() {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, isAdmin, setAdmin } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen } = useStore();
+  const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+  const navigate = useNavigate();
 
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
@@ -36,126 +31,96 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      setAdmin(true);
-      setLoginOpen(false);
-      setUsername('');
-      setPassword('');
-      setError('');
-      toast.success('Admin access granted');
-    } else {
-      setError('Nesprávné jméno nebo heslo');
-    }
-  };
-
-  const handleLogout = () => {
-    setAdmin(false);
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (
-    <>
-      <header className={`fixed top-0 left-0 right-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-        <div className="h-14 gap-3 px-4 items-center justify-start flex flex-row">
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
-            <Menu className="h-5 w-5" />
-          </Button>
+    <header className={`fixed top-0 left-0 right-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+      <div className="h-14 gap-3 px-4 items-center justify-start flex flex-row">
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+          <Menu className="h-5 w-5" />
+        </Button>
 
+        <Link to="/">
           <h1 className="font-display text-xl font-semibold tracking-tight">
             <img src={logo} alt="swelt." className="h-24 object-contain my-0 px-0 py-0 mx-0" />
           </h1>
+        </Link>
 
-          <div className="flex-1" />
+        <div className="flex-1" />
 
-          {/* Admin button */}
-          {isAdmin ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-1.5 text-xs text-muted-foreground hover:text-destructive"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t.adminLogout}</span>
-            </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-1.5 text-xs text-muted-foreground"
-              onClick={() => setLoginOpen(true)}
-            >
-              <Lock className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Admin</span>
-            </Button>
-          )}
+        {/* User welcome or discount info */}
+        {user && profile && (
+          <div className="hidden sm:flex flex-col items-end text-right">
+            <span className="text-[10px] text-muted-foreground leading-tight">
+              Vítejte, <span className="font-semibold text-foreground">{profile.company_name || 'Zákazník'}</span>
+            </span>
+            {profile.base_discount > 0 && (
+              <span className="text-[10px] text-primary font-semibold leading-tight">
+                Vaše sleva: {profile.base_discount}%
+              </span>
+            )}
+          </div>
+        )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1.5 text-sm">
-                <span className="text-base">{flags[lang]}</span>
-                <span className="hidden sm:inline">{lang.toUpperCase()}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-                <DropdownMenuItem key={l} onClick={() => setLang(l)} className="gap-2">
-                  <span>{flags[l]}</span> {l.toUpperCase()}
+        {/* Auth buttons */}
+        {!loading && (
+          user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1.5 text-xs">
+                  <LogIn className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{profile?.company_name?.slice(0, 15) || 'Účet'}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
+                      <Users className="h-3.5 w-3.5" /> Správa zákazníků
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
+                  <LogOut className="h-3.5 w-3.5" /> Odhlásit se
                 </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
-            <ShoppingCart className="h-5 w-5" />
-            {totalItems > 0 && (
-              <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-                {totalItems}
-              </Badge>
-            )}
-          </Button>
-        </div>
-      </header>
-
-      {/* Admin Login Modal */}
-      <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="font-display">{t.adminLogin}</DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              {t.adminMode}
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                placeholder={t.username}
-                value={username}
-                onChange={(e) => { setUsername(e.target.value); setError(''); }}
-                autoFocus
-              />
-              <Input
-                type="password"
-                placeholder={t.password}
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(''); }}
-              />
-            </div>
-            {error && (
-              <p className="text-xs text-destructive font-medium">{error}</p>
-            )}
-            <Button type="submit" className="w-full">
-              {t.login}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/login')}>
+              <LogIn className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{t.login}</span>
             </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </>
+          )
+        )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="gap-1.5 text-sm">
+              <span className="text-base">{flags[lang]}</span>
+              <span className="hidden sm:inline">{lang.toUpperCase()}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+              <DropdownMenuItem key={l} onClick={() => setLang(l)} className="gap-2">
+                <span>{flags[l]}</span> {l.toUpperCase()}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+          <ShoppingCart className="h-5 w-5" />
+          {totalItems > 0 && (
+            <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+              {totalItems}
+            </Badge>
+          )}
+        </Button>
+      </div>
+    </header>
   );
 }

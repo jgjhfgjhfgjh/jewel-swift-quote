@@ -3,13 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
-import { getActiveDiscount } from '@/lib/discount';
+import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, cart, brandDiscounts, productDiscounts, isAdmin, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
+  const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
+  const { isAdmin, profile } = useAuthContext();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(false);
@@ -21,8 +23,9 @@ export function ProductCard({ product }: { product: Product }) {
   const atMax = qty >= product.stock;
 
   const { percent: activeDiscount, source } = getActiveDiscount(product, productDiscounts, brandDiscounts);
+  const customerDiscount = profile?.base_discount ?? 0;
 
-  const effectiveVoc = product.price * (1 - activeDiscount / 100);
+  const effectiveVoc = getFinalVoc(product.price, activeDiscount, customerDiscount);
   const unitMargin = product.price - effectiveVoc;
   const totalMargin = unitMargin * Math.max(qty, 1);
   const isOverridden = source === 'manual' || source === 'brand';
@@ -83,7 +86,6 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
-        {/* Discount badge - editable in admin mode */}
         {activeDiscount > 0 && (
           editingDiscount && isAdmin ? (
             <div className="absolute right-1 top-1 flex items-center gap-0.5">
@@ -111,6 +113,7 @@ export function ProductCard({ product }: { product: Product }) {
               }`}
             >
               -{Math.round(activeDiscount)}%
+              {customerDiscount > 0 && ` -${customerDiscount}%`}
             </Badge>
           )
         )}
@@ -119,13 +122,11 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
 
-        {/* Stock indicator */}
         <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
           {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
         </p>
 
         <div className="mt-auto flex flex-col gap-2 pt-3">
-          {/* B2B Pricing */}
           <div>
             <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
               {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}

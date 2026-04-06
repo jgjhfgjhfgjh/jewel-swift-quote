@@ -4,17 +4,20 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
-import { getActiveDiscount } from '@/lib/discount';
+import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import { useState } from 'react';
 
 export function CartDrawer() {
   const {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
-    clearCart, isAdmin, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
+    clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
     setProductDiscount,
   } = useStore();
+  const { isAdmin, profile } = useAuthContext();
   const t = translations[lang];
+  const customerDiscount = profile?.base_discount ?? 0;
 
   const [discountBrand, setDiscountBrand] = useState('');
   const [discountPercent, setDiscountPercent] = useState('');
@@ -23,13 +26,13 @@ export function CartDrawer() {
 
   const totalVOC = cart.reduce((sum, item) => {
     const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
-    const voc = item.product.price * (1 - percent / 100);
+    const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
     const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
-    const voc = item.product.price * (1 - percent / 100);
+    const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
 
@@ -64,7 +67,7 @@ export function CartDrawer() {
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
                     : 0;
                   const { percent: activePercent, source } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
-                  const vocAfterDiscount = item.product.price * (1 - activePercent / 100);
+                  const vocAfterDiscount = getFinalVoc(item.product.price, activePercent, customerDiscount);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
@@ -72,11 +75,9 @@ export function CartDrawer() {
 
                   return (
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3 w-full">
-                      {/* Image */}
                       <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
                         <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
                       </div>
-                      {/* Info */}
                       <div className="flex flex-1 flex-col min-w-0">
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
@@ -101,6 +102,13 @@ export function CartDrawer() {
                               <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
                             </div>
                           )}
+                          {customerDiscount > 0 && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[9px] font-semibold text-primary bg-primary/10 rounded px-1 py-0.5">
+                                Zákaznická sleva -{customerDiscount}%
+                              </span>
+                            </div>
+                          )}
                           <p className={`text-xs font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
                             {item.quantity > 1 ? t.marginTotal : t.margin}: €{(effectiveMargin * item.quantity).toFixed(2)}
                           </p>
@@ -111,7 +119,6 @@ export function CartDrawer() {
                           )}
                         </div>
                       </div>
-                      {/* Delete + Admin inline discount */}
                       <div className="flex flex-col items-end gap-1 flex-shrink-0 mr-0">
                         <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
                           <Trash2 className="h-3 w-3" />
@@ -135,7 +142,6 @@ export function CartDrawer() {
                           />
                         )}
                       </div>
-                      {/* Quantity + Subtotal row */}
                       <div className="flex w-full items-center justify-between gap-2 pl-0 sm:pl-[calc(3.5rem+0.75rem)]">
                         <div className="flex items-center gap-1 flex-shrink-0">
                           <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
@@ -159,7 +165,6 @@ export function CartDrawer() {
               </div>
             </ScrollArea>
 
-            {/* Admin Discount Panel */}
             {isAdmin && cartBrands.length > 0 && (
               <div className="border-t bg-muted/50 p-4">
                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
@@ -216,7 +221,6 @@ export function CartDrawer() {
               </div>
             )}
 
-            {/* Total */}
             <div className="border-t p-4">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-muted-foreground">{t.total} ({t.voc})</span>
