@@ -86,7 +86,7 @@ export function CartDrawer() {
         ) : (
           <>
             <ScrollArea className="flex-1 scrollbar-thin">
-              <div className="divide-y px-2.5 sm:px-4 py-2">
+              <div className="divide-y py-2" style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                 {cart.map((item) => {
                   const baseDiscount = item.product.price > 0
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
