@@ -10,7 +10,7 @@ import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import { useState } from 'react';
 
 export function CartDrawer() {
-  const {
+  const { user } = useAuthContext();
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
     setProductDiscount,
