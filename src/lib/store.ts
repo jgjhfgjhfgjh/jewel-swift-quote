@@ -150,6 +150,47 @@ export const useStore = create<AppState>()(
       setStockOnly: (v) => set({ stockOnly: v }),
       minDiscount: 0,
       setMinDiscount: (v) => set({ minDiscount: v }),
+
+      // Sales mode
+      salesCustomer: null,
+      salesBrandDiscounts: [],
+      salesProductDiscounts: {},
+      savePermanentBrand: false,
+      setSavePermanentBrand: (v) => set({ savePermanentBrand: v }),
+      savePermanentProduct: false,
+      setSavePermanentProduct: (v) => set({ savePermanentProduct: v }),
+      setSalesMode: (customer, brandDiscounts, productDiscounts) => set({
+        salesCustomer: customer,
+        salesBrandDiscounts: brandDiscounts,
+        salesProductDiscounts: productDiscounts,
+      }),
+      clearSalesMode: () => set({
+        salesCustomer: null,
+        salesBrandDiscounts: [],
+        salesProductDiscounts: {},
+        savePermanentBrand: false,
+        savePermanentProduct: false,
+      }),
+      setSalesBrandDiscount: (brand, percent) => set((s) => {
+        const existing = s.salesBrandDiscounts.find((d) => d.brand === brand);
+        return {
+          salesBrandDiscounts: existing
+            ? s.salesBrandDiscounts.map((d) => d.brand === brand ? { ...d, percent } : d)
+            : [...s.salesBrandDiscounts, { brand, percent }],
+        };
+      }),
+      removeSalesBrandDiscount: (brand) => set((s) => ({
+        salesBrandDiscounts: s.salesBrandDiscounts.filter((d) => d.brand !== brand),
+      })),
+      setSalesProductDiscount: (productId, percent) => set((s) => {
+        const next = { ...s.salesProductDiscounts };
+        if (percent === undefined) {
+          delete next[productId];
+        } else {
+          next[productId] = percent;
+        }
+        return { salesProductDiscounts: next };
+      }),
     }),
     {
       name: 'app-store',
