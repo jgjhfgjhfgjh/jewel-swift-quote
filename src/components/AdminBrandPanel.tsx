@@ -62,7 +62,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
             <Button
               size="sm"
               variant="outline"
-              className="h-7 text-[10px] px-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="h-7 text-[10px] px-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground md:h-7 md:text-[10px] md:px-2 max-[767px]:h-5 max-[767px]:text-[8px] max-[767px]:px-1.5 max-[767px]:scale-90"
               onClick={(e) => {
                 e.stopPropagation();
                 if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
@@ -70,8 +70,9 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                 }
               }}
             >
-              <RotateCcw className="h-3 w-3 mr-1" />
-              Resetovat všechny slevy
+              <RotateCcw className="h-3 w-3 max-[767px]:h-2.5 max-[767px]:w-2.5 max-[767px]:mr-0 mr-1" />
+              <span className="hidden md:inline">Resetovat všechny slevy</span>
+              <span className="md:hidden">Reset</span>
             </Button>
           )}
           <button onClick={() => setOpen(!open)}>
