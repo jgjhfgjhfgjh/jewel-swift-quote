@@ -66,9 +66,18 @@ export const useStore = create<AppState>()(
           ? s.cart.filter((i) => i.product.id !== id)
           : s.cart.map((i) => i.product.id === id ? { ...i, quantity: Math.min(qty, i.product.stock) } : i),
       })),
-      setItemDiscount: (id, percent) => set((s) => ({
-        cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
-      })),
+      setItemDiscount: (id, percent) => set((s) => {
+        const next = { ...s.productDiscounts };
+        if (percent === undefined) {
+          delete next[id];
+        } else {
+          next[id] = percent;
+        }
+        return {
+          productDiscounts: next,
+          cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
+        };
+      }),
       clearCart: () => set({ cart: [] }),
 
       productDiscounts: {},
