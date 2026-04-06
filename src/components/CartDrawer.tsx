@@ -160,7 +160,7 @@ export function CartDrawer() {
                                 setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
-                            className={`w-14 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
+                            className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
                           />
                         )}
                       </div>
