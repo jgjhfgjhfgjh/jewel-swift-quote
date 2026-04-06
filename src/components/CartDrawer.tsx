@@ -135,13 +135,13 @@ export function CartDrawer() {
                             min="0"
                             max="100"
                             placeholder="%"
-                            value={item.product.id in productDiscounts ? productDiscounts[item.product.id] : ''}
+                            value={item.product.id in effectiveProductDiscounts ? effectiveProductDiscounts[item.product.id] : ''}
                             onChange={(e) => {
                               const val = e.target.value;
-                              if (val === '') {
-                                setProductDiscount(item.product.id, undefined);
+                              if (salesCustomer) {
+                                setSalesProductDiscount(item.product.id, val === '' ? undefined : Math.min(100, Math.max(0, Number(val))));
                               } else {
-                                setProductDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
+                                setProductDiscount(item.product.id, val === '' ? undefined : Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
                             className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
