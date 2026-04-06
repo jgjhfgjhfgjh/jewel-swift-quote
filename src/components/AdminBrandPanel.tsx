@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp, Percent, X } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { ChevronDown, ChevronUp, Percent, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,8 +15,20 @@ export function AdminBrandPanel({ manufacturers }: Props) {
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
+  const [brandSearch, setBrandSearch] = useState('');
 
   if (!isAdmin) return null;
+
+  const sortedBrands = useMemo(() =>
+    [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
+    [manufacturers]
+  );
+
+  const filteredBrands = useMemo(() => {
+    if (!brandSearch.trim()) return sortedBrands;
+    const q = brandSearch.toLowerCase();
+    return sortedBrands.filter(({ name }) => name.toLowerCase().includes(q));
+  }, [sortedBrands, brandSearch]);
 
   const handleSet = (brand: string) => {
     const val = inputs[brand];
@@ -38,6 +50,11 @@ export function AdminBrandPanel({ manufacturers }: Props) {
         <span className="flex items-center gap-2">
           <Percent className="h-4 w-4 text-primary" />
           {t.brandDiscountPanel}
+          {brandDiscounts.length > 0 && (
+            <span className="rounded-full bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+              {brandDiscounts.length}
+            </span>
+          )}
         </span>
         {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
       </button>
@@ -59,13 +76,27 @@ export function AdminBrandPanel({ manufacturers }: Props) {
             </div>
           )}
 
-          <ScrollArea className="max-h-48">
+          {/* Search filter for brands */}
+          <div className="relative mb-2">
+            <Search className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder={t.search}
+              value={brandSearch}
+              onChange={(e) => setBrandSearch(e.target.value)}
+              className="h-7 pl-7 text-xs"
+            />
+          </div>
+
+          <ScrollArea className="max-h-60">
             <div className="space-y-1">
-              {manufacturers.map(({ name }) => {
+              {filteredBrands.map(({ name, count }) => {
                 const existing = getBrandDiscount(name);
                 return (
                   <div key={name} className="flex items-center gap-2">
-                    <span className="flex-1 truncate text-xs">{name}</span>
+                    <span className="flex-1 truncate text-xs">
+                      {name}
+                      <span className="text-[10px] text-muted-foreground ml-1">({count})</span>
+                    </span>
                     {existing !== undefined && (
                       <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
                     )}
