@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw } from 'lucide-react';
+import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
 import { translations } from '@/lib/i18n';
 
 interface Props {
