@@ -12,6 +12,7 @@ interface AppState {
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, qty: number) => void;
+  setItemDiscount: (productId: string, percent: number | undefined) => void;
   clearCart: () => void;
 
   brandDiscounts: BrandDiscount[];
@@ -45,6 +46,9 @@ export const useStore = create<AppState>((set, get) => ({
       ? s.cart.filter((i) => i.product.id !== id)
       : s.cart.map((i) => i.product.id === id ? { ...i, quantity: Math.min(qty, i.product.stock) } : i),
   })),
+  setItemDiscount: (id, percent) => set((s) => ({
+    cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
+  })),
   clearCart: () => set({ cart: [] }),
 
   brandDiscounts: [],
@@ -53,13 +57,21 @@ export const useStore = create<AppState>((set, get) => ({
     const newDiscounts = existing
       ? s.brandDiscounts.map((d) => d.brand === brand ? { ...d, percent } : d)
       : [...s.brandDiscounts, { brand, percent }];
-    // Update cart items for this brand
-    const newCart = s.cart.map((i) => i.product.manufacturer === brand ? { ...i, discountPercent: percent } : i);
+    // Update cart items for this brand (only if no manual override)
+    const newCart = s.cart.map((i) =>
+      i.product.manufacturer === brand && i.manualDiscountPercent === undefined
+        ? { ...i, discountPercent: percent }
+        : i
+    );
     return { brandDiscounts: newDiscounts, cart: newCart };
   }),
   removeBrandDiscount: (brand) => set((s) => ({
     brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
-    cart: s.cart.map((i) => i.product.manufacturer === brand ? { ...i, discountPercent: 0 } : i),
+    cart: s.cart.map((i) =>
+      i.product.manufacturer === brand && i.manualDiscountPercent === undefined
+        ? { ...i, discountPercent: 0 }
+        : i
+    ),
   })),
 
   cartOpen: false,
