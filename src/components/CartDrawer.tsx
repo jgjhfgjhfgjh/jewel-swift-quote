@@ -21,144 +21,19 @@ function getActiveDiscount(
     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
     : 0;
 
+  // Priority 1: Manual individual override
   if (item.manualDiscountPercent !== undefined) {
     return { percent: item.manualDiscountPercent, source: 'manual' };
   }
 
+  // Priority 2: Admin brand discount
   const brandDiscount = brandDiscounts.find((d) => d.brand === item.product.manufacturer);
   if (brandDiscount) {
     return { percent: brandDiscount.percent, source: 'brand' };
   }
 
+  // Priority 3: Base feed discount
   return { percent: baseDiscount, source: 'feed' };
-}
-
-function CartItem({
-  item,
-  brandDiscounts,
-  isAdmin,
-  t,
-  removeFromCart,
-  updateQuantity,
-  setItemDiscount,
-}: {
-  item: any;
-  brandDiscounts: { brand: string; percent: number }[];
-  isAdmin: boolean;
-  t: any;
-  removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, qty: number) => void;
-  setItemDiscount: (id: string, percent: number | undefined) => void;
-}) {
-  const baseDiscount = item.product.price > 0
-    ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
-    : 0;
-  const { percent: activePercent, source } = getActiveDiscount(item, brandDiscounts);
-  const vocAfterDiscount = item.product.price * (1 - activePercent / 100);
-  const effectiveMargin = item.product.price - vocAfterDiscount;
-  const rowTotal = vocAfterDiscount * item.quantity;
-  const isOverridden = source === 'manual' || source === 'brand';
-
-  return (
-    <div className="rounded-lg border border-border/50 bg-card p-3 shadow-sm">
-      {/* Top row: image, name, delete */}
-      <div className="flex items-start gap-3">
-        <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded bg-muted">
-          <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-[11px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
-          <p className="truncate text-sm font-medium leading-tight">{item.product.name}</p>
-        </div>
-        <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-      </div>
-
-      {/* Price grid: 2x2 */}
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <div className="rounded bg-muted/50 px-2 py-1.5">
-          <span className="block text-[10px] text-muted-foreground uppercase">{t.moq}</span>
-          <span className="text-sm font-semibold tabular-nums">€{item.product.price.toFixed(2)}</span>
-        </div>
-        <div className="rounded bg-muted/50 px-2 py-1.5">
-          <span className="block text-[10px] text-muted-foreground uppercase">{t.voc}</span>
-          <span className="text-sm font-semibold tabular-nums">€{vocAfterDiscount.toFixed(2)}</span>
-        </div>
-        <div className="rounded bg-muted/50 px-2 py-1.5">
-          <span className="block text-[10px] text-muted-foreground uppercase">{t.discount}</span>
-          <span className="text-sm font-semibold tabular-nums">
-            {Math.round(activePercent)}%
-            {baseDiscount > 0 && isOverridden && (
-              <span className="ml-1 text-[9px] text-muted-foreground line-through">{Math.round(baseDiscount)}%</span>
-            )}
-          </span>
-          {isOverridden && (
-            <span className={`inline-block mt-0.5 rounded px-1 py-0.5 text-[9px] font-semibold ${
-              source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'
-            }`}>
-              {source === 'manual' ? 'Manual' : 'Admin'}
-            </span>
-          )}
-        </div>
-        <div className="rounded bg-muted/50 px-2 py-1.5">
-          <span className="block text-[10px] text-muted-foreground uppercase">
-            {item.quantity > 1 ? t.marginTotal : t.margin}
-          </span>
-          <span className={`text-sm font-bold tabular-nums ${source === 'manual' ? 'text-blue-600' : 'text-primary'}`}>
-            €{(effectiveMargin * item.quantity).toFixed(2)}
-          </span>
-          {item.quantity > 1 && (
-            <span className="block text-[10px] text-muted-foreground tabular-nums">
-              {t.marginPerPc}: €{effectiveMargin.toFixed(2)}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Admin individual discount input */}
-      {isAdmin && (
-        <div className="mt-2">
-          <label className="text-[10px] text-muted-foreground uppercase">{t.discount} %</label>
-          <Input
-            type="number"
-            min="0"
-            max="100"
-            placeholder="%"
-            value={item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : ''}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (val === '') {
-                setItemDiscount(item.product.id, undefined);
-              } else {
-                setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
-              }
-            }}
-            className={`mt-1 w-full h-8 text-sm text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
-          />
-        </div>
-      )}
-
-      {/* Quantity + subtotal */}
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
-            <Minus className="h-3.5 w-3.5" />
-          </Button>
-          <span className="w-8 text-center text-base font-medium tabular-nums">{item.quantity}</span>
-          <Button variant="outline" size="icon" className="h-8 w-8" disabled={item.quantity >= item.product.stock} onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
-            <Plus className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-        <div className="text-right">
-          <p className="text-base font-bold tabular-nums">€{vocAfterDiscount.toFixed(2)}<span className="text-xs font-normal text-muted-foreground">/{t.pcs}</span></p>
-          {item.quantity > 1 && (
-            <p className="text-xs text-muted-foreground tabular-nums">{item.quantity}× = €{rowTotal.toFixed(2)}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export function CartDrawer() {
@@ -191,9 +66,8 @@ export function CartDrawer() {
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setCartOpen(false)} />
-      <aside className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-card shadow-xl box-border overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b p-4 flex-shrink-0">
+      <aside className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-card shadow-xl">
+        <div className="flex items-center justify-between border-b p-4">
           <h2 className="font-display text-lg font-semibold">{t.cart}</h2>
           <div className="flex gap-2">
             {cart.length > 0 && (
@@ -212,25 +86,111 @@ export function CartDrawer() {
         ) : (
           <>
             <ScrollArea className="flex-1 scrollbar-thin">
-              <div className="flex flex-col gap-3 px-3 py-3 pb-24">
-                {cart.map((item) => (
-                  <CartItem
-                    key={item.product.id}
-                    item={item}
-                    brandDiscounts={brandDiscounts}
-                    isAdmin={isAdmin}
-                    t={t}
-                    removeFromCart={removeFromCart}
-                    updateQuantity={updateQuantity}
-                    setItemDiscount={setItemDiscount}
-                  />
-                ))}
+              <div className="divide-y px-3 sm:px-4 py-2">
+                {cart.map((item) => {
+                  const baseDiscount = item.product.price > 0
+                    ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
+                    : 0;
+                  const { percent: activePercent, source } = getActiveDiscount(item, brandDiscounts);
+                  const vocAfterDiscount = item.product.price * (1 - activePercent / 100);
+                  const effectiveMargin = item.product.price - vocAfterDiscount;
+                  const rowTotal = vocAfterDiscount * item.quantity;
+
+                  const isOverridden = source === 'manual' || source === 'brand';
+
+                  return (
+                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
+                      {/* Image */}
+                      <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
+                        <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
+                      </div>
+                      {/* Info */}
+                      <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
+                        <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
+                        <p className="truncate text-sm font-medium">{item.product.name}</p>
+                        <div className="mt-1 space-y-0.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
+                            <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
+                            {baseDiscount > 0 && (
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">
+                                -{Math.round(baseDiscount)}%
+                              </span>
+                            )}
+                          </div>
+                          {/* Only show override line if discount differs from feed */}
+                          {isOverridden && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
+                              <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${
+                                source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'
+                              }`}>
+                                {source === 'manual' ? 'Manual' : 'Admin'} -{Math.round(activePercent)}%
+                              </span>
+                              <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
+                            </div>
+                          )}
+                          <p className={`text-xs font-bold tabular-nums ${source === 'manual' ? 'text-blue-600' : 'text-primary'}`}>
+                            {item.quantity > 1 ? t.marginTotal : t.margin}: €{(effectiveMargin * item.quantity).toFixed(2)}
+                          </p>
+                          {item.quantity > 1 && (
+                            <p className="text-[10px] text-muted-foreground tabular-nums">
+                              {t.marginPerPc}: €{effectiveMargin.toFixed(2)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {/* Delete + Admin inline discount */}
+                      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                        {isAdmin && (
+                          <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            placeholder="%"
+                            value={item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '') {
+                                setItemDiscount(item.product.id, undefined);
+                              } else {
+                                setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
+                              }
+                            }}
+                            className={`w-14 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
+                          />
+                        )}
+                      </div>
+                      {/* Quantity + Subtotal row */}
+                      <div className="flex w-full items-center justify-between gap-2 pl-0 sm:pl-[calc(3.5rem+0.75rem)]">
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="w-7 text-center text-sm tabular-nums">{item.quantity}</span>
+                          <Button variant="outline" size="icon" className="h-6 w-6" disabled={item.quantity >= item.product.stock} onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-sm font-bold tabular-nums">€{vocAfterDiscount.toFixed(2)}<span className="text-[10px] font-normal text-muted-foreground">/{t.pcs}</span></p>
+                          {item.quantity > 1 && (
+                            <p className="text-[10px] text-muted-foreground tabular-nums">{item.quantity}× = €{rowTotal.toFixed(2)}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </ScrollArea>
 
             {/* Admin Discount Panel */}
             {isAdmin && cartBrands.length > 0 && (
-              <div className="border-t bg-muted/50 p-4 flex-shrink-0">
+              <div className="border-t bg-muted/50 p-4">
                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
                   <Percent className="h-4 w-4 text-gold" />
                   {t.discountPanel}
@@ -285,8 +245,8 @@ export function CartDrawer() {
               </div>
             )}
 
-            {/* Sticky Total Footer */}
-            <div className="border-t p-4 flex-shrink-0 bg-card">
+            {/* Total */}
+            <div className="border-t p-4">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-muted-foreground">{t.total} ({t.voc})</span>
                 <span className="text-lg font-bold tabular-nums">€{totalVOC.toFixed(2)}</span>
