@@ -38,16 +38,26 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
   if (!isAdmin) return null;
 
-  const handleSet = (brand: string) => {
+  const handleSet = async (brand: string) => {
     const val = inputs[brand];
     if (val && !isNaN(Number(val))) {
-      setBrandDiscount(brand, Math.min(100, Math.max(0, Number(val))));
+      const percent = Math.min(100, Math.max(0, Number(val)));
+      if (salesCustomer) {
+        setSalesBrandDiscount(brand, percent);
+        if (savePermanentBrand) {
+          await saveBrandDiscount(salesCustomer.user_id, brand, percent);
+        }
+      } else {
+        setBrandDiscount(brand, percent);
+      }
       setInputs((prev) => ({ ...prev, [brand]: '' }));
     }
   };
 
+  const activeBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
+
   const getBrandDiscount = (brand: string) =>
-    brandDiscounts.find((d) => d.brand === brand)?.percent;
+    activeBrandDiscounts.find((d) => d.brand === brand)?.percent;
 
   const handleGlobalReset = () => {
     if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
