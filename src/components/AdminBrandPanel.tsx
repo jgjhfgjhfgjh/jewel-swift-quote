@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 
 interface Props {
@@ -11,7 +11,8 @@ interface Props {
 }
 
 export function AdminBrandPanel({ manufacturers }: Props) {
-  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
+  const { lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
+  const { isAdmin } = useAuthContext();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -28,7 +29,6 @@ export function AdminBrandPanel({ manufacturers }: Props) {
     return sortedBrands.filter(({ name }) => name.toLowerCase().includes(q));
   }, [sortedBrands, brandSearch]);
 
-
   if (!isAdmin) return null;
 
   const handleSet = (brand: string) => {
@@ -41,6 +41,12 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
   const getBrandDiscount = (brand: string) =>
     brandDiscounts.find((d) => d.brand === brand)?.percent;
+
+  const handleGlobalReset = () => {
+    if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
+      clearAllAdminDiscounts();
+    }
+  };
 
   return (
     <div className="border-b bg-muted/30">
@@ -65,9 +71,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
               className="h-7 text-[10px] px-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground md:h-7 md:text-[10px] md:px-2 max-[767px]:h-5 max-[767px]:text-[8px] max-[767px]:px-1.5 max-[767px]:scale-90"
               onClick={(e) => {
                 e.stopPropagation();
-                if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
-                  clearAllAdminDiscounts();
-                }
+                handleGlobalReset();
               }}
             >
               <RotateCcw className="h-3 w-3 max-[767px]:h-2.5 max-[767px]:w-2.5 max-[767px]:mr-0 mr-1" />
@@ -83,7 +87,6 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
-          {/* Active brand discounts summary */}
           {brandDiscounts.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1">
               {brandDiscounts.map((d) => (
@@ -98,7 +101,6 @@ export function AdminBrandPanel({ manufacturers }: Props) {
             </div>
           )}
 
-          {/* Search filter for brands - sticky */}
           <div className="sticky top-0 z-10 bg-muted/30 pb-2">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
