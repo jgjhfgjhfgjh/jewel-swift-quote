@@ -31,15 +31,15 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
-    return sum + vocAfterDiscount * item.quantity;
+    const disc = getFinalDiscount(item);
+    const voc = item.product.price * (1 - disc / 100);
+    return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
-    return sum + (item.product.price - vocAfterDiscount) * item.quantity;
+    const disc = getFinalDiscount(item);
+    const voc = item.product.price * (1 - disc / 100);
+    return sum + (item.product.price - voc) * item.quantity;
   }, 0);
 
   if (!cartOpen) return null;
