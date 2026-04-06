@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_discounts: {
+        Row: {
+          created_at: string
+          customer_user_id: string
+          discount_type: string
+          id: string
+          percent: number
+          target_key: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_user_id: string
+          discount_type: string
+          id?: string
+          percent?: number
+          target_key: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_user_id?: string
+          discount_type?: string
+          id?: string
+          percent?: number
+          target_key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           base_discount: number
