@@ -10,6 +10,7 @@ import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import { useState } from 'react';
 
 export function CartDrawer() {
+  const { user } = useAuthContext();
   const {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
@@ -36,7 +37,7 @@ export function CartDrawer() {
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
 
-  if (!cartOpen) return null;
+  if (!cartOpen || !user) return null;
 
   return (
     <div className="fixed inset-0 z-50">

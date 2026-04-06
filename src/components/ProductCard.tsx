@@ -1,4 +1,4 @@
-import { Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -8,10 +8,12 @@ import { translations } from '@/lib/i18n';
 import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function ProductCard({ product }: { product: Product }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
-  const { isAdmin, profile } = useAuthContext();
+  const { isAdmin, profile, user } = useAuthContext();
+  const navigate = useNavigate();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(false);
@@ -62,6 +64,8 @@ export function ProductCard({ product }: { product: Product }) {
     setEditingDiscount(true);
   };
 
+  const isLoggedIn = !!user;
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <div className={`relative aspect-square overflow-hidden bg-muted ${isOutOfStock ? 'grayscale opacity-50' : ''}`}>
@@ -86,7 +90,7 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
-        {activeDiscount > 0 && (
+        {isLoggedIn && activeDiscount > 0 && (
           editingDiscount && isAdmin ? (
             <div className="absolute right-1 top-1 flex items-center gap-0.5">
               <Input
@@ -122,63 +126,78 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
 
-        <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
-          {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
-        </p>
+        {isLoggedIn && (
+          <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
+            {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
+          </p>
+        )}
 
         <div className="mt-auto flex flex-col gap-2 pt-3">
-          <div>
-            <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
-              {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
-            </p>
-            {qty > 1 && (
-              <p className="text-[11px] text-muted-foreground tabular-nums">
-                {t.marginPerPc}: €{unitMargin.toFixed(2)}
-              </p>
-            )}
-            <div className="flex items-baseline gap-2">
-              <span className="text-xs text-muted-foreground">
-                {t.voc}: €{effectiveVoc.toFixed(2)}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {t.moq}: €{product.price.toFixed(2)}
-              </span>
-            </div>
-          </div>
+          {isLoggedIn ? (
+            <>
+              <div>
+                <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
+                  {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
+                </p>
+                {qty > 1 && (
+                  <p className="text-[11px] text-muted-foreground tabular-nums">
+                    {t.marginPerPc}: €{unitMargin.toFixed(2)}
+                  </p>
+                )}
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs text-muted-foreground">
+                    {t.voc}: €{effectiveVoc.toFixed(2)}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {t.moq}: €{product.price.toFixed(2)}
+                  </span>
+                </div>
+              </div>
 
-          {qty === 0 ? (
+              {qty === 0 ? (
+                <Button
+                  size="sm"
+                  className="h-8 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+                  onClick={handleAdd}
+                  disabled={isOutOfStock}
+                >
+                  <ShoppingCart className="h-3.5 w-3.5" />
+                  <span className="text-xs">{isOutOfStock ? t.soldOut : t.addToCart}</span>
+                </Button>
+              ) : (
+                <div className="flex w-full items-center justify-center gap-2 transition-all duration-200 animate-in fade-in">
+                  <button
+                    onClick={handleDecrement}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </button>
+                  <span className="min-w-[1.5rem] text-center text-sm font-semibold tabular-nums">
+                    {qty}
+                  </span>
+                  <button
+                    onClick={handleIncrement}
+                    disabled={atMax}
+                    className={`flex h-8 w-8 items-center justify-center rounded-full border transition-colors ${
+                      atMax
+                        ? 'border-muted bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground'
+                    }`}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
             <Button
               size="sm"
-              className="h-8 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
-              onClick={handleAdd}
-              disabled={isOutOfStock}
+              className="h-9 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+              onClick={() => navigate('/register')}
             >
-              <ShoppingCart className="h-3.5 w-3.5" />
-              <span className="text-xs">{isOutOfStock ? t.soldOut : t.addToCart}</span>
+              <Lock className="h-3.5 w-3.5" />
+              <span className="text-xs">{t.getWholesalePrices}</span>
             </Button>
-          ) : (
-            <div className="flex w-full items-center justify-center gap-2 transition-all duration-200 animate-in fade-in">
-              <button
-                onClick={handleDecrement}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                <Minus className="h-3.5 w-3.5" />
-              </button>
-              <span className="min-w-[1.5rem] text-center text-sm font-semibold tabular-nums">
-                {qty}
-              </span>
-              <button
-                onClick={handleIncrement}
-                disabled={atMax}
-                className={`flex h-8 w-8 items-center justify-center rounded-full border transition-colors ${
-                  atMax
-                    ? 'border-muted bg-muted text-muted-foreground cursor-not-allowed'
-                    : 'border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground'
-                }`}
-              >
-                <Plus className="h-3.5 w-3.5" />
-              </button>
-            </div>
           )}
         </div>
       </div>

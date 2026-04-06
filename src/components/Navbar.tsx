@@ -89,10 +89,16 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/login')}>
-              <LogIn className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t.login}</span>
-            </Button>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/login')}>
+                <LogIn className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{t.login}</span>
+              </Button>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/register')}>
+                <span className="hidden sm:inline">{t.register}</span>
+                <span className="sm:hidden">Reg</span>
+              </Button>
+            </div>
           )
         )}
 
@@ -112,14 +118,16 @@ export function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
-          <ShoppingCart className="h-5 w-5" />
-          {totalItems > 0 && (
-            <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-              {totalItems}
-            </Badge>
-          )}
-        </Button>
+        {user && (
+          <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+            <ShoppingCart className="h-5 w-5" />
+            {totalItems > 0 && (
+              <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                {totalItems}
+              </Badge>
+            )}
+          </Button>
+        )}
       </div>
     </header>
   );
