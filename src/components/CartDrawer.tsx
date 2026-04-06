@@ -7,10 +7,15 @@ import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import { useState } from 'react';
 
+function getEffectiveDiscount(item: { discountPercent: number; manualDiscountPercent?: number }) {
+  return item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : item.discountPercent;
+}
+
 export function CartDrawer() {
   const {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount,
+    setItemDiscount,
   } = useStore();
   const t = translations[lang];
 
@@ -19,18 +24,16 @@ export function CartDrawer() {
 
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
-  // Calculate totals based on wholesale (VOC)
   const totalVOC = cart.reduce((sum, item) => {
-    const adminDiscount = item.discountPercent;
-    const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
+    const disc = getEffectiveDiscount(item);
+    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
     return sum + vocAfterDiscount * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const adminDiscount = item.discountPercent;
-    const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
-    const margin = item.product.price - vocAfterDiscount;
-    return sum + margin * item.quantity;
+    const disc = getEffectiveDiscount(item);
+    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    return sum + (item.product.price - vocAfterDiscount) * item.quantity;
   }, 0);
 
   if (!cartOpen) return null;
@@ -62,8 +65,9 @@ export function CartDrawer() {
                 {cart.map((item) => {
                   const baseMargin = item.product.price - item.product.wholesale;
                   const basePct = item.product.price > 0 ? ((baseMargin / item.product.price) * 100) : 0;
-                  const adminDiscount = item.discountPercent;
-                  const vocAfterDiscount = item.product.wholesale * (1 - adminDiscount / 100);
+                  const effectiveDisc = getEffectiveDiscount(item);
+                  const hasManualOverride = item.manualDiscountPercent !== undefined;
+                  const vocAfterDiscount = item.product.wholesale * (1 - effectiveDisc / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
@@ -77,7 +81,6 @@ export function CartDrawer() {
                       <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
-                        {/* Pricing details */}
                         <div className="mt-1 space-y-0.5">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
@@ -86,20 +89,44 @@ export function CartDrawer() {
                               <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(basePct)}%</span>
                             )}
                           </div>
-                          {adminDiscount > 0 && (
+                          {effectiveDisc > 0 && (
                             <div className="flex items-center gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
-                              <span className="rounded bg-primary/10 px-1 py-0.5 text-[9px] font-semibold text-primary">Admin -{adminDiscount}%</span>
+                              <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${hasManualOverride ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'}`}>
+                                {hasManualOverride ? 'Manual' : 'Admin'} -{effectiveDisc}%
+                              </span>
                               <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
                             </div>
                           )}
-                          <p className="text-xs font-bold text-primary tabular-nums">{t.margin}: €{effectiveMargin.toFixed(2)}</p>
+                          <p className={`text-xs font-bold tabular-nums ${hasManualOverride ? 'text-blue-600' : 'text-primary'}`}>
+                            {t.margin}: €{effectiveMargin.toFixed(2)}
+                          </p>
                         </div>
                       </div>
-                      {/* Delete */}
-                      <Button variant="ghost" size="icon" className="h-6 w-6 flex-shrink-0 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
+                      {/* Delete + Admin inline discount */}
+                      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                        {isAdmin && (
+                          <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            placeholder="%"
+                            value={item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '') {
+                                setItemDiscount(item.product.id, undefined);
+                              } else {
+                                setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
+                              }
+                            }}
+                            className={`w-14 h-6 text-[10px] px-1 text-center ${hasManualOverride ? 'border-blue-500 text-blue-600' : ''}`}
+                          />
+                        )}
+                      </div>
                       {/* Quantity + Subtotal row */}
                       <div className="flex w-full items-center justify-between gap-2 pl-0 sm:pl-[calc(3.5rem+0.75rem)]">
                         <div className="flex items-center gap-1 flex-shrink-0">
@@ -167,7 +194,7 @@ export function CartDrawer() {
                 </div>
                 {brandDiscounts.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
-                {brandDiscounts.map((d: { brand: string; percent: number }) => (
+                    {brandDiscounts.map((d: { brand: string; percent: number }) => (
                       <button
                         key={d.brand}
                         onClick={() => removeBrandDiscount(d.brand)}
