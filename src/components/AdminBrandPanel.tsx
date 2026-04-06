@@ -1,0 +1,99 @@
+import { useState } from 'react';
+import { ChevronDown, ChevronUp, Percent, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useStore } from '@/lib/store';
+import { translations } from '@/lib/i18n';
+
+interface Props {
+  manufacturers: { name: string; count: number }[];
+}
+
+export function AdminBrandPanel({ manufacturers }: Props) {
+  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount } = useStore();
+  const t = translations[lang];
+  const [open, setOpen] = useState(false);
+  const [inputs, setInputs] = useState<Record<string, string>>({});
+
+  if (!isAdmin) return null;
+
+  const handleSet = (brand: string) => {
+    const val = inputs[brand];
+    if (val && !isNaN(Number(val))) {
+      setBrandDiscount(brand, Math.min(100, Math.max(0, Number(val))));
+      setInputs((prev) => ({ ...prev, [brand]: '' }));
+    }
+  };
+
+  const getBrandDiscount = (brand: string) =>
+    brandDiscounts.find((d) => d.brand === brand)?.percent;
+
+  return (
+    <div className="border-b bg-muted/30">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-center justify-between px-4 py-2 text-sm font-semibold hover:bg-muted/50 transition-colors"
+      >
+        <span className="flex items-center gap-2">
+          <Percent className="h-4 w-4 text-primary" />
+          {t.brandDiscountPanel}
+        </span>
+        {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+      </button>
+
+      {open && (
+        <div className="px-4 pb-3">
+          {/* Active brand discounts summary */}
+          {brandDiscounts.length > 0 && (
+            <div className="mb-2 flex flex-wrap gap-1">
+              {brandDiscounts.map((d) => (
+                <button
+                  key={d.brand}
+                  onClick={() => removeBrandDiscount(d.brand)}
+                  className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-500/20 transition-colors"
+                >
+                  {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
+                </button>
+              ))}
+            </div>
+          )}
+
+          <ScrollArea className="max-h-48">
+            <div className="space-y-1">
+              {manufacturers.map(({ name }) => {
+                const existing = getBrandDiscount(name);
+                return (
+                  <div key={name} className="flex items-center gap-2">
+                    <span className="flex-1 truncate text-xs">{name}</span>
+                    {existing !== undefined && (
+                      <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
+                    )}
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      placeholder="%"
+                      value={inputs[name] || ''}
+                      onChange={(e) => setInputs((prev) => ({ ...prev, [name]: e.target.value }))}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSet(name)}
+                      className={`w-14 h-6 text-[10px] px-1 text-center ${existing !== undefined ? 'border-blue-500' : ''}`}
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-6 text-[10px] px-2"
+                      onClick={() => handleSet(name)}
+                    >
+                      {t.setDiscount}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </div>
+      )}
+    </div>
+  );
+}
