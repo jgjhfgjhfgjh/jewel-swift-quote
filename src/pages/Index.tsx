@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar';
 import { AdminBrandPanel } from '@/components/AdminBrandPanel';
+import { AdminProductOverridesPanel } from '@/components/AdminProductOverridesPanel';
 import { CustomerSelectorPanel } from '@/components/CustomerSelectorPanel';
 import { SalesModeBar } from '@/components/SalesModeBar';
 import { FilterSidebar } from '@/components/FilterSidebar';
