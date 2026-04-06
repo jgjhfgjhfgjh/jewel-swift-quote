@@ -39,14 +39,15 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
     }
     if (selectedCategory) {
       const categoryKeywords: Record<string, string[]> = {
-        'Hodinky': ['hodinky', 'watches', 'watch', 'uhr'],
-        'Šperky': ['šperky', 'jewelry', 'jewellery', 'bijoux', 'schmuck'],
-        'Příslušenství': ['příslušenství', 'accessories', 'straps', 'strap', 'řemínky', 'zubehör'],
+        'Hodinky': ['hodink', 'watch', 'hodin'],
+        'Šperky': ['šperk', 'jewelry', 'bijoux', 'prsten', 'náhrdelník', 'náramek', 'náušnice', 'přívěsek', 'ring', 'necklace', 'bracelet', 'earring'],
+        'Příslušenství': ['příslušenství', 'accessories', 'řemínek', 'strap'],
       };
       const keywords = categoryKeywords[selectedCategory] || [selectedCategory.toLowerCase()];
       result = result.filter((p) => {
         const cat = (p.category || '').toLowerCase();
-        return keywords.some((kw) => cat.includes(kw));
+        const name = (p.name || '').toLowerCase();
+        return keywords.some((kw) => cat.includes(kw) || name.includes(kw));
       });
     }
     if (stockOnly) result = result.filter((p) => p.inStock);
