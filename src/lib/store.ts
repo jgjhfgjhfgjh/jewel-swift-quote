@@ -107,6 +107,11 @@ export const useStore = create<AppState>()(
       removeBrandDiscount: (brand) => set((s) => ({
         brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
       })),
+      clearAllAdminDiscounts: () => set((s) => ({
+        brandDiscounts: [],
+        productDiscounts: {},
+        cart: s.cart.map((i) => ({ ...i, manualDiscountPercent: undefined })),
+      })),
 
       cartOpen: false,
       setCartOpen: (v) => set({ cartOpen: v }),
