@@ -90,8 +90,8 @@ export function CartDrawer() {
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
                             <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
-                            {basePct > 0 && (
-                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(basePct)}%</span>
+                            {feedDisc > 0 && (
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(feedDisc)}%</span>
                             )}
                           </div>
                           {effectiveDisc > 0 && (
