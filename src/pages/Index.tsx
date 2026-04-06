@@ -47,6 +47,7 @@ const Index = () => {
       <SalesModeBar />
       <CustomerSelectorPanel />
       <AdminBrandPanel manufacturers={manufacturers} />
+      <AdminProductOverridesPanel products={products} />
       <div className="flex flex-1 overflow-hidden">
         <FilterSidebar
           manufacturers={manufacturers}
