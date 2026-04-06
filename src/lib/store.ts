@@ -73,6 +73,7 @@ export const useStore = create<AppState>()(
         const newDiscounts = existing
           ? s.brandDiscounts.map((d) => d.brand === brand ? { ...d, percent } : d)
           : [...s.brandDiscounts, { brand, percent }];
+        // Update cart items: brand discount replaces base feed discount (unless manual override exists)
         const newCart = s.cart.map((i) =>
           i.product.manufacturer === brand && i.manualDiscountPercent === undefined
             ? { ...i, discountPercent: percent }
@@ -82,11 +83,14 @@ export const useStore = create<AppState>()(
       }),
       removeBrandDiscount: (brand) => set((s) => ({
         brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
-        cart: s.cart.map((i) =>
-          i.product.manufacturer === brand && i.manualDiscountPercent === undefined
-            ? { ...i, discountPercent: 0 }
-            : i
-        ),
+        // Fall back to base feed discount when brand discount is removed
+        cart: s.cart.map((i) => {
+          if (i.product.manufacturer === brand && i.manualDiscountPercent === undefined) {
+            const baseDiscount = i.product.price > 0 ? ((i.product.price - i.product.wholesale) / i.product.price) * 100 : 0;
+            return { ...i, discountPercent: baseDiscount };
+          }
+          return i;
+        }),
       })),
 
       cartOpen: false,
