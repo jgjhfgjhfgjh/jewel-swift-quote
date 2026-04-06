@@ -48,7 +48,20 @@ export function Navbar() {
           </h1>
         </Link>
 
-        <div className="flex-1" />
+        {/* Search bar - hidden on mobile, visible on md+ */}
+        <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg xl:max-w-xl mx-4">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder={t.search}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+          </div>
+        </div>
+        <div className="flex-1 md:hidden" />
 
         {/* User welcome or discount info */}
         {user && profile && (
