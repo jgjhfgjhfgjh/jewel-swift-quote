@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
@@ -9,8 +11,8 @@ import { translations } from '@/lib/i18n';
 interface Props {
   manufacturers: { name: string; count: number }[];
   categories: { name: string; count: number }[];
-  selectedBrand: string;
-  setSelectedBrand: (v: string) => void;
+  selectedBrands: string[];
+  setSelectedBrands: (v: string[]) => void;
   selectedCategory: string;
   setSelectedCategory: (v: string) => void;
   search: string;
@@ -21,8 +23,10 @@ interface Props {
   setMinDiscount: (v: number) => void;
 }
 
+const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
+
 export function FilterSidebar({
-  manufacturers, categories, selectedBrand, setSelectedBrand,
+  manufacturers, categories, selectedBrands, setSelectedBrands,
   selectedCategory, setSelectedCategory, search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
 }: Props) {
@@ -34,6 +38,25 @@ export function FilterSidebar({
     { label: t.discount60, value: 60 },
     { label: t.discount50, value: 50 },
   ];
+
+  const categoryLabels: Record<string, Record<string, string>> = {
+    'Hodinky': { cs: 'Hodinky', en: 'Watches', is: 'Úr' },
+    'Šperky': { cs: 'Šperky', en: 'Jewelry', is: 'Skartgripir' },
+    'Příslušenství': { cs: 'Příslušenství', en: 'Accessories', is: 'Fylgihlutir' },
+  };
+
+  const sortedManufacturers = useMemo(
+    () => [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
+    [manufacturers]
+  );
+
+  const toggleBrand = (name: string) => {
+    if (selectedBrands.includes(name)) {
+      setSelectedBrands(selectedBrands.filter((b) => b !== name));
+    } else {
+      setSelectedBrands([...selectedBrands, name]);
+    }
+  };
 
   const content = (
     <div className="flex h-full flex-col">
@@ -49,6 +72,7 @@ export function FilterSidebar({
         </div>
       </div>
 
+      {/* Live Offer toggle */}
       <div className="flex items-center justify-between px-4 py-2">
         <span className="text-sm font-medium">{t.stockOnly}</span>
         <Switch checked={stockOnly} onCheckedChange={setStockOnly} />
@@ -68,43 +92,49 @@ export function FilterSidebar({
         ))}
       </div>
 
+      {/* Category switches */}
+      <div className="px-4 py-2 space-y-2">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.categories}</h3>
+        <button
+          onClick={() => setSelectedCategory('')}
+          className="text-sm text-primary hover:underline font-medium"
+        >
+          {t.allCategories}
+        </button>
+        {CATEGORY_KEYS.map((cat) => (
+          <div key={cat} className="flex items-center justify-between">
+            <span className="text-sm font-medium">{categoryLabels[cat]?.[lang] || cat}</span>
+            <Switch
+              checked={selectedCategory === cat}
+              onCheckedChange={(checked) => setSelectedCategory(checked ? cat : '')}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Brands with checkboxes */}
       <ScrollArea className="flex-1 scrollbar-thin">
         <div className="p-4 pt-2">
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.brands}</h3>
-          <div className="space-y-0.5">
-            <button
-              onClick={() => setSelectedBrand('')}
-              className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${!selectedBrand ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-muted'}`}
-            >
-              {t.allBrands}
-            </button>
-            {manufacturers.map((m) => (
-              <button
+          <button
+            onClick={() => setSelectedBrands([])}
+            className="mb-2 text-sm text-primary hover:underline font-medium"
+          >
+            {t.allBrands}
+          </button>
+          <div className="space-y-1.5">
+            {sortedManufacturers.map((m) => (
+              <label
                 key={m.name}
-                onClick={() => setSelectedBrand(m.name === selectedBrand ? '' : m.name)}
-                className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${selectedBrand === m.name ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-muted'}`}
+                className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
               >
+                <Checkbox
+                  checked={selectedBrands.includes(m.name)}
+                  onCheckedChange={() => toggleBrand(m.name)}
+                  className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                />
                 <span className="truncate">{m.name}</span>
-              </button>
-            ))}
-          </div>
-
-          <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.categories}</h3>
-          <div className="space-y-0.5">
-            <button
-              onClick={() => setSelectedCategory('')}
-              className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${!selectedCategory ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-muted'}`}
-            >
-              {t.allCategories}
-            </button>
-            {categories.map((c) => (
-              <button
-                key={c.name}
-                onClick={() => setSelectedCategory(c.name === selectedCategory ? '' : c.name)}
-                className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors ${selectedCategory === c.name ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-muted'}`}
-              >
-                <span className="truncate">{c.name}</span>
-              </button>
+              </label>
             ))}
           </div>
         </div>

@@ -10,19 +10,19 @@ const PAGE_SIZE = 48;
 interface Props {
   products: Product[];
   search: string;
-  selectedBrand: string;
+  selectedBrands: string[];
   selectedCategory: string;
   stockOnly: boolean;
   minDiscount: number;
 }
 
-export function ProductGrid({ products, search, selectedBrand, selectedCategory, stockOnly, minDiscount }: Props) {
+export function ProductGrid({ products, search, selectedBrands, selectedCategory, stockOnly, minDiscount }: Props) {
   const { lang } = useStore();
   const t = translations[lang];
   const [page, setPage] = useState(1);
 
   // Reset page when filters change
-  useMemo(() => { setPage(1); }, [search, selectedBrand, selectedCategory, stockOnly, minDiscount]);
+  useMemo(() => { setPage(1); }, [search, selectedBrands, selectedCategory, stockOnly, minDiscount]);
 
   const filtered = useMemo(() => {
     let result = products;
@@ -34,7 +34,9 @@ export function ProductGrid({ products, search, selectedBrand, selectedCategory,
         p.sku.toLowerCase().includes(q)
       );
     }
-    if (selectedBrand) result = result.filter((p) => p.manufacturer === selectedBrand);
+    if (selectedBrands.length > 0) {
+      result = result.filter((p) => selectedBrands.includes(p.manufacturer));
+    }
     if (selectedCategory) result = result.filter((p) => p.category.startsWith(selectedCategory));
     if (stockOnly) result = result.filter((p) => p.inStock);
     if (minDiscount > 0) {
@@ -44,7 +46,7 @@ export function ProductGrid({ products, search, selectedBrand, selectedCategory,
       });
     }
     return result;
-  }, [products, search, selectedBrand, selectedCategory, stockOnly, minDiscount]);
+  }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount]);
 
   const paginated = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filtered.length;

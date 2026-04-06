@@ -12,7 +12,7 @@ const Index = () => {
   const { lang } = useStore();
 
   const [search, setSearch] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [stockOnly, setStockOnly] = useState(false);
   const [minDiscount, setMinDiscount] = useState(0);
@@ -45,8 +45,8 @@ const Index = () => {
         <FilterSidebar
           manufacturers={manufacturers}
           categories={categories}
-          selectedBrand={selectedBrand}
-          setSelectedBrand={setSelectedBrand}
+          selectedBrands={selectedBrands}
+          setSelectedBrands={setSelectedBrands}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           search={search}
@@ -59,7 +59,7 @@ const Index = () => {
         <ProductGrid
           products={products}
           search={search}
-          selectedBrand={selectedBrand}
+          selectedBrands={selectedBrands}
           selectedCategory={selectedCategory}
           stockOnly={stockOnly}
           minDiscount={minDiscount}
