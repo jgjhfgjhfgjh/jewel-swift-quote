@@ -31,13 +31,13 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
     const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
     const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
