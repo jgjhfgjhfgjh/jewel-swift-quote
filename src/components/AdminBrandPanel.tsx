@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -89,8 +90,19 @@ export function AdminBrandPanel({ manufacturers }: Props) {
     activeBrandDiscounts.find((d) => d.brand === brand)?.percent;
 
   const handleGlobalReset = () => {
-    if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
+    if (!window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) return;
+
+    if (salesCustomer) {
+      // Only remove non-permanent brand discounts
+      const toRemove = salesBrandDiscounts.filter((d) => !permanentBrands[d.brand]);
+      for (const d of toRemove) removeSalesBrandDiscount(d.brand);
+    } else {
       clearAllAdminDiscounts();
+    }
+
+    const hadPermanent = Object.values(permanentBrands).some(Boolean);
+    if (hadPermanent) {
+      toast('Dočasné úpravy byly resetovány. Trvalé slevy zůstaly zachovány.');
     }
   };
 

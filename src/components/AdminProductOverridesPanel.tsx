@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Package, X, RotateCcw, Save } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useStore } from '@/lib/store';
@@ -48,7 +49,13 @@ export function AdminProductOverridesPanel({ products }: Props) {
     .map((id) => products.find((p) => p.id === id))
     .filter((p): p is Product => !!p);
 
-  const handleRemove = (productId: string) => {
+  const handleRemove = async (productId: string) => {
+    const isPermanent = permanentProducts[productId];
+    if (isPermanent && salesCustomer) {
+      if (!window.confirm('Opravdu chcete smazat tuto trvalou slevu z profilu zákazníka?')) return;
+      await removeProductDiscount(salesCustomer.user_id, productId);
+      setPermanentProducts((prev) => ({ ...prev, [productId]: false }));
+    }
     if (salesCustomer) {
       setSalesProductDiscount(productId, undefined);
     } else {
@@ -58,12 +65,17 @@ export function AdminProductOverridesPanel({ products }: Props) {
 
   const handleResetAll = () => {
     if (!window.confirm('Opravdu chcete resetovat všechny ruční úpravy produktů?')) return;
+    const hadPermanent = Object.values(permanentProducts).some(Boolean);
     for (const id of overriddenIds) {
+      if (permanentProducts[id]) continue; // skip permanent
       if (salesCustomer) {
         setSalesProductDiscount(id, undefined);
       } else {
         setProductDiscount(id, undefined);
       }
+    }
+    if (hadPermanent) {
+      toast('Dočasné úpravy byly resetovány. Trvalé slevy zůstaly zachovány.');
     }
   };
 
