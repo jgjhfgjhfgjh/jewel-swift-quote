@@ -107,7 +107,7 @@ export function ProductCard({ product }: { product: Product }) {
               } ${
                 isOverridden
                   ? 'bg-blue-500 text-white hover:bg-blue-600'
-                  : 'bg-primary text-destructive-foreground'
+                  : 'bg-primary text-destructive-foreground hover:bg-primary'
               }`}
             >
               -{Math.round(activeDiscount)}%
