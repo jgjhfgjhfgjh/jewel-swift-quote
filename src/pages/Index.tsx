@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { FilterSidebar } from '@/components/FilterSidebar';
 import { ProductGrid } from '@/components/ProductGrid';
@@ -9,13 +8,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
-  const { lang } = useStore();
-
-  const [search, setSearch] = useState('');
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [stockOnly, setStockOnly] = useState(false);
-  const [minDiscount, setMinDiscount] = useState(0);
+  const {
+    search, setSearch,
+    selectedBrands, setSelectedBrands,
+    selectedCategory, setSelectedCategory,
+    stockOnly, setStockOnly,
+    minDiscount, setMinDiscount,
+  } = useStore();
 
   if (loading) {
     return (
