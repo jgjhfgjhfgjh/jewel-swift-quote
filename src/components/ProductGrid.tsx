@@ -37,7 +37,18 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
     if (selectedBrands.length > 0) {
       result = result.filter((p) => selectedBrands.includes(p.manufacturer));
     }
-    if (selectedCategory) result = result.filter((p) => p.category.startsWith(selectedCategory));
+    if (selectedCategory) {
+      const categoryKeywords: Record<string, string[]> = {
+        'Hodinky': ['hodinky', 'watches', 'watch', 'uhr'],
+        'Šperky': ['šperky', 'jewelry', 'jewellery', 'bijoux', 'schmuck'],
+        'Příslušenství': ['příslušenství', 'accessories', 'straps', 'strap', 'řemínky', 'zubehör'],
+      };
+      const keywords = categoryKeywords[selectedCategory] || [selectedCategory.toLowerCase()];
+      result = result.filter((p) => {
+        const cat = (p.category || '').toLowerCase();
+        return keywords.some((kw) => cat.includes(kw));
+      });
+    }
     if (stockOnly) result = result.filter((p) => p.inStock);
     if (minDiscount > 0) {
       result = result.filter((p) => {
