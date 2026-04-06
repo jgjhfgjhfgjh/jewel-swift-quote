@@ -15,10 +15,15 @@ export function CartDrawer() {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
     setProductDiscount,
+    salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
   const { isAdmin, profile } = useAuthContext();
   const t = translations[lang];
-  const customerDiscount = profile?.base_discount ?? 0;
+
+  // In sales mode, use the selected customer's discount
+  const effectiveProductDiscounts = salesCustomer ? salesProductDiscounts : productDiscounts;
+  const effectiveBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
+  const customerDiscount = salesCustomer ? salesCustomer.base_discount : (profile?.base_discount ?? 0);
 
   const [discountBrand, setDiscountBrand] = useState('');
   const [discountPercent, setDiscountPercent] = useState('');
@@ -26,13 +31,13 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
     const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const { percent } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+    const { percent } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
     const voc = getFinalVoc(item.product.price, percent, customerDiscount);
     return sum + (item.product.price - voc) * item.quantity;
   }, 0);
@@ -67,12 +72,12 @@ export function CartDrawer() {
                   const baseDiscount = item.product.price > 0
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
                     : 0;
-                  const { percent: activePercent, source } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+                  const { percent: activePercent, source } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
                   const vocAfterDiscount = getFinalVoc(item.product.price, activePercent, customerDiscount);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
-                  const isOverridden = source === 'manual' || source === 'brand';
+                  const isOverridden = source === 'manual' || source === 'brand' || source === 'customer-product' || source === 'customer-brand';
 
                   return (
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3 w-full">
@@ -130,13 +135,13 @@ export function CartDrawer() {
                             min="0"
                             max="100"
                             placeholder="%"
-                            value={item.product.id in productDiscounts ? productDiscounts[item.product.id] : ''}
+                            value={item.product.id in effectiveProductDiscounts ? effectiveProductDiscounts[item.product.id] : ''}
                             onChange={(e) => {
                               const val = e.target.value;
-                              if (val === '') {
-                                setProductDiscount(item.product.id, undefined);
+                              if (salesCustomer) {
+                                setSalesProductDiscount(item.product.id, val === '' ? undefined : Math.min(100, Math.max(0, Number(val))));
                               } else {
-                                setProductDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
+                                setProductDiscount(item.product.id, val === '' ? undefined : Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
                             className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
@@ -223,6 +228,16 @@ export function CartDrawer() {
             )}
 
             <div className="border-t p-4">
+              {salesCustomer && (
+                <div className="mb-3 rounded-md bg-blue-50 dark:bg-blue-950/30 p-2 text-xs">
+                  <p className="font-semibold text-blue-700 dark:text-blue-300">
+                    Nabídka pro: {salesCustomer.company_name}
+                  </p>
+                  {salesCustomer.ico && (
+                    <p className="text-blue-600/70 dark:text-blue-400/70">IČO: {salesCustomer.ico}</p>
+                  )}
+                </div>
+              )}
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-muted-foreground">{t.total} ({t.voc})</span>
                 <span className="text-lg font-bold tabular-nums">€{totalVOC.toFixed(2)}</span>

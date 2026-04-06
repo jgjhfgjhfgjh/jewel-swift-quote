@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw } from 'lucide-react';
+import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
 import { translations } from '@/lib/i18n';
 
 interface Props {
@@ -11,8 +13,13 @@ interface Props {
 }
 
 export function AdminBrandPanel({ manufacturers }: Props) {
-  const { lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
+  const {
+    lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts,
+    salesCustomer, salesBrandDiscounts, setSalesBrandDiscount, removeSalesBrandDiscount,
+    savePermanentBrand, setSavePermanentBrand,
+  } = useStore();
   const { isAdmin } = useAuthContext();
+  const { saveBrandDiscount, removeBrandDiscount: removeDbBrandDiscount } = useCustomerDiscounts();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -31,16 +38,26 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
   if (!isAdmin) return null;
 
-  const handleSet = (brand: string) => {
+  const handleSet = async (brand: string) => {
     const val = inputs[brand];
     if (val && !isNaN(Number(val))) {
-      setBrandDiscount(brand, Math.min(100, Math.max(0, Number(val))));
+      const percent = Math.min(100, Math.max(0, Number(val)));
+      if (salesCustomer) {
+        setSalesBrandDiscount(brand, percent);
+        if (savePermanentBrand) {
+          await saveBrandDiscount(salesCustomer.user_id, brand, percent);
+        }
+      } else {
+        setBrandDiscount(brand, percent);
+      }
       setInputs((prev) => ({ ...prev, [brand]: '' }));
     }
   };
 
+  const activeBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
+
   const getBrandDiscount = (brand: string) =>
-    brandDiscounts.find((d) => d.brand === brand)?.percent;
+    activeBrandDiscounts.find((d) => d.brand === brand)?.percent;
 
   const handleGlobalReset = () => {
     if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
@@ -57,14 +74,14 @@ export function AdminBrandPanel({ manufacturers }: Props) {
         >
           <Percent className="h-4 w-4 text-primary" />
           {t.brandDiscountPanel}
-          {brandDiscounts.length > 0 && (
+          {activeBrandDiscounts.length > 0 && (
             <span className="rounded-full bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
-              {brandDiscounts.length}
+              {activeBrandDiscounts.length}
             </span>
           )}
         </button>
         <div className="flex items-center gap-2">
-          {(brandDiscounts.length > 0 || Object.keys(productDiscounts).length > 0) && (
+          {(activeBrandDiscounts.length > 0 || Object.keys(salesCustomer ? {} : productDiscounts).length > 0) && (
             <Button
               size="sm"
               variant="outline"
@@ -87,12 +104,25 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
-          {brandDiscounts.length > 0 && (
+          {salesCustomer && (
+            <div className="mb-2 flex items-center gap-2">
+              <Checkbox
+                id="save-permanent-brand"
+                checked={savePermanentBrand}
+                onCheckedChange={(v) => setSavePermanentBrand(!!v)}
+              />
+              <label htmlFor="save-permanent-brand" className="text-[11px] font-medium text-blue-600 cursor-pointer flex items-center gap-1">
+                <Save className="h-3 w-3" />
+                Uložit trvale do profilu zákazníka
+              </label>
+            </div>
+          )}
+          {activeBrandDiscounts.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1">
-              {brandDiscounts.map((d) => (
+              {activeBrandDiscounts.map((d) => (
                 <button
                   key={d.brand}
-                  onClick={() => removeBrandDiscount(d.brand)}
+                  onClick={() => salesCustomer ? removeSalesBrandDiscount(d.brand) : removeBrandDiscount(d.brand)}
                   className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-500/20 transition-colors"
                 >
                   {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
