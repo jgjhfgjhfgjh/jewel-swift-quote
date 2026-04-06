@@ -31,6 +31,7 @@ export function FilterSidebar({
   selectedCategory, setSelectedCategory, search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
 }: Props) {
+  const { user } = useAuthContext();
   const { lang, sidebarOpen, setSidebarOpen } = useStore();
   const t = translations[lang];
 
