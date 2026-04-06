@@ -28,18 +28,8 @@ export function AdminBrandPanel({ manufacturers }: Props) {
     return sortedBrands.filter(({ name }) => name.toLowerCase().includes(q));
   }, [sortedBrands, brandSearch]);
 
+
   if (!isAdmin) return null;
-
-  const sortedBrands = useMemo(() =>
-    [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
-    [manufacturers]
-  );
-
-  const filteredBrands = useMemo(() => {
-    if (!brandSearch.trim()) return sortedBrands;
-    const q = brandSearch.toLowerCase();
-    return sortedBrands.filter(({ name }) => name.toLowerCase().includes(q));
-  }, [sortedBrands, brandSearch]);
 
   const handleSet = (brand: string) => {
     const val = inputs[brand];
