@@ -123,56 +123,74 @@ export function AdminProductOverridesPanel({ products }: Props) {
               const marginPercent = product.price > 0 ? (margin / product.price) * 100 : 0;
 
               return (
-                <div key={product.id} className="flex items-center gap-2 rounded-lg border bg-white p-2">
-                  <div className="h-10 w-10 shrink-0 overflow-hidden rounded bg-muted">
-                    <img
-                      src={product.img}
-                      alt={product.name}
-                      className="h-full w-full object-contain p-0.5"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-medium leading-tight truncate">{product.name}</p>
-                    <p className="text-[9px] text-muted-foreground">{product.manufacturer} · {product.sku || product.id}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[10px] text-muted-foreground line-through">
-                        VOC: €{feedVoc.toFixed(2)}
-                      </span>
-                      <span className="text-[10px] font-bold text-blue-600">
-                        VOC: €{effectiveVoc.toFixed(2)}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        MOC: €{product.price.toFixed(2)}
-                      </span>
+                <div key={product.id} className="rounded-lg border bg-card p-3 space-y-2">
+                  {/* Row 1: Photo + Name/SKU */}
+                  <div className="flex items-start gap-3">
+                    <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border bg-muted">
+                      <img
+                        src={product.img}
+                        alt={product.name}
+                        className="h-full w-full object-contain p-1"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-blue-600">
-                        Sleva: -{Math.round(overridePercent)}%
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        Marže: €{margin.toFixed(2)} ({marginPercent.toFixed(1)}%)
-                      </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold leading-tight truncate">{product.name}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{product.manufacturer} · {product.sku || product.id}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    {salesCustomer && savePermanentProduct && (
+
+                  {/* Row 2: Pricing grid — matches Cart style */}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">MOC:</span>
+                      <span className="font-medium">€{product.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-primary">MARŽE:</span>
+                      <span className="font-bold text-primary text-sm">{marginPercent.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">VOC (feed):</span>
+                      <span className="text-muted-foreground line-through">€{feedVoc.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Marže €:</span>
+                      <span className="font-medium">€{margin.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-blue-600 font-semibold">VOC (nová):</span>
+                      <span className="text-blue-600 font-bold">€{effectiveVoc.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-blue-600 font-semibold">SLEVA:</span>
+                      <span className="text-blue-600 font-bold">-{Math.round(overridePercent)}%</span>
+                    </div>
+                  </div>
+
+                  {/* Row 3: Actions */}
+                  <div className="flex items-center justify-between pt-1 border-t">
+                    {salesCustomer && savePermanentProduct ? (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-6 text-[9px] px-1.5 text-blue-600 border-blue-300 hover:bg-blue-50"
+                        className="h-6 text-[10px] px-2 gap-1 text-blue-600 border-blue-300 hover:bg-blue-50"
                         onClick={() => handleSavePermanent(product.id)}
                       >
-                        <Save className="h-2.5 w-2.5" />
+                        <Save className="h-3 w-3" />
+                        Uložit trvale
                       </Button>
+                    ) : (
+                      <div />
                     )}
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-6 text-[9px] px-1.5 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                      className="h-6 text-[10px] px-2 gap-1 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
                       onClick={() => handleRemove(product.id)}
                     >
                       <X className="h-3 w-3" />
+                      Odebrat
                     </Button>
                   </div>
                 </div>
