@@ -12,7 +12,8 @@ import { useNavigate } from 'react-router-dom';
 
 export function ProductCard({ product }: { product: Product }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
-  const { isAdmin, profile } = useAuthContext();
+  const { isAdmin, profile, user } = useAuthContext();
+  const navigate = useNavigate();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(false);
