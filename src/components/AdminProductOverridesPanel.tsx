@@ -145,7 +145,7 @@ export function AdminProductOverridesPanel({ products }: Props) {
                         MOC: €{product.price.toFixed(2)}
                       </span>
                       <span className={`text-[10px] font-bold ${marginKc >= 0 ? 'text-green-600' : 'text-destructive'}`}>
-                        Marže: {marginKc >= 0 ? '+' : ''}{marginKc.toFixed(2)} Kč
+                        Marže/ks: {marginKc >= 0 ? '+' : ''}{marginKc.toFixed(2)} Kč
                       </span>
                     </div>
                   </div>
