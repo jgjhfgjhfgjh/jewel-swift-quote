@@ -74,14 +74,14 @@ export function AdminBrandPanel({ manufacturers }: Props) {
         >
           <Percent className="h-4 w-4 text-primary" />
           {t.brandDiscountPanel}
-          {brandDiscounts.length > 0 && (
+          {activeBrandDiscounts.length > 0 && (
             <span className="rounded-full bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
-              {brandDiscounts.length}
+              {activeBrandDiscounts.length}
             </span>
           )}
         </button>
         <div className="flex items-center gap-2">
-          {(brandDiscounts.length > 0 || Object.keys(productDiscounts).length > 0) && (
+          {(activeBrandDiscounts.length > 0 || Object.keys(salesCustomer ? {} : productDiscounts).length > 0) && (
             <Button
               size="sm"
               variant="outline"
@@ -104,12 +104,25 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
-          {brandDiscounts.length > 0 && (
+          {salesCustomer && (
+            <div className="mb-2 flex items-center gap-2">
+              <Checkbox
+                id="save-permanent-brand"
+                checked={savePermanentBrand}
+                onCheckedChange={(v) => setSavePermanentBrand(!!v)}
+              />
+              <label htmlFor="save-permanent-brand" className="text-[11px] font-medium text-blue-600 cursor-pointer flex items-center gap-1">
+                <Save className="h-3 w-3" />
+                Uložit trvale do profilu zákazníka
+              </label>
+            </div>
+          )}
+          {activeBrandDiscounts.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1">
-              {brandDiscounts.map((d) => (
+              {activeBrandDiscounts.map((d) => (
                 <button
                   key={d.brand}
-                  onClick={() => removeBrandDiscount(d.brand)}
+                  onClick={() => salesCustomer ? removeSalesBrandDiscount(d.brand) : removeBrandDiscount(d.brand)}
                   className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-500/20 transition-colors"
                 >
                   {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
