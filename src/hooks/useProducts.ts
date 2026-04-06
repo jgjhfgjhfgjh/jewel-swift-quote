@@ -9,7 +9,15 @@ export function useProducts() {
     fetch('/products.json')
       .then((r) => r.json())
       .then((data: Product[]) => {
-        setProducts(data);
+        // Exclude dropshipping products and products with empty manufacturers
+        const cleaned = data.filter((p) => {
+          const cat = (p.category || '').toLowerCase();
+          const mfr = (p.manufacturer || '').trim();
+          if (!mfr) return false;
+          if (cat.includes('dropshipping')) return false;
+          return true;
+        });
+        setProducts(cleaned);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -18,7 +26,10 @@ export function useProducts() {
   const manufacturers = useMemo(() => {
     const counts = new Map<string, number>();
     products.forEach((p) => {
-      counts.set(p.manufacturer, (counts.get(p.manufacturer) || 0) + 1);
+      const mfr = (p.manufacturer || '').trim();
+      if (mfr) {
+        counts.set(mfr, (counts.get(mfr) || 0) + 1);
+      }
     });
     return Array.from(counts.entries())
       .sort((a, b) => b[1] - a[1])
