@@ -17,6 +17,7 @@ export interface CartItem {
   product: Product;
   quantity: number;
   discountPercent: number;
+  manualDiscountPercent?: number;
 }
 
 export interface BrandDiscount {
