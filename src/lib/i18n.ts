@@ -90,6 +90,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount70: 'Discount 70%+',
     discount60: 'Discount 60%+',
     discount50: 'Discount 50%+',
+    brandDiscountPanel: 'Bulk Brand Discounts',
+    setDiscount: 'Set',
   },
   is: {
     search: 'Leita að vörum...',
