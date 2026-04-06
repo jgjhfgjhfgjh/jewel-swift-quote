@@ -53,10 +53,6 @@ interface AppState {
   salesCustomer: SalesCustomer | null;
   salesBrandDiscounts: BrandDiscount[];
   salesProductDiscounts: Record<string, number>;
-  savePermanentBrand: boolean;
-  setSavePermanentBrand: (v: boolean) => void;
-  savePermanentProduct: boolean;
-  setSavePermanentProduct: (v: boolean) => void;
   setSalesMode: (customer: SalesCustomer, brandDiscounts: BrandDiscount[], productDiscounts: Record<string, number>) => void;
   clearSalesMode: () => void;
   setSalesBrandDiscount: (brand: string, percent: number) => void;
@@ -155,10 +151,6 @@ export const useStore = create<AppState>()(
       salesCustomer: null,
       salesBrandDiscounts: [],
       salesProductDiscounts: {},
-      savePermanentBrand: false,
-      setSavePermanentBrand: (v) => set({ savePermanentBrand: v }),
-      savePermanentProduct: false,
-      setSavePermanentProduct: (v) => set({ savePermanentProduct: v }),
       setSalesMode: (customer, brandDiscounts, productDiscounts) => set({
         salesCustomer: customer,
         salesBrandDiscounts: brandDiscounts,
@@ -168,8 +160,6 @@ export const useStore = create<AppState>()(
         salesCustomer: null,
         salesBrandDiscounts: [],
         salesProductDiscounts: {},
-        savePermanentBrand: false,
-        savePermanentProduct: false,
       }),
       setSalesBrandDiscount: (brand, percent) => set((s) => {
         const existing = s.salesBrandDiscounts.find((d) => d.brand === brand);

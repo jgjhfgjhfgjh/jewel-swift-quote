@@ -1,8 +1,7 @@
 import { useState, useMemo, useRef, useCallback } from 'react';
-import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save } from 'lucide-react';
+import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
@@ -16,14 +15,14 @@ export function AdminBrandPanel({ manufacturers }: Props) {
   const {
     lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts,
     salesCustomer, salesBrandDiscounts, setSalesBrandDiscount, removeSalesBrandDiscount,
-    savePermanentBrand, setSavePermanentBrand,
   } = useStore();
   const { isAdmin } = useAuthContext();
-  const { saveBrandDiscount, removeBrandDiscount: removeDbBrandDiscount } = useCustomerDiscounts();
+  const { saveBrandDiscount } = useCustomerDiscounts();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [brandSearch, setBrandSearch] = useState('');
+  const [savedBrands, setSavedBrands] = useState<Record<string, boolean>>({});
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const setInputRef = useCallback((name: string) => (el: HTMLInputElement | null) => { inputRefs.current[name] = el; }, []);
 
@@ -46,13 +45,21 @@ export function AdminBrandPanel({ manufacturers }: Props) {
       const percent = Math.min(100, Math.max(0, Number(val)));
       if (salesCustomer) {
         setSalesBrandDiscount(brand, percent);
-        if (savePermanentBrand) {
-          await saveBrandDiscount(salesCustomer.user_id, brand, percent);
-        }
       } else {
         setBrandDiscount(brand, percent);
       }
       setInputs((prev) => ({ ...prev, [brand]: '' }));
+    }
+  };
+
+  const handleSavePermanent = async (brand: string) => {
+    if (!salesCustomer) return;
+    const discount = activeBrandDiscounts.find((d) => d.brand === brand);
+    if (!discount) return;
+    const ok = await saveBrandDiscount(salesCustomer.user_id, brand, discount.percent);
+    if (ok) {
+      setSavedBrands((prev) => ({ ...prev, [brand]: true }));
+      setTimeout(() => setSavedBrands((prev) => ({ ...prev, [brand]: false })), 2000);
     }
   };
 
@@ -106,19 +113,6 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
-          {salesCustomer && (
-            <div className="mb-2 flex items-center gap-2">
-              <Checkbox
-                id="save-permanent-brand"
-                checked={savePermanentBrand}
-                onCheckedChange={(v) => setSavePermanentBrand(!!v)}
-              />
-              <label htmlFor="save-permanent-brand" className="text-[11px] font-medium text-blue-600 cursor-pointer flex items-center gap-1">
-                <Save className="h-3 w-3" />
-                Uložit trvale do profilu zákazníka
-              </label>
-            </div>
-          )}
           {activeBrandDiscounts.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1">
               {activeBrandDiscounts.map((d) => (
@@ -148,6 +142,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
           <div className="space-y-1 pr-1">
             {filteredBrands.map(({ name, count }) => {
               const existing = getBrandDiscount(name);
+              const isSaved = savedBrands[name];
               return (
                 <div key={name} className="flex items-center gap-2">
                   <span
@@ -179,6 +174,17 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                   >
                     {t.setDiscount}
                   </Button>
+                  {salesCustomer && existing !== undefined && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className={`h-6 w-6 p-0 transition-colors ${isSaved ? 'border-green-500 text-green-600 bg-green-50' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
+                      onClick={() => handleSavePermanent(name)}
+                      title="Uložit trvale"
+                    >
+                      {isSaved ? <Check className="h-3 w-3" /> : <Save className="h-3 w-3" />}
+                    </Button>
+                  )}
                 </div>
               );
             })}
