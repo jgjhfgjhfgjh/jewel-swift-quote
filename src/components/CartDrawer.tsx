@@ -141,7 +141,7 @@ export function CartDrawer() {
                         </div>
                       </div>
                       {/* Delete + Admin inline discount */}
-                      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                      <div className="flex flex-col items-end gap-1 flex-shrink-0 mr-0">
                         <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground" onClick={() => removeFromCart(item.product.id)}>
                           <Trash2 className="h-3 w-3" />
                         </Button>
