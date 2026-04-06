@@ -145,6 +145,7 @@ export function Navbar() {
             )}
           </Button>
         )}
+        </div>
       </div>
     </header>
   );
