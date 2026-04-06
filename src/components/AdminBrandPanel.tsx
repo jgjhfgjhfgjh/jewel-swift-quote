@@ -61,7 +61,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
       </button>
 
       {open && (
-        <div className="px-4 pb-3">
+        <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
           {/* Active brand discounts summary */}
           {brandDiscounts.length > 0 && (
             <div className="mb-2 flex flex-wrap gap-1">
@@ -77,53 +77,53 @@ export function AdminBrandPanel({ manufacturers }: Props) {
             </div>
           )}
 
-          {/* Search filter for brands */}
-          <div className="relative mb-2">
-            <Search className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder={t.search}
-              value={brandSearch}
-              onChange={(e) => setBrandSearch(e.target.value)}
-              className="h-7 pl-7 text-xs"
-            />
+          {/* Search filter for brands - sticky */}
+          <div className="sticky top-0 z-10 bg-muted/30 pb-2">
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder={t.search}
+                value={brandSearch}
+                onChange={(e) => setBrandSearch(e.target.value)}
+                className="h-7 pl-7 text-xs"
+              />
+            </div>
           </div>
 
-          <ScrollArea className="max-h-60">
-            <div className="space-y-1">
-              {filteredBrands.map(({ name, count }) => {
-                const existing = getBrandDiscount(name);
-                return (
-                  <div key={name} className="flex items-center gap-2">
-                    <span className="flex-1 truncate text-xs">
-                      {name}
-                      <span className="text-[10px] text-muted-foreground ml-1">({count})</span>
-                    </span>
-                    {existing !== undefined && (
-                      <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
-                    )}
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      placeholder="%"
-                      value={inputs[name] || ''}
-                      onChange={(e) => setInputs((prev) => ({ ...prev, [name]: e.target.value }))}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSet(name)}
-                      className={`w-14 h-6 text-[10px] px-1 text-center ${existing !== undefined ? 'border-blue-500' : ''}`}
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-6 text-[10px] px-2"
-                      onClick={() => handleSet(name)}
-                    >
-                      {t.setDiscount}
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          </ScrollArea>
+          <div className="space-y-1 pr-1">
+            {filteredBrands.map(({ name, count }) => {
+              const existing = getBrandDiscount(name);
+              return (
+                <div key={name} className="flex items-center gap-2">
+                  <span className="flex-1 truncate text-xs">
+                    {name}
+                    <span className="text-[10px] text-muted-foreground ml-1">({count})</span>
+                  </span>
+                  {existing !== undefined && (
+                    <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
+                  )}
+                  <Input
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="%"
+                    value={inputs[name] || ''}
+                    onChange={(e) => setInputs((prev) => ({ ...prev, [name]: e.target.value }))}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSet(name)}
+                    className={`w-14 h-6 text-[10px] px-1 text-center ${existing !== undefined ? 'border-blue-500' : ''}`}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-6 text-[10px] px-2"
+                    onClick={() => handleSet(name)}
+                  >
+                    {t.setDiscount}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
