@@ -13,8 +13,8 @@ interface Props {
   categories: { name: string; count: number }[];
   selectedBrands: string[];
   setSelectedBrands: (v: string[]) => void;
-  selectedCategory: string;
-  setSelectedCategory: (v: string) => void;
+  selectedCategory: string | null;
+  setSelectedCategory: (v: string | null) => void;
   search: string;
   setSearch: (v: string) => void;
   stockOnly: boolean;
@@ -96,7 +96,7 @@ export function FilterSidebar({
       <div className="px-4 py-2 space-y-2">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.categories}</h3>
         <button
-          onClick={() => setSelectedCategory('')}
+          onClick={() => setSelectedCategory(null)}
           className="text-sm text-primary hover:underline font-medium"
         >
           {t.allCategories}
@@ -106,7 +106,7 @@ export function FilterSidebar({
             <span className="text-sm font-medium">{categoryLabels[cat]?.[lang] || cat}</span>
             <Switch
               checked={selectedCategory === cat}
-              onCheckedChange={(checked) => setSelectedCategory(checked ? cat : '')}
+              onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
             />
           </div>
         ))}
