@@ -11,6 +11,7 @@ import { useState } from 'react';
 
 export function CartDrawer() {
   const { user } = useAuthContext();
+  const {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
     setProductDiscount,
