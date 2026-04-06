@@ -119,8 +119,7 @@ export function AdminProductOverridesPanel({ products }: Props) {
                 : 0;
               const effectiveVoc = getFinalVoc(product.price, overridePercent, customerDiscount);
               const feedVoc = getFinalVoc(product.price, baseDiscount, customerDiscount);
-              const margin = product.price - effectiveVoc;
-              const marginPercent = product.price > 0 ? (margin / product.price) * 100 : 0;
+              const marginKc = effectiveVoc - product.wholesale;
 
               return (
                 <div key={product.id} className="flex items-center gap-2 rounded-lg border bg-white p-2">
@@ -135,23 +134,18 @@ export function AdminProductOverridesPanel({ products }: Props) {
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-medium leading-tight truncate">{product.name}</p>
                     <p className="text-[9px] text-muted-foreground">{product.manufacturer} · {product.sku || product.id}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[10px] text-muted-foreground line-through">
-                        VOC: €{feedVoc.toFixed(2)}
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-[10px] font-semibold text-blue-600">
+                        Sleva: -{Math.round(overridePercent)}%
                       </span>
-                      <span className="text-[10px] font-bold text-blue-600">
+                      <span className="text-[10px] text-muted-foreground">
                         VOC: €{effectiveVoc.toFixed(2)}
                       </span>
                       <span className="text-[10px] text-muted-foreground">
                         MOC: €{product.price.toFixed(2)}
                       </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-blue-600">
-                        Sleva: -{Math.round(overridePercent)}%
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        Marže: €{margin.toFixed(2)} ({marginPercent.toFixed(1)}%)
+                      <span className={`text-[10px] font-bold ${marginKc >= 0 ? 'text-green-600' : 'text-destructive'}`}>
+                        Marže: {marginKc >= 0 ? '+' : ''}{marginKc.toFixed(2)} Kč
                       </span>
                     </div>
                   </div>
