@@ -99,7 +99,7 @@ export function CartDrawer() {
                   const isOverridden = source === 'manual' || source === 'brand';
 
                   return (
-                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
+                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3 w-full">
                       {/* Image */}
                       <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
                         <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
