@@ -22,7 +22,7 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
   const [page, setPage] = useState(1);
 
   // Reset page when filters change
-  useMemo(() => { setPage(1); }, [search, selectedBrands, selectedCategory, stockOnly, minDiscount]);
+  useMemo(() => { setPage(1); }, [search, selectedBrands?.length, selectedCategory, stockOnly, minDiscount]);
 
   const filtered = useMemo(() => {
     let result = products;
