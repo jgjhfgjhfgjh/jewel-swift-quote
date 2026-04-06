@@ -90,11 +90,11 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" className="gap-1 text-[11px] sm:text-xs h-7 sm:h-8 px-1.5 sm:px-3" onClick={() => navigate('/login')}>
-                <LogIn className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline text-xs">{t.login}</span>
+              <Button variant="ghost" size="sm" className="text-[11px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3" onClick={() => navigate('/login')}>
+                <span className="sm:hidden">Přihlásit</span>
+                <span className="hidden sm:inline">{t.login}</span>
               </Button>
-              <Button variant="outline" size="sm" className="text-[11px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3 rounded-lg border-primary text-primary hover:bg-primary hover:text-primary-foreground" onClick={() => navigate('/register')}>
+              <Button size="sm" className="text-[11px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
                 {t.register}
               </Button>
             </div>
