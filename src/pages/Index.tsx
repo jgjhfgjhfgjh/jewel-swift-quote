@@ -1,5 +1,7 @@
 import { Navbar } from '@/components/Navbar';
 import { AdminBrandPanel } from '@/components/AdminBrandPanel';
+import { CustomerSelectorPanel } from '@/components/CustomerSelectorPanel';
+import { SalesModeBar } from '@/components/SalesModeBar';
 import { FilterSidebar } from '@/components/FilterSidebar';
 import { ProductGrid } from '@/components/ProductGrid';
 import { CartDrawer } from '@/components/CartDrawer';
