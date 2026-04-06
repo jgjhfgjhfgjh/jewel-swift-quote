@@ -16,8 +16,16 @@ export function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = product.stock <= 0;
   const atMax = qty >= product.stock;
 
-  const margin = product.price - product.wholesale;
-  const discountPct = product.price > 0 ? ((margin / product.price) * 100) : 0;
+  // Discount hierarchy: Manual item > Brand > Feed
+  const feedDiscount = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+  const brandDiscount = brandDiscounts.find((d) => d.brand === product.manufacturer);
+  const manualDiscount = cartItem?.manualDiscountPercent;
+  const activeDiscount = manualDiscount ?? brandDiscount?.percent ?? feedDiscount;
+  
+  const effectiveVoc = product.price * (1 - activeDiscount / 100);
+  const unitMargin = product.price - effectiveVoc;
+  const totalMargin = unitMargin * Math.max(qty, 1);
+  const discountPct = activeDiscount;
 
   const handleAdd = () => {
     if (!isOutOfStock) addToCart(product);
