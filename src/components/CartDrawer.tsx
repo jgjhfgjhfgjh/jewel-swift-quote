@@ -86,7 +86,7 @@ export function CartDrawer() {
         ) : (
           <>
             <ScrollArea className="flex-1 scrollbar-thin">
-              <div className="divide-y px-3 sm:px-4 py-2">
+              <div className="divide-y px-2.5 sm:px-4 py-2">
                 {cart.map((item) => {
                   const baseDiscount = item.product.price > 0
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
@@ -99,13 +99,13 @@ export function CartDrawer() {
                   const isOverridden = source === 'manual' || source === 'brand';
 
                   return (
-                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
+                    <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3 w-full">
                       {/* Image */}
                       <div className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded bg-muted">
                         <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
                       </div>
                       {/* Info */}
-                      <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
+                      <div className="flex flex-1 flex-col min-w-0">
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
                         <div className="mt-1 space-y-0.5">
@@ -160,7 +160,7 @@ export function CartDrawer() {
                                 setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
-                            className={`w-14 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
+                            className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
                           />
                         )}
                       </div>
