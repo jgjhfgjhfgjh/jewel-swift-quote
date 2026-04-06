@@ -160,8 +160,6 @@ export const useStore = create<AppState>()(
         salesCustomer: null,
         salesBrandDiscounts: [],
         salesProductDiscounts: {},
-        savePermanentBrand: false,
-        savePermanentProduct: false,
       }),
       setSalesBrandDiscount: (brand, percent) => set((s) => {
         const existing = s.salesBrandDiscounts.find((d) => d.brand === brand);
