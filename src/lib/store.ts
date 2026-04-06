@@ -48,6 +48,20 @@ interface AppState {
   setStockOnly: (v: boolean) => void;
   minDiscount: number;
   setMinDiscount: (v: number) => void;
+
+  // Sales mode
+  salesCustomer: SalesCustomer | null;
+  salesBrandDiscounts: BrandDiscount[];
+  salesProductDiscounts: Record<string, number>;
+  savePermanentBrand: boolean;
+  setSavePermanentBrand: (v: boolean) => void;
+  savePermanentProduct: boolean;
+  setSavePermanentProduct: (v: boolean) => void;
+  setSalesMode: (customer: SalesCustomer, brandDiscounts: BrandDiscount[], productDiscounts: Record<string, number>) => void;
+  clearSalesMode: () => void;
+  setSalesBrandDiscount: (brand: string, percent: number) => void;
+  removeSalesBrandDiscount: (brand: string) => void;
+  setSalesProductDiscount: (productId: string, percent: number | undefined) => void;
 }
 
 export const useStore = create<AppState>()(
