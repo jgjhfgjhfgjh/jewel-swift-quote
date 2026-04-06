@@ -52,8 +52,9 @@ export const useStore = create<AppState>()(
         if (existing) {
           return { cart: s.cart.map((i) => i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i) };
         }
-        const discount = s.brandDiscounts.find((d) => d.brand === product.manufacturer);
-        return { cart: [...s.cart, { product, quantity: 1, discountPercent: discount?.percent || 0 }] };
+        const baseDiscount = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+        const brandDiscount = s.brandDiscounts.find((d) => d.brand === product.manufacturer);
+        return { cart: [...s.cart, { product, quantity: 1, discountPercent: brandDiscount?.percent ?? baseDiscount }] };
       }),
       removeFromCart: (id) => set((s) => ({ cart: s.cart.filter((i) => i.product.id !== id) })),
       updateQuantity: (id, qty) => set((s) => ({
@@ -72,6 +73,7 @@ export const useStore = create<AppState>()(
         const newDiscounts = existing
           ? s.brandDiscounts.map((d) => d.brand === brand ? { ...d, percent } : d)
           : [...s.brandDiscounts, { brand, percent }];
+        // Update cart items: brand discount replaces base feed discount (unless manual override exists)
         const newCart = s.cart.map((i) =>
           i.product.manufacturer === brand && i.manualDiscountPercent === undefined
             ? { ...i, discountPercent: percent }
@@ -81,11 +83,14 @@ export const useStore = create<AppState>()(
       }),
       removeBrandDiscount: (brand) => set((s) => ({
         brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
-        cart: s.cart.map((i) =>
-          i.product.manufacturer === brand && i.manualDiscountPercent === undefined
-            ? { ...i, discountPercent: 0 }
-            : i
-        ),
+        // Fall back to base feed discount when brand discount is removed
+        cart: s.cart.map((i) => {
+          if (i.product.manufacturer === brand && i.manualDiscountPercent === undefined) {
+            const baseDiscount = i.product.price > 0 ? ((i.product.price - i.product.wholesale) / i.product.price) * 100 : 0;
+            return { ...i, discountPercent: baseDiscount };
+          }
+          return i;
+        }),
       })),
 
       cartOpen: false,

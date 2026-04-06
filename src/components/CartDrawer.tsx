@@ -26,13 +26,13 @@ export function CartDrawer() {
 
   const totalVOC = cart.reduce((sum, item) => {
     const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    const vocAfterDiscount = item.product.price * (1 - disc / 100);
     return sum + vocAfterDiscount * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
     const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    const vocAfterDiscount = item.product.price * (1 - disc / 100);
     return sum + (item.product.price - vocAfterDiscount) * item.quantity;
   }, 0);
 
@@ -63,11 +63,10 @@ export function CartDrawer() {
             <ScrollArea className="flex-1 scrollbar-thin">
               <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
-                  const baseMargin = item.product.price - item.product.wholesale;
-                  const basePct = item.product.price > 0 ? ((baseMargin / item.product.price) * 100) : 0;
+                  const baseDiscount = item.product.price > 0 ? ((item.product.price - item.product.wholesale) / item.product.price) * 100 : 0;
                   const effectiveDisc = getEffectiveDiscount(item);
                   const hasManualOverride = item.manualDiscountPercent !== undefined;
-                  const vocAfterDiscount = item.product.wholesale * (1 - effectiveDisc / 100);
+                  const vocAfterDiscount = item.product.price * (1 - effectiveDisc / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
@@ -85,8 +84,8 @@ export function CartDrawer() {
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
                             <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
-                            {basePct > 0 && (
-                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(basePct)}%</span>
+                            {baseDiscount > 0 && (
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(baseDiscount)}%</span>
                             )}
                           </div>
                           {effectiveDisc > 0 && (
