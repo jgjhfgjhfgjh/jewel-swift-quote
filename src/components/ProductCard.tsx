@@ -56,10 +56,18 @@ export function ProductCard({ product }: { product: Product }) {
 
   const handleDiscountSubmit = () => {
     if (discountInput === '') {
-      setProductDiscount(product.id, undefined);
+      if (salesCustomer) {
+        setSalesProductDiscount(product.id, undefined);
+      } else {
+        setProductDiscount(product.id, undefined);
+      }
     } else {
       const val = Math.min(100, Math.max(0, Number(discountInput)));
-      setProductDiscount(product.id, val);
+      if (salesCustomer) {
+        setSalesProductDiscount(product.id, val);
+      } else {
+        setProductDiscount(product.id, val);
+      }
     }
     setEditingDiscount(false);
   };
