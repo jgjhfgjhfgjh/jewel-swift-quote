@@ -7,8 +7,33 @@ import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import { useState } from 'react';
 
-function getEffectiveDiscount(item: { discountPercent: number; manualDiscountPercent?: number }) {
-  return item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : item.discountPercent;
+/**
+ * Discount hierarchy (replacement, NOT additive):
+ * 1. Manual individual discount (highest priority)
+ * 2. Admin brand discount
+ * 3. Base feed discount (lowest / default)
+ */
+function getActiveDiscount(
+  item: { product: { price: number; wholesale: number; manufacturer: string }; discountPercent: number; manualDiscountPercent?: number },
+  brandDiscounts: { brand: string; percent: number }[]
+): { percent: number; source: 'manual' | 'brand' | 'feed' } {
+  const baseDiscount = item.product.price > 0
+    ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
+    : 0;
+
+  // Priority 1: Manual individual override
+  if (item.manualDiscountPercent !== undefined) {
+    return { percent: item.manualDiscountPercent, source: 'manual' };
+  }
+
+  // Priority 2: Admin brand discount
+  const brandDiscount = brandDiscounts.find((d) => d.brand === item.product.manufacturer);
+  if (brandDiscount) {
+    return { percent: brandDiscount.percent, source: 'brand' };
+  }
+
+  // Priority 3: Base feed discount
+  return { percent: baseDiscount, source: 'feed' };
 }
 
 export function CartDrawer() {
@@ -25,15 +50,15 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.price * (1 - disc / 100);
-    return sum + vocAfterDiscount * item.quantity;
+    const { percent } = getActiveDiscount(item, brandDiscounts);
+    const voc = item.product.price * (1 - percent / 100);
+    return sum + voc * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.price * (1 - disc / 100);
-    return sum + (item.product.price - vocAfterDiscount) * item.quantity;
+    const { percent } = getActiveDiscount(item, brandDiscounts);
+    const voc = item.product.price * (1 - percent / 100);
+    return sum + (item.product.price - voc) * item.quantity;
   }, 0);
 
   if (!cartOpen) return null;
@@ -63,12 +88,15 @@ export function CartDrawer() {
             <ScrollArea className="flex-1 scrollbar-thin">
               <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
-                  const baseDiscount = item.product.price > 0 ? ((item.product.price - item.product.wholesale) / item.product.price) * 100 : 0;
-                  const effectiveDisc = getEffectiveDiscount(item);
-                  const hasManualOverride = item.manualDiscountPercent !== undefined;
-                  const vocAfterDiscount = item.product.price * (1 - effectiveDisc / 100);
+                  const baseDiscount = item.product.price > 0
+                    ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
+                    : 0;
+                  const { percent: activePercent, source } = getActiveDiscount(item, brandDiscounts);
+                  const vocAfterDiscount = item.product.price * (1 - activePercent / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
+
+                  const isOverridden = source === 'manual' || source === 'brand';
 
                   return (
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3">
@@ -85,19 +113,24 @@ export function CartDrawer() {
                             <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
                             <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
                             {baseDiscount > 0 && (
-                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(baseDiscount)}%</span>
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">
+                                -{Math.round(baseDiscount)}%
+                              </span>
                             )}
                           </div>
-                          {effectiveDisc > 0 && (
+                          {/* Only show override line if discount differs from feed */}
+                          {isOverridden && (
                             <div className="flex items-center gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
-                              <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${hasManualOverride ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'}`}>
-                                {hasManualOverride ? 'Manual' : 'Admin'} -{effectiveDisc}%
+                              <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${
+                                source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-primary/10 text-primary'
+                              }`}>
+                                {source === 'manual' ? 'Manual' : 'Admin'} -{Math.round(activePercent)}%
                               </span>
                               <span className="text-[10px] font-medium">→ €{vocAfterDiscount.toFixed(2)}</span>
                             </div>
                           )}
-                          <p className={`text-xs font-bold tabular-nums ${hasManualOverride ? 'text-blue-600' : 'text-primary'}`}>
+                          <p className={`text-xs font-bold tabular-nums ${source === 'manual' ? 'text-blue-600' : 'text-primary'}`}>
                             {t.margin}: €{effectiveMargin.toFixed(2)}
                           </p>
                         </div>
@@ -122,7 +155,7 @@ export function CartDrawer() {
                                 setItemDiscount(item.product.id, Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
-                            className={`w-14 h-6 text-[10px] px-1 text-center ${hasManualOverride ? 'border-blue-500 text-blue-600' : ''}`}
+                            className={`w-14 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
                           />
                         )}
                       </div>
@@ -193,7 +226,7 @@ export function CartDrawer() {
                 </div>
                 {brandDiscounts.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
-                    {brandDiscounts.map((d: { brand: string; percent: number }) => (
+                    {brandDiscounts.map((d) => (
                       <button
                         key={d.brand}
                         onClick={() => removeBrandDiscount(d.brand)}
