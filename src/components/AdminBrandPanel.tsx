@@ -13,8 +13,13 @@ interface Props {
 }
 
 export function AdminBrandPanel({ manufacturers }: Props) {
-  const { lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
+  const {
+    lang, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts,
+    salesCustomer, salesBrandDiscounts, setSalesBrandDiscount, removeSalesBrandDiscount,
+    savePermanentBrand, setSavePermanentBrand,
+  } = useStore();
   const { isAdmin } = useAuthContext();
+  const { saveBrandDiscount, removeBrandDiscount: removeDbBrandDiscount } = useCustomerDiscounts();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
