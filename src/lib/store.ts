@@ -3,6 +3,13 @@ import { persist } from 'zustand/middleware';
 import type { CartItem, BrandDiscount, Product } from './types';
 import type { Lang } from './i18n';
 
+export interface SalesCustomer {
+  user_id: string;
+  company_name: string;
+  ico: string | null;
+  base_discount: number;
+}
+
 interface AppState {
   lang: Lang;
   setLang: (l: Lang) => void;
