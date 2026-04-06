@@ -122,6 +122,7 @@ export const useStore = create<AppState>()(
         isAdmin: state.isAdmin,
         cart: state.cart,
         brandDiscounts: state.brandDiscounts,
+        productDiscounts: state.productDiscounts,
         search: state.search,
         selectedBrands: state.selectedBrands,
         selectedCategory: state.selectedCategory,
