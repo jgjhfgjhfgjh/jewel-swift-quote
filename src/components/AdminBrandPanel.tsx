@@ -24,6 +24,8 @@ export function AdminBrandPanel({ manufacturers }: Props) {
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [brandSearch, setBrandSearch] = useState('');
+  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const setInputRef = useCallback((name: string) => (el: HTMLInputElement | null) => { inputRefs.current[name] = el; }, []);
 
   const sortedBrands = useMemo(() =>
     [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
