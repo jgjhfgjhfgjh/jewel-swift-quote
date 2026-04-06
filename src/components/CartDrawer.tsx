@@ -15,10 +15,15 @@ export function CartDrawer() {
     lang, cart, cartOpen, setCartOpen, removeFromCart, updateQuantity,
     clearCart, brandDiscounts, productDiscounts, setBrandDiscount, removeBrandDiscount,
     setProductDiscount,
+    salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
   const { isAdmin, profile } = useAuthContext();
   const t = translations[lang];
-  const customerDiscount = profile?.base_discount ?? 0;
+
+  // In sales mode, use the selected customer's discount
+  const effectiveProductDiscounts = salesCustomer ? salesProductDiscounts : productDiscounts;
+  const effectiveBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
+  const customerDiscount = salesCustomer ? salesCustomer.base_discount : (profile?.base_discount ?? 0);
 
   const [discountBrand, setDiscountBrand] = useState('');
   const [discountPercent, setDiscountPercent] = useState('');
