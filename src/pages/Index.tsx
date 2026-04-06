@@ -13,7 +13,7 @@ const Index = () => {
 
   const [search, setSearch] = useState('');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [stockOnly, setStockOnly] = useState(false);
   const [minDiscount, setMinDiscount] = useState(0);
 

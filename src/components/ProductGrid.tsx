@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
+import { getProductBrand, matchesFeedCategory } from '@/lib/product-feed';
 
 const PAGE_SIZE = 48;
 
@@ -11,7 +12,7 @@ interface Props {
   products: Product[];
   search: string;
   selectedBrands: string[];
-  selectedCategory: string;
+  selectedCategory: string | null;
   stockOnly: boolean;
   minDiscount: number;
 }
@@ -20,54 +21,56 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
   const { lang } = useStore();
   const t = translations[lang];
   const [page, setPage] = useState(1);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
-  // Reset page when filters change
-  useMemo(() => { setPage(1); }, [search, selectedBrands?.length, selectedCategory, stockOnly, minDiscount]);
+  useEffect(() => {
+    const query = search.trim().toLowerCase();
+    const activeBrands = selectedBrands ?? [];
 
-  const filtered = useMemo(() => {
-    let result = products;
-    if (search) {
-      const q = search.toLowerCase();
-      result = result.filter((p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.manufacturer.toLowerCase().includes(q) ||
-        p.sku.toLowerCase().includes(q)
-      );
-    }
-    if (selectedBrands.length > 0) {
-      result = result.filter((p) => selectedBrands.includes(p.manufacturer));
-    }
-    if (selectedCategory) {
-      const categoryKeywords: Record<string, string[]> = {
-        'Hodinky': ['hodink', 'watch', 'hodin'],
-        'Šperky': ['šperk', 'jewelry', 'bijoux', 'prsten', 'náhrdelník', 'náramek', 'náušnice', 'přívěsek', 'ring', 'necklace', 'bracelet', 'earring'],
-        'Příslušenství': ['příslušenství', 'accessories', 'řemínek', 'strap'],
-      };
-      const keywords = categoryKeywords[selectedCategory] || [selectedCategory.toLowerCase()];
-      result = result.filter((p) => {
-        const cat = (p.category || '').toLowerCase();
-        const name = (p.name || '').toLowerCase();
-        return keywords.some((kw) => cat.includes(kw) || name.includes(kw));
-      });
-    }
-    if (stockOnly) result = result.filter((p) => p.inStock);
-    if (minDiscount > 0) {
-      result = result.filter((p) => {
-        const pct = p.price > 0 ? ((p.price - p.wholesale) / p.price) * 100 : 0;
-        return pct >= minDiscount;
-      });
-    }
-    return result;
+    const nextFilteredProducts = products.filter((product) => {
+      const brand = getProductBrand(product);
+
+      if (query) {
+        const matchesSearch =
+          product.name.toLowerCase().includes(query) ||
+          brand.toLowerCase().includes(query) ||
+          product.sku.toLowerCase().includes(query);
+
+        if (!matchesSearch) return false;
+      }
+
+      if (activeBrands.length > 0 && !activeBrands.includes(brand)) {
+        return false;
+      }
+
+      if (!matchesFeedCategory(product, selectedCategory)) {
+        return false;
+      }
+
+      if (stockOnly && !(product.stock > 0 || product.inStock)) {
+        return false;
+      }
+
+      if (minDiscount > 0) {
+        const pct = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+        if (pct < minDiscount) return false;
+      }
+
+      return true;
+    });
+
+    setPage(1);
+    setFilteredProducts(nextFilteredProducts);
   }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount]);
 
-  const paginated = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = paginated.length < filtered.length;
+  const paginated = filteredProducts.slice(0, page * PAGE_SIZE);
+  const hasMore = paginated.length < filteredProducts.length;
 
   return (
     <div className="flex-1 overflow-auto">
       <div className="px-4 py-2">
         <p className="text-xs text-muted-foreground">
-          {filtered.length.toLocaleString()} {t.products}
+          {filteredProducts.length.toLocaleString()} {t.products}
         </p>
       </div>
       <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">

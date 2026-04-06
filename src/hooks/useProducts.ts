@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Product } from '@/lib/types';
+import { getProductBrand, getProductFeedCategories, isDropshippingProduct } from '@/lib/product-feed';
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -9,13 +10,9 @@ export function useProducts() {
     fetch('/products.json')
       .then((r) => r.json())
       .then((data: Product[]) => {
-        // Exclude dropshipping products and products with empty manufacturers
         const cleaned = data.filter((p) => {
-          const cat = (p.category || '').toLowerCase();
-          const mfr = (p.manufacturer || '').trim();
-          if (!mfr) return false;
-          if (cat.includes('dropshipping')) return false;
-          return true;
+          const brand = getProductBrand(p);
+          return Boolean(brand) && !isDropshippingProduct(p);
         });
         setProducts(cleaned);
         setLoading(false);
@@ -26,9 +23,9 @@ export function useProducts() {
   const manufacturers = useMemo(() => {
     const counts = new Map<string, number>();
     products.forEach((p) => {
-      const mfr = (p.manufacturer || '').trim();
-      if (mfr) {
-        counts.set(mfr, (counts.get(mfr) || 0) + 1);
+      const brand = getProductBrand(p);
+      if (brand) {
+        counts.set(brand, (counts.get(brand) || 0) + 1);
       }
     });
     return Array.from(counts.entries())
@@ -39,8 +36,9 @@ export function useProducts() {
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     products.forEach((p) => {
-      const cat = p.category.split('|')[0]?.trim() || p.category;
-      counts.set(cat, (counts.get(cat) || 0) + 1);
+      const category = getProductFeedCategories(p)[0] || p.category || '';
+      if (!category) return;
+      counts.set(category, (counts.get(category) || 0) + 1);
     });
     return Array.from(counts.entries())
       .sort((a, b) => b[1] - a[1])
