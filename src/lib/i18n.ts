@@ -81,6 +81,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     removeFromCart: 'Remove',
     quantity: 'Quantity',
     margin: 'Margin',
+    marginTotal: 'Total Margin',
+    marginPerPc: 'Margin per pc',
     voc: 'VOC',
     discountTiers: 'Discounts',
     discount70: 'Discount 70%+',
