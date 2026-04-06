@@ -139,7 +139,7 @@ export function FilterSidebar({
               <Checkbox
                 checked={selectedBrands.includes(m.name)}
                 onCheckedChange={() => toggleBrand(m.name)}
-                className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                className=""
               />
               <span className="truncate">{m.name}</span>
             </label>
