@@ -105,7 +105,7 @@ export function CartDrawer() {
                         <img src={item.product.img} alt="" className="h-full w-full object-contain p-1 bg-white" />
                       </div>
                       {/* Info */}
-                      <div className="flex flex-1 flex-col min-w-0" style={{ minWidth: '120px' }}>
+                      <div className="flex flex-1 flex-col min-w-0">
                         <p className="text-[10px] uppercase tracking-wider text-gold">{item.product.manufacturer}</p>
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
                         <div className="mt-1 space-y-0.5">
