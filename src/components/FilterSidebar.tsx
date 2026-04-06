@@ -90,18 +90,20 @@ export function FilterSidebar({
       </div>
 
       {/* Discount tier filters */}
-      <div className="px-4 py-2 space-y-2">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.discountTiers}</h3>
-        {discountTiers.map((tier) => (
-          <div key={tier.value} className="flex items-center justify-between">
-            <span className="text-sm font-medium">{tier.label}</span>
-            <Switch
-              checked={minDiscount === tier.value}
-              onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
-            />
-          </div>
-        ))}
-      </div>
+      {user && (
+        <div className="px-4 py-2 space-y-2">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.discountTiers}</h3>
+          {discountTiers.map((tier) => (
+            <div key={tier.value} className="flex items-center justify-between">
+              <span className="text-sm font-medium">{tier.label}</span>
+              <Switch
+                checked={minDiscount === tier.value}
+                onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Category switches */}
       <div className="px-4 py-2 space-y-2">
