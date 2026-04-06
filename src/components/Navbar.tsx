@@ -89,10 +89,16 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/login')}>
-              <LogIn className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{t.login}</span>
-            </Button>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/login')}>
+                <LogIn className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{t.login}</span>
+              </Button>
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={() => navigate('/register')}>
+                <span className="hidden sm:inline">{t.register}</span>
+                <span className="sm:hidden">Reg</span>
+              </Button>
+            </div>
           )
         )}
 
