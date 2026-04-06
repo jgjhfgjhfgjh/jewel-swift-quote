@@ -144,7 +144,7 @@ export function AdminProductOverridesPanel({ products }: Props) {
                       <span className="text-[10px] text-muted-foreground">
                         MOC: €{product.price.toFixed(2)}
                       </span>
-                      <span className={`text-[10px] font-bold ${marginEur >= 0 ? 'text-green-600' : 'text-destructive'}`}>
+                      <span className={`font-bold text-sm text-justify mx-[10px] ${marginEur >= 0 ? 'text-blue-600' : 'text-destructive'}`}>
                         Marže/ks: €{marginEur.toFixed(2)}
                       </span>
                     </div>
