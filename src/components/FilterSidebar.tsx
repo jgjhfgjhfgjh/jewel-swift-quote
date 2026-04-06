@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 
@@ -122,32 +122,30 @@ export function FilterSidebar({
       </div>
 
       {/* Brands with checkboxes */}
-      <ScrollArea className="flex-1 scrollbar-thin">
-        <div className="p-4 pt-2">
-          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.brands}</h3>
-          <button
-            onClick={() => setSelectedBrands([])}
-            className="mb-2 text-sm text-primary hover:underline font-medium"
-          >
-            {t.allBrands}
-          </button>
-          <div className="space-y-1.5">
-            {sortedManufacturers.map((m) => (
-              <label
-                key={m.name}
-                className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-              >
-                <Checkbox
-                  checked={selectedBrands.includes(m.name)}
-                  onCheckedChange={() => toggleBrand(m.name)}
-                  className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
-                />
-                <span className="truncate">{m.name}</span>
-              </label>
-            ))}
-          </div>
+      <div className="p-4 pt-2 pb-24">
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.brands}</h3>
+        <button
+          onClick={() => setSelectedBrands([])}
+          className="mb-2 text-sm text-primary hover:underline font-medium"
+        >
+          {t.allBrands}
+        </button>
+        <div className="space-y-1.5">
+          {sortedManufacturers.map((m) => (
+            <label
+              key={m.name}
+              className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+            >
+              <Checkbox
+                checked={selectedBrands.includes(m.name)}
+                onCheckedChange={() => toggleBrand(m.name)}
+                className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+              />
+              <span className="truncate">{m.name}</span>
+            </label>
+          ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 
