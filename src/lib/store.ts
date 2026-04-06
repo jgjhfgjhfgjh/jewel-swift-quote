@@ -57,13 +57,21 @@ export const useStore = create<AppState>((set, get) => ({
     const newDiscounts = existing
       ? s.brandDiscounts.map((d) => d.brand === brand ? { ...d, percent } : d)
       : [...s.brandDiscounts, { brand, percent }];
-    // Update cart items for this brand
-    const newCart = s.cart.map((i) => i.product.manufacturer === brand ? { ...i, discountPercent: percent } : i);
+    // Update cart items for this brand (only if no manual override)
+    const newCart = s.cart.map((i) =>
+      i.product.manufacturer === brand && i.manualDiscountPercent === undefined
+        ? { ...i, discountPercent: percent }
+        : i
+    );
     return { brandDiscounts: newDiscounts, cart: newCart };
   }),
   removeBrandDiscount: (brand) => set((s) => ({
     brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
-    cart: s.cart.map((i) => i.product.manufacturer === brand ? { ...i, discountPercent: 0 } : i),
+    cart: s.cart.map((i) =>
+      i.product.manufacturer === brand && i.manualDiscountPercent === undefined
+        ? { ...i, discountPercent: 0 }
+        : i
+    ),
   })),
 
   cartOpen: false,
