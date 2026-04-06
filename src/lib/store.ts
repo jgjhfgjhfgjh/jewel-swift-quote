@@ -23,6 +23,7 @@ interface AppState {
   brandDiscounts: BrandDiscount[];
   setBrandDiscount: (brand: string, percent: number) => void;
   removeBrandDiscount: (brand: string) => void;
+  clearAllAdminDiscounts: () => void;
 
   cartOpen: boolean;
   setCartOpen: (v: boolean) => void;
@@ -105,6 +106,11 @@ export const useStore = create<AppState>()(
       }),
       removeBrandDiscount: (brand) => set((s) => ({
         brandDiscounts: s.brandDiscounts.filter((d) => d.brand !== brand),
+      })),
+      clearAllAdminDiscounts: () => set((s) => ({
+        brandDiscounts: [],
+        productDiscounts: {},
+        cart: s.cart.map((i) => ({ ...i, manualDiscountPercent: undefined })),
       })),
 
       cartOpen: false,
