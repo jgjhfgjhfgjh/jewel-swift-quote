@@ -65,8 +65,24 @@ export function useCustomerDiscounts() {
       toast.error('Chyba: ' + error.message);
       return false;
     }
+    toast.success(`Trvalá sleva pro ${brand} odstraněna`);
     return true;
   }, []);
 
-  return { fetchDiscounts, saveBrandDiscount, saveProductDiscount, removeBrandDiscount };
+  const removeProductDiscount = useCallback(async (customerUserId: string, productId: string) => {
+    const { error } = await supabase
+      .from('customer_discounts')
+      .delete()
+      .eq('customer_user_id', customerUserId)
+      .eq('discount_type', 'product')
+      .eq('target_key', productId);
+    if (error) {
+      toast.error('Chyba: ' + error.message);
+      return false;
+    }
+    toast.success('Trvalá produktová sleva odstraněna');
+    return true;
+  }, []);
+
+  return { fetchDiscounts, saveBrandDiscount, saveProductDiscount, removeBrandDiscount, removeProductDiscount };
 }

@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp, Package, X, RotateCcw, Save, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronDown, ChevronUp, Package, X, RotateCcw, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
@@ -17,9 +18,23 @@ export function AdminProductOverridesPanel({ products }: Props) {
     salesCustomer, salesProductDiscounts, setSalesProductDiscount, salesBrandDiscounts,
   } = useStore();
   const { isAdmin } = useAuthContext();
-  const { saveProductDiscount } = useCustomerDiscounts();
+  const { saveProductDiscount, removeProductDiscount, fetchDiscounts } = useCustomerDiscounts();
   const [open, setOpen] = useState(false);
-  const [savedProducts, setSavedProducts] = useState<Record<string, boolean>>({});
+  // Tracks which products are permanently saved in DB
+  const [permanentProducts, setPermanentProducts] = useState<Record<string, boolean>>({});
+
+  // Load permanent state from DB when sales customer changes
+  useEffect(() => {
+    if (!salesCustomer) {
+      setPermanentProducts({});
+      return;
+    }
+    fetchDiscounts(salesCustomer.user_id).then(({ productDiscounts: dbProducts }) => {
+      const map: Record<string, boolean> = {};
+      for (const id of Object.keys(dbProducts)) map[id] = true;
+      setPermanentProducts(map);
+    });
+  }, [salesCustomer, fetchDiscounts]);
 
   if (!isAdmin) return null;
 
@@ -52,14 +67,17 @@ export function AdminProductOverridesPanel({ products }: Props) {
     }
   };
 
-  const handleSavePermanent = async (productId: string) => {
+  const handleTogglePermanent = async (productId: string) => {
     if (!salesCustomer) return;
-    const percent = effectiveProductDiscounts[productId];
-    if (percent !== undefined) {
-      const ok = await saveProductDiscount(salesCustomer.user_id, productId, percent);
-      if (ok) {
-        setSavedProducts((prev) => ({ ...prev, [productId]: true }));
-        setTimeout(() => setSavedProducts((prev) => ({ ...prev, [productId]: false })), 2000);
+    const isPermanent = permanentProducts[productId];
+    if (isPermanent) {
+      const ok = await removeProductDiscount(salesCustomer.user_id, productId);
+      if (ok) setPermanentProducts((prev) => ({ ...prev, [productId]: false }));
+    } else {
+      const percent = effectiveProductDiscounts[productId];
+      if (percent !== undefined) {
+        const ok = await saveProductDiscount(salesCustomer.user_id, productId, percent);
+        if (ok) setPermanentProducts((prev) => ({ ...prev, [productId]: true }));
       }
     }
   };
@@ -104,7 +122,7 @@ export function AdminProductOverridesPanel({ products }: Props) {
               const overridePercent = effectiveProductDiscounts[product.id];
               const effectiveVoc = getFinalVoc(product.price, overridePercent, customerDiscount);
               const marginEur = product.price - effectiveVoc;
-              const isSaved = savedProducts[product.id];
+              const isPermanent = permanentProducts[product.id];
 
               return (
                 <div key={product.id} className="flex items-center gap-2 rounded-lg border bg-white p-2">
@@ -136,15 +154,23 @@ export function AdminProductOverridesPanel({ products }: Props) {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     {salesCustomer && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className={`h-6 w-6 p-0 transition-colors ${isSaved ? 'border-green-500 text-green-600 bg-green-50' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
-                        onClick={() => handleSavePermanent(product.id)}
-                        title="Uložit trvale"
-                      >
-                        {isSaved ? <Check className="h-2.5 w-2.5" /> : <Save className="h-2.5 w-2.5" />}
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className={`h-6 w-6 p-0 transition-colors ${isPermanent ? 'border-green-500 text-green-600 bg-green-50 hover:bg-green-100' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
+                              onClick={() => handleTogglePermanent(product.id)}
+                            >
+                              <Save className="h-2.5 w-2.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {isPermanent ? 'Zrušit trvalé uložení' : 'Uložit trvale'}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     )}
                     <Button
                       size="sm"
