@@ -72,12 +72,12 @@ export function CartDrawer() {
                   const baseDiscount = item.product.price > 0
                     ? ((item.product.price - item.product.wholesale) / item.product.price) * 100
                     : 0;
-                  const { percent: activePercent, source } = getActiveDiscount(item.product, productDiscounts, brandDiscounts);
+                  const { percent: activePercent, source } = getActiveDiscount(item.product, effectiveProductDiscounts, effectiveBrandDiscounts);
                   const vocAfterDiscount = getFinalVoc(item.product.price, activePercent, customerDiscount);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
-                  const isOverridden = source === 'manual' || source === 'brand';
+                  const isOverridden = source === 'manual' || source === 'brand' || source === 'customer-product' || source === 'customer-brand';
 
                   return (
                     <div key={item.product.id} className="flex flex-wrap gap-2 sm:gap-3 py-3 w-full">
