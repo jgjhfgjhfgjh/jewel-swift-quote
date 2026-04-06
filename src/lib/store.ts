@@ -23,6 +23,7 @@ interface AppState {
   brandDiscounts: BrandDiscount[];
   setBrandDiscount: (brand: string, percent: number) => void;
   removeBrandDiscount: (brand: string) => void;
+  clearAllAdminDiscounts: () => void;
 
   cartOpen: boolean;
   setCartOpen: (v: boolean) => void;
