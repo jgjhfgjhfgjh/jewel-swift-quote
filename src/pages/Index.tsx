@@ -43,6 +43,8 @@ const Index = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="h-14" />
+      <SalesModeBar />
+      <CustomerSelectorPanel />
       <AdminBrandPanel manufacturers={manufacturers} />
       <div className="flex flex-1 overflow-hidden">
         <FilterSidebar
