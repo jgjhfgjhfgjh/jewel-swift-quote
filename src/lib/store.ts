@@ -53,10 +53,6 @@ interface AppState {
   salesCustomer: SalesCustomer | null;
   salesBrandDiscounts: BrandDiscount[];
   salesProductDiscounts: Record<string, number>;
-  savePermanentBrand: boolean;
-  setSavePermanentBrand: (v: boolean) => void;
-  savePermanentProduct: boolean;
-  setSavePermanentProduct: (v: boolean) => void;
   setSalesMode: (customer: SalesCustomer, brandDiscounts: BrandDiscount[], productDiscounts: Record<string, number>) => void;
   clearSalesMode: () => void;
   setSalesBrandDiscount: (brand: string, percent: number) => void;
