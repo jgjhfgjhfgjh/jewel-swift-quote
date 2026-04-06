@@ -58,7 +58,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
           )}
         </button>
         <div className="flex items-center gap-2">
-          {(brandDiscounts.length > 0 || Object.keys(useStore.getState().productDiscounts).length > 0) && (
+          {(brandDiscounts.length > 0 || Object.keys(productDiscounts).length > 0) && (
             <Button
               size="sm"
               variant="outline"
