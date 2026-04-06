@@ -151,10 +151,6 @@ export const useStore = create<AppState>()(
       salesCustomer: null,
       salesBrandDiscounts: [],
       salesProductDiscounts: {},
-      savePermanentBrand: false,
-      setSavePermanentBrand: (v) => set({ savePermanentBrand: v }),
-      savePermanentProduct: false,
-      setSavePermanentProduct: (v) => set({ savePermanentProduct: v }),
       setSalesMode: (customer, brandDiscounts, productDiscounts) => set({
         salesCustomer: customer,
         salesBrandDiscounts: brandDiscounts,
