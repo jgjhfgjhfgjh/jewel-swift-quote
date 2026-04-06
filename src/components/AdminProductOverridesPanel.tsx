@@ -119,7 +119,7 @@ export function AdminProductOverridesPanel({ products }: Props) {
                 : 0;
               const effectiveVoc = getFinalVoc(product.price, overridePercent, customerDiscount);
               const feedVoc = getFinalVoc(product.price, baseDiscount, customerDiscount);
-              const marginKc = effectiveVoc - product.wholesale;
+              const marginEur = product.price - effectiveVoc;
 
               return (
                 <div key={product.id} className="flex items-center gap-2 rounded-lg border bg-white p-2">
@@ -144,8 +144,8 @@ export function AdminProductOverridesPanel({ products }: Props) {
                       <span className="text-[10px] text-muted-foreground">
                         MOC: €{product.price.toFixed(2)}
                       </span>
-                      <span className={`text-[10px] font-bold ${marginKc >= 0 ? 'text-green-600' : 'text-destructive'}`}>
-                        Marže/ks: {marginKc >= 0 ? '+' : ''}{marginKc.toFixed(2)} Kč
+                      <span className={`text-[10px] font-bold ${marginEur >= 0 ? 'text-green-600' : 'text-destructive'}`}>
+                        Marže/ks: €{marginEur.toFixed(2)}
                       </span>
                     </div>
                   </div>
