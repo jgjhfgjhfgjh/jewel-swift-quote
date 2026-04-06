@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { ChevronDown, ChevronUp, Percent, X, Search, RotateCcw, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,8 @@ export function AdminBrandPanel({ manufacturers }: Props) {
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [brandSearch, setBrandSearch] = useState('');
+  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const setInputRef = useCallback((name: string) => (el: HTMLInputElement | null) => { inputRefs.current[name] = el; }, []);
 
   const sortedBrands = useMemo(() =>
     [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
@@ -148,7 +150,10 @@ export function AdminBrandPanel({ manufacturers }: Props) {
               const existing = getBrandDiscount(name);
               return (
                 <div key={name} className="flex items-center gap-2">
-                  <span className="flex-1 truncate text-xs">
+                  <span
+                    className="flex-1 truncate text-xs cursor-pointer hover:text-primary transition-colors"
+                    onClick={() => inputRefs.current[name]?.focus()}
+                  >
                     {name}
                     <span className="text-[10px] text-muted-foreground ml-1">({count})</span>
                   </span>
@@ -156,6 +161,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                     <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
                   )}
                   <Input
+                    ref={setInputRef(name)}
                     type="number"
                     min="0"
                     max="100"
@@ -163,7 +169,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                     value={inputs[name] || ''}
                     onChange={(e) => setInputs((prev) => ({ ...prev, [name]: e.target.value }))}
                     onKeyDown={(e) => e.key === 'Enter' && handleSet(name)}
-                    className={`w-14 h-6 text-[10px] px-1 text-center ${existing !== undefined ? 'border-blue-500' : ''}`}
+                    className={`w-14 h-6 text-[10px] px-1 text-center transition-colors focus:border-primary focus:ring-primary ${existing !== undefined ? 'border-blue-500' : ''}`}
                   />
                   <Button
                     size="sm"
