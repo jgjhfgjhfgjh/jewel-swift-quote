@@ -10,7 +10,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
 };
 
 function readFeedString(product: Product, field: string) {
-  const value = (product as Record<string, unknown>)[field];
+  const value = (product as unknown as Record<string, unknown>)[field];
   return typeof value === 'string' ? value.trim() : '';
 }
 
