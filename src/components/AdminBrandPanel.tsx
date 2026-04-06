@@ -44,11 +44,11 @@ export function AdminBrandPanel({ manufacturers }: Props) {
 
   return (
     <div className="border-b bg-muted/30">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-4 py-2 text-sm font-semibold hover:bg-muted/50 transition-colors"
-      >
-        <span className="flex items-center gap-2">
+      <div className="flex w-full items-center justify-between px-4 py-2">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex flex-1 items-center gap-2 text-sm font-semibold hover:bg-muted/50 transition-colors"
+        >
           <Percent className="h-4 w-4 text-primary" />
           {t.brandDiscountPanel}
           {brandDiscounts.length > 0 && (
@@ -56,9 +56,29 @@ export function AdminBrandPanel({ manufacturers }: Props) {
               {brandDiscounts.length}
             </span>
           )}
-        </span>
-        {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-      </button>
+        </button>
+        <div className="flex items-center gap-2">
+          {(brandDiscounts.length > 0 || Object.keys(useStore.getState().productDiscounts).length > 0) && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-[10px] px-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm('Opravdu chcete smazat všechny ručně nastavené slevy a vrátit se k cenám z feedu?')) {
+                  clearAllAdminDiscounts();
+                }
+              }}
+            >
+              <RotateCcw className="h-3 w-3 mr-1" />
+              Resetovat všechny slevy
+            </Button>
+          )}
+          <button onClick={() => setOpen(!open)}>
+            {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </button>
+        </div>
+      </div>
 
       {open && (
         <div className="px-4 pb-3 max-h-[70vh] overflow-y-auto scroll-smooth">
