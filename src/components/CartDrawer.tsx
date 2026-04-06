@@ -7,14 +7,8 @@ import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import { useState } from 'react';
 
-function getFeedDiscount(product: { price: number; wholesale: number }) {
-  return product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
-}
-
-function getFinalDiscount(item: { product: { price: number; wholesale: number }; discountPercent: number; manualDiscountPercent?: number }) {
-  if (item.manualDiscountPercent !== undefined) return item.manualDiscountPercent;
-  if (item.discountPercent > 0) return item.discountPercent;
-  return getFeedDiscount(item.product);
+function getEffectiveDiscount(item: { discountPercent: number; manualDiscountPercent?: number }) {
+  return item.manualDiscountPercent !== undefined ? item.manualDiscountPercent : item.discountPercent;
 }
 
 export function CartDrawer() {
@@ -31,15 +25,15 @@ export function CartDrawer() {
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
   const totalVOC = cart.reduce((sum, item) => {
-    const disc = getFinalDiscount(item);
-    const voc = item.product.price * (1 - disc / 100);
-    return sum + voc * item.quantity;
+    const disc = getEffectiveDiscount(item);
+    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    return sum + vocAfterDiscount * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
-    const disc = getFinalDiscount(item);
-    const voc = item.product.price * (1 - disc / 100);
-    return sum + (item.product.price - voc) * item.quantity;
+    const disc = getEffectiveDiscount(item);
+    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    return sum + (item.product.price - vocAfterDiscount) * item.quantity;
   }, 0);
 
   if (!cartOpen) return null;
@@ -69,10 +63,11 @@ export function CartDrawer() {
             <ScrollArea className="flex-1 scrollbar-thin">
               <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
-                  const feedDisc = getFeedDiscount(item.product);
-                  const effectiveDisc = getFinalDiscount(item);
+                  const baseMargin = item.product.price - item.product.wholesale;
+                  const basePct = item.product.price > 0 ? ((baseMargin / item.product.price) * 100) : 0;
+                  const effectiveDisc = getEffectiveDiscount(item);
                   const hasManualOverride = item.manualDiscountPercent !== undefined;
-                  const vocAfterDiscount = item.product.price * (1 - effectiveDisc / 100);
+                  const vocAfterDiscount = item.product.wholesale * (1 - effectiveDisc / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
@@ -90,8 +85,8 @@ export function CartDrawer() {
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] text-muted-foreground">{t.moq}: €{item.product.price.toFixed(2)}</span>
                             <span className="text-[10px] text-muted-foreground">{t.voc}: €{item.product.wholesale.toFixed(2)}</span>
-                            {feedDisc > 0 && (
-                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(feedDisc)}%</span>
+                            {basePct > 0 && (
+                              <span className="rounded bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">-{Math.round(basePct)}%</span>
                             )}
                           </div>
                           {effectiveDisc > 0 && (
