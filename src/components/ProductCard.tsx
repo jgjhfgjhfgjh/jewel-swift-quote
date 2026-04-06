@@ -64,6 +64,8 @@ export function ProductCard({ product }: { product: Product }) {
     setEditingDiscount(true);
   };
 
+  const isLoggedIn = !!user;
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <div className={`relative aspect-square overflow-hidden bg-muted ${isOutOfStock ? 'grayscale opacity-50' : ''}`}>
