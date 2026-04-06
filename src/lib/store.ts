@@ -52,8 +52,9 @@ export const useStore = create<AppState>()(
         if (existing) {
           return { cart: s.cart.map((i) => i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i) };
         }
-        const discount = s.brandDiscounts.find((d) => d.brand === product.manufacturer);
-        return { cart: [...s.cart, { product, quantity: 1, discountPercent: discount?.percent || 0 }] };
+        const baseDiscount = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
+        const brandDiscount = s.brandDiscounts.find((d) => d.brand === product.manufacturer);
+        return { cart: [...s.cart, { product, quantity: 1, discountPercent: brandDiscount?.percent ?? baseDiscount }] };
       }),
       removeFromCart: (id) => set((s) => ({ cart: s.cart.filter((i) => i.product.id !== id) })),
       updateQuantity: (id, qty) => set((s) => ({

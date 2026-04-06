@@ -63,11 +63,10 @@ export function CartDrawer() {
             <ScrollArea className="flex-1 scrollbar-thin">
               <div className="divide-y px-3 sm:px-4 py-2">
                 {cart.map((item) => {
-                  const baseMargin = item.product.price - item.product.wholesale;
-                  const basePct = item.product.price > 0 ? ((baseMargin / item.product.price) * 100) : 0;
+                  const baseDiscount = item.product.price > 0 ? ((item.product.price - item.product.wholesale) / item.product.price) * 100 : 0;
                   const effectiveDisc = getEffectiveDiscount(item);
                   const hasManualOverride = item.manualDiscountPercent !== undefined;
-                  const vocAfterDiscount = item.product.wholesale * (1 - effectiveDisc / 100);
+                  const vocAfterDiscount = item.product.price * (1 - effectiveDisc / 100);
                   const effectiveMargin = item.product.price - vocAfterDiscount;
                   const rowTotal = vocAfterDiscount * item.quantity;
 
