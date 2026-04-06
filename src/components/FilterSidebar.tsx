@@ -33,6 +33,15 @@ export function FilterSidebar({
   const { lang, sidebarOpen, setSidebarOpen } = useStore();
   const t = translations[lang];
 
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
+
   const discountTiers = [
     { label: t.discount70, value: 70 },
     { label: t.discount60, value: 60 },
