@@ -26,13 +26,13 @@ export function CartDrawer() {
 
   const totalVOC = cart.reduce((sum, item) => {
     const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    const vocAfterDiscount = item.product.price * (1 - disc / 100);
     return sum + vocAfterDiscount * item.quantity;
   }, 0);
 
   const totalMargin = cart.reduce((sum, item) => {
     const disc = getEffectiveDiscount(item);
-    const vocAfterDiscount = item.product.wholesale * (1 - disc / 100);
+    const vocAfterDiscount = item.product.price * (1 - disc / 100);
     return sum + (item.product.price - vocAfterDiscount) * item.quantity;
   }, 0);
 
