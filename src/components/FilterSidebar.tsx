@@ -71,7 +71,8 @@ export function FilterSidebar({
 
   const content = (
     <div className="flex h-full flex-col">
-      <div className="p-4 pb-2">
+      {/* Search bar visible only on mobile (md+ it's in the header) */}
+      <div className="p-4 pb-2 md:hidden">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
