@@ -66,7 +66,7 @@ export function CartDrawer() {
   return (
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setCartOpen(false)} />
-      <aside className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-card shadow-xl">
+      <aside className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-card shadow-xl overflow-x-hidden">
         <div className="flex items-center justify-between border-b p-4">
           <h2 className="font-display text-lg font-semibold">{t.cart}</h2>
           <div className="flex gap-2">
