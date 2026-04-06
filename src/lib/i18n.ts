@@ -37,6 +37,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     removeFromCart: 'Odebrat',
     quantity: 'Množství',
     margin: 'Marže',
+    marginTotal: 'Marže celkem',
+    marginPerPc: 'Marže za 1 ks',
     voc: 'VOC',
     discountTiers: 'Slevy',
     discount70: 'Sleva 70%+',
