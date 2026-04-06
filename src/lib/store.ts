@@ -71,6 +71,21 @@ export const useStore = create<AppState>()(
       })),
       clearCart: () => set({ cart: [] }),
 
+      productDiscounts: {},
+      setProductDiscount: (id, percent) => set((s) => {
+        const next = { ...s.productDiscounts };
+        if (percent === undefined) {
+          delete next[id];
+        } else {
+          next[id] = percent;
+        }
+        // Also sync to cart item if present
+        return {
+          productDiscounts: next,
+          cart: s.cart.map((i) => i.product.id === id ? { ...i, manualDiscountPercent: percent } : i),
+        };
+      }),
+
       brandDiscounts: [],
       setBrandDiscount: (brand, percent) => set((s) => {
         const existing = s.brandDiscounts.find((d) => d.brand === brand);
