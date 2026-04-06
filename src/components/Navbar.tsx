@@ -118,14 +118,16 @@ export function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
-          <ShoppingCart className="h-5 w-5" />
-          {totalItems > 0 && (
-            <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-              {totalItems}
-            </Badge>
-          )}
-        </Button>
+        {user && (
+          <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+            <ShoppingCart className="h-5 w-5" />
+            {totalItems > 0 && (
+              <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                {totalItems}
+              </Badge>
+            )}
+          </Button>
+        )}
       </div>
     </header>
   );
