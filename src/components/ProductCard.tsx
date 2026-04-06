@@ -7,7 +7,7 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, cart, addToCart, updateQuantity, removeFromCart } = useStore();
+  const { lang, cart, brandDiscounts, addToCart, updateQuantity, removeFromCart } = useStore();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
 
