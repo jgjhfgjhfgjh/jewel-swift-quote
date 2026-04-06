@@ -11,7 +11,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function ProductCard({ product }: { product: Product }) {
-  const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount } = useStore();
+  const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
+    salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
+  } = useStore();
   const { isAdmin, profile, user } = useAuthContext();
   const navigate = useNavigate();
   const t = translations[lang];
@@ -24,13 +26,17 @@ export function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = product.stock <= 0;
   const atMax = qty >= product.stock;
 
-  const { percent: activeDiscount, source } = getActiveDiscount(product, productDiscounts, brandDiscounts);
-  const customerDiscount = profile?.base_discount ?? 0;
+  // In sales mode, use sales discounts; otherwise use admin/own discounts
+  const effectiveProductDiscounts = salesCustomer ? salesProductDiscounts : productDiscounts;
+  const effectiveBrandDiscounts = salesCustomer ? salesBrandDiscounts : brandDiscounts;
+  const customerDiscount = salesCustomer ? salesCustomer.base_discount : (profile?.base_discount ?? 0);
+
+  const { percent: activeDiscount, source } = getActiveDiscount(product, effectiveProductDiscounts, effectiveBrandDiscounts);
 
   const effectiveVoc = getFinalVoc(product.price, activeDiscount, customerDiscount);
   const unitMargin = product.price - effectiveVoc;
   const totalMargin = unitMargin * Math.max(qty, 1);
-  const isOverridden = source === 'manual' || source === 'brand';
+  const isOverridden = source === 'manual' || source === 'brand' || source === 'customer-product' || source === 'customer-brand';
 
   const handleAdd = () => {
     if (!isOutOfStock) addToCart(product);
