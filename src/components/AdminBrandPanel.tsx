@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function AdminBrandPanel({ manufacturers }: Props) {
-  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts } = useStore();
+  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
@@ -58,7 +58,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
           )}
         </button>
         <div className="flex items-center gap-2">
-          {(brandDiscounts.length > 0 || Object.keys(useStore.getState().productDiscounts).length > 0) && (
+          {(brandDiscounts.length > 0 || Object.keys(productDiscounts).length > 0) && (
             <Button
               size="sm"
               variant="outline"
