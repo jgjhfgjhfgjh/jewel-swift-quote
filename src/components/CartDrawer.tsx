@@ -228,6 +228,16 @@ export function CartDrawer() {
             )}
 
             <div className="border-t p-4">
+              {salesCustomer && (
+                <div className="mb-3 rounded-md bg-blue-50 dark:bg-blue-950/30 p-2 text-xs">
+                  <p className="font-semibold text-blue-700 dark:text-blue-300">
+                    Nabídka pro: {salesCustomer.company_name}
+                  </p>
+                  {salesCustomer.ico && (
+                    <p className="text-blue-600/70 dark:text-blue-400/70">IČO: {salesCustomer.ico}</p>
+                  )}
+                </div>
+              )}
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-muted-foreground">{t.total} ({t.voc})</span>
                 <span className="text-lg font-bold tabular-nums">€{totalVOC.toFixed(2)}</span>
