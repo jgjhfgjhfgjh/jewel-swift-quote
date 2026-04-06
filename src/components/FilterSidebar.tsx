@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
