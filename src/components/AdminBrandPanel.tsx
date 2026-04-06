@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function AdminBrandPanel({ manufacturers }: Props) {
-  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts } = useStore();
+  const { lang, isAdmin, brandDiscounts, setBrandDiscount, removeBrandDiscount, clearAllAdminDiscounts, productDiscounts } = useStore();
   const t = translations[lang];
   const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
