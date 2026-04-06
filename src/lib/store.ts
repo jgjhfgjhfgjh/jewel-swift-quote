@@ -16,6 +16,10 @@ interface AppState {
   setItemDiscount: (productId: string, percent: number | undefined) => void;
   clearCart: () => void;
 
+  // Individual product discount overrides (single source of truth)
+  productDiscounts: Record<string, number>;
+  setProductDiscount: (productId: string, percent: number | undefined) => void;
+
   brandDiscounts: BrandDiscount[];
   setBrandDiscount: (brand: string, percent: number) => void;
   removeBrandDiscount: (brand: string) => void;

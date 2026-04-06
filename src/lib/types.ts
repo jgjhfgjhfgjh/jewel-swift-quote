@@ -17,6 +17,7 @@ export interface CartItem {
   product: Product;
   quantity: number;
   discountPercent: number;
+  /** @deprecated Use productDiscounts in store instead */
   manualDiscountPercent?: number;
 }
 

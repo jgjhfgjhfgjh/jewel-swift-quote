@@ -136,6 +136,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount70: 'Afsláttur 70%+',
     discount60: 'Afsláttur 60%+',
     discount50: 'Afsláttur 50%+',
+    brandDiscountPanel: 'Heildsöluafsláttur vörumerkja',
+    setDiscount: 'Stilla',
   },
 };
 
