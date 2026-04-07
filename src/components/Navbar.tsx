@@ -81,6 +81,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 size="icon"
                 className="relative"
                 onClick={() => onOpenWishlist?.()}
+                title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
                 <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-primary text-primary' : ''}`} />
                 {wishlistCount > 0 && (
