@@ -136,11 +136,28 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
       <Sheet open={profileOpen} onOpenChange={setProfileOpen}>
         <SheetContent side="bottom" className="rounded-t-2xl pb-8" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 2rem)' }}>
           <SheetHeader>
-            <SheetTitle>Profil</SheetTitle>
+            <SheetTitle>{isAdmin && salesCustomer ? 'Režim nabídky' : 'Profil'}</SheetTitle>
           </SheetHeader>
 
           <div className="mt-4 space-y-4">
-            {user && profile ? (
+            {isAdmin && salesCustomer ? (
+              <>
+                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
+                  <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Zákazník</p>
+                  <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
+                  {salesCustomer.ico && <p className="text-xs text-muted-foreground">IČO: {salesCustomer.ico}</p>}
+                  {salesCustomer.base_discount > 0 && (
+                    <p className="text-xs text-primary font-semibold mt-1">Sleva: {salesCustomer.base_discount}%</p>
+                  )}
+                </div>
+                <Button variant="outline" className="w-full gap-2 text-xs" onClick={() => { setProfileOpen(false); navigate('/customers'); }}>
+                  <Users className="h-4 w-4" /> Správa zákazníků
+                </Button>
+                <Button variant="destructive" className="w-full gap-2" onClick={() => { clearSalesMode(); setProfileOpen(false); }}>
+                  <LogOut className="h-4 w-4" /> Ukončit režim nabídky
+                </Button>
+              </>
+            ) : user && profile ? (
               <>
                 <div className="rounded-lg bg-muted p-3">
                   <p className="text-sm font-semibold">{profile.company_name || 'Zákazník'}</p>
