@@ -127,7 +127,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         {/* Discount badge - desktop only (inside image) */}
         {isLoggedIn && activeDiscount > 0 && (
           editingDiscount && isAdmin ? (
-            <div className="absolute right-1 top-1 hidden sm:flex items-center gap-0.5">
+            <div className="absolute right-1 top-1 hidden lg:flex items-center gap-0.5">
               <Input
                 type="number"
                 min="0"
@@ -143,7 +143,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
           ) : (
             <Badge
               onClick={handleBadgeClick}
-              className={`absolute right-2 top-2 hidden sm:inline-flex text-[10px] font-bold ${
+              className={`absolute right-2 top-2 hidden lg:inline-flex text-[10px] font-bold ${
                 isAdmin ? 'cursor-pointer hover:scale-110 transition-transform' : ''
               } ${
                 isOverridden
@@ -160,7 +160,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
       <div className="flex flex-1 flex-col p-3">
         {/* Discount badge - mobile only (above brand name) */}
         {isLoggedIn && activeDiscount > 0 && (
-          <div className="flex sm:hidden justify-end mb-1">
+          <div className="flex lg:hidden justify-end mb-1">
             {editingDiscount && isAdmin ? (
               <Input
                 type="number"
@@ -263,8 +263,8 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
               onClick={() => navigate('/register')}
             >
               <Lock className="h-3.5 w-3.5" />
-              <span className="text-xs sm:hidden">Zobrazit cenu</span>
-              <span className="text-xs hidden sm:inline">{t.getWholesalePrices}</span>
+              <span className="text-xs lg:hidden">Zobrazit cenu</span>
+              <span className="text-xs hidden lg:inline">{t.getWholesalePrices}</span>
             </Button>
           )}
         </div>

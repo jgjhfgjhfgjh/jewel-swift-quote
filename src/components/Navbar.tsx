@@ -41,7 +41,7 @@ export function Navbar() {
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Hamburger only visible on tablet (md-lg), hidden on mobile (bottom nav) and desktop (sidebar always visible) */}
-          <Button variant="ghost" size="icon" className="hidden md:flex lg:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
+          <Button variant="ghost" size="icon" className="hidden lg:flex xl:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
 
@@ -67,7 +67,7 @@ export function Navbar() {
         </div>
 
         {/* Right group: auth, lang, cart — hidden on mobile (moved to bottom nav) */}
-        <div className="hidden md:flex items-center gap-1 sm:gap-2 shrink-0">
+        <div className="hidden lg:flex items-center gap-1 sm:gap-2 shrink-0">
 
         {/* User welcome or discount info */}
         {user && profile && (
