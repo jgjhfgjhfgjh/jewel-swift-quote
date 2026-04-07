@@ -12,9 +12,10 @@ import {
 
 interface Props {
   onOpenWishlist: () => void;
+  wishlistCount?: number;
 }
 
-export function BottomNav({ onOpenWishlist }: Props) {
+export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen } = useStore();
   const { user, profile, signOut, loading } = useAuthContext();
   const t = translations[lang];
@@ -104,7 +105,14 @@ export function BottomNav({ onOpenWishlist }: Props) {
             }}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
           >
-            <Heart className="h-5 w-5" />
+            <div className="relative">
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <Badge className="absolute -right-2 -top-2 h-4 min-w-4 justify-center rounded-full bg-primary px-1 text-[8px] font-bold text-primary-foreground">
+                  {wishlistCount}
+                </Badge>
+              )}
+            </div>
             <span className="text-[10px]">Oblíbené</span>
           </button>
 

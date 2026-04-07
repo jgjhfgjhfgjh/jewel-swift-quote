@@ -82,7 +82,7 @@ const Index = () => {
       </div>
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
-      <BottomNav onOpenWishlist={() => setWishlistOpen(true)} />
+      <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
     </div>
   );
 };
