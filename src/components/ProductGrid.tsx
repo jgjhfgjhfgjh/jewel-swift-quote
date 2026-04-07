@@ -15,9 +15,11 @@ interface Props {
   selectedCategory: string | null;
   stockOnly: boolean;
   minDiscount: number;
+  wishlistIds?: Set<string>;
+  onToggleWishlist?: (id: string) => void;
 }
 
-export function ProductGrid({ products, search, selectedBrands, selectedCategory, stockOnly, minDiscount }: Props) {
+export function ProductGrid({ products, search, selectedBrands, selectedCategory, stockOnly, minDiscount, wishlistIds, onToggleWishlist }: Props) {
   const { lang } = useStore();
   const t = translations[lang];
   const [page, setPage] = useState(1);
@@ -75,7 +77,7 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
       </div>
       <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {paginated.map((p) => (
-          <ProductCard key={p.id} product={p} />
+          <ProductCard key={p.id} product={p} isWishlisted={wishlistIds?.has(p.id)} onToggleWishlist={onToggleWishlist} />
         ))}
       </div>
       {hasMore && (
