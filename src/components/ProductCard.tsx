@@ -1,4 +1,4 @@
-import { Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, Lock, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
@@ -81,7 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
   const isLoggedIn = !!user;
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
+    <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <div className={`relative aspect-square overflow-hidden bg-muted ${isOutOfStock ? 'grayscale opacity-50' : ''}`}>
         {!imgError ? (
           <img
@@ -103,6 +103,26 @@ export function ProductCard({ product }: { product: Product }) {
               {t.inStock}
             </span>
           </div>
+        )}
+        {/* Wishlist heart */}
+        {onToggleWishlist && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!isLoggedIn) {
+                navigate('/login');
+                return;
+              }
+              onToggleWishlist(product.id);
+            }}
+            className="absolute right-2 top-2 z-10 rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm transition-all hover:scale-110"
+          >
+            <Heart
+              className={`h-4 w-4 transition-colors ${
+                isWishlisted ? 'fill-primary text-primary' : 'text-muted-foreground'
+              }`}
+            />
+          </button>
         )}
         {isLoggedIn && activeDiscount > 0 && (
           editingDiscount && isAdmin ? (

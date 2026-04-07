@@ -40,7 +40,8 @@ export function Navbar() {
       <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
+          {/* Hamburger only visible on tablet (md-lg), hidden on mobile (bottom nav) and desktop (sidebar always visible) */}
+          <Button variant="ghost" size="icon" className="hidden md:flex lg:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
 
@@ -51,8 +52,8 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Center: Search bar - hidden on mobile */}
-        <div className="hidden md:flex flex-1 justify-center mx-4">
+        {/* Center: Search bar - visible on all sizes now (mobile top header has search) */}
+        <div className="flex flex-1 justify-center mx-2 md:mx-4">
           <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -65,8 +66,8 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right group: auth, lang, cart */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        {/* Right group: auth, lang, cart — hidden on mobile (moved to bottom nav) */}
+        <div className="hidden md:flex items-center gap-1 sm:gap-2 shrink-0">
 
         {/* User welcome or discount info */}
         {user && profile && (

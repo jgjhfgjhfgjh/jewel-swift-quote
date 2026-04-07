@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
+import { BottomNav } from '@/components/BottomNav';
+import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { AdminBrandPanel } from '@/components/AdminBrandPanel';
 import { AdminProductOverridesPanel } from '@/components/AdminProductOverridesPanel';
 import { CustomerSelectorPanel } from '@/components/CustomerSelectorPanel';
@@ -7,11 +10,14 @@ import { FilterSidebar } from '@/components/FilterSidebar';
 import { ProductGrid } from '@/components/ProductGrid';
 import { CartDrawer } from '@/components/CartDrawer';
 import { useProducts } from '@/hooks/useProducts';
+import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
+  const { wishlistIds, toggle: toggleWishlist } = useWishlist();
+  const [wishlistOpen, setWishlistOpen] = useState(false);
   const {
     search, setSearch,
     selectedBrands, setSelectedBrands,
@@ -41,7 +47,7 @@ const Index = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col pb-16 md:pb-0">
       <Navbar />
       <div className="h-14" />
       <SalesModeBar />
@@ -70,9 +76,13 @@ const Index = () => {
           selectedCategory={selectedCategory}
           stockOnly={stockOnly}
           minDiscount={minDiscount}
+          wishlistIds={wishlistIds}
+          onToggleWishlist={toggleWishlist}
         />
       </div>
       <CartDrawer />
+      <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
+      <BottomNav onOpenWishlist={() => setWishlistOpen(true)} />
     </div>
   );
 };
