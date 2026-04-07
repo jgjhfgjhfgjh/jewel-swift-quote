@@ -120,10 +120,14 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           {/* Profile */}
           <button
             onClick={() => setProfileOpen(true)}
-            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            className={`flex flex-col items-center gap-0.5 transition-colors min-w-[48px] ${
+              isAdmin && salesCustomer ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+            }`}
           >
             <User className="h-5 w-5" />
-            <span className="text-[10px]">Profil</span>
+            <span className="text-[10px]">
+              {isAdmin && salesCustomer ? salesCustomer.company_name.slice(0, 8) : 'Profil'}
+            </span>
           </button>
         </div>
       </nav>
