@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from 'react';
-import { Search, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -71,19 +70,6 @@ export function FilterSidebar({
 
   const content = (
     <div className="flex h-full flex-col">
-      {/* Search bar visible only on mobile (md+ it's in the header) */}
-      <div className="p-4 pb-2 md:hidden">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder={t.search}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 text-sm"
-          />
-        </div>
-      </div>
-
       {/* Live Offer toggle */}
       <div className="flex items-center justify-between px-4 py-2">
         <span className="text-sm font-medium">{t.stockOnly}</span>
