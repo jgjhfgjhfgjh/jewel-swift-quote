@@ -17,7 +17,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
