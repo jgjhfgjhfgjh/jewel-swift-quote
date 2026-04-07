@@ -17,7 +17,7 @@ interface Props {
 
 export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer, clearSalesMode } = useStore();
-  const { user, profile, signOut, loading } = useAuthContext();
+  const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
