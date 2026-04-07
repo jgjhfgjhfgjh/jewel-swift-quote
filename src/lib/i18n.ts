@@ -46,7 +46,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     discount50: 'Sleva 50%+',
     brandDiscountPanel: 'Hromadné slevy značek',
     setDiscount: 'Nastavit',
-    getWholesalePrices: 'Získat velkoobchodní ceny',
+    getWholesalePrices: 'Velkoobchodní cena',
     register: 'Registrace',
     loginRequired: 'Pro zobrazení cen se přihlaste',
   },
