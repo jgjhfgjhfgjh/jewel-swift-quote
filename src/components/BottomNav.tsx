@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Menu, ShoppingCart, Heart, User, LogIn, LogOut, Globe } from 'lucide-react';
+import { Home, Menu, ShoppingCart, Heart, User, LogIn, LogOut, Globe, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer, clearSalesMode } = useStore();
   const { user, profile, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
