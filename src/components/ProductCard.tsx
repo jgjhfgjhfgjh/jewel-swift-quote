@@ -126,9 +126,9 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         )}
       </div>
       <div className="flex flex-1 flex-col p-3">
-        {/* Discount badge - mobile only (above brand name) */}
+        {/* Discount badge - above brand name, all sizes */}
         {isLoggedIn && activeDiscount > 0 && (
-          <div className="flex lg:hidden justify-end mb-1">
+          <div className="flex justify-end mb-1">
             {editingDiscount && isAdmin ? (
               <Input
                 type="number"
