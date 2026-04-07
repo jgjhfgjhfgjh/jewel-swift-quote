@@ -104,6 +104,26 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
             </span>
           </div>
         )}
+        {/* Wishlist heart */}
+        {onToggleWishlist && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!isLoggedIn) {
+                navigate('/login');
+                return;
+              }
+              onToggleWishlist(product.id);
+            }}
+            className="absolute right-2 top-2 z-10 rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm transition-all hover:scale-110"
+          >
+            <Heart
+              className={`h-4 w-4 transition-colors ${
+                isWishlisted ? 'fill-primary text-primary' : 'text-muted-foreground'
+              }`}
+            />
+          </button>
+        )}
         {isLoggedIn && activeDiscount > 0 && (
           editingDiscount && isAdmin ? (
             <div className="absolute right-1 top-1 flex items-center gap-0.5">
