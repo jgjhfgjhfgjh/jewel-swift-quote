@@ -44,7 +44,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
   return (
     <>
       <nav
-        className={`fixed bottom-0 left-0 right-0 z-50 md:hidden border-t bg-card/90 backdrop-blur-md supports-[backdrop-filter]:bg-card/70 transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-0 left-0 right-0 z-50 lg:hidden border-t bg-card/90 backdrop-blur-md supports-[backdrop-filter]:bg-card/70 transition-transform duration-300 ease-in-out ${
           hidden ? 'translate-y-full' : 'translate-y-0'
         }`}
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
