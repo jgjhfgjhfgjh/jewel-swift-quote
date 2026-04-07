@@ -210,7 +210,7 @@ export function ProductCard({ product }: { product: Product }) {
               onClick={() => navigate('/register')}
             >
               <Lock className="h-3.5 w-3.5" />
-              <span className="text-xs sm:hidden">Velkoobchodní cena</span>
+              <span className="text-xs sm:hidden">Zobrazit ceny</span>
               <span className="text-xs hidden sm:inline">{t.getWholesalePrices}</span>
             </Button>
           )}
