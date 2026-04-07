@@ -1,4 +1,4 @@
-import { Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, Lock, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
