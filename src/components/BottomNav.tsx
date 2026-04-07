@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer } = useStore();
   const { user, profile, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -104,6 +104,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
               }
             }}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            title={salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
           >
             <div className="relative">
               <Heart className="h-5 w-5" />
@@ -113,7 +114,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
                 </Badge>
               )}
             </div>
-            <span className="text-[10px]">Oblíbené</span>
+            <span className="text-[10px]">{salesCustomer ? salesCustomer.company_name.slice(0, 8) : 'Oblíbené'}</span>
           </button>
 
           {/* Profile */}
