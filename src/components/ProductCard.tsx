@@ -10,7 +10,7 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
@@ -81,7 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
   const isLoggedIn = !!user;
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
+    <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <div className={`relative aspect-square overflow-hidden bg-muted ${isOutOfStock ? 'grayscale opacity-50' : ''}`}>
         {!imgError ? (
           <img
