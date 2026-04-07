@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Menu, ShoppingCart, Heart, User, LogIn, LogOut, Globe } from 'lucide-react';
+import { Home, Menu, ShoppingCart, Heart, User, LogIn, LogOut, Globe, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
@@ -16,8 +16,8 @@ interface Props {
 }
 
 export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer } = useStore();
-  const { user, profile, signOut, loading } = useAuthContext();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer, clearSalesMode } = useStore();
+  const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
@@ -120,10 +120,14 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           {/* Profile */}
           <button
             onClick={() => setProfileOpen(true)}
-            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            className={`flex flex-col items-center gap-0.5 transition-colors min-w-[48px] ${
+              isAdmin && salesCustomer ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+            }`}
           >
             <User className="h-5 w-5" />
-            <span className="text-[10px]">Profil</span>
+            <span className="text-[10px]">
+              {isAdmin && salesCustomer ? salesCustomer.company_name.slice(0, 8) : 'Profil'}
+            </span>
           </button>
         </div>
       </nav>
@@ -132,11 +136,28 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
       <Sheet open={profileOpen} onOpenChange={setProfileOpen}>
         <SheetContent side="bottom" className="rounded-t-2xl pb-8" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 2rem)' }}>
           <SheetHeader>
-            <SheetTitle>Profil</SheetTitle>
+            <SheetTitle>{isAdmin && salesCustomer ? 'Režim nabídky' : 'Profil'}</SheetTitle>
           </SheetHeader>
 
           <div className="mt-4 space-y-4">
-            {user && profile ? (
+            {isAdmin && salesCustomer ? (
+              <>
+                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
+                  <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Zákazník</p>
+                  <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
+                  {salesCustomer.ico && <p className="text-xs text-muted-foreground">IČO: {salesCustomer.ico}</p>}
+                  {salesCustomer.base_discount > 0 && (
+                    <p className="text-xs text-primary font-semibold mt-1">Sleva: {salesCustomer.base_discount}%</p>
+                  )}
+                </div>
+                <Button variant="outline" className="w-full gap-2 text-xs" onClick={() => { setProfileOpen(false); navigate('/customers'); }}>
+                  <Users className="h-4 w-4" /> Správa zákazníků
+                </Button>
+                <Button variant="destructive" className="w-full gap-2" onClick={() => { clearSalesMode(); setProfileOpen(false); }}>
+                  <LogOut className="h-4 w-4" /> Ukončit režim nabídky
+                </Button>
+              </>
+            ) : user && profile ? (
               <>
                 <div className="rounded-lg bg-muted p-3">
                   <p className="text-sm font-semibold">{profile.company_name || 'Zákazník'}</p>

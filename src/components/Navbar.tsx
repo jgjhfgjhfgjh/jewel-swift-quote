@@ -17,7 +17,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -104,54 +104,97 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
               {/* Profile dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-1.5 text-xs ml-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`gap-1.5 text-xs ml-1 ${isAdmin && salesCustomer ? 'border border-primary/50 bg-primary/5' : ''}`}
+                  >
                     <User className="h-4 w-4" />
-                    <span className="hidden xl:inline max-w-[120px] truncate">{profile?.company_name || 'Účet'}</span>
+                    <span className="hidden xl:inline max-w-[120px] truncate">
+                      {isAdmin && salesCustomer ? salesCustomer.company_name : (profile?.company_name || 'Účet')}
+                    </span>
+                    {isAdmin && salesCustomer && (
+                      <Badge className="ml-1 h-4 px-1 text-[8px] bg-primary text-primary-foreground">Sales</Badge>
+                    )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  {/* User info header */}
-                  <div className="px-3 py-2 border-b">
-                    <p className="text-sm font-semibold">{profile?.company_name || 'Zákazník'}</p>
-                    {profile?.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
-                    {profile && profile.base_discount > 0 && (
-                      <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
-                    )}
-                  </div>
-
-                  {isAdmin && (
+                  {isAdmin && salesCustomer ? (
                     <>
+                      {/* Customer info header in sales mode */}
+                      <div className="px-3 py-2 border-b border-primary/20 bg-primary/5">
+                        <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Režim nabídky</p>
+                        <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
+                        {salesCustomer.ico && <p className="text-xs text-muted-foreground">IČO: {salesCustomer.ico}</p>}
+                        {salesCustomer.base_discount > 0 && (
+                          <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {salesCustomer.base_discount}%</p>
+                        )}
+                      </div>
+
                       <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
                         <Users className="h-3.5 w-3.5" /> Správa zákazníků
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
+
+                      {/* Language switcher */}
+                      <div className="px-2 py-1.5">
+                        <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
+                          <Globe className="h-3 w-3" /> Jazyk
+                        </p>
+                        <div className="flex gap-1">
+                          {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+                            <Button key={l} variant={lang === l ? 'default' : 'outline'} size="sm" className="flex-1 gap-1 h-7 text-[11px]" onClick={() => setLang(l)}>
+                              <span>{flags[l]}</span> {l.toUpperCase()}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => clearSalesMode()} className="gap-2 text-xs text-destructive font-semibold">
+                        <LogOut className="h-3.5 w-3.5" /> Ukončit režim nabídky
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    <>
+                      {/* Admin's own info */}
+                      <div className="px-3 py-2 border-b">
+                        <p className="text-sm font-semibold">{profile?.company_name || 'Zákazník'}</p>
+                        {profile?.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
+                        {profile && profile.base_discount > 0 && (
+                          <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
+                        )}
+                      </div>
+
+                      {isAdmin && (
+                        <>
+                          <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
+                            <Users className="h-3.5 w-3.5" /> Správa zákazníků
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                        </>
+                      )}
+
+                      {/* Language switcher */}
+                      <div className="px-2 py-1.5">
+                        <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
+                          <Globe className="h-3 w-3" /> Jazyk
+                        </p>
+                        <div className="flex gap-1">
+                          {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+                            <Button key={l} variant={lang === l ? 'default' : 'outline'} size="sm" className="flex-1 gap-1 h-7 text-[11px]" onClick={() => setLang(l)}>
+                              <span>{flags[l]}</span> {l.toUpperCase()}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
+                        <LogOut className="h-3.5 w-3.5" /> Odhlásit se
+                      </DropdownMenuItem>
                     </>
                   )}
-
-                  {/* Language switcher */}
-                  <div className="px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
-                      <Globe className="h-3 w-3" /> Jazyk
-                    </p>
-                    <div className="flex gap-1">
-                      {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-                        <Button
-                          key={l}
-                          variant={lang === l ? 'default' : 'outline'}
-                          size="sm"
-                          className="flex-1 gap-1 h-7 text-[11px]"
-                          onClick={() => setLang(l)}
-                        >
-                          <span>{flags[l]}</span> {l.toUpperCase()}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
-                    <LogOut className="h-3.5 w-3.5" /> Odhlásit se
-                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
