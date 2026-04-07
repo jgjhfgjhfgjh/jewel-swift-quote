@@ -124,9 +124,10 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
             />
           </button>
         )}
+        {/* Discount badge - desktop only (inside image) */}
         {isLoggedIn && activeDiscount > 0 && (
           editingDiscount && isAdmin ? (
-            <div className="absolute right-1 top-1 flex items-center gap-0.5">
+            <div className="absolute right-1 top-1 hidden sm:flex items-center gap-0.5">
               <Input
                 type="number"
                 min="0"
@@ -142,7 +143,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
           ) : (
             <Badge
               onClick={handleBadgeClick}
-              className={`absolute right-2 top-2 text-[10px] font-bold ${
+              className={`absolute right-2 top-2 hidden sm:inline-flex text-[10px] font-bold ${
                 isAdmin ? 'cursor-pointer hover:scale-110 transition-transform' : ''
               } ${
                 isOverridden
@@ -157,6 +158,38 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         )}
       </div>
       <div className="flex flex-1 flex-col p-3">
+        {/* Discount badge - mobile only (above brand name) */}
+        {isLoggedIn && activeDiscount > 0 && (
+          <div className="flex sm:hidden justify-end mb-1">
+            {editingDiscount && isAdmin ? (
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                autoFocus
+                value={discountInput}
+                onChange={(e) => setDiscountInput(e.target.value)}
+                onBlur={handleDiscountSubmit}
+                onKeyDown={(e) => e.key === 'Enter' && handleDiscountSubmit()}
+                className="w-14 h-5 text-[10px] px-1 text-center border-blue-500 bg-white"
+              />
+            ) : (
+              <Badge
+                onClick={handleBadgeClick}
+                className={`text-[10px] font-bold ${
+                  isAdmin ? 'cursor-pointer hover:scale-110 transition-transform' : ''
+                } ${
+                  isOverridden
+                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                    : 'bg-primary text-destructive-foreground hover:bg-primary'
+                }`}
+              >
+                -{Math.round(activeDiscount)}%
+                {customerDiscount > 0 && ` -${customerDiscount}%`}
+              </Badge>
+            )}
+          </div>
+        )}
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
 
