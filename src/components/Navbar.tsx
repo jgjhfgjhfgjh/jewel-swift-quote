@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogIn, LogOut, Users, Search } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,12 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 
-export function Navbar() {
+interface NavbarProps {
+  wishlistCount?: number;
+  onOpenWishlist?: () => void;
+}
+
+export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
@@ -40,7 +45,6 @@ export function Navbar() {
       <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Hamburger only visible on tablet (md-lg), hidden on mobile (bottom nav) and desktop (sidebar always visible) */}
           <Button variant="ghost" size="icon" className="hidden lg:flex xl:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
@@ -52,7 +56,7 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Center: Search bar - visible on all sizes now (mobile top header has search) */}
+        {/* Center: Search bar */}
         <div className="flex flex-1 justify-center mx-2 md:mx-4">
           <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -66,86 +70,119 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right group: auth, lang, cart — hidden on mobile (moved to bottom nav) */}
-        <div className="hidden lg:flex items-center gap-1 sm:gap-2 shrink-0">
+        {/* Right group: wishlist, cart, profile — hidden on mobile/tablet (bottom nav) */}
+        <div className="hidden lg:flex items-center gap-1 shrink-0">
 
-        {/* User welcome or discount info */}
-        {user && profile && (
-          <div className="hidden sm:flex flex-col items-end text-right">
-            <span className="text-[10px] text-muted-foreground leading-tight">
-              Vítejte, <span className="font-semibold text-foreground">{profile.company_name || 'Zákazník'}</span>
-            </span>
-            {profile.base_discount > 0 && (
-              <span className="text-[10px] text-primary font-semibold leading-tight">
-                Vaše sleva: {profile.base_discount}%
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Auth buttons */}
-        {!loading && (
-          user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1.5 text-xs">
-                  <LogIn className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{profile?.company_name?.slice(0, 15) || 'Účet'}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {isAdmin && (
-                  <>
-                    <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
-                      <Users className="h-3.5 w-3.5" /> Správa zákazníků
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
+          {!loading && user ? (
+            <>
+              {/* Wishlist icon */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => onOpenWishlist?.()}
+              >
+                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-primary text-primary' : ''}`} />
+                {wishlistCount > 0 && (
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                    {wishlistCount}
+                  </Badge>
                 )}
-                <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
-                  <LogOut className="h-3.5 w-3.5" /> Odhlásit se
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" className="text-[11px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3" onClick={() => navigate('/login')}>
-                <span className="sm:hidden">Přihlásit</span>
-                <span className="hidden sm:inline">{t.login}</span>
               </Button>
-              <Button size="sm" className="text-[11px] sm:text-xs h-7 sm:h-8 px-2 sm:px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
-                {t.register}
+
+              {/* Cart icon */}
+              <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+                <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                    {totalItems}
+                  </Badge>
+                )}
               </Button>
-            </div>
-          )
-        )}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="gap-1.5 text-sm">
-              <span className="text-base">{flags[lang]}</span>
-              <span className="hidden sm:inline">{lang.toUpperCase()}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-              <DropdownMenuItem key={l} onClick={() => setLang(l)} className="gap-2">
-                <span>{flags[l]}</span> {l.toUpperCase()}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {/* Profile dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1.5 text-xs ml-1">
+                    <User className="h-4 w-4" />
+                    <span className="hidden xl:inline max-w-[120px] truncate">{profile?.company_name || 'Účet'}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {/* User info header */}
+                  <div className="px-3 py-2 border-b">
+                    <p className="text-sm font-semibold">{profile?.company_name || 'Zákazník'}</p>
+                    {profile?.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
+                    {profile && profile.base_discount > 0 && (
+                      <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
+                    )}
+                  </div>
 
-        {user && (
-          <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
-            <ShoppingCart className="h-5 w-5" />
-            {totalItems > 0 && (
-              <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
-                {totalItems}
-              </Badge>
-            )}
-          </Button>
-        )}
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
+                        <Users className="h-3.5 w-3.5" /> Správa zákazníků
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+
+                  {/* Language switcher */}
+                  <div className="px-2 py-1.5">
+                    <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
+                      <Globe className="h-3 w-3" /> Jazyk
+                    </p>
+                    <div className="flex gap-1">
+                      {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+                        <Button
+                          key={l}
+                          variant={lang === l ? 'default' : 'outline'}
+                          size="sm"
+                          className="flex-1 gap-1 h-7 text-[11px]"
+                          onClick={() => setLang(l)}
+                        >
+                          <span>{flags[l]}</span> {l.toUpperCase()}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
+                    <LogOut className="h-3.5 w-3.5" /> Odhlásit se
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : !loading ? (
+            <>
+              {/* Language switcher for non-logged in */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1.5 text-sm">
+                    <span className="text-base">{flags[lang]}</span>
+                    <span className="hidden sm:inline">{lang.toUpperCase()}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+                    <DropdownMenuItem key={l} onClick={() => setLang(l)} className="gap-2">
+                      <span>{flags[l]}</span> {l.toUpperCase()}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="sm" className="text-xs h-8 px-3" onClick={() => navigate('/login')}>
+                  {t.login}
+                </Button>
+                <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
+                  {t.register}
+                </Button>
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
     </header>
