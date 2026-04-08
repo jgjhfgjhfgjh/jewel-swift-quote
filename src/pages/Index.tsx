@@ -13,6 +13,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
+import { HeroBanner } from '@/components/HeroBanner';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
