@@ -80,7 +80,7 @@ const Index = () => {
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       {/* Parallax sticky in home mode, normal scroll in catalog */}
       <div className={viewMode === 'home' ? 'sticky top-0 z-0' : 'relative z-0'}>
-        <HeroBanner />
+        <HeroBanner compact={viewMode === 'catalog'} />
       </div>
 
       {/* Everything below slides OVER the hero banner */}

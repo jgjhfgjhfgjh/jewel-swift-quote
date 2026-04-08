@@ -17,7 +17,7 @@ const slides = [
   { bg: 'from-sky-800 to-sky-950', title: 'Join Swelt Today', subtitle: 'Start selling premium products with zero risk.' },
 ];
 
-export function HeroBanner() {
+export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: false });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -53,18 +53,26 @@ export function HeroBanner() {
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-end justify-center h-[97vh] lg:h-[100vh] overflow-hidden pt-14 pb-16`}>
+              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center overflow-hidden pt-14 pb-12 transition-all duration-500 ${
+                compact ? 'h-[32vh] lg:h-[100vh]' : 'h-[97vh] lg:h-[100vh]'
+              }`}>
                 {/* Logo watermark */}
                 <img
                   src={logo}
                   alt=""
-                  className="absolute inset-0 m-auto w-32 sm:w-40 md:w-48 lg:w-56 opacity-10 pointer-events-none select-none"
+                  className={`absolute inset-0 m-auto opacity-10 pointer-events-none select-none transition-all duration-500 ${
+                    compact ? 'w-20 sm:w-24 lg:w-56' : 'w-32 sm:w-40 md:w-48 lg:w-56'
+                  }`}
                   draggable={false}
                 />
-                {/* Text overlay – pushed down to avoid header overlap */}
+                {/* Text overlay */}
                 <div className="relative z-10 text-center px-6 max-w-xl">
-                  <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-lg">{slide.title}</h2>
-                  <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl mt-2 drop-shadow">{slide.subtitle}</p>
+                  <h2 className={`text-white font-bold drop-shadow-lg transition-all duration-500 ${
+                    compact ? 'text-base sm:text-lg lg:text-4xl' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl'
+                  }`}>{slide.title}</h2>
+                  <p className={`text-white/80 mt-1 drop-shadow transition-all duration-500 ${
+                    compact ? 'text-xs sm:text-sm lg:text-xl' : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                  }`}>{slide.subtitle}</p>
                 </div>
               </div>
             </div>
