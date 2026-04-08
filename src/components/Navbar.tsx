@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,14 +17,16 @@ interface NavbarProps {
 }
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
 
   const [hidden, setHidden] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const lastScrollY = useRef(0);
+  const isHome = viewMode === 'home';
 
   useEffect(() => {
     const onScroll = () => {
@@ -45,7 +47,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
       <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <Button variant="ghost" size="icon" className="hidden lg:flex xl:hidden shrink-0" onClick={() => setSidebarOpen(true)}>
+          {/* Hamburger: always visible on mobile/tablet in home mode, catalog mode uses lg breakpoint */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`shrink-0 ${isHome ? 'lg:hidden' : 'hidden lg:flex xl:hidden'}`}
+            onClick={() => setSidebarOpen(true)}
+          >
             <Menu className="h-5 w-5" />
           </Button>
 
@@ -56,8 +64,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
           </Link>
         </div>
 
-        {/* Center: Search bar */}
-        <div className="flex flex-1 justify-center mx-2 md:mx-4">
+        {/* Center: Search bar — hidden on mobile in home mode, replaced by search icon */}
+        <div className={`flex flex-1 justify-center mx-2 md:mx-4 ${isHome ? 'hidden md:flex' : ''}`}>
           <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -69,6 +77,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
             />
           </div>
         </div>
+
+        {/* Mobile search icon — only in home mode on mobile */}
+        {isHome && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden shrink-0"
+            onClick={() => setMobileSearchOpen((v) => !v)}
+          >
+            {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+          </Button>
+        )}
 
         {/* Right group: wishlist, cart, profile — hidden on mobile/tablet (bottom nav) */}
         <div className="hidden lg:flex items-center gap-1 shrink-0">
@@ -229,6 +249,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
           ) : null}
         </div>
       </div>
+
+      {/* Expandable mobile search bar — drops below header in home mode */}
+      {isHome && mobileSearchOpen && (
+        <div className="md:hidden px-3 pb-2 pt-1 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 animate-fade-in">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder={t.search}
+              value={search}
+              autoFocus
+              onChange={(e) => { setSearch(e.target.value); if (e.target.value.trim()) { setViewMode('catalog'); setMobileSearchOpen(false); } }}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+          </div>
+        </div>
+      )}
     </header>
   );
 }
