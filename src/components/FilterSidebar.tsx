@@ -31,8 +31,9 @@ export function FilterSidebar({
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
 }: Props) {
   const { user } = useAuthContext();
-  const { lang, sidebarOpen, setSidebarOpen } = useStore();
+  const { lang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
   const t = translations[lang];
+  const isHome = viewMode === 'home';
 
   useEffect(() => {
     if (sidebarOpen) {
@@ -67,6 +68,16 @@ export function FilterSidebar({
       setSelectedBrands([...selectedBrands, name]);
     }
   };
+
+  const homeContent = (
+    <div className="flex h-full flex-col">
+      <nav className="px-4 py-3 space-y-1">
+        <a href="#" className="block px-2 py-2.5 text-sm font-medium rounded-md hover:bg-muted transition-colors">O nás</a>
+        <a href="#" className="block px-2 py-2.5 text-sm font-medium rounded-md hover:bg-muted transition-colors">Naše služby</a>
+        <a href="#" className="block px-2 py-2.5 text-sm font-medium rounded-md hover:bg-muted transition-colors">Kontakt</a>
+      </nav>
+    </div>
+  );
 
   const content = (
     <div className="flex h-full flex-col">
@@ -140,24 +151,28 @@ export function FilterSidebar({
     </div>
   );
 
+  const activeContent = isHome ? homeContent : content;
+
   return (
     <>
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card">
-        {content}
-      </aside>
+      {!isHome && (
+        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card">
+          {content}
+        </aside>
+      )}
 
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between border-b p-4 shrink-0">
-              <h2 className="font-display font-semibold">{t.filters}</h2>
+              <h2 className="font-display font-semibold">{isHome ? 'Menu' : t.filters}</h2>
               <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
             <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
-              {content}
+              {activeContent}
             </div>
           </aside>
         </div>
