@@ -6,7 +6,7 @@ interface Props {
 }
 
 const brandLogos = [
-  'SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER',
+  'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER',
   'Calvin Klein', 'TISSOT', 'PIERRE LANNIER',
 ];
 
