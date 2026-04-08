@@ -15,6 +15,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { TripleGateway } from '@/components/TripleGateway';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
