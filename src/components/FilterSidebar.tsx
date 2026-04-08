@@ -31,30 +31,10 @@ const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
 const HEADER_HEIGHT = 56;
 
 function DesktopSidebar({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLElement>(null);
-  const [stickyTop, setStickyTop] = useState(HEADER_HEIGHT);
-
-  const recalc = useCallback(() => {
-    if (!ref.current) return;
-    const sidebarH = ref.current.scrollHeight;
-    const viewportH = window.innerHeight;
-    const availableH = viewportH - HEADER_HEIGHT;
-    setStickyTop(sidebarH <= availableH ? HEADER_HEIGHT : viewportH - sidebarH);
-  }, []);
-
-  useEffect(() => {
-    recalc();
-    window.addEventListener('resize', recalc);
-    return () => window.removeEventListener('resize', recalc);
-  }, [recalc]);
-
-  useEffect(() => { recalc(); });
-
   return (
     <aside
-      ref={ref}
-      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky self-start"
-      style={{ top: stickyTop }}
+      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky self-start overflow-y-auto scrollbar-thin scrollbar-thumb-muted hover:scrollbar-thumb-muted-foreground/30"
+      style={{ top: HEADER_HEIGHT, maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}
     >
       {children}
     </aside>
