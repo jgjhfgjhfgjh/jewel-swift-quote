@@ -53,8 +53,8 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Sticky hero banner - acts as background layer during parallax scroll */}
-      <div className="sticky top-0 z-0">
+      {/* Parallax sticky in home mode, normal scroll in catalog */}
+      <div className={viewMode === 'home' ? 'sticky top-0 z-0' : 'relative z-0'}>
         <HeroBanner />
       </div>
 
@@ -68,7 +68,7 @@ const Index = () => {
 
       {viewMode === 'home' && (
         <div className="relative z-10 bg-background animate-fade-in">
-          <TripleGateway onOpenCatalog={() => setViewMode('catalog')} />
+          <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
         </div>
       )}
 
