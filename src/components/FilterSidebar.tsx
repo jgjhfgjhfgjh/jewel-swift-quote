@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef, useState, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -162,9 +162,7 @@ export function FilterSidebar({
     <>
       {/* Desktop sidebar — only in catalog mode, only when desktopOnly */}
       {!mobileOnly && !isHome && (
-        <aside className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky bottom-0 self-end top-14">
-          {content}
-        </aside>
+        <DesktopSidebar>{content}</DesktopSidebar>
       )}
 
       {/* Mobile overlay — always available when not desktopOnly */}
