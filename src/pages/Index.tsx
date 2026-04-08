@@ -58,32 +58,35 @@ const Index = () => {
       <AdminBrandPanel manufacturers={manufacturers} />
       <AdminProductOverridesPanel products={products} />
       <HeroBanner />
-      <div className="flex flex-1 overflow-hidden">
-        <FilterSidebar
-          manufacturers={manufacturers}
-          categories={categories}
-          selectedBrands={selectedBrands}
-          setSelectedBrands={setSelectedBrands}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          search={search}
-          setSearch={setSearch}
-          stockOnly={stockOnly}
-          setStockOnly={setStockOnly}
-          minDiscount={minDiscount}
-          setMinDiscount={setMinDiscount}
-        />
-        <ProductGrid
-          products={products}
-          search={search}
-          selectedBrands={selectedBrands}
-          selectedCategory={selectedCategory}
-          stockOnly={stockOnly}
-          minDiscount={minDiscount}
-          wishlistIds={wishlistIds}
-          onToggleWishlist={toggleWishlist}
-        />
-      </div>
+      <TripleGateway onOpenCatalog={() => setCatalogOpen(true)} />
+      {catalogOpen && (
+        <div className="flex flex-1 overflow-hidden">
+          <FilterSidebar
+            manufacturers={manufacturers}
+            categories={categories}
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            search={search}
+            setSearch={setSearch}
+            stockOnly={stockOnly}
+            setStockOnly={setStockOnly}
+            minDiscount={minDiscount}
+            setMinDiscount={setMinDiscount}
+          />
+          <ProductGrid
+            products={products}
+            search={search}
+            selectedBrands={selectedBrands}
+            selectedCategory={selectedCategory}
+            stockOnly={stockOnly}
+            minDiscount={minDiscount}
+            wishlistIds={wishlistIds}
+            onToggleWishlist={toggleWishlist}
+          />
+        </div>
+      )}
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
       <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
