@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,9 @@ import { translations, flags, type Lang } from '@/lib/i18n';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet, SheetContent, SheetHeader, SheetTitle,
+} from '@/components/ui/sheet';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -25,6 +28,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
   const [hidden, setHidden] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const isHome = viewMode === 'home';
 
@@ -43,16 +47,25 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   };
 
   return (
+    <>
     <header className={`fixed top-0 left-0 right-0 z-[100] border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Hamburger: always visible on mobile/tablet in home mode, catalog mode uses lg breakpoint */}
+          {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
           <Button
             variant="ghost"
             size="icon"
             className="shrink-0 lg:hidden"
             onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="shrink-0 hidden lg:flex"
+            onClick={() => setMenuOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -267,5 +280,57 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         </div>
       )}
     </header>
+
+    {/* Desktop navigation menu drawer */}
+    <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+      <SheetContent side="left" className="w-72 p-0">
+        <SheetHeader className="px-4 py-4 border-b">
+          <SheetTitle className="text-left">Nabídka</SheetTitle>
+        </SheetHeader>
+        <nav className="flex flex-col py-2">
+          {isHome ? (
+            <>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Info className="h-4 w-4 text-muted-foreground" /> O nás
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <BookOpen className="h-4 w-4 text-muted-foreground" /> Blog
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => { setViewMode('home'); setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Home className="h-4 w-4 text-muted-foreground" /> Domů
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Info className="h-4 w-4 text-muted-foreground" /> O nás
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
+              </button>
+            </>
+          )}
+
+          {isAdmin && (
+            <>
+              <div className="border-t my-2" />
+              <button onClick={() => { setMenuOpen(false); navigate('/customers'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Users className="h-4 w-4 text-muted-foreground" /> Správa zákazníků
+              </button>
+            </>
+          )}
+        </nav>
+      </SheetContent>
+    </Sheet>
+    </>
   );
 }
