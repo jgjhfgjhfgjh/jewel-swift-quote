@@ -53,18 +53,18 @@ export function HeroBanner() {
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center h-36 sm:h-44 md:h-52 lg:h-60 overflow-hidden`}>
+              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] overflow-hidden`}>
                 {/* Logo watermark */}
                 <img
                   src={logo}
                   alt=""
-                  className="absolute inset-0 m-auto w-24 sm:w-32 lg:w-40 opacity-10 pointer-events-none select-none"
+                  className="absolute inset-0 m-auto w-32 sm:w-40 md:w-48 lg:w-56 opacity-10 pointer-events-none select-none"
                   draggable={false}
                 />
                 {/* Text overlay */}
                 <div className="relative z-10 text-center px-6 max-w-xl">
-                  <h2 className="text-white font-bold text-lg sm:text-xl lg:text-2xl drop-shadow-lg">{slide.title}</h2>
-                  <p className="text-white/80 text-xs sm:text-sm lg:text-base mt-1 drop-shadow">{slide.subtitle}</p>
+                  <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-lg">{slide.title}</h2>
+                  <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl mt-2 drop-shadow">{slide.subtitle}</p>
                 </div>
               </div>
             </div>
