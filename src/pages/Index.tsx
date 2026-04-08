@@ -55,6 +55,7 @@ const Index = () => {
       <CustomerSelectorPanel />
       <AdminBrandPanel manufacturers={manufacturers} />
       <AdminProductOverridesPanel products={products} />
+      <HeroBanner />
       <div className="flex flex-1 overflow-hidden">
         <FilterSidebar
           manufacturers={manufacturers}
