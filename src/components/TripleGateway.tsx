@@ -55,14 +55,6 @@ export function TripleGateway({ onOpenCatalog }: Props) {
               </svg>
             </span>
 
-            {/* Brand logos row */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 opacity-60">
-              {brandLogos.map((name) => (
-                <span key={name} className="text-[10px] lg:text-xs font-bold text-slate-600 tracking-wider uppercase whitespace-nowrap">
-                  {name}
-                </span>
-              ))}
-            </div>
           </div>
         </button>
 
