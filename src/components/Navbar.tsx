@@ -30,6 +30,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const isHome = viewMode === 'home';
 
   useEffect(() => {
@@ -62,10 +63,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
             <Menu className="h-5 w-5" />
           </Button>
           <Button
+            ref={desktopMenuButtonRef}
             variant="ghost"
             size="icon"
-            className="shrink-0 hidden lg:flex relative z-[110]"
-            onClick={() => setMenuOpen((v) => !v)}
+            className="shrink-0 hidden lg:flex relative z-[110] cursor-pointer pointer-events-auto"
+            onPointerDown={(e) => {
+              e.preventDefault();
+              setMenuOpen((v) => !v);
+            }}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -283,7 +288,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
     {/* Desktop navigation menu drawer */}
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
-      <SheetContent side="left" className="w-72 p-0 z-[95]">
+      <SheetContent
+        side="left"
+        className="w-72 p-0 z-[95]"
+        onInteractOutside={(e) => {
+          if (desktopMenuButtonRef.current?.contains(e.target as Node)) {
+            e.preventDefault();
+          }
+        }}
+      >
         <SheetHeader className="px-4 py-4 border-b">
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
