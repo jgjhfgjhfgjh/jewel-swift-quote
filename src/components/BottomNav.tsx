@@ -52,7 +52,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
         <div className="flex justify-between items-center w-full px-4 py-2">
           {/* Home */}
           <button
-            onClick={() => { setViewMode('home'); navigate('/'); }}
+            onClick={() => { setViewMode('home'); navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
           >
             <Home className="h-5 w-5" />
