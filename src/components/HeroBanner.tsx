@@ -53,7 +53,7 @@ export function HeroBanner() {
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-end justify-center aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:h-[min(55vh,540px)] overflow-hidden`}>
+              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-end justify-center h-[70vh] sm:h-[65vh] lg:h-[75vh] overflow-hidden`}>
                 {/* Logo watermark */}
                 <img
                   src={logo}
