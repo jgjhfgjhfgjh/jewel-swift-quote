@@ -53,7 +53,7 @@ export function HeroBanner() {
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-end justify-center h-[70vh] sm:h-[65vh] lg:h-[75vh] overflow-hidden`}>
+              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center h-[70vh] sm:h-[65vh] lg:h-[75vh] overflow-hidden pt-14`}>
                 {/* Logo watermark */}
                 <img
                   src={logo}
@@ -62,7 +62,7 @@ export function HeroBanner() {
                   draggable={false}
                 />
                 {/* Text overlay – pushed down to avoid header overlap */}
-                <div className="relative z-10 text-center px-6 max-w-xl pb-10 sm:pb-12 lg:pb-14">
+                <div className="relative z-10 text-center px-6 max-w-xl">
                   <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-lg">{slide.title}</h2>
                   <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl mt-2 drop-shadow">{slide.subtitle}</p>
                 </div>
