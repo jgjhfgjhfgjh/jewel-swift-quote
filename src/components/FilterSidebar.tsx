@@ -28,7 +28,6 @@ interface Props {
 }
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
-const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
 const HEADER_HEIGHT = 56;
 
 function DesktopSidebar({ children }: { children: React.ReactNode }) {
