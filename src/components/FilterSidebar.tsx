@@ -162,7 +162,7 @@ export function FilterSidebar({
     <>
       {/* Desktop sidebar — only in catalog mode, only when desktopOnly */}
       {!mobileOnly && !isHome && (
-        <aside className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card">
+        <aside className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky bottom-0 self-end top-14">
           {content}
         </aside>
       )}
