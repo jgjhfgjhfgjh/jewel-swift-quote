@@ -17,6 +17,21 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { TripleGateway } from '@/components/TripleGateway';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 
+const filterProps = (p: any) => ({
+  manufacturers: p.manufacturers,
+  categories: p.categories,
+  selectedBrands: p.selectedBrands,
+  setSelectedBrands: p.setSelectedBrands,
+  selectedCategory: p.selectedCategory,
+  setSelectedCategory: p.setSelectedCategory,
+  search: p.search,
+  setSearch: p.setSearch,
+  stockOnly: p.stockOnly,
+  setStockOnly: p.setStockOnly,
+  minDiscount: p.minDiscount,
+  setMinDiscount: p.setMinDiscount,
+});
+
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
@@ -29,6 +44,15 @@ const Index = () => {
     minDiscount, setMinDiscount,
     viewMode, setViewMode,
   } = useStore();
+
+  const fp = filterProps({
+    manufacturers, categories,
+    selectedBrands, setSelectedBrands,
+    selectedCategory, setSelectedCategory,
+    search, setSearch,
+    stockOnly, setStockOnly,
+    minDiscount, setMinDiscount,
+  });
 
   if (loading) {
     return (
@@ -66,6 +90,9 @@ const Index = () => {
         <AdminProductOverridesPanel products={products} />
       </div>
 
+      {/* Mobile sidebar overlay — works in all modes */}
+      <FilterSidebar {...fp} mobileOnly />
+
       {viewMode === 'home' && (
         <div className="relative z-10 bg-background animate-fade-in">
           <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
@@ -74,6 +101,7 @@ const Index = () => {
 
       {viewMode === 'catalog' && (
         <div className="relative z-10 bg-background flex flex-1 overflow-hidden animate-fade-in">
+          <FilterSidebar {...fp} desktopOnly />
           <ProductGrid
             products={products}
             search={search}

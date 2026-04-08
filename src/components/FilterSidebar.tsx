@@ -21,6 +21,10 @@ interface Props {
   setStockOnly: (v: boolean) => void;
   minDiscount: number;
   setMinDiscount: (v: number) => void;
+  /** Render only the mobile overlay (no desktop aside) */
+  mobileOnly?: boolean;
+  /** Render only the desktop aside (no mobile overlay) */
+  desktopOnly?: boolean;
 }
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
@@ -29,6 +33,7 @@ export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
   selectedCategory, setSelectedCategory, search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
+  mobileOnly, desktopOnly,
 }: Props) {
   const { user } = useAuthContext();
   const { lang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
@@ -36,13 +41,13 @@ export function FilterSidebar({
   const isHome = viewMode === 'home';
 
   useEffect(() => {
-    if (sidebarOpen) {
+    if (sidebarOpen && !desktopOnly) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [sidebarOpen]);
+  }, [sidebarOpen, desktopOnly]);
 
   const discountTiers = [
     { label: t.discount70, value: 70 },
@@ -155,14 +160,16 @@ export function FilterSidebar({
 
   return (
     <>
-      {!isHome && (
-        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card">
+      {/* Desktop sidebar — only in catalog mode, only when desktopOnly */}
+      {!mobileOnly && !isHome && (
+        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto z-[90]">
           {content}
         </aside>
       )}
 
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" style={{ touchAction: 'none' }}>
+      {/* Mobile overlay — always available when not desktopOnly */}
+      {!desktopOnly && sidebarOpen && (
+        <div className="fixed inset-0 z-[90]" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between border-b p-4 shrink-0">
