@@ -28,6 +28,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
   const [hidden, setHidden] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const isHome = viewMode === 'home';
 
