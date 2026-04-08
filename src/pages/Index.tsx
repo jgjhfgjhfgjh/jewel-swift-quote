@@ -66,6 +66,22 @@ const Index = () => {
         <AdminProductOverridesPanel products={products} />
       </div>
 
+      {/* FilterSidebar for mobile hamburger menu in all modes */}
+      <FilterSidebar
+        manufacturers={manufacturers}
+        categories={categories}
+        selectedBrands={selectedBrands}
+        setSelectedBrands={setSelectedBrands}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        search={search}
+        setSearch={setSearch}
+        stockOnly={stockOnly}
+        setStockOnly={setStockOnly}
+        minDiscount={minDiscount}
+        setMinDiscount={setMinDiscount}
+      />
+
       {viewMode === 'home' && (
         <div className="relative z-10 bg-background animate-fade-in">
           <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
