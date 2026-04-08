@@ -72,6 +72,9 @@ export const useStore = create<AppState>()(
       isAdmin: false,
       setAdmin: (v) => set({ isAdmin: v }),
 
+      viewMode: 'home',
+      setViewMode: (v) => set({ viewMode: v }),
+
       cart: [],
       addToCart: (product) => set((s) => {
         const existing = s.cart.find((i) => i.product.id === product.id);
