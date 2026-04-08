@@ -14,11 +14,13 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
+import { TripleGateway } from '@/components/TripleGateway';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const {
     search, setSearch,
     selectedBrands, setSelectedBrands,
