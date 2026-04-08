@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef, useState, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -28,6 +28,38 @@ interface Props {
 }
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
+const HEADER_HEIGHT = 56;
+
+function DesktopSidebar({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLElement>(null);
+  const [stickyTop, setStickyTop] = useState(HEADER_HEIGHT);
+
+  const recalc = useCallback(() => {
+    if (!ref.current) return;
+    const sidebarH = ref.current.scrollHeight;
+    const viewportH = window.innerHeight;
+    const availableH = viewportH - HEADER_HEIGHT;
+    setStickyTop(sidebarH <= availableH ? HEADER_HEIGHT : viewportH - sidebarH);
+  }, []);
+
+  useEffect(() => {
+    recalc();
+    window.addEventListener('resize', recalc);
+    return () => window.removeEventListener('resize', recalc);
+  }, [recalc]);
+
+  useEffect(() => { recalc(); });
+
+  return (
+    <aside
+      ref={ref}
+      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky self-start"
+      style={{ top: stickyTop }}
+    >
+      {children}
+    </aside>
+  );
+}
 
 export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
@@ -162,9 +194,7 @@ export function FilterSidebar({
     <>
       {/* Desktop sidebar — only in catalog mode, only when desktopOnly */}
       {!mobileOnly && !isHome && (
-        <aside className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card">
-          {content}
-        </aside>
+        <DesktopSidebar>{content}</DesktopSidebar>
       )}
 
       {/* Mobile overlay — always available when not desktopOnly */}
