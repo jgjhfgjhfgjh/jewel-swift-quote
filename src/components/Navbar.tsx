@@ -64,8 +64,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="shrink-0 hidden lg:flex"
-            onPointerDown={(e) => { e.stopPropagation(); e.preventDefault(); setMenuOpen((v) => !v); }}
+            className="shrink-0 hidden lg:flex relative z-[110]"
+            onClick={() => setMenuOpen((v) => !v)}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -282,8 +282,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
     </header>
 
     {/* Desktop navigation menu drawer */}
-    <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-      <SheetContent side="left" className="w-72 p-0">
+    <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
+      <SheetContent side="left" className="w-72 p-0 z-[95]">
         <SheetHeader className="px-4 py-4 border-b">
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
