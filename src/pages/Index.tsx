@@ -58,7 +58,7 @@ const Index = () => {
         <CustomerSelectorPanel />
         <AdminBrandPanel manufacturers={manufacturers} />
         <AdminProductOverridesPanel products={products} />
-
+      </div>
       {viewMode === 'home' && (
         <div className="animate-fade-in">
           <TripleGateway onOpenCatalog={() => setViewMode('catalog')} />
