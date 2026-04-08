@@ -14,11 +14,13 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
+import { TripleGateway } from '@/components/TripleGateway';
 
 const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const {
     search, setSearch,
     selectedBrands, setSelectedBrands,
@@ -56,32 +58,35 @@ const Index = () => {
       <AdminBrandPanel manufacturers={manufacturers} />
       <AdminProductOverridesPanel products={products} />
       <HeroBanner />
-      <div className="flex flex-1 overflow-hidden">
-        <FilterSidebar
-          manufacturers={manufacturers}
-          categories={categories}
-          selectedBrands={selectedBrands}
-          setSelectedBrands={setSelectedBrands}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          search={search}
-          setSearch={setSearch}
-          stockOnly={stockOnly}
-          setStockOnly={setStockOnly}
-          minDiscount={minDiscount}
-          setMinDiscount={setMinDiscount}
-        />
-        <ProductGrid
-          products={products}
-          search={search}
-          selectedBrands={selectedBrands}
-          selectedCategory={selectedCategory}
-          stockOnly={stockOnly}
-          minDiscount={minDiscount}
-          wishlistIds={wishlistIds}
-          onToggleWishlist={toggleWishlist}
-        />
-      </div>
+      <TripleGateway onOpenCatalog={() => setCatalogOpen(true)} />
+      {catalogOpen && (
+        <div className="flex flex-1 overflow-hidden">
+          <FilterSidebar
+            manufacturers={manufacturers}
+            categories={categories}
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            search={search}
+            setSearch={setSearch}
+            stockOnly={stockOnly}
+            setStockOnly={setStockOnly}
+            minDiscount={minDiscount}
+            setMinDiscount={setMinDiscount}
+          />
+          <ProductGrid
+            products={products}
+            search={search}
+            selectedBrands={selectedBrands}
+            selectedCategory={selectedCategory}
+            stockOnly={stockOnly}
+            minDiscount={minDiscount}
+            wishlistIds={wishlistIds}
+            onToggleWishlist={toggleWishlist}
+          />
+        </div>
+      )}
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
       <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
