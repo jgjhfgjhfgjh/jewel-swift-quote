@@ -64,7 +64,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
               type="text"
               placeholder={t.search}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); if (e.target.value.trim()) setViewMode('catalog'); }}
               className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           </div>
