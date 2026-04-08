@@ -49,6 +49,10 @@ interface AppState {
   minDiscount: number;
   setMinDiscount: (v: number) => void;
 
+  // View mode
+  viewMode: 'home' | 'catalog';
+  setViewMode: (v: 'home' | 'catalog') => void;
+
   // Sales mode
   salesCustomer: SalesCustomer | null;
   salesBrandDiscounts: BrandDiscount[];
