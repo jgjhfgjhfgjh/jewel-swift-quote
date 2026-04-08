@@ -52,37 +52,27 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      <HeroBanner />
-      <div className="relative z-10">
+      {/* Sticky hero banner - acts as background layer during parallax scroll */}
+      <div className="sticky top-0 z-0">
+        <HeroBanner />
+      </div>
+
+      {/* Everything below slides OVER the hero banner */}
+      <div className="relative z-10 bg-background">
         <SalesModeBar />
         <CustomerSelectorPanel />
         <AdminBrandPanel manufacturers={manufacturers} />
         <AdminProductOverridesPanel products={products} />
       </div>
-      {/* FilterSidebar always rendered for hamburger menu access in both modes */}
-      <FilterSidebar
-        manufacturers={manufacturers}
-        categories={categories}
-        selectedBrands={selectedBrands}
-        setSelectedBrands={setSelectedBrands}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        search={search}
-        setSearch={setSearch}
-        stockOnly={stockOnly}
-        setStockOnly={setStockOnly}
-        minDiscount={minDiscount}
-        setMinDiscount={setMinDiscount}
-      />
 
       {viewMode === 'home' && (
-        <div className="animate-fade-in">
+        <div className="relative z-10 bg-background animate-fade-in">
           <TripleGateway onOpenCatalog={() => setViewMode('catalog')} />
         </div>
       )}
 
       {viewMode === 'catalog' && (
-        <div className="flex flex-1 overflow-hidden animate-fade-in">
+        <div className="relative z-10 bg-background flex flex-1 overflow-hidden animate-fade-in">
           <ProductGrid
             products={products}
             search={search}
