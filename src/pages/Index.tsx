@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { TripleGateway } from '@/components/TripleGateway';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import { HomepageCanvas } from '@/components/HomepageCanvas';
 
 const filterProps = (p: any) => ({
   manufacturers: p.manufacturers,
@@ -96,6 +97,7 @@ const Index = () => {
       {viewMode === 'home' && (
         <div className="relative z-10 bg-background animate-fade-in">
           <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
+          <HomepageCanvas />
         </div>
       )}
 
