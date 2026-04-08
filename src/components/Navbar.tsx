@@ -51,12 +51,20 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
       <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Hamburger: always visible on mobile/tablet in home mode, catalog mode uses lg breakpoint */}
+          {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
           <Button
             variant="ghost"
             size="icon"
             className="shrink-0 lg:hidden"
             onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="shrink-0 hidden lg:flex"
+            onClick={() => setMenuOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
