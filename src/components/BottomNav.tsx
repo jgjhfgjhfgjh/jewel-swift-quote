@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer, clearSalesMode } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, salesCustomer, clearSalesMode, setViewMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -52,7 +52,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
         <div className="flex justify-between items-center w-full px-4 py-2">
           {/* Home */}
           <button
-            onClick={() => navigate('/')}
+            onClick={() => { setViewMode('home'); navigate('/'); }}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
           >
             <Home className="h-5 w-5" />
