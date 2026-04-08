@@ -54,7 +54,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
               <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center overflow-hidden pt-14 pb-12 transition-all duration-500 ${
-                compact ? 'h-[70vh] lg:h-[100vh]' : 'h-[97vh] lg:h-[100vh]'
+                compact ? 'h-[70vh] lg:h-[60vh]' : 'h-[97vh] lg:h-[100vh]'
               }`}>
                 {/* Logo watermark */}
                 <img
