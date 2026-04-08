@@ -33,7 +33,6 @@ export function TripleGateway({ onOpenCatalog }: Props) {
             {/* Logo */}
             <div className="flex items-center gap-1.5">
               <img src={logo} alt="Swelt" className="h-8 lg:h-9" draggable={false} />
-              <span className="text-slate-800 font-semibold text-base lg:text-lg tracking-wide uppercase">partner</span>
             </div>
 
             {/* Live indicator */}
