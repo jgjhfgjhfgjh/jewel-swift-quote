@@ -52,12 +52,12 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      <div className="h-14" />
-      <SalesModeBar />
-      <CustomerSelectorPanel />
-      <AdminBrandPanel manufacturers={manufacturers} />
-      <AdminProductOverridesPanel products={products} />
       <HeroBanner />
+      <div className="relative z-10">
+        <SalesModeBar />
+        <CustomerSelectorPanel />
+        <AdminBrandPanel manufacturers={manufacturers} />
+        <AdminProductOverridesPanel products={products} />
 
       {viewMode === 'home' && (
         <div className="animate-fade-in">

@@ -48,12 +48,12 @@ export function HeroBanner() {
   }, [emblaApi]);
 
   return (
-    <div className="relative w-full group">
+    <div className="relative w-full group -mt-14 z-0">
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:h-[min(50vh,500px)] overflow-hidden`}>
+              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-end justify-center aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:h-[min(55vh,540px)] overflow-hidden`}>
                 {/* Logo watermark */}
                 <img
                   src={logo}
@@ -61,8 +61,8 @@ export function HeroBanner() {
                   className="absolute inset-0 m-auto w-32 sm:w-40 md:w-48 lg:w-56 opacity-10 pointer-events-none select-none"
                   draggable={false}
                 />
-                {/* Text overlay */}
-                <div className="relative z-10 text-center px-6 max-w-xl">
+                {/* Text overlay – pushed down to avoid header overlap */}
+                <div className="relative z-10 text-center px-6 max-w-xl pb-10 sm:pb-12 lg:pb-14">
                   <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-lg">{slide.title}</h2>
                   <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl mt-2 drop-shadow">{slide.subtitle}</p>
                 </div>
