@@ -59,6 +59,22 @@ const Index = () => {
         <AdminBrandPanel manufacturers={manufacturers} />
         <AdminProductOverridesPanel products={products} />
       </div>
+      {/* FilterSidebar always rendered for hamburger menu access in both modes */}
+      <FilterSidebar
+        manufacturers={manufacturers}
+        categories={categories}
+        selectedBrands={selectedBrands}
+        setSelectedBrands={setSelectedBrands}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        search={search}
+        setSearch={setSearch}
+        stockOnly={stockOnly}
+        setStockOnly={setStockOnly}
+        minDiscount={minDiscount}
+        setMinDiscount={setMinDiscount}
+      />
+
       {viewMode === 'home' && (
         <div className="animate-fade-in">
           <TripleGateway onOpenCatalog={() => setViewMode('catalog')} />
@@ -67,20 +83,6 @@ const Index = () => {
 
       {viewMode === 'catalog' && (
         <div className="flex flex-1 overflow-hidden animate-fade-in">
-          <FilterSidebar
-            manufacturers={manufacturers}
-            categories={categories}
-            selectedBrands={selectedBrands}
-            setSelectedBrands={setSelectedBrands}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            search={search}
-            setSearch={setSearch}
-            stockOnly={stockOnly}
-            setStockOnly={setStockOnly}
-            minDiscount={minDiscount}
-            setMinDiscount={setMinDiscount}
-          />
           <ProductGrid
             products={products}
             search={search}
