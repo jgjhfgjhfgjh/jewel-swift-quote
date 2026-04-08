@@ -17,7 +17,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -49,7 +49,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
             <Menu className="h-5 w-5" />
           </Button>
 
-          <Link to="/" className="shrink-0">
+          <Link to="/" onClick={() => setViewMode('home')} className="shrink-0">
             <h1 className="font-display text-xl font-semibold tracking-tight">
               <img src={logo} alt="swelt." className="h-16 sm:h-24 object-contain my-0 px-0 py-0 mx-0" />
             </h1>
@@ -64,7 +64,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
               type="text"
               placeholder={t.search}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); if (e.target.value.trim()) setViewMode('catalog'); }}
               className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           </div>

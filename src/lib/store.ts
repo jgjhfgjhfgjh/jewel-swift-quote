@@ -49,6 +49,10 @@ interface AppState {
   minDiscount: number;
   setMinDiscount: (v: number) => void;
 
+  // View mode
+  viewMode: 'home' | 'catalog';
+  setViewMode: (v: 'home' | 'catalog') => void;
+
   // Sales mode
   salesCustomer: SalesCustomer | null;
   salesBrandDiscounts: BrandDiscount[];
@@ -67,6 +71,9 @@ export const useStore = create<AppState>()(
       setLang: (lang) => set({ lang }),
       isAdmin: false,
       setAdmin: (v) => set({ isAdmin: v }),
+
+      viewMode: 'home',
+      setViewMode: (v) => set({ viewMode: v }),
 
       cart: [],
       addToCart: (product) => set((s) => {
