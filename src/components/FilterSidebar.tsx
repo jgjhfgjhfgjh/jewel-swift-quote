@@ -62,7 +62,7 @@ function DesktopSidebar({ children }: { children: React.ReactNode }) {
   );
 }
 
-
+export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
   selectedCategory, setSelectedCategory, search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
