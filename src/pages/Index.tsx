@@ -72,7 +72,7 @@ const Index = () => {
       )}
 
       {viewMode === 'catalog' && (
-        <div className="flex flex-1 overflow-hidden animate-fade-in">
+        <div className="relative z-10 bg-background flex flex-1 overflow-hidden animate-fade-in">
           <ProductGrid
             products={products}
             search={search}
