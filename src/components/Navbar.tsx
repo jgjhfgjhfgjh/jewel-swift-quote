@@ -283,7 +283,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
     {/* Desktop navigation menu drawer */}
     <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-      <SheetContent side="left" className="w-72 p-0">
+      <SheetContent side="left" className="w-72 p-0 z-[110]" style={{}} >
         <SheetHeader className="px-4 py-4 border-b">
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
