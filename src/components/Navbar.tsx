@@ -279,5 +279,57 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         </div>
       )}
     </header>
+
+    {/* Desktop navigation menu drawer */}
+    <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+      <SheetContent side="left" className="w-72 p-0">
+        <SheetHeader className="px-4 py-4 border-b">
+          <SheetTitle className="text-left">Nabídka</SheetTitle>
+        </SheetHeader>
+        <nav className="flex flex-col py-2">
+          {isHome ? (
+            <>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Info className="h-4 w-4 text-muted-foreground" /> O nás
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <BookOpen className="h-4 w-4 text-muted-foreground" /> Blog
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => { setViewMode('home'); setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Home className="h-4 w-4 text-muted-foreground" /> Domů
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Info className="h-4 w-4 text-muted-foreground" /> O nás
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
+              </button>
+              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
+              </button>
+            </>
+          )}
+
+          {isAdmin && (
+            <>
+              <div className="border-t my-2" />
+              <button onClick={() => { setMenuOpen(false); navigate('/customers'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Users className="h-4 w-4 text-muted-foreground" /> Správa zákazníků
+              </button>
+            </>
+          )}
+        </nav>
+      </SheetContent>
+    </Sheet>
+    </>
   );
 }
