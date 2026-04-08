@@ -17,7 +17,7 @@ const slides = [
   { bg: 'from-sky-800 to-sky-950', title: 'Join Swelt Today', subtitle: 'Start selling premium products with zero risk.' },
 ];
 
-export function HeroBanner() {
+export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: false });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
