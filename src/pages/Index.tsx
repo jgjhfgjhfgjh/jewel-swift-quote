@@ -74,6 +74,20 @@ const Index = () => {
 
       {viewMode === 'catalog' && (
         <div className="relative z-10 bg-background flex flex-1 overflow-hidden animate-fade-in">
+          <FilterSidebar
+            manufacturers={manufacturers}
+            categories={categories}
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            search={search}
+            setSearch={setSearch}
+            stockOnly={stockOnly}
+            setStockOnly={setStockOnly}
+            minDiscount={minDiscount}
+            setMinDiscount={setMinDiscount}
+          />
           <ProductGrid
             products={products}
             search={search}

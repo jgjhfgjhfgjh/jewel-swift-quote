@@ -156,13 +156,13 @@ export function FilterSidebar({
   return (
     <>
       {!isHome && (
-        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card">
+        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-card sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto z-[90]">
           {content}
         </aside>
       )}
 
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" style={{ touchAction: 'none' }}>
+        <div className="fixed inset-0 z-[90] lg:hidden" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between border-b p-4 shrink-0">
