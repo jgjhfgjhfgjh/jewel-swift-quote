@@ -20,13 +20,13 @@ const Index = () => {
   const { products, loading, manufacturers, categories } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
-  const [catalogOpen, setCatalogOpen] = useState(false);
   const {
     search, setSearch,
     selectedBrands, setSelectedBrands,
     selectedCategory, setSelectedCategory,
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
+    viewMode, setViewMode,
   } = useStore();
 
   if (loading) {
@@ -58,9 +58,15 @@ const Index = () => {
       <AdminBrandPanel manufacturers={manufacturers} />
       <AdminProductOverridesPanel products={products} />
       <HeroBanner />
-      <TripleGateway onOpenCatalog={() => setCatalogOpen(true)} />
-      {catalogOpen && (
-        <div className="flex flex-1 overflow-hidden">
+
+      {viewMode === 'home' && (
+        <div className="animate-fade-in">
+          <TripleGateway onOpenCatalog={() => setViewMode('catalog')} />
+        </div>
+      )}
+
+      {viewMode === 'catalog' && (
+        <div className="flex flex-1 overflow-hidden animate-fade-in">
           <FilterSidebar
             manufacturers={manufacturers}
             categories={categories}
@@ -87,6 +93,7 @@ const Index = () => {
           />
         </div>
       )}
+
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
       <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
