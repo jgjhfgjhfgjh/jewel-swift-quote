@@ -10,6 +10,8 @@ interface AuthContextType {
   loading: boolean;
   isAdmin: boolean;
   isCustomer: boolean;
+  isLead: boolean;
+  isB2bApproved: boolean;
   signUp: (email: string, password: string, companyName: string, ico: string) => Promise<any>;
   signIn: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
