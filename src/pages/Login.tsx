@@ -36,7 +36,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Link to="/" className="absolute left-4 top-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Zpět na katalog
+        Zpět na úvodní stránku
       </Link>
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
