@@ -55,18 +55,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         <div className="flex items-center gap-2 shrink-0">
           {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
           <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0 lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-          <Button
             ref={desktopMenuButtonRef}
             variant="ghost"
             size="icon"
-            className="shrink-0 hidden lg:flex relative z-[110] cursor-pointer pointer-events-auto"
+            className="shrink-0 relative z-[110] cursor-pointer pointer-events-auto"
             onPointerDown={(e) => {
               e.preventDefault();
               setMenuOpen((v) => !v);
