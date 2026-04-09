@@ -9,12 +9,12 @@ export function LeadUpgradeBadge() {
     <div className="mt-auto pt-3">
       <Button
         size="sm"
-        variant="outline"
-        className="h-9 w-full gap-1.5 border-amber-500/40 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-all duration-200 rounded-lg text-xs"
+        className="h-9 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 rounded-lg text-xs"
         onClick={() => navigate('/register')}
       >
         <Lock className="h-3.5 w-3.5" />
-        <span>Ceny pouze pro B2B partnery. Dokončete registraci.</span>
+        <span className="text-xs lg:hidden">Zobrazit cenu</span>
+        <span className="text-xs hidden lg:inline">Ceny pouze pro B2B partnery. Dokončete registraci.</span>
       </Button>
     </div>
   );
