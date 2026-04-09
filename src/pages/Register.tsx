@@ -27,6 +27,10 @@ export default function Register() {
       setError('Heslo musí mít alespoň 6 znaků');
       return;
     }
+    if (!ico.trim()) {
+      setError('IČO je povinné pro B2B registraci');
+      return;
+    }
     setError('');
     setLoading(true);
     try {
@@ -63,9 +67,10 @@ export default function Register() {
             autoFocus
           />
           <Input
-            placeholder="IČO"
+            placeholder="IČO (povinné pro B2B přístup)"
             value={ico}
             onChange={(e) => setIco(e.target.value)}
+            required
           />
           <Input
             type="email"
