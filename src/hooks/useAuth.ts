@@ -4,7 +4,7 @@ import type { User, Session } from '@supabase/supabase-js';
 import type { Tables } from '@/integrations/supabase/types';
 
 export type Profile = Tables<'profiles'>;
-export type AppRole = 'admin' | 'customer';
+export type AppRole = 'admin' | 'customer' | 'lead' | 'b2b_approved';
 
 interface AuthState {
   user: User | null;
@@ -100,7 +100,9 @@ export function useAuth() {
   return {
     ...state,
     isAdmin: state.role === 'admin',
-    isCustomer: state.role === 'customer',
+    isCustomer: state.role === 'customer' || state.role === 'b2b_approved',
+    isLead: state.role === 'lead',
+    isB2bApproved: state.role === 'b2b_approved',
     signUp,
     signIn,
     signOut,

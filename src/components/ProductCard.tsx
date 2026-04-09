@@ -9,12 +9,13 @@ import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 
 export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
-  const { isAdmin, profile, user } = useAuthContext();
+  const { isAdmin, isLead, profile, user } = useAuthContext();
   const navigate = useNavigate();
   const t = translations[lang];
   const [imgError, setImgError] = useState(false);
@@ -79,6 +80,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   };
 
   const isLoggedIn = !!user;
+  const canSeePrices = isLoggedIn && !isLead;
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
@@ -127,7 +129,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
       </div>
       <div className="flex flex-1 flex-col p-3">
         {/* Discount badge - above brand name, all sizes */}
-        {isLoggedIn && activeDiscount > 0 && (
+        {canSeePrices && activeDiscount > 0 && (
           <div className="flex justify-end mb-1">
             {editingDiscount && isAdmin ? (
               <Input
@@ -161,14 +163,14 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
 
-        {isLoggedIn && (
+        {canSeePrices && (
           <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
             {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
           </p>
         )}
 
         <div className="mt-auto flex flex-col gap-2 pt-3">
-          {isLoggedIn ? (
+          {canSeePrices ? (
             <>
               <div>
                 <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
@@ -224,6 +226,8 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
                 </div>
               )}
             </>
+          ) : isLead ? (
+            <LeadUpgradeBadge />
           ) : (
             <Button
               size="sm"

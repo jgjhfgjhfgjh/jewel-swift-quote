@@ -17,6 +17,8 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { TripleGateway } from '@/components/TripleGateway';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { HomepageCanvas } from '@/components/HomepageCanvas';
+import { CatalogGateway } from '@/components/CatalogGateway';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 const filterProps = (p: any) => ({
   manufacturers: p.manufacturers,
@@ -34,6 +36,7 @@ const filterProps = (p: any) => ({
 });
 
 const Index = () => {
+  const { user, loading: authLoading } = useAuthContext();
   const { products, loading, manufacturers, categories } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
@@ -54,6 +57,11 @@ const Index = () => {
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
   });
+
+  // Show gateway for unauthenticated users trying to access catalog
+  if (!authLoading && !user && viewMode === 'catalog') {
+    return <CatalogGateway />;
+  }
 
   if (loading) {
     return (
