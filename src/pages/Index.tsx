@@ -58,6 +58,11 @@ const Index = () => {
     minDiscount, setMinDiscount,
   });
 
+  // Show gateway for unauthenticated users trying to access catalog
+  if (!authLoading && !user && viewMode === 'catalog') {
+    return <CatalogGateway />;
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col">
