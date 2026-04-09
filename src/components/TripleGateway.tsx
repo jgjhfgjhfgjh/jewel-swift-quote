@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '@/contexts/AuthContext';
 import logo from '@/assets/logo.png';
 
 interface Props {
@@ -33,6 +34,7 @@ const cards = [
 ];
 
 export function TripleGateway({ onOpenCatalog }: Props) {
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const handleClick = (key: string) => {
