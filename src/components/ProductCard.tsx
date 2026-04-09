@@ -129,7 +129,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
       </div>
       <div className="flex flex-1 flex-col p-3">
         {/* Discount badge - above brand name, all sizes */}
-        {isLoggedIn && activeDiscount > 0 && (
+        {canSeePrices && activeDiscount > 0 && (
           <div className="flex justify-end mb-1">
             {editingDiscount && isAdmin ? (
               <Input
@@ -163,14 +163,14 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
 
-        {isLoggedIn && (
+        {canSeePrices && (
           <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
             {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
           </p>
         )}
 
         <div className="mt-auto flex flex-col gap-2 pt-3">
-          {isLoggedIn ? (
+          {canSeePrices ? (
             <>
               <div>
                 <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
@@ -226,6 +226,8 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
                 </div>
               )}
             </>
+          ) : isLead ? (
+            <LeadUpgradeBadge />
           ) : (
             <Button
               size="sm"
