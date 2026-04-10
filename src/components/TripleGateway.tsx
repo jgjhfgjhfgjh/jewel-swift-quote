@@ -18,8 +18,8 @@ const cards = [
   {
     key: 'dropshipping',
     label: 'Swelt.dropshipping',
-    title: 'EXPEDICE BEZ STAROSTÍ',
-    description: 'Prodávejte, my se postaráme o zbytek. Logistika, balení a odesílání pod vaší značkou přímo ke koncovému zákazníkovi.',
+    title: 'E-SHOP BEZ MILIONOVÝCH INVESTIC?',
+    description: 'Ano, jde to. Zjistěte, jak postavit byznys, kde platíte za zboží až poté, co vám zaplatí zákazník.',
     cta: 'Vstoupit',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
@@ -44,7 +44,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   };
 
   return (
-    <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
+    <div className="w-full px-4 py-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 max-w-7xl mx-auto">
         {cards.map((card) => (
           <button
