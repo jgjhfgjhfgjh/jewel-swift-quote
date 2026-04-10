@@ -12,7 +12,7 @@ const cards = [
     label: 'Swelt.partner',
     title: 'LIVE KATALOG 2026',
     description: 'Přístup k velkoobchodnímu katalogu šperků a hodinek. Aktuální ceny, skladové zásoby a rychlé objednávky.',
-    cta: 'Free Katalog',
+    cta: 'Katalog 2026 Free',
     gradient: 'from-emerald-700/80 via-emerald-800/90 to-teal-900/95',
   },
   {
