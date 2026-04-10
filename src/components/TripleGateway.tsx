@@ -19,7 +19,7 @@ const cards = [
     key: 'dropshipping',
     label: 'Swelt.dropshipping',
     title: 'E-SHOP BEZ MILIONOVÝCH INVESTIC?',
-    description: 'Ano, jde to. Zjistěte, jak postavit byznys, kde platíte za zboží až poté, co vám zaplatí zákazník.',
+    description: 'Prodávejte my se postaráme o zbytek. Logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
     cta: 'Vstoupit',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
