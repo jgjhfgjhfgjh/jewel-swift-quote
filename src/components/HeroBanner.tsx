@@ -48,7 +48,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
   }, [emblaApi]);
 
   return (
-    <div className="relative w-full group -mt-14 z-0">
+    <div className="relative w-full group -mt-14 z-0" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex">
           {slides.map((slide, i) => (

@@ -44,7 +44,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   };
 
   return (
-    <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
+    <div className="w-full px-4 py-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 max-w-7xl mx-auto">
         {cards.map((card) => (
           <button
