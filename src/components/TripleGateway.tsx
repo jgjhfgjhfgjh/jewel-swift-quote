@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
-import logo from '@/assets/logo.png';
+import { Handshake, Package, Watch } from 'lucide-react';
 
 interface Props {
   onOpenCatalog: () => void;
@@ -9,27 +9,27 @@ interface Props {
 const cards = [
   {
     key: 'partner',
-    label: 'Swelt.partner',
-    title: 'LIVE KATALOG 2026',
-    description: 'Přístup k velkoobchodnímu katalogu šperků a hodinek. Aktuální ceny, skladové zásoby a rychlé objednávky.',
-    cta: 'Katalog 2026 Free',
-    gradient: 'from-emerald-700/80 via-emerald-800/90 to-teal-900/95',
+    icon: Handshake,
+    title: 'Prémiový velkoobchod',
+    description: 'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
+    cta: 'Vstoupit do velkoobchodu',
+    iconColor: 'text-indigo-500',
   },
   {
     key: 'dropshipping',
-    label: 'Swelt.dropshipping',
-    title: 'E-SHOP BEZ MILIONOVÝCH INVESTIC?',
+    icon: Package,
+    title: 'E-shop bez milionových investic',
     description: 'Prodávejte my se postaráme o zbytek. Logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
-    cta: 'Vstoupit',
-    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
+    cta: 'Chci vlastní e-shop',
+    iconColor: 'text-indigo-500',
   },
   {
     key: 'luxury',
-    label: 'Swelt.luxury',
-    title: 'PRIVÁTNÍ NÁKUPY',
-    description: 'Segment vysoké hodinařiny bez nutnosti minimálních odběrů. Máte IČO? Poptávka na jediný kus luxusních značek začíná zde.',
-    cta: 'Vstoupit',
-    gradient: 'from-amber-800/80 via-yellow-900/90 to-stone-900/95',
+    icon: Watch,
+    title: 'Breitling, Omega, TAG Heuer a další',
+    description: 'Odemykáme vám exkluzivní přístup k velkoobchodním cenám pro vaše soukromé nákupy nebo firemní dary. Už od jednoho kusu a bez registrace.',
+    cta: 'Zjistit více',
+    iconColor: 'text-indigo-500',
   },
 ];
 
@@ -44,41 +44,36 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   };
 
   return (
-    <div className="w-full px-4 py-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 max-w-7xl mx-auto">
-        {cards.map((card) => (
-          <button
-            key={card.key}
-            onClick={() => handleClick(card.key)}
-            className="group relative overflow-hidden rounded-2xl text-left transition-transform duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            {/* Background */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
-            <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-              <div className="absolute -inset-full rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
-            </div>
-            <div className="absolute inset-[1px] rounded-2xl border border-white/[0.08] pointer-events-none" />
-            <img src={logo} alt="" className="absolute right-3 bottom-3 w-14 opacity-[0.07] pointer-events-none select-none" draggable={false} />
-
-            {/* Content */}
-            <div className="relative z-10 p-5 lg:p-6 flex flex-col min-h-[220px] sm:min-h-[200px] lg:min-h-[180px] justify-between">
-              <div>
-                <span className="inline-block text-white/60 text-xs font-medium tracking-[0.2em] uppercase mb-2">{card.label}</span>
-                <h3 className="text-white font-bold text-base lg:text-lg tracking-wide leading-tight">{card.title}</h3>
+    <div className="w-full px-4 py-8 sm:px-6 lg:px-8" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.key}
+              className="group relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center p-8 lg:p-10"
+            >
+              <div className={`mb-5 ${card.iconColor}`}>
+                <Icon className="w-12 h-12" strokeWidth={1.5} />
               </div>
-              <p className="text-white/70 text-xs sm:text-sm leading-relaxed mt-2">
+
+              <h3 className="text-gray-900 font-bold text-lg lg:text-xl leading-tight mb-3">
+                {card.title}
+              </h3>
+
+              <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">
                 {card.description}
               </p>
-              <div className="mt-3 flex items-center gap-2 text-white/50 group-hover:text-white/80 transition-colors text-sm">
-                <span>{card.cta}</span>
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
+
+              <button
+                onClick={() => handleClick(card.key)}
+                className="mt-auto px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+              >
+                {card.cta}
+              </button>
             </div>
-          </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
