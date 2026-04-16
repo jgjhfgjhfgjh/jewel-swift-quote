@@ -9,10 +9,10 @@ interface Props {
 const cards = [
   {
     key: 'partner',
-    label: 'Swelt.partner',
-    title: 'LIVE KATALOG 2026',
-    description: 'Přístup k velkoobchodnímu katalogu šperků a hodinek. Aktuální ceny, skladové zásoby a rychlé objednávky.',
-    cta: 'Katalog 2026 Free',
+    label: 'B2B',
+    title: 'Prémiový velkoobchod',
+    description: 'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
+    cta: 'Vstoupit do velkoobchodu',
     gradient: 'from-emerald-700/80 via-emerald-800/90 to-teal-900/95',
   },
   {
