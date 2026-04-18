@@ -110,7 +110,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 variant="ghost"
                 size="icon"
                 className="relative"
-                onClick={() => onOpenWishlist?.()}
+                onClick={() => { if (!user) { navigate('/login'); } else { navigate('/favorites'); } }}
                 title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
                 <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-primary text-primary' : ''}`} />
