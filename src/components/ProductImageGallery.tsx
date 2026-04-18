@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface ProductImageGalleryProps {
@@ -8,15 +7,13 @@ interface ProductImageGalleryProps {
   alt: string;
   /** Render prop for the thumbnail trigger (the existing card image). */
   children: (handlers: {
-    onMouseEnter: () => void;
-    onClick: () => void;
+    onClick: (e: React.MouseEvent) => void;
   }) => React.ReactNode;
 }
 
 const SWIPE_THRESHOLD = 50;
 
 export function ProductImageGallery({ images, alt, children }: ProductImageGalleryProps) {
-  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -74,11 +71,8 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
   };
 
   const triggerHandlers = {
-    onMouseEnter: () => {
-      if (!isMobile) open();
-    },
-    onClick: () => {
-      if (isMobile) open();
+    onClick: (_e: React.MouseEvent) => {
+      open();
     },
   };
 
@@ -92,7 +86,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
           aria-modal="true"
           aria-label={alt}
           onClick={close}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-[9990] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
         >
           {/* Close */}
           <button
@@ -102,9 +96,9 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
               e.stopPropagation();
               close();
             }}
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20"
+            className="fixed right-4 top-4 z-[9999] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
           >
-            <X className="h-5 w-5" />
+            <X className="h-6 w-6" />
           </button>
 
           {/* Image area */}
@@ -131,7 +125,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
                     e.stopPropagation();
                     prev();
                   }}
-                  className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 md:left-4"
+                  className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10 md:left-4"
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </button>
@@ -142,7 +136,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
                     e.stopPropagation();
                     next();
                   }}
-                  className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 md:right-4"
+                  className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10 md:right-4"
                 >
                   <ChevronRight className="h-6 w-6" />
                 </button>
@@ -160,7 +154,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
                       }}
                       className={cn(
                         'h-2 rounded-full transition-all',
-                        i === currentIndex ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/80',
+                        i === currentIndex ? 'w-6 bg-gray-900' : 'w-2 bg-gray-300 hover:bg-gray-500',
                       )}
                     />
                   ))}

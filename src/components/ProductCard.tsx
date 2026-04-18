@@ -90,11 +90,10 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <ProductImageGallery images={galleryImages} alt={product.name}>
-        {({ onMouseEnter, onClick }) => (
+        {({ onClick }) => (
           <div
-            onMouseEnter={onMouseEnter}
             onClick={onClick}
-            className={`relative aspect-square overflow-hidden bg-muted cursor-zoom-in ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
+            className={`relative aspect-square overflow-hidden bg-muted cursor-pointer ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
           >
             {!imgError ? (
               <img
