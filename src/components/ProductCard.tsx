@@ -98,6 +98,18 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         ...addImages,
       ].filter((value): value is string => Boolean(value));
 
+  useEffect(() => {
+    console.log('PRODUCT DATA:', JSON.stringify({
+      img_url: rawProduct.img_url,
+      img: product.img,
+      image_url: product.image_url,
+      add_images: rawProduct.add_images,
+      image_urls: product.image_urls,
+      images: rawProduct.images,
+      galleryImages,
+    }, null, 2));
+  }, [galleryImages, product.img, product.image_url, product.image_urls, rawProduct]);
+
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <ProductImageGallery images={galleryImages} alt={product.name}>
