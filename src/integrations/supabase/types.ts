@@ -106,6 +106,7 @@ export type Database = {
           ean: string | null
           id: string
           image_url: string | null
+          image_urls: string[]
           is_featured: boolean
           last_synced_at: string | null
           manual_price_isk: number | null
@@ -128,6 +129,7 @@ export type Database = {
           ean?: string | null
           id?: string
           image_url?: string | null
+          image_urls?: string[]
           is_featured?: boolean
           last_synced_at?: string | null
           manual_price_isk?: number | null
@@ -150,6 +152,7 @@ export type Database = {
           ean?: string | null
           id?: string
           image_url?: string | null
+          image_urls?: string[]
           is_featured?: boolean
           last_synced_at?: string | null
           manual_price_isk?: number | null
