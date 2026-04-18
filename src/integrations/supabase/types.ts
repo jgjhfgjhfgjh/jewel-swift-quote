@@ -95,6 +95,75 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          admin_manual_override: boolean
+          admin_notes: string | null
+          category_text: string | null
+          created_at: string
+          custom_margin: number | null
+          description_is: string | null
+          ean: string | null
+          id: string
+          image_url: string | null
+          is_featured: boolean
+          last_synced_at: string | null
+          manual_price_isk: number | null
+          manufacturer: string | null
+          original_description_cz: string | null
+          original_name_cz: string | null
+          product_name_is: string | null
+          sku: string
+          stock_quantity: number
+          supplier_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          admin_manual_override?: boolean
+          admin_notes?: string | null
+          category_text?: string | null
+          created_at?: string
+          custom_margin?: number | null
+          description_is?: string | null
+          ean?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          last_synced_at?: string | null
+          manual_price_isk?: number | null
+          manufacturer?: string | null
+          original_description_cz?: string | null
+          original_name_cz?: string | null
+          product_name_is?: string | null
+          sku: string
+          stock_quantity?: number
+          supplier_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          admin_manual_override?: boolean
+          admin_notes?: string | null
+          category_text?: string | null
+          created_at?: string
+          custom_margin?: number | null
+          description_is?: string | null
+          ean?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          last_synced_at?: string | null
+          manual_price_isk?: number | null
+          manufacturer?: string | null
+          original_description_cz?: string | null
+          original_name_cz?: string | null
+          product_name_is?: string | null
+          sku?: string
+          stock_quantity?: number
+          supplier_price?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           base_discount: number
@@ -122,6 +191,36 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      translation_cache: {
+        Row: {
+          created_at: string
+          id: string
+          source_hash: string
+          source_lang: string
+          source_text: string
+          target_lang: string
+          translated_text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          source_hash: string
+          source_lang?: string
+          source_text: string
+          target_lang?: string
+          translated_text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          source_hash?: string
+          source_lang?: string
+          source_text?: string
+          target_lang?: string
+          translated_text?: string
         }
         Relationships: []
       }
