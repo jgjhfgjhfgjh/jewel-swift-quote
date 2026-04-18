@@ -7,7 +7,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
