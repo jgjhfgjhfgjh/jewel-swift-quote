@@ -7,7 +7,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import type { Product } from '@/lib/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
@@ -97,6 +97,18 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         (typeof rawProduct.img_url === 'string' ? rawProduct.img_url : '') || product.image_url || product.img,
         ...addImages,
       ].filter((value): value is string => Boolean(value));
+
+  useEffect(() => {
+    console.log('PRODUCT DATA:', JSON.stringify({
+      img_url: rawProduct.img_url,
+      img: product.img,
+      image_url: product.image_url,
+      add_images: rawProduct.add_images,
+      image_urls: product.image_urls,
+      images: rawProduct.images,
+      galleryImages,
+    }, null, 2));
+  }, [galleryImages, product.img, product.image_url, product.image_urls, rawProduct]);
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
