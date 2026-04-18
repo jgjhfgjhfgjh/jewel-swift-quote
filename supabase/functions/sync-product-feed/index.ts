@@ -33,6 +33,7 @@ interface RawFeedProduct {
   short_description?: string;
   category_text?: string;
   img_url?: string;
+  add_images?: string | string[] | { '#text'?: string } | Array<string | { '#text'?: string }>;
   wholesale_price?: string | number;
   retail_price?: string | number;
   stock?: string | number;
@@ -45,6 +46,7 @@ interface NormalizedProduct {
   supplier_price: number | null;
   stock_quantity: number;
   image_url: string | null;
+  image_urls: string[];
   manufacturer: string | null;
   ean: string | null;
   category_text: string | null;
@@ -76,10 +78,26 @@ async function sha256(text: string): Promise<string> {
     .join('');
 }
 
+function extractAddImages(v: RawFeedProduct['add_images']): string[] {
+  if (v === null || v === undefined) return [];
+  const arr = Array.isArray(v) ? v : [v];
+  return arr
+    .map((item) => {
+      if (item === null || item === undefined) return null;
+      if (typeof item === 'string' || typeof item === 'number') return strOrNull(item);
+      if (typeof item === 'object' && '#text' in item) return strOrNull((item as { '#text'?: string })['#text']);
+      return strOrNull(item);
+    })
+    .filter((s): s is string => !!s);
+}
+
 function normalize(p: RawFeedProduct): NormalizedProduct | null {
   const sku = strOrNull(p.sku);
   if (!sku) return null;
   const price = toNumber(p.wholesale_price) ?? toNumber(p.retail_price);
+  const mainImg = strOrNull(p.img_url);
+  const addImgs = extractAddImages(p.add_images);
+  const image_urls = [mainImg, ...addImgs].filter((s): s is string => !!s);
   return {
     sku,
     original_name_cz: strOrNull(p.product_name),
@@ -87,7 +105,8 @@ function normalize(p: RawFeedProduct): NormalizedProduct | null {
       strOrNull(p.short_description) ?? strOrNull(p.long_description),
     supplier_price: price === null ? null : Number((price * CURRENCY_MULTIPLIER).toFixed(4)),
     stock_quantity: toInt(p.stock),
-    image_url: strOrNull(p.img_url),
+    image_url: mainImg,
+    image_urls,
     manufacturer: strOrNull(p.manufacturer),
     ean: strOrNull(p.ean),
     category_text: strOrNull(p.category_text),
@@ -276,6 +295,7 @@ Deno.serve(async (req) => {
           supplier_price: norm.supplier_price,
           stock_quantity: norm.stock_quantity,
           image_url: norm.image_url,
+          image_urls: norm.image_urls,
           manufacturer: norm.manufacturer,
           ean: norm.ean,
           category_text: norm.category_text,
