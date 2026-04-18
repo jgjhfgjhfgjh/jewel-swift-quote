@@ -44,6 +44,57 @@ export type Database = {
         }
         Relationships: []
       }
+      feed_config: {
+        Row: {
+          created_at: string
+          feed_url: string
+          id: string
+          last_sync: string | null
+          mapping_rules: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          feed_url?: string
+          id?: string
+          last_sync?: string | null
+          mapping_rules?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          feed_url?: string
+          id?: string
+          last_sync?: string | null
+          mapping_rules?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      feed_sync_logs: {
+        Row: {
+          id: string
+          items_processed_count: number
+          message: string | null
+          status: string
+          timestamp: string
+        }
+        Insert: {
+          id?: string
+          items_processed_count?: number
+          message?: string | null
+          status: string
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          items_processed_count?: number
+          message?: string | null
+          status?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           base_discount: number
