@@ -333,10 +333,14 @@ Deno.serve(async (req) => {
       .update({ last_sync: new Date().toISOString() })
       .eq('id', config.id);
 
+    const processedEnd = Math.min(offset + slice.length, parsedCount);
+    const hasMore = processedEnd < parsedCount;
+
     const summary =
-      `Parsed: ${parsedCount} · Upserted: ${upsertedCount} · ` +
-      `Newly translated: ${newlyTranslated} · Errors: ${errors.length}` +
-      (errors.length ? ` — first: ${errors[0]}` : '');
+      `Parsed: ${parsedCount} · Batch [${offset}-${processedEnd}] upserted: ${upsertedCount} · ` +
+      `Translation: OFF · Errors: ${errors.length}` +
+      (errors.length ? ` — first: ${errors[0]}` : '') +
+      (hasMore ? ` · NEXT offset=${processedEnd}` : ' · DONE');
 
     await admin
       .from('feed_sync_logs')
@@ -351,8 +355,13 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         parsed: parsedCount,
+        offset,
+        limit,
+        processed_end: processedEnd,
         upserted: upsertedCount,
-        newly_translated: newlyTranslated,
+        has_more: hasMore,
+        next_offset: hasMore ? processedEnd : null,
+        translation_enabled: TRANSLATION_ENABLED,
         errors_count: errors.length,
         sample_errors: errors.slice(0, 5),
       }),
