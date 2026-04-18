@@ -99,7 +99,7 @@ const Favorites = () => {
   const hasFavorites = favoriteProducts.length > 0;
 
   return (
-    <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <div className="flex min-h-screen flex-col pb-16 lg:pb-0 pt-14">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
 
       <FilterSidebar {...fp} mobileOnly />
