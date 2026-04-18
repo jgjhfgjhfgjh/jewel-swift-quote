@@ -10,8 +10,9 @@ import type { Product } from '@/lib/types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
+import { ProductImageGallery } from '@/components/ProductImageGallery';
 
-export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
+export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
@@ -82,51 +83,63 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   const isLoggedIn = !!user;
   const canSeePrices = isLoggedIn && !isLead;
 
+  const galleryImages = (product.images && product.images.length > 0)
+    ? product.images
+    : (product.img ? [product.img] : []);
+
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
-      <div className={`relative aspect-square overflow-hidden bg-muted ${isOutOfStock ? 'grayscale opacity-50' : ''}`}>
-        {!imgError ? (
-          <img
-            src={product.img}
-            alt={product.name}
-            loading="lazy"
-            className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105 font-mono border-0 border-slate-50 border-none bg-white"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
-            {product.manufacturer}
-          </div>
-        )}
-        {product.inStock && !isOutOfStock && (
-          <div className="absolute left-2 top-2 flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[11px] font-semibold text-foreground drop-shadow-sm">
-              {t.inStock}
-            </span>
-          </div>
-        )}
-        {/* Wishlist heart */}
-        {onToggleWishlist && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!isLoggedIn) {
-                navigate('/login');
-                return;
-              }
-              onToggleWishlist(product.id);
-            }}
-            className="absolute right-2 top-2 z-10 rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm transition-all hover:scale-110"
+      <ProductImageGallery images={galleryImages} alt={product.name}>
+        {({ onMouseEnter, onClick }) => (
+          <div
+            onMouseEnter={onMouseEnter}
+            onClick={onClick}
+            className={`relative aspect-square overflow-hidden bg-muted cursor-zoom-in ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
           >
-            <Heart
-              className={`h-4 w-4 transition-colors ${
-                isWishlisted ? 'fill-primary text-primary' : 'text-muted-foreground'
-              }`}
-            />
-          </button>
+            {!imgError ? (
+              <img
+                src={product.img}
+                alt={product.name}
+                loading="lazy"
+                className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105 font-mono border-0 border-slate-50 border-none bg-white"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+                {product.manufacturer}
+              </div>
+            )}
+            {product.inStock && !isOutOfStock && (
+              <div className="absolute left-2 top-2 flex items-center gap-1.5">
+                <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[11px] font-semibold text-foreground drop-shadow-sm">
+                  {t.inStock}
+                </span>
+              </div>
+            )}
+            {/* Wishlist heart */}
+            {onToggleWishlist && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!isLoggedIn) {
+                    navigate('/login');
+                    return;
+                  }
+                  onToggleWishlist(product.id);
+                }}
+                className="absolute right-2 top-2 z-10 rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm transition-all hover:scale-110"
+              >
+                <Heart
+                  className={`h-4 w-4 transition-colors ${
+                    isWishlisted ? 'fill-primary text-primary' : 'text-muted-foreground'
+                  }`}
+                />
+              </button>
+            )}
+          </div>
         )}
-      </div>
+      </ProductImageGallery>
       <div className="flex flex-1 flex-col p-3">
         {/* Discount badge - above brand name, all sizes */}
         {canSeePrices && activeDiscount > 0 && (
