@@ -86,7 +86,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
           aria-modal="true"
           aria-label={alt}
           onClick={close}
-          className="fixed inset-0 z-[9990] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
         >
           {/* Close */}
           <button
@@ -96,7 +96,7 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
               e.stopPropagation();
               close();
             }}
-            className="fixed right-4 top-4 z-[9999] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
+            className="fixed right-4 top-4 z-[10000] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
           >
             <X className="h-6 w-6" />
           </button>
