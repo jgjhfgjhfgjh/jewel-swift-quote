@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -80,13 +81,13 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
     <>
       {children(triggerHandlers)}
 
-      {isOpen && safeImages.length > 0 && (
+      {isOpen && safeImages.length > 0 && typeof document !== 'undefined' && createPortal(
         <div
           role="dialog"
           aria-modal="true"
           aria-label={alt}
           onClick={close}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-[20000] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
         >
           {/* Close */}
           <button
@@ -96,14 +97,14 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
               e.stopPropagation();
               close();
             }}
-            className="fixed right-4 top-4 z-[10000] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
+            className="fixed right-4 top-4 z-[20002] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
           >
             <X className="h-6 w-6" />
           </button>
 
           {/* Image area */}
           <div
-            className="relative flex h-full w-full max-w-5xl items-center justify-center px-4 py-16 md:px-16"
+            className="relative z-[20001] flex h-full w-full max-w-5xl items-center justify-center px-4 py-16 md:px-16"
             onClick={(e) => e.stopPropagation()}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
@@ -162,7 +163,8 @@ export function ProductImageGallery({ images, alt, children }: ProductImageGalle
               </>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
