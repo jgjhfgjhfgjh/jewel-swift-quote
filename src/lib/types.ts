@@ -7,6 +7,8 @@ export interface Product {
   description: string;
   category: string;
   img: string;
+  /** Optional additional product images. When present, gallery shows them as carousel slides. */
+  images?: string[];
   price: number;
   wholesale: number;
   stock: number;
