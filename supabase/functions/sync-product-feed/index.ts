@@ -254,8 +254,17 @@ Deno.serve(async (req) => {
 
   let parsedCount = 0;
   let upsertedCount = 0;
-  let newlyTranslated = 0;
+  const newlyTranslated = 0;
   const errors: string[] = [];
+  // Translation disabled for bulk import — re-enable later via separate job.
+  const TRANSLATION_ENABLED = false;
+  void lovableApiKey;
+  void translateCZtoIS;
+
+  // Allow caller to control batching: ?offset=0&limit=2000
+  const url = new URL(req.url);
+  const offset = Math.max(0, parseInt(url.searchParams.get('offset') ?? '0', 10) || 0);
+  const limit = Math.max(1, Math.min(5000, parseInt(url.searchParams.get('limit') ?? '2000', 10) || 2000));
 
   try {
     const { data: config, error: cfgErr } = await admin
@@ -270,52 +279,54 @@ Deno.serve(async (req) => {
     const raw = await fetchAndParseFeed(config.feed_url);
     parsedCount = raw.length;
 
-    for (const r of raw) {
-      try {
-        const norm = normalize(r);
-        if (!norm) continue;
+    const slice = raw.slice(offset, offset + limit);
 
-        // Translate name + description (cached)
-        const nameRes = norm.original_name_cz
-          ? await translateCZtoIS(admin, norm.original_name_cz, lovableApiKey)
-          : { text: '', cached: true };
-        const descRes = norm.original_description_cz
-          ? await translateCZtoIS(admin, norm.original_description_cz, lovableApiKey)
-          : { text: '', cached: true };
-        if (!nameRes.cached) newlyTranslated += 1;
-        if (!descRes.cached) newlyTranslated += 1;
+    // Bulk upsert in chunks of 200 — minimizes round-trips and memory pressure.
+    const CHUNK = 200;
+    const nowIso = new Date().toISOString();
+    let buffer: Record<string, unknown>[] = [];
 
-        // Build the safe payload — NEVER include PROTECTED_FIELDS
-        const payload: Record<string, unknown> = {
-          sku: norm.sku,
-          original_name_cz: norm.original_name_cz,
-          original_description_cz: norm.original_description_cz,
-          product_name_is: nameRes.text || null,
-          description_is: descRes.text || null,
-          supplier_price: norm.supplier_price,
-          stock_quantity: norm.stock_quantity,
-          image_url: norm.image_url,
-          image_urls: norm.image_urls,
-          manufacturer: norm.manufacturer,
-          ean: norm.ean,
-          category_text: norm.category_text,
-          last_synced_at: new Date().toISOString(),
-        };
-        for (const k of Object.keys(payload)) {
-          if (PROTECTED_FIELDS.has(k)) delete payload[k];
-        }
-
-        const { error: upErr } = await admin
-          .from('products')
-          .upsert(payload, { onConflict: 'sku', ignoreDuplicates: false });
-        if (upErr) throw new Error(`Upsert ${norm.sku}: ${upErr.message}`);
-        upsertedCount += 1;
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
-        errors.push(msg);
-        if (errors.length >= 25) break; // avoid runaway
+    const flush = async () => {
+      if (buffer.length === 0) return;
+      const { error: upErr } = await admin
+        .from('products')
+        .upsert(buffer, { onConflict: 'sku', ignoreDuplicates: false });
+      if (upErr) {
+        errors.push(`Bulk upsert (${buffer.length}): ${upErr.message}`);
+      } else {
+        upsertedCount += buffer.length;
       }
+      buffer = [];
+    };
+
+    for (const r of slice) {
+      const norm = normalize(r);
+      if (!norm) continue;
+
+      const payload: Record<string, unknown> = {
+        sku: norm.sku,
+        original_name_cz: norm.original_name_cz,
+        original_description_cz: norm.original_description_cz,
+        product_name_is: TRANSLATION_ENABLED ? undefined : null,
+        description_is: TRANSLATION_ENABLED ? undefined : null,
+        supplier_price: norm.supplier_price,
+        stock_quantity: norm.stock_quantity,
+        image_url: norm.image_url,
+        image_urls: norm.image_urls,
+        manufacturer: norm.manufacturer,
+        ean: norm.ean,
+        category_text: norm.category_text,
+        last_synced_at: nowIso,
+      };
+      for (const k of Object.keys(payload)) {
+        if (PROTECTED_FIELDS.has(k) || payload[k] === undefined) delete payload[k];
+      }
+
+      buffer.push(payload);
+      if (buffer.length >= CHUNK) await flush();
+      if (errors.length >= 10) break;
     }
+    await flush();
 
     await admin
       .from('feed_config')
