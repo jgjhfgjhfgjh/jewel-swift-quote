@@ -83,9 +83,20 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   const isLoggedIn = !!user;
   const canSeePrices = isLoggedIn && !isLead;
 
+  const rawProduct = product as unknown as Record<string, unknown>;
+  const addImagesRaw = rawProduct.add_images;
+  const addImages: string[] = Array.isArray(addImagesRaw)
+    ? (addImagesRaw as unknown[]).filter((v): v is string => typeof v === 'string')
+    : typeof addImagesRaw === 'string' && addImagesRaw
+      ? [addImagesRaw]
+      : [];
+
   const galleryImages = (product.image_urls && product.image_urls.length > 0)
     ? product.image_urls
-    : [product.image_url ?? product.img].filter((value): value is string => Boolean(value));
+    : [
+        (typeof rawProduct.img_url === 'string' ? rawProduct.img_url : '') || product.image_url || product.img,
+        ...addImages,
+      ].filter((value): value is string => Boolean(value));
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
