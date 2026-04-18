@@ -90,12 +90,39 @@ export default function FeedManagement() {
 
   const handleManualSync = async () => {
     setSyncing(true);
-    const { data, error } = await supabase.functions.invoke('sync-product-feed');
-    setSyncing(false);
-    if (error) toast.error(error.message);
-    else if (data?.success) toast.success(`Synchronizováno ${data.items_processed_count} položek`);
-    else toast.error(data?.error ?? 'Synchronizace selhala');
-    loadAll();
+    let offset = 0;
+    const limit = 1500;
+    let totalUpserted = 0;
+    let totalParsed = 0;
+    try {
+      for (let hop = 0; hop < 50; hop += 1) {
+        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-product-feed?offset=${offset}&limit=${limit}`;
+        const session = (await supabase.auth.getSession()).data.session;
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session?.access_token ?? ''}`,
+          },
+        });
+        const json = await resp.json();
+        if (!resp.ok || !json?.success) {
+          toast.error(json?.error ?? `Dávka offset=${offset} selhala`);
+          break;
+        }
+        totalUpserted += json.upserted ?? 0;
+        totalParsed = json.parsed ?? totalParsed;
+        toast.message(`Dávka ${offset}–${json.processed_end} / ${totalParsed} · +${json.upserted}`);
+        if (!json.has_more) break;
+        offset = json.next_offset;
+      }
+      toast.success(`Hotovo: ${totalUpserted} / ${totalParsed} produktů uloženo`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Sync selhal');
+    } finally {
+      setSyncing(false);
+      loadAll();
+    }
   };
 
   const lastLog = logs[0];
