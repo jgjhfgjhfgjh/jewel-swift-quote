@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
 
-export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
+export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
   } = useStore();
@@ -83,9 +83,9 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   const isLoggedIn = !!user;
   const canSeePrices = isLoggedIn && !isLead;
 
-  const galleryImages = (product.images && product.images.length > 0)
-    ? product.images
-    : (product.img ? [product.img] : []);
+  const galleryImages = (product.image_urls && product.image_urls.length > 0)
+    ? product.image_urls
+    : [product.image_url ?? product.img].filter((value): value is string => Boolean(value));
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
