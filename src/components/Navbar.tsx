@@ -113,18 +113,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           {!loading && user ? (
             <>
-              {/* Mobile/Tablet search icon — only in home mode (catalog already shows search bar) */}
-              {isHome && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="lg:hidden shrink-0"
-                  onClick={() => setMobileSearchOpen((v) => !v)}
-                  title={t.search}
-                >
-                  {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-                </Button>
-              )}
+              {/* Mobile/Tablet expandable search icon — visible in all modes */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden shrink-0"
+                onClick={() => setMobileSearchOpen((v) => !v)}
+                title={t.search}
+              >
+                {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+              </Button>
 
               {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
@@ -306,9 +304,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         </div>
       </div>
 
-      {/* Expandable mobile search bar — drops below header in home mode */}
-      {isHome && mobileSearchOpen && (
-        <div className="md:hidden px-3 pb-2 pt-1 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 animate-fade-in">
+      {/* Expandable mobile/tablet search bar — drops below header in all modes */}
+      {mobileSearchOpen && (
+        <div className="lg:hidden px-3 pb-2 pt-1 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 animate-fade-in">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
