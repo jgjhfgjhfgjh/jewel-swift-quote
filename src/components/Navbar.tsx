@@ -358,6 +358,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         </nav>
       </SheetContent>
     </Sheet>
+
+    <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </>
   );
 }
