@@ -265,13 +265,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
                   {t.register}
                 </Button>
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="sm" className="text-xs h-8 px-3" onClick={() => navigate('/login')}>
-                  {t.login}
-                </Button>
-                <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
-                  {t.register}
-                </Button>
               </div>
             </>
           ) : null}
