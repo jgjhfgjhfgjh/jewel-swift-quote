@@ -11,11 +11,17 @@ import logo from '@/assets/logo.png';
 interface AuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  defaultTab?: 'login' | 'register';
+  onLoginSuccess?: () => void;
 }
 
-export function AuthModal({ open, onOpenChange }: AuthModalProps) {
+export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuccess }: AuthModalProps) {
   const { signIn } = useAuthContext();
-  const [tab, setTab] = useState<'login' | 'register'>('login');
+  const [tab, setTab] = useState<'login' | 'register'>(defaultTab);
+
+  useEffect(() => {
+    if (open) setTab(defaultTab);
+  }, [open, defaultTab]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -48,6 +54,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     try {
       await signIn(email, password);
       close();
+      onLoginSuccess?.();
     } catch (err: any) {
       setError(err.message || 'Přihlášení selhalo');
     } finally {
@@ -104,10 +111,12 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-primary/5 to-transparent">
           <img src={logo} alt="swelt." className="mx-auto h-14 object-contain" />
           <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">
-            Katalog 2026
+            {tab === 'register' ? 'Registrace' : 'Přihlášení'}
           </h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            Přihlaste se pro přístup k velkoobchodnímu katalogu
+            {tab === 'register'
+              ? 'Vytvořte si B2B účet pro přístup k velkoobchodním cenám'
+              : 'Přihlaste se pro přístup k velkoobchodnímu katalogu'}
           </p>
         </div>
 
