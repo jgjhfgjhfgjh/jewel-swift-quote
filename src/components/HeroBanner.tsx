@@ -161,7 +161,6 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                   >
                     <a href={slide.ctaHref}>
                       {slide.cta}
-                      <ArrowRight className="ml-1 h-4 w-4" />
                     </a>
                   </Button>
                 </div>
