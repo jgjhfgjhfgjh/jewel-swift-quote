@@ -54,13 +54,15 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       className="w-full px-4 py-8 sm:px-6 lg:px-8"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 lg:gap-6 max-w-7xl mx-auto">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
             <div
               key={card.key}
-              className="group relative overflow-hidden rounded-2xl transition-transform duration-300 hover:scale-[1.02] min-h-[420px] flex flex-col"
+              className={`group relative overflow-hidden rounded-2xl transition-transform duration-300 hover:scale-[1.02] min-h-[280px] sm:min-h-[420px] flex flex-col ${
+                card.key === 'luxury' ? 'col-span-1 md:col-span-1' : ''
+              }`}
             >
               {/* Layered background (kept from original glass design) */}
               <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
