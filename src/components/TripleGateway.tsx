@@ -81,11 +81,6 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                 {/* Icon with optional badge */}
                 <div className="relative mb-5 mt-1">
                   <Icon className="w-14 h-14 text-white/85" strokeWidth={1.25} />
-                  {card.label === 'B2B' && (
-                    <span className="absolute -bottom-1 -right-3 text-primary-foreground bg-primary/90 px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider">
-                      B2B
-                    </span>
-                  )}
                 </div>
 
                 {/* Label (kept from original) */}
