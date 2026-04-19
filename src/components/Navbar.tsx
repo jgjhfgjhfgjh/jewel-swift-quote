@@ -31,13 +31,19 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+
+  const openAuth = (tab: 'login' | 'register') => {
+    setAuthTab(tab);
+    setAuthOpen(true);
+  };
 
   const handleCatalogCta = () => {
     if (user) {
       setViewMode('catalog');
       window.scrollTo({ top: 0, behavior: 'instant' });
     } else {
-      setAuthOpen(true);
+      openAuth('login');
     }
   };
   const lastScrollY = useRef(0);
