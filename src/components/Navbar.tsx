@@ -274,6 +274,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
               </DropdownMenu>
             </>
           ) : null}
+
+          {/* KATALOG 2026 — far-right CTA, visible on ALL devices */}
+          <Button
+            size="sm"
+            onClick={handleCatalogCta}
+            className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-[0_0_18px_hsl(142_76%_36%/0.45)] hover:shadow-[0_0_26px_hsl(142_76%_36%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-green-500/30 shrink-0"
+          >
+            <span className="hidden sm:inline">KATALOG 2026</span>
+            <span className="sm:hidden">KATALOG</span>
+          </Button>
         </div>
       </div>
 
