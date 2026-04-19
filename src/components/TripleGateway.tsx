@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '@/contexts/AuthContext';
-import logo from '@/assets/logo.png';
+import { Handshake, PackageOpen, HandCoins } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   onOpenCatalog?: () => void;
@@ -9,32 +9,32 @@ interface Props {
 const cards = [
   {
     key: 'partner',
-    label: 'B2B',
+    icon: Handshake,
+    badge: 'B2B',
     title: 'Prémiový velkoobchod',
-    description: 'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
+    description:
+      'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
     cta: 'Vstoupit do velkoobchodu',
-    gradient: 'from-emerald-700/80 via-emerald-800/90 to-teal-900/95',
   },
   {
     key: 'dropshipping',
-    label: 'Swelt.dropshipping',
-    title: 'E-SHOP BEZ MILIONOVÝCH INVESTIC?',
-    description: 'Prodávejte my se postaráme o zbytek. Logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
-    cta: 'Vstoupit',
-    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
+    icon: PackageOpen,
+    title: 'Prodávejte my se postaráme o zbytek.',
+    description:
+      'E-shop bez miliónových investic, logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
+    cta: 'Chci dropsipping',
   },
   {
     key: 'luxury',
-    label: 'Swelt.luxury',
-    title: 'PRIVÁTNÍ NÁKUPY',
-    description: 'Segment vysoké hodinařiny bez nutnosti minimálních odběrů. Máte IČO? Poptávka na jediný kus luxusních značek začíná zde.',
-    cta: 'Vstoupit',
-    gradient: 'from-amber-800/80 via-yellow-900/90 to-stone-900/95',
+    icon: HandCoins,
+    title: 'Privátní nákupy pro firmy a živnostníky',
+    description:
+      'Odemykáme vám exkluzivní přístup k velkoobchodním cenám pro vaše soukromé nákupy nebo firemní dary. Už od jednoho kusu a bez registrace.',
+    cta: 'Zjistit více',
   },
 ];
 
 export function TripleGateway({ onOpenCatalog }: Props) {
-  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const handleClick = (key: string) => {
@@ -44,41 +44,51 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   };
 
   return (
-    <div className="w-full px-4 py-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 max-w-7xl mx-auto">
-        {cards.map((card) => (
-          <button
-            key={card.key}
-            onClick={() => handleClick(card.key)}
-            className="group relative overflow-hidden rounded-2xl text-left transition-transform duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            {/* Background */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
-            <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-              <div className="absolute -inset-full rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
-            </div>
-            <div className="absolute inset-[1px] rounded-2xl border border-white/[0.08] pointer-events-none" />
-            <img src={logo} alt="" className="absolute right-3 bottom-3 w-14 opacity-[0.07] pointer-events-none select-none" draggable={false} />
-
-            {/* Content */}
-            <div className="relative z-10 p-5 lg:p-6 flex flex-col min-h-[220px] sm:min-h-[200px] lg:min-h-[180px] justify-between">
-              <div>
-                <span className="inline-block text-white/60 text-xs font-medium tracking-[0.2em] uppercase mb-2">{card.label}</span>
-                <h3 className="text-white font-bold text-base lg:text-lg tracking-wide leading-tight">{card.title}</h3>
+    <div
+      className="w-full px-4 py-8 sm:px-6 lg:px-8 bg-muted/30"
+      style={{ fontFamily: "'Montserrat', sans-serif" }}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.key}
+              className="bg-card rounded-xl border border-border shadow-sm p-6 lg:p-8 flex flex-col items-center text-center min-h-[440px]"
+            >
+              {/* Icon */}
+              <div className="relative mb-6 mt-2">
+                <Icon
+                  className="w-16 h-16 text-muted-foreground"
+                  strokeWidth={1.25}
+                />
+                {card.badge && (
+                  <span className="absolute -bottom-1 right-0 text-primary font-bold text-sm tracking-tight">
+                    {card.badge}
+                  </span>
+                )}
               </div>
-              <p className="text-white/70 text-xs sm:text-sm leading-relaxed mt-2">
+
+              {/* Title */}
+              <h3 className="text-foreground font-bold text-xl lg:text-2xl leading-snug mb-6">
+                {card.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-foreground/80 text-sm lg:text-base leading-relaxed mb-auto">
                 {card.description}
               </p>
-              <div className="mt-3 flex items-center gap-2 text-white/50 group-hover:text-white/80 transition-colors text-sm">
-                <span>{card.cta}</span>
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
+
+              {/* CTA */}
+              <Button
+                onClick={() => handleClick(card.key)}
+                className="mt-8 w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-6 rounded-md"
+              >
+                {card.cta}
+              </Button>
             </div>
-          </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
