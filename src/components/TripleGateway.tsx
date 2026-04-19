@@ -89,7 +89,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-white/75 text-[11px] sm:text-sm leading-snug sm:leading-relaxed mb-3 sm:mb-6 text-center mx-auto max-w-[24ch] sm:max-w-[28ch] line-clamp-4 sm:line-clamp-none">
+                <p className="text-white/75 text-[11px] sm:text-sm leading-snug sm:leading-relaxed mb-3 sm:mb-6 text-center mx-auto max-w-[24ch] sm:max-w-[28ch]">
                   {card.description}
                 </p>
 
