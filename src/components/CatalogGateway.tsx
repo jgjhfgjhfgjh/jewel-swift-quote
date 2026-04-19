@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Lock, Briefcase, Eye, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable/index';
 import logo from '@/assets/logo.png';
@@ -83,8 +84,7 @@ export function CatalogGateway() {
                 required
                 className="h-9 text-sm"
               />
-              <Input
-                type="password"
+              <PasswordInput
                 placeholder="Heslo"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

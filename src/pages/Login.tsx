@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { useStore } from '@/lib/store';
@@ -52,8 +53,7 @@ export default function Login() {
             required
             autoFocus
           />
-          <Input
-            type="password"
+          <PasswordInput
             placeholder={t.password}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
