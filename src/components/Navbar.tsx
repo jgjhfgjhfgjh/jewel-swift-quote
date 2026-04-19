@@ -113,16 +113,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           {!loading && user ? (
             <>
-              {/* Mobile/Tablet search icon — opens expandable search */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden shrink-0"
-                onClick={() => setMobileSearchOpen((v) => !v)}
-                title={t.search}
-              >
-                {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-              </Button>
+              {/* Mobile/Tablet search icon — only in home mode (catalog already shows search bar) */}
+              {isHome && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="lg:hidden shrink-0"
+                  onClick={() => setMobileSearchOpen((v) => !v)}
+                  title={t.search}
+                >
+                  {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                </Button>
+              )}
 
               {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
