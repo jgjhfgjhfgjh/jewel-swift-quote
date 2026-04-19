@@ -22,7 +22,7 @@ const cards = [
     key: 'dropshipping',
     icon: PackageOpen,
     label: 'Swelt.dropshipping',
-    title: 'Prodávejte my se postaráme o zbytek.',
+    title: 'Dropsipping',
     description:
       'E-shop bez miliónových investic, logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
     cta: 'Chci dropsipping',
