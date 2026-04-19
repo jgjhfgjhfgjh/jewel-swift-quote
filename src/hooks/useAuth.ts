@@ -83,7 +83,17 @@ export function useAuth() {
 
   const signIn = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+    if (error) {
+      // Supabase z bezpečnostních důvodů nerozlišuje neexistující email vs špatné heslo.
+      const msg = (error.message || '').toLowerCase();
+      if (msg.includes('invalid login credentials') || msg.includes('invalid_credentials')) {
+        throw new Error('Zadaný email nenalezen nebo je heslo nesprávné');
+      }
+      if (msg.includes('email not confirmed')) {
+        throw new Error('Email zatím nebyl potvrzen. Zkontrolujte schránku.');
+      }
+      throw error;
+    }
     return data;
   };
 
