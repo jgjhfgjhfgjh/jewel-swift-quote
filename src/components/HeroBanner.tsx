@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
 
@@ -161,7 +161,6 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                   >
                     <a href={slide.ctaHref}>
                       {slide.cta}
-                      <ArrowRight className="ml-1 h-4 w-4" />
                     </a>
                   </Button>
                 </div>
