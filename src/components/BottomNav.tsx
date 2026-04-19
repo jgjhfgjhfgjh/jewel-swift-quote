@@ -39,6 +39,9 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
   const handleLogout = async () => {
     setProfileOpen(false);
     await signOut();
+    setViewMode('home');
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   return (
