@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Handshake, PackageOpen, HandCoins, ArrowRight } from 'lucide-react';
+import { Handshake, PackageOpen, HandCoins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
 
@@ -16,7 +16,7 @@ const cards = [
     description:
       'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
     cta: 'Vstoupit do velkoobchodu',
-    gradient: 'from-emerald-700/80 via-emerald-800/90 to-teal-900/95',
+    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
   {
     key: 'dropshipping',
@@ -36,7 +36,7 @@ const cards = [
     description:
       'Odemykáme vám exkluzivní přístup k velkoobchodním cenám pro vaše soukromé nákupy nebo firemní dary. Už od jednoho kusu a bez registrace.',
     cta: 'Zjistit více',
-    gradient: 'from-amber-800/80 via-yellow-900/90 to-stone-900/95',
+    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
 ];
 
@@ -109,7 +109,6 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                   className="mt-auto w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-medium py-5 rounded-md transition-colors"
                 >
                   {card.cta}
-                  <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </div>
