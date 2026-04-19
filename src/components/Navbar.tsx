@@ -390,7 +390,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
       </SheetContent>
     </Sheet>
 
-    <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+    <AuthModal
+      open={authOpen}
+      onOpenChange={setAuthOpen}
+      defaultTab={authTab}
+      onLoginSuccess={() => { setViewMode('home'); navigate('/'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+    />
     </>
   );
 }
