@@ -115,17 +115,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
           </div>
         </div>
 
-        {/* Mobile search icon — only in home mode on mobile */}
-        {isHome && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden shrink-0"
-            onClick={() => setMobileSearchOpen((v) => !v)}
-          >
-            {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-          </Button>
-        )}
+
 
         {/* Right group: wishlist, cart, profile — visible on all devices */}
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
