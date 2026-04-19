@@ -3,7 +3,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import logo from '@/assets/logo.png';
 
 interface Props {
-  onOpenCatalog: () => void;
+  onOpenCatalog?: () => void;
 }
 
 const cards = [
@@ -38,7 +38,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
 
   const handleClick = (key: string) => {
-    if (key === 'partner') onOpenCatalog();
+    if (key === 'partner') navigate('/partner');
     else if (key === 'dropshipping') navigate('/dropshipping');
     else if (key === 'luxury') navigate('/luxury');
   };
