@@ -128,9 +128,15 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className={`relative bg-gradient-to-br ${slide.bg} flex items-center justify-center overflow-hidden pt-14 pb-12 transition-all duration-500 ${
-                compact ? 'h-[70vh] lg:h-[80vh]' : 'h-[80vh] lg:h-[100vh]'
-              }`}>
+              <div
+                className={`relative bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden pt-14 pb-12 transition-all duration-500 ${
+                  compact ? 'h-[70vh] lg:h-[80vh]' : 'h-[80vh] lg:h-[100vh]'
+                }`}
+                style={{ backgroundImage: `url(${slide.image})` }}
+              >
+                {/* Dark overlay for legibility */}
+                <div className="absolute inset-0 bg-black/60" />
+
                 {/* Logo watermark */}
                 <img
                   src={logo}
@@ -140,14 +146,24 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                   }`}
                   draggable={false}
                 />
-                {/* Text overlay */}
-                <div className="relative z-10 text-center px-6 max-w-xl">
+                {/* Text + CTA overlay */}
+                <div className="relative z-10 text-center px-6 max-w-xl flex flex-col items-center">
                   <h2 className={`text-white font-bold drop-shadow-lg transition-all duration-500 ${
                     compact ? 'text-base sm:text-lg lg:text-4xl' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl'
                   }`}>{slide.title}</h2>
-                  <p className={`text-white/80 mt-1 drop-shadow transition-all duration-500 ${
+                  <p className={`text-white/85 mt-1 drop-shadow transition-all duration-500 ${
                     compact ? 'text-xs sm:text-sm lg:text-xl' : 'text-sm sm:text-base md:text-lg lg:text-xl'
                   }`}>{slide.subtitle}</p>
+                  <Button
+                    asChild
+                    size={compact ? 'sm' : 'lg'}
+                    className="mt-4 sm:mt-5 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-semibold"
+                  >
+                    <a href={slide.ctaHref}>
+                      {slide.cta}
+                      <ArrowRight className="ml-1 h-4 w-4" />
+                    </a>
+                  </Button>
                 </div>
               </div>
             </div>
