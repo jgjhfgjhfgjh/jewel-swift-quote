@@ -4,6 +4,7 @@ import { X, Lock, Briefcase, Eye, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable/index';
 import logo from '@/assets/logo.png';
@@ -168,8 +169,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
                     <Lock className="h-3.5 w-3.5" /> Heslo
                   </label>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
