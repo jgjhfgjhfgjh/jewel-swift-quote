@@ -13,6 +13,7 @@ import {
 import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
+import { AuthModal } from '@/components/AuthModal';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -29,6 +30,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   const [hidden, setHidden] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const handleCatalogCta = () => {
+    if (user) {
+      setViewMode('catalog');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      setAuthOpen(true);
+    }
+  };
   const lastScrollY = useRef(0);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const isHome = viewMode === 'home';
@@ -257,6 +268,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
               </div>
             </>
           ) : null}
+
+          {/* High-visibility CTA — visible to everyone */}
+          {!loading && (
+            <Button
+              size="sm"
+              onClick={handleCatalogCta}
+              className="ml-2 h-9 px-4 rounded-lg font-bold tracking-wide text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30"
+            >
+              KATALOG 2026
+            </Button>
+          )}
         </div>
       </div>
 
@@ -336,6 +358,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
         </nav>
       </SheetContent>
     </Sheet>
+
+    <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </>
   );
 }
