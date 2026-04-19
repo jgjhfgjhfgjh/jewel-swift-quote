@@ -54,6 +54,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     try {
       await signIn(email, password);
       close();
+      onLoginSuccess?.();
     } catch (err: any) {
       setError(err.message || 'Přihlášení selhalo');
     } finally {
