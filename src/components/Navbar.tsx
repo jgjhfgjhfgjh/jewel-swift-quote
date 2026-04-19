@@ -92,8 +92,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
         </div>
 
-        {/* Center: Search bar — hidden on mobile in home mode, replaced by search icon */}
-        <div className={`flex flex-1 justify-center mx-2 md:mx-4 ${isHome ? 'hidden md:flex' : ''}`}>
+        {/* Center: Search bar — desktop only; mobile/tablet uses expandable search icon */}
+        <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
           <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
