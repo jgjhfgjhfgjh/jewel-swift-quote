@@ -24,7 +24,7 @@ const cards = [
     label: 'Swelt.dropshipping',
     title: 'Dropsipping',
     description:
-      'E-shop bez miliónových investic, logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
+      'Prodávejte my se postaráme o zbytek. E-shop bez miliónových investic, logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
     cta: 'Chci dropsipping',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
@@ -89,7 +89,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-white/75 text-sm leading-relaxed mb-6 text-center mx-auto max-w-[28ch]">
+                <p className="text-white/75 text-sm leading-relaxed mb-6 text-center mx-auto max-w-[28ch] py-0">
                   {card.description}
                 </p>
 
