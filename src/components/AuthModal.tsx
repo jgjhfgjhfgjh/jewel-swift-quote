@@ -109,8 +109,8 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         className="relative z-[20001] w-full max-w-md rounded-2xl bg-card shadow-2xl border border-border/60 overflow-hidden animate-in zoom-in-95 duration-200"
       >
         {/* Header */}
-        <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-primary/5 to-transparent">
-          <img src={logo} alt="swelt." className="mx-auto h-14 object-contain" />
+        <div className="px-8 pt-8 pb-6 bg-gradient-to-b from-primary/5 to-transparent">
+          <img src={logo} alt="swelt." className="h-14 px-0 mx-[150px] object-contain" />
           <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">
             {tab === 'register' ? 'Registrace' : 'Přihlášení'}
           </h2>
