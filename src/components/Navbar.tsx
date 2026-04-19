@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -61,9 +61,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   return (
     <>
     <header className={`fixed top-0 left-0 right-0 z-[100] border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="h-14 px-3 sm:px-4 flex items-center justify-between">
+      <div className="h-14 px-2 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
         {/* Left group: hamburger + logo */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
           {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
           <Button
             ref={desktopMenuButtonRef}
@@ -80,7 +80,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           <Link to="/" onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="shrink-0">
             <h1 className="font-display text-xl font-semibold tracking-tight">
-              <img src={logo} alt="swelt." className="h-16 sm:h-24 object-contain my-0 px-0 py-0 mx-0" />
+              <img src={logo} alt="swelt." className="h-10 sm:h-16 lg:h-24 object-contain my-0 px-0 py-0 mx-0" />
             </h1>
           </Link>
         </div>
@@ -111,16 +111,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
           </Button>
         )}
 
-        {/* Right group: wishlist, cart, profile — hidden on mobile/tablet (bottom nav) */}
-        <div className="hidden lg:flex items-center gap-1 shrink-0">
+        {/* Right group: wishlist, cart, profile — visible on all devices */}
+        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
 
           {!loading && user ? (
             <>
-              {/* Wishlist icon */}
+              {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative"
+                className="relative hidden lg:inline-flex"
                 onClick={() => { if (!user) { navigate('/login'); } else { navigate('/favorites'); } }}
                 title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
@@ -132,8 +132,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 )}
               </Button>
 
-              {/* Cart icon */}
-              <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+              {/* Cart icon — desktop only */}
+              <Button variant="ghost" size="icon" className="relative hidden lg:inline-flex" onClick={() => setCartOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
                   <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
@@ -148,7 +148,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`gap-1.5 text-xs ml-1 ${isAdmin && salesCustomer ? 'border border-primary/50 bg-primary/5' : ''}`}
+                    className={`gap-1 sm:gap-1.5 text-xs px-1.5 sm:px-2 ${isAdmin && salesCustomer ? 'border border-primary/50 bg-primary/5' : ''}`}
                   >
                     <User className="h-4 w-4" />
                     <span className="hidden xl:inline max-w-[120px] truncate">
@@ -241,12 +241,45 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
             </>
           ) : !loading ? (
             <>
-              {/* Language switcher for non-logged in */}
+              {/* High-visibility CTA — placed BEFORE login/register so it never gets pushed out */}
+              <Button
+                size="sm"
+                onClick={handleCatalogCta}
+                className="h-8 sm:h-9 px-2.5 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30 shrink-0"
+              >
+                <span className="hidden sm:inline">KATALOG 2026</span>
+                <span className="sm:hidden">KATALOG</span>
+              </Button>
+
+              {/* Login — icon-only on mobile */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs h-8 px-1.5 sm:px-3 shrink-0"
+                onClick={() => setAuthOpen(true)}
+                title={t.login}
+              >
+                <LogIn className="h-4 w-4 sm:hidden" />
+                <span className="hidden sm:inline">{t.login}</span>
+              </Button>
+
+              {/* Register — icon-only on mobile */}
+              <Button
+                size="sm"
+                className="text-xs h-8 px-1.5 sm:px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+                onClick={() => navigate('/register')}
+                title={t.register}
+              >
+                <UserPlus className="h-4 w-4 sm:hidden" />
+                <span className="hidden sm:inline">{t.register}</span>
+              </Button>
+
+              {/* Language switcher — flag always visible */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-1.5 text-sm">
+                  <Button variant="ghost" size="sm" className="gap-1 text-sm h-8 px-1.5 sm:px-2 shrink-0">
                     <span className="text-base">{flags[lang]}</span>
-                    <span className="hidden sm:inline">{lang.toUpperCase()}</span>
+                    <span className="hidden md:inline text-xs">{lang.toUpperCase()}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -257,26 +290,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="sm" className="text-xs h-8 px-3" onClick={() => navigate('/login')}>
-                  {t.login}
-                </Button>
-                <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
-                  {t.register}
-                </Button>
-              </div>
             </>
           ) : null}
 
-          {/* High-visibility CTA — visible to everyone */}
-          {!loading && (
+          {/* High-visibility CTA — visible for logged-in users too */}
+          {!loading && user && (
             <Button
               size="sm"
               onClick={handleCatalogCta}
-              className="ml-2 h-9 px-4 rounded-lg font-bold tracking-wide text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30"
+              className="h-8 sm:h-9 px-2.5 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30 shrink-0"
             >
-              KATALOG 2026
+              <span className="hidden sm:inline">KATALOG 2026</span>
+              <span className="sm:hidden">KATALOG</span>
             </Button>
           )}
         </div>
