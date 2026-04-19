@@ -13,6 +13,7 @@ import {
 import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
+import { AuthModal } from '@/components/AuthModal';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -29,6 +30,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   const [hidden, setHidden] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const handleCatalogCta = () => {
+    if (user) {
+      setViewMode('catalog');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      setAuthOpen(true);
+    }
+  };
   const lastScrollY = useRef(0);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const isHome = viewMode === 'home';
