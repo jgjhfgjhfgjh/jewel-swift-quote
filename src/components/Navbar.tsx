@@ -265,9 +265,27 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
                   {t.register}
                 </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="sm" className="text-xs h-8 px-3" onClick={() => navigate('/login')}>
+                  {t.login}
+                </Button>
+                <Button size="sm" className="text-xs h-8 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => navigate('/register')}>
+                  {t.register}
+                </Button>
               </div>
             </>
           ) : null}
+
+          {/* High-visibility CTA — visible to everyone */}
+          {!loading && (
+            <Button
+              size="sm"
+              onClick={handleCatalogCta}
+              className="ml-2 h-9 px-4 rounded-lg font-bold tracking-wide text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30"
+            >
+              KATALOG 2026
+            </Button>
+          )}
         </div>
       </div>
 
