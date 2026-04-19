@@ -256,6 +256,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
             </>
           ) : !loading ? (
             <>
+              {/* Language switcher — before User icon */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1 text-sm h-8 px-1.5 sm:px-2 shrink-0">
+                    <span className="text-base">{flags[lang]}</span>
+                    <span className="hidden md:inline text-xs">{lang.toUpperCase()}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {(['cs', 'en', 'is'] as Lang[]).map((l) => (
+                    <DropdownMenuItem key={l} onClick={() => setLang(l)} className="gap-2">
+                      <span>{flags[l]}</span> {l.toUpperCase()}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {/* Guest: single User icon → dropdown with Login / Register */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
