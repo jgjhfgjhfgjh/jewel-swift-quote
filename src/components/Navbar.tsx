@@ -132,12 +132,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           {!loading && user ? (
             <>
+              {/* Mobile/Tablet search icon — opens expandable search */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden shrink-0"
+                onClick={() => setMobileSearchOpen((v) => !v)}
+                title={t.search}
+              >
+                {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+              </Button>
+
               {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
                 variant="ghost"
                 size="icon"
                 className="relative hidden lg:inline-flex"
-                onClick={() => { if (!user) { navigate('/login'); } else { navigate('/favorites'); } }}
+                onClick={() => navigate('/favorites')}
                 title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
                 <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-primary text-primary' : ''}`} />
@@ -178,7 +189,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 <DropdownMenuContent align="end" className="w-56">
                   {isAdmin && salesCustomer ? (
                     <>
-                      {/* Customer info header in sales mode */}
                       <div className="px-3 py-2 border-b border-primary/20 bg-primary/5">
                         <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Režim nabídky</p>
                         <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
@@ -187,13 +197,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                           <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {salesCustomer.base_discount}%</p>
                         )}
                       </div>
-
                       <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
                         <Users className="h-3.5 w-3.5" /> Správa zákazníků
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-
-                      {/* Language switcher */}
                       <div className="px-2 py-1.5">
                         <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
                           <Globe className="h-3 w-3" /> Jazyk
@@ -206,7 +213,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                           ))}
                         </div>
                       </div>
-
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => clearSalesMode()} className="gap-2 text-xs text-destructive font-semibold">
                         <LogOut className="h-3.5 w-3.5" /> Ukončit režim nabídky
@@ -214,7 +220,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                     </>
                   ) : (
                     <>
-                      {/* Admin's own info */}
                       <div className="px-3 py-2 border-b">
                         <p className="text-sm font-semibold">{profile?.company_name || 'Zákazník'}</p>
                         {profile?.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
@@ -222,7 +227,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                           <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
                         )}
                       </div>
-
                       {isAdmin && (
                         <>
                           <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
@@ -231,8 +235,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                           <DropdownMenuSeparator />
                         </>
                       )}
-
-                      {/* Language switcher */}
                       <div className="px-2 py-1.5">
                         <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
                           <Globe className="h-3 w-3" /> Jazyk
@@ -245,7 +247,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                           ))}
                         </div>
                       </div>
-
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
                         <LogOut className="h-3.5 w-3.5" /> Odhlásit se
@@ -254,43 +255,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>
-          ) : !loading ? (
-            <>
-              {/* High-visibility CTA — placed BEFORE login/register so it never gets pushed out */}
-              <Button
-                size="sm"
-                onClick={handleCatalogCta}
-                className="h-8 sm:h-9 px-2.5 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30 shrink-0"
-              >
-                <span className="hidden sm:inline">KATALOG 2026</span>
-                <span className="sm:hidden">KATALOG</span>
-              </Button>
 
-              {/* Login — icon-only on mobile */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-xs h-8 px-1.5 sm:px-3 shrink-0"
-                onClick={() => setAuthOpen(true)}
-                title={t.login}
-              >
-                <LogIn className="h-4 w-4 sm:hidden" />
-                <span className="hidden sm:inline">{t.login}</span>
-              </Button>
-
-              {/* Register — icon-only on mobile */}
-              <Button
-                size="sm"
-                className="text-xs h-8 px-1.5 sm:px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
-                onClick={() => navigate('/register')}
-                title={t.register}
-              >
-                <UserPlus className="h-4 w-4 sm:hidden" />
-                <span className="hidden sm:inline">{t.register}</span>
-              </Button>
-
-              {/* Language switcher — flag always visible */}
+              {/* Language switcher (logged-in) — flag visible on all devices */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-1 text-sm h-8 px-1.5 sm:px-2 shrink-0">
@@ -307,19 +273,26 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
+          ) : !loading ? (
+            <>
+              {/* Guest: single User icon → dropdown with Login / Register */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="shrink-0" title={t.login}>
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => openAuth('login')} className="gap-2 text-sm cursor-pointer">
+                    <LogIn className="h-4 w-4" /> Přihlášení
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => openAuth('register')} className="gap-2 text-sm cursor-pointer">
+                    <UserPlus className="h-4 w-4" /> B2B Registrace
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           ) : null}
-
-          {/* High-visibility CTA — visible for logged-in users too */}
-          {!loading && user && (
-            <Button
-              size="sm"
-              onClick={handleCatalogCta}
-              className="h-8 sm:h-9 px-2.5 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-[0_0_20px_hsl(24_95%_53%/0.45)] hover:shadow-[0_0_28px_hsl(24_95%_53%/0.65)] transition-all hover:-translate-y-0.5 ring-1 ring-orange-400/30 shrink-0"
-            >
-              <span className="hidden sm:inline">KATALOG 2026</span>
-              <span className="sm:hidden">KATALOG</span>
-            </Button>
-          )}
         </div>
       </div>
 
