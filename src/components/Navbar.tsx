@@ -89,7 +89,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           <Link to="/" onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="shrink-0">
             <h1 className="font-display text-xl font-semibold tracking-tight">
-              <img src={logo} alt="swelt." className="h-20 sm:h-32 lg:h-48 object-contain my-0 px-0 py-0 mx-0" />
+              <img src={logo} alt="swelt." className="h-20 sm:h-16 lg:h-24 object-contain my-0 px-0 py-0 mx-0" />
             </h1>
           </Link>
 
