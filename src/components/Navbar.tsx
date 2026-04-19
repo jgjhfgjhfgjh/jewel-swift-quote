@@ -62,6 +62,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
   const handleLogout = async () => {
     await signOut();
+    setViewMode('home');
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   return (
