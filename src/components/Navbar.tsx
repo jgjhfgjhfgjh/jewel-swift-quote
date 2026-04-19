@@ -70,7 +70,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
   return (
     <>
     <header className={`fixed top-0 left-0 right-0 z-[100] border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="h-14 px-2 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+      <div className="h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
         {/* Left group: hamburger + logo */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
           {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
