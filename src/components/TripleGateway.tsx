@@ -83,11 +83,6 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                   <Icon className="w-14 h-14 text-white/85" strokeWidth={1.25} />
                 </div>
 
-                {/* Label (kept from original) */}
-                <span className="text-white/60 text-[10px] font-medium tracking-[0.2em] uppercase mb-3">
-                  {card.label}
-                </span>
-
                 {/* Title */}
                 <h3 className="text-white font-bold text-lg lg:text-xl leading-snug mb-4">
                   {card.title}
