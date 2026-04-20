@@ -217,7 +217,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
             </p>
 
             <div className="mt-auto w-full flex flex-col gap-1.5 sm:gap-2">
-              {card.ctas.map((cta, idx) => (
+              {(card.key === 'partner' && user ? card.ctas.filter(c => c.action !== 'register') : card.ctas).map((cta, idx) => (
                 <Button
                   key={`${cta.label}-${idx}`}
                   onClick={() => handleAction(card.key, cta.action)}
