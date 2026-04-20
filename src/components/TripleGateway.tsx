@@ -35,7 +35,7 @@ const cards: GatewayCard[] = [
     key: 'partner',
     icon: Handshake,
     label: 'B2B',
-    title: 'Prémiový velkoobchod',
+    title: 'Velkoobchod',
     description: 'Získejte aktuální ceny a skladové zásoby.',
     image: bgB2b,
     ctas: [
