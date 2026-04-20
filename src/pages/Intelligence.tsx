@@ -12,7 +12,7 @@ import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
-import heroImg from '@/assets/intel-hero-light.jpg';
+import bgIntelligence from '@/assets/gateway-intelligence.jpg';
 import warehouseImg from '@/assets/intel-warehouse.jpg';
 import chartImg from '@/assets/intel-chart.jpg';
 
@@ -195,7 +195,7 @@ function ScoreSimulator() {
         ))}
       </div>
 
-      <div className="rounded-2xl border bg-card p-6 text-center">
+      <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 text-center">
         <div className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-3">Prediktivní skóre</div>
         <div className="relative mx-auto w-[180px] h-[180px]">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
@@ -233,18 +233,37 @@ const Intelligence = () => {
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <div
+      className="dark relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground"
+      style={{
+        // Scoped tmavě modrá paleta jen pro tuto stránku
+        ['--background' as any]: '220 50% 8%',
+        ['--foreground' as any]: '220 15% 92%',
+        ['--card' as any]: '220 45% 12%',
+        ['--card-foreground' as any]: '220 15% 95%',
+        ['--popover' as any]: '220 45% 12%',
+        ['--popover-foreground' as any]: '220 15% 95%',
+        ['--muted' as any]: '220 35% 18%',
+        ['--muted-foreground' as any]: '220 15% 70%',
+        ['--border' as any]: '220 30% 22%',
+        ['--input' as any]: '220 30% 22%',
+        ['--accent' as any]: '215 90% 65%',
+        ['--accent-foreground' as any]: '220 50% 8%',
+        ['--primary' as any]: '215 90% 60%',
+        ['--primary-foreground' as any]: '0 0% 100%',
+      }}
+    >
+      {/* Globální tmavě modré pozadí s neuronovou sítí */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <div className="absolute inset-0 bg-[hsl(220_55%_7%)]" />
+        <img src={bgIntelligence} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220_60%_8%)]/70 via-[hsl(220_60%_8%)]/40 to-[hsl(220_60%_8%)]/90" />
+      </div>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
 
-      <main className="flex-1 bg-background pt-14">
+      <main className="flex-1 pt-14 text-foreground">
         {/* HERO */}
-        <section className="relative overflow-hidden border-b">
-          <img
-            src={heroImg}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+        <section className="relative overflow-hidden border-b border-white/10">
           <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 grid lg:grid-cols-2 gap-12 items-center">
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border bg-card/70 backdrop-blur px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
@@ -336,7 +355,7 @@ const Intelligence = () => {
               const Icon = it.icon;
               return (
                 <Reveal key={it.title} delay={i * 80}>
-                  <div className="group h-full rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -351,7 +370,7 @@ const Intelligence = () => {
         </section>
 
         {/* DATA FLOW DIAGRAM */}
-        <section className="border-y bg-muted/30">
+        <section className="border-y bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Tok dat</div>
@@ -371,7 +390,7 @@ const Intelligence = () => {
                 return (
                   <Reveal key={s.label} delay={i * 100} className="contents">
                     <div className="flex lg:flex-col items-center gap-3">
-                      <div className="flex-1 rounded-2xl border bg-card p-5 text-center w-full">
+                      <div className="flex-1 rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-5 text-center w-full">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
                           <Icon className="h-5 w-5" />
                         </div>
@@ -401,7 +420,7 @@ const Intelligence = () => {
               const Icon = uc.icon;
               return (
                 <Reveal key={uc.title} delay={(i % 3) * 80}>
-                  <div className="group h-full rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:scale-110 transition-transform">
                         <Icon className="h-5 w-5" />
@@ -419,7 +438,7 @@ const Intelligence = () => {
         </section>
 
         {/* HOW IT WORKS — timeline with image */}
-        <section id="logika" className="border-y bg-muted/30">
+        <section id="logika" className="border-y bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-6xl px-6 py-20 grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
             <Reveal>
               <img
@@ -472,7 +491,7 @@ const Intelligence = () => {
             </p>
           </Reveal>
           <Reveal>
-            <div className="rounded-2xl border bg-card p-6 sm:p-10 shadow-sm">
+            <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 sm:p-10 shadow-xl">
               <ScoreSimulator />
             </div>
           </Reveal>
@@ -575,7 +594,7 @@ const Intelligence = () => {
         </section>
 
         {/* CTA */}
-        <section className="border-t bg-muted/30">
+        <section className="border-t bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
