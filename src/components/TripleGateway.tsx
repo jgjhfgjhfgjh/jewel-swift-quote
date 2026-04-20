@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { Handshake, PackageOpen, HandCoins, Check } from 'lucide-react';
+import { Handshake, PackageOpen, HandCoins, BrainCircuit, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface GatewayCard {
-  key: 'partner' | 'dropshipping' | 'luxury';
+  key: 'partner' | 'dropshipping' | 'luxury' | 'intelligence';
   icon: typeof Handshake;
   label: string;
   title: string;
@@ -92,6 +92,26 @@ const cards: GatewayCard[] = [
       ],
     },
   },
+  {
+    key: 'intelligence',
+    icon: BrainCircuit,
+    label: 'Swelt.intelligence',
+    title: 'Inteligence',
+    description: 'Vidíte celý trh, ne jen svůj kousek.',
+    image: bgLuxury,
+    ctas: [{ label: 'Zjistit více', action: 'navigate' }],
+    details: {
+      heading: 'Tržní zpravodajství pro vaše rozhodování',
+      subheading: 'Prediktivní přehledy postavené na pohybu zboží napříč celou distribucí',
+      bullets: [
+        'Prediktivní skóre poptávky pro každý SKU',
+        'Trendy kategorií dřív, než jsou viditelné trhu',
+        'Benchmark vašich prodejů vůči anonymnímu trhu',
+        'Upozornění na rostoucí i klesající produkty',
+        'Doporučení k akci — naskladnit, sledovat, redukovat',
+      ],
+    },
+  },
 ];
 
 export function TripleGateway({ onOpenCatalog }: Props) {
@@ -119,6 +139,8 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       navigate('/dropshipping');
     } else if (cardKey === 'luxury') {
       navigate('/luxury');
+    } else if (cardKey === 'intelligence') {
+      navigate('/intelligence');
     }
   };
 
