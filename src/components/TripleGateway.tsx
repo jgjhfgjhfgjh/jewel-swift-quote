@@ -227,7 +227,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       className="relative w-full px-3 pt-5 pb-12 sm:px-6 sm:pt-8 sm:pb-20 lg:px-8 lg:pb-24 backdrop-blur-2xl backdrop-saturate-150 bg-gradient-to-b from-white/20 via-white/40 to-white/95 border-t border-white/30 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.25)]"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
+      <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch md:mt-5">
         {cards.map((card, index) => renderCard(card, `desktop-${index}-`))}
       </div>
 
