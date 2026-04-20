@@ -4,6 +4,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Handshake, PackageOpen, HandCoins, BrainCircuit, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AuthModal } from '@/components/AuthModal';
 import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
 import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
@@ -130,12 +131,18 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
 
   const handleAction = (cardKey: GatewayCard['key'], action: 'login' | 'register' | 'navigate') => {
     if (cardKey === 'partner') {
-      if (action === 'login') navigate('/login');
-      else if (action === 'register') navigate('/register');
-      else navigate('/partner');
+      if (action === 'login') {
+        setAuthTab('login');
+        setAuthOpen(true);
+      } else if (action === 'register') {
+        setAuthTab('register');
+        setAuthOpen(true);
+      } else navigate('/partner');
     } else if (cardKey === 'dropshipping') {
       navigate('/dropshipping');
     } else if (cardKey === 'luxury') {
@@ -283,6 +290,8 @@ export function TripleGateway({ onOpenCatalog }: Props) {
           </div>
         )}
       </div>
+
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
     </div>
   );
 }
