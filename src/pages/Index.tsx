@@ -104,7 +104,7 @@ const Index = () => {
 
       {viewMode === 'home' && (
         <div className="relative z-10 animate-fade-in">
-          <div className="relative z-20 -mt-20 sm:-mt-44">
+          <div className="relative z-20 -mt-20 sm:-mt-24">
             <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
           </div>
           <div className="bg-background">
