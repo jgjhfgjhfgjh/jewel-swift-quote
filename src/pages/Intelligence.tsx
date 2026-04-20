@@ -549,9 +549,6 @@ const Intelligence = () => {
 
                     <div className="mt-6 mb-6">
                       <div className="flex items-baseline justify-center gap-1.5">
-                        {t.price !== 'Součást' && t.price !== 'Na míru' && (
-                          <span className="text-2xl text-muted-foreground">$</span>
-                        )}
                         <span className="font-display text-5xl font-semibold">{t.price}</span>
                         {t.priceUnit && (
                           <span className="text-sm text-muted-foreground ml-1">{t.priceUnit}</span>
