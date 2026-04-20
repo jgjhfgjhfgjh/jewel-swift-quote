@@ -99,7 +99,7 @@ const cards: GatewayCard[] = [
     label: 'Swelt.intelligence',
     title: 'Inteligence',
     description: 'Vidíte celý trh, ne jen svůj kousek.',
-    image: bgLuxury,
+    image: bgIntelligence,
     ctas: [{ label: 'Zjistit více', action: 'navigate' }],
     details: {
       heading: 'Tržní zpravodajství pro vaše rozhodování',
