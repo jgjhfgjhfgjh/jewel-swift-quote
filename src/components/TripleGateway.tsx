@@ -180,7 +180,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
               {card.description}
             </p>
 
-            <div className={`mt-auto w-full grid gap-1.5 sm:gap-2 ${card.ctas.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+            <div className="mt-auto w-full grid gap-1.5 sm:gap-2 grid-cols-1">
               {card.ctas.map((cta, idx) => (
                 <Button
                   key={`${cta.label}-${idx}`}
