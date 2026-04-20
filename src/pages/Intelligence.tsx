@@ -259,7 +259,7 @@ const Intelligence = () => {
         <img src={bgIntelligence} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
         <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220_60%_8%)]/70 via-[hsl(220_60%_8%)]/40 to-[hsl(220_60%_8%)]/90" />
       </div>
-      <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
+      <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} whiteLogo />
 
       <main className="flex-1 pt-14 text-foreground">
         {/* HERO */}
