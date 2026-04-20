@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { Handshake, PackageOpen, HandCoins, Check } from 'lucide-react';
+import { Handshake, PackageOpen, HandCoins, BrainCircuit, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface GatewayCard {
-  key: 'partner' | 'dropshipping' | 'luxury';
+  key: 'partner' | 'dropshipping' | 'luxury' | 'intelligence';
   icon: typeof Handshake;
   label: string;
   title: string;
@@ -92,6 +92,26 @@ const cards: GatewayCard[] = [
       ],
     },
   },
+  {
+    key: 'intelligence',
+    icon: BrainCircuit,
+    label: 'Swelt.intelligence',
+    title: 'Inteligence',
+    description: 'Vidíte celý trh, ne jen svůj kousek.',
+    image: bgLuxury,
+    ctas: [{ label: 'Zjistit více', action: 'navigate' }],
+    details: {
+      heading: 'Tržní zpravodajství pro vaše rozhodování',
+      subheading: 'Prediktivní přehledy postavené na pohybu zboží napříč celou distribucí',
+      bullets: [
+        'Prediktivní skóre poptávky pro každý SKU',
+        'Trendy kategorií dřív, než jsou viditelné trhu',
+        'Benchmark vašich prodejů vůči anonymnímu trhu',
+        'Upozornění na rostoucí i klesající produkty',
+        'Doporučení k akci — naskladnit, sledovat, redukovat',
+      ],
+    },
+  },
 ];
 
 export function TripleGateway({ onOpenCatalog }: Props) {
@@ -119,6 +139,8 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       navigate('/dropshipping');
     } else if (cardKey === 'luxury') {
       navigate('/luxury');
+    } else if (cardKey === 'intelligence') {
+      navigate('/intelligence');
     }
   };
 
@@ -227,7 +249,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       className="relative w-full px-3 pt-5 pb-12 sm:px-6 sm:pt-8 sm:pb-20 lg:px-8 lg:pt-14 lg:pb-24 backdrop-blur-2xl backdrop-saturate-150 bg-gradient-to-b from-white/20 via-white/40 to-white/95 border-t border-white/30 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.25)]"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
         {cards.map((card, index) => renderCard(card, `desktop-${index}-`))}
       </div>
 
