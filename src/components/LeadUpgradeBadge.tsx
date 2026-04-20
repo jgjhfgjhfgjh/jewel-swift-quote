@@ -13,8 +13,7 @@ export function LeadUpgradeBadge() {
         onClick={() => navigate('/register')}
       >
         <Lock className="h-3.5 w-3.5" />
-        <span className="text-xs lg:hidden">Zobrazit cenu</span>
-        <span className="text-xs hidden lg:inline">Ceny pouze pro B2B partnery. Dokončete registraci.</span>
+        <span className="text-xs">Zobrazit cenu</span>
       </Button>
     </div>
   );
