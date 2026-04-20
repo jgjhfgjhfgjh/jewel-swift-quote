@@ -119,7 +119,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
           <Button
             onClick={() => handleClick(card.key)}
-            className="mt-auto w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-medium text-[11px] sm:text-sm py-2.5 sm:py-5 px-2 rounded-md transition-colors h-auto whitespace-normal leading-tight"
+            className="mt-auto w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[44px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight hyphens-auto"
           >
             {card.cta}
           </Button>
