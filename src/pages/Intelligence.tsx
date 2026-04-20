@@ -242,15 +242,9 @@ const Intelligence = () => {
       </div>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
 
-      <main className="flex-1 bg-background pt-14">
+      <main className="flex-1 pt-14 text-foreground">
         {/* HERO */}
-        <section className="relative overflow-hidden border-b">
-          <img
-            src={heroImg}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+        <section className="relative overflow-hidden border-b border-white/10">
           <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 grid lg:grid-cols-2 gap-12 items-center">
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border bg-card/70 backdrop-blur px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
