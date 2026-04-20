@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/table';
 import {
   ArrowLeft, Mail, Building2, IdCard, Calendar, Shield, Save, Trash2,
-  Heart, Tag, Package, Briefcase, Plus, Activity, KeyRound,
+  Heart, Tag, Package, Briefcase, Plus, Activity, KeyRound, Send, Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Profile, AppRole } from '@/hooks/useAuth';
