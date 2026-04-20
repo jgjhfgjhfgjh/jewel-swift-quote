@@ -89,7 +89,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     return (
       <div
         key={`${keyPrefix}${card.key}`}
-        className="group relative min-h-[248px] overflow-hidden rounded-xl sm:min-h-[420px] sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
+        className="group relative min-h-[200px] overflow-hidden rounded-xl sm:min-h-[340px] sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
       >
         <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
         <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
@@ -119,7 +119,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
           <Button
             onClick={() => handleClick(card.key)}
-            className="mt-auto w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[44px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight hyphens-auto"
+            className="mt-auto w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[44px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight hyphens-auto"
           >
             {card.cta}
           </Button>
