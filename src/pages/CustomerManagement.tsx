@@ -102,19 +102,26 @@ export default function CustomerManagement() {
         </div>
 
         <div className="rounded-lg border bg-card">
-          <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 border-b p-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-4 border-b p-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             <span>Firma</span>
             <span>IČO</span>
             <span>Sleva %</span>
             <span>Role</span>
+            <span></span>
           </div>
 
           {customers.map((c) => (
-            <div key={c.id} className="grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center border-b last:border-0 p-3">
-              <div>
-                <p className="text-sm font-medium">{c.company_name || '—'}</p>
+            <div
+              key={c.id}
+              className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-4 items-center border-b last:border-0 p-3 hover:bg-muted/40 transition-colors"
+            >
+              <button
+                onClick={() => navigate(`/customers/${c.user_id}`)}
+                className="text-left"
+              >
+                <p className="text-sm font-medium hover:text-primary transition-colors">{c.company_name || '—'}</p>
                 <p className="text-[10px] text-muted-foreground">{c.user_id.slice(0, 8)}...</p>
-              </div>
+              </button>
               <span className="text-xs text-muted-foreground">{c.ico || '—'}</span>
               <div className="flex items-center gap-1">
                 <Input
@@ -142,6 +149,14 @@ export default function CustomerManagement() {
               }`}>
                 {c.role === 'admin' ? 'ADMIN' : 'CUSTOMER'}
               </span>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 text-xs"
+                onClick={() => navigate(`/customers/${c.user_id}`)}
+              >
+                Detail →
+              </Button>
             </div>
           ))}
 

@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import CustomerManagement from "./pages/CustomerManagement.tsx";
+import CustomerDetail from "./pages/CustomerDetail.tsx";
 import FeedManagement from "./pages/FeedManagement.tsx";
 import Favorites from "./pages/Favorites.tsx";
 import Partner from "./pages/Partner.tsx";
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/customers" element={<CustomerManagement />} />
+            <Route path="/customers/:id" element={<CustomerDetail />} />
             <Route path="/admin/feeds" element={<FeedManagement />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/partner" element={<Partner />} />
