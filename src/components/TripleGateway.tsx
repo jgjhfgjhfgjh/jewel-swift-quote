@@ -102,7 +102,7 @@ const cards: GatewayCard[] = [
     image: bgIntelligence,
     ctas: [{ label: 'Zjistit více', action: 'navigate' }],
     details: {
-      heading: 'Tržní zpravodajství pro vaše rozhodování',
+      heading: 'Tržní data pro vaše rozhodování',
       subheading: 'Prediktivní přehledy postavené na pohybu zboží napříč celou distribucí',
       bullets: [
         'Prediktivní skóre poptávky pro každý SKU',
