@@ -233,12 +233,31 @@ const Intelligence = () => {
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
   return (
-    <div className="relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground">
+    <div
+      className="dark relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground"
+      style={{
+        // Scoped tmavě modrá paleta jen pro tuto stránku
+        ['--background' as any]: '220 50% 8%',
+        ['--foreground' as any]: '220 15% 92%',
+        ['--card' as any]: '220 45% 12%',
+        ['--card-foreground' as any]: '220 15% 95%',
+        ['--popover' as any]: '220 45% 12%',
+        ['--popover-foreground' as any]: '220 15% 95%',
+        ['--muted' as any]: '220 35% 18%',
+        ['--muted-foreground' as any]: '220 15% 70%',
+        ['--border' as any]: '220 30% 22%',
+        ['--input' as any]: '220 30% 22%',
+        ['--accent' as any]: '215 90% 65%',
+        ['--accent-foreground' as any]: '220 50% 8%',
+        ['--primary' as any]: '215 90% 60%',
+        ['--primary-foreground' as any]: '0 0% 100%',
+      }}
+    >
       {/* Globální tmavě modré pozadí s neuronovou sítí */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
-        <img src={bgIntelligence} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
-        <div className="absolute inset-0 bg-[hsl(220_60%_8%)]/85" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220_70%_10%)]/60 via-transparent to-[hsl(220_70%_10%)]/80" />
+        <div className="absolute inset-0 bg-[hsl(220_55%_7%)]" />
+        <img src={bgIntelligence} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220_60%_8%)]/70 via-[hsl(220_60%_8%)]/40 to-[hsl(220_60%_8%)]/90" />
       </div>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
 
