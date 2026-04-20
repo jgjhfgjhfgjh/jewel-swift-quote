@@ -195,7 +195,7 @@ function ScoreSimulator() {
         ))}
       </div>
 
-      <div className="rounded-2xl border bg-card p-6 text-center">
+      <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 text-center">
         <div className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-3">Prediktivní skóre</div>
         <div className="relative mx-auto w-[180px] h-[180px]">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
@@ -355,7 +355,7 @@ const Intelligence = () => {
               const Icon = it.icon;
               return (
                 <Reveal key={it.title} delay={i * 80}>
-                  <div className="group h-full rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -370,7 +370,7 @@ const Intelligence = () => {
         </section>
 
         {/* DATA FLOW DIAGRAM */}
-        <section className="border-y bg-muted/30">
+        <section className="border-y bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Tok dat</div>
@@ -390,7 +390,7 @@ const Intelligence = () => {
                 return (
                   <Reveal key={s.label} delay={i * 100} className="contents">
                     <div className="flex lg:flex-col items-center gap-3">
-                      <div className="flex-1 rounded-2xl border bg-card p-5 text-center w-full">
+                      <div className="flex-1 rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-5 text-center w-full">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
                           <Icon className="h-5 w-5" />
                         </div>
@@ -420,7 +420,7 @@ const Intelligence = () => {
               const Icon = uc.icon;
               return (
                 <Reveal key={uc.title} delay={(i % 3) * 80}>
-                  <div className="group h-full rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:scale-110 transition-transform">
                         <Icon className="h-5 w-5" />
@@ -438,7 +438,7 @@ const Intelligence = () => {
         </section>
 
         {/* HOW IT WORKS — timeline with image */}
-        <section id="logika" className="border-y bg-muted/30">
+        <section id="logika" className="border-y bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-6xl px-6 py-20 grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
             <Reveal>
               <img
@@ -491,7 +491,7 @@ const Intelligence = () => {
             </p>
           </Reveal>
           <Reveal>
-            <div className="rounded-2xl border bg-card p-6 sm:p-10 shadow-sm">
+            <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-6 sm:p-10 shadow-xl">
               <ScoreSimulator />
             </div>
           </Reveal>
@@ -594,7 +594,7 @@ const Intelligence = () => {
         </section>
 
         {/* CTA */}
-        <section className="border-t bg-muted/30">
+        <section className="border-t bg-card/30 backdrop-blur-sm">
           <div className="mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
