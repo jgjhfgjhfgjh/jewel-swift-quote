@@ -37,7 +37,7 @@ const cards: GatewayCard[] = [
     description: 'Získejte aktuální ceny a skladové zásoby.',
     image: bgB2b,
     ctas: [
-      { label: 'Přihlásit se', action: 'login' },
+      { label: 'Vstoupit', action: 'login' },
       { label: 'Registrovat', action: 'register' },
     ],
     details: {
