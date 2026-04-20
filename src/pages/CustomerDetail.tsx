@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/table';
 import {
   ArrowLeft, Mail, Building2, IdCard, Calendar, Shield, Save, Trash2,
-  Heart, Tag, Package, Briefcase, Plus, Activity, KeyRound,
+  Heart, Tag, Package, Briefcase, Plus, Activity, KeyRound, Send, Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Profile, AppRole } from '@/hooks/useAuth';
@@ -84,6 +84,40 @@ export default function CustomerDetail() {
   // services
   const [services, setServices] = useState<ServiceRow[]>([]);
   const [newService, setNewService] = useState({ service_type: 'intelligence', plan: '', monthly_price: '' });
+
+  // credentials
+  const [newPassword, setNewPassword] = useState('');
+  const [credBusy, setCredBusy] = useState(false);
+
+  const handleSetPassword = async () => {
+    if (!userId || newPassword.length < 6) return;
+    setCredBusy(true);
+    const { data, error } = await supabase.functions.invoke('admin-user-credentials', {
+      body: { action: 'set_password', user_id: userId, password: newPassword },
+    });
+    setCredBusy(false);
+    if (error || (data as { error?: string })?.error) {
+      toast.error('Chyba: ' + (error?.message || (data as { error?: string })?.error));
+    } else {
+      toast.success('Heslo zákazníka bylo nastaveno');
+      setNewPassword('');
+    }
+  };
+
+  const handleSendLink = async (action: 'send_recovery' | 'send_magic_link') => {
+    if (!userId) return;
+    setCredBusy(true);
+    const { data, error } = await supabase.functions.invoke('admin-user-credentials', {
+      body: { action, user_id: userId, redirect_to: window.location.origin },
+    });
+    setCredBusy(false);
+    if (error || (data as { error?: string })?.error) {
+      toast.error('Chyba: ' + (error?.message || (data as { error?: string })?.error));
+    } else {
+      const label = action === 'send_recovery' ? 'Email pro reset hesla' : 'Magic link';
+      toast.success(`${label} odeslán${(data as { email?: string })?.email ? ` na ${(data as { email?: string }).email}` : ''}`);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !isAdmin) navigate('/');
@@ -315,7 +349,7 @@ export default function CustomerDetail() {
             </CardContent>
           </Card>
 
-          {/* Auth meta */}
+          {/* Auth meta + credential actions */}
           <Card>
             <CardHeader><CardTitle className="text-base flex items-center gap-2"><KeyRound className="h-4 w-4" />Přihlašovací údaje</CardTitle></CardHeader>
             <CardContent className="space-y-2 text-sm">
@@ -331,6 +365,33 @@ export default function CustomerDetail() {
                   : <Badge variant="destructive" className="text-[10px]">Ne</Badge>
               } />
               {meta?.phone && <InfoRow label="Telefon" value={meta.phone} />}
+
+              <div className="pt-3 mt-3 border-t space-y-3">
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Správa hesla</p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Heslo zákazníka je hashované a nelze ho zobrazit. Můžeš ho ale přepsat nebo poslat odkaz pro reset / přihlášení.
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Nové heslo (min. 6 znaků)"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="h-8 text-xs"
+                  />
+                  <Button size="sm" onClick={handleSetPassword} disabled={credBusy || newPassword.length < 6}>
+                    <KeyRound className="h-3.5 w-3.5 mr-1" />Nastavit
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button size="sm" variant="outline" onClick={() => handleSendLink('send_recovery')} disabled={credBusy}>
+                    <Send className="h-3.5 w-3.5 mr-1" />Reset emailem
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => handleSendLink('send_magic_link')} disabled={credBusy}>
+                    <Sparkles className="h-3.5 w-3.5 mr-1" />Magic link
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
