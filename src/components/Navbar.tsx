@@ -18,9 +18,10 @@ import { AuthModal } from '@/components/AuthModal';
 interface NavbarProps {
   wishlistCount?: number;
   onOpenWishlist?: () => void;
+  whiteLogo?: boolean;
 }
 
-export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
+export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
   const t = translations[lang];
@@ -89,7 +90,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist }: NavbarProps) {
 
           <Link to="/" onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="shrink-0">
             <h1 className="font-display text-xl font-semibold tracking-tight">
-              <img src={logo} alt="swelt." className="h-20 sm:h-16 lg:h-24 object-contain my-0 px-0 py-0 mx-0" />
+              <img src={logo} alt="swelt." className={`h-20 sm:h-16 lg:h-24 object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`} />
             </h1>
           </Link>
 
