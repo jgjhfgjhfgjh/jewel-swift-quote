@@ -85,6 +85,40 @@ export default function CustomerDetail() {
   const [services, setServices] = useState<ServiceRow[]>([]);
   const [newService, setNewService] = useState({ service_type: 'intelligence', plan: '', monthly_price: '' });
 
+  // credentials
+  const [newPassword, setNewPassword] = useState('');
+  const [credBusy, setCredBusy] = useState(false);
+
+  const handleSetPassword = async () => {
+    if (!userId || newPassword.length < 6) return;
+    setCredBusy(true);
+    const { data, error } = await supabase.functions.invoke('admin-user-credentials', {
+      body: { action: 'set_password', user_id: userId, password: newPassword },
+    });
+    setCredBusy(false);
+    if (error || (data as { error?: string })?.error) {
+      toast.error('Chyba: ' + (error?.message || (data as { error?: string })?.error));
+    } else {
+      toast.success('Heslo zákazníka bylo nastaveno');
+      setNewPassword('');
+    }
+  };
+
+  const handleSendLink = async (action: 'send_recovery' | 'send_magic_link') => {
+    if (!userId) return;
+    setCredBusy(true);
+    const { data, error } = await supabase.functions.invoke('admin-user-credentials', {
+      body: { action, user_id: userId, redirect_to: window.location.origin },
+    });
+    setCredBusy(false);
+    if (error || (data as { error?: string })?.error) {
+      toast.error('Chyba: ' + (error?.message || (data as { error?: string })?.error));
+    } else {
+      const label = action === 'send_recovery' ? 'Email pro reset hesla' : 'Magic link';
+      toast.success(`${label} odeslán${(data as { email?: string })?.email ? ` na ${(data as { email?: string }).email}` : ''}`);
+    }
+  };
+
   useEffect(() => {
     if (!authLoading && !isAdmin) navigate('/');
   }, [authLoading, isAdmin, navigate]);
