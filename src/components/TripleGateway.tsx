@@ -256,11 +256,11 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
       <div className="md:hidden max-w-7xl mx-auto">
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex gap-2.5 items-stretch">
+          <div className="flex items-stretch -mx-[5px]">
             {cards.map((card, index) => (
               <div
                 key={`mobile-slide-${card.key}`}
-                className="min-w-0 shrink-0 grow-0 basis-[calc((100%-0.625rem)/2)]"
+                className="min-w-0 shrink-0 grow-0 basis-1/2 px-[5px]"
               >
                 {renderCard(card, `mobile-${index}-`)}
               </div>
