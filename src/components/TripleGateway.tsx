@@ -93,8 +93,9 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     );
   };
 
-  // Mobile: carousel with 2 cards per slide, infinite loop
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
+  // Mobile: infinite carousel with autoplay, 2 cards per slide
+  const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [autoplay.current]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
@@ -128,17 +129,24 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     >
       {/* Desktop / Tablet: 3-column grid */}
       <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
-        {cards.map(renderCard)}
+        {cards.map((c) => renderCard(c, 'd-'))}
       </div>
 
       {/* Mobile: infinite carousel, 2 cards per slide */}
       <div className="md:hidden max-w-7xl mx-auto">
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex">
+          <div className="flex items-stretch">
             {mobileSlides.map((pair, idx) => (
               <div key={idx} className="flex-[0_0_100%] min-w-0">
-                <div className="grid grid-cols-2 gap-2.5">
-                  {pair.map(renderCard)}
+                <div className="grid grid-cols-2 gap-2.5 auto-rows-fr min-h-[260px]">
+                  {pair.map((c, i) => (
+                    <div
+                      key={`${idx}-${c.key}`}
+                      className={pair.length === 1 ? 'col-span-1 w-full' : ''}
+                    >
+                      {renderCard(c, `m-${idx}-${i}-`)}
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -146,18 +154,20 @@ export function TripleGateway({ onOpenCatalog }: Props) {
         </div>
 
         {/* Dots */}
-        <div className="flex justify-center gap-1.5 pt-3">
-          {scrollSnaps.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === selectedIndex ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
-        </div>
+        {scrollSnaps.length > 1 && (
+          <div className="flex justify-center gap-1.5 pt-4">
+            {scrollSnaps.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => emblaApi?.scrollTo(i)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === selectedIndex ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'
+                }`}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
