@@ -103,9 +103,13 @@ const Index = () => {
       <FilterSidebar {...fp} mobileOnly />
 
       {viewMode === 'home' && (
-        <div className="relative z-10 bg-background animate-fade-in">
-          <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
-          <HomepageCanvas />
+        <div className="relative z-10 animate-fade-in">
+          <div className="relative z-20 -mt-24 sm:-mt-28">
+            <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
+          </div>
+          <div className="bg-background">
+            <HomepageCanvas />
+          </div>
         </div>
       )}
 
