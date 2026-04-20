@@ -176,7 +176,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
             ) : (
               <div className="flex flex-col gap-2">
                 <Button className="w-full gap-2" onClick={() => { setProfileOpen(false); navigate('/login'); }}>
-                  <LogIn className="h-4 w-4" /> Přihlásit se
+                  <LogIn className="h-4 w-4" /> Vstoupit
                 </Button>
                 <Button variant="outline" className="w-full" onClick={() => { setProfileOpen(false); navigate('/register'); }}>
                   Registrace
