@@ -2,44 +2,95 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { Handshake, PackageOpen, HandCoins } from 'lucide-react';
+import { Handshake, PackageOpen, HandCoins, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
+import bgB2b from '@/assets/gateway-b2b.jpg';
+import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
+import bgLuxury from '@/assets/gateway-luxury.jpg';
 
 interface Props {
   onOpenCatalog?: () => void;
 }
 
-const cards = [
+interface GatewayCard {
+  key: 'partner' | 'dropshipping' | 'luxury';
+  icon: typeof Handshake;
+  label: string;
+  title: string;
+  description: string;
+  image: string;
+  ctas: { label: string; action: 'login' | 'register' | 'navigate' }[];
+  details: {
+    heading: string;
+    subheading?: string;
+    bullets: string[];
+  };
+}
+
+const cards: GatewayCard[] = [
   {
     key: 'partner',
     icon: Handshake,
     label: 'B2B',
     title: 'Prémiový velkoobchod',
-    description:
-      'Získejte aktuální ceny a skladové zásoby. ',
-    cta: 'Vstoupit do velkoobchodu',
-    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
+    description: 'Získejte aktuální ceny a skladové zásoby.',
+    image: bgB2b,
+    ctas: [
+      { label: 'Přihlásit se', action: 'login' },
+      { label: 'Registrovat', action: 'register' },
+    ],
+    details: {
+      heading: 'Pro ověřené partnery',
+      subheading: 'Velkoobchodní podmínky pro firmy s IČO',
+      bullets: [
+        'Aktuální velkoobchodní ceny a slevy',
+        'Skladové zásoby v reálném čase',
+        'Přímý přístup k novinkám a kolekcím',
+        'Individuální cenová politika',
+        'Rychlé objednávky a expedice',
+      ],
+    },
   },
   {
     key: 'dropshipping',
     icon: PackageOpen,
     label: 'Swelt.dropshipping',
-    title: 'Dropsipping',
-    description:
-      'Prodávejte my se postaráme o zbytek.',
-    cta: 'Chci dropsipping',
-    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
+    title: 'Dropshipping',
+    description: 'Prodávejte, my se postaráme o zbytek.',
+    image: bgDropshipping,
+    ctas: [{ label: 'Chci dropshipping', action: 'navigate' }],
+    details: {
+      heading: 'E-shop bez investic',
+      subheading: 'Kompletní fulfillment pod vaší značkou',
+      bullets: [
+        'Bez skladových nákladů a investic',
+        'Logistika, balení a odeslání pod vaší značkou',
+        'Dodání přímo ke koncovému zákazníkovi',
+        'Produktový feed pro váš e-shop',
+        'Široký katalog světových značek',
+      ],
+    },
   },
   {
     key: 'luxury',
     icon: HandCoins,
     label: 'Swelt.luxury',
-    title: 'Privátní nákupy pro firmy a živnostníky',
-    description:
-      'Odemykáme vám exkluzivní přístup.',
-    cta: 'Zjistit více',
-    gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
+    title: 'Privátní nákupy',
+    description: 'Odemykáme vám exkluzivní přístup.',
+    image: bgLuxury,
+    ctas: [{ label: 'Zjistit více', action: 'navigate' }],
+    details: {
+      heading: 'Pro firmy a živnostníky',
+      subheading: 'Velkoobchodní ceny pro soukromé nákupy',
+      bullets: [
+        'Exkluzivní přístup k velkoobchodním cenám',
+        'Soukromé nákupy nebo firemní dary',
+        'Už od jednoho kusu',
+        'Bez nutnosti registrace',
+        'Diskrétní a profesionální servis',
+      ],
+    },
   },
 ];
 
@@ -59,10 +110,16 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
-  const handleClick = (key: string) => {
-    if (key === 'partner') navigate('/partner');
-    else if (key === 'dropshipping') navigate('/dropshipping');
-    else if (key === 'luxury') navigate('/luxury');
+  const handleAction = (cardKey: GatewayCard['key'], action: 'login' | 'register' | 'navigate') => {
+    if (cardKey === 'partner') {
+      if (action === 'login') navigate('/login');
+      else if (action === 'register') navigate('/register');
+      else navigate('/partner');
+    } else if (cardKey === 'dropshipping') {
+      navigate('/dropshipping');
+    } else if (cardKey === 'luxury') {
+      navigate('/luxury');
+    }
   };
 
   const onSelect = useCallback(() => {
@@ -83,46 +140,83 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     };
   }, [emblaApi, onSelect]);
 
-  const renderCard = (card: typeof cards[number], keyPrefix = '') => {
+  const renderCard = (card: GatewayCard, keyPrefix = '') => {
     const Icon = card.icon;
 
     return (
       <div
         key={`${keyPrefix}${card.key}`}
-        className="group relative min-h-[200px] overflow-hidden rounded-xl sm:min-h-[340px] sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
+        className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-[0_8px_32px_-12px_rgba(0,0,0,0.25)] transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
       >
-        <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
-        <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-          <div className="absolute -inset-full rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
-        </div>
-        <div className="absolute inset-[1px] rounded-xl sm:rounded-2xl border border-white/[0.08] pointer-events-none" />
-        <img
-          src={logo}
-          alt=""
-          className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 w-10 sm:w-14 opacity-[0.07] pointer-events-none select-none"
-          draggable={false}
-        />
+        {/* Top: themed image with text + CTA */}
+        <div className="relative overflow-hidden min-h-[220px] sm:min-h-[320px] flex flex-col">
+          <img
+            src={card.image}
+            alt=""
+            loading="lazy"
+            width={1024}
+            height={768}
+            className="absolute inset-0 w-full h-full object-cover"
+            draggable={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/50 via-blue-900/65 to-blue-950/85" />
+          <img
+            src={logo}
+            alt=""
+            className="absolute right-2 bottom-2 sm:right-3 sm:bottom-3 w-10 sm:w-14 opacity-[0.12] pointer-events-none select-none"
+            draggable={false}
+          />
 
-        <div className="relative z-10 p-3 sm:p-6 lg:p-8 flex flex-col items-center text-center flex-1">
-          <div className="relative mb-2 sm:mb-5 mt-0.5 sm:mt-1">
-            <Icon className="w-8 h-8 sm:w-14 sm:h-14 text-white/85" strokeWidth={1.25} />
+          <div className="relative z-10 p-3 sm:p-6 lg:p-7 flex flex-col items-center text-center flex-1">
+            <div className="relative mb-2 sm:mb-4">
+              <Icon className="w-8 h-8 sm:w-12 sm:h-12 text-white/90" strokeWidth={1.25} />
+            </div>
+
+            <h3 className="text-white font-bold text-[13px] sm:text-lg lg:text-xl leading-tight sm:leading-snug mb-1.5 sm:mb-3">
+              {card.title}
+            </h3>
+
+            <p className="text-white/80 text-[11px] sm:text-sm leading-snug sm:leading-relaxed mb-3 sm:mb-5 mx-auto max-w-[26ch]">
+              {card.description}
+            </p>
+
+            <div className={`mt-auto w-full grid gap-1.5 sm:gap-2 ${card.ctas.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+              {card.ctas.map((cta, idx) => (
+                <Button
+                  key={`${cta.label}-${idx}`}
+                  onClick={() => handleAction(card.key, cta.action)}
+                  variant={idx === 0 ? 'default' : 'outline'}
+                  className={
+                    idx === 0
+                      ? 'w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight'
+                      : 'w-full bg-white/10 hover:bg-white/20 text-white border border-white/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight backdrop-blur-sm'
+                  }
+                >
+                  {cta.label}
+                </Button>
+              ))}
+            </div>
           </div>
+        </div>
 
-          <h3 className="text-white font-bold text-[13px] sm:text-lg lg:text-xl leading-tight sm:leading-snug mb-2 sm:mb-4">
-            {card.title}
-          </h3>
-
-          <p className="text-white/75 text-[11px] sm:text-sm leading-snug sm:leading-relaxed mb-3 sm:mb-6 text-center mx-auto max-w-[24ch] sm:max-w-[28ch]">
-            {card.description}
-          </p>
-
-          <Button
-            onClick={() => handleClick(card.key)}
-            className="mt-auto w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[44px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight hyphens-auto"
-          >
-            {card.cta}
-          </Button>
+        {/* Bottom: white description column */}
+        <div className="relative bg-white p-3 sm:p-6 lg:p-7 flex-1 flex flex-col">
+          <h4 className="text-foreground font-bold text-[12px] sm:text-base lg:text-lg leading-tight mb-1">
+            {card.details.heading}
+          </h4>
+          {card.details.subheading && (
+            <p className="text-muted-foreground text-[10px] sm:text-xs lg:text-sm mb-2.5 sm:mb-4 leading-snug">
+              {card.details.subheading}
+            </p>
+          )}
+          <ul className="space-y-1.5 sm:space-y-2.5">
+            {card.details.bullets.map((bullet, i) => (
+              <li key={i} className="flex items-start gap-1.5 sm:gap-2 text-foreground/80 text-[10px] sm:text-sm leading-snug">
+                <Check className="w-3 h-3 sm:w-4 sm:h-4 mt-0.5 text-primary shrink-0" strokeWidth={2.5} />
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     );
@@ -133,7 +227,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
       className="relative w-full px-3 py-5 sm:px-6 sm:py-8 lg:px-8 backdrop-blur-2xl backdrop-saturate-150 bg-gradient-to-b from-white/20 via-white/40 to-white/95 border-t border-white/30 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.25)]"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
+      <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
         {cards.map((card, index) => renderCard(card, `desktop-${index}-`))}
       </div>
 
