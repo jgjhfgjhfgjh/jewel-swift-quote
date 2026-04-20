@@ -232,6 +232,10 @@ const Intelligence = () => {
   const { wishlistIds } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div
       className="dark relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground"
