@@ -12,6 +12,7 @@ import CustomerManagement from "./pages/CustomerManagement.tsx";
 import FeedManagement from "./pages/FeedManagement.tsx";
 import Favorites from "./pages/Favorites.tsx";
 import Partner from "./pages/Partner.tsx";
+import Velkoobchod from "./pages/Velkoobchod.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/admin/feeds" element={<FeedManagement />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/partner" element={<Partner />} />
+            <Route path="/velkoobchod" element={<Velkoobchod />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

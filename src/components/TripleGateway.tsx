@@ -5,6 +5,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { Handshake, PackageOpen, HandCoins, BrainCircuit, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/AuthModal';
+import { useAuthContext } from '@/contexts/AuthContext';
 import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
 import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
@@ -118,6 +119,7 @@ const cards: GatewayCard[] = [
 
 export function TripleGateway({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   const autoplay = useRef(
     Autoplay({
       delay: 4500,
@@ -137,8 +139,12 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   const handleAction = (cardKey: GatewayCard['key'], action: 'login' | 'register' | 'navigate') => {
     if (cardKey === 'partner') {
       if (action === 'login') {
-        setAuthTab('login');
-        setAuthOpen(true);
+        if (user) {
+          navigate('/velkoobchod');
+        } else {
+          setAuthTab('login');
+          setAuthOpen(true);
+        }
       } else if (action === 'register') {
         setAuthTab('register');
         setAuthOpen(true);
