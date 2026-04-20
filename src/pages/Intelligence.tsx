@@ -275,7 +275,7 @@ const Intelligence = () => {
                 ne <span className="italic text-accent">náhodou.</span>
               </h1>
               <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                Přestaňte hádat, co se prodá. SWELT INTEL vám dává přehled o pohybu zboží napříč celou distribucí —
+                Přestaňte hádat, co se prodá. SWELT INTELIGENCE vám dává přehled o pohybu zboží napříč celou distribucí —
                 takže víte, co objednat dřív, než vám dojdou zásoby nebo uvíznete s přebytkem.
               </p>
 
