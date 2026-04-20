@@ -17,7 +17,7 @@ const cards = [
     label: 'B2B',
     title: 'Prémiový velkoobchod',
     description:
-      'Mějte aktuální ceny a skladové zásoby světových značek vždy v kapse. Od zachycení trendů k objednávce za pár vteřin.',
+      'Získejte aktuální ceny a skladové zásoby. ',
     cta: 'Vstoupit do velkoobchodu',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
@@ -27,7 +27,7 @@ const cards = [
     label: 'Swelt.dropshipping',
     title: 'Dropsipping',
     description:
-      'Prodávejte my se postaráme o zbytek. E-shop bez miliónových investic, logistika, balení a odeslání pod vaší značkou přímo ke koncovému zákazníkovi.',
+      'Prodávejte my se postaráme o zbytek.',
     cta: 'Chci dropsipping',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
@@ -37,7 +37,7 @@ const cards = [
     label: 'Swelt.luxury',
     title: 'Privátní nákupy pro firmy a živnostníky',
     description:
-      'Odemykáme vám exkluzivní přístup k velkoobchodním cenám pro vaše soukromé nákupy nebo firemní dary. Už od jednoho kusu a bez registrace.',
+      'Odemykáme vám exkluzivní přístup.',
     cta: 'Zjistit více',
     gradient: 'from-blue-700/80 via-blue-800/90 to-indigo-900/95',
   },
