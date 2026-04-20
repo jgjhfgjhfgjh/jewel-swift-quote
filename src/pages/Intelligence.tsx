@@ -389,7 +389,7 @@ const Intelligence = () => {
                 const Icon = s.icon;
                 return (
                   <Reveal key={s.label} delay={i * 100} className="contents">
-                    <div className="flex lg:flex-col items-center gap-3">
+                    <div className="flex lg:flex-col items-center gap-3 w-full min-w-0">
                       <div className="flex-1 rounded-2xl border border-white/10 bg-card/60 backdrop-blur-md p-5 text-center w-full">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
                           <Icon className="h-5 w-5" />
