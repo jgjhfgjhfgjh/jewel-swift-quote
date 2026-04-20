@@ -94,9 +94,13 @@ const Index = () => {
       {/* Everything below slides OVER the hero banner */}
       <div className="relative z-10 bg-background">
         <SalesModeBar />
-        <CustomerSelectorPanel />
-        <AdminBrandPanel manufacturers={manufacturers} />
-        <AdminProductOverridesPanel products={products} />
+        {viewMode === 'catalog' && (
+          <>
+            <CustomerSelectorPanel />
+            <AdminBrandPanel manufacturers={manufacturers} />
+            <AdminProductOverridesPanel products={products} />
+          </>
+        )}
       </div>
 
       {/* Mobile sidebar overlay — works in all modes */}
