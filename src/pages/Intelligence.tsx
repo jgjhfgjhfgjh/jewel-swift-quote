@@ -15,7 +15,7 @@ import { WishlistDrawer } from '@/components/WishlistDrawer';
 import heroImg from '@/assets/intel-hero-light.jpg';
 import warehouseImg from '@/assets/intel-warehouse.jpg';
 import chartImg from '@/assets/intel-chart.jpg';
-import dashboardImg from '@/assets/intel-dashboard.jpg';
+
 
 /* Reveal hook */
 function useReveal<T extends HTMLElement>() {
@@ -482,14 +482,14 @@ const Intelligence = () => {
         <section className="relative overflow-hidden border-y">
           <img src={chartImg} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
-          <div className="relative mx-auto max-w-6xl px-6 py-20 grid lg:grid-cols-2 gap-10 items-center">
+          <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
               <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Trh v číslech</div>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-6">Data, která dávají kontext</h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
+              <p className="text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
                 Agregované signály z celé distribuční sítě vám ukazují, kde reálně stojíte — bez dohadů, bez nepřesných průzkumů.
               </p>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
                 <div>
                   <div className="font-display text-4xl font-semibold text-accent">+<CountUp to={41} />%</div>
                   <div className="text-xs text-muted-foreground mt-1">růst rostoucích kategorií MoM</div>
@@ -499,9 +499,6 @@ const Intelligence = () => {
                   <div className="text-xs text-muted-foreground mt-1">rychlejší reakce na změnu trendu</div>
                 </div>
               </div>
-            </Reveal>
-            <Reveal delay={150}>
-              <img src={dashboardImg} alt="Analytický dashboard se signály trhu" loading="lazy" className="rounded-2xl shadow-xl w-full aspect-square object-cover" />
             </Reveal>
           </div>
         </section>
