@@ -94,7 +94,7 @@ export function CatalogGateway() {
               {error && <p className="text-xs text-destructive font-medium">{error}</p>}
               <Button type="submit" className="w-full h-9 text-sm" disabled={loading}>
                 <Lock className="h-3.5 w-3.5 mr-1.5" />
-                {loading ? '...' : 'Přihlásit se'}
+                {loading ? '...' : 'Vstoupit'}
               </Button>
             </form>
             <p className="text-center text-xs text-muted-foreground">
