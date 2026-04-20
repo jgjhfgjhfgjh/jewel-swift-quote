@@ -8,6 +8,7 @@ import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
 import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
 import bgLuxury from '@/assets/gateway-luxury.jpg';
+import bgIntelligence from '@/assets/gateway-intelligence.jpg';
 
 interface Props {
   onOpenCatalog?: () => void;
