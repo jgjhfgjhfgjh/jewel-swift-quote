@@ -186,14 +186,14 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      {/* Paginator dots */}
-      <div className="flex justify-center gap-1.5 py-2">
+      {/* Paginator dots — overlaid inside the banner */}
+      <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => emblaApi?.scrollTo(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === selectedIndex ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'
+            className={`h-2 rounded-full transition-all duration-300 pointer-events-auto ${
+              i === selectedIndex ? 'w-5 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'
             }`}
             aria-label={`Slide ${i + 1}`}
           />
