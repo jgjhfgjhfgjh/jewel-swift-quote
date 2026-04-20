@@ -180,7 +180,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
               {card.description}
             </p>
 
-            <div className="mt-auto w-full grid gap-1.5 sm:gap-2 grid-cols-1">
+            <div className="mt-auto w-full flex flex-col gap-1.5 sm:gap-2">
               {card.ctas.map((cta, idx) => (
                 <Button
                   key={`${cta.label}-${idx}`}
@@ -188,8 +188,8 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                   variant={idx === 0 ? 'default' : 'outline'}
                   className={
                     idx === 0
-                      ? 'w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight'
-                      : 'w-full bg-white/10 hover:bg-white/20 text-white border border-white/40 font-medium text-[10px] sm:text-sm py-2 sm:py-5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-0 whitespace-normal break-words leading-[1.15] sm:leading-tight backdrop-blur-sm'
+                      ? 'w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-[40px] whitespace-normal break-words leading-[1.15] sm:leading-tight'
+                      : 'w-full bg-white/10 hover:bg-white/20 text-white border border-white/40 font-medium text-[10px] sm:text-sm py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-[40px] whitespace-normal break-words leading-[1.15] sm:leading-tight backdrop-blur-sm'
                   }
                 >
                   {cta.label}
