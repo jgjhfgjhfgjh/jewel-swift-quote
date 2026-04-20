@@ -200,7 +200,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
         </div>
 
         {/* Bottom: white description column */}
-        <div className="relative bg-white p-3 sm:p-6 lg:p-7 flex-1 flex flex-col">
+        <div className="relative bg-white p-3 sm:p-6 lg:p-7 flex-1 flex flex-col shrink-0">
           <h4 className="text-foreground font-bold text-[12px] sm:text-base lg:text-lg leading-tight mb-1">
             {card.details.heading}
           </h4>
@@ -233,7 +233,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
       <div className="md:hidden max-w-7xl mx-auto">
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex gap-2.5">
+          <div className="flex gap-2.5 items-stretch">
             {cards.map((card, index) => (
               <div
                 key={`mobile-slide-${card.key}`}
