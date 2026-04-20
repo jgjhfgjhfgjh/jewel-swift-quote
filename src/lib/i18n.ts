@@ -24,7 +24,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     username: 'Uživatelské jméno',
     password: 'Heslo',
     loginError: 'Nesprávné přihlašovací údaje',
-    login: 'Přihlásit se',
+    login: 'Vstoupit',
     discountPanel: 'Slevy dle značky',
     applyDiscount: 'Použít slevu',
     discount: 'Sleva',
