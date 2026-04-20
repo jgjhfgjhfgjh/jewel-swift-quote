@@ -130,7 +130,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
   return (
     <div
-      className="w-full px-3 py-5 sm:px-6 sm:py-8 lg:px-8"
+      className="relative w-full px-3 py-5 sm:px-6 sm:py-8 lg:px-8 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 border-y border-white/20"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
       <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
