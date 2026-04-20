@@ -146,7 +146,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     return (
       <div
         key={`${keyPrefix}${card.key}`}
-        className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-[0_8px_32px_-12px_rgba(0,0,0,0.25)] transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
+        className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-[0_8px_32px_-12px_rgba(0,0,0,0.25)] transition-shadow duration-300 hover:shadow-[0_20px_40px_-18px_rgba(0,0,0,0.28)] h-full flex flex-col"
       >
         {/* Top: themed image with text + CTA */}
         <div className="relative overflow-hidden min-h-[220px] sm:min-h-[320px] flex flex-col">
@@ -156,7 +156,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
             loading="lazy"
             width={1024}
             height={768}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/50 via-blue-900/65 to-blue-950/85" />
