@@ -44,6 +44,48 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_services: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          customer_user_id: string
+          ended_at: string | null
+          id: string
+          monthly_price: number | null
+          plan: string | null
+          service_type: string
+          started_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          customer_user_id: string
+          ended_at?: string | null
+          id?: string
+          monthly_price?: number | null
+          plan?: string | null
+          service_type: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          customer_user_id?: string
+          ended_at?: string | null
+          id?: string
+          monthly_price?: number | null
+          plan?: string | null
+          service_type?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feed_config: {
         Row: {
           created_at: string
