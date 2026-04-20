@@ -268,7 +268,7 @@ const Intelligence = () => {
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border bg-card/70 backdrop-blur px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
                 <Sparkles className="h-3.5 w-3.5 text-accent" />
-                SWELT INTEL — Tržní zpravodajství
+                SWELT INTELIGENCE — Tržní data
               </div>
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
                 Objednávejte s jistotou,<br />
