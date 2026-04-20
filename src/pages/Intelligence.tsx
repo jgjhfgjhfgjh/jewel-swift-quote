@@ -15,7 +15,7 @@ import { WishlistDrawer } from '@/components/WishlistDrawer';
 import heroImg from '@/assets/intel-hero-light.jpg';
 import warehouseImg from '@/assets/intel-warehouse.jpg';
 import chartImg from '@/assets/intel-chart.jpg';
-import mapImg from '@/assets/intel-map.jpg';
+import dashboardImg from '@/assets/intel-dashboard.jpg';
 
 /* Reveal hook */
 function useReveal<T extends HTMLElement>() {
@@ -501,7 +501,7 @@ const Intelligence = () => {
               </div>
             </Reveal>
             <Reveal delay={150}>
-              <img src={mapImg} alt="" loading="lazy" className="rounded-2xl shadow-xl w-full aspect-square object-cover" />
+              <img src={dashboardImg} alt="Analytický dashboard se signály trhu" loading="lazy" className="rounded-2xl shadow-xl w-full aspect-square object-cover" />
             </Reveal>
           </div>
         </section>
