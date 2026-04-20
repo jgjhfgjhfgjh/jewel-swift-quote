@@ -8,6 +8,7 @@ import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
 import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
 import bgLuxury from '@/assets/gateway-luxury.jpg';
+import bgIntelligence from '@/assets/gateway-intelligence.jpg';
 
 interface Props {
   onOpenCatalog?: () => void;
@@ -98,7 +99,7 @@ const cards: GatewayCard[] = [
     label: 'Swelt.intelligence',
     title: 'Inteligence',
     description: 'Vidíte celý trh, ne jen svůj kousek.',
-    image: bgLuxury,
+    image: bgIntelligence,
     ctas: [{ label: 'Zjistit více', action: 'navigate' }],
     details: {
       heading: 'Tržní zpravodajství pro vaše rozhodování',
