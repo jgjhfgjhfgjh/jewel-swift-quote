@@ -12,7 +12,7 @@ import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
-import heroImg from '@/assets/intel-hero-light.jpg';
+import bgIntelligence from '@/assets/gateway-intelligence.jpg';
 import warehouseImg from '@/assets/intel-warehouse.jpg';
 import chartImg from '@/assets/intel-chart.jpg';
 
@@ -233,7 +233,13 @@ const Intelligence = () => {
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <div className="relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground">
+      {/* Globální tmavě modré pozadí s neuronovou sítí */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <img src={bgIntelligence} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <div className="absolute inset-0 bg-[hsl(220_60%_8%)]/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(220_70%_10%)]/60 via-transparent to-[hsl(220_70%_10%)]/80" />
+      </div>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
 
       <main className="flex-1 bg-background pt-14">
