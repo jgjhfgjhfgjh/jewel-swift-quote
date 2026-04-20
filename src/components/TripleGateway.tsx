@@ -52,12 +52,12 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     else if (key === 'luxury') navigate('/luxury');
   };
 
-  const renderCard = (card: typeof cards[number]) => {
+  const renderCard = (card: typeof cards[number], keyPrefix = '') => {
     const Icon = card.icon;
     return (
       <div
-        key={card.key}
-        className="group relative overflow-hidden rounded-xl sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] min-h-[220px] sm:min-h-[420px] flex flex-col"
+        key={`${keyPrefix}${card.key}`}
+        className="group relative overflow-hidden rounded-xl sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
       >
         <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
         <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
