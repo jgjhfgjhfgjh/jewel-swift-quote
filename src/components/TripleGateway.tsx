@@ -45,6 +45,19 @@ const cards = [
 
 export function TripleGateway({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
+  const autoplay = useRef(
+    Autoplay({
+      delay: 4500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    }),
+  );
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: 'start', dragFree: false },
+    [autoplay.current],
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const handleClick = (key: string) => {
     if (key === 'partner') navigate('/partner');
@@ -52,12 +65,31 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     else if (key === 'luxury') navigate('/luxury');
   };
 
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
   const renderCard = (card: typeof cards[number], keyPrefix = '') => {
     const Icon = card.icon;
+
     return (
       <div
         key={`${keyPrefix}${card.key}`}
-        className="group relative overflow-hidden rounded-xl sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
+        className="group relative min-h-[248px] overflow-hidden rounded-xl sm:min-h-[420px] sm:rounded-2xl transition-transform duration-300 hover:scale-[1.02] h-full flex flex-col"
       >
         <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />
         <div className="absolute inset-0 backdrop-blur-xl bg-white/[0.08] border border-white/[0.15]" />
@@ -76,12 +108,15 @@ export function TripleGateway({ onOpenCatalog }: Props) {
           <div className="relative mb-2 sm:mb-5 mt-0.5 sm:mt-1">
             <Icon className="w-8 h-8 sm:w-14 sm:h-14 text-white/85" strokeWidth={1.25} />
           </div>
+
           <h3 className="text-white font-bold text-[13px] sm:text-lg lg:text-xl leading-tight sm:leading-snug mb-2 sm:mb-4">
             {card.title}
           </h3>
+
           <p className="text-white/75 text-[11px] sm:text-sm leading-snug sm:leading-relaxed mb-3 sm:mb-6 text-center mx-auto max-w-[24ch] sm:max-w-[28ch]">
             {card.description}
           </p>
+
           <Button
             onClick={() => handleClick(card.key)}
             className="mt-auto w-full bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-medium text-[11px] sm:text-sm py-2.5 sm:py-5 px-2 rounded-md transition-colors h-auto whitespace-normal leading-tight"
@@ -93,67 +128,29 @@ export function TripleGateway({ onOpenCatalog }: Props) {
     );
   };
 
-  // Mobile: infinite carousel with autoplay, 2 cards per slide
-  const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [autoplay.current]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
-    onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-    return () => {
-      emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
-    };
-  }, [emblaApi, onSelect]);
-
-  // Group cards into pairs for mobile slides
-  const mobileSlides: typeof cards[] = [];
-  for (let i = 0; i < cards.length; i += 2) {
-    mobileSlides.push(cards.slice(i, i + 2));
-  }
-
   return (
     <div
       className="w-full px-3 py-5 sm:px-6 sm:py-8 lg:px-8"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      {/* Desktop / Tablet: 3-column grid */}
       <div className="hidden md:grid md:grid-cols-3 gap-5 lg:gap-6 max-w-7xl mx-auto">
-        {cards.map((c) => renderCard(c, 'd-'))}
+        {cards.map((card, index) => renderCard(card, `desktop-${index}-`))}
       </div>
 
-      {/* Mobile: infinite carousel, 2 cards per slide */}
       <div className="md:hidden max-w-7xl mx-auto">
         <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex items-stretch">
-            {mobileSlides.map((pair, idx) => (
-              <div key={idx} className="flex-[0_0_100%] min-w-0">
-                <div className="grid grid-cols-2 gap-2.5 auto-rows-fr min-h-[260px]">
-                  {pair.map((c, i) => (
-                    <div
-                      key={`${idx}-${c.key}`}
-                      className={pair.length === 1 ? 'col-span-1 w-full' : ''}
-                    >
-                      {renderCard(c, `m-${idx}-${i}-`)}
-                    </div>
-                  ))}
-                </div>
+          <div className="flex gap-2.5">
+            {cards.map((card, index) => (
+              <div
+                key={`mobile-slide-${card.key}`}
+                className="min-w-0 shrink-0 grow-0 basis-[calc((100%-0.625rem)/2)]"
+              >
+                {renderCard(card, `mobile-${index}-`)}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Dots */}
         {scrollSnaps.length > 1 && (
           <div className="flex justify-center gap-1.5 pt-4">
             {scrollSnaps.map((_, i) => (
