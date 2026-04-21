@@ -309,7 +309,7 @@ const Intelligence = () => {
             </Reveal>
 
             <Reveal delay={200}>
-              <div className="relative rounded-2xl border bg-card/90 backdrop-blur p-6 shadow-xl max-w-md ml-auto">
+              <div className="relative rounded-2xl border border-white/20 bg-white/90 backdrop-blur p-6 shadow-xl max-w-md ml-auto">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-[10px] tracking-[0.2em] uppercase text-accent font-semibold">Live signál · SKU-4471</div>
                   <span className="flex h-2 w-2 rounded-full bg-accent animate-pulse" />
