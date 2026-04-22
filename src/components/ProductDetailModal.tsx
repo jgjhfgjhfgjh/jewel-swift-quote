@@ -29,12 +29,12 @@ export function ProductDetailModal({ product, open, onClose }: ProductDetailModa
     setGalleryIndex(0);
     setParamsLoading(true);
 
-    supabase
+    (supabase as any)
       .from('produkty_parametry')
       .select('nazev, hodnota')
       .eq('produkt_id', product.id)
-      .then(({ data }) => {
-        setParams((data as Param[] | null) ?? []);
+      .then(({ data }: { data: Param[] | null }) => {
+        setParams(data ?? []);
         setParamsLoading(false);
       });
   }, [open, product.id]);
