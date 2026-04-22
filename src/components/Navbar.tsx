@@ -42,6 +42,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const handleCatalogCta = () => {
     if (user) {
       setViewMode('catalog');
+      navigate('/');
       window.scrollTo({ top: 0, behavior: 'instant' });
     } else {
       openAuth('login');
