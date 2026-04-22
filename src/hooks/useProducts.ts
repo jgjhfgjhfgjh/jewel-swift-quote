@@ -73,7 +73,7 @@ export function useProducts() {
 
     const loadProducts = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from('produkty')
           .select(`
             id, sku, ean, product_name, manufacturer, category_text,
