@@ -14,6 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
+      produkty: {
+        Row: {
+          id: string
+          sku: string
+          product_id: string | null
+          ean: string | null
+          product_name: string | null
+          manufacturer: string | null
+          category_text: string | null
+          long_description: string | null
+          short_description: string | null
+          retail_price: number | null
+          wholesale_price: number | null
+          wholesale_discount: number | null
+          stock: number | null
+          daystodelivery: number | null
+          sale: string | null
+          is_new: string | null
+          weight: number | null
+          package_weight: number | null
+          warranty: string | null
+          content_hash: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          sku: string
+          product_id?: string | null
+          ean?: string | null
+          product_name?: string | null
+          manufacturer?: string | null
+          category_text?: string | null
+          long_description?: string | null
+          short_description?: string | null
+          retail_price?: number | null
+          wholesale_price?: number | null
+          wholesale_discount?: number | null
+          stock?: number | null
+          daystodelivery?: number | null
+          sale?: string | null
+          is_new?: string | null
+          weight?: number | null
+          package_weight?: number | null
+          warranty?: string | null
+          content_hash?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          sku?: string
+          product_id?: string | null
+          ean?: string | null
+          product_name?: string | null
+          manufacturer?: string | null
+          category_text?: string | null
+          long_description?: string | null
+          short_description?: string | null
+          retail_price?: number | null
+          wholesale_price?: number | null
+          wholesale_discount?: number | null
+          stock?: number | null
+          daystodelivery?: number | null
+          sale?: string | null
+          is_new?: string | null
+          weight?: number | null
+          package_weight?: number | null
+          warranty?: string | null
+          content_hash?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      produkty_obrazky: {
+        Row: {
+          id: string
+          produkt_id: string
+          original_url: string | null
+          storage_path: string | null
+          je_hlavni: boolean
+          stazeno: boolean
+        }
+        Insert: {
+          id?: string
+          produkt_id: string
+          original_url?: string | null
+          storage_path?: string | null
+          je_hlavni?: boolean
+          stazeno?: boolean
+        }
+        Update: {
+          id?: string
+          produkt_id?: string
+          original_url?: string | null
+          storage_path?: string | null
+          je_hlavni?: boolean
+          stazeno?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produkty_obrazky_produkt_id_fkey"
+            columns: ["produkt_id"]
+            isOneToOne: false
+            referencedRelation: "produkty"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      produkty_parametry: {
+        Row: {
+          id: string
+          produkt_id: string
+          nazev: string
+          hodnota: string
+        }
+        Insert: {
+          id?: string
+          produkt_id: string
+          nazev: string
+          hodnota: string
+        }
+        Update: {
+          id?: string
+          produkt_id?: string
+          nazev?: string
+          hodnota?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produkty_parametry_produkt_id_fkey"
+            columns: ["produkt_id"]
+            isOneToOne: false
+            referencedRelation: "produkty"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       customer_discounts: {
         Row: {
           created_at: string

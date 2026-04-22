@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
+import { ProductDetailModal } from '@/components/ProductDetailModal';
 
 export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
@@ -22,6 +23,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
   const [imgError, setImgError] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(false);
   const [discountInput, setDiscountInput] = useState('');
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const cartItem = cart.find((i) => i.product.id === product.id);
   const qty = cartItem?.quantity ?? 0;
@@ -110,7 +112,11 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
     }, null, 2));
   }, [galleryImages, product.img, product.image_url, product.image_urls, rawProduct]);
 
+  // Card info area click → open detail modal (image area handled separately by ProductImageGallery)
+  const handleInfoClick = () => setDetailOpen(true);
+
   return (
+    <>
     <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
       <ProductImageGallery images={galleryImages} alt={product.name}>
         {({ onClick }) => (
@@ -195,8 +201,14 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
             )}
           </div>
         )}
-        <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{product.manufacturer}</p>
-        <h3 className="mt-1 line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
+        <p
+          className="text-[10px] font-medium uppercase tracking-wider text-gold cursor-pointer hover:underline"
+          onClick={handleInfoClick}
+        >{product.manufacturer}</p>
+        <h3
+          className="mt-1 line-clamp-2 text-sm font-medium leading-snug cursor-pointer hover:underline"
+          onClick={handleInfoClick}
+        >{product.name}</h3>
 
         {canSeePrices && (
           <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
@@ -277,5 +289,12 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
         </div>
       </div>
     </div>
+
+    <ProductDetailModal
+      product={product}
+      open={detailOpen}
+      onClose={() => setDetailOpen(false)}
+    />
+    </>
   );
 }

@@ -5,6 +5,7 @@ export interface Product {
   sku: string;
   ean: string;
   description: string;
+  short_description?: string;
   category: string;
   img: string;
   image_urls?: string[];
