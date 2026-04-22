@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const showSearch = location.pathname === '/' && viewMode === 'catalog';
 
   const [hidden, setHidden] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -97,19 +100,21 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
         </div>
 
-        {/* Center: Search bar — desktop only; mobile/tablet uses expandable search icon */}
-        <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
-          <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder={t.search}
-              value={search}
-              onChange={(e) => { setSearch(e.target.value); if (e.target.value.trim()) setViewMode('catalog'); }}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
+        {/* Center: Search bar — desktop only, only in catalog mode */}
+        {showSearch && (
+          <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
+            <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder={t.search}
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); }}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
 
 
@@ -118,16 +123,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
           {!loading && user ? (
             <>
-              {/* Mobile/Tablet expandable search icon — visible in all modes */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden shrink-0"
-                onClick={() => setMobileSearchOpen((v) => !v)}
-                title={t.search}
-              >
-                {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-              </Button>
+              {/* Mobile/Tablet expandable search icon — only in catalog mode */}
+              {showSearch && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="lg:hidden shrink-0"
+                  onClick={() => setMobileSearchOpen((v) => !v)}
+                  title={t.search}
+                >
+                  {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                </Button>
+              )}
 
               {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
@@ -288,8 +295,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         </div>
       </div>
 
-      {/* Expandable mobile/tablet search bar — drops below header in all modes */}
-      {mobileSearchOpen && (
+      {/* Expandable mobile/tablet search bar — only in catalog mode */}
+      {showSearch && mobileSearchOpen && (
         <div className="lg:hidden px-3 pb-2 pt-1 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 animate-fade-in">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
