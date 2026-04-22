@@ -30,7 +30,7 @@ function num(val) {
 }
 
 function md5(...parts) {
-  return createHash('md5').update(parts.map(p => p ?? '').join('')).digest('hex');
+  return createHash('md5').update(parts.map(p => p ?? '').join('|')).digest('hex');
 }
 
 async function downloadFeed() {
@@ -45,6 +45,19 @@ function parseProducts(parsed) {
   return Array.isArray(items) ? items : [items];
 }
 
+function extractParams(p) {
+  if (!p.parameters) return [];
+  const parametersNode = Array.isArray(p.parameters) ? p.parameters[0] : p.parameters;
+  if (!parametersNode || !parametersNode.param) return [];
+  const params = Array.isArray(parametersNode.param) ? parametersNode.param : [parametersNode.param];
+  return params
+    .map(param => ({
+      nazev: text(param.name),
+      hodnota: text(param.value),
+    }))
+    .filter(param => param.nazev && param.hodnota);
+}
+
 function extractProduct(p) {
   const imgUrl = text(p.img_url);
   const addImages = p.add_images
@@ -52,18 +65,21 @@ function extractProduct(p) {
     : [];
 
   const allImageUrls = [imgUrl, ...addImages].filter(Boolean);
+  const params = extractParams(p);
 
   return {
-    sku:           text(p.sku),
-    ean:           text(p.ean),
-    product_name:  text(p.product_name),
-    manufacturer:  text(p.manufacturer),
-    category_text: text(p.category_text),
+    sku:               text(p.sku),
+    ean:               text(p.ean),
+    product_name:      text(p.product_name),
+    short_description: text(p.short_description),
+    manufacturer:      text(p.manufacturer),
+    category_text:     text(p.category_text),
     long_description:  text(p.long_description),
     wholesale_price:   num(p.wholesale_price),
     stock:             num(p.stock),
-    img_url:       imgUrl,
-    all_image_urls: allImageUrls,
+    img_url:           imgUrl,
+    all_image_urls:    allImageUrls,
+    params,
   };
 }
 
@@ -80,24 +96,48 @@ async function fetchExistingHashes() {
 async function upsertProduct(product, hash) {
   const now = new Date().toISOString();
   const row = {
-    sku:                    product.sku,
-    ean:                    product.ean,
-    original_name_cz:       product.product_name,
-    original_description_cz: product.long_description,
-    manufacturer:           product.manufacturer,
-    category_text:          product.category_text,
-    supplier_price:         product.wholesale_price,
-    stock_quantity:         product.stock != null ? Math.round(product.stock) : null,
-    image_url:              product.img_url,
-    image_urls:             product.all_image_urls,
-    last_synced_at:         now,
-    updated_at:             now,
-    content_hash:           hash,
+    sku:                      product.sku,
+    ean:                      product.ean,
+    original_name_cz:         product.product_name,
+    original_description_cz:  product.long_description,
+    short_description:        product.short_description,
+    manufacturer:             product.manufacturer,
+    category_text:            product.category_text,
+    supplier_price:           product.wholesale_price,
+    stock_quantity:           product.stock != null ? Math.round(product.stock) : null,
+    image_url:                product.img_url,
+    image_urls:               product.all_image_urls,
+    last_synced_at:           now,
+    updated_at:               now,
+    content_hash:             hash,
   };
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('produkty')
-    .upsert(row, { onConflict: 'sku' });
+    .upsert(row, { onConflict: 'sku' })
+    .select('id')
+    .single();
+  if (error) throw error;
+  return data.id;
+}
+
+async function saveParams(produktId, params) {
+  // Delete old params first
+  const { error: delError } = await supabase
+    .from('produkty_parametry')
+    .delete()
+    .eq('produkt_id', produktId);
+  if (delError) throw delError;
+
+  if (params.length === 0) return;
+
+  const rows = params.map(p => ({
+    produkt_id: produktId,
+    nazev: p.nazev,
+    hodnota: p.hodnota,
+  }));
+
+  const { error } = await supabase.from('produkty_parametry').insert(rows);
   if (error) throw error;
 }
 
@@ -126,11 +166,15 @@ async function main() {
       continue;
     }
 
+    // Include params in hash so changes to params trigger re-sync
+    const paramStr = product.params.map(p => `${p.nazev}=${p.hodnota}`).join(';');
     const hash = md5(
       product.product_name,
+      product.short_description,
       product.long_description,
       product.wholesale_price != null ? String(product.wholesale_price) : '',
       product.stock           != null ? String(product.stock)           : '',
+      paramStr,
     );
 
     const existingHash = existing.get(product.sku);
@@ -144,7 +188,8 @@ async function main() {
     console.log(`${isNew ? 'NEW' : 'UPD'} ${product.sku} – ${product.product_name}`);
 
     try {
-      await upsertProduct(product, hash);
+      const produktId = await upsertProduct(product, hash);
+      await saveParams(produktId, product.params);
       if (isNew) stats.new++; else stats.updated++;
     } catch (err) {
       console.error(`  [error] ${product.sku}: ${err.message}`);

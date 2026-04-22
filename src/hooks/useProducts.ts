@@ -25,6 +25,8 @@ type ProduktyRow = {
   wholesale_price: number | null;
   wholesale_discount: number | null;
   stock: number | null;
+  image_url: string | null;
+  image_urls: string[] | null;
   produkty_obrazky: ImageRow[];
 };
 
@@ -38,10 +40,16 @@ function resolveImageUrl(img: ImageRow): string | null {
 function mapRow(row: ProduktyRow): Product {
   const images = row.produkty_obrazky ?? [];
   const mainImg = images.find((i) => i.je_hlavni) ?? images[0];
-  const imgUrl = mainImg ? resolveImageUrl(mainImg) : null;
-  const allImageUrls = images
+  const storedImgUrl = mainImg ? resolveImageUrl(mainImg) : null;
+  const storedAllImageUrls = images
     .map(resolveImageUrl)
     .filter((u): u is string => Boolean(u));
+
+  // Fallback to direct URL columns saved by sync script when produkty_obrazky is empty
+  const imgUrl = storedImgUrl ?? row.image_url ?? null;
+  const allImageUrls = storedAllImageUrls.length > 0
+    ? storedAllImageUrls
+    : (row.image_urls ?? []).filter(Boolean);
 
   return {
     id: row.id,
@@ -78,7 +86,7 @@ export function useProducts() {
           .select(`
             id, sku, ean, product_name, manufacturer, category_text,
             long_description, short_description, retail_price, wholesale_price,
-            wholesale_discount, stock,
+            wholesale_discount, stock, image_url, image_urls,
             produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
           `) as { data: ProduktyRow[] | null; error: unknown };
 
