@@ -28,6 +28,9 @@ export function useAuth() {
       supabase.from('profiles').select('*').eq('user_id', userId).single(),
       supabase.from('user_roles').select('role').eq('user_id', userId).single(),
     ]);
+    console.log('[useAuth] userId:', userId);
+    console.log('[useAuth] profileRes:', { data: profileRes.data, error: profileRes.error });
+    console.log('[useAuth] roleRes:', { data: roleRes.data, error: roleRes.error });
     return {
       profile: profileRes.data as Profile | null,
       role: (roleRes.data?.role as AppRole) ?? 'customer',
