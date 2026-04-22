@@ -71,7 +71,7 @@ function extractProduct(p) {
 
 async function fetchExistingHashes() {
   const { data, error } = await supabase
-    .from('products')
+    .from('produkty')
     .select('sku, content_hash');
   if (error) throw error;
   return new Map(data.map(r => [r.sku, r.content_hash]));
@@ -96,7 +96,7 @@ async function upsertProduct(product, hash) {
   };
 
   const { error } = await supabase
-    .from('products')
+    .from('produkty')
     .upsert(row, { onConflict: 'sku' });
   if (error) throw error;
 }
