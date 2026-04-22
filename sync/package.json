@@ -1,0 +1,13 @@
+{
+  "name": "swelt-sync",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync-feed.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
+    "xml2js": "^0.6.2"
+  }
+}
