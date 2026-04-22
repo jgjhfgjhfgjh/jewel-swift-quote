@@ -195,7 +195,7 @@ function ScoreSimulator() {
         ))}
       </div>
 
-      <div className="rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md p-6 text-center shadow-xl">
+      <div className="rounded-2xl border border-white/20 bg-card/80 backdrop-blur-md p-6 text-center shadow-xl">
         <div className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-3">Prediktivní skóre</div>
         <div className="relative mx-auto w-[180px] h-[180px]">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
@@ -309,7 +309,7 @@ const Intelligence = () => {
             </Reveal>
 
             <Reveal delay={200}>
-              <div className="relative rounded-2xl border border-white/20 bg-white/90 backdrop-blur p-6 shadow-xl max-w-md ml-auto">
+              <div className="relative rounded-2xl border border-white/20 bg-card/90 backdrop-blur p-6 shadow-xl max-w-md ml-auto">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-[10px] tracking-[0.2em] uppercase text-accent font-semibold">Live signál · SKU-4471</div>
                   <span className="flex h-2 w-2 rounded-full bg-accent animate-pulse" />
@@ -359,7 +359,7 @@ const Intelligence = () => {
               const Icon = it.icon;
               return (
                 <Reveal key={it.title} delay={i * 80}>
-                  <div className="group h-full rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/20 bg-card/70 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-accent/40">
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -394,7 +394,7 @@ const Intelligence = () => {
                 return (
                   <Reveal key={s.label} delay={i * 100} className="contents">
                     <div className="flex lg:flex-col items-center gap-3 w-full min-w-0">
-                      <div className="flex-1 rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md p-5 text-center w-full">
+                      <div className="flex-1 rounded-2xl border border-white/20 bg-card/70 backdrop-blur-md p-5 text-center w-full">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
                           <Icon className="h-5 w-5" />
                         </div>
@@ -424,7 +424,7 @@ const Intelligence = () => {
               const Icon = uc.icon;
               return (
                 <Reveal key={uc.title} delay={(i % 3) * 80}>
-                  <div className="group h-full rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
+                  <div className="group h-full rounded-2xl border border-white/20 bg-card/70 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:scale-110 transition-transform">
                         <Icon className="h-5 w-5" />
@@ -495,7 +495,7 @@ const Intelligence = () => {
             </p>
           </Reveal>
           <Reveal>
-            <div className="rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md p-6 sm:p-10 shadow-xl">
+            <div className="rounded-2xl border border-white/20 bg-card/70 backdrop-blur-md p-6 sm:p-10 shadow-xl">
               <ScoreSimulator />
             </div>
           </Reveal>
