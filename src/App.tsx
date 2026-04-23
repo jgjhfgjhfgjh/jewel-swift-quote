@@ -15,6 +15,7 @@ import Favorites from "./pages/Favorites.tsx";
 import Partner from "./pages/Partner.tsx";
 import Velkoobchod from "./pages/Velkoobchod.tsx";
 import Intelligence from "./pages/Intelligence.tsx";
+import Dropshipping from "./pages/Dropshipping.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/partner" element={<Partner />} />
             <Route path="/velkoobchod" element={<Velkoobchod />} />
             <Route path="/intelligence" element={<Intelligence />} />
+            <Route path="/dropshipping" element={<Dropshipping />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
