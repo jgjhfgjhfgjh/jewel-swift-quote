@@ -68,6 +68,7 @@ function extractProduct(p) {
   const params = extractParams(p);
 
   return {
+    product_id:        text(p.product_id),
     sku:               text(p.sku),
     ean:               text(p.ean),
     product_name:      text(p.product_name),
@@ -96,7 +97,8 @@ async function fetchExistingHashes() {
 async function upsertProduct(product, hash) {
   const now = new Date().toISOString();
   const row = {
-    sku:                      product.sku,
+    product_id:        product.product_id,
+    sku:               product.sku,
     ean:               product.ean,
     product_name:      product.product_name,
     long_description:  product.long_description,
