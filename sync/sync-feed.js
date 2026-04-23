@@ -97,19 +97,18 @@ async function upsertProduct(product, hash) {
   const now = new Date().toISOString();
   const row = {
     sku:                      product.sku,
-    ean:                      product.ean,
-    original_name_cz:         product.product_name,
-    original_description_cz:  product.long_description,
-    short_description:        product.short_description,
-    manufacturer:             product.manufacturer,
-    category_text:            product.category_text,
-    supplier_price:           product.wholesale_price,
-    stock_quantity:           product.stock != null ? Math.round(product.stock) : null,
-    image_url:                product.img_url,
-    image_urls:               product.all_image_urls,
-    last_synced_at:           now,
-    updated_at:               now,
-    content_hash:             hash,
+    ean:               product.ean,
+    product_name:      product.product_name,
+    long_description:  product.long_description,
+    short_description: product.short_description,
+    manufacturer:      product.manufacturer,
+    category_text:     product.category_text,
+    wholesale_price:   product.wholesale_price,
+    stock:             product.stock != null ? Math.round(product.stock) : null,
+    image_url:         product.img_url,
+    image_urls:        product.all_image_urls,
+    updated_at:        now,
+    content_hash:      hash,
   };
 
   const { data, error } = await supabase
