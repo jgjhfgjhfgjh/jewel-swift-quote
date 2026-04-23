@@ -230,60 +230,190 @@ const logisticsZones = [
   { zone: 'Zbytek EU', time: 'na dotaz', reliability: '95 %+', couriers: 'DHL, FedEx, UPS', color: 'slate' },
 ];
 
-/* ─── Margin Calculator ─── */
-function MarginCalculator() {
-  const [buyPrice, setBuyPrice] = useState(800);
-  const [sellPrice, setSellPrice] = useState(1400);
+/* ─── Product Calculator ─── */
+const DEMO_PRODUCT = {
+  brand: 'TOMMY HILFIGER',
+  name: 'DECKER 1791349',
+  fullName: 'Hodinky TOMMY HILFIGER model DECKER 1791349',
+  img: 'https://cdn.b2bzago.com/images/0/7afe1cca249d731c/100/hodinky-tommy-hilfiger-model-decker-1791349.jpg?hash=-2',
+  vocEur: 71.60,
+  mocEur: 179.00,
+  voc: 1790,   // €71.60 × 25 CZK/EUR
+  moc: 4475,   // €179.00 × 25 CZK/EUR
+  discount: 60,
+  stock: 14,
+};
+
+function ProductCalculator() {
+  const [sellPrice, setSellPrice] = useState(DEMO_PRODUCT.moc);
   const [orders, setOrders] = useState(30);
 
-  const margin = sellPrice - buyPrice;
+  const margin = sellPrice - DEMO_PRODUCT.voc;
   const marginPct = sellPrice > 0 ? ((margin / sellPrice) * 100).toFixed(1) : '0.0';
   const monthlyProfit = margin * orders;
   const yearlyProfit = monthlyProfit * 12;
-  const positive = margin >= 0;
+  const isGood = margin >= 500;
+  const profitColor = margin >= 1000 ? 'text-emerald-600' : margin >= 0 ? 'text-amber-600' : 'text-red-500';
+  const navigate = useNavigate();
 
   return (
-    <div className="grid lg:grid-cols-2 gap-10 items-center">
-      <div className="space-y-8">
-        {[
-          { label: 'Nákupní cena (Kč)', value: buyPrice, set: setBuyPrice, min: 100, max: 5000, step: 50 },
-          { label: 'Prodejní cena (Kč)', value: sellPrice, set: setSellPrice, min: 100, max: 8000, step: 50 },
-          { label: 'Objednávky za měsíc', value: orders, set: setOrders, min: 1, max: 500, step: 1, suffix: ' ks' },
-        ].map(({ label, value, set, min, max, step, suffix }) => (
-          <div key={label}>
-            <div className="flex justify-between mb-2">
-              <label className="text-sm font-medium">{label}</label>
-              <span className="font-semibold text-primary tabular-nums">{value.toLocaleString('cs')}{suffix ?? ' Kč'}</span>
+    <div className="grid lg:grid-cols-3 gap-6 items-start">
+
+      {/* ── Product card (catalog style) ── */}
+      <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden">
+        <div className="relative">
+          <img
+            src={DEMO_PRODUCT.img}
+            alt={DEMO_PRODUCT.fullName}
+            className="w-full aspect-[4/3] object-contain bg-gray-50 p-4"
+            onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect width="300" height="200" fill="%23f1f5f9"/><text x="150" y="100" text-anchor="middle" font-family="sans-serif" fill="%2394a3b8">Obrázek produktu</text></svg>'; }}
+          />
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white border border-border px-2 py-1 shadow-sm">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] font-semibold text-foreground">Živě</span>
+          </div>
+          <div className="absolute top-3 right-3 rounded-lg bg-primary text-white text-xs font-bold px-2 py-1">
+            -{DEMO_PRODUCT.discount}%
+          </div>
+        </div>
+
+        <div className="p-5">
+          <div className="text-xs font-bold text-amber-600 tracking-wide mb-1">{DEMO_PRODUCT.brand}</div>
+          <div className="font-semibold text-sm leading-snug mb-3">{DEMO_PRODUCT.fullName}</div>
+
+          <div className="flex items-center gap-1.5 mb-4">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="text-xs text-emerald-600 font-medium">Skladem: {DEMO_PRODUCT.stock} ks</span>
+          </div>
+
+          <div className="rounded-xl bg-muted/60 border border-border p-3 space-y-1.5 text-xs">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">VOC (nákup)</span>
+              <span className="font-semibold">€{DEMO_PRODUCT.vocEur.toFixed(2)} <span className="text-muted-foreground font-normal">≈ {DEMO_PRODUCT.voc.toLocaleString('cs')} Kč</span></span>
             </div>
-            <Slider value={[value]} onValueChange={([v]) => set(v)} min={min} max={max} step={step} />
-            <div className="flex justify-between text-[11px] text-muted-foreground mt-1">
-              <span>{min.toLocaleString('cs')}{suffix ?? ' Kč'}</span>
-              <span>{max.toLocaleString('cs')}{suffix ?? ' Kč'}</span>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">MOC (doporučená)</span>
+              <span className="font-semibold">€{DEMO_PRODUCT.mocEur.toFixed(2)} <span className="text-muted-foreground font-normal">≈ {DEMO_PRODUCT.moc.toLocaleString('cs')} Kč</span></span>
+            </div>
+            <div className="h-px bg-border my-1" />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Marže při MOC</span>
+              <span className="font-bold text-emerald-600">€{(DEMO_PRODUCT.mocEur - DEMO_PRODUCT.vocEur).toFixed(2)} ({DEMO_PRODUCT.discount} %)</span>
             </div>
           </div>
-        ))}
+        </div>
       </div>
 
-      <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-8 space-y-4">
-        <div className="text-[11px] tracking-[0.2em] uppercase text-primary font-semibold">Výsledek kalkulace</div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-xl bg-white p-4 shadow-sm border border-border">
-            <div className="text-xs text-muted-foreground mb-1">Marže na kus</div>
-            <div className={`font-display text-2xl font-bold ${positive ? 'text-emerald-600' : 'text-red-500'}`}>{margin.toLocaleString('cs')} Kč</div>
+      {/* ── Sliders ── */}
+      <div className="rounded-2xl border border-border bg-white shadow-sm p-6 space-y-8">
+        <div>
+          <div className="text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">Nastav svůj scénář</div>
+
+          {/* Nákupní cena — locked */}
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium flex items-center gap-1.5">
+                <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                Nákupní cena (pevná)
+              </label>
+              <span className="font-semibold text-muted-foreground tabular-nums">{DEMO_PRODUCT.voc.toLocaleString('cs')} Kč</span>
+            </div>
+            <div className="h-2 rounded-full bg-muted relative overflow-hidden">
+              <div className="absolute left-0 top-0 h-full bg-muted-foreground/30 rounded-full" style={{ width: `${(DEMO_PRODUCT.voc / 5000) * 100}%` }} />
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">Velkoobchodní cena swelt.partner — fixní, nelze měnit</p>
+          </div>
+
+          {/* Prodejní cena — adjustable */}
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium">Tvoje prodejní cena</label>
+              <span className="font-semibold text-primary tabular-nums">{sellPrice.toLocaleString('cs')} Kč</span>
+            </div>
+            <Slider value={[sellPrice]} onValueChange={([v]) => setSellPrice(v)} min={DEMO_PRODUCT.voc + 100} max={7000} step={25} />
+            <div className="flex justify-between text-[11px] text-muted-foreground mt-1">
+              <span>min. {(DEMO_PRODUCT.voc + 100).toLocaleString('cs')} Kč</span>
+              <span className="text-primary font-medium">MOC: {DEMO_PRODUCT.moc.toLocaleString('cs')} Kč</span>
+            </div>
+          </div>
+
+          {/* Objednávky */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium">Objednávky za měsíc</label>
+              <span className="font-semibold text-primary tabular-nums">{orders} ks</span>
+            </div>
+            <Slider value={[orders]} onValueChange={([v]) => setOrders(v)} min={1} max={200} step={1} />
+            <div className="flex justify-between text-[11px] text-muted-foreground mt-1">
+              <span>1 ks</span><span>200 ks</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mini result inline */}
+        <div className="rounded-xl bg-muted/40 border border-border p-4 grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-xs text-muted-foreground">Marže / kus</div>
+            <div className={`font-display text-xl font-bold ${profitColor}`}>{margin.toLocaleString('cs')} Kč</div>
             <div className="text-xs text-muted-foreground">{marginPct} %</div>
           </div>
-          <div className="rounded-xl bg-white p-4 shadow-sm border border-border">
-            <div className="text-xs text-muted-foreground mb-1">Měsíční zisk</div>
-            <div className={`font-display text-2xl font-bold ${positive ? 'text-emerald-600' : 'text-red-500'}`}>{monthlyProfit.toLocaleString('cs')} Kč</div>
+          <div>
+            <div className="text-xs text-muted-foreground">Měsíční zisk</div>
+            <div className={`font-display text-xl font-bold ${profitColor}`}>{monthlyProfit.toLocaleString('cs')} Kč</div>
             <div className="text-xs text-muted-foreground">{orders} obj.</div>
           </div>
         </div>
-        <div className="rounded-xl bg-primary text-primary-foreground p-5 shadow-md">
-          <div className="text-xs opacity-80 mb-1">Roční potenciál</div>
-          <div className="font-display text-4xl font-bold">{yearlyProfit.toLocaleString('cs')} Kč</div>
-          <div className="text-xs opacity-70 mt-1">při {orders} objednávkách měsíčně</div>
+      </div>
+
+      {/* ── Results + Silver plan ── */}
+      <div className="space-y-4">
+        {/* Roční potenciál */}
+        <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-md">
+          <div className="text-xs opacity-80 mb-1 uppercase tracking-wider">Roční potenciál</div>
+          <div className="font-display text-5xl font-bold mb-1">{yearlyProfit.toLocaleString('cs')}</div>
+          <div className="text-sm opacity-80">Kč / rok při {orders} obj./měsíc</div>
+          {isGood && (
+            <div className="mt-4 rounded-lg bg-white/15 px-3 py-2 text-xs">
+              ✓ Výborná marže — tento produkt stojí za propagaci
+            </div>
+          )}
         </div>
-        <p className="text-xs text-muted-foreground">* Kalkulace je orientační, nezohledňuje náklady na reklamu, platformu ani platební brány.</p>
+
+        <p className="text-xs text-muted-foreground px-1">* Kalkulace je orientační, nezohledňuje náklady na reklamu ani platební brány.</p>
+
+        {/* Silver plan card */}
+        <div className="relative rounded-2xl border-2 border-primary bg-white shadow-lg overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 flex justify-center -translate-y-1/2 pointer-events-none">
+            <Badge className="bg-primary text-white hover:bg-primary shadow-md">Nejoblíbenější</Badge>
+          </div>
+          <div className="p-6 pt-8">
+            <div className="text-center mb-4">
+              <div className="font-display text-2xl font-bold mb-1">Silver</div>
+              <div className="text-sm text-muted-foreground leading-snug">Pro rostoucí e-shopy<br />co to myslí vážně</div>
+              <div className="mt-3">
+                <span className="font-display text-3xl font-bold">2 490</span>
+                <span className="text-sm text-muted-foreground ml-1">Kč / měsíc</span>
+              </div>
+            </div>
+            <ul className="space-y-2 mb-5">
+              {[
+                'Celý katalog 3 000+ produktů',
+                'Shoptet API v 1 klik',
+                'White-label fakturace',
+                'Real-time inventory lock',
+                'swelt.signal — trend digest',
+              ].map(f => (
+                <li key={f} className="flex items-center gap-2 text-xs">
+                  <Check className="h-3.5 w-3.5 text-primary shrink-0" />{f}
+                </li>
+              ))}
+            </ul>
+            <Button className="w-full" onClick={() => navigate('/register')}>
+              Aktivovat Silver plán <ArrowRight className="h-4 w-4" />
+            </Button>
+            <p className="text-center text-[10px] text-muted-foreground mt-2">Refund kreditem při obratu 50 000 Kč/měsíc</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -722,7 +852,7 @@ const Dropshipping = () => {
           </Reveal>
           <Reveal>
             <div className="rounded-2xl border border-border bg-white shadow-sm p-8 sm:p-10">
-              <MarginCalculator />
+              <ProductCalculator />
             </div>
           </Reveal>
         </section>
