@@ -12,6 +12,11 @@ type ImageRow = {
   stazeno: boolean;
 };
 
+type ParamRow = {
+  nazev: string;
+  hodnota: string;
+};
+
 type ProduktyRow = {
   id: string;
   sku: string;
@@ -28,6 +33,12 @@ type ProduktyRow = {
   image_url: string | null;
   image_urls: string[] | null;
   produkty_obrazky: ImageRow[];
+  produkty_parametry: ParamRow[];
+};
+
+export type AvailableParam = {
+  nazev: string;
+  values: string[];
 };
 
 function resolveImageUrl(img: ImageRow): string | null {
@@ -66,15 +77,33 @@ function mapRow(row: ProduktyRow): Product {
     wholesale: Number(row.wholesale_price ?? 0),
     stock: row.stock ?? 0,
     inStock: (row.stock ?? 0) > 0,
+    params: row.produkty_parametry ?? [],
   };
 }
 
 const cleanProducts = (data: Product[]) =>
   data.filter((p) => Boolean(getProductBrand(p)) && !isDropshippingProduct(p));
 
+function computeAvailableParams(products: Product[]): AvailableParam[] {
+  const map = new Map<string, Set<string>>();
+  products.forEach((p) => {
+    (p.params ?? []).forEach(({ nazev, hodnota }) => {
+      if (!map.has(nazev)) map.set(nazev, new Set());
+      hodnota.split(',').map((v) => v.trim()).filter(Boolean).forEach((v) => {
+        map.get(nazev)!.add(v);
+      });
+    });
+  });
+  return Array.from(map.entries())
+    .filter(([, values]) => values.size >= 2)
+    .map(([nazev, values]) => ({ nazev, values: Array.from(values).sort((a, b) => a.localeCompare(b, 'cs')) }))
+    .sort((a, b) => a.nazev.localeCompare(b.nazev, 'cs'));
+}
+
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [availableParams, setAvailableParams] = useState<AvailableParam[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -87,12 +116,15 @@ export function useProducts() {
             id, sku, ean, product_name, manufacturer, category_text,
             long_description, short_description, retail_price, wholesale_price,
             wholesale_discount, stock, image_url, image_urls,
-            produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
+            produkty_obrazky (storage_path, original_url, je_hlavni, stazeno),
+            produkty_parametry (nazev, hodnota)
           `) as { data: ProduktyRow[] | null; error: unknown };
 
         if (!error && data && data.length > 0) {
           if (!active) return;
-          setProducts(cleanProducts(data.map(mapRow)));
+          const clean = cleanProducts(data.map(mapRow));
+          setProducts(clean);
+          setAvailableParams(computeAvailableParams(clean));
           return;
         }
 
@@ -135,5 +167,5 @@ export function useProducts() {
       .map(([name, count]) => ({ name, count }));
   }, [products]);
 
-  return { products, loading, manufacturers, categories };
+  return { products, loading, manufacturers, categories, availableParams };
 }

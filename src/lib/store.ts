@@ -48,6 +48,10 @@ interface AppState {
   setStockOnly: (v: boolean) => void;
   minDiscount: number;
   setMinDiscount: (v: number) => void;
+  selectedGenders: string[];
+  setSelectedGenders: (v: string[]) => void;
+  selectedParams: Record<string, string[]>;
+  setSelectedParams: (v: Record<string, string[]>) => void;
 
   // View mode
   viewMode: 'home' | 'catalog';
@@ -153,6 +157,10 @@ export const useStore = create<AppState>()(
       setStockOnly: (v) => set({ stockOnly: v }),
       minDiscount: 0,
       setMinDiscount: (v) => set({ minDiscount: v }),
+      selectedGenders: [],
+      setSelectedGenders: (v) => set({ selectedGenders: v }),
+      selectedParams: {},
+      setSelectedParams: (v) => set({ selectedParams: v }),
 
       // Sales mode
       salesCustomer: null,
@@ -202,6 +210,8 @@ export const useStore = create<AppState>()(
         selectedCategory: state.selectedCategory,
         stockOnly: state.stockOnly,
         minDiscount: state.minDiscount,
+        selectedGenders: state.selectedGenders,
+        selectedParams: state.selectedParams,
       }),
     }
   )

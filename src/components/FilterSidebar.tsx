@@ -1,12 +1,22 @@
-import { useMemo, useEffect, useRef, useState, useCallback } from 'react';
+import { useMemo, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
-
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
+import type { AvailableParam } from '@/hooks/useProducts';
+
+const GENDER_PARAM = 'Určení';
+const GENDER_LABELS: Record<string, string> = {
+  'Pro muže': 'Muži',
+  'Pro ženy': 'Ženy',
+  'Pro děti': 'Děti',
+  'Unisex': 'Unisex',
+};
+// Preferred display order for genders
+const GENDER_ORDER = ['Pro muže', 'Pro ženy', 'Pro děti', 'Unisex'];
 
 interface Props {
   manufacturers: { name: string; count: number }[];
@@ -21,6 +31,11 @@ interface Props {
   setStockOnly: (v: boolean) => void;
   minDiscount: number;
   setMinDiscount: (v: number) => void;
+  selectedGenders: string[];
+  setSelectedGenders: (v: string[]) => void;
+  selectedParams: Record<string, string[]>;
+  setSelectedParams: (v: Record<string, string[]>) => void;
+  availableParams: AvailableParam[];
   /** Render only the mobile overlay (no desktop aside) */
   mobileOnly?: boolean;
   /** Render only the desktop aside (no mobile overlay) */
@@ -29,6 +44,7 @@ interface Props {
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
 const HEADER_HEIGHT = 56;
+const TOGGLE_THRESHOLD = 5; // ≤ this many values → use Switch toggles
 
 function DesktopSidebar({ children }: { children: React.ReactNode }) {
   return (
@@ -45,6 +61,9 @@ export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
   selectedCategory, setSelectedCategory, search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
+  selectedGenders, setSelectedGenders,
+  selectedParams, setSelectedParams,
+  availableParams,
   mobileOnly, desktopOnly,
 }: Props) {
   const { user } = useAuthContext();
@@ -78,12 +97,41 @@ export function FilterSidebar({
     [manufacturers]
   );
 
+  // Available genders from "Určení" param, in preferred order
+  const availableGenders = useMemo(() => {
+    const genderParam = availableParams.find((p) => p.nazev === GENDER_PARAM);
+    if (!genderParam) return [];
+    return GENDER_ORDER.filter((g) => genderParam.values.includes(g));
+  }, [availableParams]);
+
+  // Other params (excluding "Určení"), each split into toggle or checkbox variant
+  const otherParams = useMemo(
+    () => availableParams.filter((p) => p.nazev !== GENDER_PARAM),
+    [availableParams]
+  );
+
   const toggleBrand = (name: string) => {
-    if (selectedBrands.includes(name)) {
-      setSelectedBrands(selectedBrands.filter((b) => b !== name));
-    } else {
-      setSelectedBrands([...selectedBrands, name]);
-    }
+    setSelectedBrands(
+      selectedBrands.includes(name)
+        ? selectedBrands.filter((b) => b !== name)
+        : [...selectedBrands, name]
+    );
+  };
+
+  const toggleGender = (gender: string) => {
+    setSelectedGenders(
+      selectedGenders.includes(gender)
+        ? selectedGenders.filter((g) => g !== gender)
+        : [...selectedGenders, gender]
+    );
+  };
+
+  const toggleParam = (nazev: string, value: string) => {
+    const current = selectedParams[nazev] ?? [];
+    const next = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    setSelectedParams({ ...selectedParams, [nazev]: next });
   };
 
   const homeContent = (
@@ -140,6 +188,85 @@ export function FilterSidebar({
         ))}
       </div>
 
+      {/* Určení — gender filter */}
+      {availableGenders.length > 0 && (
+        <div className="px-4 py-2 space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Určení</h3>
+            {selectedGenders.length > 0 && (
+              <button
+                onClick={() => setSelectedGenders([])}
+                className="text-xs text-primary hover:underline"
+              >
+                Vše
+              </button>
+            )}
+          </div>
+          {availableGenders.map((gender) => (
+            <div key={gender} className="flex items-center justify-between">
+              <span className="text-sm font-medium">{GENDER_LABELS[gender] ?? gender}</span>
+              <Switch
+                checked={selectedGenders.includes(gender)}
+                onCheckedChange={() => toggleGender(gender)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Other parameter filters */}
+      {otherParams.map((param) => {
+        const selectedValues = selectedParams[param.nazev] ?? [];
+        const useToggles = param.values.length <= TOGGLE_THRESHOLD;
+
+        return (
+          <div key={param.nazev} className="px-4 py-2">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {param.nazev}
+              </h3>
+              {selectedValues.length > 0 && (
+                <button
+                  onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Vše
+                </button>
+              )}
+            </div>
+
+            {useToggles ? (
+              <div className="space-y-2">
+                {param.values.map((value) => (
+                  <div key={value} className="flex items-center justify-between">
+                    <span className="text-sm font-medium truncate pr-2">{value}</span>
+                    <Switch
+                      checked={selectedValues.includes(value)}
+                      onCheckedChange={() => toggleParam(param.nazev, value)}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="max-h-40 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+                {param.values.map((value) => (
+                  <label
+                    key={value}
+                    className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Checkbox
+                      checked={selectedValues.includes(value)}
+                      onCheckedChange={() => toggleParam(param.nazev, value)}
+                    />
+                    <span className="truncate">{value}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
       {/* Brands with checkboxes */}
       <div className="p-4 pt-2 pb-24">
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.brands}</h3>
@@ -158,7 +285,6 @@ export function FilterSidebar({
               <Checkbox
                 checked={selectedBrands.includes(m.name)}
                 onCheckedChange={() => toggleBrand(m.name)}
-                className=""
               />
               <span className="truncate">{m.name}</span>
             </label>

@@ -1,3 +1,8 @@
+export interface ProductParam {
+  nazev: string;
+  hodnota: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -13,6 +18,7 @@ export interface Product {
   wholesale: number;
   stock: number;
   inStock: boolean;
+  params?: ProductParam[];
 }
 
 export interface CartItem {

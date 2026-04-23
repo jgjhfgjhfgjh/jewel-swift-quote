@@ -15,11 +15,22 @@ interface Props {
   selectedCategory: string | null;
   stockOnly: boolean;
   minDiscount: number;
+  selectedGenders?: string[];
+  selectedParams?: Record<string, string[]>;
   wishlistIds?: Set<string>;
   onToggleWishlist?: (id: string) => void;
 }
 
-export function ProductGrid({ products, search, selectedBrands, selectedCategory, stockOnly, minDiscount, wishlistIds, onToggleWishlist }: Props) {
+/** Split a comma-separated param value into individual trimmed tokens */
+function splitParamValue(hodnota: string): string[] {
+  return hodnota.split(',').map((v) => v.trim()).filter(Boolean);
+}
+
+export function ProductGrid({
+  products, search, selectedBrands, selectedCategory,
+  stockOnly, minDiscount, selectedGenders, selectedParams,
+  wishlistIds, onToggleWishlist,
+}: Props) {
   const { lang } = useStore();
   const t = translations[lang];
   const [page, setPage] = useState(1);
@@ -28,34 +39,57 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
   useEffect(() => {
     const query = search.trim().toLowerCase();
     const activeBrands = selectedBrands ?? [];
+    const activeGenders = selectedGenders ?? [];
+    const activeParams = selectedParams ?? {};
 
     const nextFilteredProducts = products.filter((product) => {
       const brand = getProductBrand(product);
 
+      // Search
       if (query) {
         const matchesSearch =
           product.name.toLowerCase().includes(query) ||
           brand.toLowerCase().includes(query) ||
           product.sku.toLowerCase().includes(query);
-
         if (!matchesSearch) return false;
       }
 
+      // Brands
       if (activeBrands.length > 0 && !activeBrands.includes(brand)) {
         return false;
       }
 
+      // Category
       if (!matchesFeedCategory(product, selectedCategory)) {
         return false;
       }
 
+      // Stock
       if (stockOnly && !(product.stock > 0 || product.inStock)) {
         return false;
       }
 
+      // Discount
       if (minDiscount > 0) {
         const pct = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
         if (pct < minDiscount) return false;
+      }
+
+      // Gender ("Určení") — OR logic: product matches if any of its gender tokens is in activeGenders
+      if (activeGenders.length > 0) {
+        const productGenders = (product.params ?? [])
+          .filter((p) => p.nazev === 'Určení')
+          .flatMap((p) => splitParamValue(p.hodnota));
+        if (!productGenders.some((g) => activeGenders.includes(g))) return false;
+      }
+
+      // Parametry — AND between groups, OR within group
+      for (const [nazev, selectedValues] of Object.entries(activeParams)) {
+        if (!selectedValues || selectedValues.length === 0) continue;
+        const productValues = (product.params ?? [])
+          .filter((p) => p.nazev === nazev)
+          .flatMap((p) => splitParamValue(p.hodnota));
+        if (!productValues.some((v) => selectedValues.includes(v))) return false;
       }
 
       return true;
@@ -63,7 +97,7 @@ export function ProductGrid({ products, search, selectedBrands, selectedCategory
 
     setPage(1);
     setFilteredProducts(nextFilteredProducts);
-  }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount]);
+  }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount, selectedGenders, selectedParams]);
 
   const paginated = filteredProducts.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filteredProducts.length;

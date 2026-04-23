@@ -19,7 +19,7 @@ import { getProductBrand, getProductFeedCategories } from '@/lib/product-feed';
 const Favorites = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuthContext();
-  const { products, loading } = useProducts();
+  const { products, loading, availableParams } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const {
@@ -28,6 +28,8 @@ const Favorites = () => {
     selectedCategory, setSelectedCategory,
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
+    selectedGenders, setSelectedGenders,
+    selectedParams, setSelectedParams,
     setViewMode,
   } = useStore();
 
@@ -68,6 +70,9 @@ const Favorites = () => {
     search, setSearch,
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
+    selectedGenders, setSelectedGenders,
+    selectedParams, setSelectedParams,
+    availableParams,
   };
 
   // Force catalog view mode so FilterSidebar renders catalog (not home menu) layout
@@ -115,6 +120,8 @@ const Favorites = () => {
             selectedCategory={selectedCategory}
             stockOnly={stockOnly}
             minDiscount={minDiscount}
+            selectedGenders={selectedGenders}
+            selectedParams={selectedParams}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
           />

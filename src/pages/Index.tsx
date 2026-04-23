@@ -33,11 +33,16 @@ const filterProps = (p: any) => ({
   setStockOnly: p.setStockOnly,
   minDiscount: p.minDiscount,
   setMinDiscount: p.setMinDiscount,
+  selectedGenders: p.selectedGenders,
+  setSelectedGenders: p.setSelectedGenders,
+  selectedParams: p.selectedParams,
+  setSelectedParams: p.setSelectedParams,
+  availableParams: p.availableParams ?? [],
 });
 
 const Index = () => {
   const { user, loading: authLoading } = useAuthContext();
-  const { products, loading, manufacturers, categories } = useProducts();
+  const { products, loading, manufacturers, categories, availableParams } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const {
@@ -46,6 +51,8 @@ const Index = () => {
     selectedCategory, setSelectedCategory,
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
+    selectedGenders, setSelectedGenders,
+    selectedParams, setSelectedParams,
     viewMode, setViewMode,
   } = useStore();
 
@@ -56,6 +63,9 @@ const Index = () => {
     search, setSearch,
     stockOnly, setStockOnly,
     minDiscount, setMinDiscount,
+    selectedGenders, setSelectedGenders,
+    selectedParams, setSelectedParams,
+    availableParams,
   });
 
   // Show gateway for unauthenticated users trying to access catalog
@@ -123,6 +133,8 @@ const Index = () => {
             selectedCategory={selectedCategory}
             stockOnly={stockOnly}
             minDiscount={minDiscount}
+            selectedGenders={selectedGenders}
+            selectedParams={selectedParams}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
           />
