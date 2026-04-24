@@ -486,7 +486,7 @@ const Dropshipping = () => {
 
   return (
     <div
-      className="relative flex min-h-screen flex-col pb-16 lg:pb-0 bg-background text-foreground"
+      className="drop-page relative flex min-h-screen flex-col pb-16 lg:pb-0 bg-background text-foreground"
       style={{
         ['--background' as any]: '220 30% 98%',
         ['--foreground' as any]: '220 20% 10%',
@@ -502,6 +502,7 @@ const Dropshipping = () => {
       }}
     >
       <SeoHead />
+      <style>{`.drop-page .font-display { font-family: 'Montserrat', sans-serif !important; }`}</style>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       <FloatingNotif />
 
