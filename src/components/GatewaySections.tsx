@@ -129,44 +129,29 @@ function B2BVisual() {
   ];
 
   return (
-    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60" style={{ minHeight: '380px' }}>
+    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60" style={{ minHeight: '360px' }}>
 
-      {/* ── Blurred catalog grid behind the glass ── */}
-      <div className="absolute inset-0 scale-[1.04] origin-center" style={{ filter: 'blur(3px) brightness(0.92)' }}>
-        <div className="bg-slate-50 p-3 h-full">
-          {/* Sidebar mock */}
-          <div className="flex gap-2 h-full">
-            <div className="w-24 shrink-0 bg-white rounded-lg p-2 space-y-2">
-              {['Pouze živě', 'Sleva 60%+', 'Hodinky', 'Šperky', 'Příslušenství'].map(f => (
-                <div key={f} className="h-4 rounded bg-slate-200/80 w-full" />
-              ))}
-              <div className="h-px bg-slate-200 my-1" />
-              {['Tommy Hilfiger', 'Versace', 'Seiko', 'Police', 'Citizen'].map(b => (
-                <div key={b} className="flex items-center gap-1">
-                  <div className="h-3 w-3 rounded border border-slate-300 bg-white shrink-0" />
-                  <div className="h-3 rounded bg-slate-200/70 flex-1" />
-                </div>
-              ))}
-            </div>
-            {/* Product grid */}
-            <div className="flex-1 grid grid-cols-3 gap-2 content-start">
-              {catalogItems.map((item, i) => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden border border-slate-100">
-                  <div className="relative">
-                    <img src={item.img} alt={item.brand} className="w-full aspect-square object-cover object-center" loading="lazy" />
-                    <div className="absolute top-1 right-1 bg-primary text-white text-[8px] font-bold px-1 rounded">{item.disc}</div>
-                    <div className="absolute top-1 left-1 flex items-center gap-0.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    </div>
-                  </div>
-                  <div className="p-1.5">
-                    <div className="text-[8px] font-bold text-amber-600 truncate">{item.brand}</div>
-                    <div className="text-[9px] font-bold text-primary">{item.voc}</div>
-                    <div className="text-[8px] text-slate-400 line-through">{item.moc}</div>
+      {/* ── Catalog grid behind the glass ── */}
+      <div className="absolute inset-0" style={{ filter: 'blur(1.5px) brightness(0.96)' }}>
+        <div className="bg-slate-50 p-3 h-full flex items-center justify-center">
+          {/* Centered product grid only — no sidebar, full row visible */}
+          <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
+            {catalogItems.map((item, i) => (
+              <div key={i} className="bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm">
+                <div className="relative">
+                  <img src={item.img} alt={item.brand} className="w-full aspect-square object-cover object-center" loading="lazy" />
+                  <div className="absolute top-1.5 right-1.5 bg-primary text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md">{item.disc}</div>
+                  <div className="absolute top-1.5 left-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 block ring-2 ring-white" />
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="p-2">
+                  <div className="text-[9px] font-bold text-amber-600 truncate">{item.brand}</div>
+                  <div className="text-[10px] font-bold text-primary">{item.voc}</div>
+                  <div className="text-[9px] text-slate-400 line-through">{item.moc}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -175,9 +160,9 @@ function B2BVisual() {
       <div
         className="absolute inset-0 flex flex-col items-center justify-center gap-5 text-center px-6"
         style={{
-          backdropFilter: 'blur(12px) saturate(1.4)',
-          WebkitBackdropFilter: 'blur(12px) saturate(1.4)',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(219,234,254,0.45) 100%)',
+          backdropFilter: 'blur(5px) saturate(1.2)',
+          WebkitBackdropFilter: 'blur(5px) saturate(1.2)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(219,234,254,0.30) 100%)',
           borderRadius: 'inherit',
         }}
       >
