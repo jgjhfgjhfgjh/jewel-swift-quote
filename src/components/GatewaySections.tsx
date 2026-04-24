@@ -487,7 +487,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       ctas: (
         <div className="flex flex-col sm:flex-row gap-3">
           <Button
-            onClick={() => user ? navigate('/velkoobchod') : openAuth('register')}
+            onClick={() => navigate('/velkoobchod')}
             className="gap-2"
           >
             Vstoupit do velkoobchodu <ArrowRight className="h-4 w-4" />
