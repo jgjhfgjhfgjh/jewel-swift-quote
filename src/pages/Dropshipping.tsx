@@ -477,7 +477,7 @@ const Dropshipping = () => {
   const navigate = useNavigate();
   const { wishlistIds } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'quarterly'>('monthly');
+  const [billingPeriod, setBillingPeriod] = useState<'quarterly' | 'yearly'>('quarterly');
   const [activePlatform, setActivePlatform] = useState(0);
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [faqLimit, setFaqLimit] = useState(6);
@@ -973,10 +973,13 @@ const Dropshipping = () => {
           </Reveal>
           <Reveal className="flex justify-center mb-10">
             <div className="inline-flex rounded-xl border border-border bg-white p-1 gap-1">
-              {(['monthly', 'quarterly'] as const).map(p => (
+              {(['quarterly', 'yearly'] as const).map(p => (
                 <button key={p} onClick={() => setBillingPeriod(p)}
                   className={`rounded-lg px-5 py-2 text-sm font-medium transition-all ${billingPeriod === p ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}>
-                  {p === 'monthly' ? 'Měsíčně' : <span className="flex items-center gap-2">Čtvrtletně <span className="text-[10px] bg-emerald-500 text-white rounded px-1.5 py-0.5">−20 %</span></span>}
+                  {p === 'quarterly'
+                    ? 'Čtvrtletně'
+                    : <span className="flex items-center gap-2">Ročně <span className="text-[10px] bg-emerald-500 text-white rounded px-1.5 py-0.5">−20 %</span></span>
+                  }
                 </button>
               ))}
             </div>
@@ -984,7 +987,12 @@ const Dropshipping = () => {
 
           <div className="grid lg:grid-cols-3 gap-6 items-stretch">
             {tiers.map((t, i) => {
-              const price = billingPeriod === 'monthly' ? t.monthlyPrice : t.quarterlyPrice;
+              const price = billingPeriod === 'quarterly' ? t.monthlyPrice : t.quarterlyPrice;
+              const billingNote = t.monthlyPrice > 0
+                ? (billingPeriod === 'quarterly'
+                    ? `${(t.monthlyPrice * 3).toLocaleString('cs')} Kč · fakturováno čtvrtletně`
+                    : `${(t.quarterlyPrice * 12).toLocaleString('cs')} Kč · fakturováno ročně`)
+                : t.priceNote;
               return (
                 <Reveal key={t.name} delay={i * 80}>
                   <div className={`relative h-full rounded-2xl border bg-white flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all ${t.featured ? 'border-primary border-2 shadow-lg' : 'border-border'}`}>
@@ -1001,9 +1009,9 @@ const Dropshipping = () => {
                           <>
                             <div className="flex items-baseline justify-center gap-1">
                               <span className="font-display text-5xl font-bold">{price.toLocaleString('cs')}</span>
-                              <span className="text-sm text-muted-foreground ml-1">Kč</span>
+                              <span className="text-sm text-muted-foreground ml-1">Kč / měs.</span>
                             </div>
-                            <p className="text-xs text-muted-foreground mt-1">{t.priceNote}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{billingNote}</p>
                           </>
                         ) : (
                           <>
