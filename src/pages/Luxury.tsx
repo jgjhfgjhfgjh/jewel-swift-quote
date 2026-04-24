@@ -303,8 +303,6 @@ export default function Luxury() {
         '--border': '220 20% 88%',
       } as React.CSSProperties}
     >
-      <style>{`.luxury-page .font-display { font-family: 'Montserrat', sans-serif !important; }`}</style>
-
       <Navbar />
 
       {/* ── Hero ── */}

@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', 'serif'],
+        display: ['Montserrat', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
       },
       colors: {

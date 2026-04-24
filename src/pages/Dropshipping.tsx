@@ -659,7 +659,6 @@ const Dropshipping = () => {
       }}
     >
       <SeoHead />
-      <style>{`.drop-page .font-display { font-family: 'Montserrat', sans-serif !important; }`}</style>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       <FloatingNotif />
 

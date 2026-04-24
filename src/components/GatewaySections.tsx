@@ -619,11 +619,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         '--border': '220 20% 88%',
       } as React.CSSProperties}
     >
-      <style>{`
-        .gateway-sections .font-display { font-family: 'Montserrat', sans-serif !important; }
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-      `}</style>
-
       {/* Intro strip */}
       <div className="bg-gradient-to-b from-white/60 to-white border-b border-border py-12 text-center">
         <Reveal>

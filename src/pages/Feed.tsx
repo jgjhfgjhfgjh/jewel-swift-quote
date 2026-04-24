@@ -609,11 +609,6 @@ export default function Feed() {
         '--border': '220 20% 88%',
       } as React.CSSProperties}
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
-        .feed-page .font-display { font-family: 'Montserrat', sans-serif !important; }
-      `}</style>
-
       <SeoHead />
       <Navbar />
 
