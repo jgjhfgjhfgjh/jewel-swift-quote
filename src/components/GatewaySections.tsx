@@ -116,39 +116,100 @@ function BulletList({ items }: { items: string[] }) {
 
 /* ── Visual mock cards ── */
 function B2BVisual() {
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+
+  const catalogItems = [
+    { img: 'https://cdn.b2bzago.com/images/0/7afe1cca249d731c/100/hodinky-tommy-hilfiger-model-decker-1791349.jpg?hash=-2', brand: 'Tommy Hilfiger', voc: '1 790 Kč', moc: '4 475 Kč', disc: '-60%' },
+    { img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=200&q=70', brand: 'Versace', voc: '2 890 Kč', moc: '7 225 Kč', disc: '-60%' },
+    { img: 'https://images.unsplash.com/photo-1542496658-e33a6d0d3cde?auto=format&fit=crop&w=200&q=70', brand: 'Police', voc: '1 250 Kč', moc: '3 125 Kč', disc: '-60%' },
+    { img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=200&q=70', brand: 'Seiko', voc: '2 100 Kč', moc: '5 250 Kč', disc: '-60%' },
+    { img: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=200&q=70', brand: 'Citizen', voc: '1 580 Kč', moc: '3 950 Kč', disc: '-60%' },
+    { img: 'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=200&q=70', brand: 'Hugo Boss', voc: '2 240 Kč', moc: '5 600 Kč', disc: '-60%' },
+  ];
+
   return (
-    <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="text-[11px] font-bold text-primary uppercase tracking-wider">Live katalog</div>
-        <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] text-emerald-600 font-semibold">Online</span>
+    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60" style={{ minHeight: '380px' }}>
+
+      {/* ── Blurred catalog grid behind the glass ── */}
+      <div className="absolute inset-0 scale-[1.04] origin-center" style={{ filter: 'blur(3px) brightness(0.92)' }}>
+        <div className="bg-slate-50 p-3 h-full">
+          {/* Sidebar mock */}
+          <div className="flex gap-2 h-full">
+            <div className="w-24 shrink-0 bg-white rounded-lg p-2 space-y-2">
+              {['Pouze živě', 'Sleva 60%+', 'Hodinky', 'Šperky', 'Příslušenství'].map(f => (
+                <div key={f} className="h-4 rounded bg-slate-200/80 w-full" />
+              ))}
+              <div className="h-px bg-slate-200 my-1" />
+              {['Tommy Hilfiger', 'Versace', 'Seiko', 'Police', 'Citizen'].map(b => (
+                <div key={b} className="flex items-center gap-1">
+                  <div className="h-3 w-3 rounded border border-slate-300 bg-white shrink-0" />
+                  <div className="h-3 rounded bg-slate-200/70 flex-1" />
+                </div>
+              ))}
+            </div>
+            {/* Product grid */}
+            <div className="flex-1 grid grid-cols-3 gap-2 content-start">
+              {catalogItems.map((item, i) => (
+                <div key={i} className="bg-white rounded-lg overflow-hidden border border-slate-100">
+                  <div className="relative">
+                    <img src={item.img} alt={item.brand} className="w-full aspect-square object-cover object-center" loading="lazy" />
+                    <div className="absolute top-1 right-1 bg-primary text-white text-[8px] font-bold px-1 rounded">{item.disc}</div>
+                    <div className="absolute top-1 left-1 flex items-center gap-0.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    </div>
+                  </div>
+                  <div className="p-1.5">
+                    <div className="text-[8px] font-bold text-amber-600 truncate">{item.brand}</div>
+                    <div className="text-[9px] font-bold text-primary">{item.voc}</div>
+                    <div className="text-[8px] text-slate-400 line-through">{item.moc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      {[
-        { brand: 'TOMMY HILFIGER', sku: 'TH-1791349', voc: '1 790 Kč', moc: '4 475 Kč', stock: 14, disc: 60 },
-        { brand: 'VERSACE', sku: 'VE5A00520', voc: '2 890 Kč', moc: '7 225 Kč', stock: 3, disc: 60 },
-        { brand: 'POLICE', sku: 'PL-PEWJG', voc: '1 250 Kč', moc: '3 125 Kč', stock: 22, disc: 60 },
-      ].map((p) => (
-        <div key={p.sku} className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 p-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <Package className="h-5 w-5 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-bold text-amber-600 truncate">{p.brand}</div>
-            <div className="text-xs font-semibold text-foreground truncate">{p.sku}</div>
-            <div className="text-[10px] text-muted-foreground">Skladem: {p.stock} ks</div>
-          </div>
-          <div className="text-right shrink-0">
-            <div className="text-xs font-bold text-foreground">{p.voc}</div>
-            <div className="text-[10px] text-muted-foreground line-through">{p.moc}</div>
-            <div className="text-[10px] font-bold text-primary">-{p.disc}%</div>
+
+      {/* ── Liquid glass overlay ── */}
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center gap-5 text-center px-6"
+        style={{
+          backdropFilter: 'blur(12px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(12px) saturate(1.4)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(219,234,254,0.45) 100%)',
+          borderRadius: 'inherit',
+        }}
+      >
+        {/* Glow ring around lock */}
+        <div className="relative flex items-center justify-center">
+          <div className="absolute h-20 w-20 rounded-full bg-primary/20 blur-md animate-pulse" />
+          <div className="relative h-16 w-16 rounded-full bg-white/80 border border-white/70 shadow-xl flex items-center justify-center">
+            <Lock className="h-7 w-7 text-primary" />
           </div>
         </div>
-      ))}
-      <div className="flex items-center justify-between pt-1 border-t border-border">
-        <span className="text-[11px] text-muted-foreground">3 000+ produktů k dispozici</span>
-        <Badge className="bg-primary/10 text-primary hover:bg-primary/10 text-[10px]">Aktualizace v reálném čase</Badge>
+
+        <div>
+          <div className="font-display text-2xl font-bold text-foreground mb-1">3 000+ produktů</div>
+          <div className="text-sm text-foreground/70 leading-snug">
+            70+ prémiových značek · slevy 40–65 %<br />Přihlaste se a odemkněte celý katalog.
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 w-full max-w-[200px]">
+          <Button
+            className="w-full gap-2 shadow-lg"
+            onClick={() => user ? navigate('/velkoobchod') : undefined}
+          >
+            Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-3 text-[11px] text-foreground/60 flex-wrap justify-center">
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />Live zásoby</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />Aktualizace denně</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />Ceny bez DPH</span>
+        </div>
       </div>
     </div>
   );
