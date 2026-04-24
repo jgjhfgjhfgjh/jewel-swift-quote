@@ -308,13 +308,13 @@ function ProductCalculator() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
       {/* ── Row 1: Product card + Sliders + Results ── */}
-      <div className="grid lg:grid-cols-[1fr_1fr_1fr] gap-6 items-start">
+      <div className="grid lg:grid-cols-3 gap-6 items-stretch">
 
         {/* Product card */}
-        <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden flex flex-col">
           <div className="relative">
             <img
               src={DEMO_PRODUCT.img}
@@ -330,14 +330,14 @@ function ProductCalculator() {
               -{DEMO_PRODUCT.discount}%
             </div>
           </div>
-          <div className="p-5">
+          <div className="p-5 flex flex-col flex-1">
             <div className="text-xs font-bold text-amber-600 tracking-wide mb-1">{DEMO_PRODUCT.brand}</div>
             <div className="font-semibold text-sm leading-snug mb-3">{DEMO_PRODUCT.fullName}</div>
             <div className="flex items-center gap-1.5 mb-4">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               <span className="text-xs text-emerald-600 font-medium">Skladem: {DEMO_PRODUCT.stock} ks</span>
             </div>
-            <div className="rounded-xl bg-muted/60 border border-border p-3 space-y-1.5 text-xs">
+            <div className="rounded-xl bg-muted/60 border border-border p-3 space-y-1.5 text-xs mt-auto">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">VOC (nákup)</span>
                 <span className="font-semibold">€{DEMO_PRODUCT.vocEur.toFixed(2)} <span className="text-muted-foreground font-normal">≈ {DEMO_PRODUCT.voc.toLocaleString('cs')} Kč</span></span>
@@ -356,11 +356,11 @@ function ProductCalculator() {
         </div>
 
         {/* Sliders */}
-        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 space-y-8">
-          <div>
-            <div className="text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">Nastav svůj scénář</div>
+        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 flex flex-col gap-8">
+          <div className="flex-1 space-y-6">
+            <div className="text-[11px] tracking-[0.2em] uppercase text-primary font-semibold">Nastav svůj scénář</div>
 
-            <div className="mb-6">
+            <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-sm font-medium flex items-center gap-1.5">
                   <Lock className="h-3.5 w-3.5 text-muted-foreground" />
@@ -374,7 +374,7 @@ function ProductCalculator() {
               <p className="text-[11px] text-muted-foreground mt-1">Velkoobchodní cena swelt.partner — fixní, nelze měnit</p>
             </div>
 
-            <div className="mb-6">
+            <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-sm font-medium">Tvoje prodejní cena</label>
                 <span className="font-semibold text-primary tabular-nums">{sellPrice.toLocaleString('cs')} Kč</span>
@@ -414,26 +414,16 @@ function ProductCalculator() {
         </div>
 
         {/* Results panel */}
-        <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-md h-full flex flex-col justify-between">
-          <div>
-            <div className="text-xs opacity-70 mb-4 uppercase tracking-wider">Roční potenciál po odečtení plánu</div>
-
-            {/* Billing toggle */}
-            <div className="flex rounded-lg bg-white/15 p-0.5 mb-5 gap-0.5">
-              {(['quarterly', 'yearly'] as const).map(p => (
-                <button key={p} onClick={() => setPlanBilling(p)}
-                  className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 ${planBilling === p ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
-                  {p === 'quarterly' ? 'Čtvrtletně' : (
-                    <span className="flex items-center gap-1.5">Ročně <span className="text-[9px] bg-emerald-500 text-white rounded px-1 py-0.5 leading-none">−20%</span></span>
-                  )}
-                </button>
-              ))}
-            </div>
+        <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-md flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="text-xs opacity-70 uppercase tracking-wider">Roční potenciál po odečtení plánu</div>
 
             {/* Gross */}
-            <div className="text-[10px] opacity-50 uppercase tracking-wider mb-0.5">Hrubý potenciál</div>
-            <div className="font-display text-4xl font-bold mb-1">{yearlyProfit.toLocaleString('cs')} <span className="text-lg font-normal opacity-60">Kč/rok</span></div>
-            <div className="text-xs opacity-60 mb-4">při {orders} obj./měsíc</div>
+            <div>
+              <div className="text-[10px] opacity-50 uppercase tracking-wider mb-0.5">Hrubý potenciál</div>
+              <div className="font-display text-4xl font-bold leading-none">{yearlyProfit.toLocaleString('cs')}</div>
+              <div className="text-sm opacity-60 mt-1">Kč / rok · {orders} obj./měsíc</div>
+            </div>
 
             {/* Selected plan deduction */}
             <div className="rounded-xl bg-white/10 border border-white/20 px-4 py-3 space-y-2">
@@ -462,25 +452,23 @@ function ProductCalculator() {
         </div>
       </div>
 
-      {/* ── Row 2: All plans ── */}
-      <div>
-        {/* Billing toggle header */}
-        <div className="flex items-center justify-between mb-4 px-1">
-          <p className="text-xs text-muted-foreground">* Orientační kalkulace, nezahrnuje náklady na reklamu a platební brány.</p>
-          <div className="flex rounded-lg border border-border bg-muted/30 p-0.5 gap-0.5 shrink-0">
-            {(['quarterly', 'yearly'] as const).map(p => (
-              <button key={p} onClick={() => setPlanBilling(p)}
-                className={`rounded-md px-3 py-1 text-[11px] font-semibold transition-colors flex items-center gap-1 ${planBilling === p ? 'bg-white shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
-                {p === 'quarterly' ? 'Čtvrtletně' : (
-                  <span className="flex items-center gap-1.5">Ročně <span className="text-[9px] bg-emerald-500 text-white rounded px-1 py-0.5 leading-none">−20%</span></span>
-                )}
-              </button>
-            ))}
-          </div>
+      {/* ── Separator + centered billing toggle ── */}
+      <div className="flex flex-col items-center gap-3">
+        <p className="text-xs text-muted-foreground text-center">* Orientační kalkulace, nezahrnuje náklady na reklamu a platební brány.</p>
+        <div className="inline-flex rounded-xl border border-border bg-white p-1 gap-1 shadow-sm">
+          {(['quarterly', 'yearly'] as const).map(p => (
+            <button key={p} onClick={() => setPlanBilling(p)}
+              className={`rounded-lg px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${planBilling === p ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}>
+              {p === 'quarterly' ? 'Čtvrtletně' : (
+                <span className="flex items-center gap-2">Ročně <span className="text-[10px] bg-emerald-500 text-white rounded px-1.5 py-0.5 leading-none">−20 %</span></span>
+              )}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* 3 plan cards */}
-        <div className="grid lg:grid-cols-3 gap-4">
+      {/* ── Row 2: All plans ── */}
+      <div className="grid lg:grid-cols-3 gap-4">
           {calcPlans.map(plan => {
             const monthlyPrice = planBilling === 'quarterly' ? plan.monthlyQ : plan.monthlyY;
             const yearlyPlanCost = monthlyPrice * 12;
