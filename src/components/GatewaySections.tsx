@@ -4,7 +4,7 @@ import {
   Handshake, PackageOpen, HandCoins, BrainCircuit, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, LogIn, UserPlus,
+  Package, Clock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -486,20 +486,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       ],
       ctas: (
         <div className="flex flex-col sm:flex-row gap-3">
-          {user ? (
-            <Button onClick={() => navigate('/velkoobchod')} className="gap-2">
-              Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
-            </Button>
-          ) : (
-            <>
-              <Button onClick={() => openAuth('login')} className="gap-2">
-                <LogIn className="h-4 w-4" /> Přihlásit se
-              </Button>
-              <Button variant="outline" onClick={() => openAuth('register')} className="gap-2">
-                <UserPlus className="h-4 w-4" /> B2B Registrace
-              </Button>
-            </>
-          )}
+          <Button
+            onClick={() => user ? navigate('/velkoobchod') : openAuth('register')}
+            className="gap-2"
+          >
+            Vstoupit do velkoobchodu <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       ),
       visual: <B2BVisual />,
