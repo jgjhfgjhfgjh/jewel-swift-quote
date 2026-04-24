@@ -418,6 +418,28 @@ function ProductCalculator() {
           <div className="space-y-4">
             <div className="text-xs opacity-70 uppercase tracking-wider">Roční potenciál po odečtení plánu</div>
 
+            {/* Plan tier selector */}
+            <div className="flex rounded-lg bg-white/15 p-0.5 gap-0.5">
+              {(['starter', 'silver'] as const).map(t => (
+                <button key={t} onClick={() => setPlanTier(t)}
+                  className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors ${planTier === t ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
+                  {t === 'starter' ? 'Starter' : 'Silver'}
+                </button>
+              ))}
+            </div>
+
+            {/* Billing frequency toggle */}
+            <div className="flex rounded-lg bg-white/15 p-0.5 gap-0.5">
+              {(['quarterly', 'yearly'] as const).map(p => (
+                <button key={p} onClick={() => setPlanBilling(p)}
+                  className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 ${planBilling === p ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
+                  {p === 'quarterly' ? 'Čtvrtletně' : (
+                    <span className="flex items-center gap-1.5">Ročně <span className="text-[9px] bg-emerald-500 text-white rounded px-1 py-0.5 leading-none">−20%</span></span>
+                  )}
+                </button>
+              ))}
+            </div>
+
             {/* Gross */}
             <div>
               <div className="text-[10px] opacity-50 uppercase tracking-wider mb-0.5">Hrubý potenciál</div>
