@@ -14,9 +14,10 @@ interface AuthModalProps {
   onOpenChange: (open: boolean) => void;
   defaultTab?: 'login' | 'register';
   onLoginSuccess?: () => void;
+  tip?: string;
 }
 
-export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuccess }: AuthModalProps) {
+export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuccess, tip }: AuthModalProps) {
   const { signIn } = useAuthContext();
   const [tab, setTab] = useState<'login' | 'register'>(defaultTab);
 
@@ -151,6 +152,22 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         <div className="px-8 py-6 space-y-5">
           {tab === 'login' ? (
             <>
+              {tip && (
+                <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 flex items-start gap-3">
+                  <Eye className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+                  <div className="text-xs text-blue-800 leading-relaxed">
+                    <span>{tip}</span>
+                    {' '}
+                    <button
+                      type="button"
+                      onClick={() => setTab('register')}
+                      className="font-semibold underline underline-offset-2 hover:text-blue-900 transition-colors"
+                    >
+                      Registrovat se →
+                    </button>
+                  </div>
+                </div>
+              )}
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">

@@ -320,7 +320,12 @@ const Velkoobchod = () => {
     >
       <Navbar />
       <FloatingNotif />
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
+      <AuthModal
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        defaultTab={authTab}
+        tip="Registrujte se zdarma a uvidíte i velkoobchodní nákupní ceny — B2B účet schválíme do 24 hodin."
+      />
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 border-b border-border">
@@ -445,11 +450,11 @@ const Velkoobchod = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   {!user ? (
                     <>
-                      <Button onClick={() => openAuth('register')} className="gap-2" size="lg">
+                      <Button onClick={() => openAuth('login')} className="gap-2" size="lg">
                         Nahlédnout do katalogu <ArrowRight className="h-4 w-4" />
                       </Button>
-                      <Button onClick={() => openAuth('login')} variant="outline" size="lg" className="gap-2">
-                        Přihlásit se
+                      <Button onClick={() => openAuth('register')} variant="outline" size="lg" className="gap-2">
+                        Registrovat se
                       </Button>
                     </>
                   ) : isB2bApproved ? (
