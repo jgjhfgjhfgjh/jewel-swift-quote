@@ -4,7 +4,7 @@ import {
   Handshake, Package, TrendingUp, ShieldCheck, ArrowRight, Check,
   Users, Star, Clock, Globe, Zap, Store, PackageOpen, Rss,
   HandCoins, BrainCircuit, ChevronDown, Truck, BarChart3, Award,
-  ShoppingBag, Factory, Lock, BadgeCheck, UserPlus,
+  ShoppingBag, Factory, Lock, BadgeCheck, UserPlus, Eye, CheckCircle, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -366,7 +366,7 @@ const Velkoobchod = () => {
               </div>
             </Reveal>
             <Reveal delay={320}>
-              <div className="flex flex-wrap gap-5 text-sm text-muted-foreground">
+              <div className="flex flex-wrap gap-5 text-sm text-muted-foreground mb-8">
                 {[
                   'Registrace zdarma',
                   'Bez minimálního odběru',
@@ -380,6 +380,19 @@ const Velkoobchod = () => {
                 ))}
               </div>
             </Reveal>
+            {!user && (
+              <Reveal delay={400}>
+                <div className="inline-flex items-start gap-3 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 max-w-xl">
+                  <Eye className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <span className="font-semibold text-blue-800">Chcete si nejdřív prohlédnout sortiment?</span>
+                    <span className="text-blue-700/80"> Zaregistrujte se zdarma přes e-mail nebo Google a okamžitě nahlédněte do celého katalogu — fotky, dostupnost a doporučené ceny. </span>
+                    <span className="font-semibold text-blue-800">Velkoobchodní nákupní ceny</span>
+                    <span className="text-blue-700/80"> se odemknou po schválení B2B účtu.</span>
+                  </div>
+                </div>
+              </Reveal>
+            )}
           </div>
         </div>
       </section>
@@ -401,6 +414,139 @@ const Velkoobchod = () => {
                 <div className="text-sm text-muted-foreground">{label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Nahlédněte do katalogu ── */}
+      <section className="py-20 sm:py-28 bg-white">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+            {/* Copywriting */}
+            <Reveal>
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700 uppercase tracking-wider mb-5">
+                  <Eye className="h-3.5 w-3.5" />
+                  Nahlédněte bez závazků
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
+                  Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
+                </h2>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Víme, že vstoupit do nového partnerství chce důvěru. Proto vám umožňujeme nahlédnout do katalogu ještě předtím, než cokoliv rozhodujete. Stačí se přihlásit přes e-mail nebo Google — trvá to 30 sekund.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Uvidíte celý sortiment: <strong className="text-foreground">3 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC).</strong> Takže si rovnou spočítáte, jaké marže vás čekají.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-8">
+                  <strong className="text-foreground">Velkoobchodní nákupní ceny</strong> jsou skryté a odemknou se automaticky po ověření a schválení vašeho B2B účtu — zpravidla do 24 hodin. Registrace je zcela zdarma.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {!user ? (
+                    <>
+                      <Button onClick={() => openAuth('register')} className="gap-2" size="lg">
+                        Nahlédnout do katalogu <ArrowRight className="h-4 w-4" />
+                      </Button>
+                      <Button onClick={() => openAuth('login')} variant="outline" size="lg" className="gap-2">
+                        Přihlásit se
+                      </Button>
+                    </>
+                  ) : isB2bApproved ? (
+                    <Button onClick={goToCatalog} className="gap-2" size="lg">
+                      Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Access tier comparison */}
+            <Reveal delay={150}>
+              <div className="space-y-4">
+                {[
+                  {
+                    label: 'Nepřihlášen',
+                    icon: Lock,
+                    iconColor: 'text-slate-400',
+                    bg: 'bg-slate-50 border-slate-200',
+                    labelColor: 'text-slate-500',
+                    items: [
+                      { text: 'Prohlídka sortimentu', ok: false },
+                      { text: 'Fotky a popis produktů', ok: false },
+                      { text: 'Doporučené ceny (MOC)', ok: false },
+                      { text: 'Živé zásoby', ok: false },
+                      { text: 'Velkoobchodní ceny', ok: false },
+                      { text: 'Objednávkový systém', ok: false },
+                    ],
+                  },
+                  {
+                    label: 'Přihlášen zdarma (Google / e-mail)',
+                    icon: Eye,
+                    iconColor: 'text-blue-600',
+                    bg: 'bg-blue-50 border-blue-200',
+                    labelColor: 'text-blue-700',
+                    highlight: true,
+                    badge: 'Bez čekání',
+                    items: [
+                      { text: 'Prohlídka sortimentu', ok: true },
+                      { text: 'Fotky a popis produktů', ok: true },
+                      { text: 'Doporučené ceny (MOC)', ok: true },
+                      { text: 'Živé zásoby', ok: true },
+                      { text: 'Velkoobchodní ceny', ok: false, locked: true },
+                      { text: 'Objednávkový systém', ok: false, locked: true },
+                    ],
+                  },
+                  {
+                    label: 'Schválený B2B partner',
+                    icon: BadgeCheck,
+                    iconColor: 'text-primary',
+                    bg: 'bg-primary/5 border-primary/20',
+                    labelColor: 'text-primary',
+                    badge: 'Plný přístup',
+                    items: [
+                      { text: 'Prohlídka sortimentu', ok: true },
+                      { text: 'Fotky a popis produktů', ok: true },
+                      { text: 'Doporučené ceny (MOC)', ok: true },
+                      { text: 'Živé zásoby', ok: true },
+                      { text: 'Velkoobchodní ceny', ok: true },
+                      { text: 'Objednávkový systém', ok: true },
+                    ],
+                  },
+                ].map((tier) => {
+                  const TIcon = tier.icon;
+                  return (
+                    <div key={tier.label} className={`rounded-2xl border p-5 ${tier.bg}`}>
+                      <div className="flex items-center gap-2 mb-4">
+                        <TIcon className={`h-4 w-4 shrink-0 ${tier.iconColor}`} />
+                        <span className={`font-semibold text-sm ${tier.labelColor}`}>{tier.label}</span>
+                        {tier.badge && (
+                          <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${tier.highlight ? 'bg-blue-200 text-blue-800' : 'bg-primary/15 text-primary'}`}>
+                            {tier.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                        {tier.items.map(item => (
+                          <div key={item.text} className="flex items-center gap-1.5 text-xs">
+                            {item.ok ? (
+                              <CheckCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                            ) : item.locked ? (
+                              <Lock className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                            ) : (
+                              <X className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                            )}
+                            <span className={item.ok ? 'text-foreground/80' : 'text-slate-400'}>
+                              {item.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
