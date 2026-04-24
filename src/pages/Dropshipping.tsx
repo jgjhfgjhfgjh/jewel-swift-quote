@@ -244,9 +244,16 @@ const DEMO_PRODUCT = {
   stock: 14,
 };
 
+const PLAN_PRICES = {
+  starter: { monthly: 1490, yearly: 1192 },
+  silver:  { monthly: 2490, yearly: 1992 },
+};
+
 function ProductCalculator() {
   const [sellPrice, setSellPrice] = useState(DEMO_PRODUCT.moc);
   const [orders, setOrders] = useState(30);
+  const [planTier, setPlanTier] = useState<'starter' | 'silver'>('silver');
+  const [planBilling, setPlanBilling] = useState<'quarterly' | 'yearly'>('quarterly');
 
   const margin = sellPrice - DEMO_PRODUCT.voc;
   const marginPct = sellPrice > 0 ? ((margin / sellPrice) * 100).toFixed(1) : '0.0';
@@ -254,6 +261,11 @@ function ProductCalculator() {
   const yearlyProfit = monthlyProfit * 12;
   const isGood = margin >= 500;
   const profitColor = margin >= 1000 ? 'text-emerald-600' : margin >= 0 ? 'text-amber-600' : 'text-red-500';
+
+  const planMonthlyPrice = PLAN_PRICES[planTier][planBilling === 'quarterly' ? 'monthly' : 'yearly'];
+  const planYearlyCost = planMonthlyPrice * 12;
+  const netYearlyProfit = yearlyProfit - planYearlyCost;
+
   const navigate = useNavigate();
 
   return (
@@ -369,11 +381,55 @@ function ProductCalculator() {
       <div className="space-y-4">
         {/* Roční potenciál */}
         <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-md">
-          <div className="text-xs opacity-80 mb-1 uppercase tracking-wider">Roční potenciál</div>
-          <div className="font-display text-5xl font-bold mb-1">{yearlyProfit.toLocaleString('cs')}</div>
-          <div className="text-sm opacity-80">Kč / rok při {orders} obj./měsíc</div>
+          <div className="text-xs opacity-80 mb-3 uppercase tracking-wider">Roční potenciál po odečtení plánu</div>
+
+          {/* Plan tier selector */}
+          <div className="flex rounded-lg bg-white/15 p-0.5 mb-2 gap-0.5">
+            {(['starter', 'silver'] as const).map(t => (
+              <button key={t} onClick={() => setPlanTier(t)}
+                className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors ${planTier === t ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
+                {t === 'starter' ? 'Starter' : 'Silver'}
+              </button>
+            ))}
+          </div>
+
+          {/* Billing toggle */}
+          <div className="flex rounded-lg bg-white/15 p-0.5 mb-4 gap-0.5">
+            {(['quarterly', 'yearly'] as const).map(p => (
+              <button key={p} onClick={() => setPlanBilling(p)}
+                className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 ${planBilling === p ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
+                {p === 'quarterly' ? 'Čtvrtletně' : (
+                  <span className="flex items-center gap-1">Ročně <span className="text-[9px] bg-emerald-500 text-white rounded px-1 py-0.5">−20%</span></span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Gross */}
+          <div className="text-xs opacity-60 mb-0.5 uppercase tracking-wider">Hrubý potenciál</div>
+          <div className="font-display text-4xl font-bold mb-1">{yearlyProfit.toLocaleString('cs')} <span className="text-lg font-normal opacity-70">Kč</span></div>
+          <div className="text-xs opacity-70 mb-3">při {orders} obj./měsíc</div>
+
+          {/* Deduction box */}
+          <div className="rounded-xl bg-white/10 border border-white/20 px-4 py-3 space-y-2">
+            <div className="flex justify-between text-xs">
+              <span className="opacity-70">Plán {planTier === 'starter' ? 'Starter' : 'Silver'} / rok</span>
+              <span className="text-red-300 font-semibold">−{planYearlyCost.toLocaleString('cs')} Kč</span>
+            </div>
+            <div className="text-[10px] opacity-50">
+              {planMonthlyPrice.toLocaleString('cs')} Kč/měs · fakturováno {planBilling === 'quarterly' ? 'čtvrtletně' : 'ročně'}
+            </div>
+            <div className="h-px bg-white/20" />
+            <div className="flex justify-between text-sm font-bold">
+              <span>Čistý zisk / rok</span>
+              <span className={netYearlyProfit >= 0 ? 'text-emerald-300' : 'text-red-300'}>
+                {netYearlyProfit.toLocaleString('cs')} Kč
+              </span>
+            </div>
+          </div>
+
           {isGood && (
-            <div className="mt-4 rounded-lg bg-white/15 px-3 py-2 text-xs">
+            <div className="mt-3 rounded-lg bg-white/15 px-3 py-2 text-xs">
               ✓ Výborná marže — tento produkt stojí za propagaci
             </div>
           )}
