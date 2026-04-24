@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, BrainCircuit } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -100,8 +100,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
         </div>
 
-        {/* Center: Search bar — desktop only, only in catalog mode */}
-        {showSearch && (
+        {/* Center: Search bar in catalog mode / Section nav links in home mode */}
+        {showSearch ? (
           <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
             <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -114,7 +114,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               />
             </div>
           </div>
-        )}
+        ) : location.pathname === '/' && isHome ? (
+          <nav className="hidden lg:flex flex-1 justify-center items-center gap-1 mx-4">
+            {[
+              { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
+              { href: '#feed', label: 'swelt.feed', icon: Rss },
+              { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
+              { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
+              { href: '#intelligence', label: 'Intelligence', icon: BrainCircuit },
+            ].map(({ href, label, icon: Icon }) => (
+              <a key={href} href={href}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">
+                <Icon className="h-3.5 w-3.5" />
+                {label}
+              </a>
+            ))}
+          </nav>
+        ) : null}
 
 
 

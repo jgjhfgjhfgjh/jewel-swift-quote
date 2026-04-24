@@ -16,6 +16,8 @@ import Partner from "./pages/Partner.tsx";
 import Velkoobchod from "./pages/Velkoobchod.tsx";
 import Intelligence from "./pages/Intelligence.tsx";
 import Dropshipping from "./pages/Dropshipping.tsx";
+import Feed from "./pages/Feed.tsx";
+import Luxury from "./pages/Luxury.tsx";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,8 @@ const App = () => (
             <Route path="/velkoobchod" element={<Velkoobchod />} />
             <Route path="/intelligence" element={<Intelligence />} />
             <Route path="/dropshipping" element={<Dropshipping />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/luxury" element={<Luxury />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

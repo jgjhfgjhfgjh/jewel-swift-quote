@@ -14,9 +14,8 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
-import { TripleGateway } from '@/components/TripleGateway';
+import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
-import { HomepageCanvas } from '@/components/HomepageCanvas';
 import { CatalogGateway } from '@/components/CatalogGateway';
 import { useAuthContext } from '@/contexts/AuthContext';
 
@@ -115,10 +114,7 @@ const Index = () => {
       {viewMode === 'home' && (
         <div className="relative z-10 animate-fade-in">
           <div className="relative z-20 -mt-20 sm:-mt-24">
-            <TripleGateway onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
-          </div>
-          <div className="bg-background">
-            <HomepageCanvas />
+            <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
           </div>
         </div>
       )}
