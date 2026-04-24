@@ -20,33 +20,59 @@ function SeoHead() {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'Co je produktový feed a k čemu slouží?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Produktový feed je strukturovaný soubor (XML, CSV, JSON) s daty o vašich produktech — název, cena, EAN, skladovost, popis, foto. Slouží k automatickému propojení vašeho e-shopu se srovnávači (Heureka, Zbozi.cz), inzertními platformami (Google Shopping, Facebook) a dalšími kanály bez manuální práce.' },
+          name: 'Co je swelt.feed a jak mi pomůže?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'swelt.feed je služba, která automaticky přenese náš katalog 3 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
+          },
         },
         {
           '@type': 'Question',
-          name: 'Jaké formáty feedu swelt.feed podporuje?',
-          acceptedAnswer: { '@type': 'Answer', text: 'swelt.feed generuje feed ve formátech XML, CSV, JSON, nativní Heureka.cz XML, Zbozi.cz XML, Google Shopping XML (RSS2) a Facebook Catalog CSV. Všechny formáty jsou dostupné v plánu Pro, plán Starter zahrnuje XML a CSV.' },
+          name: 'Musím umět programovat, abych mohl swelt.feed použít?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Vůbec ne. Pro Shoptet, WooCommerce a Upgates máme připravené přímé integrace — nastavíte je za 10–20 minut bez jediného řádku kódu. Pro ostatní platformy vám pošleme odkaz na feed, který jednoduše vložíte do nastavení vašeho e-shopu. Pokud si nevíte rady, pomůžeme vám zdarma.',
+          },
         },
         {
           '@type': 'Question',
-          name: 'Jak rychle mohu spustit první feed?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Po registraci máte feed zprovozněný do 48 hodin. Přimé integrace pro Shoptet, WooCommerce a Upgates trvají obvykle méně než 20 minut. Technická podpora vám s nastavením pomůže zdarma.' },
+          name: 'Jaký je rozdíl mezi swelt.feed a swelt.dropshipping?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.dropshipping je o krok dál: nulový sklad, nulová logistika.',
+          },
         },
         {
           '@type': 'Question',
-          name: 'Mohu filtrovat produkty v feedu dle kategorie nebo značky?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Ano. Ve Feed Builderu si navolíte kategorie (Hodinky, Šperky, Doplňky), konkrétní značky (Tommy Hilfiger, Swarovski apod.) i maximální počet produktů. Změny se projeví okamžitě. Plán Pro a Enterprise umožňuje i filtry dle skladovosti, marže nebo vlastních tagů.' },
+          name: 'Jak rychle uvidím produkty ve svém e-shopu?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Typicky do 48 hodin od registrace. Přímé integrace pro Shoptet a WooCommerce trvají méně než 20 minut. Technická podpora vám s nastavením pomůže zdarma — stačí napsat.',
+          },
         },
         {
           '@type': 'Question',
-          name: 'Jak probíhají aktualizace cen a skladových zásob?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Plán Starter aktualizuje feed 1× denně. Plán Pro 4× denně. Enterprise plán nabízí real-time aktualizace s latencí pod 5 minut. Při každé aktualizaci se ověřují ceny, skladovost a dostupnost všech 3 000+ produktů.' },
+          name: 'Jak fungují aktualizace cen a dostupnosti?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Katalog aktualizujeme každé 2 hodiny na naší straně. Váš e-shop pak feed načítá: plán Starter 1× denně, plán Pro 4× denně (každých 6 hodin). Pokud se produkt vyprodá, feed ho automaticky označí jako nedostupný — váš zákazník nikdy neobjedná něco, co nemáme.',
+          },
         },
         {
           '@type': 'Question',
-          name: 'Jaký je rozdíl mezi plánem Pro a Enterprise?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Plán Pro zahrnuje 3 feedů najednou, 4× denní aktualizaci a celý katalog 3 000+ produktů. Enterprise přidává neomezený počet feedů, real-time aktualizace, API přístup pro vývojáře, vlastní atributy, SLA garanci dostupnosti a dedikovaného account managera.' },
+          name: 'Mohu si vybrat jen část katalogu — třeba jen hodinky?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Ano. Ve Feed Builderu si zvolíte kategorie (Hodinky, Šperky, Doplňky), konkrétní značky i maximální počet produktů. Chcete jen Tommy Hilfiger a Festina? Žádný problém. Změny se projeví při dalším načtení feedu.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Co se stane, když zákazník chce zboží vrátit?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
+          },
         },
       ],
     };
@@ -54,8 +80,8 @@ function SeoHead() {
     const serviceSchema = {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'swelt.feed — Produktový feed pro e-shopy',
-      description: 'Automatický produktový feed 3 000+ prémiových hodinek a šperků pro české a slovenské e-shopy. Heureka, Zbozi.cz, Google Shopping, Facebook Catalog, Shoptet — synchronizace v reálném čase.',
+      name: 'swelt.feed — Produktový feed prémiových hodinek a šperků',
+      description: 'Automatický produktový feed 3 000+ prémiových hodinek a šperků pro české a slovenské e-shopy. Shoptet, WooCommerce, Heureka, Zbozi.cz, Google Shopping — bez technických znalostí.',
       provider: { '@type': 'Organization', name: 'ZAGO / swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
@@ -162,23 +188,43 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
   );
 }
 
+/* ─── FloatingNotif ─── */
+function FloatingNotif({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+  return (
+    <div className={`fixed bottom-6 left-6 z-40 transition-all duration-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+      <div className="flex items-center gap-3 bg-white border border-border rounded-2xl shadow-xl px-4 py-3 max-w-xs">
+        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <Rss className="h-4 w-4 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-semibold text-foreground truncate">Nový e-shop právě aktivoval feed</p>
+          <p className="text-[11px] text-muted-foreground">před 3 minutami · Shoptet integrace</p>
+        </div>
+        <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Data ─── */
 const FORMAT_LIST = [
-  { id: 'xml',      label: 'XML',            icon: FileText,  color: '#2563eb', desc: 'Univerzální formát pro libovolnou platformu' },
-  { id: 'csv',      label: 'CSV',            icon: Download,  color: '#0891b2', desc: 'Ideální pro import do tabulek a custom systémů' },
-  { id: 'json',     label: 'JSON',           icon: FileJson,  color: '#7c3aed', desc: 'REST API kompatibilní, pro vývojáře' },
-  { id: 'heureka',  label: 'Heureka.cz',     icon: BarChart3, color: '#ea580c', desc: 'Nativní XML dle specifikace Heureka.cz' },
-  { id: 'zbozi',    label: 'Zbozi.cz',       icon: ShoppingCart, color: '#16a34a', desc: 'XML kompatibilní se Zbozi.cz ceníkem' },
-  { id: 'google',   label: 'Google Shopping',icon: Globe,     color: '#dc2626', desc: 'Google Merchant Center RSS2 feed' },
-  { id: 'facebook', label: 'Facebook Catalog',icon: Rss,      color: '#1d4ed8', desc: 'Meta Catalog CSV pro dynamické reklamy' },
+  { id: 'xml',      label: 'XML',             icon: FileText,     color: '#2563eb', desc: 'Funguje na každé platformě — univerzální volba' },
+  { id: 'csv',      label: 'CSV',             icon: Download,     color: '#0891b2', desc: 'Vhodný pro import tabulek a vlastní systémy' },
+  { id: 'json',     label: 'JSON / API',      icon: FileJson,     color: '#7c3aed', desc: 'Pro vývojáře — real-time API přístup' },
+  { id: 'heureka',  label: 'Heureka.cz',      icon: BarChart3,    color: '#ea580c', desc: 'Nativní formát dle specifikace Heureka.cz' },
+  { id: 'zbozi',    label: 'Zbozi.cz',        icon: ShoppingCart, color: '#16a34a', desc: 'Ceník kompatibilní se Zbozi.cz' },
+  { id: 'google',   label: 'Google Shopping', icon: Globe,        color: '#dc2626', desc: 'Google Merchant Center — spusťte CPC reklamy' },
+  { id: 'facebook', label: 'Facebook Catalog',icon: Rss,          color: '#1d4ed8', desc: 'Dynamické reklamy na Facebooku a Instagramu' },
 ] as const;
 
 type FormatId = typeof FORMAT_LIST[number]['id'];
 
 const CATEGORIES = [
-  { id: 'hodinky',  label: 'Hodinky',  count: 1850 },
-  { id: 'sperky',   label: 'Šperky',   count: 780  },
-  { id: 'doplnky',  label: 'Doplňky',  count: 420  },
+  { id: 'hodinky',  label: 'Hodinky',   count: 1850 },
+  { id: 'sperky',   label: 'Šperky',    count: 780  },
+  { id: 'doplnky',  label: 'Doplňky',   count: 420  },
 ] as const;
 
 type CategoryId = typeof CATEGORIES[number]['id'];
@@ -265,33 +311,55 @@ ${p.id},"${p.brand} ${p.name}","${p.description}","${p.price} CZK","in stock","$
 }
 
 const PLATFORM_LIST = [
-  { name: 'Shoptet',           icon: '🏪', desc: 'Přímá API integrace — 1 kliknutí, vše automaticky.', time: '~15 min' },
-  { name: 'WooCommerce',       icon: '🛒', desc: 'WordPress plugin s XML feedem. Plná kontrola.', time: '~30 min' },
-  { name: 'Heureka.cz',        icon: '🔍', desc: 'Nativní XML dle specifikace. Automatické schválení.', time: '~10 min' },
-  { name: 'Zbozi.cz',          icon: '📦', desc: 'Kompatibilní XML ceník, okamžitá synchronizace.', time: '~10 min' },
-  { name: 'Google Shopping',   icon: '🛍️', desc: 'Merchant Center RSS2 feed. CPC reklamy hned.', time: '~20 min' },
-  { name: 'Facebook Catalog',  icon: '📢', desc: 'Meta Catalog CSV pro dynamické reklamy FB/IG.', time: '~20 min' },
-  { name: 'Upgates',           icon: '⚙️', desc: 'CSV a XML import. Automatická aktualizace cen.', time: '~20 min' },
-  { name: 'PrestaShop',        icon: '🔧', desc: 'XML feed + REST API. Podpora verzí 1.6 i 1.7+.', time: '~30 min' },
-  { name: 'REST API',          icon: '</>', desc: 'JSON API přístup pro libovolnou integraci.', time: 'Custom' },
+  { name: 'Shoptet',           icon: '🏪', desc: 'Přímé propojení — vložte URL feedu do nastavení a hotovo. Žádný kód.', time: '~15 min' },
+  { name: 'WooCommerce',       icon: '🛒', desc: 'WordPress plugin pro import XML feedu. Nastavíte sami za pár kliků.', time: '~20 min' },
+  { name: 'Upgates',           icon: '⚙️', desc: 'CSV nebo XML import. Ceny a dostupnost se aktualizují automaticky.', time: '~20 min' },
+  { name: 'Heureka.cz',        icon: '🔍', desc: 'Nativní XML dle jejich specifikace. Produkty se schválí automaticky.', time: '~10 min' },
+  { name: 'Zbozi.cz',          icon: '📦', desc: 'Kompatibilní XML ceník — vaše nabídky se okamžitě synchronizují.', time: '~10 min' },
+  { name: 'Google Shopping',   icon: '🛍️', desc: 'Merchant Center RSS2 feed. Spusťte CPC reklamy hned dnes.', time: '~20 min' },
+  { name: 'Facebook Catalog',  icon: '📢', desc: 'Meta Catalog CSV pro dynamické reklamy na FB a Instagramu.', time: '~20 min' },
+  { name: 'PrestaShop',        icon: '🔧', desc: 'XML feed i REST API. Funguje s verzemi 1.6 i 1.7+.', time: '~30 min' },
+  { name: 'REST API',          icon: '</>', desc: 'JSON API pro vývojáře — real-time data pro libovolnou integraci.', time: 'Custom' },
 ];
 
 const FEATURES = [
-  { icon: Clock,     title: 'Automatická aktualizace', text: 'Ceny a skladovost se aktualizují 1× denně (Starter) nebo 4× denně (Pro). Nikdy nezobrazíš vyprodaný produkt.' },
-  { icon: TrendingUp,title: 'Vlastní cenová pravidla',  text: 'Nastav globální marži nebo pravidla po kategoriích. Feed automaticky přepočítá prodejní ceny s tvou marží.' },
-  { icon: Filter,    title: 'Filtrace dle kategorie',   text: 'Vyber přesně, co chceš v feedu zobrazit — hodinky, šperky nebo jen konkrétní značky. Zbytek ignoruj.' },
-  { icon: Settings,  title: 'Vlastní pole a atributy',  text: 'Přidej vlastní sloupce, přejmenuj pole nebo namapuj atributy přesně dle požadavků tvé platformy.' },
-  { icon: Layers,    title: 'Multi-formát v jednom',    text: 'Jeden účet, 3 feedů najednou (Pro plán). XML pro Shoptet, Heureka feed, Google Shopping — vše synchronizovaně.' },
-  { icon: Code,      title: 'API přístup pro vývojáře', text: 'REST API s JSON výstupem. Programaticky dotazuj produkty, filtry, ceny. Dokumentace + Postman kolekce zdarma.' },
+  { icon: Clock,      title: 'Automatická aktualizace bez práce',  text: 'Ceny a dostupnost se aktualizují každé 2 hodiny na naší straně. Váš feed pak přenese změny 1× denně (Starter) nebo 4× denně (Pro). Nikdy nezobrazíte vyprodaný produkt ani špatnou cenu.' },
+  { icon: TrendingUp, title: 'Vaše ceny, vaše marže',              text: 'Nastavte si globální přirážku nebo různá pravidla pro každou kategorii zvlášť. Feed automaticky přepočítá prodejní ceny — a vy vždy víte, kolik vyděláte na každém prodeji.' },
+  { icon: Filter,     title: 'Jen produkty, které chcete',         text: 'Zvolte si kategorie (Hodinky, Šperky, Doplňky), konkrétní značky nebo maximální počet produktů. Zbytek katalogu se do vašeho e-shopu nedostane.' },
+  { icon: Shield,     title: 'Nikdy neprodáte to, co nemáme',      text: 'Každá aktualizace feedu ověří dostupnost všech produktů. Jakmile se zboží vyprodá, feed ho označí jako nedostupný — a váš zákazník vidí správný stav.' },
+  { icon: Layers,     title: 'Jeden účet, více kanálů najednou',   text: 'Plán Pro vám dá 3 feedů současně. XML pro váš e-shop, nativní Heureka feed a Google Shopping — vše ze stejného katalogu, vše synchronizovaně.' },
+  { icon: Code,       title: 'API pro pokročilé',                  text: 'Potřebujete real-time data nebo vlastní integraci? REST API s JSON výstupem umí vše — dotazy na produkty, ceny, dostupnost. Dokumentace a příklady zdarma.' },
 ];
 
 const FAQS = [
-  { q: 'Co je produktový feed a k čemu slouží?', a: 'Produktový feed je strukturovaný soubor (XML, CSV, JSON) s kompletními daty o vašich produktech — název, cena, EAN, skladovost, popis, fotografie. Slouží k automatickému propojení vašeho e-shopu se srovnávači (Heureka.cz, Zbozi.cz), inzertními platformami (Google Shopping, Facebook Catalog) a dalšími kanály bez manuální práce a bez rizika zastaralých dat.' },
-  { q: 'Jaké formáty feedu swelt.feed podporuje?', a: 'swelt.feed generuje feed ve formátech XML, CSV, JSON, nativní Heureka.cz XML, Zbozi.cz XML, Google Shopping XML (RSS2) a Facebook Catalog CSV. Plán Starter zahrnuje XML a CSV, plán Pro všechny formáty najednou.' },
-  { q: 'Jak rychle mohu spustit první feed?', a: 'Po registraci máte feed zprovozněný do 48 hodin. Přímé integrace pro Shoptet, WooCommerce a Upgates trvají obvykle méně než 20 minut. Technická podpora vám s nastavením pomůže zdarma — bez příplatku.' },
-  { q: 'Mohu filtrovat produkty v feedu dle kategorie nebo značky?', a: 'Ano. Ve Feed Builderu si navolíte kategorie (Hodinky, Šperky, Doplňky), konkrétní značky (Tommy Hilfiger, Swarovski, Festina apod.) i maximální počet produktů. Změny se projeví okamžitě v živém náhledu. Plán Pro a Enterprise umožňuje i filtry dle skladovosti, marže nebo vlastních tagů.' },
-  { q: 'Jak probíhají aktualizace cen a skladových zásob?', a: 'Plán Starter aktualizuje feed 1× denně. Plán Pro 4× denně (každých 6 hodin). Enterprise plán nabízí real-time aktualizace s latencí pod 5 minut. Při každé aktualizaci se ověřují ceny, skladovost a dostupnost všech 3 000+ produktů v katalogu ZAGO.' },
-  { q: 'Jaký je rozdíl mezi plánem Pro a Enterprise?', a: 'Plán Pro zahrnuje 3 feedů najednou, 4× denní aktualizaci, celý katalog 3 000+ produktů, Google Shopping, Facebook Catalog a swelt.signal Lite. Enterprise přidává neomezený počet feedů, real-time aktualizace, plný API přístup, vlastní atributy, SLA garanci 99,9% dostupnosti a dedikovaného account managera.' },
+  {
+    q: 'Co je swelt.feed a jak mi pomůže?',
+    a: 'swelt.feed je služba, která automaticky přenese náš katalog 3 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
+  },
+  {
+    q: 'Musím umět programovat, abych mohl swelt.feed použít?',
+    a: 'Vůbec ne. Pro Shoptet, WooCommerce a Upgates máme připravené přímé integrace — nastavíte je za 10–20 minut bez jediného řádku kódu. Pro ostatní platformy vám pošleme odkaz na feed, který jednoduše vložíte do nastavení vašeho e-shopu. Pokud si nevíte rady, pomůžeme vám zdarma.',
+  },
+  {
+    q: 'Jaký je rozdíl mezi swelt.feed a swelt.dropshipping?',
+    a: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.dropshipping je o krok dál: nulový sklad, nulová logistika.',
+  },
+  {
+    q: 'Jak rychle uvidím produkty ve svém e-shopu?',
+    a: 'Typicky do 48 hodin od registrace. Přímé integrace pro Shoptet a WooCommerce trvají méně než 20 minut. Technická podpora vám s nastavením pomůže zdarma — stačí napsat.',
+  },
+  {
+    q: 'Jak fungují aktualizace cen a dostupnosti?',
+    a: 'Katalog aktualizujeme každé 2 hodiny na naší straně. Váš e-shop pak feed načítá: plán Starter 1× denně, plán Pro 4× denně (každých 6 hodin). Pokud se produkt vyprodá, feed ho automaticky označí jako nedostupný — váš zákazník nikdy neobjedná něco, co nemáme.',
+  },
+  {
+    q: 'Mohu si vybrat jen část katalogu — třeba jen hodinky?',
+    a: 'Ano. Ve Feed Builderu si zvolíte kategorie (Hodinky, Šperky, Doplňky), konkrétní značky i maximální počet produktů. Chcete jen Tommy Hilfiger a Festina? Žádný problém. Změny se projeví při dalším načtení feedu.',
+  },
+  {
+    q: 'Co se stane, když zákazník chce zboží vrátit?',
+    a: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
+  },
 ];
 
 /* ─── Feed Builder ─── */
@@ -327,8 +395,9 @@ function FeedBuilder() {
       <div className="rounded-2xl border border-border bg-white shadow-sm p-5 space-y-3">
         <div className="flex items-center gap-2 mb-1">
           <FileText className="h-4 w-4 text-primary" />
-          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Formát feedu</span>
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Kam chcete posílat feed?</span>
         </div>
+        <p className="text-xs text-muted-foreground pb-1">Vyberte platformu nebo kanál — živý náhled dat se okamžitě změní.</p>
         {FORMAT_LIST.map(f => {
           const Ico = f.icon;
           const active = selectedFormat === f.id;
@@ -349,10 +418,11 @@ function FeedBuilder() {
       {/* Middle — category + slider */}
       <div className="rounded-2xl border border-border bg-white shadow-sm p-5 space-y-6">
         <div>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-1">
             <Filter className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Kategorie</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Které produkty chcete?</span>
           </div>
+          <p className="text-xs text-muted-foreground mb-3">Zaškrtněte kategorie, které budete prodávat.</p>
           <div className="space-y-2">
             {CATEGORIES.map(c => {
               const active = activeCategories.has(c.id);
@@ -376,10 +446,11 @@ function FeedBuilder() {
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-1">
             <Package className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Max. produktů</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Kolik produktů chcete v feedu?</span>
           </div>
+          <p className="text-xs text-muted-foreground mb-3">Začněte s méně a postupně přidávejte — nebo rovnou vezměte celý katalog.</p>
           <Slider
             min={100}
             max={3000}
@@ -395,18 +466,18 @@ function FeedBuilder() {
           </div>
           {maxProducts[0] > 500 && (
             <p className="mt-3 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-              Pro katalog nad 500 produktů je potřeba plán <strong>Pro</strong>.
+              Pro více než 500 produktů najednou potřebujete plán <strong>Pro</strong>.
             </p>
           )}
         </div>
 
         <div className="rounded-xl bg-muted/60 border border-border p-4 space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Dostupných produktů</span>
+            <span className="text-muted-foreground">Produktů ve feedu</span>
             <span className="font-bold text-primary">{limitedCount.toLocaleString('cs')}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Frekvence aktualizace</span>
+            <span className="text-muted-foreground">Aktualizace</span>
             <span className="font-semibold text-foreground">{updateFrequency}</span>
           </div>
           <div className="flex justify-between">
@@ -423,7 +494,7 @@ function FeedBuilder() {
             <FormatIcon className="h-5 w-5" style={{ color: currentFormat.color }} />
           </div>
           <div>
-            <div className="font-bold text-sm">{currentFormat.label} Feed</div>
+            <div className="font-bold text-sm">{currentFormat.label} — živý náhled</div>
             <div className="text-xs text-muted-foreground">{currentFormat.desc}</div>
           </div>
         </div>
@@ -437,12 +508,12 @@ function FeedBuilder() {
         <div className="rounded-xl bg-muted/50 border border-border px-4 py-3 flex items-center gap-3">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
           <span className="text-xs text-muted-foreground">
-            <strong className="text-foreground">{limitedCount.toLocaleString('cs')} produktů</strong> připraveno k exportu · aktualizace {updateFrequency}
+            <strong className="text-foreground">{limitedCount.toLocaleString('cs')} produktů</strong> připraveno · aktualizace {updateFrequency}
           </span>
         </div>
 
         <Button className="w-full gap-2 font-semibold" onClick={() => navigate('/register')}>
-          Generovat feed
+          Chci tento feed
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
@@ -467,32 +538,59 @@ export default function Feed() {
   const plans = [
     {
       name: 'Starter',
-      subtitle: 'Pro první kroky a otestování',
+      subtitle: 'Ideální pro první kroky — vyzkoušejte bez závazku',
       monthly: price(490, 392),
       badge: null,
       featured: false,
       cta: 'Začít zdarma →',
-      features: ['1 feed (XML nebo CSV)', 'Aktualizace 1× denně', 'Až 500 produktů', 'E-mailová podpora', 'swelt.launch onboarding'],
-      missing: ['Heureka / Zbozi / Google / FB', 'Více feedů najednou', 'API přístup', 'swelt.signal'],
+      features: [
+        '1 feed (XML nebo CSV)',
+        'Až 500 produktů',
+        'Aktualizace 1× denně',
+        'Shoptet, WooCommerce, Upgates',
+        'E-mailová podpora',
+        'Onboarding krok za krokem',
+      ],
+      missing: [
+        'Heureka / Zbozi / Google / Facebook',
+        'Více feedů najednou',
+        'API přístup',
+      ],
     },
     {
       name: 'Pro',
-      subtitle: 'Pro rostoucí e-shopy co to myslí vážně',
+      subtitle: 'Pro e-shopy, které to myslí vážně',
       monthly: price(990, 792),
       badge: 'Nejoblíbenější',
       featured: true,
       cta: 'Aktivovat Pro →',
-      features: ['3 feedů najednou', 'XML + CSV + Heureka + Zbozi', 'Aktualizace 4× denně', 'Celý katalog 3 000+ produktů', 'Google Shopping + Facebook Catalog', 'Chat podpora', 'swelt.signal Lite'],
+      features: [
+        '3 feedů najednou',
+        'Celý katalog — 3 000+ produktů',
+        'Aktualizace 4× denně (každých 6 h)',
+        'XML + CSV + Heureka + Zbozi',
+        'Google Shopping + Facebook Catalog',
+        'Chat podpora',
+        'swelt.signal Lite (přehled trendů)',
+      ],
       missing: [],
     },
     {
       name: 'Enterprise',
-      subtitle: 'Pro profesionály a velké e-shopy',
+      subtitle: 'Pro velké e-shopy a profesionální týmy',
       monthly: 0,
-      badge: 'Enterprise',
+      badge: 'Na míru',
       featured: false,
       cta: 'Získat nabídku',
-      features: ['Neomezené feedů', 'Real-time aktualizace', 'Plný API přístup', 'Custom atributy a mapování', 'SLA garance 99,9%', 'Dedikovaný account manager', 'Prioritní podpora 4h SLA'],
+      features: [
+        'Neomezený počet feedů',
+        'Real-time aktualizace (< 2 h)',
+        'Plný API přístup (JSON)',
+        'Vlastní atributy a mapování polí',
+        'SLA garance 99,9 % dostupnosti',
+        'Dedikovaný account manager',
+        'Prioritní podpora 4h SLA',
+      ],
       missing: [],
     },
   ];
@@ -512,16 +610,15 @@ export default function Feed() {
       } as React.CSSProperties}
     >
       <style>{`
-        .feed-page .font-display { font-family: 'Montserrat', sans-serif !important; }
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+        .feed-page .font-display { font-family: 'Montserrat', sans-serif !important; }
       `}</style>
 
       <SeoHead />
       <Navbar />
 
-      {/* ─── Hero ─── */}
+      {/* ─── 1. Hero ─── */}
       <section className="relative overflow-hidden pt-28 pb-20 px-4">
-        {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 pointer-events-none" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
@@ -529,20 +626,24 @@ export default function Feed() {
           <Reveal>
             <Badge className="mb-5 px-4 py-1.5 text-sm font-semibold bg-primary/10 text-primary border-primary/20 rounded-full">
               <Rss className="h-3.5 w-3.5 mr-2" />
-              swelt.feed — Produktový feed pro e-shopy
+              swelt.feed — prémiové produkty pro váš e-shop
             </Badge>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-tight mb-5">
-              Tvůj e-shop nikdy nevypadne<br className="hidden sm:block" />
-              <span className="text-primary"> z kroku s trhem.</span>
+              Máte e-shop a chcete přidat<br className="hidden sm:block" />
+              <span className="text-primary"> prémiové produkty bez starostí?</span>
             </h1>
           </Reveal>
 
           <Reveal delay={160}>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-              Automatický produktový feed <strong className="text-foreground">3 000+ prémiových produktů</strong>. Heureka, Zbozi.cz, Google Shopping, Shoptet — vše synchronizované v reálném čase.
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-5 leading-relaxed">
+              Pořiďte si <strong className="text-foreground">swelt.feed</strong> a my vám propojíme e-shop s naším katalogem{' '}
+              <strong className="text-foreground">3 000+ prémiových hodinek a doplňků</strong> — žádné technické znalosti nejsou potřeba.
+            </p>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+              Nebo jděte ještě dál: se <strong className="text-foreground">swelt.dropshipping</strong> zboží vůbec nemusíte kupovat ani skladovat — my ho rovnou odešleme vašim zákazníkům.
             </p>
           </Reveal>
 
@@ -554,7 +655,7 @@ export default function Feed() {
               </Button>
               <Button size="lg" variant="outline" className="px-8 gap-2 font-semibold text-base" onClick={() => document.getElementById('feed-builder')?.scrollIntoView({ behavior: 'smooth' })}>
                 <Database className="h-4 w-4" />
-                Prohlédnout ukázku
+                Vyzkoušet na nečisto
               </Button>
             </div>
           </Reveal>
@@ -562,9 +663,10 @@ export default function Feed() {
           <Reveal delay={320}>
             <div className="flex flex-wrap items-center justify-center gap-3">
               {[
-                { icon: Package, label: '3 000+ produktů' },
-                { icon: Layers, label: '6+ formátů' },
-                { icon: RefreshCw, label: 'Aktualizace každou hodinu' },
+                { icon: Package,    label: '3 000+ produktů' },
+                { icon: Layers,     label: '7 formátů exportu' },
+                { icon: RefreshCw,  label: 'Aktualizace každé 2 hodiny' },
+                { icon: CheckCircle,label: 'Bez technických znalostí' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 rounded-full bg-white border border-border px-4 py-2 shadow-sm text-sm font-medium text-foreground">
                   <Icon className="h-4 w-4 text-primary" />
@@ -575,31 +677,17 @@ export default function Feed() {
           </Reveal>
         </div>
 
-        {/* Floating notification */}
-        <div className={`fixed bottom-6 left-6 z-40 transition-all duration-500 ${notifVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <div className="flex items-center gap-3 bg-white border border-border rounded-2xl shadow-xl px-4 py-3 max-w-xs">
-            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <Rss className="h-4 w-4 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-foreground truncate">Nový e-shop začal odebírat feed</p>
-              <p className="text-[11px] text-muted-foreground">před 2 minutami · Shoptet integrace</p>
-            </div>
-            <button onClick={() => setNotifVisible(false)} className="text-muted-foreground hover:text-foreground transition-colors">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
+        <FloatingNotif visible={notifVisible} onClose={() => setNotifVisible(false)} />
       </section>
 
-      {/* ─── Stats bar ─── */}
+      {/* ─── 2. Stats bar ─── */}
       <section className="bg-primary py-10 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-white">
           {[
-            { to: 3000, suffix: '+', label: 'produktů v feedu' },
-            { to: 6,    suffix: '',  label: 'formátů exportu' },
-            { to: 99,   suffix: '.9%', label: 'uptime' },
-            { to: 48,   suffix: 'h', label: 'implementace' },
+            { to: 3000, suffix: '+', label: 'produktů v katalogu' },
+            { to: 7,    suffix: '',  label: 'formátů exportu' },
+            { to: 48,   suffix: 'h', label: 'do spuštění feedu' },
+            { to: 15,   suffix: '+', label: 'let ZAGO na trhu' },
           ].map(({ to, suffix, label }) => (
             <div key={label}>
               <div className="text-3xl sm:text-4xl font-black mb-1">
@@ -611,34 +699,167 @@ export default function Feed() {
         </div>
       </section>
 
-      {/* ─── What is swelt.feed ─── */}
+      {/* ─── 3. Jak swelt.feed funguje ─── */}
       <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-14">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Jak to funguje</Badge>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+                Jak swelt.feed funguje pro váš e-shop
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Tři jednoduché kroky. Žádný kód. Žádné technické znalosti.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-14">
+            {[
+              {
+                step: '1',
+                icon: Users,
+                title: 'Zaregistrujete se',
+                desc: 'Vyberete plán, vyplníte e-mail a hotovo. Do 48 hodin máte feed připravený. Pomůžeme vám s nastavením zdarma — stačí napsat.',
+              },
+              {
+                step: '2',
+                icon: Link,
+                title: 'Propojíte e-shop',
+                desc: 'Dostanete odkaz na feed (URL). Vložíte ho do nastavení vašeho e-shopu nebo srovnávače — stejně jako byste nastavovali fakturaci. Pro Shoptet, WooCommerce a Upgates máme přímé integrace.',
+              },
+              {
+                step: '3',
+                icon: RefreshCw,
+                title: 'Vše běží samo',
+                desc: 'E-shop automaticky stahuje aktuální ceny a dostupnost. Vy jen prodáváte. My se staráme o to, aby data byla vždy správně.',
+              },
+            ].map(({ step, icon: Icon, title, desc }, i) => (
+              <Reveal key={step} delay={i * 100}>
+                <div className="relative text-center">
+                  <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-primary text-white font-black text-xl mb-5 shadow-lg shadow-primary/25">
+                    {step}
+                  </div>
+                  <div className="absolute top-6 left-1/2 hidden md:block w-full h-0.5 bg-gradient-to-r from-primary/30 to-transparent -z-10" />
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-bold text-foreground mb-2">{title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Upsell dropshipping */}
+          <Reveal delay={200}>
+            <div className="rounded-2xl bg-gradient-to-r from-indigo-50 to-blue-50 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="h-12 w-12 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+                <Package className="h-6 w-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-foreground mb-1">Nechcete vůbec řešit sklad ani nákup?</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Se <strong className="text-foreground">swelt.dropshipping</strong> zákazník objedná u vás, my zboží zabalíme a odešleme přímo jemu — pod vaším jménem. Vy nic neskladujete, nic nenakupujete, jen fakturujete.
+                </p>
+              </div>
+              <Button variant="outline" size="sm" className="shrink-0 font-semibold gap-1.5" onClick={() => navigate('/dropshipping')}>
+                Zjistit více
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ─── 4. Feed Builder ─── */}
+      <section id="feed-builder" className="py-20 px-4 bg-muted/40">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Vyzkoušejte si to</Badge>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+                Sestavte si feed přesně pro svůj e-shop
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Zvolte kam chcete posílat data, které kategorie a kolik produktů. Vpravo vidíte živý náhled toho, co váš e-shop nebo srovnávač dostane.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <FeedBuilder />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ─── 5. Platforms ─── */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Integrace</Badge>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+                Funguje s tím, co už máte
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Shoptet, WooCommerce, Heureka, Google Shopping — swelt.feed se napojí na vše bez kódu a bez IT oddělení.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {PLATFORM_LIST.map((p, i) => (
+              <Reveal key={p.name} delay={i * 50}>
+                <div className="rounded-2xl border border-border bg-white p-5 hover:border-primary/40 hover:shadow-md transition-all group">
+                  <div className="flex items-start gap-3 mb-2">
+                    <span className="text-2xl leading-none">{p.icon}</span>
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{p.name}</div>
+                      <div className="text-xs text-primary font-medium">Nastavení za {p.time}</div>
+                    </div>
+                    <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 6. What's in the catalog ─── */}
+      <section className="py-20 px-4 bg-muted/40">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <Reveal>
             <div>
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Co je swelt.feed?</Badge>
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Co dostanete v katalogu</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
-                Tvůj katalog. Automaticky. Všude.
+                3 000+ produktů připravených k prodeji
               </h2>
-              <p className="text-muted-foreground leading-relaxed mb-5">
-                swelt.feed propojuje velkoobchodní katalog <strong className="text-foreground">ZAGO/swelt.partner</strong> (3 000+ prémiových hodinek, šperků a doplňků) přímo s tvým e-shopem a inzertními platformami.
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Katalog zahrnuje <strong className="text-foreground">prémiové hodinky, šperky a doplňky</strong> od světových značek jako Tommy Hilfiger, Festina, Swarovski a dalších. Každý produkt má kompletní data:
               </p>
-              <p className="text-muted-foreground leading-relaxed mb-5">
-                Zapomeň na ruční aktualizace cen a skladovosti. Feed se aktualizuje automaticky — každý den (Starter) nebo každých 6 hodin (Pro). Tvůj e-shop vždy zobrazuje aktuální data.
+              <ul className="space-y-2 mb-6">
+                {[
+                  'Název, značka, SKU a EAN čárový kód',
+                  'Prodejní cena a doporučená maloobchodní cena',
+                  'Aktuální dostupnost a počet kusů na skladě',
+                  'Fotografie ve vysokém rozlišení (300–800 px)',
+                  'Popis produktu, kategorie a podkategorie',
+                  'Atributy (pohlaví, voděodolnost, materiál...)',
+                ].map(item => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 leading-relaxed">
+                <strong className="text-foreground">Tip:</strong> Chcete katalog bez starostí o sklad? Přejděte na{' '}
+                <button className="text-primary font-semibold hover:underline" onClick={() => navigate('/dropshipping')}>swelt.dropshipping</button>{' '}
+                — zákazník objedná, my odešleme, vy jen inkasujete.
               </p>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Jeden účet, jeden feed, více platforem najednou. Heureka.cz, Zbozi.cz, Google Shopping, Facebook Catalog — vše z jednoho místa.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button onClick={() => navigate('/register')} className="gap-2 font-semibold">
-                  Začít zdarma
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" onClick={() => document.getElementById('feed-builder')?.scrollIntoView({ behavior: 'smooth' })} className="gap-2">
-                  <Database className="h-4 w-4" />
-                  Vyzkoušet Feed Builder
-                </Button>
-              </div>
             </div>
           </Reveal>
 
@@ -648,7 +869,7 @@ export default function Feed() {
                 <div className="h-3 w-3 rounded-full bg-red-500" />
                 <div className="h-3 w-3 rounded-full bg-amber-500" />
                 <div className="h-3 w-3 rounded-full bg-emerald-500" />
-                <span className="ml-2 text-xs text-slate-400 font-mono">heureka-feed.xml</span>
+                <span className="ml-2 text-xs text-slate-400 font-mono">heureka-feed.xml — živá ukázka</span>
               </div>
               <pre className="text-[11px] sm:text-xs leading-relaxed font-mono text-emerald-300 whitespace-pre-wrap">{`<?xml version="1.0" encoding="UTF-8"?>
 <SHOP>
@@ -664,86 +885,30 @@ export default function Feed() {
     <MANUFACTURER>
       Tommy Hilfiger
     </MANUFACTURER>
-    <!-- aktualizace: ${new Date().toISOString().slice(0, 16).replace('T', ' ')} -->
+    <!-- aktualizováno: ${new Date().toISOString().slice(0, 16).replace('T', ' ')} -->
   </SHOPITEM>
   <!-- + 2 999 dalších produktů... -->
 </SHOP>`}</pre>
               <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
                 <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Feed živě · automatická aktualizace
+                Feed je živý · automatická aktualizace každé 2 hodiny
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ─── Feed Builder ─── */}
-      <section id="feed-builder" className="py-20 px-4 bg-muted/40">
-        <div className="max-w-6xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Interaktivní nástroj</Badge>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Postav si feed na míru
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Vyberte formát, kategorie a počet produktů. Živý náhled dat se okamžitě změní.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={100}>
-            <FeedBuilder />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ─── Platforms ─── */}
+      {/* ─── 7. Features ─── */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Integrace</Badge>
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Co vše dostanete</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Podporované platformy a kanály
+                Vše, co váš e-shop potřebuje
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                swelt.feed se připojí k tvému e-shopu i inzertním platformám. Bez kódu, bez stresu.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {PLATFORM_LIST.map((p, i) => (
-              <Reveal key={p.name} delay={i * 50}>
-                <div className="rounded-2xl border border-border bg-white p-5 hover:border-primary/40 hover:shadow-md transition-all group">
-                  <div className="flex items-start gap-3 mb-2">
-                    <span className="text-2xl leading-none">{p.icon}</span>
-                    <div className="flex-1">
-                      <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{p.name}</div>
-                      <div className="text-xs text-primary font-medium">Implementace {p.time}</div>
-                    </div>
-                    <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Features ─── */}
-      <section className="py-20 px-4 bg-muted/40">
-        <div className="max-w-5xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Funkce</Badge>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Vše, co potřebuješ v jednom feedu
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                swelt.feed není jen export XML. Je to kompletní datová vrstva pro tvůj e-shop.
+                swelt.feed není jen XML soubor. Je to živé datové propojení, které pracuje za vás 24 hodin denně.
               </p>
             </div>
           </Reveal>
@@ -764,20 +929,65 @@ export default function Feed() {
         </div>
       </section>
 
-      {/* ─── Pricing ─── */}
+      {/* ─── 8. Dropshipping cross-sell ─── */}
+      <section className="py-16 px-4 bg-gradient-to-br from-indigo-600 to-blue-700">
+        <div className="max-w-4xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-10">
+              <Badge className="mb-4 bg-white/20 text-white border-white/30">Chcete jít ještě dál?</Badge>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-4">
+                swelt.dropshipping: žádný sklad, žádná logistika
+              </h2>
+              <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">
+                S feedem stále musíte zboží nakoupit a skladovat. Se swelt.dropshipping to odpadá úplně. Zákazník objedná → vy přepošlete objednávku → my zboží zabalíme a odešleme přímo zákazníkovi pod vaším jménem.
+              </p>
+            </div>
+          </Reveal>
+          <div className="grid sm:grid-cols-3 gap-6 mb-10">
+            {[
+              { icon: ShoppingCart, title: 'Zákazník objedná u vás', desc: 'Zákazník nakoupí na vašem e-shopu jako obvykle — netuší, že zásilku připravujeme my.' },
+              { icon: Zap,          title: 'My vyřídíme vše ostatní', desc: 'Zboží zabalíme, přiložíme dokumenty a odešleme kurýrem (FedEx, DHL, UPS) přímo zákazníkovi.' },
+              { icon: TrendingUp,   title: 'Vy jen fakturujete', desc: 'Dostanete jeden souhrnný B2B doklad místo desítek faktur. Žádné zásoby, žádný sklad, čistý zisk.' },
+            ].map(({ icon: Icon, title, desc }, i) => (
+              <Reveal key={title} delay={i * 100}>
+                <div className="rounded-2xl bg-white/10 border border-white/20 p-5 text-white">
+                  <div className="h-10 w-10 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                    <Icon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="font-bold mb-2">{title}</h3>
+                  <p className="text-sm text-blue-100 leading-relaxed">{desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={300}>
+            <div className="text-center">
+              <Button
+                size="lg"
+                className="bg-white text-indigo-700 hover:bg-white/95 px-8 gap-2 font-bold text-base shadow-xl"
+                onClick={() => navigate('/dropshipping')}
+              >
+                Zjistit víc o swelt.dropshipping
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ─── 9. Pricing ─── */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-10">
               <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Ceník</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Jednoduchý ceník. Žádné překvapení.
+                Jasné ceny. Žádné překvapení.
               </h2>
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                Platíš jen za to, co používáš. Žádná smlouva, zrušení kdykoliv.
+                Platíte jen za feed. Žádná provize z prodeje, žádná smlouva. Zrušit můžete kdykoliv.
               </p>
 
-              {/* Billing toggle */}
               <div className="inline-flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
                 <button
                   onClick={() => setBillingCycle('quarterly')}
@@ -790,7 +1000,7 @@ export default function Feed() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${billingCycle === 'yearly' ? 'bg-white shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Ročně
-                  <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 py-0.5">−20%</span>
+                  <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 py-0.5">−20 %</span>
                 </button>
               </div>
             </div>
@@ -817,7 +1027,7 @@ export default function Feed() {
                         <span className="text-3xl font-black text-foreground">{plan.monthly.toLocaleString('cs')}</span>
                         <span className="text-muted-foreground text-sm ml-1">Kč / měs</span>
                         {billingCycle === 'yearly' && (
-                          <div className="text-xs text-emerald-600 mt-1">Ušetříš {(plan.monthly * 12 * 0.2).toLocaleString('cs')} Kč/rok</div>
+                          <div className="text-xs text-emerald-600 mt-1">Ušetříte {(plan.monthly * 12 * 0.2).toLocaleString('cs')} Kč ročně</div>
                         )}
                       </>
                     ) : (
@@ -853,22 +1063,34 @@ export default function Feed() {
           </div>
 
           <Reveal delay={300}>
-            <p className="text-center text-xs text-muted-foreground mt-6">
+            <div className="mt-8 rounded-2xl bg-blue-50 border border-blue-200 p-5 text-center">
+              <p className="text-sm text-blue-800 leading-relaxed">
+                <strong>Chcete jít ještě dál bez skladu?</strong> swelt.dropshipping funguje bez měsíčního paušálu za feed — platíte jen za to, co skutečně prodáte.{' '}
+                <button className="font-bold underline hover:no-underline" onClick={() => navigate('/dropshipping')}>Zjistit víc →</button>
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={350}>
+            <p className="text-center text-xs text-muted-foreground mt-4">
               Všechny ceny jsou bez DPH. První měsíc zdarma — žádná karta potřeba.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ─── FAQ ─── */}
+      {/* ─── 10. FAQ ─── */}
       <section className="py-20 px-4 bg-muted/40">
         <div className="max-w-2xl mx-auto">
           <Reveal>
             <div className="text-center mb-12">
               <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Časté dotazy</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground">
-                Máš otázky? Máme odpovědi.
+                Máte otázky? Tady jsou odpovědi.
               </h2>
+              <p className="text-muted-foreground mt-3 max-w-md mx-auto">
+                Pokud tu odpověď nenajdete, napište nám — odpovíme do hodiny.
+              </p>
             </div>
           </Reveal>
 
@@ -882,19 +1104,22 @@ export default function Feed() {
         </div>
       </section>
 
-      {/* ─── CTA bottom ─── */}
+      {/* ─── 11. CTA bottom ─── */}
       <section className="py-20 px-4 bg-primary">
         <div className="max-w-3xl mx-auto text-center">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-white text-sm font-semibold mb-6">
               <Star className="h-4 w-4 text-yellow-300" />
-              15+ let ZAGO na trhu
+              15+ let ZAGO na trhu · autorizovaný distributor
             </div>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
-              Začni prodávat s daty,<br />ne dohady.
+              Přidejte prémiové produkty<br />do svého e-shopu ještě dnes.
             </h2>
-            <p className="text-blue-100 text-lg mb-8 max-w-xl mx-auto">
-              První feed připravíme zdarma. Žádná karta, žádný závazek. Spuštění za 48 hodin.
+            <p className="text-blue-100 text-lg mb-3 max-w-xl mx-auto leading-relaxed">
+              První feed připravíme zdarma. Žádná karta, žádný závazek. Spuštění do 48 hodin.
+            </p>
+            <p className="text-blue-200 text-sm mb-8 max-w-lg mx-auto">
+              Nebo rovnou vyzkoušejte <strong className="text-white">swelt.dropshipping</strong> — bez skladu, bez nákupu, bez logistiky.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button
@@ -909,25 +1134,25 @@ export default function Feed() {
                 size="lg"
                 variant="outline"
                 className="border-white/40 text-white hover:bg-white/10 px-8 gap-2 font-semibold text-base"
-                onClick={() => document.getElementById('feed-builder')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/dropshipping')}
               >
-                <Database className="h-4 w-4" />
-                Vyzkoušet zdarma
+                <Package className="h-4 w-4" />
+                Zkusit dropshipping
               </Button>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ─── Trust footer strip ─── */}
+      {/* ─── 12. Trust footer strip ─── */}
       <section className="border-t border-border bg-white py-5 px-4">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {[
-            { icon: Star,       label: '15+ let ZAGO na trhu' },
-            { icon: Shield,     label: 'Autorizovaný distributor' },
-            { icon: CheckCircle,label: 'GDPR' },
-            { icon: Link,       label: 'Šifrované připojení' },
-            { icon: Shield,     label: 'ISO 27001' },
+            { icon: Star,        label: '15+ let ZAGO na trhu' },
+            { icon: Shield,      label: 'Autorizovaný distributor' },
+            { icon: CheckCircle, label: 'GDPR' },
+            { icon: Link,        label: 'Šifrované připojení' },
+            { icon: Users,       label: 'FedEx · DHL · UPS logistika' },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
               <Icon className="h-3.5 w-3.5 text-primary" />
