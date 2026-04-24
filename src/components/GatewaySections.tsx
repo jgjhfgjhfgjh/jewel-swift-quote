@@ -57,6 +57,44 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
+/* ── Floating social proof ── */
+function FloatingNotif() {
+  const notifs = [
+    { name: 'Jan K.', city: 'Praha', action: 'se zaregistroval jako partner' },
+    { name: 'Tereza M.', city: 'Brno', action: 'aktivoval Silver plán' },
+    { name: 'Ondřej P.', city: 'Ostrava', action: 'spustil první feed' },
+    { name: 'Lucie V.', city: 'Plzeň', action: 'přidal 120 produktů do e-shopu' },
+    { name: 'Martin S.', city: 'Bratislava', action: 'expandoval na slovenský trh' },
+    { name: 'Radek H.', city: 'Liberec', action: 'odeslal poptávku na hodinky' },
+  ];
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const show = () => { setVisible(true); setTimeout(() => setVisible(false), 4500); };
+    const interval = setInterval(() => {
+      setIdx(i => (i + 1) % notifs.length);
+      show();
+    }, 10000);
+    const t = setTimeout(show, 3500);
+    return () => { clearInterval(interval); clearTimeout(t); };
+  }, []);
+
+  return (
+    <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+      <div className="flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 max-w-xs">
+        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <Users className="h-4 w-4 text-primary" />
+        </div>
+        <div>
+          <div className="text-xs font-semibold">{notifs[idx].name} z {notifs[idx].city}</div>
+          <div className="text-[11px] text-muted-foreground">{notifs[idx].action} · právě teď</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Section divider ── */
 function SectionDivider() {
   return <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mx-auto max-w-4xl" />;
@@ -610,6 +648,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* Trust section */}
       <TrustSection />
 
+      <FloatingNotif />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
     </div>
   );
