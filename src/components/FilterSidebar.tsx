@@ -4,6 +4,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import type { AvailableParam } from '@/hooks/useProducts';
@@ -15,7 +16,6 @@ const GENDER_LABELS: Record<string, string> = {
   'Pro děti': 'Děti',
   'Unisex': 'Unisex',
 };
-// Preferred display order for genders
 const GENDER_ORDER = ['Pro muže', 'Pro ženy', 'Pro děti', 'Unisex'];
 
 interface Props {
@@ -36,15 +36,13 @@ interface Props {
   selectedParams: Record<string, string[]>;
   setSelectedParams: (v: Record<string, string[]>) => void;
   availableParams: AvailableParam[];
-  /** Render only the mobile overlay (no desktop aside) */
   mobileOnly?: boolean;
-  /** Render only the desktop aside (no mobile overlay) */
   desktopOnly?: boolean;
 }
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
 const HEADER_HEIGHT = 56;
-const TOGGLE_THRESHOLD = 5; // ≤ this many values → use Switch toggles
+const TOGGLE_THRESHOLD = 5;
 
 function DesktopSidebar({ children }: { children: React.ReactNode }) {
   return (
@@ -57,9 +55,19 @@ function DesktopSidebar({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Pill-style label showing how many values are active in a group, e.g. "2" */
+function ActiveBadge({ count }: { count: number }) {
+  if (count <= 0) return null;
+  return (
+    <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-semibold text-primary-foreground">
+      {count}
+    </span>
+  );
+}
+
 export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
-  selectedCategory, setSelectedCategory, search, setSearch,
+  selectedCategory, setSelectedCategory,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
   selectedGenders, setSelectedGenders,
   selectedParams, setSelectedParams,
@@ -97,14 +105,12 @@ export function FilterSidebar({
     [manufacturers]
   );
 
-  // Available genders from "Určení" param, in preferred order
   const availableGenders = useMemo(() => {
     const genderParam = availableParams.find((p) => p.nazev === GENDER_PARAM);
     if (!genderParam) return [];
     return GENDER_ORDER.filter((g) => genderParam.values.includes(g));
   }, [availableParams]);
 
-  // Other params (excluding "Určení"), each split into toggle or checkbox variant
   const otherParams = useMemo(
     () => availableParams.filter((p) => p.nazev !== GENDER_PARAM),
     [availableParams]
@@ -144,153 +150,197 @@ export function FilterSidebar({
     </div>
   );
 
+  // Compute active counts for collapsed-state badges
+  const activeCategoryCount = selectedCategory ? 1 : 0;
+  const activeGendersCount = selectedGenders.length;
+  const activeBrandsCount = selectedBrands.length;
+  const activeDiscountCount = minDiscount > 0 ? 1 : 0;
+
   const content = (
     <div className="flex h-full flex-col">
-      {/* Live Offer toggle */}
-      <div className="flex items-center justify-between px-4 py-2">
+      {/* Always-visible quick toggle: stock only */}
+      <div className="flex items-center justify-between border-b px-4 py-3">
         <span className="text-sm font-medium">{t.stockOnly}</span>
         <Switch checked={stockOnly} onCheckedChange={setStockOnly} />
       </div>
 
-      {/* Discount tier filters */}
-      {user && (
-        <div className="px-4 py-2 space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.discountTiers}</h3>
-          {discountTiers.map((tier) => (
-            <div key={tier.value} className="flex items-center justify-between">
-              <span className="text-sm font-medium">{tier.label}</span>
-              <Switch
-                checked={minDiscount === tier.value}
-                onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Category switches */}
-      <div className="px-4 py-2 space-y-2">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.categories}</h3>
-        <button
-          onClick={() => setSelectedCategory(null)}
-          className="text-sm text-primary hover:underline font-medium"
-        >
-          {t.allCategories}
-        </button>
-        {CATEGORY_KEYS.map((cat) => (
-          <div key={cat} className="flex items-center justify-between">
-            <span className="text-sm font-medium">{categoryLabels[cat]?.[lang] || cat}</span>
-            <Switch
-              checked={selectedCategory === cat}
-              onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Určení — gender filter */}
-      {availableGenders.length > 0 && (
-        <div className="px-4 py-2 space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Určení</h3>
-            {selectedGenders.length > 0 && (
-              <button
-                onClick={() => setSelectedGenders([])}
-                className="text-xs text-primary hover:underline"
-              >
-                Vše
-              </button>
-            )}
-          </div>
-          {availableGenders.map((gender) => (
-            <div key={gender} className="flex items-center justify-between">
-              <span className="text-sm font-medium">{GENDER_LABELS[gender] ?? gender}</span>
-              <Switch
-                checked={selectedGenders.includes(gender)}
-                onCheckedChange={() => toggleGender(gender)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Other parameter filters */}
-      {otherParams.map((param) => {
-        const selectedValues = selectedParams[param.nazev] ?? [];
-        const useToggles = param.values.length <= TOGGLE_THRESHOLD;
-
-        return (
-          <div key={param.nazev} className="px-4 py-2">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {param.nazev}
-              </h3>
-              {selectedValues.length > 0 && (
-                <button
-                  onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
-                  className="text-xs text-primary hover:underline"
-                >
-                  Vše
-                </button>
-              )}
-            </div>
-
-            {useToggles ? (
+      <Accordion type="multiple" className="w-full">
+        {/* Discount tiers (only for logged-in users) */}
+        {user && (
+          <AccordionItem value="discount" className="border-b px-2">
+            <AccordionTrigger className="px-2 py-3 hover:no-underline">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t.discountTiers}
+                <ActiveBadge count={activeDiscountCount} />
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="px-2 pb-3">
               <div className="space-y-2">
-                {param.values.map((value) => (
-                  <div key={value} className="flex items-center justify-between">
-                    <span className="text-sm font-medium truncate pr-2">{value}</span>
+                {discountTiers.map((tier) => (
+                  <div key={tier.value} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{tier.label}</span>
                     <Switch
-                      checked={selectedValues.includes(value)}
-                      onCheckedChange={() => toggleParam(param.nazev, value)}
+                      checked={minDiscount === tier.value}
+                      onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
                     />
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="max-h-40 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
-                {param.values.map((value) => (
-                  <label
-                    key={value}
-                    className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-                  >
-                    <Checkbox
-                      checked={selectedValues.includes(value)}
-                      onCheckedChange={() => toggleParam(param.nazev, value)}
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {/* Categories */}
+        <AccordionItem value="categories" className="border-b px-2">
+          <AccordionTrigger className="px-2 py-3 hover:no-underline">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t.categories}
+              <ActiveBadge count={activeCategoryCount} />
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pb-3">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="mb-2 text-sm text-primary hover:underline font-medium"
+            >
+              {t.allCategories}
+            </button>
+            <div className="space-y-2">
+              {CATEGORY_KEYS.map((cat) => (
+                <div key={cat} className="flex items-center justify-between">
+                  <span className="text-sm font-medium">{categoryLabels[cat]?.[lang] || cat}</span>
+                  <Switch
+                    checked={selectedCategory === cat}
+                    onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
+                  />
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Určení (gender) */}
+        {availableGenders.length > 0 && (
+          <AccordionItem value="genders" className="border-b px-2">
+            <AccordionTrigger className="px-2 py-3 hover:no-underline">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Určení
+                <ActiveBadge count={activeGendersCount} />
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="px-2 pb-3">
+              {activeGendersCount > 0 && (
+                <button
+                  onClick={() => setSelectedGenders([])}
+                  className="mb-2 text-xs text-primary hover:underline"
+                >
+                  Vše
+                </button>
+              )}
+              <div className="space-y-2">
+                {availableGenders.map((gender) => (
+                  <div key={gender} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{GENDER_LABELS[gender] ?? gender}</span>
+                    <Switch
+                      checked={selectedGenders.includes(gender)}
+                      onCheckedChange={() => toggleGender(gender)}
                     />
-                    <span className="truncate">{value}</span>
-                  </label>
+                  </div>
                 ))}
               </div>
-            )}
-          </div>
-        );
-      })}
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-      {/* Brands with checkboxes */}
-      <div className="p-4 pt-2 pb-24">
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.brands}</h3>
-        <button
-          onClick={() => setSelectedBrands([])}
-          className="mb-2 text-sm text-primary hover:underline font-medium"
-        >
-          {t.allBrands}
-        </button>
-        <div className="space-y-1.5">
-          {sortedManufacturers.map((m) => (
-            <label
-              key={m.name}
-              className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-            >
-              <Checkbox
-                checked={selectedBrands.includes(m.name)}
-                onCheckedChange={() => toggleBrand(m.name)}
-              />
-              <span className="truncate">{m.name}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+        {/* Other parameter filters */}
+        {otherParams.map((param) => {
+          const selectedValues = selectedParams[param.nazev] ?? [];
+          const useToggles = param.values.length <= TOGGLE_THRESHOLD;
+
+          return (
+            <AccordionItem key={param.nazev} value={`param-${param.nazev}`} className="border-b px-2">
+              <AccordionTrigger className="px-2 py-3 hover:no-underline">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {param.nazev}
+                  <ActiveBadge count={selectedValues.length} />
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-2 pb-3">
+                {selectedValues.length > 0 && (
+                  <button
+                    onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
+                    className="mb-2 text-xs text-primary hover:underline"
+                  >
+                    Vše
+                  </button>
+                )}
+                {useToggles ? (
+                  <div className="space-y-2">
+                    {param.values.map((value) => (
+                      <div key={value} className="flex items-center justify-between">
+                        <span className="text-sm font-medium truncate pr-2">{value}</span>
+                        <Switch
+                          checked={selectedValues.includes(value)}
+                          onCheckedChange={() => toggleParam(param.nazev, value)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="max-h-48 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+                    {param.values.map((value) => (
+                      <label
+                        key={value}
+                        className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                      >
+                        <Checkbox
+                          checked={selectedValues.includes(value)}
+                          onCheckedChange={() => toggleParam(param.nazev, value)}
+                        />
+                        <span className="truncate">{value}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          );
+        })}
+
+        {/* Brands */}
+        <AccordionItem value="brands" className="px-2">
+          <AccordionTrigger className="px-2 py-3 hover:no-underline">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t.brands}
+              <ActiveBadge count={activeBrandsCount} />
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pb-6">
+            {activeBrandsCount > 0 && (
+              <button
+                onClick={() => setSelectedBrands([])}
+                className="mb-2 text-sm text-primary hover:underline font-medium"
+              >
+                {t.allBrands}
+              </button>
+            )}
+            <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+              {sortedManufacturers.map((m) => (
+                <label
+                  key={m.name}
+                  className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                >
+                  <Checkbox
+                    checked={selectedBrands.includes(m.name)}
+                    onCheckedChange={() => toggleBrand(m.name)}
+                  />
+                  <span className="truncate">{m.name}</span>
+                </label>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 
@@ -298,12 +348,10 @@ export function FilterSidebar({
 
   return (
     <>
-      {/* Desktop sidebar — only in catalog mode, only when desktopOnly */}
       {!mobileOnly && !isHome && (
         <DesktopSidebar>{content}</DesktopSidebar>
       )}
 
-      {/* Mobile overlay — always available when not desktopOnly */}
       {!desktopOnly && sidebarOpen && (
         <div className="fixed inset-0 z-[90]" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
