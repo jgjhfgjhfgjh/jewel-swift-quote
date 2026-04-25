@@ -823,19 +823,17 @@ const Dropshipping = () => {
                     <Sparkles className="h-3.5 w-3.5" /> Nová služba — swelt.signal
                   </div>
                   <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
-                    Prodávej s daty v ruce,<br /><span className="italic text-primary">ne s pocitem v žaludku.</span>
+                    Chceš rovnou hotový e-shop?<br /><span className="italic text-primary">swelt.shop ti ho postaví za 48 hodin.</span>
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-8">
-                    swelt.signal je dropshippingová verze naší B2B intelligence služby. Sleduje pohyb produktů napříč
-                    celou distribucí a každý týden ti doporučí, co přidat nebo odebrat z feedu — bez nutnosti sledovat
-                    konkurenci ručně nebo interpretovat složité grafy.
+                    swelt.shop je kompletní e-shop naplněný 3 000+ prémiovými produkty — připravený k prodeji. Kombinuj ho s dropshippingem a nepotřebuješ ani sklad, ani logistiku. Stačí spustit a prodávat.
                   </p>
                   <div className="space-y-4 mb-8">
                     {[
-                      { icon: TrendingUp, title: 'Top 10 trending produktů každý týden', text: 'Ve tvém segmentu, dřív než je uvidí konkurence.' },
-                      { icon: Bell, title: 'Early warning — klesající zájem', text: 'Odeber produkt z feedu dřív, než zákazníci přestanou kupovat.' },
-                      { icon: BarChart2, title: 'Benchmark vůči ostatním partnerům', text: 'Anonymní srovnání — víš kde vedeš a kde ztrácíš.' },
-                      { icon: Globe, title: 'EU expansion radar (Signal Pro)', text: 'Trendy v SK, DE, AT — vstup na trh dřív než ostatní.' },
+                      { icon: TrendingUp, title: 'E-shop setup do 48 hodin', text: 'Shoptet, WooCommerce nebo Upgates — nastavíme vše za tebe.' },
+                      { icon: Globe, title: '3 000+ produktů hned od startu', text: 'Katalog naplněný a synchronizovaný. Nic neimportuješ ručně.' },
+                      { icon: BarChart2, title: 'Dropshipping integrace v ceně', text: 'Business plán obsahuje plnou dropshipping integraci — nulový sklad.' },
+                      { icon: Bell, title: 'Automatická aktualizace cen a zásob', text: 'Feed se synchronizuje 1–4× denně. Vždy aktuální.' },
                     ].map((f, i) => {
                       const Icon = f.icon;
                       return (
@@ -854,11 +852,11 @@ const Dropshipping = () => {
                     })}
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    <Button onClick={() => navigate('/intelligence')}>
-                      Zjistit více o swelt.intelligence <ArrowUpRight className="h-4 w-4" />
+                    <Button onClick={() => navigate('/shop')}>
+                      Chci svůj e-shop <ArrowUpRight className="h-4 w-4" />
                     </Button>
                     <Button variant="outline" onClick={() => navigate('/register')}>
-                      Vyzkoušet v Silver plánu
+                      Vyzkoušet dropshipping
                     </Button>
                   </div>
                 </Reveal>

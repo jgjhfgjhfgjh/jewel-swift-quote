@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, BrainCircuit } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -121,7 +121,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               { href: '#feed', label: 'swelt.feed', icon: Rss },
               { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
               { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
-              { href: '#intelligence', label: 'Intelligence', icon: BrainCircuit },
+              { href: '#shop', label: 'swelt.shop', icon: ShoppingCart },
             ].map(({ href, label, icon: Icon }) => (
               <a key={href} href={href}
                 className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">

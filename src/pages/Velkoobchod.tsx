@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Handshake, Package, TrendingUp, ShieldCheck, ArrowRight, Check,
   Users, Star, Clock, Globe, Zap, Store, PackageOpen, Rss,
-  HandCoins, BrainCircuit, ChevronDown, Truck, BarChart3, Award,
+  HandCoins, ShoppingCart, ChevronDown, Truck, BarChart3, Award,
   ShoppingBag, Factory, Lock, BadgeCheck, UserPlus, Eye, CheckCircle, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -250,11 +250,11 @@ const ECOSYSTEM = [
     color: 'text-amber-600 bg-amber-50',
   },
   {
-    icon: BrainCircuit,
-    name: 'Intelligence',
-    desc: 'Tržní data, trendy a analytika hodinářského trhu v reálném čase. Rozhodujte se na základě dat, ne dojmů.',
-    href: '/intelligence',
-    color: 'text-violet-600 bg-violet-50',
+    icon: ShoppingCart,
+    name: 'swelt.shop',
+    desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.',
+    href: '/shop',
+    color: 'text-orange-600 bg-orange-50',
   },
 ];
 

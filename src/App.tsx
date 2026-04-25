@@ -14,10 +14,10 @@ import FeedManagement from "./pages/FeedManagement.tsx";
 import Favorites from "./pages/Favorites.tsx";
 import Partner from "./pages/Partner.tsx";
 import Velkoobchod from "./pages/Velkoobchod.tsx";
-import Intelligence from "./pages/Intelligence.tsx";
 import Dropshipping from "./pages/Dropshipping.tsx";
 import Feed from "./pages/Feed.tsx";
 import Luxury from "./pages/Luxury.tsx";
+import Shop from "./pages/Shop.tsx";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +38,7 @@ const App = () => (
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/partner" element={<Partner />} />
             <Route path="/velkoobchod" element={<Velkoobchod />} />
-            <Route path="/intelligence" element={<Intelligence />} />
+            <Route path="/shop" element={<Shop />} />
             <Route path="/dropshipping" element={<Dropshipping />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/luxury" element={<Luxury />} />

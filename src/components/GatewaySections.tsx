@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Handshake, PackageOpen, HandCoins, BrainCircuit, Rss,
+  Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock,
+  Package, Clock, Rocket, RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -332,42 +332,65 @@ function LuxuryVisual() {
   );
 }
 
-function IntelligenceVisual() {
+function ShopVisual() {
+  const [tab, setTab] = useState(0);
+  const tabs = ['Hodinky', 'Šperky'];
   const products = [
-    { name: 'Citizen Eco-Drive BM7455', score: 92, trend: '+28%', action: 'Naskladnit', color: 'emerald' },
-    { name: 'Seiko Presage SRPE35', score: 76, trend: '+14%', action: 'Sledovat', color: 'blue' },
-    { name: 'Police Menelik PEWJG', score: 61, trend: '+6%', action: 'Sledovat', color: 'blue' },
-    { name: 'Versace V-Chronos VE5A', score: 28, trend: '−11%', action: 'Redukovat', color: 'red' },
+    { img: 'https://cdn.b2bzago.com/images/0/7afe1cca249d731c/100/hodinky-tommy-hilfiger-model-decker-1791349.jpg?hash=-2', name: 'Tommy Hilfiger', price: '4 475 Kč', badge: 'NOVÉ' },
+    { img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=200&q=70', name: 'Versace', price: '7 225 Kč' },
+    { img: 'https://images.unsplash.com/photo-1542496658-e33a6d0d3cde?auto=format&fit=crop&w=200&q=70', name: 'Police', price: '3 125 Kč', badge: '-15%' },
+    { img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=200&q=70', name: 'Seiko', price: '5 250 Kč' },
   ];
   return (
-    <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="text-[11px] font-bold text-primary uppercase tracking-wider">swelt.signal — Live skóre</div>
-        <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] text-emerald-600 font-semibold">Live</span>
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+      {/* Browser chrome */}
+      <div className="bg-slate-100 border-b border-slate-200 px-3 py-2 flex items-center gap-2">
+        <div className="flex gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-red-400" />
+          <div className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+          <div className="h-2.5 w-2.5 rounded-full bg-green-400" />
         </div>
+        <div className="flex-1 bg-white rounded px-2 py-0.5 text-[10px] text-slate-400 border border-slate-200">
+          vaseshop.cz
+        </div>
+        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
       </div>
-      <div className="space-y-2">
+      {/* Fake shop nav */}
+      <div className="border-b border-slate-100 px-4 py-2 flex items-center justify-between bg-white">
+        <div className="font-display font-black text-[11px] text-slate-800">WatchStore.cz</div>
+        <div className="flex gap-3">
+          {tabs.map((t, i) => (
+            <button key={t} onClick={() => setTab(i)}
+              className={`text-[10px] font-semibold pb-0.5 border-b transition-colors ${tab === i ? 'text-primary border-primary' : 'text-slate-400 border-transparent'}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+        <ShoppingCart className="h-3.5 w-3.5 text-primary" />
+      </div>
+      {/* Product grid */}
+      <div className="p-3 grid grid-cols-2 gap-2 bg-slate-50">
         {products.map((p) => (
-          <div key={p.name} className="flex items-center gap-3 rounded-xl border border-border bg-muted/20 p-2.5">
-            <div className={`h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
-              p.color === 'emerald' ? 'bg-emerald-100 text-emerald-700' :
-              p.color === 'blue' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-600'
-            }`}>{p.score}</div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[11px] font-semibold text-foreground truncate">{p.name}</div>
-              <div className="h-1.5 rounded-full bg-muted mt-1 overflow-hidden">
-                <div className={`h-full rounded-full transition-all ${
-                  p.color === 'emerald' ? 'bg-emerald-500' : p.color === 'blue' ? 'bg-primary' : 'bg-red-400'
-                }`} style={{ width: `${p.score}%` }} />
-              </div>
+          <div key={p.name} className="bg-white rounded-xl overflow-hidden border border-slate-100">
+            <div className="relative">
+              <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" loading="lazy" />
+              {p.badge && <div className="absolute top-1 right-1 bg-primary text-white text-[7px] font-black px-1 py-0.5 rounded">{p.badge}</div>}
             </div>
-            <div className={`text-[10px] font-bold shrink-0 ${
-              p.trend.startsWith('+') ? 'text-emerald-600' : 'text-red-500'
-            }`}>{p.trend}</div>
+            <div className="p-1.5">
+              <div className="text-[9px] text-slate-500 truncate">{p.name}</div>
+              <div className="text-[10px] font-black text-primary">{p.price}</div>
+            </div>
           </div>
         ))}
+      </div>
+      {/* Status */}
+      <div className="px-3 py-2 border-t border-slate-100 bg-white flex items-center gap-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <span className="text-[9px] text-emerald-600 font-semibold">Aktualizováno před 2 hod. · 3 000+ produktů</span>
+        <div className="ml-auto flex items-center gap-1">
+          <Rocket className="h-3 w-3 text-orange-400" />
+          <span className="text-[9px] text-orange-500 font-semibold">swelt.shop</span>
+        </div>
       </div>
     </div>
   );
@@ -572,26 +595,26 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       bg: 'bg-muted/20',
     },
     {
-      id: 'intelligence',
-      badge: 'swelt.intelligence',
-      badgeColor: 'bg-violet-50 text-violet-700 border border-violet-200',
-      icon: BrainCircuit,
-      label: 'Intelligence',
-      heading: 'Vidíte celý trh. Ne jen svůj kousek.',
-      subheading: 'Prediktivní tržní data postavená na pohybu zboží napříč celou distribucí. Vždy víte, co naskladnit, co sledovat a co redukovat.',
+      id: 'shop',
+      badge: 'swelt.shop',
+      badgeColor: 'bg-orange-50 text-orange-700 border border-orange-200',
+      icon: ShoppingCart,
+      label: 'swelt.shop',
+      heading: 'Hotový e-shop s prémiovým zbožím. Spuštěný za 48 hodin.',
+      subheading: 'Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ produkty — připravený k prodeji ihned.',
       bullets: [
-        'Prediktivní skóre poptávky pro každý SKU',
-        'Trendy kategorií dřív, než jsou viditelné trhu',
-        'Benchmark vašich prodejů vůči anonymnímu trhu',
-        'Upozornění na rostoucí i klesající produkty',
-        'swelt.signal — real-time trendový přehled',
+        'E-shop setup na Shoptet, WooCommerce nebo Upgates',
+        '3 000+ produktů importovaných hned od začátku',
+        'Automatická synchronizace cen a zásob přes feed',
+        'Volba: dropshipping (bez skladu) nebo vlastní sklad',
+        'Spuštění do 48 hodin, žádné zkušenosti nepotřebujete',
       ],
       ctas: (
-        <Button onClick={() => navigate('/intelligence')} className="gap-2">
-          Zjistit více o Intelligence <ArrowRight className="h-4 w-4" />
+        <Button onClick={() => navigate('/shop')} className="gap-2">
+          Chci svůj e-shop <ArrowRight className="h-4 w-4" />
         </Button>
       ),
-      visual: <IntelligenceVisual />,
+      visual: <ShopVisual />,
       reverse: false,
       bg: 'bg-white',
     },
