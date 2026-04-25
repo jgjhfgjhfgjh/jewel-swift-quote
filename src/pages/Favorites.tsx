@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
@@ -14,12 +14,11 @@ import { useProducts } from '@/hooks/useProducts';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { getProductBrand, getProductFeedCategories } from '@/lib/product-feed';
 
 const Favorites = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuthContext();
-  const { products, loading, availableParams } = useProducts();
+  const { loading: authLoading } = useAuthContext();
+  const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const {
@@ -30,38 +29,8 @@ const Favorites = () => {
     minDiscount, setMinDiscount,
     selectedGenders, setSelectedGenders,
     selectedParams, setSelectedParams,
-    setViewMode,
+    viewMode, setViewMode,
   } = useStore();
-
-  // Only favorited products
-  const favoriteProducts = useMemo(
-    () => products.filter((p) => wishlistIds.has(p.id)),
-    [products, wishlistIds]
-  );
-
-  // Manufacturers/categories computed from favorites only — sidebar reflects what's in favorites
-  const manufacturers = useMemo(() => {
-    const counts = new Map<string, number>();
-    favoriteProducts.forEach((p) => {
-      const brand = getProductBrand(p);
-      if (brand) counts.set(brand, (counts.get(brand) || 0) + 1);
-    });
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, count]) => ({ name, count }));
-  }, [favoriteProducts]);
-
-  const categories = useMemo(() => {
-    const counts = new Map<string, number>();
-    favoriteProducts.forEach((p) => {
-      const cat = getProductFeedCategories(p)[0] || p.category || '';
-      if (!cat) return;
-      counts.set(cat, (counts.get(cat) || 0) + 1);
-    });
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, count]) => ({ name, count }));
-  }, [favoriteProducts]);
 
   const fp = {
     manufacturers, categories,
@@ -75,8 +44,24 @@ const Favorites = () => {
     availableParams,
   };
 
+  const wishlistArray = Array.from(wishlistIds);
+  const filters = {
+    search, selectedBrands, selectedCategory,
+    stockOnly, minDiscount, selectedGenders, selectedParams,
+    ids: wishlistArray,
+  };
+
+  const clearAllFilters = () => {
+    setSearch('');
+    setSelectedBrands([]);
+    setSelectedCategory(null);
+    setStockOnly(false);
+    setMinDiscount(0);
+    setSelectedGenders([]);
+    setSelectedParams({});
+  };
+
   // Force catalog view mode so FilterSidebar renders catalog (not home menu) layout
-  const { viewMode } = useStore();
   if (viewMode !== 'catalog') {
     setViewMode('catalog');
   }
@@ -101,7 +86,7 @@ const Favorites = () => {
     );
   }
 
-  const hasFavorites = favoriteProducts.length > 0;
+  const hasFavorites = wishlistArray.length > 0;
 
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0 pt-14">
@@ -114,25 +99,10 @@ const Favorites = () => {
 
         {hasFavorites ? (
           <ProductGrid
-            products={favoriteProducts}
-            search={search}
-            selectedBrands={selectedBrands}
-            selectedCategory={selectedCategory}
-            stockOnly={stockOnly}
-            minDiscount={minDiscount}
-            selectedGenders={selectedGenders}
-            selectedParams={selectedParams}
+            filters={filters}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
-            onClearFilters={() => {
-              setSearch('');
-              setSelectedBrands([]);
-              setSelectedCategory(null);
-              setStockOnly(false);
-              setMinDiscount(0);
-              setSelectedGenders([]);
-              setSelectedParams({});
-            }}
+            onClearFilters={clearAllFilters}
           />
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">

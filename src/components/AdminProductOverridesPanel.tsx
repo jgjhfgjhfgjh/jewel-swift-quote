@@ -7,13 +7,11 @@ import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
 import { getFinalVoc } from '@/lib/discount';
+import { supabase } from '@/integrations/supabase/client';
 import type { Product } from '@/lib/types';
 
-interface Props {
-  products: Product[];
-}
-
-export function AdminProductOverridesPanel({ products }: Props) {
+export function AdminProductOverridesPanel() {
+  const [products, setProducts] = useState<Product[]>([]);
   const {
     lang, productDiscounts, setProductDiscount, brandDiscounts,
     salesCustomer, salesProductDiscounts, setSalesProductDiscount, salesBrandDiscounts,
@@ -36,6 +34,41 @@ export function AdminProductOverridesPanel({ products }: Props) {
       setPermanentProducts(map);
     });
   }, [salesCustomer, fetchDiscounts]);
+
+  // Fetch overridden products by ID (lightweight, only when overrides exist)
+  const effectiveProductDiscountsForFetch = salesCustomer ? salesProductDiscounts : productDiscounts;
+  const overriddenIdsKey = Object.keys(effectiveProductDiscountsForFetch).sort().join(',');
+  useEffect(() => {
+    const ids = overriddenIdsKey ? overriddenIdsKey.split(',') : [];
+    if (ids.length === 0) {
+      setProducts([]);
+      return;
+    }
+    let active = true;
+    (supabase as any)
+      .from('produkty')
+      .select('id, sku, ean, product_name, manufacturer, category_text, retail_price, wholesale_price, stock, image_url')
+      .in('id', ids)
+      .then(({ data }: { data: any[] | null }) => {
+        if (!active || !data) return;
+        setProducts(data.map((row: any) => ({
+          id: row.id,
+          name: row.product_name || row.sku,
+          manufacturer: row.manufacturer || '',
+          sku: row.sku,
+          ean: row.ean || '',
+          description: '',
+          category: row.category_text || '',
+          img: row.image_url || '',
+          image_urls: [],
+          price: Number(row.retail_price ?? 0),
+          wholesale: Number(row.wholesale_price ?? 0),
+          stock: row.stock ?? 0,
+          inStock: (row.stock ?? 0) > 0,
+        })));
+      });
+    return () => { active = false; };
+  }, [overriddenIdsKey]);
 
   if (!isAdmin) return null;
 

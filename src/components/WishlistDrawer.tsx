@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Heart, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useWishlist } from '@/hooks/useWishlist';
-import { useProducts } from '@/hooks/useProducts';
 import { useStore } from '@/lib/store';
-import { translations } from '@/lib/i18n';
+import { supabase } from '@/integrations/supabase/client';
+import type { Product } from '@/lib/types';
 
 interface Props {
   open: boolean;
@@ -13,10 +14,42 @@ interface Props {
 
 export function WishlistDrawer({ open, onOpenChange }: Props) {
   const { wishlistIds, toggle, isViewingCustomerWishlist } = useWishlist();
-  const { products } = useProducts();
-  const { lang, salesCustomer } = useStore();
+  const { salesCustomer } = useStore();
+  const [wishlistProducts, setWishlistProducts] = useState<Product[]>([]);
 
-  const wishlistProducts = products.filter((p) => wishlistIds.has(p.id));
+  // Fetch product details for the wishlist IDs
+  const idsKey = Array.from(wishlistIds).sort().join(',');
+  useEffect(() => {
+    const ids = idsKey ? idsKey.split(',') : [];
+    if (ids.length === 0 || !open) {
+      setWishlistProducts([]);
+      return;
+    }
+    let active = true;
+    (supabase as any)
+      .from('produkty')
+      .select('id, sku, product_name, manufacturer, image_url')
+      .in('id', ids)
+      .then(({ data }: { data: any[] | null }) => {
+        if (!active || !data) return;
+        setWishlistProducts(data.map((row: any) => ({
+          id: row.id,
+          name: row.product_name || row.sku,
+          manufacturer: row.manufacturer || '',
+          sku: row.sku,
+          ean: '',
+          description: '',
+          category: '',
+          img: row.image_url || '',
+          image_urls: [],
+          price: 0,
+          wholesale: 0,
+          stock: 0,
+          inStock: false,
+        })));
+      });
+    return () => { active = false; };
+  }, [idsKey, open]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

@@ -19,29 +19,9 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { CatalogGateway } from '@/components/CatalogGateway';
 import { useAuthContext } from '@/contexts/AuthContext';
 
-const filterProps = (p: any) => ({
-  manufacturers: p.manufacturers,
-  categories: p.categories,
-  selectedBrands: p.selectedBrands,
-  setSelectedBrands: p.setSelectedBrands,
-  selectedCategory: p.selectedCategory,
-  setSelectedCategory: p.setSelectedCategory,
-  search: p.search,
-  setSearch: p.setSearch,
-  stockOnly: p.stockOnly,
-  setStockOnly: p.setStockOnly,
-  minDiscount: p.minDiscount,
-  setMinDiscount: p.setMinDiscount,
-  selectedGenders: p.selectedGenders,
-  setSelectedGenders: p.setSelectedGenders,
-  selectedParams: p.selectedParams,
-  setSelectedParams: p.setSelectedParams,
-  availableParams: p.availableParams ?? [],
-});
-
 const Index = () => {
   const { user, loading: authLoading } = useAuthContext();
-  const { products, loading, manufacturers, categories, availableParams } = useProducts();
+  const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const {
@@ -55,7 +35,7 @@ const Index = () => {
     viewMode, setViewMode,
   } = useStore();
 
-  const fp = filterProps({
+  const fp = {
     manufacturers, categories,
     selectedBrands, setSelectedBrands,
     selectedCategory, setSelectedCategory,
@@ -65,7 +45,22 @@ const Index = () => {
     selectedGenders, setSelectedGenders,
     selectedParams, setSelectedParams,
     availableParams,
-  });
+  };
+
+  const filters = {
+    search, selectedBrands, selectedCategory,
+    stockOnly, minDiscount, selectedGenders, selectedParams,
+  };
+
+  const clearAllFilters = () => {
+    setSearch('');
+    setSelectedBrands([]);
+    setSelectedCategory(null);
+    setStockOnly(false);
+    setMinDiscount(0);
+    setSelectedGenders([]);
+    setSelectedParams({});
+  };
 
   // Show gateway for unauthenticated users trying to access catalog
   if (!authLoading && !user && viewMode === 'catalog') {
@@ -105,7 +100,7 @@ const Index = () => {
         <SalesModeBar />
         <CustomerSelectorPanel />
         <AdminBrandPanel manufacturers={manufacturers} />
-        <AdminProductOverridesPanel products={products} />
+        <AdminProductOverridesPanel />
       </div>
 
       {/* Mobile sidebar overlay — works in all modes */}
@@ -123,25 +118,10 @@ const Index = () => {
         <div className="relative z-10 bg-background flex flex-1 items-start animate-fade-in">
           <FilterSidebar {...fp} desktopOnly />
           <ProductGrid
-            products={products}
-            search={search}
-            selectedBrands={selectedBrands}
-            selectedCategory={selectedCategory}
-            stockOnly={stockOnly}
-            minDiscount={minDiscount}
-            selectedGenders={selectedGenders}
-            selectedParams={selectedParams}
+            filters={filters}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
-            onClearFilters={() => {
-              setSearch('');
-              setSelectedBrands([]);
-              setSelectedCategory(null);
-              setStockOnly(false);
-              setMinDiscount(0);
-              setSelectedGenders([]);
-              setSelectedParams({});
-            }}
+            onClearFilters={clearAllFilters}
           />
         </div>
       )}
