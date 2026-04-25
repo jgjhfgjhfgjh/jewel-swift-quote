@@ -199,19 +199,14 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'app-store',
+      version: 2,
       partialize: (state) => ({
         lang: state.lang,
         isAdmin: state.isAdmin,
         cart: state.cart,
         brandDiscounts: state.brandDiscounts,
         productDiscounts: state.productDiscounts,
-        search: state.search,
-        selectedBrands: state.selectedBrands,
-        selectedCategory: state.selectedCategory,
-        stockOnly: state.stockOnly,
-        minDiscount: state.minDiscount,
-        selectedGenders: state.selectedGenders,
-        selectedParams: state.selectedParams,
+        // Filters intentionally NOT persisted — start fresh each session
       }),
     }
   )

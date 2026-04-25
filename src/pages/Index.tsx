@@ -133,6 +133,15 @@ const Index = () => {
             selectedParams={selectedParams}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
+            onClearFilters={() => {
+              setSearch('');
+              setSelectedBrands([]);
+              setSelectedCategory(null);
+              setStockOnly(false);
+              setMinDiscount(0);
+              setSelectedGenders([]);
+              setSelectedParams({});
+            }}
           />
         </div>
       )}

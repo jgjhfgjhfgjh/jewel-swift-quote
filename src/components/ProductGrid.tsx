@@ -6,6 +6,7 @@ import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { getProductBrand, matchesFeedCategory } from '@/lib/product-feed';
 import { supabase } from '@/integrations/supabase/client';
+import { SlidersHorizontal } from 'lucide-react';
 
 const PAGE_SIZE = 48;
 
@@ -20,12 +21,13 @@ interface Props {
   selectedParams?: Record<string, string[]>;
   wishlistIds?: Set<string>;
   onToggleWishlist?: (id: string) => void;
+  onClearFilters?: () => void;
 }
 
 export function ProductGrid({
   products, search, selectedBrands, selectedCategory,
   stockOnly, minDiscount, selectedGenders, selectedParams,
-  wishlistIds, onToggleWishlist,
+  wishlistIds, onToggleWishlist, onClearFilters,
 }: Props) {
   const { lang } = useStore();
   const t = translations[lang];
@@ -104,6 +106,13 @@ export function ProductGrid({
 
   const paginated = filteredProducts.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filteredProducts.length;
+  const hasActiveFilters = (selectedBrands?.length ?? 0) > 0
+    || selectedCategory !== null
+    || stockOnly
+    || minDiscount > 0
+    || (selectedGenders?.length ?? 0) > 0
+    || Object.values(selectedParams ?? {}).some((v) => v.length > 0)
+    || search.trim().length > 0;
 
   return (
     <div className="flex-1 overflow-auto">
@@ -112,17 +121,33 @@ export function ProductGrid({
           {filteredProducts.length.toLocaleString()} {t.products}
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {paginated.map((p) => (
-          <ProductCard key={p.id} product={p} isWishlisted={wishlistIds?.has(p.id)} onToggleWishlist={onToggleWishlist} />
-        ))}
-      </div>
-      {hasMore && (
-        <div className="flex justify-center pb-8">
-          <Button variant="outline" onClick={() => setPage((p) => p + 1)}>
-            Load more
-          </Button>
+
+      {filteredProducts.length === 0 && products.length > 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 px-6 text-center">
+          <SlidersHorizontal className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-1">Žádné produkty neodpovídají filtrům</h3>
+          <p className="text-sm text-muted-foreground mb-4">Zkuste upravit nebo zrušit aktivní filtry.</p>
+          {(hasActiveFilters || onClearFilters) && (
+            <Button variant="outline" onClick={onClearFilters}>
+              Zrušit všechny filtry
+            </Button>
+          )}
         </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {paginated.map((p) => (
+              <ProductCard key={p.id} product={p} isWishlisted={wishlistIds?.has(p.id)} onToggleWishlist={onToggleWishlist} />
+            ))}
+          </div>
+          {hasMore && (
+            <div className="flex justify-center pb-8">
+              <Button variant="outline" onClick={() => setPage((p) => p + 1)}>
+                Load more
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

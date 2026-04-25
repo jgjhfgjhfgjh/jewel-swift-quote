@@ -124,6 +124,15 @@ const Favorites = () => {
             selectedParams={selectedParams}
             wishlistIds={wishlistIds}
             onToggleWishlist={toggleWishlist}
+            onClearFilters={() => {
+              setSearch('');
+              setSelectedBrands([]);
+              setSelectedCategory(null);
+              setStockOnly(false);
+              setMinDiscount(0);
+              setSelectedGenders([]);
+              setSelectedParams({});
+            }}
           />
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
