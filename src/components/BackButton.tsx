@@ -7,7 +7,7 @@ export function BackButton() {
     <button
       onClick={() => navigate(-1)}
       aria-label="Zpět"
-      className="fixed top-4 left-4 z-[999] flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-200 hover:scale-110 hover:border-white/50"
+      className="fixed top-[76px] left-4 z-[99] flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-200 hover:scale-110 hover:border-white/50"
       style={{
         backdropFilter: 'blur(12px) saturate(1.6)',
         WebkitBackdropFilter: 'blur(12px) saturate(1.6)',

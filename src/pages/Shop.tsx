@@ -78,8 +78,8 @@ function FloatingNotif() {
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
       <div className="flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 max-w-xs">
-        <div className="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
-          <ShoppingCart className="h-4 w-4 text-orange-600" />
+        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <ShoppingCart className="h-4 w-4 text-primary" />
         </div>
         <div>
           <div className="text-xs font-semibold">{notifs[idx].name} z {notifs[idx].city}</div>
@@ -381,12 +381,12 @@ const Shop = () => {
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 border-b border-border">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(249,115,22,0.07),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,100,190,0.07),transparent)]" />
         <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <div>
               <Reveal>
-                <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-4 py-1.5 text-sm font-semibold text-orange-700 mb-7">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-4 py-1.5 text-sm font-semibold text-primary mb-7">
                   <ShoppingCart className="h-4 w-4" />
                   swelt.shop · Hotový e-shop do 48 hodin
                 </div>
@@ -405,7 +405,7 @@ const Shop = () => {
                 <div className="flex flex-col sm:flex-row gap-3 mb-10">
                   <Button
                     size="lg"
-                    className="gap-2 text-base h-12 px-7 bg-orange-500 hover:bg-orange-600"
+                    className="gap-2 text-base h-12 px-7"
                     onClick={() => window.location.href = 'mailto:shop@swelt.cz'}
                   >
                     Chci svůj e-shop <ArrowRight className="h-4 w-4" />
@@ -453,7 +453,7 @@ const Shop = () => {
               { val: 60, suffix: ' %', label: 'průměrná marže pod MOC' },
             ].map(({ val, suffix, label }) => (
               <div key={label} className="text-center">
-                <div className="font-display text-3xl sm:text-4xl font-black text-orange-500 mb-1">
+                <div className="font-display text-3xl sm:text-4xl font-black text-primary mb-1">
                   <CountUp to={val} suffix={suffix} />
                 </div>
                 <div className="text-sm text-muted-foreground">{label}</div>
@@ -468,7 +468,7 @@ const Shop = () => {
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-xs font-semibold text-orange-700 uppercase tracking-wider mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
                 Dvě cesty
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
@@ -537,9 +537,9 @@ const Shop = () => {
               return (
                 <Reveal key={s.n} delay={i * 80}>
                   <div className="bg-slate-50 rounded-2xl border border-border p-6 h-full">
-                    <div className="font-display text-5xl font-black text-orange-500/20 mb-3 leading-none select-none">{s.n}</div>
-                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 mb-4">
-                      <Icon className="h-5 w-5 text-orange-600" />
+                    <div className="font-display text-5xl font-black text-primary/20 mb-3 leading-none select-none">{s.n}</div>
+                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mb-4">
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <h3 className="font-display font-black text-foreground mb-2">{s.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
@@ -552,7 +552,7 @@ const Shop = () => {
             <div className="mt-10 flex justify-center">
               <Button
                 size="lg"
-                className="gap-2 h-12 px-8 text-base bg-orange-500 hover:bg-orange-600"
+                className="gap-2 h-12 px-8 text-base"
                 onClick={() => window.location.href = 'mailto:shop@swelt.cz'}
               >
                 Chci zahájit setup <ArrowRight className="h-4 w-4" />
@@ -567,7 +567,7 @@ const Shop = () => {
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-xs font-semibold text-orange-700 uppercase tracking-wider mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
                 Co dostanete
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
@@ -584,8 +584,8 @@ const Shop = () => {
               return (
                 <Reveal key={f.label} delay={i * 55}>
                   <div className="bg-white rounded-xl border border-border p-5 flex flex-col items-start gap-3">
-                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                      <Icon className="h-5 w-5 text-orange-600" />
+                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <div className="font-display font-black text-foreground text-sm leading-tight">{f.label}</div>
@@ -609,7 +609,7 @@ const Shop = () => {
                   <button
                     key={p}
                     onClick={() => setActivePlatform(i)}
-                    className={`rounded-xl px-5 py-2.5 text-sm font-semibold border transition-all ${activePlatform === i ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-200' : 'border-border text-muted-foreground hover:border-orange-300 hover:text-orange-600'}`}
+                    className={`rounded-xl px-5 py-2.5 text-sm font-semibold border transition-all ${activePlatform === i ? 'bg-primary text-white border-primary shadow-md shadow-primary/20' : 'border-border text-muted-foreground hover:border-primary/40 hover:text-primary'}`}
                   >
                     {p}
                   </button>
@@ -631,7 +631,7 @@ const Shop = () => {
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-xs font-semibold text-orange-700 uppercase tracking-wider mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
                 Ceník
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
@@ -666,7 +666,7 @@ const Shop = () => {
                   <div className={`relative rounded-2xl border p-8 h-full flex flex-col ${plan.featured ? 'bg-primary border-primary text-white shadow-xl shadow-primary/20' : 'bg-white border-border'}`}>
                     {plan.featured && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                        <span className="bg-orange-400 text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
+                        <span className="bg-primary text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
                           Nejoblíbenější
                         </span>
                       </div>
@@ -724,7 +724,7 @@ const Shop = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <Reveal>
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-xs font-semibold text-orange-700 uppercase tracking-wider mb-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-6">
                   Proč swelt.shop
                 </div>
                 <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
@@ -844,7 +844,7 @@ const Shop = () => {
       </section>
 
       {/* ── CTA Bottom ── */}
-      <section className="py-20 sm:py-28" style={{ background: 'linear-gradient(135deg, hsl(24,90%,35%) 0%, hsl(24,80%,50%) 100%)' }}>
+      <section className="py-20 sm:py-28" style={{ background: 'linear-gradient(135deg, hsl(220,60%,28%) 0%, hsl(220,60%,45%) 100%)' }}>
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-sm font-semibold text-white/90 mb-7">
@@ -860,7 +860,7 @@ const Shop = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="gap-2 h-12 px-8 text-base bg-white text-orange-600 hover:bg-white/90 font-black"
+                className="gap-2 h-12 px-8 text-base bg-white text-primary hover:bg-white/90 font-black"
                 onClick={() => window.location.href = 'mailto:shop@swelt.cz'}
               >
                 Zahájit setup <ArrowRight className="h-4 w-4" />
@@ -891,7 +891,7 @@ const Shop = () => {
               { icon: Truck, text: 'Dropshipping dostupný' },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-orange-500/70" />
+                <Icon className="h-4 w-4 text-primary/60" />
                 <span>{text}</span>
               </div>
             ))}
