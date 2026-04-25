@@ -86,26 +86,50 @@ export function useProducts() {
 
     const loadProducts = async () => {
       try {
-        // Lightweight product query — no embedded params (avoids huge payload)
-        const { data, error } = await (supabase as any)
-          .from('produkty')
-          .select(`
-            id, sku, ean, product_name, manufacturer, category_text,
-            long_description, short_description, retail_price, wholesale_price,
-            wholesale_discount, stock, image_url, image_urls,
-            produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
-          `)
-          .limit(50000) as { data: ProduktyRow[] | null; error: unknown };
+        // Fetch all products in batches of 1000 (PostgREST server cap per request)
+        const BATCH = 1000;
+        const allRows: ProduktyRow[] = [];
+        let from = 0;
+        let keepGoing = true;
 
-        if (!error && data && data.length > 0) {
+        while (keepGoing) {
+          const { data, error } = await (supabase as any)
+            .from('produkty')
+            .select(`
+              id, sku, ean, product_name, manufacturer, category_text,
+              long_description, short_description, retail_price, wholesale_price,
+              wholesale_discount, stock, image_url, image_urls,
+              produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
+            `)
+            .range(from, from + BATCH - 1) as { data: ProduktyRow[] | null; error: unknown };
+
+          if (error || !data) {
+            // If first batch fails, fall back to static JSON
+            if (from === 0) {
+              const response = await fetch('/products.json');
+              const fallbackData = await response.json() as Product[];
+              if (!active) return;
+              setProducts(cleanProducts(fallbackData));
+              return;
+            }
+            break;
+          }
+
+          allRows.push(...data);
           if (!active) return;
-          setProducts(cleanProducts(data.map(mapRow)));
-        } else {
-          // Fallback to static JSON
-          const response = await fetch('/products.json');
-          const fallbackData = await response.json() as Product[];
-          if (!active) return;
-          setProducts(cleanProducts(fallbackData));
+
+          // Progressively update products after first batch so UI isn't blank
+          if (from === 0 && data.length > 0) {
+            setProducts(cleanProducts(allRows.map(mapRow)));
+          }
+
+          keepGoing = data.length === BATCH;
+          from += BATCH;
+        }
+
+        if (!active) return;
+        if (allRows.length > 0) {
+          setProducts(cleanProducts(allRows.map(mapRow)));
         }
       } catch {
         if (!active) return;
