@@ -12,11 +12,6 @@ type ImageRow = {
   stazeno: boolean;
 };
 
-type ParamRow = {
-  nazev: string;
-  hodnota: string;
-};
-
 type ProduktyRow = {
   id: string;
   sku: string;
@@ -33,7 +28,6 @@ type ProduktyRow = {
   image_url: string | null;
   image_urls: string[] | null;
   produkty_obrazky: ImageRow[];
-  produkty_parametry: ParamRow[];
 };
 
 export type AvailableParam = {
@@ -56,7 +50,6 @@ function mapRow(row: ProduktyRow): Product {
     .map(resolveImageUrl)
     .filter((u): u is string => Boolean(u));
 
-  // Fallback to direct URL columns saved by sync script when produkty_obrazky is empty
   const imgUrl = storedImgUrl ?? row.image_url ?? null;
   const allImageUrls = storedAllImageUrls.length > 0
     ? storedAllImageUrls
@@ -77,28 +70,11 @@ function mapRow(row: ProduktyRow): Product {
     wholesale: Number(row.wholesale_price ?? 0),
     stock: row.stock ?? 0,
     inStock: (row.stock ?? 0) > 0,
-    params: row.produkty_parametry ?? [],
   };
 }
 
 const cleanProducts = (data: Product[]) =>
   data.filter((p) => Boolean(getProductBrand(p)) && !isDropshippingProduct(p));
-
-function computeAvailableParams(products: Product[]): AvailableParam[] {
-  const map = new Map<string, Set<string>>();
-  products.forEach((p) => {
-    (p.params ?? []).forEach(({ nazev, hodnota }) => {
-      if (!map.has(nazev)) map.set(nazev, new Set());
-      hodnota.split(',').map((v) => v.trim()).filter(Boolean).forEach((v) => {
-        map.get(nazev)!.add(v);
-      });
-    });
-  });
-  return Array.from(map.entries())
-    .filter(([, values]) => values.size >= 2)
-    .map(([nazev, values]) => ({ nazev, values: Array.from(values).sort((a, b) => a.localeCompare(b, 'cs')) }))
-    .sort((a, b) => a.nazev.localeCompare(b.nazev, 'cs'));
-}
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -110,28 +86,26 @@ export function useProducts() {
 
     const loadProducts = async () => {
       try {
+        // Lightweight product query — no embedded params (avoids huge payload)
         const { data, error } = await (supabase as any)
           .from('produkty')
           .select(`
             id, sku, ean, product_name, manufacturer, category_text,
             long_description, short_description, retail_price, wholesale_price,
             wholesale_discount, stock, image_url, image_urls,
-            produkty_obrazky (storage_path, original_url, je_hlavni, stazeno),
-            produkty_parametry (nazev, hodnota)
+            produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
           `) as { data: ProduktyRow[] | null; error: unknown };
 
         if (!error && data && data.length > 0) {
           if (!active) return;
-          const clean = cleanProducts(data.map(mapRow));
-          setProducts(clean);
-          setAvailableParams(computeAvailableParams(clean));
-          return;
+          setProducts(cleanProducts(data.map(mapRow)));
+        } else {
+          // Fallback to static JSON
+          const response = await fetch('/products.json');
+          const fallbackData = await response.json() as Product[];
+          if (!active) return;
+          setProducts(cleanProducts(fallbackData));
         }
-
-        const response = await fetch('/products.json');
-        const fallbackData = await response.json() as Product[];
-        if (!active) return;
-        setProducts(cleanProducts(fallbackData));
       } catch {
         if (!active) return;
         setProducts([]);
@@ -140,7 +114,25 @@ export function useProducts() {
       }
     };
 
+    // Load param options from server-side RPC (lightweight aggregation)
+    const loadParamOptions = async () => {
+      try {
+        const { data, error } = await (supabase as any).rpc('get_param_options');
+        if (error || !data) return;
+        const mapped: AvailableParam[] = (data as Array<{ nazev: string; moznosti: string[] }>)
+          .map((row) => ({
+            nazev: row.nazev,
+            values: (row.moznosti ?? []).sort((a: string, b: string) => a.localeCompare(b, 'cs')),
+          }))
+          .sort((a, b) => a.nazev.localeCompare(b.nazev, 'cs'));
+        if (active) setAvailableParams(mapped);
+      } catch {
+        // Param options are non-critical — silently ignore
+      }
+    };
+
     loadProducts();
+    loadParamOptions();
     return () => { active = false; };
   }, []);
 

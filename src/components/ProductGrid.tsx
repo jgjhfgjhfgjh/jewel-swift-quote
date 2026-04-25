@@ -5,6 +5,7 @@ import { translations } from '@/lib/i18n';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { getProductBrand, matchesFeedCategory } from '@/lib/product-feed';
+import { supabase } from '@/integrations/supabase/client';
 
 const PAGE_SIZE = 48;
 
@@ -21,11 +22,6 @@ interface Props {
   onToggleWishlist?: (id: string) => void;
 }
 
-/** Split a comma-separated param value into individual trimmed tokens */
-function splitParamValue(hodnota: string): string[] {
-  return hodnota.split(',').map((v) => v.trim()).filter(Boolean);
-}
-
 export function ProductGrid({
   products, search, selectedBrands, selectedCategory,
   stockOnly, minDiscount, selectedGenders, selectedParams,
@@ -36,68 +32,75 @@ export function ProductGrid({
   const [page, setPage] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
+  // Server-side param filter — returns Set of matching product IDs (null = no filter active)
+  const [paramFilteredIds, setParamFilteredIds] = useState<Set<string> | null>(null);
+
+  useEffect(() => {
+    const activeGenders = selectedGenders ?? [];
+    const activeParams = selectedParams ?? {};
+    const hasGenders = activeGenders.length > 0;
+    const hasParams = Object.values(activeParams).some((v) => v.length > 0);
+
+    if (!hasGenders && !hasParams) {
+      setParamFilteredIds(null);
+      return;
+    }
+
+    let active = true;
+
+    const paramFilters = Object.fromEntries(
+      Object.entries(activeParams).filter(([, v]) => v.length > 0),
+    );
+
+    (supabase as any)
+      .rpc('filter_products_by_params', {
+        p_genders: hasGenders ? activeGenders : null,
+        p_params: Object.keys(paramFilters).length > 0 ? paramFilters : null,
+      })
+      .then(({ data, error }: { data: string[] | null; error: unknown }) => {
+        if (!active || error) return;
+        setParamFilteredIds(new Set(data ?? []));
+      });
+
+    return () => { active = false; };
+  }, [selectedGenders, selectedParams]);
+
+  // Client-side filter (search, brand, category, stock, discount) + param ID gate
   useEffect(() => {
     const query = search.trim().toLowerCase();
     const activeBrands = selectedBrands ?? [];
-    const activeGenders = selectedGenders ?? [];
-    const activeParams = selectedParams ?? {};
 
-    const nextFilteredProducts = products.filter((product) => {
+    const next = products.filter((product) => {
       const brand = getProductBrand(product);
 
-      // Search
       if (query) {
-        const matchesSearch =
+        const ok =
           product.name.toLowerCase().includes(query) ||
           brand.toLowerCase().includes(query) ||
           product.sku.toLowerCase().includes(query);
-        if (!matchesSearch) return false;
+        if (!ok) return false;
       }
 
-      // Brands
-      if (activeBrands.length > 0 && !activeBrands.includes(brand)) {
-        return false;
-      }
+      if (activeBrands.length > 0 && !activeBrands.includes(brand)) return false;
 
-      // Category
-      if (!matchesFeedCategory(product, selectedCategory)) {
-        return false;
-      }
+      if (!matchesFeedCategory(product, selectedCategory)) return false;
 
-      // Stock
-      if (stockOnly && !(product.stock > 0 || product.inStock)) {
-        return false;
-      }
+      if (stockOnly && !(product.stock > 0 || product.inStock)) return false;
 
-      // Discount
       if (minDiscount > 0) {
         const pct = product.price > 0 ? ((product.price - product.wholesale) / product.price) * 100 : 0;
         if (pct < minDiscount) return false;
       }
 
-      // Gender ("Určení") — OR logic: product matches if any of its gender tokens is in activeGenders
-      if (activeGenders.length > 0) {
-        const productGenders = (product.params ?? [])
-          .filter((p) => p.nazev === 'Určení')
-          .flatMap((p) => splitParamValue(p.hodnota));
-        if (!productGenders.some((g) => activeGenders.includes(g))) return false;
-      }
-
-      // Parametry — AND between groups, OR within group
-      for (const [nazev, selectedValues] of Object.entries(activeParams)) {
-        if (!selectedValues || selectedValues.length === 0) continue;
-        const productValues = (product.params ?? [])
-          .filter((p) => p.nazev === nazev)
-          .flatMap((p) => splitParamValue(p.hodnota));
-        if (!productValues.some((v) => selectedValues.includes(v))) return false;
-      }
+      // Param / gender filter — server already resolved which IDs match
+      if (paramFilteredIds !== null && !paramFilteredIds.has(product.id)) return false;
 
       return true;
     });
 
     setPage(1);
-    setFilteredProducts(nextFilteredProducts);
-  }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount, selectedGenders, selectedParams]);
+    setFilteredProducts(next);
+  }, [products, search, selectedBrands, selectedCategory, stockOnly, minDiscount, paramFilteredIds]);
 
   const paginated = filteredProducts.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filteredProducts.length;
