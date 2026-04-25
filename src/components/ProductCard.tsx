@@ -139,7 +139,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
             )}
             {product.inStock && !isOutOfStock && (
               <div className="absolute left-2 top-2 flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+                <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse [animation-duration:1.2s]" />
                 <span className="text-[11px] font-semibold text-foreground drop-shadow-sm">
                   {t.inStock}
                 </span>
