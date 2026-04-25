@@ -118,9 +118,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <nav className="hidden lg:flex flex-1 justify-center items-center gap-1 mx-4">
             {[
               { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
+              { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
               { href: '#feed', label: 'swelt.feed', icon: Rss },
               { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
-              { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
               { href: '#shop', label: 'swelt.shop', icon: ShoppingCart },
             ].map(({ href, label, icon: Icon }) => (
               <a key={href} href={href}

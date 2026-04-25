@@ -522,55 +522,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       bg: 'bg-white',
     },
     {
-      id: 'feed',
-      badge: 'Nový produkt',
-      badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-      icon: Rss,
-      label: 'swelt.feed',
-      heading: 'Produktový feed, který se stará sám.',
-      subheading: 'Automatický XML/CSV feed 3 000+ prémiových produktů. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.',
-      bullets: [
-        'XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping',
-        'Aktualizace cen a zásob až 4× denně',
-        'Filtrace dle kategorie, značky a dostupnosti',
-        'Vlastní cenová pravidla a přirážky',
-        'Jednoduchá integrace — funguje do 48 hodin',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/feed')} className="gap-2">
-          Zjistit více o swelt.feed <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <FeedVisual />,
-      reverse: true,
-      bg: 'bg-muted/20',
-    },
-    {
-      id: 'dropshipping',
-      badge: 'swelt.dropshipping',
-      badgeColor: 'bg-primary/10 text-primary',
-      icon: PackageOpen,
-      label: 'Dropshipping',
-      heading: 'E-shop bez skladu. Prodávej, my zabalíme.',
-      subheading: 'Prémiové hodinky a šperky prodávané přes tvůj e-shop. Swelt vyřizuje sklad, balení, expedici a bílý štítek — vše pod tvou značkou.',
-      bullets: [
-        'Bez skladových nákladů a investic',
-        'Logistika, balení a expedice pod vaší značkou',
-        'Dodání přímo ke koncovému zákazníkovi do 24–72 h',
-        'White-label fakturace s vaším logem',
-        'Marže 40–60 % při doporučené MOC',
-        'swelt.signal — trendová data každý týden',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/dropshipping')} className="gap-2">
-          Chci dropshipping <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <DropshippingVisual />,
-      reverse: false,
-      bg: 'bg-white',
-    },
-    {
       id: 'luxury',
       badge: 'swelt.luxury',
       badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200',
@@ -595,9 +546,58 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       bg: 'bg-muted/20',
     },
     {
+      id: 'feed',
+      badge: 'Nový produkt',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+      icon: Rss,
+      label: 'swelt.feed',
+      heading: 'Produktový feed, který se stará sám.',
+      subheading: 'Automatický XML/CSV feed 3 000+ prémiových produktů. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.',
+      bullets: [
+        'XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping',
+        'Aktualizace cen a zásob až 4× denně',
+        'Filtrace dle kategorie, značky a dostupnosti',
+        'Vlastní cenová pravidla a přirážky',
+        'Jednoduchá integrace — funguje do 48 hodin',
+      ],
+      ctas: (
+        <Button onClick={() => navigate('/feed')} className="gap-2">
+          Zjistit více o swelt.feed <ArrowRight className="h-4 w-4" />
+        </Button>
+      ),
+      visual: <FeedVisual />,
+      reverse: false,
+      bg: 'bg-white',
+    },
+    {
+      id: 'dropshipping',
+      badge: 'swelt.dropshipping',
+      badgeColor: 'bg-primary/10 text-primary',
+      icon: PackageOpen,
+      label: 'Dropshipping',
+      heading: 'E-shop bez skladu. Prodávej, my zabalíme.',
+      subheading: 'Prémiové hodinky a šperky prodávané přes tvůj e-shop. Swelt vyřizuje sklad, balení, expedici a bílý štítek — vše pod tvou značkou.',
+      bullets: [
+        'Bez skladových nákladů a investic',
+        'Logistika, balení a expedice pod vaší značkou',
+        'Dodání přímo ke koncovému zákazníkovi do 24–72 h',
+        'White-label fakturace s vaším logem',
+        'Marže 40–60 % při doporučené MOC',
+        'swelt.signal — trendová data každý týden',
+      ],
+      ctas: (
+        <Button onClick={() => navigate('/dropshipping')} className="gap-2">
+          Chci dropshipping <ArrowRight className="h-4 w-4" />
+        </Button>
+      ),
+      visual: <DropshippingVisual />,
+      reverse: true,
+      bg: 'bg-muted/20',
+    },
+    {
       id: 'shop',
       badge: 'swelt.shop',
-      badgeColor: 'bg-orange-50 text-orange-700 border border-orange-200',
+      badgeColor: 'bg-primary/10 text-primary',
       icon: ShoppingCart,
       label: 'swelt.shop',
       heading: 'Hotový e-shop s prémiovým zbožím. Spuštěný za 48 hodin.',
