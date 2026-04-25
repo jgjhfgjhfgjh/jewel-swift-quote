@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
+import { BackButton } from '@/components/BackButton';
 import { BottomNav } from '@/components/BottomNav';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -660,6 +661,7 @@ const Dropshipping = () => {
     >
       <SeoHead />
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
+      <BackButton />
       <FloatingNotif />
 
       <main className="flex-1 pt-14">

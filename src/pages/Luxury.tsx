@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navbar } from '@/components/Navbar';
+import { BackButton } from '@/components/BackButton';
 
 /* ─── Utility hooks ─── */
 function useReveal(threshold = 0.15): [React.RefObject<HTMLDivElement>, boolean] {
@@ -306,6 +307,7 @@ export default function Luxury() {
       } as React.CSSProperties}
     >
       <Navbar />
+      <BackButton />
 
       {/* ── Hero ── */}
       <section className="relative pt-24 pb-16 sm:pt-32 sm:pb-24 overflow-hidden">

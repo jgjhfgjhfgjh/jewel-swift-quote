@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
+import { BackButton } from '@/components/BackButton';
 import { AuthModal } from '@/components/AuthModal';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -321,6 +322,7 @@ const Velkoobchod = () => {
       } as React.CSSProperties}
     >
       <Navbar />
+      <BackButton />
       <FloatingNotif />
       <AuthModal
         open={authOpen}

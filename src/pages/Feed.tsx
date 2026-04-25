@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
+import { BackButton } from '@/components/BackButton';
 
 /* ─── SEO / JSON-LD ─── */
 function SeoHead() {
@@ -613,6 +614,7 @@ export default function Feed() {
     >
       <SeoHead />
       <Navbar />
+      <BackButton />
 
       {/* ─── 1. Hero ─── */}
       <section className="relative overflow-hidden pt-28 pb-20 px-4">

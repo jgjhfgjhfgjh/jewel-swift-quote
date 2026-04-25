@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
+import { BackButton } from '@/components/BackButton';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -375,6 +376,7 @@ const Shop = () => {
       } as React.CSSProperties}
     >
       <Navbar />
+      <BackButton />
       <FloatingNotif />
 
       {/* ── Hero ── */}
