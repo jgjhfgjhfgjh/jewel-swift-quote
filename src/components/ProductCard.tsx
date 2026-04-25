@@ -212,7 +212,9 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
 
         {canSeePrices && (
           <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
-            {product.stock > 0 ? `${t.stockCount}: ${product.stock} ${t.pcs}` : t.outOfStock}
+            {product.stock > 0
+              ? `${t.stockCount}: ${product.stock >= 20 ? '20+' : product.stock} ${t.pcs}`
+              : t.outOfStock}
           </p>
         )}
 
