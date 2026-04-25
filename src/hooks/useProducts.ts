@@ -94,7 +94,8 @@ export function useProducts() {
             long_description, short_description, retail_price, wholesale_price,
             wholesale_discount, stock, image_url, image_urls,
             produkty_obrazky (storage_path, original_url, je_hlavni, stazeno)
-          `) as { data: ProduktyRow[] | null; error: unknown };
+          `)
+          .limit(50000) as { data: ProduktyRow[] | null; error: unknown };
 
         if (!error && data && data.length > 0) {
           if (!active) return;
