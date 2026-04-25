@@ -208,6 +208,8 @@ export default function Luxury() {
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const formRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   /* JSON-LD SEO */
   useEffect(() => {
     const serviceSchema = {

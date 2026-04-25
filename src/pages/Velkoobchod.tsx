@@ -301,6 +301,8 @@ const Velkoobchod = () => {
   const openAuth = (tab: 'login' | 'register') => { setAuthTab(tab); setAuthOpen(true); };
   const goToCatalog = () => { setViewMode('catalog'); navigate('/'); };
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   return (
     <div
       className="velo-page min-h-screen font-sans"

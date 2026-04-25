@@ -355,6 +355,8 @@ const Shop = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activePlatform, setActivePlatform] = useState(0);
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   return (
     <div
       className="shop-page min-h-screen font-sans"

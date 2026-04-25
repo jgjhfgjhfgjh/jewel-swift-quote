@@ -527,6 +527,8 @@ export default function Feed() {
   const [billingCycle, setBillingCycle] = useState<'quarterly' | 'yearly'>('quarterly');
   const [notifVisible, setNotifVisible] = useState(false);
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   useEffect(() => {
     const t = setTimeout(() => setNotifVisible(true), 1800);
     return () => clearTimeout(t);
