@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { useStore } from '@/lib/store';
+import { luxury } from '@/lib/i18n-luxury';
 
 /* ─── Utility hooks ─── */
 function useReveal(threshold = 0.15): [React.RefObject<HTMLDivElement>, boolean] {
@@ -75,111 +77,21 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
   );
 }
 
-/* ─── Data ─── */
+/* ─── Static brand list (no translation) + icons (text comes from i18n-luxury.ts) ─── */
 const brands = [
   'Tommy Hilfiger', 'Versace', 'Police', 'Tissot', 'Seiko', 'Citizen',
   'Hugo Boss', 'Armani Exchange', 'Michael Kors', 'Guess', 'Fossil',
   'Swarovski', 'Calvin Klein', 'DKNY', 'Bulova', 'Casio G-Shock',
   'Daniel Wellington', 'Lacoste', 'Emporio Armani', 'Skagen',
 ];
-
-const benefits = [
-  {
-    icon: HandCoins,
-    title: 'Velkoobchodní ceny',
-    text: 'Stejné ceny jako pro B2B partnery. Průměrná úspora 40–60 % oproti retailu. Platíte co distributorský zákazník, ne co koncový spotřebitel.',
-  },
-  {
-    icon: Package,
-    title: 'Dostupné od 1 kusu',
-    text: 'Žádné minimální odběry. Jeden kus, desítky kusů — funguje stejně. Ideální pro osobní nákup i firemní dárkové balíčky.',
-  },
-  {
-    icon: Lock,
-    title: 'Diskrétní servis',
-    text: 'Balení bez loga, nenápadná zásilka. Faktura přizpůsobená vašim potřebám — pro soukromé osoby i pro firemní účetnictví.',
-  },
-];
-
-const steps = [
-  {
-    num: 1,
-    icon: MessageSquare,
-    title: 'Popište, co hledáte',
-    text: 'Vyplňte formulář nebo nám napište. Máme katalog 3 000+ produktů 70+ světových značek. Nevíte přesně? Poradíme.',
-  },
-  {
-    num: 2,
-    icon: Clock,
-    title: 'Obdržíte nabídku do 24 hodin',
-    text: 'Odešleme vám přesnou cenovou nabídku s aktuální dostupností a velkoobchodní cenou. Bez závazku, bez poplatku.',
-  },
-  {
-    num: 3,
-    icon: Truck,
-    title: 'Zásilka přímo k vám',
-    text: 'Po potvrzení a platbě expedujeme do 24–48 hodin. Diskrétní balení, pojištěná zásilka, sledování zásilky online.',
-  },
-];
-
+const BENEFIT_ICONS = [HandCoins, Package, Lock];
+const STEP_ICONS = [MessageSquare, Clock, Truck];
+const TRUST_ICONS = [Award, Star, Shield, Package, Lock];
+const TRUST_STRIP_ICONS = [Award, Star, Shield, Lock, Truck];
 const products = [
-  {
-    brand: 'Tommy Hilfiger',
-    name: 'DECKER',
-    category: 'Hodinky',
-    voc: 1790,
-    moc: 4475,
-  },
-  {
-    brand: 'Police',
-    name: 'MENELIK',
-    category: 'Hodinky',
-    voc: 1250,
-    moc: 3125,
-  },
-  {
-    brand: 'Versace',
-    name: 'V-Chronos',
-    category: 'Hodinky',
-    voc: 2890,
-    moc: 7225,
-  },
-];
-
-const trustItems = [
-  { icon: Award, text: '15+ let ZAGO na trhu' },
-  { icon: Star, text: 'Autorizovaný distributor 70+ značek' },
-  { icon: Shield, text: 'Garance pravosti produktů' },
-  { icon: Package, text: 'Pojištěné zásilky' },
-  { icon: Lock, text: 'GDPR — vaše data jsou v bezpečí' },
-];
-
-const notifications = [
-  { name: 'Petr K.', city: 'Prahy', product: 'Tommy Hilfiger hodinky' },
-  { name: 'Markéta S.', city: 'Brna', product: 'firemní dary' },
-];
-
-const faqs = [
-  {
-    q: 'Musím mít IČO nebo firmu, abych mohl nakoupit?',
-    a: 'Ne. swelt.luxury je dostupné pro soukromé osoby i firmy bez nutnosti IČO. Stačí vyplnit poptávkový formulář. Pro firmy vystavíme fakturu odpovídající jejich potřebám.',
-  },
-  {
-    q: 'Jaká je minimální výše objednávky?',
-    a: 'Minimální odběr je 1 kus. Nejsme vázáni žádnými MOQ. Objednáte jeden kus jako narozeninový dárek nebo sto kusů jako firemní prezenty — podmínky jsou stejné.',
-  },
-  {
-    q: 'Jak dlouho trvá vyřízení poptávky?',
-    a: 'Odpovídáme do 24 hodin v pracovní dny. Cenová nabídka obsahuje přesnou dostupnost, velkoobchodní cenu a odhadovaný čas doručení. Po potvrzení expedujeme do 24–48 hodin.',
-  },
-  {
-    q: 'Jsou produkty originální?',
-    a: 'Ano. Jsme autorizovaný distributor 70+ světových značek. Každý produkt je originální, pochází přímo od výrobce nebo autorizovaného dovozce a je doplněn dokladem o původu.',
-  },
-  {
-    q: 'Jak probíhá platba a dodání?',
-    a: 'Po potvrzení nabídky obdržíte fakturu (hotovost, převod nebo karta). Po platbě zásilku expedujeme. Doručení po celé EU do 72 hodin. Zásilka je pojištěná a sledovatelná online.',
-  },
+  { brand: 'Tommy Hilfiger', name: 'DECKER',    category: 'Hodinky', voc: 1790, moc: 4475 },
+  { brand: 'Police',         name: 'MENELIK',   category: 'Hodinky', voc: 1250, moc: 3125 },
+  { brand: 'Versace',        name: 'V-Chronos', category: 'Hodinky', voc: 2890, moc: 7225 },
 ];
 
 /* ─── Form state type ─── */
@@ -192,18 +104,15 @@ interface FormState {
   budget: string;
 }
 
-const initialForm: FormState = {
-  name: '',
-  email: '',
-  phone: '',
-  description: '',
-  quantity: '1 kus',
-  budget: 'do 5 000 Kč',
-};
-
 /* ─── Main component ─── */
 export default function Luxury() {
   const navigate = useNavigate();
+  const { lang } = useStore();
+  const l = luxury[lang];
+  const initialForm: FormState = {
+    name: '', email: '', phone: '', description: '',
+    quantity: l.qtyOptions[0], budget: l.budgetOptions[0],
+  };
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<FormState>>({});
@@ -231,7 +140,7 @@ export default function Luxury() {
     const faqSchema = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: faqs.map(f => ({
+      mainEntity: l.faqs.map(f => ({
         '@type': 'Question',
         name: f.q,
         acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -270,9 +179,9 @@ export default function Luxury() {
 
   function validate(): boolean {
     const e: Partial<FormState> = {};
-    if (!form.name.trim()) e.name = 'Vyplňte jméno';
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Zadejte platný e-mail';
-    if (!form.description.trim()) e.description = 'Popište, co hledáte';
+    if (!form.name.trim()) e.name = l.inquiry.nameError;
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = l.inquiry.emailError;
+    if (!form.description.trim()) e.description = l.inquiry.descError;
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -318,35 +227,34 @@ export default function Luxury() {
             <div>
               <Reveal>
                 <Badge className="mb-5 bg-primary/10 text-primary border-primary/20 font-medium px-3 py-1 text-xs uppercase tracking-wider">
-                  swelt.luxury — Privátní přístup k prémiím
+                  {l.hero.badge}
                 </Badge>
               </Reveal>
               <Reveal delay={80}>
                 <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-foreground mb-5">
-                  Prémiové hodinky a šperky.{' '}
-                  <span className="text-primary">Bez kompromisů.</span>{' '}
-                  Za velkoobchodní ceny.
+                  {l.hero.h1Part1}{' '}
+                  <span className="text-primary">{l.hero.h1Highlight}</span>{' '}
+                  {l.hero.h1Part2}
                 </h1>
               </Reveal>
               <Reveal delay={160}>
                 <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl">
-                  Exkluzivní přístup k 3&nbsp;000+ produktům světových značek. Pro soukromé osoby i&nbsp;firmy.
-                  Bez nutnosti IČO. Dostupné od&nbsp;1&nbsp;kusu.
+                  {l.hero.sub}
                 </p>
               </Reveal>
               <Reveal delay={240}>
                 <div className="flex flex-col sm:flex-row gap-3 mb-10">
                   <Button size="lg" className="gap-2 text-base font-semibold shadow-md" onClick={scrollToForm}>
-                    Odeslat poptávku <ArrowRight className="h-4 w-4" />
+                    {l.hero.ctaInquiry} <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline" className="gap-2 text-base">
-                    Prohlédnout značky <ChevronRight className="h-4 w-4" />
+                    {l.hero.ctaBrands} <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </Reveal>
               <Reveal delay={320}>
                 <div className="flex flex-wrap gap-3">
-                  {['Od 1 kusu', 'Bez nutnosti IČO', 'Doručení EU do 72h'].map(pill => (
+                  {l.hero.pills.map(pill => (
                     <span key={pill} className="inline-flex items-center gap-1.5 bg-white border border-border rounded-full px-4 py-1.5 text-sm font-medium text-foreground shadow-sm">
                       <Check className="h-3.5 w-3.5 text-primary" />
                       {pill}
@@ -360,8 +268,8 @@ export default function Luxury() {
             <Reveal delay={200} className="lg:flex lg:justify-end">
               <div className="bg-white rounded-2xl shadow-xl border border-border p-6 max-w-sm w-full mx-auto lg:mx-0">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-semibold text-primary uppercase tracking-widest">Ukázka katalogu</span>
-                  <Badge variant="secondary" className="text-xs">3 000+ produktů</Badge>
+                  <span className="text-xs font-semibold text-primary uppercase tracking-widest">{l.hero.sampleLabel}</span>
+                  <Badge variant="secondary" className="text-xs">{l.hero.productCount}</Badge>
                 </div>
                 <div className="space-y-3 mb-5">
                   {products.map(p => (
@@ -381,12 +289,12 @@ export default function Luxury() {
                   ))}
                 </div>
                 <div className="border-t border-border pt-4">
-                  <p className="text-xs text-muted-foreground mb-2 font-medium">Značky v katalogu:</p>
+                  <p className="text-xs text-muted-foreground mb-2 font-medium">{l.hero.brandsLabel}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {['Tommy Hilfiger', 'Versace', 'Police', 'Tissot', 'Seiko'].map(b => (
                       <span key={b} className="text-xs bg-primary/8 text-primary border border-primary/15 rounded-full px-2 py-0.5 font-medium">{b}</span>
                     ))}
-                    <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5">+65 dalších</span>
+                    <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5">{l.hero.moreCount}</span>
                   </div>
                 </div>
               </div>
@@ -401,19 +309,19 @@ export default function Luxury() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-primary-foreground">
             <div>
               <p className="text-3xl font-bold font-display"><CountUp to={3000} suffix="+" /></p>
-              <p className="text-sm opacity-80 mt-1">Produktů v katalogu</p>
+              <p className="text-sm opacity-80 mt-1">{l.stats[0]}</p>
             </div>
             <div>
               <p className="text-3xl font-bold font-display"><CountUp to={70} suffix="+" /></p>
-              <p className="text-sm opacity-80 mt-1">Světových značek</p>
+              <p className="text-sm opacity-80 mt-1">{l.stats[1]}</p>
             </div>
             <div>
               <p className="text-3xl font-bold font-display"><CountUp to={60} suffix="%" /></p>
-              <p className="text-sm opacity-80 mt-1">Průměrná úspora</p>
+              <p className="text-sm opacity-80 mt-1">{l.stats[2]}</p>
             </div>
             <div>
               <p className="text-3xl font-bold font-display"><CountUp to={15} suffix="+" /></p>
-              <p className="text-sm opacity-80 mt-1">Let ZAGO na trhu</p>
+              <p className="text-sm opacity-80 mt-1">{l.stats[3]}</p>
             </div>
           </div>
         </div>
@@ -423,21 +331,24 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">Proč swelt.luxury?</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">Přístup k prémiím bez zbytečných překážek</h2>
+            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.benefits.eyebrow}</Badge>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.benefits.heading}</h2>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-6">
-            {benefits.map((b, i) => (
-              <Reveal key={b.title} delay={i * 100}>
-                <div className="bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow h-full">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                    <b.icon className="h-6 w-6 text-primary" />
+            {l.benefits.items.map((b, i) => {
+              const Icon = BENEFIT_ICONS[i];
+              return (
+                <Reveal key={b.title} delay={i * 100}>
+                  <div className="bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow h-full">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-base mb-2">{b.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{b.text}</p>
                   </div>
-                  <h3 className="font-semibold text-base mb-2">{b.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{b.text}</p>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -446,25 +357,28 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">Jak to funguje</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">Tři kroky k vašemu produktu</h2>
+            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.howItWorks.eyebrow}</Badge>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.howItWorks.heading}</h2>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-8 relative">
             <div className="hidden sm:block absolute top-8 left-1/6 right-1/6 h-0.5 bg-border" style={{ left: '16.67%', right: '16.67%' }} />
-            {steps.map((s, i) => (
-              <Reveal key={s.num} delay={i * 120}>
-                <div className="relative text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center mx-auto mb-5 shadow-md">
-                    <s.icon className="h-7 w-7" />
+            {l.howItWorks.steps.map((s, i) => {
+              const Icon = STEP_ICONS[i];
+              return (
+                <Reveal key={i} delay={i * 120}>
+                  <div className="relative text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center mx-auto mb-5 shadow-md">
+                      <Icon className="h-7 w-7" />
+                    </div>
+                    <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 w-5 h-5 rounded-full bg-white border-2 border-primary text-primary text-xs font-bold flex items-center justify-center">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-semibold text-base mb-2">{s.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{s.text}</p>
                   </div>
-                  <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 w-5 h-5 rounded-full bg-white border-2 border-primary text-primary text-xs font-bold flex items-center justify-center">
-                    {s.num}
-                  </span>
-                  <h3 className="font-semibold text-base mb-2">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{s.text}</p>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -474,7 +388,7 @@ export default function Luxury() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-8">
             <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">
-              70+ světových značek — výběr z katalogu
+              {l.brandsStrip}
             </p>
           </Reveal>
           <div className="flex flex-wrap justify-center gap-3">
@@ -494,8 +408,8 @@ export default function Luxury() {
       <section ref={formRef} className="py-16 sm:py-24 bg-background scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">Poptávkový formulář</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">Napište nám, co hledáte</h2>
+            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.inquiry.eyebrow}</Badge>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.inquiry.heading}</h2>
           </Reveal>
           <div className="grid lg:grid-cols-5 gap-8 items-start">
             {/* Form */}
@@ -506,42 +420,42 @@ export default function Luxury() {
                     <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                       <Check className="h-8 w-8 text-green-600" />
                     </div>
-                    <h3 className="font-display font-bold text-xl mb-2">Poptávka odeslána!</h3>
+                    <h3 className="font-display font-bold text-xl mb-2">{l.inquiry.submitted}</h3>
                     <p className="text-muted-foreground text-sm mb-6">
-                      Odpovíme vám do 24 hodin na <strong>{form.email}</strong>.
+                      {l.inquiry.submittedSub} <strong>{form.email}</strong>.
                     </p>
                     <Button variant="outline" onClick={() => { setSubmitted(false); setForm(initialForm); }}>
-                      Odeslat další poptávku
+                      {l.inquiry.submitAgain}
                     </Button>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-4">
                     <div>
-                      <p className="font-semibold text-lg mb-0.5">Nezávazná poptávka</p>
-                      <p className="text-sm text-muted-foreground">Odpovíme do 24 hodin</p>
+                      <p className="font-semibold text-lg mb-0.5">{l.inquiry.nonbinding}</p>
+                      <p className="text-sm text-muted-foreground">{l.inquiry.replyTime}</p>
                     </div>
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-name">Jméno a příjmení *</label>
+                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-name">{l.inquiry.nameLabel}</label>
                         <input
                           id="lux-name"
                           type="text"
                           value={form.name}
                           onChange={handleChange('name')}
-                          placeholder="Jan Novák"
+                          placeholder={l.inquiry.namePh}
                           className={`w-full rounded-lg border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition ${errors.name ? 'border-red-400' : 'border-border'}`}
                         />
                         {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-email">E-mail *</label>
+                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-email">{l.inquiry.emailLabel}</label>
                         <input
                           id="lux-email"
                           type="email"
                           value={form.email}
                           onChange={handleChange('email')}
-                          placeholder="jan@firma.cz"
+                          placeholder={l.inquiry.emailPh}
                           className={`w-full rounded-lg border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition ${errors.email ? 'border-red-400' : 'border-border'}`}
                         />
                         {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
@@ -549,25 +463,25 @@ export default function Luxury() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" htmlFor="lux-phone">Telefon</label>
+                      <label className="block text-sm font-medium mb-1.5" htmlFor="lux-phone">{l.inquiry.phoneLabel}</label>
                       <input
                         id="lux-phone"
                         type="tel"
                         value={form.phone}
                         onChange={handleChange('phone')}
-                        placeholder="+420 123 456 789"
+                        placeholder={l.inquiry.phonePh}
                         className="w-full rounded-lg border border-border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" htmlFor="lux-desc">Co hledáte? *</label>
+                      <label className="block text-sm font-medium mb-1.5" htmlFor="lux-desc">{l.inquiry.descLabel}</label>
                       <textarea
                         id="lux-desc"
                         rows={4}
                         value={form.description}
                         onChange={handleChange('description')}
-                        placeholder="Popište produkt, značku, model nebo příležitost — narozeniny, firemní dar, osobní nákup..."
+                        placeholder={l.inquiry.descPh}
                         className={`w-full rounded-lg border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition resize-none ${errors.description ? 'border-red-400' : 'border-border'}`}
                       />
                       {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
@@ -575,39 +489,33 @@ export default function Luxury() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-qty">Počet kusů</label>
+                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-qty">{l.inquiry.qtyLabel}</label>
                         <select
                           id="lux-qty"
                           value={form.quantity}
                           onChange={handleChange('quantity')}
                           className="w-full rounded-lg border border-border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition"
                         >
-                          <option>1 kus</option>
-                          <option>2–5 kusů</option>
-                          <option>6–20 kusů</option>
-                          <option>20+ kusů</option>
+                          {l.qtyOptions.map(o => <option key={o}>{o}</option>)}
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-budget">Rozpočet</label>
+                        <label className="block text-sm font-medium mb-1.5" htmlFor="lux-budget">{l.inquiry.budgetLabel}</label>
                         <select
                           id="lux-budget"
                           value={form.budget}
                           onChange={handleChange('budget')}
                           className="w-full rounded-lg border border-border px-3 py-2.5 text-sm bg-background outline-none focus:ring-2 focus:ring-primary/30 transition"
                         >
-                          <option>do 5 000 Kč</option>
-                          <option>5 000–15 000 Kč</option>
-                          <option>15 000–50 000 Kč</option>
-                          <option>50 000+ Kč</option>
+                          {l.budgetOptions.map(o => <option key={o}>{o}</option>)}
                         </select>
                       </div>
                     </div>
 
                     <Button type="submit" size="lg" className="w-full gap-2 font-semibold text-base mt-2">
-                      Odeslat poptávku <ArrowRight className="h-4 w-4" />
+                      {l.inquiry.submit} <ArrowRight className="h-4 w-4" />
                     </Button>
-                    <p className="text-center text-xs text-muted-foreground">Bez závazku. Nebudeme vás spamovat.</p>
+                    <p className="text-center text-xs text-muted-foreground">{l.inquiry.noSpam}</p>
                   </form>
                 )}
               </div>
@@ -617,14 +525,14 @@ export default function Luxury() {
             <div className="lg:col-span-2 space-y-5">
               <Reveal>
                 <div className="bg-white rounded-2xl border border-border shadow-sm p-6">
-                  <h3 className="font-semibold text-base mb-4">Proč věřit swelt.luxury?</h3>
+                  <h3 className="font-semibold text-base mb-4">{l.inquiry.whyTrust}</h3>
                   <ul className="space-y-3">
-                    {trustItems.map(t => (
-                      <li key={t.text} className="flex items-center gap-3 text-sm">
+                    {l.trustItems.map(text => (
+                      <li key={text} className="flex items-center gap-3 text-sm">
                         <div className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                           <Check className="h-4 w-4 text-green-600" />
                         </div>
-                        <span>{t.text}</span>
+                        <span>{text}</span>
                       </li>
                     ))}
                   </ul>
@@ -633,16 +541,16 @@ export default function Luxury() {
 
               <Reveal delay={100}>
                 <div className="bg-white rounded-2xl border border-border shadow-sm p-6">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Nedávná aktivita</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{l.inquiry.recentActivity}</p>
                   <div className="space-y-3">
-                    {notifications.map((n, i) => (
+                    {l.notifications.map((n, i) => (
                       <div key={i} className="flex items-start gap-3 text-sm">
                         <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                           <Users className="h-3.5 w-3.5 text-primary" />
                         </div>
                         <div>
-                          <p className="font-medium leading-tight">{n.name} z {n.city}</p>
-                          <p className="text-muted-foreground text-xs">{n.product} — právě odeslal/a poptávku</p>
+                          <p className="font-medium leading-tight">{n.name} {n.city}</p>
+                          <p className="text-muted-foreground text-xs">{n.product} — {l.inquiry.activityNote}</p>
                         </div>
                       </div>
                     ))}
@@ -653,8 +561,8 @@ export default function Luxury() {
               <Reveal delay={200}>
                 <div className="bg-primary/5 border border-primary/15 rounded-2xl p-5 text-center">
                   <Globe className="h-6 w-6 text-primary mx-auto mb-2" />
-                  <p className="text-sm font-semibold mb-1">Doručení po celé EU</p>
-                  <p className="text-xs text-muted-foreground">ČR, SK, DE, AT a další země EU do 72 hodin</p>
+                  <p className="text-sm font-semibold mb-1">{l.inquiry.euDelivery}</p>
+                  <p className="text-xs text-muted-foreground">{l.inquiry.euDeliveryNote}</p>
                 </div>
               </Reveal>
             </div>
@@ -666,10 +574,10 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">Ukázka produktů</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">Velkoobchodní ceny — přehled</h2>
+            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.productsSection.eyebrow}</Badge>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.productsSection.heading}</h2>
             <p className="text-muted-foreground text-sm mt-3 max-w-lg mx-auto">
-              Ceny jsou orientační. Přesnou nabídku dostanete po odeslání poptávky.
+              {l.productsSection.sub}
             </p>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-6">
@@ -696,7 +604,7 @@ export default function Luxury() {
                     </div>
                     <Badge variant="outline" className="text-xs w-full justify-center py-1.5">
                       <Eye className="h-3.5 w-3.5 mr-1" />
-                      Dostupný v poptávce
+                      {l.productsSection.available}
                     </Badge>
                   </div>
                 </div>
@@ -710,11 +618,11 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-background">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">Časté dotazy</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">Máte otázky?</h2>
+            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.faq.eyebrow}</Badge>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.faq.heading}</h2>
           </Reveal>
           <div className="bg-white rounded-2xl border border-border shadow-sm px-6 sm:px-8">
-            {faqs.map((f, i) => (
+            {l.faqs.map((f, i) => (
               <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />
             ))}
           </div>
@@ -727,10 +635,10 @@ export default function Luxury() {
           <Reveal>
             <Gem className="h-10 w-10 mx-auto mb-5 opacity-80" />
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3">
-              Prémiové produkty dostupné pro každého.
+              {l.cta.heading}
             </h2>
             <p className="text-base opacity-85 mb-8">
-              Vyplňte poptávku — nabídku zašleme do 24 hodin.
+              {l.cta.sub}
             </p>
             <Button
               size="lg"
@@ -738,7 +646,7 @@ export default function Luxury() {
               className="gap-2 font-semibold text-base shadow-lg"
               onClick={scrollToForm}
             >
-              Odeslat poptávku <ArrowRight className="h-4 w-4" />
+              {l.cta.button} <ArrowRight className="h-4 w-4" />
             </Button>
           </Reveal>
         </div>
@@ -748,18 +656,15 @@ export default function Luxury() {
       <section className="py-8 bg-white border-t border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-sm text-muted-foreground">
-            {[
-              { icon: Award, text: '15+ let ZAGO' },
-              { icon: Star, text: 'Autorizovaný distributor' },
-              { icon: Shield, text: 'Garance pravosti' },
-              { icon: Lock, text: 'GDPR' },
-              { icon: Truck, text: 'Pojištěné zásilky' },
-            ].map(item => (
-              <span key={item.text} className="flex items-center gap-1.5 font-medium">
-                <item.icon className="h-4 w-4 text-primary" />
-                {item.text}
-              </span>
-            ))}
+            {l.trustStrip.map((text, i) => {
+              const Icon = TRUST_STRIP_ICONS[i];
+              return (
+                <span key={text} className="flex items-center gap-1.5 font-medium">
+                  <Icon className="h-4 w-4 text-primary" />
+                  {text}
+                </span>
+              );
+            })}
           </div>
         </div>
       </section>
