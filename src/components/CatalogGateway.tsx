@@ -7,10 +7,14 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable/index';
 import logo from '@/assets/logo.png';
+import { useStore } from '@/lib/store';
+import { home } from '@/lib/i18n-homepage';
 
 export function CatalogGateway() {
   const { signIn } = useAuthContext();
   const navigate = useNavigate();
+  const { lang } = useStore();
+  const h = home[lang];
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,7 +28,7 @@ export function CatalogGateway() {
     try {
       await signIn(email, password);
     } catch (err: any) {
-      setError(err.message || 'Přihlášení selhalo');
+      setError(err.message || h.loginFailed);
     } finally {
       setLoading(false);
     }
@@ -37,11 +41,11 @@ export function CatalogGateway() {
         redirect_uri: window.location.origin,
       });
       if (result.error) {
-        setError(result.error instanceof Error ? result.error.message : 'Přihlášení selhalo');
+        setError(result.error instanceof Error ? result.error.message : h.loginFailed);
       }
       if (result.redirected) return;
     } catch (err: any) {
-      setError(err.message || 'Přihlášení selhalo');
+      setError(err.message || h.loginFailed);
     } finally {
       setSocialLoading(null);
     }
@@ -51,7 +55,7 @@ export function CatalogGateway() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Link to="/" className="absolute left-4 top-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Zpět na úvodní stránku
+        {h.backToHome}
       </Link>
       <div className="w-full max-w-lg space-y-8">
         {/* Logo */}
@@ -59,10 +63,8 @@ export function CatalogGateway() {
           <Link to="/">
             <img src={logo} alt="swelt." className="mx-auto h-20 object-contain cursor-pointer" />
           </Link>
-          <h1 className="mt-4 font-display text-2xl font-semibold">Přístup do katalogu</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Pro zobrazení katalogu se prosím přihlaste
-          </p>
+          <h1 className="mt-4 font-display text-2xl font-semibold">{h.catalogAccess}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{h.catalogAccessSubtitle}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -70,22 +72,20 @@ export function CatalogGateway() {
           <div className="rounded-2xl border border-border/60 bg-card p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary">
               <Briefcase className="h-4 w-4" />
-              Jste B2B partner?
+              {h.areYouB2B}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Přihlaste se pomocí firemního účtu nebo se zaregistrujte jako B2B partner.
-            </p>
+            <p className="text-xs text-muted-foreground">{h.b2bSubtitle}</p>
             <form onSubmit={handleLogin} className="space-y-3">
               <Input
                 type="email"
-                placeholder="Email"
+                placeholder={h.email}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="h-9 text-sm"
               />
               <PasswordInput
-                placeholder="Heslo"
+                placeholder={h.password}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -94,13 +94,13 @@ export function CatalogGateway() {
               {error && <p className="text-xs text-destructive font-medium">{error}</p>}
               <Button type="submit" className="w-full h-9 text-sm" disabled={loading}>
                 <Lock className="h-3.5 w-3.5 mr-1.5" />
-                {loading ? '...' : 'Vstoupit'}
+                {loading ? '...' : h.enterCta}
               </Button>
             </form>
             <p className="text-center text-xs text-muted-foreground">
-              Nemáte účet?{' '}
+              {h.noAccount}{' '}
               <Link to="/register" className="text-primary hover:underline font-medium">
-                B2B Registrace
+                {h.b2bRegister}
               </Link>
             </p>
           </div>
@@ -109,11 +109,9 @@ export function CatalogGateway() {
           <div className="rounded-2xl border border-border/60 bg-card p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
               <Eye className="h-4 w-4" />
-              Chcete si prohlédnout katalog?
+              {h.wantToBrowse}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Rychlý přístup ke katalogu bez B2B registrace. Ceny jsou dostupné pouze pro ověřené partnery.
-            </p>
+            <p className="text-xs text-muted-foreground">{h.browseSubtitle}</p>
             <div className="space-y-3">
               <Button
                 variant="outline"
@@ -127,7 +125,7 @@ export function CatalogGateway() {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
-                {socialLoading === 'google' ? 'Přihlašování...' : 'Pokračovat přes Google'}
+                {socialLoading === 'google' ? h.signingIn : h.continueWithGoogle}
               </Button>
               <Button
                 variant="outline"
@@ -138,7 +136,7 @@ export function CatalogGateway() {
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                 </svg>
-                {socialLoading === 'apple' ? 'Přihlašování...' : 'Pokračovat přes Apple'}
+                {socialLoading === 'apple' ? h.signingIn : h.continueWithApple}
               </Button>
             </div>
           </div>
