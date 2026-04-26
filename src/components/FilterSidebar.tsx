@@ -7,15 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useStore } from '@/lib/store';
 import { translations, flags, langNames, ALL_LANGS, type Lang } from '@/lib/i18n';
+import { tParamName, tGender, tCategory } from '@/lib/i18n-filters';
 import type { AvailableParam } from '@/hooks/useProducts';
 
 const GENDER_PARAM = 'Určení';
-const GENDER_LABELS: Record<string, string> = {
-  'Pro muže': 'Muži',
-  'Pro ženy': 'Ženy',
-  'Pro děti': 'Děti',
-  'Unisex': 'Unisex',
-};
 const GENDER_ORDER = ['Pro muže', 'Pro ženy', 'Pro děti', 'Unisex'];
 
 interface Props {
@@ -94,11 +89,7 @@ export function FilterSidebar({
     { label: t.discount50, value: 50 },
   ];
 
-  const categoryLabels: Record<string, Record<string, string>> = {
-    'Hodinky': { cs: 'Hodinky', en: 'Watches', is: 'Úr' },
-    'Šperky': { cs: 'Šperky', en: 'Jewelry', is: 'Skartgripir' },
-    'Příslušenství': { cs: 'Příslušenství', en: 'Accessories', is: 'Fylgihlutir' },
-  };
+  // Category labels via i18n-filters.ts (covers all 18 langs)
 
   const sortedManufacturers = useMemo(
     () => [...manufacturers].sort((a, b) => a.name.localeCompare(b.name)),
@@ -253,7 +244,7 @@ export function FilterSidebar({
             <div className="space-y-2">
               {CATEGORY_KEYS.map((cat) => (
                 <div key={cat} className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{categoryLabels[cat]?.[lang] || cat}</span>
+                  <span className="text-sm font-medium">{tCategory(cat, lang)}</span>
                   <Switch
                     checked={selectedCategory === cat}
                     onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
@@ -269,7 +260,7 @@ export function FilterSidebar({
           <AccordionItem value="genders" className="border-b px-2">
             <AccordionTrigger className="px-2 py-3 hover:no-underline">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Určení
+                {tParamName('Určení', lang)}
                 <ActiveBadge count={activeGendersCount} />
               </span>
             </AccordionTrigger>
@@ -285,7 +276,7 @@ export function FilterSidebar({
               <div className="space-y-2">
                 {availableGenders.map((gender) => (
                   <div key={gender} className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{GENDER_LABELS[gender] ?? gender}</span>
+                    <span className="text-sm font-medium">{tGender(gender, lang)}</span>
                     <Switch
                       checked={selectedGenders.includes(gender)}
                       onCheckedChange={() => toggleGender(gender)}
@@ -306,7 +297,7 @@ export function FilterSidebar({
             <AccordionItem key={param.nazev} value={`param-${param.nazev}`} className="border-b px-2">
               <AccordionTrigger className="px-2 py-3 hover:no-underline">
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {param.nazev}
+                  {tParamName(param.nazev, lang)}
                   <ActiveBadge count={selectedValues.length} />
                 </span>
               </AccordionTrigger>
