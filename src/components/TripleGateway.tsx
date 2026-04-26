@@ -6,6 +6,8 @@ import { Handshake, PackageOpen, HandCoins, BrainCircuit, Check } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/AuthModal';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useStore } from '@/lib/store';
+import { triple } from '@/lib/i18n-triple';
 import logo from '@/assets/logo.png';
 import bgB2b from '@/assets/gateway-b2b.jpg';
 import bgDropshipping from '@/assets/gateway-dropshipping.jpg';
@@ -31,95 +33,40 @@ interface GatewayCard {
   };
 }
 
-const cards: GatewayCard[] = [
-  {
-    key: 'partner',
-    icon: Handshake,
-    label: 'B2B',
-    title: 'Velkoobchod',
-    description: 'Získejte aktuální ceny a skladové zásoby.',
-    image: bgB2b,
-    ctas: [
-      { label: 'Vstoupit', action: 'login' },
-      { label: 'Registrovat', action: 'register' },
-    ],
-    details: {
-      heading: 'Pro ověřené partnery',
-      subheading: 'Velkoobchodní podmínky pro firmy s IČO',
-      bullets: [
-        'Aktuální velkoobchodní ceny a slevy',
-        'Skladové zásoby v reálném čase',
-        'Přímý přístup k novinkám a kolekcím',
-        'Individuální cenová politika',
-        'Rychlé objednávky a expedice',
-      ],
-    },
-  },
-  {
-    key: 'dropshipping',
-    icon: PackageOpen,
-    label: 'Swelt.dropshipping',
-    title: 'Dropshipping',
-    description: 'Prodávejte, my se postaráme o zbytek.',
-    image: bgDropshipping,
-    ctas: [{ label: 'Chci dropshipping', action: 'navigate' }],
-    details: {
-      heading: 'E-shop bez investic',
-      subheading: 'Kompletní fulfillment pod vaší značkou',
-      bullets: [
-        'Bez skladových nákladů a investic',
-        'Logistika, balení a odeslání pod vaší značkou',
-        'Dodání přímo ke koncovému zákazníkovi',
-        'Produktový feed pro váš e-shop',
-        'Široký katalog světových značek',
-      ],
-    },
-  },
-  {
-    key: 'luxury',
-    icon: HandCoins,
-    label: 'Swelt.luxury',
-    title: 'Privátní nákupy',
-    description: 'Odemykáme vám exkluzivní přístup.',
-    image: bgLuxury,
-    ctas: [{ label: 'Zjistit více', action: 'navigate' }],
-    details: {
-      heading: 'Pro firmy a živnostníky',
-      subheading: 'Velkoobchodní ceny pro soukromé nákupy',
-      bullets: [
-        'Exkluzivní přístup k velkoobchodním cenám',
-        'Soukromé nákupy nebo firemní dary',
-        'Už od jednoho kusu',
-        'Bez nutnosti registrace',
-        'Diskrétní a profesionální servis',
-      ],
-    },
-  },
-  {
-    key: 'intelligence',
-    icon: BrainCircuit,
-    label: 'Swelt.intelligence',
-    title: 'Inteligence',
-    description: 'Vidíte celý trh, ne jen svůj kousek.',
-    image: bgIntelligence,
-    ctas: [{ label: 'Zjistit více', action: 'navigate' }],
-    details: {
-      heading: 'Tržní data pro vaše rozhodování',
-      subheading: 'Prediktivní přehledy postavené na pohybu zboží napříč celou distribucí',
-      bullets: [
-        'Prediktivní skóre poptávky pro každý SKU',
-        'Trendy kategorií dřív, než jsou viditelné trhu',
-        'Benchmark vašich prodejů vůči anonymnímu trhu',
-        'Upozornění na rostoucí i klesající produkty',
-        'Doporučení k akci — naskladnit, sledovat, redukovat',
-      ],
-    },
-  },
+// Static structure (icons, images, action types) — text comes from i18n-triple.ts
+type CardKey = 'partner' | 'dropshipping' | 'luxury' | 'intelligence';
+const CARD_STRUCTURE: Array<{
+  key: CardKey;
+  icon: typeof Handshake;
+  image: string;
+  actions: Array<'login' | 'register' | 'navigate'>;
+}> = [
+  { key: 'partner',      icon: Handshake,    image: bgB2b,          actions: ['login', 'register'] },
+  { key: 'dropshipping', icon: PackageOpen,  image: bgDropshipping, actions: ['navigate'] },
+  { key: 'luxury',       icon: HandCoins,    image: bgLuxury,       actions: ['navigate'] },
+  { key: 'intelligence', icon: BrainCircuit, image: bgIntelligence, actions: ['navigate'] },
 ];
 
 export function TripleGateway({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { lang } = useStore();
+  const t = triple[lang];
+
+  // Compose live cards from translation + structure
+  const cards: GatewayCard[] = CARD_STRUCTURE.map(({ key, icon, image, actions }) => {
+    const txt = t[key];
+    return {
+      key, icon, image,
+      label: txt.label, title: txt.title, description: txt.description,
+      ctas: actions.map((action, i) => ({ label: txt.ctaLabels[i] ?? '', action })),
+      details: {
+        heading: txt.detailsHeading,
+        subheading: txt.detailsSubheading,
+        bullets: txt.bullets,
+      },
+    };
+  });
   const autoplay = useRef(
     Autoplay({
       delay: 4500,
