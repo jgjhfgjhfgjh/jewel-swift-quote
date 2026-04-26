@@ -7,6 +7,8 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { useStore } from '@/lib/store';
+import { home } from '@/lib/i18n-homepage';
+import { auth as authT } from '@/lib/i18n-auth';
 import logo from '@/assets/logo.png';
 import { toast } from 'sonner';
 
@@ -14,6 +16,8 @@ export default function Register() {
   const { signUp } = useAuthContext();
   const { lang } = useStore();
   const t = translations[lang];
+  const h = home[lang];
+  const a = authT[lang];
   const navigate = useNavigate();
   const [companyName, setCompanyName] = useState('');
   const [ico, setIco] = useState('');
@@ -25,21 +29,21 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
-      setError('Heslo musí mít alespoň 6 znaků');
+      setError(a.passwordMin);
       return;
     }
     if (!ico.trim()) {
-      setError('IČO je povinné pro B2B registraci');
+      setError(a.icoRequired);
       return;
     }
     setError('');
     setLoading(true);
     try {
       await signUp(email, password, companyName, ico);
-      toast.success('Registrace úspěšná! Zkontrolujte svůj email pro potvrzení.');
+      toast.success(a.registerSuccess);
       navigate('/login');
     } catch (err: any) {
-      setError(err.message || 'Registrace selhala');
+      setError(err.message || a.registerFailed);
     } finally {
       setLoading(false);
     }
@@ -49,33 +53,31 @@ export default function Register() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Link to="/" className="absolute left-4 top-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Zpět na úvodní stránku
+        {h.backToHome}
       </Link>
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
           <Link to="/"><img src={logo} alt="swelt." className="mx-auto h-20 object-contain cursor-pointer" /></Link>
-          <h1 className="mt-4 font-display text-2xl font-semibold">B2B Registrace</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Vytvořte si firemní účet
-          </p>
+          <h1 className="mt-4 font-display text-2xl font-semibold">{a.registerHeading}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{a.registerSubtitle}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            placeholder="Název firmy"
+            placeholder={a.companyNamePlaceholder}
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             required
             autoFocus
           />
           <Input
-            placeholder="IČO (povinné pro B2B přístup)"
+            placeholder={a.icoPlaceholder}
             value={ico}
             onChange={(e) => setIco(e.target.value)}
             required
           />
           <Input
             type="email"
-            placeholder="Email"
+            placeholder={h.email}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -89,11 +91,11 @@ export default function Register() {
           />
           {error && <p className="text-xs text-destructive font-medium">{error}</p>}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? '...' : 'Registrovat'}
+            {loading ? '...' : a.registerCta}
           </Button>
         </form>
         <p className="text-center text-sm text-muted-foreground">
-          Už máte účet?{' '}
+          {a.haveAccount}{' '}
           <Link to="/login" className="text-primary hover:underline font-medium">
             {t.login}
           </Link>

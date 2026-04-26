@@ -7,12 +7,14 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { useStore } from '@/lib/store';
+import { home } from '@/lib/i18n-homepage';
 import logo from '@/assets/logo.png';
 
 export default function Login() {
   const { signIn } = useAuthContext();
   const { lang } = useStore();
   const t = translations[lang];
+  const h = home[lang];
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,7 +39,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Link to="/" className="absolute left-4 top-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Zpět na úvodní stránku
+        {h.backToHome}
       </Link>
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
@@ -65,9 +67,9 @@ export default function Login() {
           </Button>
         </form>
         <p className="text-center text-sm text-muted-foreground">
-          Nemáte účet?{' '}
+          {h.noAccount}{' '}
           <Link to="/register" className="text-primary hover:underline font-medium">
-            Registrace
+            {t.register}
           </Link>
         </p>
       </div>

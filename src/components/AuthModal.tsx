@@ -7,6 +7,9 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable/index';
+import { useStore } from '@/lib/store';
+import { home } from '@/lib/i18n-homepage';
+import { auth as authT } from '@/lib/i18n-auth';
 import logo from '@/assets/logo.png';
 
 interface AuthModalProps {
@@ -19,6 +22,9 @@ interface AuthModalProps {
 
 export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuccess, tip }: AuthModalProps) {
   const { signIn } = useAuthContext();
+  const { lang } = useStore();
+  const h = home[lang];
+  const a = authT[lang];
   const [tab, setTab] = useState<'login' | 'register'>(defaultTab);
 
   useEffect(() => {
@@ -58,7 +64,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
       close();
       onLoginSuccess?.();
     } catch (err: any) {
-      setError(err.message || 'Přihlášení selhalo');
+      setError(err.message || h.loginFailed);
     } finally {
       setLoading(false);
     }
@@ -71,11 +77,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         redirect_uri: window.location.origin,
       });
       if (result.error) {
-        setError(result.error instanceof Error ? result.error.message : 'Přihlášení selhalo');
+        setError(result.error instanceof Error ? result.error.message : h.loginFailed);
       }
       if (result.redirected) return;
     } catch (err: any) {
-      setError(err.message || 'Přihlášení selhalo');
+      setError(err.message || h.loginFailed);
     } finally {
       setSocialLoading(null);
     }
@@ -87,14 +93,14 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Přihlášení do katalogu"
+      aria-label={h.catalogAccess}
       onClick={close}
       className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
     >
       {/* Close — same style as ProductImageGallery */}
       <button
         type="button"
-        aria-label="Zavřít"
+        aria-label={a.closeLabel}
         onClick={(e) => {
           e.stopPropagation();
           close();
@@ -113,12 +119,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         <div className="px-8 pt-8 pb-6 bg-gradient-to-b from-primary/5 to-transparent">
           <img src={logo} alt="swelt." className="h-14 px-0 mx-[150px] object-contain" />
           <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">
-            {tab === 'register' ? 'Registrace' : 'Přihlášení'}
+            {tab === 'register' ? a.tabRegister : a.modalLoginHeading}
           </h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {tab === 'register'
-              ? 'Vytvořte si B2B účet pro přístup k velkoobchodním cenám'
-              : 'Přihlaste se pro přístup k velkoobchodnímu katalogu'}
+            {tab === 'register' ? a.modalRegisterSubtitle : a.modalLoginSubtitle}
           </p>
         </div>
 
@@ -133,7 +137,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              Přihlášení
+              {a.tabLogin}
             </button>
             <button
               onClick={() => setTab('register')}
@@ -143,7 +147,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              Registrace
+              {a.tabRegister}
             </button>
           </div>
         </div>
@@ -163,7 +167,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                       onClick={() => setTab('register')}
                       className="font-semibold underline underline-offset-2 hover:text-blue-900 transition-colors"
                     >
-                      Registrovat se →
+                      {a.registerLinkArrow}
                     </button>
                   </div>
                 </div>
@@ -171,7 +175,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                    <Mail className="h-3.5 w-3.5" /> Email
+                    <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
                   </label>
                   <Input
                     type="email"
@@ -184,7 +188,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                    <Lock className="h-3.5 w-3.5" /> Heslo
+                    <Lock className="h-3.5 w-3.5" /> {a.passwordLabel}
                   </label>
                   <PasswordInput
                     placeholder="••••••••"
@@ -201,7 +205,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 )}
                 <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
                   <Briefcase className="h-4 w-4 mr-1.5" />
-                  {loading ? 'Přihlašování…' : 'Přihlásit jako B2B partner'}
+                  {loading ? h.signingIn : a.loginAsB2B}
                 </Button>
               </form>
 
@@ -211,7 +215,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card px-2 text-muted-foreground tracking-wider">
-                    nebo rychlý přístup
+                    {a.separatorText}
                   </span>
                 </div>
               </div>
@@ -229,7 +233,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                   </svg>
-                  {socialLoading === 'google' ? 'Přihlašování…' : 'Pokračovat přes Google'}
+                  {socialLoading === 'google' ? h.signingIn : h.continueWithGoogle}
                 </Button>
                 <Button
                   variant="outline"
@@ -240,7 +244,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                   </svg>
-                  {socialLoading === 'apple' ? 'Přihlašování…' : 'Pokračovat přes Apple'}
+                  {socialLoading === 'apple' ? h.signingIn : h.continueWithApple}
                 </Button>
               </div>
             </>
@@ -250,21 +254,17 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 <Briefcase className="h-7 w-7 text-primary" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="font-display text-lg font-semibold">B2B Registrace</h3>
-                <p className="text-sm text-muted-foreground">
-                  Pro přístup k velkoobchodním cenám se zaregistrujte jako ověřený B2B partner s platným IČO.
-                </p>
+                <h3 className="font-display text-lg font-semibold">{a.registerHeading}</h3>
+                <p className="text-sm text-muted-foreground">{a.registerInfo}</p>
               </div>
               <Button asChild className="w-full h-10 font-semibold" onClick={() => onOpenChange(false)}>
-                <Link to="/register">
-                  Pokračovat na registraci
-                </Link>
+                <Link to="/register">{a.continueToRegister}</Link>
               </Button>
               <button
                 onClick={() => setTab('login')}
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
-                Už máte účet? Přihlásit se
+                {a.haveAccountLogin}
               </button>
             </div>
           )}
