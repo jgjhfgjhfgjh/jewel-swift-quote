@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useStore } from '@/lib/store';
+import { gateway } from '@/lib/i18n-gateway';
 
 /* ── Reveal on scroll ── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -398,11 +400,13 @@ function ShopVisual() {
 
 /* ── Trust section ── */
 function TrustSection() {
+  const { lang } = useStore();
+  const g = gateway[lang];
   const stats = [
-    { val: 15, suf: '+', label: 'let ZAGO na trhu' },
-    { val: 70, suf: '+', label: 'světových značek' },
-    { val: 3000, suf: '+', label: 'produktů v katalogu' },
-    { val: 500, suf: '+', label: 'aktivních partnerů' },
+    { val: 15, suf: '+', label: g.statYearsLabel },
+    { val: 70, suf: '+', label: g.statBrandsLabel },
+    { val: 3000, suf: '+', label: g.statProductsLabel },
+    { val: 500, suf: '+', label: g.statPartnersLabel },
   ];
   const testimonials = [
     { name: 'Martin H.', company: 'WatchStore.cz', text: 'Dropshipping od swelt změnil náš byznys. Za 3 měsíce jsme přidali 800 produktů bez jediné koruny do skladu.', rating: 5 },
@@ -415,8 +419,8 @@ function TrustSection() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Stats */}
         <Reveal className="text-center mb-14">
-          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Důvěřují nám</div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-2">15 let zkušeností. Tisíce spokojených partnerů.</h2>
+          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{g.trustEyebrow}</div>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-2">{g.trustHeading}</h2>
         </Reveal>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {stats.map((s, i) => (
@@ -455,11 +459,11 @@ function TrustSection() {
         <Reveal>
           <div className="flex flex-wrap items-center justify-center gap-6 py-8 border-t border-border">
             {[
-              { icon: Shield, text: '15+ let ZAGO na trhu' },
-              { icon: Check, text: 'Autorizovaný distributor' },
-              { icon: Lock, text: 'GDPR & bezpečnost' },
-              { icon: Globe, text: 'EU distribuce' },
-              { icon: Star, text: 'Garance pravosti' },
+              { icon: Shield, text: g.trustBadges[0] },
+              { icon: Check,  text: g.trustBadges[1] },
+              { icon: Lock,   text: g.trustBadges[2] },
+              { icon: Globe,  text: g.trustBadges[3] },
+              { icon: Star,   text: g.trustBadges[4] },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon className="h-4 w-4 text-primary shrink-0" />
@@ -481,6 +485,8 @@ interface Props {
 export function GatewaySections({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { lang } = useStore();
+  const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
 
@@ -493,130 +499,46 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   const sections = [
     {
-      id: 'velkoobchod',
-      badge: 'B2B Velkoobchod',
-      badgeColor: 'bg-primary/10 text-primary',
-      icon: Handshake,
-      label: 'Velkoobchod',
-      heading: 'Přímý přístup k prémiím za velkoobchodní ceny.',
-      subheading: 'Katalog 3 000+ produktů 70+ světových značek. Aktuální ceny a zásoby v reálném čase. Pro firmy s IČO.',
-      bullets: [
-        'Velkoobchodní ceny a slevy až 60 % pod MOC',
-        'Katalog v reálném čase — vždy aktuální zásoby',
-        'Přímý přístup k novinkám a kolekcím',
-        'Individuální cenová politika dle obratu',
-        'Rychlá expedice do 24–48 hodin',
-      ],
-      ctas: (
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            onClick={() => navigate('/velkoobchod')}
-            className="gap-2"
-          >
-            Vstoupit do velkoobchodu <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-      visual: <B2BVisual />,
-      reverse: false,
-      bg: 'bg-white',
+      id: 'velkoobchod', badgeColor: 'bg-primary/10 text-primary', icon: Handshake,
+      ...g.velkoobchod,
+      ctas: (<div className="flex flex-col sm:flex-row gap-3">
+        <Button onClick={() => navigate('/velkoobchod')} className="gap-2">
+          {g.velkoobchod.ctaLabel} <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>),
+      visual: <B2BVisual />, reverse: false, bg: 'bg-white',
     },
     {
-      id: 'luxury',
-      badge: 'swelt.luxury',
-      badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200',
-      icon: HandCoins,
-      label: 'Privátní nákupy',
-      heading: 'Velkoobchodní ceny. Pro každého. Od 1 kusu.',
-      subheading: 'Prémiové hodinky a šperky za velkoobchodní ceny dostupné pro soukromé osoby i firmy. Bez nutnosti IČO. Diskrétní balení. EU doručení.',
-      bullets: [
-        'Velkoobchodní ceny bez nutnosti IČO',
-        'Dostupné od 1 kusu bez minimálního odběru',
-        'Garance pravosti 100 %',
-        'Diskrétní balení bez loga na zásilce',
-        'Doručení po celé EU do 72 hodin',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/luxury')} className="gap-2">
-          Zjistit více <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <LuxuryVisual />,
-      reverse: true,
-      bg: 'bg-muted/20',
+      id: 'luxury', badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200', icon: HandCoins,
+      ...g.luxury,
+      ctas: (<Button onClick={() => navigate('/luxury')} className="gap-2">
+        {g.luxury.ctaLabel} <ArrowRight className="h-4 w-4" />
+      </Button>),
+      visual: <LuxuryVisual />, reverse: true, bg: 'bg-muted/20',
     },
     {
-      id: 'feed',
-      badge: 'Nový produkt',
-      badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-      icon: Rss,
-      label: 'swelt.feed',
-      heading: 'Produktový feed, který se stará sám.',
-      subheading: 'Automatický XML/CSV feed 3 000+ prémiových produktů. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.',
-      bullets: [
-        'XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping',
-        'Aktualizace cen a zásob až 4× denně',
-        'Filtrace dle kategorie, značky a dostupnosti',
-        'Vlastní cenová pravidla a přirážky',
-        'Jednoduchá integrace — funguje do 48 hodin',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/feed')} className="gap-2">
-          Zjistit více o swelt.feed <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <FeedVisual />,
-      reverse: false,
-      bg: 'bg-white',
+      id: 'feed', badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200', icon: Rss,
+      ...g.feed,
+      ctas: (<Button onClick={() => navigate('/feed')} className="gap-2">
+        {g.feed.ctaLabel} <ArrowRight className="h-4 w-4" />
+      </Button>),
+      visual: <FeedVisual />, reverse: false, bg: 'bg-white',
     },
     {
-      id: 'dropshipping',
-      badge: 'swelt.dropshipping',
-      badgeColor: 'bg-primary/10 text-primary',
-      icon: PackageOpen,
-      label: 'Dropshipping',
-      heading: 'E-shop bez skladu. Prodávej, my zabalíme.',
-      subheading: 'Prémiové hodinky a šperky prodávané přes tvůj e-shop. Swelt vyřizuje sklad, balení, expedici a bílý štítek — vše pod tvou značkou.',
-      bullets: [
-        'Bez skladových nákladů a investic',
-        'Logistika, balení a expedice pod vaší značkou',
-        'Dodání přímo ke koncovému zákazníkovi do 24–72 h',
-        'White-label fakturace s vaším logem',
-        'Marže 40–60 % při doporučené MOC',
-        'swelt.signal — trendová data každý týden',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/dropshipping')} className="gap-2">
-          Chci dropshipping <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <DropshippingVisual />,
-      reverse: true,
-      bg: 'bg-muted/20',
+      id: 'dropshipping', badgeColor: 'bg-primary/10 text-primary', icon: PackageOpen,
+      ...g.dropshipping,
+      ctas: (<Button onClick={() => navigate('/dropshipping')} className="gap-2">
+        {g.dropshipping.ctaLabel} <ArrowRight className="h-4 w-4" />
+      </Button>),
+      visual: <DropshippingVisual />, reverse: true, bg: 'bg-muted/20',
     },
     {
-      id: 'shop',
-      badge: 'swelt.shop',
-      badgeColor: 'bg-primary/10 text-primary',
-      icon: ShoppingCart,
-      label: 'swelt.shop',
-      heading: 'Hotový e-shop s prémiovým zbožím. Spuštěný za 48 hodin.',
-      subheading: 'Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ produkty — připravený k prodeji ihned.',
-      bullets: [
-        'E-shop setup na Shoptet, WooCommerce nebo Upgates',
-        '3 000+ produktů importovaných hned od začátku',
-        'Automatická synchronizace cen a zásob přes feed',
-        'Volba: dropshipping (bez skladu) nebo vlastní sklad',
-        'Spuštění do 48 hodin, žádné zkušenosti nepotřebujete',
-      ],
-      ctas: (
-        <Button onClick={() => navigate('/shop')} className="gap-2">
-          Chci svůj e-shop <ArrowRight className="h-4 w-4" />
-        </Button>
-      ),
-      visual: <ShopVisual />,
-      reverse: false,
-      bg: 'bg-white',
+      id: 'shop', badgeColor: 'bg-primary/10 text-primary', icon: ShoppingCart,
+      ...g.shop,
+      ctas: (<Button onClick={() => navigate('/shop')} className="gap-2">
+        {g.shop.ctaLabel} <ArrowRight className="h-4 w-4" />
+      </Button>),
+      visual: <ShopVisual />, reverse: false, bg: 'bg-white',
     },
   ];
 
@@ -637,12 +559,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* Intro strip */}
       <div className="bg-gradient-to-b from-white/60 to-white border-b border-border py-12 text-center">
         <Reveal>
-          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">swelt.partner ekosystém</div>
+          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{g.introEyebrow}</div>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4 max-w-2xl mx-auto px-6">
-            Jeden partner. Pět způsobů, jak vydělat víc.
+            {g.introHeading}
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto px-6">
-            Vyberte si model, který sedí vašemu byznysu — nebo kombinujte více najednou.
+            {g.introSubheading}
           </p>
         </Reveal>
         {/* Section quick-nav pills */}
