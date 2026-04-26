@@ -13,6 +13,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
+import { velkoobchod } from '@/lib/i18n-velkoobchod';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -99,7 +100,7 @@ function FloatingNotif() {
   );
 }
 
-/* ─── Data ─── */
+/* ─── Static structure (text comes from i18n-velkoobchod.ts) ─── */
 const BRANDS = [
   'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Police', 'Seiko',
   'Hugo Boss', 'Citizen', 'Guess', 'DKNY', 'Calvin Klein',
@@ -107,194 +108,25 @@ const BRANDS = [
   'Swarovski', 'Pandora', 'Morellato', 'Festina', 'Pierre Cardin',
 ];
 
-const STEPS = [
-  {
-    n: '01',
-    icon: UserPlus,
-    title: 'Bezplatná registrace',
-    desc: 'Vyplňte základní údaje — jméno, e-mail, telefon. Registrace trvá 2 minuty a je zcela zdarma.',
-  },
-  {
-    n: '02',
-    icon: BadgeCheck,
-    title: 'Ověření B2B účtu',
-    desc: 'Zadejte IČO nebo doložte jiný doklad o podnikání. Přijímáme i fyzické osoby se záměrem dalšího prodeje.',
-  },
-  {
-    n: '03',
-    icon: Clock,
-    title: 'Schválení do 24 hodin',
-    desc: 'Náš obchodní tým prověří žádost a aktivuje vám plný přístup k velkoobchodnímu katalogu.',
-  },
-  {
-    n: '04',
-    icon: Package,
-    title: 'Nakupujte a vydělávejte',
-    desc: 'Prohlédněte si 3 000+ produktů, zadejte objednávku, my se postaráme o expedici do 24–48 hodin.',
-  },
+const STEP_ICONS = [UserPlus, BadgeCheck, Clock, Package];
+const TARGET_ICONS = [Store, ShoppingBag, Factory];
+const TARGET_HIGHLIGHT = [false, true, false];
+const FEATURE_ICONS = [Package, Award, TrendingUp, Clock, Globe, Truck, BarChart3, Zap];
+const VOLUME_FEATURED = [false, true, false];
+const ECOSYSTEM_META = [
+  { icon: Rss,         href: '/feed',         color: 'text-emerald-600 bg-emerald-50' },
+  { icon: PackageOpen, href: '/dropshipping', color: 'text-blue-600 bg-blue-50' },
+  { icon: HandCoins,   href: '/luxury',       color: 'text-amber-600 bg-amber-50' },
+  { icon: ShoppingCart,href: '/shop',         color: 'text-orange-600 bg-orange-50' },
 ];
-
-const TARGETS = [
-  {
-    icon: Store,
-    title: 'Malý obchodník',
-    desc: 'Kamenný obchod, tržiště nebo začínající e-shop. Pořizujete 1–30 kusů měsíčně a hledáte prémiové zboží s dobrou marží bez složitých smluvních závazků.',
-    bullets: [
-      'Žádná minimální objednávka',
-      'Nákupní ceny od prvního kusu',
-      'Osobní podpora obchodního týmu',
-    ],
-    highlight: false,
-  },
-  {
-    icon: ShoppingBag,
-    title: 'Rostoucí e-shop',
-    desc: 'Prodáváte online a chcete automatizovat doplňování katalogu. Obrat 10 000–100 000 Kč měsíčně — a chuť růst dál.',
-    bullets: [
-      'Automatické napojení přes swelt.feed',
-      'Individuální slevy dle obratu',
-      'Priority shipping a dedikovaná podpora',
-    ],
-    highlight: true,
-  },
-  {
-    icon: Factory,
-    title: 'Velký distributor',
-    desc: 'Zásobujete síť prodejen nebo váš obrat přesahuje 100 000 Kč měsíčně. Potřebujete individuální podmínky, API přístup a dedikovaný servis.',
-    bullets: [
-      'Individuální cenotvorba a SLA',
-      'Dedikovaný account manager',
-      'API přístup k datům a zásobám',
-    ],
-    highlight: false,
-  },
-];
-
-const CATALOG_FEATURES = [
-  { icon: Package, label: '3 000+ produktů', desc: 'Hodinky, šperky, příslušenství' },
-  { icon: Award, label: '70+ světových značek', desc: 'Tommy Hilfiger, Versace, Seiko…' },
-  { icon: TrendingUp, label: '40–65 % pod MOC', desc: 'Marže s prostorem na zisk' },
-  { icon: Clock, label: 'Zásoby v reálném čase', desc: 'Aktualizace každé 2 hodiny' },
-  { icon: Globe, label: '15+ kategorií', desc: 'Dámské, pánské, unisex, doplňky' },
-  { icon: Truck, label: 'Expedice 24–48 h', desc: 'FedEx, DHL, UPS — celá EU' },
-  { icon: BarChart3, label: 'Ceny bez DPH', desc: 'Jasná kalkulace pro B2B partnery' },
-  { icon: Zap, label: 'Nové kolekce každý týden', desc: 'Přímý přístup před ostatními' },
-];
-
-const VOLUME_TIERS = [
-  {
-    name: 'Registrace',
-    volume: 'Libovolný objem',
-    price: 'Zdarma',
-    priceNote: 'vstup bez závazků',
-    features: [
-      'Přístup k B2B katalogu',
-      'Nákupní ceny od 1 kusu',
-      'Online objednávkový systém',
-      'Zákaznická podpora v češtině',
-    ],
-    cta: 'Registrovat se',
-    featured: false,
-  },
-  {
-    name: 'Partner',
-    volume: '20 000+ Kč / měsíc',
-    price: 'Individuální sleva',
-    priceNote: 'nad rámec nákupních cen',
-    features: [
-      'Vše z Registrace',
-      'Individuální sleva dle obratu',
-      'Priority shipping bez příplatku',
-      'Přístup k novinkám před ostatními',
-      'Dedikovaný obchodní zástupce',
-    ],
-    cta: 'Zjistit podmínky',
-    featured: true,
-  },
-  {
-    name: 'Enterprise',
-    volume: '200 000+ Kč / měsíc',
-    price: 'Na míru',
-    priceNote: 'individuální smlouva',
-    features: [
-      'Vše z Partner',
-      'Smluvní ceny a SLA garantie',
-      'API přístup k datům a zásobám',
-      'White-label možnosti',
-      'Zastoupení v EU zemích',
-    ],
-    cta: 'Kontaktovat obchod',
-    featured: false,
-  },
-];
-
-const ECOSYSTEM = [
-  {
-    icon: Rss,
-    name: 'swelt.feed',
-    desc: 'Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.',
-    href: '/feed',
-    color: 'text-emerald-600 bg-emerald-50',
-  },
-  {
-    icon: PackageOpen,
-    name: 'swelt.dropshipping',
-    desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my mu zboží zabalíme a odešleme přímo pod vaším jménem.',
-    href: '/dropshipping',
-    color: 'text-blue-600 bg-blue-50',
-  },
-  {
-    icon: HandCoins,
-    name: 'Privátní nákupy',
-    desc: 'Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.',
-    href: '/luxury',
-    color: 'text-amber-600 bg-amber-50',
-  },
-  {
-    icon: ShoppingCart,
-    name: 'swelt.shop',
-    desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.',
-    href: '/shop',
-    color: 'text-orange-600 bg-orange-50',
-  },
-];
-
-const FAQS = [
-  {
-    q: 'Co potřebuji k registraci jako B2B partner?',
-    a: 'Stačí vyplnit základní kontaktní údaje a zadat IČO nebo doložit záměr podnikání. Přijímáme e-shopy, kamenné obchody, tržnice i fyzické osoby se záměrem dalšího prodeje. Registrace je zdarma a trvá 2 minuty.',
-  },
-  {
-    q: 'Jak dlouho trvá schválení B2B účtu?',
-    a: 'Standardně do 24 hodin v pracovní dny. Po schválení vám přijde e-mail s přístupovými údaji do velkoobchodního katalogu. Urgentní žádosti vyřizujeme i mimo pracovní dobu — napište nám.',
-  },
-  {
-    q: 'Jaké jsou minimální objednávky?',
-    a: 'Žádné. Žádné minimální množství ani minimální hodnota objednávky. Pořídíte si klidně 1 kus. Slevy a individuální podmínky se odvíjejí od celkového měsíčního obratu, ne od jednotlivé objednávky.',
-  },
-  {
-    q: 'Jak funguje cenotvorba a jaké slevy mohu získat?',
-    a: 'Základní nákupní ceny jsou 40–65 % pod doporučenou maloobchodní cenou (MOC). Nad rámec těchto cen nabízíme individuální slevy pro partnery s vyšším měsíčním obratem. Podmínky nastavujeme osobně — napište nám nebo zavolejte.',
-  },
-  {
-    q: 'Mohu produkty prodávat i v zahraničí?',
-    a: 'Ano. Zasíláme po celé EU. Produkty jsou určeny pro další prodej bez geografického omezení v rámci EU. Pokud plánujete prodej mimo EU, konzultujte podmínky s naším obchodním týmem.',
-  },
-  {
-    q: 'Jak mohu propojit katalog se svým e-shopem?',
-    a: 'Doporučujeme službu swelt.feed — automatický produktový feed ve formátu XML, CSV nebo přímo pro Heureka, Google Shopping a další srovnávače. Feed se aktualizuje 1–4× denně bez jakékoliv manuální práce z vaší strany.',
-  },
-  {
-    q: 'Mohu kombinovat velkoobchod s dropshippingem?',
-    a: 'Ano, a mnoho našich partnerů to tak dělá. Část sortimentu nakoupíte na sklad (velkoobchod), zbytek prodáváte na objednávku bez skladu (dropshipping). Jde to nastavit paralelně na jednom účtu.',
-  },
-];
+const TRUST_STRIP_ICONS = [ShieldCheck, Truck, Globe, BadgeCheck, Lock];
 
 /* ─── Page ─── */
 const Velkoobchod = () => {
   const navigate = useNavigate();
   const { user, isB2bApproved, isLead } = useAuthContext();
-  const { setViewMode } = useStore();
+  const { setViewMode, lang } = useStore();
+  const v = velkoobchod[lang];
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -328,7 +160,7 @@ const Velkoobchod = () => {
         open={authOpen}
         onOpenChange={setAuthOpen}
         defaultTab={authTab}
-        tip="Registrujte se zdarma a uvidíte i velkoobchodní nákupní ceny — B2B účet schválíme do 24 hodin."
+        tip={v.authTip}
       />
 
       {/* ── Hero ── */}
@@ -339,17 +171,17 @@ const Velkoobchod = () => {
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-4 py-1.5 text-sm font-semibold text-primary mb-7">
                 <Handshake className="h-4 w-4" />
-                B2B Velkoobchod · Přímý přístup k dodavateli
+                {v.hero.badge}
               </div>
             </Reveal>
             <Reveal delay={80}>
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-[1.05] mb-6">
-                Nakupujte prémiové značky přímo od zdroje.
+                {v.hero.heading}
               </h1>
             </Reveal>
             <Reveal delay={160}>
               <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl">
-                3 000+ produktů, 70+ světových značek, marže 40–65 %. Žádní prostředníci, žádné zbytečné přirážky. Registrace zdarma — schválení do 24 hodin.
+                {v.hero.sub}
               </p>
             </Reveal>
             <Reveal delay={240}>
@@ -357,16 +189,16 @@ const Velkoobchod = () => {
                 {!user && (
                   <>
                     <Button size="lg" onClick={() => openAuth('register')} className="gap-2 text-base h-12 px-7">
-                      Registrovat se zdarma <ArrowRight className="h-4 w-4" />
+                      {v.hero.ctaRegister} <ArrowRight className="h-4 w-4" />
                     </Button>
                     <Button size="lg" variant="outline" onClick={() => openAuth('login')} className="gap-2 text-base h-12 px-7">
-                      Přihlásit se
+                      {v.hero.ctaLogin}
                     </Button>
                   </>
                 )}
                 {user && isB2bApproved && (
                   <Button size="lg" onClick={goToCatalog} className="gap-2 text-base h-12 px-7">
-                    Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
+                    {v.hero.ctaCatalog} <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
                 {user && isLead && !isB2bApproved && (
@@ -376,12 +208,7 @@ const Velkoobchod = () => {
             </Reveal>
             <Reveal delay={320}>
               <div className="flex flex-wrap gap-5 text-sm text-muted-foreground mb-8">
-                {[
-                  'Registrace zdarma',
-                  'Bez minimálního odběru',
-                  'Schválení do 24 h',
-                  'IČO není podmínkou',
-                ].map(text => (
+                {v.hero.bullets.map(text => (
                   <div key={text} className="flex items-center gap-1.5">
                     <Check className="h-4 w-4 text-emerald-500" strokeWidth={2.5} />
                     <span>{text}</span>
@@ -393,12 +220,7 @@ const Velkoobchod = () => {
               <Reveal delay={400}>
                 <div className="inline-flex items-start gap-3 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 max-w-xl">
                   <Eye className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-                  <div className="text-sm">
-                    <span className="font-semibold text-blue-800">Chcete si nejdřív prohlédnout sortiment?</span>
-                    <span className="text-blue-700/80"> Zaregistrujte se zdarma přes e-mail nebo Google a okamžitě nahlédněte do celého katalogu — fotky, dostupnost a doporučené ceny. </span>
-                    <span className="font-semibold text-blue-800">Velkoobchodní nákupní ceny</span>
-                    <span className="text-blue-700/80"> se odemknou po schválení B2B účtu.</span>
-                  </div>
+                  <div className="text-sm text-blue-700/90">{v.hero.banner}</div>
                 </div>
               </Reveal>
             )}
@@ -411,10 +233,10 @@ const Velkoobchod = () => {
         <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { val: 3000, suffix: '+', label: 'produktů v katalogu' },
-              { val: 70, suffix: '+', label: 'světových značek' },
-              { val: 60, suffix: ' %', label: 'sleva pod MOC' },
-              { val: 500, suffix: '+', label: 'aktivních partnerů' },
+              { val: 3000, suffix: '+', label: v.stats[0] },
+              { val: 70,   suffix: '+', label: v.stats[1] },
+              { val: 60,   suffix: ' %', label: v.stats[2] },
+              { val: 500,  suffix: '+', label: v.stats[3] },
             ].map(({ val, suffix, label }) => (
               <div key={label} className="text-center">
                 <div className="font-display text-3xl sm:text-4xl font-black text-primary mb-1">
@@ -437,33 +259,27 @@ const Velkoobchod = () => {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700 uppercase tracking-wider mb-5">
                   <Eye className="h-3.5 w-3.5" />
-                  Nahlédněte bez závazků
+                  {v.preview.eyebrow}
                 </div>
                 <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
-                  Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
+                  {v.preview.heading}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  Víme, že vstoupit do nového partnerství chce důvěru. Proto vám umožňujeme nahlédnout do katalogu ještě předtím, než cokoliv rozhodujete. Stačí se přihlásit přes e-mail nebo Google — trvá to 30 sekund.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  Uvidíte celý sortiment: <strong className="text-foreground">3 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC).</strong> Takže si rovnou spočítáte, jaké marže vás čekají.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-8">
-                  <strong className="text-foreground">Velkoobchodní nákupní ceny</strong> jsou skryté a odemknou se automaticky po ověření a schválení vašeho B2B účtu — zpravidla do 24 hodin. Registrace je zcela zdarma.
-                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">{v.preview.p1}</p>
+                <p className="text-muted-foreground leading-relaxed mb-4">{v.preview.p2}</p>
+                <p className="text-muted-foreground leading-relaxed mb-8">{v.preview.p3}</p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   {!user ? (
                     <>
                       <Button onClick={() => openAuth('login')} className="gap-2" size="lg">
-                        Nahlédnout do katalogu <ArrowRight className="h-4 w-4" />
+                        {v.preview.cta1} <ArrowRight className="h-4 w-4" />
                       </Button>
                       <Button onClick={() => openAuth('register')} variant="outline" size="lg" className="gap-2">
-                        Registrovat se
+                        {v.preview.cta2}
                       </Button>
                     </>
                   ) : isB2bApproved ? (
                     <Button onClick={goToCatalog} className="gap-2" size="lg">
-                      Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
+                      {v.hero.ctaCatalog} <ArrowRight className="h-4 w-4" />
                     </Button>
                   ) : null}
                 </div>
@@ -475,52 +291,23 @@ const Velkoobchod = () => {
               <div className="space-y-4">
                 {[
                   {
-                    label: 'Nepřihlášen',
-                    icon: Lock,
-                    iconColor: 'text-slate-400',
-                    bg: 'bg-slate-50 border-slate-200',
-                    labelColor: 'text-slate-500',
-                    items: [
-                      { text: 'Prohlídka sortimentu', ok: false },
-                      { text: 'Fotky a popis produktů', ok: false },
-                      { text: 'Doporučené ceny (MOC)', ok: false },
-                      { text: 'Živé zásoby', ok: false },
-                      { text: 'Velkoobchodní ceny', ok: false },
-                      { text: 'Objednávkový systém', ok: false },
-                    ],
+                    label: v.accessTiers[0].label, badge: v.accessTiers[0].badge,
+                    icon: Lock, iconColor: 'text-slate-400',
+                    bg: 'bg-slate-50 border-slate-200', labelColor: 'text-slate-500',
+                    items: v.accessItems.map(text => ({ text, ok: false })),
                   },
                   {
-                    label: 'Přihlášen zdarma (Google / e-mail)',
-                    icon: Eye,
-                    iconColor: 'text-blue-600',
-                    bg: 'bg-blue-50 border-blue-200',
-                    labelColor: 'text-blue-700',
+                    label: v.accessTiers[1].label, badge: v.accessTiers[1].badge,
+                    icon: Eye, iconColor: 'text-blue-600',
+                    bg: 'bg-blue-50 border-blue-200', labelColor: 'text-blue-700',
                     highlight: true,
-                    badge: 'Bez čekání',
-                    items: [
-                      { text: 'Prohlídka sortimentu', ok: true },
-                      { text: 'Fotky a popis produktů', ok: true },
-                      { text: 'Doporučené ceny (MOC)', ok: true },
-                      { text: 'Živé zásoby', ok: true },
-                      { text: 'Velkoobchodní ceny', ok: false, locked: true },
-                      { text: 'Objednávkový systém', ok: false, locked: true },
-                    ],
+                    items: v.accessItems.map((text, i) => ({ text, ok: i < 4, locked: i >= 4 })),
                   },
                   {
-                    label: 'Schválený B2B partner',
-                    icon: BadgeCheck,
-                    iconColor: 'text-primary',
-                    bg: 'bg-primary/5 border-primary/20',
-                    labelColor: 'text-primary',
-                    badge: 'Plný přístup',
-                    items: [
-                      { text: 'Prohlídka sortimentu', ok: true },
-                      { text: 'Fotky a popis produktů', ok: true },
-                      { text: 'Doporučené ceny (MOC)', ok: true },
-                      { text: 'Živé zásoby', ok: true },
-                      { text: 'Velkoobchodní ceny', ok: true },
-                      { text: 'Objednávkový systém', ok: true },
-                    ],
+                    label: v.accessTiers[2].label, badge: v.accessTiers[2].badge,
+                    icon: BadgeCheck, iconColor: 'text-primary',
+                    bg: 'bg-primary/5 border-primary/20', labelColor: 'text-primary',
+                    items: v.accessItems.map(text => ({ text, ok: true })),
                   },
                 ].map((tier) => {
                   const TIcon = tier.icon;
@@ -566,38 +353,39 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
-                Pro koho jsme
+                {v.forWhom.eyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Velkoobchod pro každou fázi vašeho podnikání
+                {v.forWhom.heading}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Ať prodáváte na tržišti, provozujete e-shop nebo zásobujete síť prodejen — máme podmínky, které dávají smysl pro váš objem a ambice.
+                {v.forWhom.sub}
               </p>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {TARGETS.map((t, i) => {
-              const Icon = t.icon;
+            {v.targets.map((t, i) => {
+              const Icon = TARGET_ICONS[i];
+              const highlight = TARGET_HIGHLIGHT[i];
               return (
                 <Reveal key={t.title} delay={i * 100}>
-                  <div className={`relative rounded-2xl border p-8 h-full flex flex-col ${t.highlight ? 'bg-primary text-white border-primary shadow-xl shadow-primary/20' : 'bg-white border-border'}`}>
-                    {t.highlight && (
+                  <div className={`relative rounded-2xl border p-8 h-full flex flex-col ${highlight ? 'bg-primary text-white border-primary shadow-xl shadow-primary/20' : 'bg-white border-border'}`}>
+                    {highlight && (
                       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
                         <span className="bg-amber-400 text-amber-900 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
-                          Nejoblíbenější
+                          {v.forWhom.popular}
                         </span>
                       </div>
                     )}
-                    <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl mb-5 ${t.highlight ? 'bg-white/20' : 'bg-primary/10'}`}>
-                      <Icon className={`h-6 w-6 ${t.highlight ? 'text-white' : 'text-primary'}`} />
+                    <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl mb-5 ${highlight ? 'bg-white/20' : 'bg-primary/10'}`}>
+                      <Icon className={`h-6 w-6 ${highlight ? 'text-white' : 'text-primary'}`} />
                     </div>
-                    <h3 className={`font-display text-xl font-black mb-2 ${t.highlight ? 'text-white' : 'text-foreground'}`}>{t.title}</h3>
-                    <p className={`text-sm leading-relaxed mb-6 flex-1 ${t.highlight ? 'text-white/80' : 'text-muted-foreground'}`}>{t.desc}</p>
+                    <h3 className={`font-display text-xl font-black mb-2 ${highlight ? 'text-white' : 'text-foreground'}`}>{t.title}</h3>
+                    <p className={`text-sm leading-relaxed mb-6 flex-1 ${highlight ? 'text-white/80' : 'text-muted-foreground'}`}>{t.desc}</p>
                     <ul className="space-y-2.5">
                       {t.bullets.map(b => (
-                        <li key={b} className={`flex items-start gap-2 text-sm ${t.highlight ? 'text-white' : 'text-foreground/80'}`}>
-                          <Check className={`h-4 w-4 shrink-0 mt-0.5 ${t.highlight ? 'text-white' : 'text-emerald-500'}`} strokeWidth={2.5} />
+                        <li key={b} className={`flex items-start gap-2 text-sm ${highlight ? 'text-white' : 'text-foreground/80'}`}>
+                          <Check className={`h-4 w-4 shrink-0 mt-0.5 ${highlight ? 'text-white' : 'text-emerald-500'}`} strokeWidth={2.5} />
                           {b}
                         </li>
                       ))}
@@ -616,23 +404,24 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-4">
-                Jak začít
+                {v.onboarding.eyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Od registrace k první objednávce za 24 hodin
+                {v.onboarding.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Žádné papírování, žádné čekání týdny. Jednoduchý proces — stačí se zaregistrovat a o zbytek se postaráme my.
+                {v.onboarding.sub}
               </p>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {STEPS.map((s, i) => {
-              const Icon = s.icon;
+            {v.steps.map((s, i) => {
+              const Icon = STEP_ICONS[i];
+              const n = String(i + 1).padStart(2, '0');
               return (
-                <Reveal key={s.n} delay={i * 80}>
+                <Reveal key={n} delay={i * 80}>
                   <div className="relative bg-slate-50 rounded-2xl border border-border p-6 h-full">
-                    <div className="font-display text-5xl font-black text-primary/10 mb-3 leading-none select-none">{s.n}</div>
+                    <div className="font-display text-5xl font-black text-primary/10 mb-3 leading-none select-none">{n}</div>
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mb-4">
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
@@ -653,7 +442,7 @@ const Velkoobchod = () => {
                   else if (isB2bApproved) goToCatalog();
                 }}
               >
-                {!user ? 'Začít registraci zdarma' : isB2bApproved ? 'Vstoupit do katalogu' : 'Žádost se zpracovává'}
+                {!user ? v.onboarding.ctaStart : isB2bApproved ? v.onboarding.ctaApproved : v.onboarding.ctaProcessing}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -667,19 +456,19 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
-                Katalog
+                {v.catalog.eyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Co najdete v B2B katalogu
+                {v.catalog.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Přímý přístup k 3 000+ prémiových hodinek a šperků. Vše skladem, vše s aktuálními velkoobchodními cenami a přesným přehledem zásob.
+                {v.catalog.sub}
               </p>
             </div>
           </Reveal>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-14">
-            {CATALOG_FEATURES.map((f, i) => {
-              const Icon = f.icon;
+            {v.features.map((f, i) => {
+              const Icon = FEATURE_ICONS[i];
               return (
                 <Reveal key={f.label} delay={i * 55}>
                   <div className="bg-white rounded-xl border border-border p-5 flex flex-col items-start gap-3">
@@ -699,7 +488,7 @@ const Velkoobchod = () => {
           {/* Brands strip */}
           <Reveal>
             <div className="text-center mb-5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">70+ značek dostupných od prvního kusu</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{v.catalog.brandsLabel}</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
               {BRANDS.map(b => (
@@ -708,7 +497,7 @@ const Velkoobchod = () => {
                 </span>
               ))}
               <span className="rounded-lg bg-primary/8 border border-primary/20 px-3 py-1.5 text-xs font-semibold text-primary">
-                +50 dalších →
+                {v.catalog.brandsMore}
               </span>
             </div>
           </Reveal>
@@ -721,46 +510,49 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
-                Partnerské podmínky
+                {v.partnership.eyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Ceny, které rostou s vaším obratem
+                {v.partnership.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Základní nákupní ceny jsou otevřené pro všechny registrované partnery. Čím vyšší obrat, tím lepší podmínky — bez složitých smluv od začátku.
+                {v.partnership.sub}
               </p>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {VOLUME_TIERS.map((tier, i) => (
+            {v.volumeTiers.map((tier, i) => {
+              const featured = VOLUME_FEATURED[i];
+              const isFirst = i === 0;
+              return (
               <Reveal key={tier.name} delay={i * 100}>
-                <div className={`relative rounded-2xl border p-8 h-full flex flex-col ${tier.featured ? 'bg-primary text-white border-primary shadow-xl shadow-primary/20' : 'bg-white border-border'}`}>
-                  {tier.featured && (
+                <div className={`relative rounded-2xl border p-8 h-full flex flex-col ${featured ? 'bg-primary text-white border-primary shadow-xl shadow-primary/20' : 'bg-white border-border'}`}>
+                  {featured && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
                       <span className="bg-amber-400 text-amber-900 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
-                        Doporučeno
+                        {v.partnership.recommended}
                       </span>
                     </div>
                   )}
                   <div className="mb-6">
-                    <h3 className={`font-display text-xl font-black mb-1 ${tier.featured ? 'text-white' : 'text-foreground'}`}>{tier.name}</h3>
-                    <div className={`text-xs mb-4 ${tier.featured ? 'text-white/70' : 'text-muted-foreground'}`}>{tier.volume}</div>
-                    <div className={`font-display text-2xl font-black ${tier.featured ? 'text-white' : 'text-primary'}`}>{tier.price}</div>
-                    <div className={`text-xs mt-1 ${tier.featured ? 'text-white/60' : 'text-muted-foreground'}`}>{tier.priceNote}</div>
+                    <h3 className={`font-display text-xl font-black mb-1 ${featured ? 'text-white' : 'text-foreground'}`}>{tier.name}</h3>
+                    <div className={`text-xs mb-4 ${featured ? 'text-white/70' : 'text-muted-foreground'}`}>{tier.volume}</div>
+                    <div className={`font-display text-2xl font-black ${featured ? 'text-white' : 'text-primary'}`}>{tier.price}</div>
+                    <div className={`text-xs mt-1 ${featured ? 'text-white/60' : 'text-muted-foreground'}`}>{tier.priceNote}</div>
                   </div>
                   <ul className="space-y-2.5 flex-1 mb-8">
                     {tier.features.map(f => (
-                      <li key={f} className={`flex items-start gap-2 text-sm ${tier.featured ? 'text-white' : 'text-foreground/80'}`}>
-                        <Check className={`h-4 w-4 shrink-0 mt-0.5 ${tier.featured ? 'text-white' : 'text-emerald-500'}`} strokeWidth={2.5} />
+                      <li key={f} className={`flex items-start gap-2 text-sm ${featured ? 'text-white' : 'text-foreground/80'}`}>
+                        <Check className={`h-4 w-4 shrink-0 mt-0.5 ${featured ? 'text-white' : 'text-emerald-500'}`} strokeWidth={2.5} />
                         {f}
                       </li>
                     ))}
                   </ul>
                   <Button
-                    variant={tier.featured ? 'secondary' : 'outline'}
-                    className={`w-full gap-1.5 ${tier.featured ? 'bg-white text-primary hover:bg-white/90' : ''}`}
+                    variant={featured ? 'secondary' : 'outline'}
+                    className={`w-full gap-1.5 ${featured ? 'bg-white text-primary hover:bg-white/90' : ''}`}
                     onClick={() => {
-                      if (tier.name === 'Registrace') {
+                      if (isFirst) {
                         if (!user) openAuth('register');
                         else if (isB2bApproved) goToCatalog();
                       } else {
@@ -772,11 +564,12 @@ const Velkoobchod = () => {
                   </Button>
                 </div>
               </Reveal>
-            ))}
+              );
+            })}
           </div>
           <Reveal delay={400}>
             <p className="text-center text-sm text-muted-foreground mt-8">
-              Potřebujete přesnější kalkulaci? <a href="mailto:obchod@swelt.cz" className="text-primary font-semibold hover:underline">Napište nám</a> — obchodní podmínky nastavíme na míru do 24 hodin.
+              {v.contactNote}
             </p>
           </Reveal>
         </div>
@@ -788,32 +581,32 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
-                Kompletní ekosystém
+                {v.ecosystemSell.eyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Jedna platforma. Čtyři způsoby, jak vydělávat.
+                {v.ecosystemSell.heading}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Velkoobchod je základ. Ale naši nejúspěšnější partneři kombinují více služeb — a tím násobí svůj zisk bez nutnosti více dodavatelů.
+                {v.ecosystemSell.sub}
               </p>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {ECOSYSTEM.map((svc, i) => {
-              const Icon = svc.icon;
+            {v.ecosystemItems.map((svc, i) => {
+              const Icon = ECOSYSTEM_META[i].icon;
               return (
                 <Reveal key={svc.name} delay={i * 80}>
                   <div
-                    onClick={() => navigate(svc.href)}
+                    onClick={() => navigate(ECOSYSTEM_META[i].href)}
                     className="group cursor-pointer bg-white rounded-2xl border border-border p-6 h-full flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                   >
-                    <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl mb-4 ${svc.color}`}>
+                    <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl mb-4 ${ECOSYSTEM_META[i].color}`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <h3 className="font-display font-black text-foreground mb-2">{svc.name}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed flex-1">{svc.desc}</p>
                     <div className="flex items-center gap-1.5 text-primary text-sm font-semibold mt-5 group-hover:gap-2.5 transition-all">
-                      Zjistit více <ArrowRight className="h-3.5 w-3.5" />
+                      {v.finalCta.learnMore} <ArrowRight className="h-3.5 w-3.5" />
                     </div>
                   </div>
                 </Reveal>
@@ -830,22 +623,16 @@ const Velkoobchod = () => {
             <Reveal>
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-6">
-                  Proč Swelt
+                  {v.whySwelt.eyebrow}
                 </div>
                 <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
-                  15 let zkušeností. Přímý vztah s dodavateli.
+                  {v.whySwelt.heading}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-8">
-                  Nejsme překupník. Jsme přímý distributor světových hodinářských a klenotnických značek pro střední a východní Evropu. Díky přímému partnerství s výrobci nabízíme ceny, na které jiní distributoři nedosáhnou.
+                  {v.whySwelt.p}
                 </p>
                 <div className="space-y-3">
-                  {[
-                    'Přímé partnerství s 70+ světovými značkami',
-                    'Garance originality — 100 % autentické produkty',
-                    'Evropský sklad — expedice do 24–48 hodin',
-                    'Certifikovaný záruční a pozáruční servis',
-                    'GDPR compliance a transparentní obchodní podmínky',
-                  ].map(item => (
+                  {v.whySwelt.bullets.map(item => (
                     <div key={item} className="flex items-center gap-3 text-sm text-foreground/80">
                       <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" strokeWidth={2.5} />
                       {item}
@@ -857,10 +644,10 @@ const Velkoobchod = () => {
             <Reveal delay={150}>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { val: 15, suffix: '+', label: 'let na trhu', icon: Award },
-                  { val: 500, suffix: '+', label: 'aktivních partnerů', icon: Users },
-                  { val: 3000, suffix: '+', label: 'produktů v katalogu', icon: Package },
-                  { val: 98, suffix: ' %', label: 'spokojenost partnerů', icon: Star },
+                  { val: 15,   suffix: '+',  label: v.whyStats[0], icon: Award },
+                  { val: 500,  suffix: '+',  label: v.whyStats[1], icon: Users },
+                  { val: 3000, suffix: '+',  label: v.whyStats[2], icon: Package },
+                  { val: 98,   suffix: ' %', label: v.whyStats[3], icon: Star },
                 ].map(({ val, suffix, label, icon: Icon }) => (
                   <div key={label} className="bg-slate-50 rounded-2xl border border-border p-6 text-center">
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mx-auto mb-3">
@@ -878,23 +665,7 @@ const Velkoobchod = () => {
 
           {/* Testimonials */}
           <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {[
-              {
-                name: 'Radek H.',
-                role: 'E-shop hodinek, Praha',
-                text: 'Díky Sweltu jsem rozšířil katalog o 800 produktů za víkend. Marže na Tommy Hilfiger jsou výrazně lepší než u předchozího dodavatele a zásoby jsou vždy aktuální.',
-              },
-              {
-                name: 'Monika B.',
-                role: 'Zlatnictví, Brno',
-                text: 'Schválení účtu přišlo do 8 hodin. Přístup do katalogu byl okamžitý. Nikdy jsem nezaznamenala nesoulad zásob — to, co katalog říká „skladem", opravdu je skladem.',
-              },
-              {
-                name: 'Jan K.',
-                role: 'Distributor, Ostrava',
-                text: 'Zásobuji přes 3 e-shopy a Swelt je za tím vším. Kombinuji velkoobchod s dropshippingem — ideální model, který mi šetří kapitál vázaný ve skladu.',
-              },
-            ].map((t, i) => (
+            {v.testimonials.map((t, i) => (
               <Reveal key={t.name} delay={i * 100}>
                 <div className="bg-slate-50 rounded-2xl border border-border p-6">
                   <div className="flex gap-0.5 mb-3">
@@ -920,13 +691,13 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="text-center mb-12">
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Nejčastější otázky
+                {v.faq.heading}
               </h2>
-              <p className="text-muted-foreground">Vše, co potřebujete vědět před registrací.</p>
+              <p className="text-muted-foreground">{v.faq.sub}</p>
             </div>
           </Reveal>
           <div className="space-y-3">
-            {FAQS.map((faq, i) => (
+            {v.faqItems.map((faq, i) => (
               <Reveal key={i} delay={i * 40}>
                 <div className="bg-white rounded-xl border border-border overflow-hidden">
                   <button
@@ -957,19 +728,19 @@ const Velkoobchod = () => {
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-sm font-semibold text-white/90 mb-7">
               <Handshake className="h-4 w-4" />
-              Připojte se ke komunitě 500+ partnerů
+              {v.finalCta.communityBadge}
             </div>
             <h2 className="font-display text-3xl sm:text-5xl font-black text-white mb-5">
-              Začněte vydělávat s prémiemi. Dnes.
+              {v.finalCta.bottomHeading}
             </h2>
             <p className="text-white/75 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              Registrace zdarma. Schválení do 24 hodin. Přístup k 3 000+ produktům s marží 40–65 %.
+              {v.finalCta.bottomSub}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user ? (
                 <>
                   <Button size="lg" variant="secondary" onClick={() => openAuth('register')} className="gap-2 h-12 px-8 text-base">
-                    Registrovat se zdarma <ArrowRight className="h-4 w-4" />
+                    {v.hero.ctaRegister} <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button
                     size="lg"
@@ -977,15 +748,15 @@ const Velkoobchod = () => {
                     onClick={() => openAuth('login')}
                     className="gap-2 h-12 px-8 text-base text-white border border-white/30 hover:bg-white/10"
                   >
-                    Přihlásit se
+                    {v.hero.ctaLogin}
                   </Button>
                 </>
               ) : isB2bApproved ? (
                 <Button size="lg" variant="secondary" onClick={goToCatalog} className="gap-2 h-12 px-8 text-base">
-                  Vstoupit do katalogu <ArrowRight className="h-4 w-4" />
+                  {v.hero.ctaCatalog} <ArrowRight className="h-4 w-4" />
                 </Button>
               ) : (
-                <p className="text-white/70 text-sm italic">Vaše žádost je v procesu schvalování — brzy se ozveme.</p>
+                <p className="text-white/70 text-sm italic">{v.finalCta.processing}</p>
               )}
             </div>
           </Reveal>
@@ -996,18 +767,15 @@ const Velkoobchod = () => {
       <section className="bg-white border-t border-border py-10">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
-            {[
-              { icon: ShieldCheck, text: '100% autentické produkty' },
-              { icon: Truck, text: 'FedEx / DHL / UPS expedice' },
-              { icon: Globe, text: 'Doručení po celé EU' },
-              { icon: BadgeCheck, text: 'Přímý distributor značek' },
-              { icon: Lock, text: 'Bezpečné B2B platby' },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-primary/60" />
-                <span>{text}</span>
-              </div>
-            ))}
+            {v.trustStrip.map((text, i) => {
+              const Icon = TRUST_STRIP_ICONS[i];
+              return (
+                <div key={text} className="flex items-center gap-2">
+                  <Icon className="h-4 w-4 text-primary/60" />
+                  <span>{text}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
