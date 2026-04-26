@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useStore } from '@/lib/store';
-import { translations } from '@/lib/i18n';
+import { translations, flags, langNames, ALL_LANGS, type Lang } from '@/lib/i18n';
 import type { AvailableParam } from '@/hooks/useProducts';
 
 const GENDER_PARAM = 'Určení';
@@ -75,7 +75,7 @@ export function FilterSidebar({
   mobileOnly, desktopOnly,
 }: Props) {
   const { user } = useAuthContext();
-  const { lang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
+  const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
   const t = translations[lang];
   const isHome = viewMode === 'home';
 
@@ -140,8 +140,40 @@ export function FilterSidebar({
     setSelectedParams({ ...selectedParams, [nazev]: next });
   };
 
+  const LanguagePicker = () => (
+    <div className="grid grid-cols-2 gap-1.5 max-h-72 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted">
+      {ALL_LANGS.map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l as Lang)}
+          className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+            lang === l
+              ? 'bg-primary text-primary-foreground'
+              : 'hover:bg-muted text-foreground'
+          }`}
+        >
+          <span className="text-base leading-none">{flags[l as Lang]}</span>
+          <span className="truncate">{langNames[l as Lang]}</span>
+        </button>
+      ))}
+    </div>
+  );
+
   const homeContent = (
     <div className="flex h-full flex-col">
+      <Accordion type="multiple" className="w-full">
+        <AccordionItem value="lang-home" className="border-b px-2">
+          <AccordionTrigger className="px-2 py-3 hover:no-underline">
+            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <span className="text-base leading-none">{flags[lang as Lang]}</span>
+              {t.language}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pb-3">
+            <LanguagePicker />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       <nav className="px-4 py-3 space-y-1">
         <a href="#" className="block px-2 py-2.5 text-sm font-medium rounded-md hover:bg-muted transition-colors">O nás</a>
         <a href="#" className="block px-2 py-2.5 text-sm font-medium rounded-md hover:bg-muted transition-colors">Naše služby</a>
@@ -165,6 +197,19 @@ export function FilterSidebar({
       </div>
 
       <Accordion type="multiple" className="w-full">
+        {/* Language picker — collapsed at top */}
+        <AccordionItem value="lang" className="border-b px-2">
+          <AccordionTrigger className="px-2 py-3 hover:no-underline">
+            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <span className="text-base leading-none">{flags[lang as Lang]}</span>
+              {t.language}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pb-3">
+            <LanguagePicker />
+          </AccordionContent>
+        </AccordionItem>
+
         {/* Discount tiers (only for logged-in users) */}
         {user && (
           <AccordionItem value="discount" className="border-b px-2">

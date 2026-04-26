@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { translations, flags, type Lang } from '@/lib/i18n';
+import { translations, flags, langNames, ALL_LANGS, type Lang } from '@/lib/i18n';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
@@ -214,13 +214,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
                           <Globe className="h-3 w-3" /> Jazyk
                         </p>
-                        <div className="flex gap-1">
-                          {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-                            <Button key={l} variant={lang === l ? 'default' : 'outline'} size="sm" className="flex-1 gap-1 h-7 text-[11px]" onClick={() => setLang(l)}>
-                              <span>{flags[l]}</span> {l.toUpperCase()}
-                            </Button>
+                        <select
+                          value={lang}
+                          onChange={(e) => setLang(e.target.value as Lang)}
+                          className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          {ALL_LANGS.map((l) => (
+                            <option key={l} value={l}>
+                              {flags[l]} {langNames[l]}
+                            </option>
                           ))}
-                        </div>
+                        </select>
                       </div>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => clearSalesMode()} className="gap-2 text-xs text-destructive font-semibold">
@@ -248,13 +252,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
                           <Globe className="h-3 w-3" /> Jazyk
                         </p>
-                        <div className="flex gap-1">
-                          {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-                            <Button key={l} variant={lang === l ? 'default' : 'outline'} size="sm" className="flex-1 gap-1 h-7 text-[11px]" onClick={() => setLang(l)}>
-                              <span>{flags[l]}</span> {l.toUpperCase()}
-                            </Button>
+                        <select
+                          value={lang}
+                          onChange={(e) => setLang(e.target.value as Lang)}
+                          className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+                        >
+                          {ALL_LANGS.map((l) => (
+                            <option key={l} value={l}>
+                              {flags[l]} {langNames[l]}
+                            </option>
                           ))}
-                        </div>
+                        </select>
                       </div>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout} className="gap-2 text-xs text-destructive">
@@ -286,13 +294,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
                       <Globe className="h-3 w-3" /> Jazyk
                     </p>
-                    <div className="flex gap-1">
-                      {(['cs', 'en', 'is'] as Lang[]).map((l) => (
-                        <Button key={l} variant={lang === l ? 'default' : 'outline'} size="sm" className="flex-1 gap-1 h-7 text-[11px]" onClick={() => setLang(l)}>
-                          <span>{flags[l]}</span> {l.toUpperCase()}
-                        </Button>
+                    <select
+                      value={lang}
+                      onChange={(e) => setLang(e.target.value as Lang)}
+                      className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+                    >
+                      {ALL_LANGS.map((l) => (
+                        <option key={l} value={l}>
+                          {flags[l]} {langNames[l]}
+                        </option>
                       ))}
-                    </div>
+                    </select>
                   </div>
                 </DropdownMenuContent>
               </DropdownMenu>
