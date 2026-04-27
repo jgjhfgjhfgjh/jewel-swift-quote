@@ -366,7 +366,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           `}
         >
           {/* Large centered logo — pulled up to overlap toolbar row */}
-          <div className="flex justify-center items-center -mt-12 pb-1">
+          <div className="flex justify-center items-center -mt-16 pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -379,8 +379,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </Link>
           </div>
 
-          {/* Centered nav items — black text */}
-          <nav className="flex justify-center items-center gap-0.5 -mt-6 pb-6">
+          {/* Centered nav items — black text, pulled up close to logo */}
+          <nav className="flex justify-center items-center gap-0.5 -mt-24 pb-4">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
