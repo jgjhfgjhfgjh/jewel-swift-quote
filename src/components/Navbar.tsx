@@ -165,7 +165,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <a
                 key={href}
                 href={href}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {label}
@@ -365,9 +365,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
           `}
         >
-          {/* Large logo — light overlap with toolbar, shifted right to compensate
-              for the PNG's left-biased content so the visible mark is centered */}
-          <div className="w-full flex justify-center items-center -mt-[72px] pb-0">
+          {/* Logo — pulled up 132px (60px more than baseline) and shifted right
+              to compensate for the PNG's left-biased visible content */}
+          <div className="w-full flex justify-center items-center -mt-[132px] pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -376,14 +376,20 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <img
                 src={logo}
                 alt="swelt."
-                className={`h-72 lg:h-96 object-contain block translate-x-[50px] lg:translate-x-[66px] ${whiteLogo ? 'brightness-0 invert' : ''}`}
+                className={`h-72 lg:h-96 object-contain block translate-x-[70px] lg:translate-x-[86px] ${whiteLogo ? 'brightness-0 invert' : ''}`}
               />
             </Link>
           </div>
 
-          {/* Nav directly under the logo (overlapping the PNG's bottom whitespace),
-              with generous bottom padding so the gradient bar keeps its full height */}
-          <nav className="w-full flex justify-center items-center gap-0.5 -mt-[136px] pb-20">
+          {/* Tagline — sits in the logo's bottom whitespace, just above the menu */}
+          <p className="w-full text-center -mt-[120px] text-sm lg:text-base text-black font-medium tracking-wide">
+            Velkoobchod světovými značkami hodinek a šperků
+          </p>
+
+          {/* Nav — relative z-10 so it sits above the logo Link and stays clickable
+              (without it the Link's bounding box swallows the hover/click events).
+              Tight spacing under tagline; generous pb-20 keeps the bar full-height. */}
+          <nav className="relative z-10 w-full flex justify-center items-center gap-0.5 mt-1 pb-20">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
