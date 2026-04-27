@@ -365,22 +365,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
           `}
         >
-          {/* Large centered logo — pulled up to overlap toolbar row */}
-          <div className="flex justify-center items-center -mt-16 pb-0">
+          {/* Large centered logo — pulled up high to sit near top of viewport */}
+          <div className="w-full flex justify-center items-center -mt-28 pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="mx-auto block"
             >
               <img
                 src={logo}
                 alt="swelt."
-                className={`h-72 lg:h-96 object-contain ${whiteLogo ? 'brightness-0 invert' : ''}`}
+                className={`h-72 lg:h-96 object-contain mx-auto block ${whiteLogo ? 'brightness-0 invert' : ''}`}
               />
             </Link>
           </div>
 
           {/* Centered nav items — black text, pulled up close to logo */}
-          <nav className="flex justify-center items-center gap-0.5 -mt-24 pb-4">
+          <nav className="w-full flex justify-center items-center gap-0.5 -mt-32 pb-3">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
