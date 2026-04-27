@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -24,6 +24,7 @@ const Index = () => {
   const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
   const [wishlistOpen, setWishlistOpen] = useState(false);
+  const homeContentRef = useRef<HTMLDivElement>(null);
   const {
     search, setSearch,
     selectedBrands, setSelectedBrands,
@@ -51,6 +52,25 @@ const Index = () => {
     search, selectedBrands, selectedCategory,
     stockOnly, minDiscount, selectedGenders, selectedParams,
   };
+
+  // Scroll buffer: hold the homepage content in place for the first 60px of
+  // scroll so the navbar collapse animation plays out before anything else
+  // starts moving over the hero.
+  useEffect(() => {
+    const el = homeContentRef.current;
+    if (!el) return;
+    if (viewMode !== 'home') {
+      el.style.transform = '';
+      return;
+    }
+    const onScroll = () => {
+      const offset = Math.min(window.scrollY, 60);
+      el.style.transform = `translate3d(0, ${offset}px, 0)`;
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [viewMode, loading]);
 
   const clearAllFilters = () => {
     setSearch('');
@@ -108,9 +128,16 @@ const Index = () => {
 
       {viewMode === 'home' && (
         <div className="relative z-10 animate-fade-in">
-          <div className="relative z-20 -mt-20 sm:-mt-24">
+          <div
+            ref={homeContentRef}
+            className="relative z-20 -mt-20 sm:-mt-24"
+            style={{ willChange: 'transform' }}
+          >
             <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
           </div>
+          {/* 60px spacer compensates for the translateY offset so the user can
+              still scroll all the way to the visual end of the page */}
+          <div className="h-[60px]" aria-hidden />
         </div>
       )}
 
