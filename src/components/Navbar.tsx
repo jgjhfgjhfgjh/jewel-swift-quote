@@ -24,9 +24,9 @@ interface NavbarProps {
 const HOME_NAV_ITEMS = [
   { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
   { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
-  { href: '#feed', label: 'swelt.feed', icon: Rss },
+  { href: '#feed', label: 'Feed', icon: Rss },
   { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
-  { href: '#shop', label: 'swelt.shop', icon: ShoppingCart },
+  { href: '#shop', label: 'Shop', icon: ShoppingCart },
 ];
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
@@ -105,7 +105,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         ${isExpanded ? 'border-b-0' : 'border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80'}
       `}
       style={isExpanded ? {
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.82) 55%, rgba(255,255,255,0.0) 100%)',
+        background: 'linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 25%, rgba(255,255,255,0.78) 50%, rgba(255,255,255,0.45) 75%, rgba(255,255,255,0.15) 90%, rgba(255,255,255,0) 100%)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
       } : undefined}
@@ -362,11 +362,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       {isOnHomePage && isHome && (
         <div
           className={`hidden lg:block overflow-hidden transition-all duration-500 ease-in-out
-            ${isExpanded ? 'max-h-[220px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
+            ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
           `}
         >
-          {/* Large centered logo */}
-          <div className="flex justify-center items-center pt-1 pb-2">
+          {/* Large centered logo — pulled up to overlap toolbar row */}
+          <div className="flex justify-center items-center -mt-12 pb-1">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -374,18 +374,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <img
                 src={logo}
                 alt="swelt."
-                className={`h-20 lg:h-24 object-contain ${whiteLogo ? 'brightness-0 invert' : ''}`}
+                className={`h-72 lg:h-96 object-contain ${whiteLogo ? 'brightness-0 invert' : ''}`}
               />
             </Link>
           </div>
 
-          {/* Centered nav items */}
-          <nav className="flex justify-center items-center gap-0.5 pb-5">
+          {/* Centered nav items — black text */}
+          <nav className="flex justify-center items-center gap-0.5 -mt-6 pb-6">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
                 href={href}
-                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-foreground/75 hover:text-primary hover:bg-black/5 transition-all"
+                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {label}
