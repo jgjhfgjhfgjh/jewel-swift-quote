@@ -21,6 +21,14 @@ interface NavbarProps {
   whiteLogo?: boolean;
 }
 
+const HOME_NAV_ITEMS = [
+  { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
+  { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
+  { href: '#feed', label: 'swelt.feed', icon: Rss },
+  { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
+  { href: '#shop', label: 'swelt.shop', icon: ShoppingCart },
+];
+
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode } = useStore();
   const { user, profile, isAdmin, signOut, loading } = useAuthContext();
@@ -32,6 +40,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const showSearch = location.pathname === '/' && viewMode === 'catalog';
 
   const [hidden, setHidden] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
@@ -51,19 +60,35 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       openAuth('login');
     }
   };
+
   const lastScrollY = useRef(0);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const isHome = viewMode === 'home';
+  const isOnHomePage = location.pathname === '/';
+
+  // Expanded = homepage at top (Swarovski-style large header)
+  const isExpanded = isHome && isAtTop && isOnHomePage;
+
+  // Sync isAtTop when switching back to home view
+  useEffect(() => {
+    if (isHome) setIsAtTop(window.scrollY < 60);
+  }, [isHome]);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setHidden(y > lastScrollY.current && y > 50);
+      setIsAtTop(y < 60);
+      // Only hide navbar in catalog mode; in home mode it just collapses
+      if (isHome) {
+        setHidden(false);
+      } else {
+        setHidden(y > lastScrollY.current && y > 50);
+      }
       lastScrollY.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isHome]);
 
   const handleLogout = async () => {
     await signOut();
@@ -74,11 +99,22 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
   return (
     <>
-    <header className={`fixed top-0 left-0 right-0 z-[100] border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 transition-transform duration-300 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
+        ${hidden ? '-translate-y-full' : 'translate-y-0'}
+        ${isExpanded ? 'border-b-0' : 'border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80'}
+      `}
+      style={isExpanded ? {
+        background: 'linear-gradient(to bottom, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.82) 55%, rgba(255,255,255,0.0) 100%)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+      } : undefined}
+    >
+      {/* ── Toolbar row — always h-14 ── */}
       <div className="h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
-        {/* Left group: hamburger + logo */}
+
+        {/* Left: hamburger (always) + logo (always mobile, hidden desktop when expanded) */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
-          {/* Hamburger: mobile opens sidebar (filters in catalog), desktop opens nav menu */}
           <Button
             ref={desktopMenuButtonRef}
             variant="ghost"
@@ -92,15 +128,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Menu className="h-5 w-5" />
           </Button>
 
-          <Link to="/" onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="shrink-0">
-            <h1 className="font-display text-xl font-semibold tracking-tight">
-              <img src={logo} alt="swelt." className={`h-20 sm:h-16 lg:h-24 object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`} />
-            </h1>
+          {/* Logo in toolbar: always on mobile, fades out on desktop when expanded */}
+          <Link
+            to="/"
+            onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className={`shrink-0 transition-all duration-500 ease-in-out
+              ${isExpanded ? 'lg:opacity-0 lg:pointer-events-none lg:w-0 lg:overflow-hidden' : 'opacity-100'}
+            `}
+          >
+            <img
+              src={logo}
+              alt="swelt."
+              className={`h-20 sm:h-12 lg:h-10 object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
+            />
           </Link>
-
         </div>
 
-        {/* Center: Search bar in catalog mode / Section nav links in home mode */}
+        {/* Center: search (catalog) | nav links (home collapsed) */}
         {showSearch ? (
           <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
             <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
@@ -114,17 +158,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               />
             </div>
           </div>
-        ) : location.pathname === '/' && isHome ? (
-          <nav className="hidden lg:flex flex-1 justify-center items-center gap-1 mx-4">
-            {[
-              { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
-              { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
-              { href: '#feed', label: 'swelt.feed', icon: Rss },
-              { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
-              { href: '#shop', label: 'swelt.shop', icon: ShoppingCart },
-            ].map(({ href, label, icon: Icon }) => (
-              <a key={href} href={href}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all">
+        ) : isOnHomePage && isHome ? (
+          /* Nav links in toolbar — desktop only, fade out when expanded */
+          <nav className={`hidden lg:flex flex-1 justify-center items-center gap-1 mx-4 transition-all duration-500 ease-in-out ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
+              <a
+                key={href}
+                href={href}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+              >
                 <Icon className="h-3.5 w-3.5" />
                 {label}
               </a>
@@ -132,14 +174,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           </nav>
         ) : null}
 
-
-
-        {/* Right group: wishlist, cart, profile — visible on all devices */}
+        {/* Right: icons + CTA — always visible */}
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
 
           {!loading && user ? (
             <>
-              {/* Mobile/Tablet expandable search icon — only in catalog mode */}
               {showSearch && (
                 <Button
                   variant="ghost"
@@ -152,7 +191,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 </Button>
               )}
 
-              {/* Wishlist icon — desktop only (mobile uses bottom nav) */}
               <Button
                 variant="ghost"
                 size="icon"
@@ -168,7 +206,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 )}
               </Button>
 
-              {/* Cart icon — desktop only */}
               <Button variant="ghost" size="icon" className="relative hidden lg:inline-flex" onClick={() => setCartOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
@@ -178,7 +215,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 )}
               </Button>
 
-              {/* Profile dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -272,7 +308,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-
             </>
           ) : !loading ? (
             <>
@@ -311,7 +346,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : null}
 
-          {/* KATALOG 2026 — far-right CTA, visible on ALL devices */}
+          {/* KATALOG 2026 — always far right */}
           <Button
             size="sm"
             onClick={handleCatalogCta}
@@ -323,7 +358,44 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         </div>
       </div>
 
-      {/* Expandable mobile/tablet search bar — only in catalog mode */}
+      {/* ── Expanded section: centered logo + centered nav — desktop, home mode only ── */}
+      {isOnHomePage && isHome && (
+        <div
+          className={`hidden lg:block overflow-hidden transition-all duration-500 ease-in-out
+            ${isExpanded ? 'max-h-[220px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
+          `}
+        >
+          {/* Large centered logo */}
+          <div className="flex justify-center items-center pt-1 pb-2">
+            <Link
+              to="/"
+              onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            >
+              <img
+                src={logo}
+                alt="swelt."
+                className={`h-20 lg:h-24 object-contain ${whiteLogo ? 'brightness-0 invert' : ''}`}
+              />
+            </Link>
+          </div>
+
+          {/* Centered nav items */}
+          <nav className="flex justify-center items-center gap-0.5 pb-5">
+            {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
+              <a
+                key={href}
+                href={href}
+                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-foreground/75 hover:text-primary hover:bg-black/5 transition-all"
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Mobile search expansion — catalog mode only */}
       {showSearch && mobileSearchOpen && (
         <div className="lg:hidden px-3 pb-2 pt-1 border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 animate-fade-in">
           <div className="relative w-full">
@@ -341,7 +413,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       )}
     </header>
 
-    {/* Desktop navigation menu drawer */}
+    {/* Desktop navigation sheet */}
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
         side="left"
