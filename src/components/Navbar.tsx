@@ -365,23 +365,25 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
           `}
         >
-          {/* Large centered logo — pulled up high to sit near top of viewport */}
-          <div className="w-full flex justify-center items-center -mt-28 pb-0">
+          {/* Large logo — light overlap with toolbar, shifted right to compensate
+              for the PNG's left-biased content so the visible mark is centered */}
+          <div className="w-full flex justify-center items-center -mt-8 pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-              className="mx-auto block"
+              className="block"
             >
               <img
                 src={logo}
                 alt="swelt."
-                className={`h-72 lg:h-96 object-contain mx-auto block ${whiteLogo ? 'brightness-0 invert' : ''}`}
+                className={`h-72 lg:h-96 object-contain block translate-x-10 lg:translate-x-14 ${whiteLogo ? 'brightness-0 invert' : ''}`}
               />
             </Link>
           </div>
 
-          {/* Centered nav items — black text, pulled up close to logo */}
-          <nav className="w-full flex justify-center items-center gap-0.5 -mt-32 pb-3">
+          {/* Nav directly under the logo (overlapping the PNG's bottom whitespace),
+              with generous bottom padding so the gradient bar keeps its full height */}
+          <nav className="w-full flex justify-center items-center gap-0.5 -mt-24 pb-20">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
