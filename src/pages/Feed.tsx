@@ -11,6 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { useStore } from '@/lib/store';
+import { feed as feedT } from '@/lib/i18n-feed';
 
 /* ─── SEO / JSON-LD ─── */
 function SeoHead() {
@@ -525,6 +527,8 @@ function FeedBuilder() {
 /* ─── Main Page ─── */
 export default function Feed() {
   const navigate = useNavigate();
+  const { lang } = useStore();
+  const f = feedT[lang];
   const [billingCycle, setBillingCycle] = useState<'quarterly' | 'yearly'>('quarterly');
   const [notifVisible, setNotifVisible] = useState(false);
 
@@ -535,68 +539,16 @@ export default function Feed() {
     return () => clearTimeout(t);
   }, []);
 
-  const price = (quarterly: number, yearly: number) =>
-    billingCycle === 'quarterly' ? quarterly : yearly;
-
-  const plans = [
-    {
-      name: 'Starter',
-      subtitle: 'Ideální pro první kroky — vyzkoušejte bez závazku',
-      monthly: price(490, 392),
-      badge: null,
-      featured: false,
-      cta: 'Začít zdarma →',
-      features: [
-        '1 feed (XML nebo CSV)',
-        'Až 500 produktů',
-        'Aktualizace 1× denně',
-        'Shoptet, WooCommerce, Upgates',
-        'E-mailová podpora',
-        'Onboarding krok za krokem',
-      ],
-      missing: [
-        'Heureka / Zbozi / Google / Facebook',
-        'Více feedů najednou',
-        'API přístup',
-      ],
-    },
-    {
-      name: 'Pro',
-      subtitle: 'Pro e-shopy, které to myslí vážně',
-      monthly: price(990, 792),
-      badge: 'Nejoblíbenější',
-      featured: true,
-      cta: 'Aktivovat Pro →',
-      features: [
-        '3 feedů najednou',
-        'Celý katalog — 3 000+ produktů',
-        'Aktualizace 4× denně (každých 6 h)',
-        'XML + CSV + Heureka + Zbozi',
-        'Google Shopping + Facebook Catalog',
-        'Chat podpora',
-        'swelt.signal Lite (přehled trendů)',
-      ],
-      missing: [],
-    },
-    {
-      name: 'Enterprise',
-      subtitle: 'Pro velké e-shopy a profesionální týmy',
-      monthly: 0,
-      badge: 'Na míru',
-      featured: false,
-      cta: 'Získat nabídku',
-      features: [
-        'Neomezený počet feedů',
-        'Real-time aktualizace (< 2 h)',
-        'Plný API přístup (JSON)',
-        'Vlastní atributy a mapování polí',
-        'SLA garance 99,9 % dostupnosti',
-        'Dedikovaný account manager',
-        'Prioritní podpora 4h SLA',
-      ],
-      missing: [],
-    },
-  ];
+  const plans = f.plans.map((p, i) => ({
+    name: p.name,
+    subtitle: p.subtitle,
+    monthly: billingCycle === 'quarterly' ? p.quarterly : p.yearly,
+    badge: p.badge,
+    featured: i === 1,
+    cta: p.cta,
+    features: p.features,
+    missing: p.missing,
+  }));
 
   return (
     <div
@@ -625,36 +577,35 @@ export default function Feed() {
           <Reveal>
             <Badge className="mb-5 px-4 py-1.5 text-sm font-semibold bg-primary/10 text-primary border-primary/20 rounded-full">
               <Rss className="h-3.5 w-3.5 mr-2" />
-              swelt.feed — prémiové produkty pro váš e-shop
+              {f.hero.badge}
             </Badge>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-tight mb-5">
-              Máte e-shop a chcete přidat<br className="hidden sm:block" />
-              <span className="text-primary"> prémiové produkty bez starostí?</span>
+              {f.hero.h1Part1}<br className="hidden sm:block" />
+              <span className="text-primary"> {f.hero.h1Highlight}</span>
             </h1>
           </Reveal>
 
           <Reveal delay={160}>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-5 leading-relaxed">
-              Pořiďte si <strong className="text-foreground">swelt.feed</strong> a my vám propojíme e-shop s naším katalogem{' '}
-              <strong className="text-foreground">3 000+ prémiových hodinek a doplňků</strong> — žádné technické znalosti nejsou potřeba.
+              {f.hero.sub1Pre}<strong className="text-foreground">{f.hero.sub1Mid}</strong>{f.hero.sub1Post}
             </p>
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-              Nebo jděte ještě dál: se <strong className="text-foreground">swelt.dropshipping</strong> zboží vůbec nemusíte kupovat ani skladovat — my ho rovnou odešleme vašim zákazníkům.
+              {f.hero.sub2Pre}<strong className="text-foreground">{f.hero.sub2Mid}</strong>{f.hero.sub2Post}
             </p>
           </Reveal>
 
           <Reveal delay={240}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
               <Button size="lg" className="px-8 gap-2 font-bold text-base shadow-lg shadow-primary/25" onClick={() => navigate('/register')}>
-                Začít s feedem zdarma
+                {f.hero.ctaPrimary}
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <Button size="lg" variant="outline" className="px-8 gap-2 font-semibold text-base" onClick={() => document.getElementById('feed-builder')?.scrollIntoView({ behavior: 'smooth' })}>
                 <Database className="h-4 w-4" />
-                Vyzkoušet na nečisto
+                {f.hero.ctaSecondary}
               </Button>
             </div>
           </Reveal>
@@ -662,10 +613,10 @@ export default function Feed() {
           <Reveal delay={320}>
             <div className="flex flex-wrap items-center justify-center gap-3">
               {[
-                { icon: Package,    label: '3 000+ produktů' },
-                { icon: Layers,     label: '7 formátů exportu' },
-                { icon: RefreshCw,  label: 'Aktualizace každé 2 hodiny' },
-                { icon: CheckCircle,label: 'Bez technických znalostí' },
+                { icon: Package,    label: f.hero.bullets[0] },
+                { icon: Layers,     label: f.hero.bullets[1] },
+                { icon: RefreshCw,  label: f.hero.bullets[2] },
+                { icon: CheckCircle,label: f.hero.bullets[3] },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 rounded-full bg-white border border-border px-4 py-2 shadow-sm text-sm font-medium text-foreground">
                   <Icon className="h-4 w-4 text-primary" />
@@ -683,10 +634,10 @@ export default function Feed() {
       <section className="bg-primary py-10 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-white">
           {[
-            { to: 3000, suffix: '+', label: 'produktů v katalogu' },
-            { to: 7,    suffix: '',  label: 'formátů exportu' },
-            { to: 48,   suffix: 'h', label: 'do spuštění feedu' },
-            { to: 15,   suffix: '+', label: 'let ZAGO na trhu' },
+            { to: 3000, suffix: '+', label: f.stats[0] },
+            { to: 7,    suffix: '',  label: f.stats[1] },
+            { to: 48,   suffix: 'h', label: f.stats[2] },
+            { to: 15,   suffix: '+', label: f.stats[3] },
           ].map(({ to, suffix, label }) => (
             <div key={label}>
               <div className="text-3xl sm:text-4xl font-black mb-1">
@@ -703,36 +654,21 @@ export default function Feed() {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-14">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Jak to funguje</Badge>
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">{f.howItWorks.eyebrow}</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Jak swelt.feed funguje pro váš e-shop
+                {f.howItWorks.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Tři jednoduché kroky. Žádný kód. Žádné technické znalosti.
+                {f.howItWorks.sub}
               </p>
             </div>
           </Reveal>
 
           <div className="grid md:grid-cols-3 gap-8 mb-14">
             {[
-              {
-                step: '1',
-                icon: Users,
-                title: 'Zaregistrujete se',
-                desc: 'Vyberete plán, vyplníte e-mail a hotovo. Do 48 hodin máte feed připravený. Pomůžeme vám s nastavením zdarma — stačí napsat.',
-              },
-              {
-                step: '2',
-                icon: Link,
-                title: 'Propojíte e-shop',
-                desc: 'Dostanete odkaz na feed (URL). Vložíte ho do nastavení vašeho e-shopu nebo srovnávače — stejně jako byste nastavovali fakturaci. Pro Shoptet, WooCommerce a Upgates máme přímé integrace.',
-              },
-              {
-                step: '3',
-                icon: RefreshCw,
-                title: 'Vše běží samo',
-                desc: 'E-shop automaticky stahuje aktuální ceny a dostupnost. Vy jen prodáváte. My se staráme o to, aby data byla vždy správně.',
-              },
+              { step: '1', icon: Users,     title: f.howItWorks.steps[0].title, desc: f.howItWorks.steps[0].desc },
+              { step: '2', icon: Link,      title: f.howItWorks.steps[1].title, desc: f.howItWorks.steps[1].desc },
+              { step: '3', icon: RefreshCw, title: f.howItWorks.steps[2].title, desc: f.howItWorks.steps[2].desc },
             ].map(({ step, icon: Icon, title, desc }, i) => (
               <Reveal key={step} delay={i * 100}>
                 <div className="relative text-center">
@@ -757,13 +693,13 @@ export default function Feed() {
                 <Package className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="font-bold text-foreground mb-1">Nechcete vůbec řešit sklad ani nákup?</p>
+                <p className="font-bold text-foreground mb-1">{f.howItWorks.upsellTitle}</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Se <strong className="text-foreground">swelt.dropshipping</strong> zákazník objedná u vás, my zboží zabalíme a odešleme přímo jemu — pod vaším jménem. Vy nic neskladujete, nic nenakupujete, jen fakturujete.
+                  {f.howItWorks.upsellSubPre}<strong className="text-foreground">{f.howItWorks.upsellSubMid}</strong>{f.howItWorks.upsellSubPost}
                 </p>
               </div>
               <Button variant="outline" size="sm" className="shrink-0 font-semibold gap-1.5" onClick={() => navigate('/dropshipping')}>
-                Zjistit více
+                {f.howItWorks.upsellCta}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -979,12 +915,12 @@ export default function Feed() {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-10">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Ceník</Badge>
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">{f.pricing.eyebrow}</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
-                Jasné ceny. Žádné překvapení.
+                {f.pricing.heading}
               </h2>
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                Platíte jen za feed. Žádná provize z prodeje, žádná smlouva. Zrušit můžete kdykoliv.
+                {f.pricing.sub}
               </p>
 
               <div className="inline-flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
@@ -992,13 +928,13 @@ export default function Feed() {
                   onClick={() => setBillingCycle('quarterly')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${billingCycle === 'quarterly' ? 'bg-white shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
-                  Čtvrtletně
+                  {f.pricing.quarterly}
                 </button>
                 <button
                   onClick={() => setBillingCycle('yearly')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${billingCycle === 'yearly' ? 'bg-white shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
-                  Ročně
+                  {f.pricing.yearly}
                   <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 py-0.5">−20 %</span>
                 </button>
               </div>
@@ -1024,27 +960,27 @@ export default function Feed() {
                     {plan.monthly > 0 ? (
                       <>
                         <span className="text-3xl font-black text-foreground">{plan.monthly.toLocaleString('cs')}</span>
-                        <span className="text-muted-foreground text-sm ml-1">Kč / měs</span>
+                        <span className="text-muted-foreground text-sm ml-1">Kč {f.pricing.perMonth}</span>
                         {billingCycle === 'yearly' && (
-                          <div className="text-xs text-emerald-600 mt-1">Ušetříte {(plan.monthly * 12 * 0.2).toLocaleString('cs')} Kč ročně</div>
+                          <div className="text-xs text-emerald-600 mt-1">{f.pricing.saveYearly} {(plan.monthly * 12 * 0.2).toLocaleString('cs')} Kč</div>
                         )}
                       </>
                     ) : (
-                      <span className="text-xl font-bold text-foreground">Individuální cena</span>
+                      <span className="text-xl font-bold text-foreground">{f.pricing.bespoke}</span>
                     )}
                   </div>
 
                   <ul className="space-y-2 mb-6 flex-1">
-                    {plan.features.map(f => (
-                      <li key={f} className="flex items-start gap-2 text-sm">
+                    {plan.features.map(feat => (
+                      <li key={feat} className="flex items-start gap-2 text-sm">
                         <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                        <span className="text-foreground">{f}</span>
+                        <span className="text-foreground">{feat}</span>
                       </li>
                     ))}
-                    {plan.missing.map(f => (
-                      <li key={f} className="flex items-start gap-2 text-sm">
+                    {plan.missing.map(feat => (
+                      <li key={feat} className="flex items-start gap-2 text-sm">
                         <X className="h-4 w-4 text-muted-foreground/50 shrink-0 mt-0.5" />
-                        <span className="text-muted-foreground/60 line-through">{f}</span>
+                        <span className="text-muted-foreground/60 line-through">{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -1064,15 +1000,15 @@ export default function Feed() {
           <Reveal delay={300}>
             <div className="mt-8 rounded-2xl bg-blue-50 border border-blue-200 p-5 text-center">
               <p className="text-sm text-blue-800 leading-relaxed">
-                <strong>Chcete jít ještě dál bez skladu?</strong> swelt.dropshipping funguje bez měsíčního paušálu za feed — platíte jen za to, co skutečně prodáte.{' '}
-                <button className="font-bold underline hover:no-underline" onClick={() => navigate('/dropshipping')}>Zjistit víc →</button>
+                <strong>{f.pricing.bottomCardPre}</strong> {f.pricing.bottomCardMid}{' '}
+                <button className="font-bold underline hover:no-underline" onClick={() => navigate('/dropshipping')}>{f.pricing.bottomCardLink}</button>
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={350}>
             <p className="text-center text-xs text-muted-foreground mt-4">
-              Všechny ceny jsou bez DPH. První měsíc zdarma — žádná karta potřeba.
+              {f.pricing.smallNote}
             </p>
           </Reveal>
         </div>
@@ -1083,19 +1019,19 @@ export default function Feed() {
         <div className="max-w-2xl mx-auto">
           <Reveal>
             <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Časté dotazy</Badge>
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">{f.faq.eyebrow}</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground">
-                Máte otázky? Tady jsou odpovědi.
+                {f.faq.heading}
               </h2>
               <p className="text-muted-foreground mt-3 max-w-md mx-auto">
-                Pokud tu odpověď nenajdete, napište nám — odpovíme do hodiny.
+                {f.faq.sub}
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={80}>
             <div className="rounded-2xl border border-border bg-white shadow-sm px-6 divide-y divide-border">
-              {FAQS.map((faq, i) => (
+              {f.faqs.map((faq, i) => (
                 <FaqItem key={faq.q} q={faq.q} a={faq.a} defaultOpen={i === 0} />
               ))}
             </div>
@@ -1109,16 +1045,16 @@ export default function Feed() {
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-white text-sm font-semibold mb-6">
               <Star className="h-4 w-4 text-yellow-300" />
-              15+ let ZAGO na trhu · autorizovaný distributor
+              {f.finalCta.badge}
             </div>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
-              Přidejte prémiové produkty<br />do svého e-shopu ještě dnes.
+              {f.finalCta.heading1}<br />{f.finalCta.heading2}
             </h2>
             <p className="text-blue-100 text-lg mb-3 max-w-xl mx-auto leading-relaxed">
-              První feed připravíme zdarma. Žádná karta, žádný závazek. Spuštění do 48 hodin.
+              {f.finalCta.sub1}
             </p>
             <p className="text-blue-200 text-sm mb-8 max-w-lg mx-auto">
-              Nebo rovnou vyzkoušejte <strong className="text-white">swelt.dropshipping</strong> — bez skladu, bez nákupu, bez logistiky.
+              {f.finalCta.sub2Pre}<strong className="text-white">{f.finalCta.sub2Mid}</strong>{f.finalCta.sub2Post}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button
@@ -1126,7 +1062,7 @@ export default function Feed() {
                 className="bg-white text-primary hover:bg-white/95 px-8 gap-2 font-bold text-base shadow-xl"
                 onClick={() => navigate('/register')}
               >
-                Spustit swelt.feed
+                {f.finalCta.ctaPrimary}
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <Button
@@ -1136,7 +1072,7 @@ export default function Feed() {
                 onClick={() => navigate('/dropshipping')}
               >
                 <Package className="h-4 w-4" />
-                Zkusit dropshipping
+                {f.finalCta.ctaSecondary}
               </Button>
             </div>
           </Reveal>
@@ -1147,11 +1083,11 @@ export default function Feed() {
       <section className="border-t border-border bg-white py-5 px-4">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {[
-            { icon: Star,        label: '15+ let ZAGO na trhu' },
-            { icon: Shield,      label: 'Autorizovaný distributor' },
-            { icon: CheckCircle, label: 'GDPR' },
-            { icon: Link,        label: 'Šifrované připojení' },
-            { icon: Users,       label: 'FedEx · DHL · UPS logistika' },
+            { icon: Star,        label: f.trustStrip[0] },
+            { icon: Shield,      label: f.trustStrip[1] },
+            { icon: CheckCircle, label: f.trustStrip[2] },
+            { icon: Link,        label: f.trustStrip[3] },
+            { icon: Users,       label: f.trustStrip[4] },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
               <Icon className="h-3.5 w-3.5 text-primary" />
