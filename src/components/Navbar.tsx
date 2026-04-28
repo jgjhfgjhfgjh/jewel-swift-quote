@@ -390,9 +390,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
           `}
         >
-          {/* Logo — pulled up 132px (60px more than baseline) and shifted right
-              to compensate for the PNG's left-biased visible content */}
-          <div className="w-full flex justify-center items-center -mt-[142px] pb-0">
+          {/* Logo — sits just below toolbar, shifted right to compensate for PNG's left-biased content */}
+          <div className="w-full flex justify-center items-center pt-2 pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -406,8 +405,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </Link>
           </div>
 
-          {/* Tagline — pulled up close to the visible logo so the menu has room below */}
-          <p className="w-full text-center -mt-[50px] text-sm lg:text-base text-black font-medium tracking-wide">
+          {/* Tagline — pulled up tight under the visible logo mark */}
+          <p className="w-full text-center -mt-[130px] text-sm lg:text-base text-black font-medium tracking-wide">
             Velkoobchod světovými značkami hodinek a šperků
           </p>
 
