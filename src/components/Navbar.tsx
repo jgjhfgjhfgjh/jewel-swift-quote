@@ -102,13 +102,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <header
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
         ${hidden ? '-translate-y-full' : 'translate-y-0'}
-        ${isExpanded ? 'border-b-0' : 'border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80'}
+        ${isExpanded ? 'border-b-0' : 'border-b border-border'}
       `}
-      style={isExpanded ? {
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 25%, rgba(255,255,255,0.78) 50%, rgba(255,255,255,0.45) 75%, rgba(255,255,255,0.15) 90%, rgba(255,255,255,0) 100%)',
+      style={{
+        background: isExpanded
+          ? 'linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 25%, rgba(255,255,255,0.78) 50%, rgba(255,255,255,0.45) 75%, rgba(255,255,255,0.15) 90%, rgba(255,255,255,0) 100%)'
+          : 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 100%)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
-      } : undefined}
+      }}
     >
       {/* ── Toolbar row — always h-14 ── */}
       <div className="h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
