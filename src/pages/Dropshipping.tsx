@@ -15,6 +15,8 @@ import { BackButton } from '@/components/BackButton';
 import { BottomNav } from '@/components/BottomNav';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
+import { useStore } from '@/lib/store';
+import { dropshipping as dropT } from '@/lib/i18n-dropshipping';
 import bgDrop from '@/assets/gateway-dropshipping.jpg';
 import heroLight from '@/assets/intel-hero-light.jpg';
 
@@ -634,6 +636,8 @@ function FloatingNotif() {
 const Dropshipping = () => {
   const navigate = useNavigate();
   const { wishlistIds } = useWishlist();
+  const { lang } = useStore();
+  const d = dropT[lang];
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState<'quarterly' | 'yearly'>('quarterly');
   const [activePlatform, setActivePlatform] = useState(0);
@@ -677,19 +681,17 @@ const Dropshipping = () => {
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-6">
                 <PackageOpen className="h-3.5 w-3.5" />
-                swelt.dropshipping — E-shop bez skladu
+                {d.hero.badge}
               </div>
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-                Prodávej prémiové<br />produkty <span className="italic text-primary">bez skladu.</span>
+                {d.hero.h1Part1}<br /><span className="italic text-primary">{d.hero.h1Highlight}</span>
               </h1>
               <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                Vyber si z 3 000+ produktů od 70+ světových značek. My je zabalíme, zkontrolujeme a odešleme
-                pod tvou značkou do 24–72 hodin. Real-time inventory lock zabrání přeprodeji. swelt.signal ti
-                každý týden řekne, co teď zákazníci chtějí.
+                {d.hero.sub}
               </p>
 
               <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                {[{ n: 15, s: '+', l: 'let na trhu' }, { n: 70, s: '+', l: 'značek' }, { n: 500, s: '+', l: 'aktivních partnerů' }].map(({ n, s, l }) => (
+                {[{ n: 15, s: '+', l: d.hero.statLabels[0] }, { n: 70, s: '+', l: d.hero.statLabels[1] }, { n: 500, s: '+', l: d.hero.statLabels[2] }].map(({ n, s, l }) => (
                   <div key={l}>
                     <div className="font-display text-3xl font-bold text-primary"><CountUp to={n} suffix={s} /></div>
                     <div className="text-[11px] text-muted-foreground mt-1">{l}</div>
@@ -699,14 +701,14 @@ const Dropshipping = () => {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button size="lg" onClick={() => navigate('/register')} className="shadow-md">
-                  Začít dropshipping zdarma <ArrowRight className="h-4 w-4" />
+                  {d.hero.ctaPrimary} <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <a href="#jak-to-funguje">Jak to funguje? ↓</a>
+                  <a href="#jak-to-funguje">{d.hero.ctaSecondary}</a>
                 </Button>
               </div>
               <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-                {['Bez závazků', 'Bez kreditní karty', 'Schválení do 24 h'].map(t => (
+                {d.hero.bullets.map(t => (
                   <span key={t} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Check className="h-3.5 w-3.5 text-emerald-500" />{t}
                   </span>
@@ -759,12 +761,12 @@ const Dropshipping = () => {
         {/* ══ PAIN → SOLUTION ══ */}
         <section className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Poznáš se v tom?</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Čtyři překážky, které řešíme za tebe</h2>
+            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.pain.eyebrow}</div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.pain.heading}</h2>
           </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {painPoints.map((p, i) => {
-              const Icon = p.icon;
+            {d.pain.items.map((p, i) => {
+              const Icon = painPoints[i].icon;
               return (
                 <Reveal key={p.title} delay={i * 80}>
                   <div className="group h-full rounded-2xl border border-border bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-primary/30 transition-all">
@@ -784,24 +786,25 @@ const Dropshipping = () => {
         <section id="jak-to-funguje" className="border-y border-border bg-muted/40">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Jak to funguje</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">Od registrace k první objednávce za 48 hodin</h2>
-              <p className="mt-3 text-muted-foreground">Stačí 5 kroků. Klikni na krok pro detail.</p>
+              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.steps.eyebrow}</div>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.steps.heading}</h2>
+              <p className="mt-3 text-muted-foreground">{d.steps.sub}</p>
             </Reveal>
 
             <div className="relative">
               <div className="hidden lg:block absolute top-[52px] left-[calc(10%+24px)] right-[calc(10%+24px)] h-px bg-border z-0" />
               <div className="grid gap-4 sm:grid-cols-5 relative z-10">
-                {steps.map((s, i) => {
-                  const Icon = s.icon;
+                {d.steps.items.map((s, i) => {
+                  const Icon = steps[i].icon;
+                  const num = steps[i].num;
                   const isActive = activeStep === i;
                   return (
-                    <Reveal key={s.num} delay={i * 80}>
+                    <Reveal key={num} delay={i * 80}>
                       <button onClick={() => setActiveStep(isActive ? null : i)} className="w-full text-left group">
                         <div className={`rounded-2xl border p-5 transition-all duration-300 cursor-pointer
                           ${isActive ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-[1.02]' : 'border-border bg-white hover:border-primary/40 hover:shadow-md'}`}>
                           <div className={`flex items-center justify-center h-10 w-10 rounded-full mb-4 font-display font-semibold text-sm transition-colors
-                            ${isActive ? 'bg-white/20' : 'bg-primary/10 text-primary'}`}>{s.num}</div>
+                            ${isActive ? 'bg-white/20' : 'bg-primary/10 text-primary'}`}>{num}</div>
                           <Icon className={`h-5 w-5 mb-3 ${isActive ? 'text-white/80' : 'text-primary'}`} />
                           <h3 className={`font-semibold text-sm mb-2 ${isActive ? 'text-white' : ''}`}>{s.title}</h3>
                           <p className={`text-xs leading-relaxed ${isActive ? 'text-white/80' : 'text-muted-foreground'}`}>{s.text}</p>
@@ -1215,17 +1218,17 @@ const Dropshipping = () => {
         <section className="border-t border-border bg-muted/30">
           <div className="mx-auto max-w-3xl px-6 py-20">
             <Reveal className="text-center mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">FAQ</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">Nejčastější otázky</h2>
+              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.faq.eyebrow}</div>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.faq.heading}</h2>
             </Reveal>
             <Reveal>
               <div className="rounded-2xl border border-border bg-white shadow-sm px-8 py-2">
-                {faqs.slice(0, faqLimit).map((f, i) => <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />)}
+                {d.faqs.slice(0, faqLimit).map((f, i) => <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />)}
               </div>
-              {faqLimit < faqs.length && (
+              {faqLimit < d.faqs.length && (
                 <div className="text-center mt-6">
-                  <Button variant="outline" onClick={() => setFaqLimit(faqs.length)}>
-                    Zobrazit všech {faqs.length} otázek <ChevronDown className="h-4 w-4" />
+                  <Button variant="outline" onClick={() => setFaqLimit(d.faqs.length)}>
+                    {d.faq.showAll} ({d.faqs.length}) <ChevronDown className="h-4 w-4" />
                   </Button>
                 </div>
               )}
@@ -1243,28 +1246,27 @@ const Dropshipping = () => {
             <div className="relative mx-auto max-w-4xl px-6 py-24 text-center">
               <Reveal>
                 <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-6">
-                  <Calculator className="h-3.5 w-3.5" /> Začni prodávat dnes
+                  <Calculator className="h-3.5 w-3.5" /> {d.finalCta.badge}
                 </div>
                 <h2 className="font-display text-3xl sm:text-5xl font-semibold mb-4">
-                  Začni prodávat dnes —<br /><span className="italic text-primary">bez rizika, bez skladu.</span>
+                  {d.finalCta.h2Part1}<br /><span className="italic text-primary">{d.finalCta.h2Highlight}</span>
                 </h2>
                 <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg leading-relaxed">
-                  Tisíce e-shopů v ČR a SK to dělá už teď. Přidej se a prodávej prémiové produkty, které zákazníci
-                  chtějí — bez investice do zásob, bez logistické bolesti.
+                  {d.finalCta.sub}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button size="lg" onClick={() => navigate('/register')} className="shadow-lg">
-                    Registrovat se zdarma a začít <ArrowRight className="h-4 w-4" />
+                    {d.finalCta.ctaPrimary} <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline" asChild>
-                    <a href="mailto:dropshipping@swelt.partner">Napsat nám</a>
+                    <a href="mailto:dropshipping@swelt.partner">{d.finalCta.ctaSecondary}</a>
                   </Button>
                 </div>
                 <div className="mt-6 grid sm:grid-cols-3 gap-4 max-w-lg mx-auto">
                   {[
-                    { icon: HeadphonesIcon, label: 'Po–Pá 9:00–17:00', sub: 'Telefon + chat' },
-                    { icon: Globe, label: 'dropshipping@swelt.partner', sub: 'Odpověď do 2 h' },
-                    { icon: Users, label: 'Schválení do 24 h', sub: 'Žádné papírování' },
+                    { icon: HeadphonesIcon, ...d.finalCta.contactItems[0] },
+                    { icon: Globe,          ...d.finalCta.contactItems[1] },
+                    { icon: Users,          ...d.finalCta.contactItems[2] },
                   ].map(({ icon: Icon, label, sub }) => (
                     <div key={label} className="rounded-xl border border-border bg-white/80 p-3 text-center">
                       <Icon className="h-4 w-4 text-primary mx-auto mb-1" />
@@ -1273,7 +1275,7 @@ const Dropshipping = () => {
                     </div>
                   ))}
                 </div>
-                <p className="mt-5 text-xs text-muted-foreground">Bez závazků · Bez kreditní karty · Schválení do 24 hodin</p>
+                <p className="mt-5 text-xs text-muted-foreground">{d.finalCta.smallNote}</p>
               </Reveal>
             </div>
           </div>
