@@ -63,7 +63,7 @@ const Index = () => {
       el.style.transform = '';
       return;
     }
-    const BUFFER = 200;
+    const BUFFER = 600;
     const onScroll = () => {
       const offset = Math.min(window.scrollY, BUFFER);
       el.style.transform = `translate3d(0, ${offset}px, 0)`;
@@ -140,7 +140,7 @@ const Index = () => {
           </div>
           {/* Spacer compensates for the translateY offset so the user can
               still scroll all the way to the visual end of the page */}
-          <div className="h-[200px]" aria-hidden />
+          <div className="h-[600px]" aria-hidden />
         </div>
       )}
 

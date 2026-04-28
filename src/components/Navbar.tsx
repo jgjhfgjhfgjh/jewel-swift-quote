@@ -369,7 +369,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         >
           {/* Logo — pulled up 132px (60px more than baseline) and shifted right
               to compensate for the PNG's left-biased visible content */}
-          <div className="w-full flex justify-center items-center -mt-[132px] pb-0">
+          <div className="w-full flex justify-center items-center -mt-[152px] pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -384,7 +384,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           </div>
 
           {/* Tagline — pulled up close to the visible logo so the menu has room below */}
-          <p className="w-full text-center -mt-[160px] text-sm lg:text-base text-black font-medium tracking-wide">
+          <p className="w-full text-center -mt-[50px] text-sm lg:text-base text-black font-medium tracking-wide">
             Velkoobchod světovými značkami hodinek a šperků
           </p>
 
