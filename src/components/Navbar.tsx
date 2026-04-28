@@ -63,11 +63,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
   const lastScrollY = useRef(0);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [navbarHoverCollapsed, setNavbarHoverCollapsed] = useState(false);
   const isHome = viewMode === 'home';
   const isOnHomePage = location.pathname === '/';
 
-  // Expanded = homepage at top (Swarovski-style large header)
-  const isExpanded = isHome && isAtTop && isOnHomePage;
+  // Expanded = homepage at top AND not collapsed by wheel-over-navbar
+  const isExpanded = isHome && isAtTop && isOnHomePage && !navbarHoverCollapsed;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -78,6 +80,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     const onScroll = () => {
       const y = window.scrollY;
       setIsAtTop(y < 60);
+      // When the page is scrolled back to the very top, allow the navbar to
+      // re-expand by clearing any wheel-over-navbar collapse override
+      if (y === 0) setNavbarHoverCollapsed(false);
       // Only hide navbar in catalog mode; in home mode it just collapses
       if (isHome) {
         setHidden(false);
@@ -90,6 +95,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
 
+  // Wheel over the navbar: don't scroll the page, just drive the navbar
+  // collapse/expand. The hero stays exposed so the customer can browse it.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || !isHome || !isOnHomePage) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (e.deltaY > 0) {
+        setNavbarHoverCollapsed(true);
+      } else if (e.deltaY < 0 && window.scrollY === 0) {
+        setNavbarHoverCollapsed(false);
+      }
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [isHome, isOnHomePage]);
+
   const handleLogout = async () => {
     await signOut();
     setViewMode('home');
@@ -100,6 +122,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   return (
     <>
     <header
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
         ${hidden ? '-translate-y-full' : 'translate-y-0'}
         ${isExpanded ? 'border-b-0' : 'border-b border-border'}
@@ -369,7 +392,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         >
           {/* Logo — pulled up 132px (60px more than baseline) and shifted right
               to compensate for the PNG's left-biased visible content */}
-          <div className="w-full flex justify-center items-center -mt-[152px] pb-0">
+          <div className="w-full flex justify-center items-center -mt-[142px] pb-0">
             <Link
               to="/"
               onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
