@@ -26,7 +26,7 @@ const HOME_NAV_ITEMS = [
   { href: '#luxury', label: 'Privátní nákupy', icon: HandCoins },
   { href: '#feed', label: 'Feed', icon: Rss },
   { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
-  { href: '#shop', label: 'Shop', icon: ShoppingCart },
+  { href: '#shop', label: 'E-shop do 48h', icon: ShoppingCart },
 ];
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
@@ -381,15 +381,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </Link>
           </div>
 
-          {/* Tagline — sits in the logo's bottom whitespace, just above the menu */}
-          <p className="w-full text-center -mt-[120px] text-sm lg:text-base text-black font-medium tracking-wide">
+          {/* Tagline — pulled up close to the visible logo so the menu has room below */}
+          <p className="w-full text-center -mt-[160px] text-sm lg:text-base text-black font-medium tracking-wide">
             Velkoobchod světovými značkami hodinek a šperků
           </p>
 
           {/* Nav — relative z-10 so it sits above the logo Link and stays clickable
               (without it the Link's bounding box swallows the hover/click events).
-              Tight spacing under tagline; generous pb-20 keeps the bar full-height. */}
-          <nav className="relative z-10 w-full flex justify-center items-center gap-0.5 mt-1 pb-20">
+              Comfortable space between tagline and menu; generous pb-20 keeps the
+              bar full-height. */}
+          <nav className="relative z-10 w-full flex justify-center items-center gap-0.5 mt-7 pb-20">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}

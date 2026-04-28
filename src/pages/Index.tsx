@@ -63,8 +63,9 @@ const Index = () => {
       el.style.transform = '';
       return;
     }
+    const BUFFER = 200;
     const onScroll = () => {
-      const offset = Math.min(window.scrollY, 60);
+      const offset = Math.min(window.scrollY, BUFFER);
       el.style.transform = `translate3d(0, ${offset}px, 0)`;
     };
     onScroll();
@@ -115,13 +116,15 @@ const Index = () => {
         <HeroBanner compact={viewMode === 'catalog'} />
       </div>
 
-      {/* Everything below slides OVER the hero banner */}
-      <div className="relative z-10 bg-background">
-        <SalesModeBar />
-        <CustomerSelectorPanel />
-        <AdminBrandPanel manufacturers={manufacturers} />
-        <AdminProductOverridesPanel />
-      </div>
+      {/* Admin/sales panels — only relevant in the catalog view */}
+      {viewMode === 'catalog' && (
+        <div className="relative z-10 bg-background">
+          <SalesModeBar />
+          <CustomerSelectorPanel />
+          <AdminBrandPanel manufacturers={manufacturers} />
+          <AdminProductOverridesPanel />
+        </div>
+      )}
 
       {/* Mobile sidebar overlay — works in all modes */}
       <FilterSidebar {...fp} mobileOnly />
@@ -135,9 +138,9 @@ const Index = () => {
           >
             <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
           </div>
-          {/* 60px spacer compensates for the translateY offset so the user can
+          {/* Spacer compensates for the translateY offset so the user can
               still scroll all the way to the visual end of the page */}
-          <div className="h-[60px]" aria-hidden />
+          <div className="h-[200px]" aria-hidden />
         </div>
       )}
 
