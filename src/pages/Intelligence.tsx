@@ -489,12 +489,12 @@ const Intelligence = () => {
                     </div>
 
                     <Button
-                      variant={t.ctaVariant}
+                      variant={TIER_CTA_VARIANT[i]}
                       className="w-full"
                       size="lg"
                       onClick={() => navigate('/velkoobchod')}
                     >
-                      {t.cta}
+                      {tier.cta}
                     </Button>
                   </div>
 
@@ -503,7 +503,7 @@ const Intelligence = () => {
                     {i > 0 && (
                       <div className="text-xs text-muted-foreground mb-3 flex items-center gap-1.5">
                         <ArrowRight className="h-3 w-3" />
-                        Vše z {tiers[i - 1].name}, plus…
+                        Vše z {t.tiers[i - 1].name}, plus…
                       </div>
                     )}
                     <ul className="space-y-3">
@@ -526,13 +526,13 @@ const Intelligence = () => {
           <div className="mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
-                Začněte rozhodovat s daty.
+                {t.finalCta.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-                Domluvíme krátkou ukázku na vašich kategoriích — uvidíte, jak skóre sedí na váš sortiment.
+                {t.finalCta.sub}
               </p>
               <Button size="lg" onClick={() => navigate('/velkoobchod')}>
-                Domluvit ukázku <ArrowRight className="h-4 w-4" />
+                {t.finalCta.button} <ArrowRight className="h-4 w-4" />
               </Button>
             </Reveal>
           </div>
