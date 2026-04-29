@@ -572,7 +572,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <div className="flex flex-wrap gap-2 justify-center px-6">
             {sections.map((s) => {
               const Icon = s.icon;
-              const blueViolet = 'bg-gradient-to-r from-blue-500 to-violet-600 text-white border-transparent hover:brightness-110';
+              const blueViolet = 'bg-gradient-to-r from-blue-400 to-blue-700 text-white border-transparent hover:brightness-110';
               const gradientMap: Record<string, string> = {
                 velkoobchod: blueViolet,
                 luxury: blueViolet,
