@@ -52,7 +52,7 @@ const cs: GatewayText = {
     ctaLabel: 'Zjistit více',
   },
   feed: {
-    badge: 'Nový produkt', label: 'swelt.feed',
+    badge: 'Nový produkt', label: 'Feed',
     heading: 'Produktový feed, který se stará sám.',
     subheading: 'Automatický XML/CSV feed 3 000+ prémiových produktů. Heureka, Zboží.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.',
     bullets: ['XML, CSV, JSON, Heureka, Zboží.cz, Google Shopping', 'Aktualizace cen a zásob až 4× denně', 'Filtrace dle kategorie, značky a dostupnosti', 'Vlastní cenová pravidla a přirážky', 'Jednoduchá integrace — funguje do 48 hodin'],
@@ -66,7 +66,7 @@ const cs: GatewayText = {
     ctaLabel: 'Chci dropshipping',
   },
   shop: {
-    badge: 'swelt.shop', label: 'swelt.shop',
+    badge: 'swelt.shop', label: 'E-shop do 48h',
     heading: 'Hotový e-shop s prémiovým zbožím. Spuštěný za 48 hodin.',
     subheading: 'Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ produkty — připravený k prodeji ihned.',
     bullets: ['E-shop setup na Shoptet, WooCommerce nebo Upgates', '3 000+ produktů importovaných hned od začátku', 'Automatická synchronizace cen a zásob přes feed', 'Volba: dropshipping (bez skladu) nebo vlastní sklad', 'Spuštění do 48 hodin, žádné zkušenosti nepotřebujete'],

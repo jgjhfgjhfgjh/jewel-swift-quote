@@ -572,9 +572,17 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <div className="flex flex-wrap gap-2 justify-center px-6">
             {sections.map((s) => {
               const Icon = s.icon;
+              const gradientMap: Record<string, string> = {
+                velkoobchod: 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-transparent hover:brightness-110',
+                luxury: 'bg-gradient-to-r from-amber-400 to-orange-500 text-white border-transparent hover:brightness-110',
+                feed: 'bg-gradient-to-r from-emerald-400 to-teal-600 text-white border-transparent hover:brightness-110',
+                dropshipping: 'bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white border-transparent hover:brightness-110',
+                shop: 'bg-black text-white border-transparent hover:bg-neutral-800',
+              };
+              const cls = gradientMap[s.id] ?? 'bg-white text-foreground border-border hover:border-primary/40 hover:text-primary';
               return (
                 <a key={s.id} href={`#${s.id}`}
-                  className="flex items-center gap-1.5 rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-foreground hover:border-primary/40 hover:text-primary transition-all shadow-sm">
+                  className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls}`}>
                   <Icon className="h-3.5 w-3.5" />
                   {s.label}
                 </a>
