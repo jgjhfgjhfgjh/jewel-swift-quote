@@ -599,17 +599,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         return (
           <section key={section.id} id={section.id} className={`${section.bg} py-20 scroll-mt-16`}>
             <div className="mx-auto max-w-6xl px-6">
-              {/* Section title — centered, black icon + text, no background, no border */}
-              <Reveal>
-                <h1 className="flex items-center justify-center gap-3 text-center font-display text-3xl sm:text-4xl font-bold text-black mb-12">
-                  <Icon className="h-8 w-8 text-black" />
-                  <span>{section.label}</span>
-                </h1>
-              </Reveal>
               <div className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
                 {/* Text side */}
                 <Reveal>
                   <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <Icon className="h-5 w-5 text-black" />
+                      <span className="text-[11px] font-semibold text-black">
+                        {section.label}
+                      </span>
+                    </div>
                     <div>
                       <h2 className="font-display text-3xl sm:text-4xl font-bold leading-tight mb-4">{section.heading}</h2>
                       <p className="text-muted-foreground leading-relaxed">{section.subheading}</p>
