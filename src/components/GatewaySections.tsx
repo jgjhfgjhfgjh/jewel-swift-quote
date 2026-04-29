@@ -572,18 +572,18 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <div className="flex flex-wrap gap-2 justify-center px-6">
             {sections.map((s) => {
               const Icon = s.icon;
-              const blueViolet = 'bg-gradient-to-r from-blue-400 to-blue-700 text-white border-transparent hover:brightness-110';
+              const blueViolet = 'bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-500 hover:to-blue-700 hover:shadow-lg hover:shadow-blue-500/40 hover:scale-105';
               const gradientMap: Record<string, string> = {
                 velkoobchod: blueViolet,
                 luxury: blueViolet,
                 feed: blueViolet,
                 dropshipping: blueViolet,
-                shop: 'bg-black text-white border-transparent hover:bg-neutral-800',
+                shop: 'bg-black text-white hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/40 hover:scale-105',
               };
-              const cls = gradientMap[s.id] ?? 'bg-white text-foreground border-border hover:border-primary/40 hover:text-primary';
+              const cls = gradientMap[s.id] ?? 'bg-white text-foreground border border-border hover:border-primary/40 hover:text-primary';
               return (
                 <a key={s.id} href={`#${s.id}`}
-                  className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls}`}>
+                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls}`}>
                   <Icon className="h-3.5 w-3.5" />
                   {s.label}
                 </a>
