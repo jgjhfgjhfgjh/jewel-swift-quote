@@ -342,13 +342,13 @@ const Intelligence = () => {
         {/* USE CASES */}
         <section className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Use cases</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Šest scénářů, kde data mění hru</h2>
+            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">{t.useCasesSection.eyebrow}</div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold">{t.useCasesSection.heading}</h2>
           </Reveal>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {useCases.map((uc, i) => {
-              const Icon = uc.icon;
+            {t.useCases.map((uc, i) => {
+              const Icon = USE_CASE_ICONS[i];
               return (
                 <Reveal key={uc.title} delay={(i % 3) * 80}>
                   <div className="group h-full rounded-2xl border border-white/20 bg-card/70 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-accent/40">
@@ -381,12 +381,12 @@ const Intelligence = () => {
             </Reveal>
             <div>
               <Reveal>
-                <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Jak model funguje</div>
-                <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-10">Čtyři kroky od dat k rozhodnutí</h2>
+                <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">{t.howItWorks.eyebrow}</div>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-10">{t.howItWorks.heading}</h2>
               </Reveal>
               <ol className="space-y-6">
-                {steps.map((s, i) => {
-                  const Icon = s.icon;
+                {t.steps.map((s, i) => {
+                  const Icon = STEP_ICONS[i];
                   return (
                     <Reveal key={s.title} delay={i * 100}>
                       <li className="flex gap-4 group">
@@ -394,7 +394,7 @@ const Intelligence = () => {
                           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground font-display font-semibold text-sm shrink-0 group-hover:scale-110 transition-transform">
                             {i + 1}
                           </div>
-                          {i < steps.length - 1 && <div className="w-px flex-1 bg-border mt-2 min-h-8" />}
+                          {i < t.steps.length - 1 && <div className="w-px flex-1 bg-border mt-2 min-h-8" />}
                         </div>
                         <div className="pb-2">
                           <div className="flex items-center gap-2 mb-1">
@@ -415,10 +415,10 @@ const Intelligence = () => {
         {/* SCORE SIMULATOR */}
         <section id="simulator" className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Interaktivní simulátor</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Vyzkoušejte, jak se počítá skóre</h2>
+            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">{t.simulator.eyebrow}</div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold">{t.simulator.heading}</h2>
             <p className="mt-4 text-muted-foreground">
-              Posuňte signály a sledujte, jak se mění predikce a doporučená akce.
+              {t.simulator.sub}
             </p>
           </Reveal>
           <Reveal>
@@ -434,19 +434,19 @@ const Intelligence = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
           <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
-              <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Trh v číslech</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-6">Data, která dávají kontext</h2>
+              <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">{t.marketStrip.eyebrow}</div>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-6">{t.marketStrip.heading}</h2>
               <p className="text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
-                Agregované signály z celé distribuční sítě vám ukazují, kde reálně stojíte — bez dohadů, bez nepřesných průzkumů.
+                {t.marketStrip.sub}
               </p>
               <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
                 <div>
                   <div className="font-display text-4xl font-semibold text-accent">+<CountUp to={41} />%</div>
-                  <div className="text-xs text-muted-foreground mt-1">růst rostoucích kategorií MoM</div>
+                  <div className="text-xs text-muted-foreground mt-1">{t.marketStrip.statGrowth}</div>
                 </div>
                 <div>
                   <div className="font-display text-4xl font-semibold text-accent"><CountUp to={12} />×</div>
-                  <div className="text-xs text-muted-foreground mt-1">rychlejší reakce na změnu trendu</div>
+                  <div className="text-xs text-muted-foreground mt-1">{t.marketStrip.statSpeed}</div>
                 </div>
               </div>
             </Reveal>
@@ -456,45 +456,45 @@ const Intelligence = () => {
         {/* PRICING */}
         <section id="pricing" className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">Pricing</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Tři úrovně. Vyberte, jak hluboko chcete vidět.</h2>
+            <div className="text-[11px] tracking-[0.25em] uppercase text-accent font-semibold mb-3">{t.pricing.eyebrow}</div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold">{t.pricing.heading}</h2>
           </Reveal>
 
           <div className="grid lg:grid-cols-3 gap-6 items-stretch">
-            {tiers.map((t, i) => (
-              <Reveal key={t.name} delay={i * 100}>
+            {t.tiers.map((tier, i) => (
+              <Reveal key={tier.name} delay={i * 100}>
                 <div
                   className={`relative h-full rounded-2xl border bg-card flex flex-col transition-all hover:-translate-y-1 hover:shadow-xl
-                    ${t.featured ? 'border-accent border-2 shadow-lg' : ''}`}
+                    ${TIER_FEATURED[i] ? 'border-accent border-2 shadow-lg' : ''}`}
                 >
-                  {t.featured && (
+                  {TIER_FEATURED[i] && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-accent text-accent-foreground hover:bg-accent">Doporučeno</Badge>
+                      <Badge className="bg-accent text-accent-foreground hover:bg-accent">{t.pricing.recommended}</Badge>
                     </div>
                   )}
 
                   {/* Header */}
                   <div className="p-8 pb-6 text-center border-b">
-                    <h3 className="font-display text-3xl font-semibold mb-2">{t.name}</h3>
-                    <p className="text-sm text-muted-foreground whitespace-pre-line min-h-[3rem]">{t.subtitle}</p>
+                    <h3 className="font-display text-3xl font-semibold mb-2">{tier.name}</h3>
+                    <p className="text-sm text-muted-foreground whitespace-pre-line min-h-[3rem]">{tier.subtitle}</p>
 
                     <div className="mt-6 mb-6">
                       <div className="flex items-baseline justify-center gap-1.5">
-                        <span className="font-display text-5xl font-semibold">{t.price}</span>
-                        {t.priceUnit && (
-                          <span className="text-sm text-muted-foreground ml-1">{t.priceUnit}</span>
+                        <span className="font-display text-5xl font-semibold">{tier.price}</span>
+                        {tier.priceUnit && (
+                          <span className="text-sm text-muted-foreground ml-1">{tier.priceUnit}</span>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-2">{t.priceNote}</p>
+                      <p className="text-xs text-muted-foreground mt-2">{tier.priceNote}</p>
                     </div>
 
                     <Button
-                      variant={t.ctaVariant}
+                      variant={TIER_CTA_VARIANT[i]}
                       className="w-full"
                       size="lg"
                       onClick={() => navigate('/velkoobchod')}
                     >
-                      {t.cta}
+                      {tier.cta}
                     </Button>
                   </div>
 
@@ -503,11 +503,11 @@ const Intelligence = () => {
                     {i > 0 && (
                       <div className="text-xs text-muted-foreground mb-3 flex items-center gap-1.5">
                         <ArrowRight className="h-3 w-3" />
-                        Vše z {tiers[i - 1].name}, plus…
+                        {t.pricing.allFromPrev} {t.tiers[i - 1].name}, plus…
                       </div>
                     )}
                     <ul className="space-y-3">
-                      {t.features.map((f) => (
+                      {tier.features.map((f) => (
                         <li key={f} className="flex items-start gap-2.5 text-sm">
                           <Check className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                           <span>{f}</span>
@@ -526,13 +526,13 @@ const Intelligence = () => {
           <div className="mx-auto max-w-4xl px-6 py-20 text-center">
             <Reveal>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
-                Začněte rozhodovat s daty.
+                {t.finalCta.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-                Domluvíme krátkou ukázku na vašich kategoriích — uvidíte, jak skóre sedí na váš sortiment.
+                {t.finalCta.sub}
               </p>
               <Button size="lg" onClick={() => navigate('/velkoobchod')}>
-                Domluvit ukázku <ArrowRight className="h-4 w-4" />
+                {t.finalCta.button} <ArrowRight className="h-4 w-4" />
               </Button>
             </Reveal>
           </div>

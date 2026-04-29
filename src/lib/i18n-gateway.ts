@@ -34,7 +34,7 @@ export interface GatewayText {
 }
 
 const cs: GatewayText = {
-  introEyebrow: 'swelt.partner ekosystém',
+  introEyebrow: 'swelt.partner ',
   introHeading: 'Jeden partner. Pět způsobů, jak vydělat víc.',
   introSubheading: 'Vyberte si model, který sedí vašemu byznysu — nebo kombinujte více najednou.',
   velkoobchod: {
