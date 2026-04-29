@@ -498,7 +498,7 @@ function ProductCalculator() {
             const monthlyPrice = planBilling === 'quarterly' ? plan.monthlyQ : plan.monthlyY;
             const yearlyPlanCost = monthlyPrice * 12;
             const net = plan.monthlyQ === 0 ? null : netFor(monthlyPrice);
-            const isSelected = planTier === plan.key && plan.key !== 'gold';
+            const isSelected = planTier === plan.key && (plan.key as string) !== 'gold';
 
             return (
               <div key={plan.key}
