@@ -497,12 +497,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  const blueViolet = 'bg-gradient-to-r from-blue-500 to-violet-600 text-white border-transparent hover:brightness-110';
+  const blackBtn = 'bg-black text-white border-transparent hover:bg-neutral-800';
   const sections = [
     {
       id: 'velkoobchod', badgeColor: 'bg-primary/10 text-primary', icon: Handshake,
       ...g.velkoobchod,
       ctas: (<div className="flex flex-col sm:flex-row gap-3">
-        <Button onClick={() => navigate('/velkoobchod')} className="gap-2">
+        <Button onClick={() => navigate('/velkoobchod')} className={`gap-2 ${blueViolet}`}>
           {g.velkoobchod.ctaLabel} <ArrowRight className="h-4 w-4" />
         </Button>
       </div>),
@@ -511,7 +513,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'luxury', badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200', icon: HandCoins,
       ...g.luxury,
-      ctas: (<Button onClick={() => navigate('/luxury')} className="gap-2">
+      ctas: (<Button onClick={() => navigate('/luxury')} className={`gap-2 ${blueViolet}`}>
         {g.luxury.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
       visual: <LuxuryVisual />, reverse: true, bg: 'bg-muted/20',
@@ -519,7 +521,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'feed', badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200', icon: Rss,
       ...g.feed,
-      ctas: (<Button onClick={() => navigate('/feed')} className="gap-2">
+      ctas: (<Button onClick={() => navigate('/feed')} className={`gap-2 ${blueViolet}`}>
         {g.feed.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
       visual: <FeedVisual />, reverse: false, bg: 'bg-white',
@@ -527,7 +529,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'dropshipping', badgeColor: 'bg-primary/10 text-primary', icon: PackageOpen,
       ...g.dropshipping,
-      ctas: (<Button onClick={() => navigate('/dropshipping')} className="gap-2">
+      ctas: (<Button onClick={() => navigate('/dropshipping')} className={`gap-2 ${blueViolet}`}>
         {g.dropshipping.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
       visual: <DropshippingVisual />, reverse: true, bg: 'bg-muted/20',
@@ -535,7 +537,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'shop', badgeColor: 'bg-primary/10 text-primary', icon: ShoppingCart,
       ...g.shop,
-      ctas: (<Button onClick={() => navigate('/shop')} className="gap-2">
+      ctas: (<Button onClick={() => navigate('/shop')} className={`gap-2 ${blackBtn}`}>
         {g.shop.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
       visual: <ShopVisual />, reverse: false, bg: 'bg-white',
