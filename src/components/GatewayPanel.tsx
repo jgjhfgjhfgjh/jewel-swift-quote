@@ -8,38 +8,17 @@ interface GatewayPanelProps {
 }
 
 export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProps) {
-  // iOS-compatible scroll lock:
-  // overflow:hidden alone doesn't stop iOS Safari from scrolling the page under a fixed overlay.
-  // Fixing the body at the current scroll position is the reliable cross-browser solution.
   useEffect(() => {
     if (open) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
+      document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
     } else {
-      const top = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
+      document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      if (top) {
-        window.scrollTo(0, parseInt(top, 10) * -1);
-      }
     }
     return () => {
-      const top = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
+      document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      if (top) {
-        window.scrollTo(0, parseInt(top, 10) * -1);
-      }
     };
   }, [open]);
 
