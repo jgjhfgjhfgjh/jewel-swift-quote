@@ -180,8 +180,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </div>
           </div>
         ) : isOnHomePage && isHome ? (
-          /* Nav links in toolbar — desktop only, fade out when expanded */
-          <nav className="hidden lg:flex flex-1 justify-center items-center gap-1 mx-4 opacity-100">
+          /* Nav links absolutely centered to viewport — stays centered regardless of left/right widths */
+          <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 opacity-100">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
