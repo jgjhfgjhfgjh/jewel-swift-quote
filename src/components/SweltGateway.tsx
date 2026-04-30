@@ -79,9 +79,10 @@ function EyeCard({ onClick }: { onClick: () => void }) {
 
 interface SweltGatewayProps {
   onClose: () => void;
+  partnerContext?: string;
 }
 
-export function SweltGateway({ onClose }: SweltGatewayProps) {
+export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -109,7 +110,7 @@ export function SweltGateway({ onClose }: SweltGatewayProps) {
       const res = await fetch(CHAT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: nextMessages, partnerContext }),
       });
 
       if (!res.ok || !res.body) throw new Error('API error');

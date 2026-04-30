@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
 
@@ -485,7 +486,8 @@ interface Props {
 
 export function GatewaySections({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
+  const { user, profile, role } = useAuthContext();
+  const partnerContext = buildPartnerContext({ profile, role });
   const { lang } = useStore();
   const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
@@ -659,7 +661,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
       <FloatingNotif />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
-      <GatewayPanel open={gatewayOpen} onClose={() => setGatewayOpen(false)} />
+      <GatewayPanel open={gatewayOpen} onClose={() => setGatewayOpen(false)} partnerContext={partnerContext} />
     </div>
   );
 }

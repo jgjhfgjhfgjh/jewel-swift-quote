@@ -4,9 +4,10 @@ import { SweltGateway } from './SweltGateway';
 interface GatewayPanelProps {
   open: boolean;
   onClose: () => void;
+  partnerContext?: string;
 }
 
-export function GatewayPanel({ open, onClose }: GatewayPanelProps) {
+export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProps) {
   // Lock body scroll on mobile when open
   useEffect(() => {
     if (open) {
@@ -38,7 +39,7 @@ export function GatewayPanel({ open, onClose }: GatewayPanelProps) {
         transition-transform duration-300
         ${open ? 'translate-x-0' : 'translate-x-full'}
       `}>
-        <SweltGateway onClose={onClose} />
+        <SweltGateway onClose={onClose} partnerContext={partnerContext} />
       </div>
     </>
   );
