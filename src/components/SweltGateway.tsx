@@ -5,73 +5,80 @@ import type { ChatMessage as ChatMsg } from '@/lib/chatContext';
 
 const CHAT_ENDPOINT = '/api/chat';
 
-/* ── 3D sphere — CSS only, no eyes on the ball ── */
-function GatewayMascot3D({ size = 96 }: { size?: number }) {
+/* ── 3D sphere with animated eyes overlaid ── */
+function GatewayMascot3D({ size = 96, eyePhase = 0 }: { size?: number; eyePhase?: number }) {
+  const eyeFrames = ['> <', '^ ^'];
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        background: `
-          radial-gradient(
-            circle at 34% 32%,
-            #5a5a5a 0%,
-            #2a2a2a 28%,
-            #111111 52%,
-            #000000 72%,
-            #050505 100%
-          )
-        `,
-        boxShadow: `
-          inset -${size * 0.08}px -${size * 0.08}px ${size * 0.18}px rgba(0,0,0,0.85),
-          inset ${size * 0.04}px ${size * 0.04}px ${size * 0.12}px rgba(255,255,255,0.08),
-          0 ${size * 0.22}px ${size * 0.4}px rgba(0,0,0,0.38),
-          0 ${size * 0.08}px ${size * 0.14}px rgba(0,0,0,0.22)
-        `,
-        flexShrink: 0,
-      }}
-    />
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      {/* Sphere */}
+      <div
+        style={{
+          width: size,
+          height: size,
+          borderRadius: '50%',
+          background: `
+            radial-gradient(
+              circle at 34% 32%,
+              #5a5a5a 0%,
+              #2a2a2a 28%,
+              #111111 52%,
+              #000000 72%,
+              #050505 100%
+            )
+          `,
+          boxShadow: `
+            inset -${size * 0.08}px -${size * 0.08}px ${size * 0.18}px rgba(0,0,0,0.85),
+            inset ${size * 0.04}px ${size * 0.04}px ${size * 0.12}px rgba(255,255,255,0.08),
+            0 ${size * 0.14}px ${size * 0.32}px rgba(0,0,0,0.55),
+            0 ${size * 0.04}px ${size * 0.1}px rgba(0,0,0,0.35)
+          `,
+        }}
+      />
+      {/* Eyes — overlaid on sphere */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'rgba(255,255,255,0.88)',
+          fontSize: size * 0.21,
+          fontWeight: 700,
+          letterSpacing: size * 0.05 + 'px',
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      >
+        <span key={eyePhase} style={{ transition: 'opacity 0.3s', opacity: 1 }}>
+          {eyeFrames[eyePhase % eyeFrames.length]}
+        </span>
+      </div>
+    </div>
   );
 }
 
 /* ── Info card to the right of the sphere ── */
 function EyeCard({ onClick }: { onClick: () => void }) {
-  const [phase, setPhase] = useState(0);
-  // cycle: >< → ^^ → >< ...
-  const labels = ['>  <', '^ ^', '>  <'];
-
-  useEffect(() => {
-    const id = setInterval(() => setPhase(p => (p + 1) % labels.length), 1800);
-    return () => clearInterval(id);
-  }, []);
-
   return (
-    <div className="flex flex-col justify-between bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 h-full min-h-[96px] flex-1">
+    <div className="flex flex-col justify-between bg-white border border-zinc-200 rounded-2xl px-4 py-3 h-full min-h-[96px] flex-1 shadow-sm">
       {/* Top row */}
       <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium">
         <Sparkles className="h-3 w-3" />
-        <span>24 requests left</span>
+        <span>Dostupný 24h denně</span>
       </div>
 
       {/* Middle text */}
       <p className="text-zinc-900 text-sm font-semibold leading-snug mt-1">
-        Use AI at full<br />power with pro
+        AI obchodní<br />zástupce swelt
       </p>
 
-      {/* Dynamic eye button */}
+      {/* CTA button */}
       <button
         onClick={onClick}
-        className="mt-2 w-full rounded-xl bg-zinc-900 text-white text-lg font-bold py-1.5 tracking-widest hover:bg-zinc-700 transition-colors"
-        style={{ letterSpacing: '0.15em' }}
+        className="mt-2 w-full rounded-xl bg-zinc-900 text-white text-sm font-bold py-1.5 hover:bg-zinc-700 transition-colors"
       >
-        <span
-          key={phase}
-          className="inline-block transition-all duration-500"
-          style={{ opacity: 1 }}
-        >
-          {labels[phase]}
-        </span>
+        Zeptat se
       </button>
     </div>
   );
@@ -88,8 +95,15 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
   const [loading, setLoading] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [started, setStarted] = useState(false);
+  const [eyePhase, setEyePhase] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /* Animate eyes on sphere */
+  useEffect(() => {
+    const id = setInterval(() => setEyePhase(p => (p + 1) % 2), 1800);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -143,7 +157,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
       setStreamingContent('');
       setMessages(prev => [...prev, { role: 'assistant', content: 'Omlouvám se, nastala chyba. Zkuste to prosím znovu.' }]);
     }
-  }, [messages, loading, started]);
+  }, [messages, loading, started, partnerContext]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -159,14 +173,14 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-zinc-50">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-100">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 bg-white">
         <div className="flex items-center gap-3">
-          <GatewayMascot3D size={32} />
+          <GatewayMascot3D size={32} eyePhase={eyePhase} />
           <div>
             <p className="text-sm font-bold text-zinc-900 leading-none">AI asistent</p>
-            <p className="text-xs text-zinc-400 mt-0.5">Obchodní zástupce 24/7</p>
+            <p className="text-xs text-zinc-400 mt-0.5">Obchodní zástupce 24h denně</p>
           </div>
         </div>
         <button
@@ -182,23 +196,29 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
         {!started && messages.length === 0 ? (
           /* Welcome screen */
           <div className="flex flex-col items-center text-center">
-            {/* Sphere + info card side by side */}
-            <div className="flex items-stretch gap-4 w-full max-w-xs">
+            {/* Hero card: sphere + info card side by side */}
+            <div
+              className="flex items-stretch gap-4 w-full max-w-xs rounded-3xl p-4 border border-zinc-200"
+              style={{
+                background: 'linear-gradient(135deg, #f8f8f8 0%, #efefef 100%)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)',
+              }}
+            >
               <div className="flex items-center justify-center">
-                <GatewayMascot3D size={96} />
+                <GatewayMascot3D size={96} eyePhase={eyePhase} />
               </div>
               <EyeCard onClick={() => inputRef.current?.focus()} />
             </div>
 
-            <h2 className="mt-6 text-2xl font-bold text-zinc-900">Hi, there!</h2>
-            <p className="text-zinc-500 text-sm mt-1">How may I help you today?</p>
+            <h2 className="mt-6 text-2xl font-bold text-zinc-900">Ahoj!</h2>
+            <p className="text-zinc-500 text-sm mt-1">Jak vám mohu dnes pomoct?</p>
 
             <div className="mt-6 w-full space-y-2">
               {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
-                  className="w-full text-left px-4 py-3 rounded-2xl border border-zinc-200 text-sm text-zinc-700 hover:border-zinc-900 hover:text-zinc-900 transition-all"
+                  className="w-full text-left px-4 py-3 rounded-2xl border border-zinc-200 bg-white text-sm text-zinc-700 hover:border-zinc-900 hover:text-zinc-900 transition-all shadow-sm"
                 >
                   {s}
                 </button>
@@ -221,13 +241,13 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-3 border-t border-zinc-100 flex gap-2 items-end">
+      <div className="px-4 py-3 border-t border-zinc-200 bg-white flex gap-2 items-end">
         <textarea
           ref={inputRef}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask me anything..."
+          placeholder="Zeptejte se na cokoliv..."
           rows={1}
           className="flex-1 resize-none rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 max-h-28"
           style={{ fieldSizing: 'content' } as React.CSSProperties}
