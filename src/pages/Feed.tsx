@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useStore } from '@/lib/store';
 import { feed as feedT } from '@/lib/i18n-feed';
 
@@ -1096,6 +1097,7 @@ export default function Feed() {
           ))}
         </div>
       </section>
+      <ScrollToTopButton />
     </div>
   );
 }

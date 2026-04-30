@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useStore } from '@/lib/store';
 import { luxury } from '@/lib/i18n-luxury';
 
@@ -668,6 +669,7 @@ export default function Luxury() {
           </div>
         </div>
       </section>
+      <ScrollToTopButton />
     </div>
   );
 }

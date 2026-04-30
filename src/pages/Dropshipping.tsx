@@ -13,6 +13,7 @@ import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { BottomNav } from '@/components/BottomNav';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { useStore } from '@/lib/store';
@@ -1285,6 +1286,7 @@ const Dropshipping = () => {
 
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
       <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
+      <ScrollToTopButton />
     </div>
   );
 };

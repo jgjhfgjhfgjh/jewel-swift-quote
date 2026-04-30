@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { AuthModal } from '@/components/AuthModal';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -779,6 +780,7 @@ const Velkoobchod = () => {
           </div>
         </div>
       </section>
+      <ScrollToTopButton />
     </div>
   );
 };

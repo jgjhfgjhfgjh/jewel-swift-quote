@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { useStore } from '@/lib/store';
@@ -541,6 +542,7 @@ const Intelligence = () => {
 
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
       <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
+      <ScrollToTopButton />
     </div>
   );
 };

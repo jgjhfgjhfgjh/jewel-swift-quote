@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useStore } from '@/lib/store';
 import { shop } from '@/lib/i18n-shop';
 
@@ -749,6 +750,7 @@ const Shop = () => {
           </div>
         </div>
       </section>
+      <ScrollToTopButton />
     </div>
   );
 };
