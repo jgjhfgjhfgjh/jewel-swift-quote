@@ -581,9 +581,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 shop: 'bg-black text-white hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/40 hover:scale-105',
               };
               const cls = gradientMap[s.id] ?? 'bg-white text-foreground border border-border hover:border-primary/40 hover:text-primary';
+              const extraCls = s.id === 'shop' ? 'mt-[15px] sm:mt-0' : '';
               return (
                 <a key={s.id} href={`#${s.id}`}
-                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls}`}>
+                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls} ${extraCls}`}>
                   <Icon className="h-3.5 w-3.5" />
                   {s.label}
                 </a>
