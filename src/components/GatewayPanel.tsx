@@ -49,13 +49,13 @@ export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProp
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+        className="fixed inset-0 z-[110] bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Panel — overscroll-contain prevents scroll from leaking to the page behind */}
       <div className={`
-        fixed z-50 bg-white shadow-2xl
+        fixed z-[120] bg-white shadow-2xl
         inset-0
         lg:inset-auto lg:right-0 lg:top-0 lg:bottom-0 lg:w-[420px]
         flex flex-col
