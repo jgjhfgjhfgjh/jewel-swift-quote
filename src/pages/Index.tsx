@@ -130,7 +130,9 @@ const Index = () => {
 
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
-      <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
+      {viewMode === 'catalog' && (
+        <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
+      )}
       <ScrollToTopButton />
     </div>
   );
