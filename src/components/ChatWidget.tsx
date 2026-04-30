@@ -107,7 +107,7 @@ export function ChatWidget({ partnerContext }: ChatWidgetProps) {
               V
             </div>
             <div>
-              <p className="text-sm font-semibold text-zinc-900 dark:text-white leading-none">Vera</p>
+              <p className="text-sm font-semibold text-zinc-900 dark:text-white leading-none">AI asistent</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">swelt.partner</p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export function ChatWidget({ partnerContext }: ChatWidgetProps) {
           <div className="flex-1 overflow-y-auto px-4 py-3">
             {messages.length === 0 && !loading && (
               <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center mt-8">
-                Ahoj! Jsem Vera, vaše obchodní zástupkyně swelt.partner. Jak vám mohu pomoct?
+                Ahoj! Jsem AI asistent swelt.partner, váš obchodní zástupce dostupný 24/7. Jak vám mohu pomoct?
               </p>
             )}
             {messages.map((msg, i) => (
