@@ -132,7 +132,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
       </button>
 
       {/* Paginator dots — overlaid inside the banner */}
-      <div className="absolute bottom-28 sm:bottom-32 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none">
+      <div className="absolute bottom-28 sm:bottom-32 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none" style={{ transform: 'translateY(5px)' }}>
         {slides.map((_, i) => (
           <button
             key={i}
