@@ -5,6 +5,12 @@ import type { ChatMessage as ChatMsg } from '@/lib/chatContext';
 
 const CHAT_ENDPOINT = '/api/chat';
 
+function getGreeting(): string {
+  const h = new Date().getHours();
+  if (h >= 18) return 'Dobrý večer';
+  return 'Dobrý den';
+}
+
 /* ── 3D sphere — plain, no eyes ── */
 export function GatewayMascot3D({ size = 96 }: { size?: number }) {
   return (
@@ -163,7 +169,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
                     border: '1px solid rgba(0,0,0,0.07)',
                   }}
                 >
-                  Ahoj! 👋
+                  {getGreeting()}!
                 </div>
                 <GatewayMascot3D size={160} />
               </div>
@@ -190,7 +196,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
         {introSeen && !started && (
           <div className="flex flex-col items-center text-center px-5 py-6">
             <GatewayMascot3D size={72} />
-            <h2 className="mt-4 text-xl font-bold text-zinc-900">Ahoj!</h2>
+            <h2 className="mt-4 text-xl font-bold text-zinc-900">{getGreeting()}!</h2>
             <p className="text-zinc-500 text-sm mt-1">Jak vám mohu dnes pomoct?</p>
             <div className="mt-5 w-full space-y-2">
               {suggestions.map((s) => (
