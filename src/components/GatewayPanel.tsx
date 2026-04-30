@@ -63,6 +63,14 @@ export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProp
         transition-transform duration-300
         ${open ? 'translate-x-0' : 'translate-x-full'}
       `}>
+        {/* Drag handle strip — mobile only, tap to close */}
+        <button
+          onClick={onClose}
+          aria-label="Zavřít AI asistenta"
+          className="lg:hidden flex-shrink-0 flex items-center justify-center w-full py-3 touch-manipulation"
+        >
+          <div className="w-12 h-1.5 rounded-full bg-zinc-300" />
+        </button>
         <SweltGateway onClose={onClose} partnerContext={partnerContext} />
       </div>
     </>
