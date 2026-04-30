@@ -181,7 +181,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           </div>
         ) : isOnHomePage && isHome ? (
           /* Nav links in toolbar — desktop only, fade out when expanded */
-          <nav className={`hidden lg:flex flex-1 justify-center items-center gap-1 mx-4 transition-all duration-500 ease-in-out ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <nav className="hidden lg:flex flex-1 justify-center items-center gap-1 mx-4 opacity-100">
             {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
