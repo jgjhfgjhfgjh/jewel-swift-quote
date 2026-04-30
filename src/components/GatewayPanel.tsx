@@ -56,8 +56,8 @@ export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProp
       {/* Panel — overscroll-contain prevents scroll from leaking to the page behind */}
       <div className={`
         fixed z-[120] bg-white shadow-2xl
-        inset-0
-        lg:inset-auto lg:right-0 lg:top-0 lg:bottom-0 lg:w-[420px]
+        top-14 left-0 right-0 bottom-0
+        lg:top-0 lg:left-auto lg:right-0 lg:bottom-0 lg:w-[420px]
         flex flex-col
         overscroll-contain
         transition-transform duration-300
