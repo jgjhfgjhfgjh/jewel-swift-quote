@@ -582,7 +582,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 luxury: blueViolet,
                 feed: blueViolet,
                 dropshipping: blueViolet,
-                shop: 'bg-black text-white hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/40 hover:scale-105',
+                shop: blueViolet,
               };
               const cls = gradientMap[s.id] ?? 'bg-white text-foreground border border-border hover:border-primary/40 hover:text-primary';
               return (
