@@ -134,7 +134,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       }}
     >
       {/* ── Toolbar row — always h-14 ── */}
-      <div className="h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+      <div className="relative h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
 
         {/* Left: hamburger (always) + logo (always mobile, hidden desktop when expanded) */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
