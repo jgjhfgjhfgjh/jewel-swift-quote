@@ -36,6 +36,8 @@ interface AppState {
   setCartOpen: (v: boolean) => void;
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
+  gatewayOpen: boolean;
+  setGatewayOpen: (v: boolean) => void;
 
   // Filter state (persisted)
   search: string;
@@ -145,6 +147,8 @@ export const useStore = create<AppState>()(
       setCartOpen: (v) => set({ cartOpen: v }),
       sidebarOpen: false,
       setSidebarOpen: (v) => set({ sidebarOpen: v }),
+      gatewayOpen: false,
+      setGatewayOpen: (v) => set({ gatewayOpen: v }),
 
       // Filter state
       search: '',

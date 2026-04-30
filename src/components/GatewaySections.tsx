@@ -489,11 +489,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   const navigate = useNavigate();
   const { user, profile, role } = useAuthContext();
   const partnerContext = buildPartnerContext({ profile, role });
-  const { lang } = useStore();
+  const { lang, gatewayOpen, setGatewayOpen } = useStore();
   const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
-  const [gatewayOpen, setGatewayOpen] = useState(false);
   const [bannerEyePhase, setBannerEyePhase] = useState(0);
 
   useEffect(() => {
