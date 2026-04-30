@@ -4,8 +4,9 @@ import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, Rocket, RefreshCw,
+  Package, Clock, Rocket, RefreshCw, Bot,
 } from 'lucide-react';
+import { GatewayPanel } from './GatewayPanel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
@@ -489,6 +490,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+  const [gatewayOpen, setGatewayOpen] = useState(false);
 
   const openAuth = (tab: 'login' | 'register') => {
     setAuthTab(tab);
@@ -589,6 +591,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </a>
               );
             })}
+            <button
+              onClick={() => setGatewayOpen(true)}
+              className="flex items-center gap-1.5 rounded-full border border-zinc-900 bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 hover:border-zinc-700 transition-all shadow-sm"
+            >
+              <Bot className="h-3.5 w-3.5" />
+              swelt gateway
+            </button>
           </div>
         </Reveal>
       </div>
@@ -635,6 +644,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
       <FloatingNotif />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
+      <GatewayPanel open={gatewayOpen} onClose={() => setGatewayOpen(false)} />
     </div>
   );
 }
