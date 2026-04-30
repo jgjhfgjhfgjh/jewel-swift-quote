@@ -125,12 +125,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
         ${hidden ? '-translate-y-full' : 'translate-y-0'}
-        ${isExpanded ? 'border-b-0' : 'border-b border-border'}
+        border-b border-border
       `}
       style={{
-        background: isExpanded
-          ? 'linear-gradient(to bottom, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 25%, rgba(255,255,255,0.78) 50%, rgba(255,255,255,0.45) 75%, rgba(255,255,255,0.15) 90%, rgba(255,255,255,0) 100%)'
-          : 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 100%)',
+        background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 100%)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
       }}
@@ -383,51 +381,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         </div>
       </div>
 
-      {/* ── Expanded section: centered logo + centered nav — desktop, home mode only ── */}
-      {isOnHomePage && isHome && (
-        <div
-          className={`hidden lg:block overflow-hidden transition-all duration-500 ease-in-out
-            ${isExpanded ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
-          `}
-        >
-          {/* Logo — sits just below toolbar, shifted right to compensate for PNG's left-biased content */}
-          <div className="w-full flex justify-center items-center pt-2 pb-0">
-            <Link
-              to="/"
-              onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-              className="block"
-            >
-              <img
-                src={logo}
-                alt="swelt."
-                className={`h-72 lg:h-96 object-contain block translate-x-[70px] lg:translate-x-[86px] ${whiteLogo ? 'brightness-0 invert' : ''}`}
-              />
-            </Link>
-          </div>
-
-          {/* Tagline — pulled up tight under the visible logo mark */}
-          <p className="w-full text-center -mt-[130px] text-sm lg:text-base text-black font-medium tracking-wide">
-            Velkoobchod světovými značkami hodinek a šperků
-          </p>
-
-          {/* Nav — relative z-10 so it sits above the logo Link and stays clickable
-              (without it the Link's bounding box swallows the hover/click events).
-              Comfortable space between tagline and menu; generous pb-20 keeps the
-              bar full-height. */}
-          <nav className="relative z-10 w-full flex justify-center items-center gap-0.5 mt-7 pb-20">
-            {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
-              <a
-                key={href}
-                href={href}
-                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
-              >
-                <Icon className="h-3.5 w-3.5" />
-                {label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      )}
+      {/* Expanded hero section removed — navbar no longer expands over the hero banner */}
 
       {/* Mobile search expansion — catalog mode only */}
       {showSearch && mobileSearchOpen && (
