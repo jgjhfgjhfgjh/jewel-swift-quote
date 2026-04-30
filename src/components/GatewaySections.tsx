@@ -604,11 +604,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           >
             <GatewayMascot3D size={56} />
             <div className="flex-1 text-left">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
-                <p className="text-zinc-900 font-bold text-sm leading-none">AI asistent obchodního zástupce</p>
+              <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+                <Sparkles className="h-3 w-3 shrink-0" />
+                <span>Dostupný 24h denně</span>
               </div>
-              <p className="text-zinc-500 text-xs mt-1">Dostupný 24h denně</p>
+              <p className="text-zinc-900 font-bold text-sm leading-none">AI asistent obchodního zástupce</p>
             </div>
             <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
               <ArrowRight className="h-4 w-4 text-white" />

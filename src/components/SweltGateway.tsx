@@ -121,11 +121,11 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
         <div className="flex items-center gap-3">
           <GatewayMascot3D size={30} />
           <div>
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="h-3 w-3 text-zinc-400" />
-              <p className="text-sm font-bold text-zinc-900 leading-none">AI asistent obchodního zástupce</p>
+            <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+              <Sparkles className="h-3 w-3" />
+              <span>Dostupný 24h denně</span>
             </div>
-            <p className="text-xs text-zinc-400 mt-0.5">Dostupný 24h denně</p>
+            <p className="text-sm font-bold text-zinc-900 leading-none">AI asistent obchodního zástupce</p>
           </div>
         </div>
         <button
