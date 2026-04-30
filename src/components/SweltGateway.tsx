@@ -1,65 +1,28 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, X, ArrowRight } from 'lucide-react';
+import { Send, X, ArrowRight, Sparkles } from 'lucide-react';
 import { ChatMessage, ChatMessageSkeleton } from './ChatMessage';
 import type { ChatMessage as ChatMsg } from '@/lib/chatContext';
 
 const CHAT_ENDPOINT = '/api/chat';
 
-/* ── CSS eye shapes ── */
-function Eyes({ phase, size }: { phase: number; size: number }) {
-  const eyeW = size * 0.155;
-  const eyeH = size * 0.08;
-  const gap = size * 0.11;
-
-  if (phase === 0) {
-    // Open: two white circles
-    const r = size * 0.09;
-    return (
-      <div style={{ display: 'flex', gap, alignItems: 'center' }}>
-        <div style={{ width: r, height: r, borderRadius: '50%', background: 'rgba(255,255,255,0.92)' }} />
-        <div style={{ width: r, height: r, borderRadius: '50%', background: 'rgba(255,255,255,0.92)' }} />
-      </div>
-    );
-  }
-  // Squinting: two white arcs (upward semicircles)
+/* ── 3D sphere — plain, no eyes ── */
+export function GatewayMascot3D({ size = 96 }: { size?: number }) {
   return (
-    <div style={{ display: 'flex', gap, alignItems: 'flex-end' }}>
-      <div style={{ width: eyeW, height: eyeH, borderRadius: `${eyeW}px ${eyeW}px 0 0`, background: 'rgba(255,255,255,0.92)' }} />
-      <div style={{ width: eyeW, height: eyeH, borderRadius: `${eyeW}px ${eyeW}px 0 0`, background: 'rgba(255,255,255,0.92)' }} />
-    </div>
-  );
-}
-
-/* ── 3D sphere with CSS eyes ── */
-export function GatewayMascot3D({ size = 96, eyePhase = 0 }: { size?: number; eyePhase?: number }) {
-  return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-      {/* Sphere */}
-      <div
-        style={{
-          width: size,
-          height: size,
-          borderRadius: '50%',
-          background: `radial-gradient(circle at 34% 32%, #5a5a5a 0%, #2a2a2a 28%, #111111 52%, #000000 72%, #050505 100%)`,
-          boxShadow: `
-            inset -${size * 0.08}px -${size * 0.08}px ${size * 0.18}px rgba(0,0,0,0.85),
-            inset ${size * 0.04}px ${size * 0.04}px ${size * 0.12}px rgba(255,255,255,0.08),
-            0 ${size * 0.14}px ${size * 0.36}px rgba(0,0,0,0.6),
-            0 ${size * 0.04}px ${size * 0.1}px rgba(0,0,0,0.4)
-          `,
-        }}
-      />
-      {/* Eyes overlay */}
-      <div
-        style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          pointerEvents: 'none',
-        }}
-      >
-        <Eyes phase={eyePhase} size={size} />
-      </div>
-    </div>
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        flexShrink: 0,
+        background: `radial-gradient(circle at 34% 32%, #5a5a5a 0%, #2a2a2a 28%, #111111 52%, #000000 72%, #050505 100%)`,
+        boxShadow: `
+          inset -${size * 0.08}px -${size * 0.08}px ${size * 0.18}px rgba(0,0,0,0.85),
+          inset ${size * 0.04}px ${size * 0.04}px ${size * 0.12}px rgba(255,255,255,0.08),
+          0 ${size * 0.14}px ${size * 0.36}px rgba(0,0,0,0.6),
+          0 ${size * 0.04}px ${size * 0.1}px rgba(0,0,0,0.4)
+        `,
+      }}
+    />
   );
 }
 
@@ -75,14 +38,8 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
   const [streamingContent, setStreamingContent] = useState('');
   const [started, setStarted] = useState(false);
   const [introSeen, setIntroSeen] = useState(false);
-  const [eyePhase, setEyePhase] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    const id = setInterval(() => setEyePhase(p => (p + 1) % 2), 2000);
-    return () => clearInterval(id);
-  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -162,10 +119,13 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-100">
         <div className="flex items-center gap-3">
-          <GatewayMascot3D size={30} eyePhase={eyePhase} />
+          <GatewayMascot3D size={30} />
           <div>
-            <p className="text-sm font-bold text-zinc-900 leading-none">AI obchodní zástupce</p>
-            <p className="text-xs text-zinc-400 mt-0.5">swelt.partner · 24h denně</p>
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-zinc-400" />
+              <p className="text-sm font-bold text-zinc-900 leading-none">AI asistent obchodního zástupce</p>
+            </div>
+            <p className="text-xs text-zinc-400 mt-0.5">Dostupný 24h denně</p>
           </div>
         </div>
         <button
@@ -205,11 +165,11 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
                 >
                   Ahoj! 👋
                 </div>
-                <GatewayMascot3D size={160} eyePhase={eyePhase} />
+                <GatewayMascot3D size={160} />
               </div>
 
               <h1 className="mt-8 text-2xl font-bold text-zinc-900 leading-tight">
-                Váš AI obchodní<br />zástupce
+                AI asistent<br />obchodního zástupce
               </h1>
               <p className="mt-3 text-zinc-500 text-sm leading-relaxed max-w-[260px]">
                 Pomůžu vám s katalogem, dropshippingem a vším o swelt.partner
@@ -229,7 +189,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
         {/* === SUGGESTIONS (after intro, before first message) === */}
         {introSeen && !started && (
           <div className="flex flex-col items-center text-center px-5 py-6">
-            <GatewayMascot3D size={72} eyePhase={eyePhase} />
+            <GatewayMascot3D size={72} />
             <h2 className="mt-4 text-xl font-bold text-zinc-900">Ahoj!</h2>
             <p className="text-zinc-500 text-sm mt-1">Jak vám mohu dnes pomoct?</p>
             <div className="mt-5 w-full space-y-2">

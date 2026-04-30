@@ -4,7 +4,7 @@ import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, Rocket, RefreshCw, ArrowRight,
+  Package, Clock, Rocket, RefreshCw, Sparkles,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
@@ -493,12 +493,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
-  const [bannerEyePhase, setBannerEyePhase] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => setBannerEyePhase(p => (p + 1) % 2), 2000);
-    return () => clearInterval(id);
-  }, []);
 
   const openAuth = (tab: 'login' | 'register') => {
     setAuthTab(tab);
@@ -608,10 +602,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             onClick={() => setGatewayOpen(true)}
             className="w-full max-w-sm mx-auto flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
           >
-            <GatewayMascot3D size={56} eyePhase={bannerEyePhase} />
+            <GatewayMascot3D size={56} />
             <div className="flex-1 text-left">
-              <p className="text-zinc-900 font-bold text-sm leading-none">AI obchodní zástupce</p>
-              <p className="text-zinc-500 text-xs mt-1">Dostupný 24h denně · swelt.partner</p>
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+                <p className="text-zinc-900 font-bold text-sm leading-none">AI asistent obchodního zástupce</p>
+              </div>
+              <p className="text-zinc-500 text-xs mt-1">Dostupný 24h denně</p>
             </div>
             <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
               <ArrowRight className="h-4 w-4 text-white" />
