@@ -4,9 +4,10 @@ import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, Rocket, RefreshCw, Bot,
+  Package, Clock, Rocket, RefreshCw, ArrowRight,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
+import { GatewayMascot3D } from './SweltGateway';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
@@ -493,6 +494,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [gatewayOpen, setGatewayOpen] = useState(false);
+  const [bannerEyePhase, setBannerEyePhase] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setBannerEyePhase(p => (p + 1) % 2), 2000);
+    return () => clearInterval(id);
+  }, []);
 
   const openAuth = (tab: 'login' | 'register') => {
     setAuthTab(tab);
@@ -596,25 +603,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </div>
         </Reveal>
 
-        {/* AI asistent gateway banner */}
+        {/* AI obchodní zástupce gateway */}
         <Reveal delay={150} className="mt-6 px-4 sm:px-6">
           <button
             onClick={() => setGatewayOpen(true)}
-            className="w-full max-w-sm mx-auto flex items-center gap-4 bg-zinc-900 hover:bg-zinc-800 transition-all rounded-2xl px-5 py-4 shadow-xl group"
+            className="w-full max-w-sm mx-auto flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
           >
-            {/* 3D sphere */}
-            <div style={{
-              width: 56, height: 56, borderRadius: '50%', flexShrink: 0,
-              background: 'radial-gradient(circle at 34% 32%, #5a5a5a 0%, #2a2a2a 28%, #111 52%, #000 72%)',
-              boxShadow: 'inset -5px -5px 14px rgba(0,0,0,0.85), inset 3px 3px 8px rgba(255,255,255,0.08), 0 10px 24px rgba(0,0,0,0.5)',
-            }} />
-            {/* Text */}
+            <GatewayMascot3D size={56} eyePhase={bannerEyePhase} />
             <div className="flex-1 text-left">
-              <p className="text-white font-bold text-sm leading-none">AI asistent</p>
-              <p className="text-zinc-400 text-xs mt-1">Zeptejte se na cokoliv o swelt.partner</p>
+              <p className="text-zinc-900 font-bold text-sm leading-none">AI obchodní zástupce</p>
+              <p className="text-zinc-500 text-xs mt-1">Dostupný 24h denně · swelt.partner</p>
             </div>
-            {/* Arrow */}
-            <Bot className="h-5 w-5 text-zinc-400 group-hover:text-white transition-colors shrink-0" />
+            <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+              <ArrowRight className="h-4 w-4 text-white" />
+            </div>
           </button>
         </Reveal>
       </div>
