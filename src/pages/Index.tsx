@@ -15,6 +15,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { GatewaySections } from '@/components/GatewaySections';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { CatalogGateway } from '@/components/CatalogGateway';
 import { useAuthContext } from '@/contexts/AuthContext';
 
@@ -129,9 +130,8 @@ const Index = () => {
 
       <CartDrawer />
       <WishlistDrawer open={wishlistOpen} onOpenChange={setWishlistOpen} />
-      {viewMode === 'catalog' && (
-        <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
-      )}
+      <BottomNav onOpenWishlist={() => setWishlistOpen(true)} wishlistCount={wishlistIds.size} />
+      <ScrollToTopButton />
     </div>
   );
 };
