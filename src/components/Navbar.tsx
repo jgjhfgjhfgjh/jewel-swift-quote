@@ -160,7 +160,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <img
               src={logo}
               alt="swelt."
-              className={`h-30 sm:h-[72px] lg:h-[60px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
+              className={`h-[120px] sm:h-[72px] lg:h-[60px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
             />
           </Link>
         </div>
