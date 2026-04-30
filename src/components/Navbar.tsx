@@ -155,14 +155,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <Link
             to="/"
             onClick={() => { setViewMode('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className={`shrink-0 transition-all duration-500 ease-in-out
-              ${isExpanded ? 'lg:opacity-0 lg:pointer-events-none lg:w-0 lg:overflow-hidden' : 'opacity-100'}
-            `}
+            className="shrink-0 opacity-100"
           >
             <img
               src={logo}
               alt="swelt."
-              className={`h-20 sm:h-12 lg:h-10 object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
+              className={`h-30 sm:h-[72px] lg:h-[60px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
             />
           </Link>
         </div>
