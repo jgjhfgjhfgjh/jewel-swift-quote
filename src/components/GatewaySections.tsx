@@ -571,49 +571,71 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             {g.introSubheading}
           </p>
         </Reveal>
-        {/* Section quick-nav pills */}
-        <Reveal delay={100} className="mt-8">
-          <div className="flex flex-wrap gap-2 justify-center px-6">
+        {/* Section quick-nav cards — unified gateway-style design */}
+        <Reveal delay={100} className="mt-8 px-4 sm:px-6">
+          <div className="mx-auto max-w-3xl flex flex-wrap gap-2.5 justify-center">
             {sections.map((s) => {
               const Icon = s.icon;
-              const blueViolet = 'bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-500 hover:to-blue-700 hover:shadow-lg hover:shadow-blue-500/40 hover:scale-105';
-              const gradientMap: Record<string, string> = {
-                velkoobchod: blueViolet,
-                luxury: blueViolet,
-                feed: blueViolet,
-                dropshipping: blueViolet,
-                shop: blueViolet,
-              };
-              const cls = gradientMap[s.id] ?? 'bg-white text-foreground border border-border hover:border-primary/40 hover:text-primary';
               return (
-                <a key={s.id} href={`#${s.id}`}
-                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all shadow-sm ${cls}`}>
-                  <Icon className="h-3.5 w-3.5" />
-                  {s.label}
+                <a
+                  key={s.id}
+                  href={`#${s.id}`}
+                  className="flex items-center gap-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl px-3.5 py-2.5 shadow-sm group"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
+                    <Icon className="h-4 w-4 text-zinc-700 group-hover:text-white transition-colors" />
+                  </div>
+                  <span className="text-zinc-900 font-semibold text-xs leading-none pr-1">{s.label}</span>
+                  <div className="w-5 h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                    <ArrowRight className="h-3 w-3 text-white" />
+                  </div>
                 </a>
               );
             })}
           </div>
         </Reveal>
 
-        {/* AI obchodní zástupce gateway */}
+        {/* Premium gateways — AI asistent + Dedikovaný obchodní zástupce (larger, highlighted) */}
         <Reveal delay={150} className="mt-6 px-4 sm:px-6">
-          <button
-            onClick={() => setGatewayOpen(true)}
-            className="w-full max-w-sm mx-auto flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
-          >
-            <GatewayMascot3D size={56} />
-            <div className="flex-1 text-left">
-              <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
-                <Sparkles className="h-3 w-3 shrink-0" />
-                <span>Dostupný 24h denně</span>
+          <div className="mx-auto max-w-3xl grid sm:grid-cols-2 gap-3">
+            {/* AI asistent */}
+            <button
+              onClick={() => setGatewayOpen(true)}
+              className="flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
+            >
+              <GatewayMascot3D size={56} />
+              <div className="flex-1 text-left">
+                <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+                  <Sparkles className="h-3 w-3 shrink-0" />
+                  <span>Dostupný 24h denně</span>
+                </div>
+                <p className="text-zinc-900 font-bold text-sm leading-tight">AI asistent obchodního zástupce</p>
               </div>
-              <p className="text-zinc-900 font-bold text-sm leading-none">AI asistent obchodního zástupce</p>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-              <ArrowRight className="h-4 w-4 text-white" />
-            </div>
-          </button>
+              <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                <ArrowRight className="h-4 w-4 text-white" />
+              </div>
+            </button>
+
+            {/* Dedikovaný obchodní zástupce */}
+            <button
+              onClick={() => navigate('/partner')}
+              className="flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
+            >
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
+                <Users className="h-7 w-7 text-amber-700" />
+              </div>
+              <div className="flex-1 text-left">
+                <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+                  <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />
+                  <span>Osobní péče</span>
+                </div>
+                <p className="text-zinc-900 font-bold text-sm leading-tight">Dedikovaný obchodní zástupce</p>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                <ArrowRight className="h-4 w-4 text-white" />
+              </div>
+            </button>
+          </div>
         </Reveal>
       </div>
 
