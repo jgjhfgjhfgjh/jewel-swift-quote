@@ -592,19 +592,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </a>
               );
             })}
-            {/* Mobile-only compact Dedikovaný obchodní zástupce — sits next to last pill */}
-            <button
-              onClick={() => navigate('/partner')}
-              className="sm:hidden flex items-center gap-2 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-xl px-2.5 py-2 shadow-sm group min-w-0"
-            >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0">
-                <Users className="h-3.5 w-3.5 text-amber-700" />
-              </div>
-              <span className="text-zinc-900 font-semibold text-[11px] leading-tight pr-0.5 flex-1 text-left truncate">Dedikovaný OZ</span>
-              <div className="w-4 h-4 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                <ArrowRight className="h-2.5 w-2.5 text-white" />
-              </div>
-            </button>
           </div>
         </Reveal>
 
