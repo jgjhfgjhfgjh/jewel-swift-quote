@@ -573,21 +573,21 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         </Reveal>
         {/* Section quick-nav cards — unified gateway-style design */}
         <Reveal delay={100} className="mt-8 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl flex flex-wrap gap-2.5 justify-center">
+          <div className="mx-auto max-w-3xl grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-2.5 sm:justify-center">
             {sections.map((s) => {
               const Icon = s.icon;
               return (
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="flex items-center gap-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl px-3.5 py-2.5 shadow-sm group"
+                  className="flex items-center gap-2 sm:gap-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 shadow-sm group min-w-0"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
-                    <Icon className="h-4 w-4 text-zinc-700 group-hover:text-white transition-colors" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
+                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-700 group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-zinc-900 font-semibold text-xs leading-none pr-1">{s.label}</span>
-                  <div className="w-5 h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-3 w-3 text-white" />
+                  <span className="text-zinc-900 font-semibold text-[11px] sm:text-xs leading-tight sm:leading-none pr-0.5 sm:pr-1 flex-1 text-left truncate">{s.label}</span>
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                    <ArrowRight className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
                   </div>
                 </a>
               );
