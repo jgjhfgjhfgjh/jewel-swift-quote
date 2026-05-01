@@ -595,47 +595,85 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </div>
         </Reveal>
 
-        {/* Premium gateways — AI asistent + Dedikovaný obchodní zástupce (larger, highlighted) */}
-        <Reveal delay={150} className="mt-6 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:hidden sm:[&>*:last-child]:flex">
-            {/* AI asistent */}
-            <button
-              onClick={() => setGatewayOpen(true)}
-              className="flex items-center gap-2.5 sm:gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl sm:rounded-3xl px-3.5 py-2.5 sm:px-5 sm:py-4 shadow-md sm:shadow-lg group"
-            >
-              <div className="sm:hidden"><GatewayMascot3D size={36} /></div>
-              <div className="hidden sm:block"><GatewayMascot3D size={56} /></div>
-              <div className="flex-1 text-left min-w-0">
-                <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-xs font-medium mb-0.5 sm:mb-1">
-                  <Sparkles className="h-3 w-3 shrink-0" />
-                  <span>Dostupný 24h denně</span>
-                </div>
-                <p className="text-zinc-900 font-bold text-xs sm:text-sm leading-tight">AI asistent obchodního zástupce</p>
-              </div>
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-              </div>
-            </button>
+        {/* Unified premium gateway — Account Manager + AI assistant */}
+        <Reveal delay={150} className="mt-8 px-4 sm:px-6">
+          <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-white via-white to-zinc-50 shadow-xl">
+            {/* Decorative glow */}
+            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-amber-200/30 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
 
-            {/* Dedikovaný obchodní zástupce */}
-            <button
-              onClick={() => navigate('/partner')}
-              className="flex items-center gap-2.5 sm:gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl sm:rounded-3xl px-3.5 py-2.5 sm:px-5 sm:py-4 shadow-md sm:shadow-lg group"
-            >
-              <div className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
-                <Users className="h-4 w-4 sm:h-7 sm:w-7 text-amber-700" />
-              </div>
-              <div className="flex-1 text-left min-w-0">
-                <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-xs font-medium mb-0.5 sm:mb-1">
-                  <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />
-                  <span>Osobní péče</span>
+            <div className="relative p-5 sm:p-7">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4 sm:mb-5">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  Váš osobní obchodní tým
                 </div>
-                <p className="text-zinc-900 font-bold text-xs sm:text-sm leading-tight">Dedikovaný obchodní zástupce</p>
+                <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Online teď
+                </div>
               </div>
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1.5 text-left">
+                Potřebujete poradit? Jsme tu pro vás.
+              </h3>
+              <p className="text-sm text-zinc-600 mb-5 sm:mb-6 text-left max-w-xl">
+                Vyberte si, jak vám pomůžeme nejrychleji — okamžitá odpověď AI asistenta, nebo osobní péče vašeho account managera.
+              </p>
+
+              {/* Two CTAs */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                {/* AI assistant CTA — preserves original gateway open route */}
+                <button
+                  onClick={() => setGatewayOpen(true)}
+                  className="group flex items-center gap-3 sm:gap-4 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
+                >
+                  <div className="shrink-0">
+                    <GatewayMascot3D size={44} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
+                      <Sparkles className="h-3 w-3 shrink-0" />
+                      <span>Odpověď do 5 vteřin</span>
+                    </div>
+                    <p className="font-bold text-sm leading-tight">Promluvit s AI asistentem</p>
+                    <p className="text-[11px] text-zinc-400 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors flex items-center justify-center shrink-0">
+                    <ArrowRight className="h-4 w-4 text-white" />
+                  </div>
+                </button>
+
+                {/* Account manager CTA */}
+                <button
+                  onClick={() => navigate('/partner')}
+                  className="group flex items-center gap-3 sm:gap-4 bg-white hover:bg-amber-50 border border-zinc-200 hover:border-amber-300 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
+                >
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
+                    <Users className="h-5 w-5 sm:h-6 sm:w-6 text-amber-700" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1 text-amber-700 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
+                      <Star className="h-3 w-3 shrink-0 fill-amber-500 text-amber-500" />
+                      <span>Osobní péče</span>
+                    </div>
+                    <p className="font-bold text-sm leading-tight text-zinc-900">Kontaktovat account managera</p>
+                    <p className="text-[11px] text-zinc-500 leading-tight mt-0.5">Strategie, individuální nabídka, volání</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-amber-600 transition-colors flex items-center justify-center shrink-0">
+                    <ArrowRight className="h-4 w-4 text-white" />
+                  </div>
+                </button>
               </div>
-            </button>
+
+              {/* Footer reassurance */}
+              <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
+                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Zdarma a nezávazně</span>
+                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Odpověď do 24 h</span>
+                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Česky &amp; slovensky</span>
+              </div>
+            </div>
           </div>
         </Reveal>
       </div>
