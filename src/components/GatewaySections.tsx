@@ -597,42 +597,43 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
         {/* Premium gateways — AI asistent + Dedikovaný obchodní zástupce (larger, highlighted) */}
         <Reveal delay={150} className="mt-6 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl grid sm:grid-cols-2 gap-3">
+          <div className="mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {/* AI asistent */}
             <button
               onClick={() => setGatewayOpen(true)}
-              className="flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
+              className="flex items-center gap-2.5 sm:gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl sm:rounded-3xl px-3.5 py-2.5 sm:px-5 sm:py-4 shadow-md sm:shadow-lg group"
             >
-              <GatewayMascot3D size={56} />
-              <div className="flex-1 text-left">
-                <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+              <div className="sm:hidden"><GatewayMascot3D size={36} /></div>
+              <div className="hidden sm:block"><GatewayMascot3D size={56} /></div>
+              <div className="flex-1 text-left min-w-0">
+                <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-xs font-medium mb-0.5 sm:mb-1">
                   <Sparkles className="h-3 w-3 shrink-0" />
                   <span>Dostupný 24h denně</span>
                 </div>
-                <p className="text-zinc-900 font-bold text-sm leading-tight">AI asistent obchodního zástupce</p>
+                <p className="text-zinc-900 font-bold text-xs sm:text-sm leading-tight">AI asistent obchodního zástupce</p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                <ArrowRight className="h-4 w-4 text-white" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
               </div>
             </button>
 
             {/* Dedikovaný obchodní zástupce */}
             <button
               onClick={() => navigate('/partner')}
-              className="flex items-center gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-3xl px-5 py-4 shadow-lg group"
+              className="flex items-center gap-2.5 sm:gap-4 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl sm:rounded-3xl px-3.5 py-2.5 sm:px-5 sm:py-4 shadow-md sm:shadow-lg group"
             >
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
-                <Users className="h-7 w-7 text-amber-700" />
+              <div className="w-9 h-9 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
+                <Users className="h-4 w-4 sm:h-7 sm:w-7 text-amber-700" />
               </div>
-              <div className="flex-1 text-left">
-                <div className="flex items-center gap-1 text-zinc-400 text-xs font-medium mb-1">
+              <div className="flex-1 text-left min-w-0">
+                <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-xs font-medium mb-0.5 sm:mb-1">
                   <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />
                   <span>Osobní péče</span>
                 </div>
-                <p className="text-zinc-900 font-bold text-sm leading-tight">Dedikovaný obchodní zástupce</p>
+                <p className="text-zinc-900 font-bold text-xs sm:text-sm leading-tight">Dedikovaný obchodní zástupce</p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                <ArrowRight className="h-4 w-4 text-white" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
               </div>
             </button>
           </div>
