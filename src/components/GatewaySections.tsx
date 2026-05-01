@@ -610,7 +610,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
         {/* Premium gateways — AI asistent + Dedikovaný obchodní zástupce (larger, highlighted) */}
         <Reveal delay={150} className="mt-6 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+          <div className="mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 [&>*:last-child]:hidden sm:[&>*:last-child]:flex">
             {/* AI asistent */}
             <button
               onClick={() => setGatewayOpen(true)}
