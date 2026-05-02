@@ -173,6 +173,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   </div>
                 </div>
               )}
+
+              {/* Access tiers — show what unlocks at each step */}
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-2">
+                  Co získáte po přihlášení
+                </p>
+                <AccessTiersVisual compact />
+              </div>
+
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
