@@ -571,29 +571,81 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             {g.introSubheading}
           </p>
         </Reveal>
-        {/* Section quick-nav cards — unified gateway-style design */}
+        {/* Section quick-nav cards — unified gateway-style design, single row on all sizes */}
         <Reveal delay={100} className="mt-8 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-2.5 sm:justify-center">
+          <div className="mx-auto max-w-4xl grid grid-cols-5 gap-1.5 sm:gap-2.5 sm:justify-center">
             {sections.map((s) => {
               const Icon = s.icon;
               return (
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="flex items-center gap-2 sm:gap-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-xl sm:rounded-2xl px-2.5 py-2 sm:px-3.5 sm:py-2.5 shadow-sm group min-w-0"
+                  className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-xl sm:rounded-2xl px-1.5 py-2 sm:px-3.5 sm:py-2.5 shadow-sm group min-w-0"
                 >
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
                     <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-700 group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-zinc-900 font-semibold text-[11px] sm:text-xs leading-tight sm:leading-none pr-0.5 sm:pr-1 flex-1 text-left truncate">{s.label}</span>
-                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
+                  <span className="text-zinc-900 font-semibold text-[10px] sm:text-xs leading-tight sm:leading-none flex-1 text-center sm:text-left truncate w-full">{s.label}</span>
+                  <div className="hidden sm:flex w-5 h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors items-center justify-center shrink-0">
+                    <ArrowRight className="h-3 w-3 text-white" />
                   </div>
                 </a>
               );
             })}
           </div>
         </Reveal>
+
+        {/* Lead capture — preview catalog (only when not logged in) */}
+        {!user && (
+          <Reveal delay={130} className="mt-8 px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-white shadow-xl">
+              <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-blue-200/40 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+
+              <div className="relative p-5 sm:p-8">
+                <div className="flex items-center justify-between mb-4 sm:mb-5">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                    <Eye className="h-3 w-3" />
+                    Zdarma · 30 sekund
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Bez čekání
+                  </div>
+                </div>
+
+                <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
+                  Chcete si nejdřív prohlédnout sortiment?
+                </h3>
+                <p className="text-sm sm:text-base text-zinc-600 mb-5 sm:mb-6 text-left max-w-2xl leading-relaxed">
+                  Zaregistrujte se zdarma přes e-mail, Google nebo Apple a okamžitě nahlédněte do celého katalogu — fotky, dostupnost a doporučené ceny (MOC). Velkoobchodní nákupní ceny se odemknou po schválení B2B účtu.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 sm:items-center">
+                  <button
+                    onClick={() => openAuth('login')}
+                    className="group flex items-center justify-center gap-2 sm:gap-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 shadow-lg transition-all font-bold text-sm sm:text-base"
+                  >
+                    <Eye className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
+                    <span>Prohlédnout sortiment</span>
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                  <div className="text-[11px] sm:text-xs text-zinc-500 sm:ml-2">
+                    3 000+ produktů · 70+ značek<br className="hidden sm:block" />
+                    <span className="sm:hidden"> · </span>Bez závazku
+                  </div>
+                </div>
+
+                <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Fotky a popisy</span>
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Skladové zásoby</span>
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Doporučené ceny (MOC)</span>
+                  <span className="flex items-center gap-1 text-zinc-400"><Lock className="h-3 w-3" /> VOC po schválení B2B</span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        )}
 
         {/* Unified premium gateway — Account Manager + AI assistant */}
         <Reveal delay={150} className="mt-8 px-4 sm:px-6">
