@@ -10,6 +10,7 @@ import { lovable } from '@/integrations/lovable/index';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 import { auth as authT } from '@/lib/i18n-auth';
+import { AccessTiersVisual } from '@/components/AccessTiersVisual';
 import logo from '@/assets/logo.png';
 
 interface AuthModalProps {
