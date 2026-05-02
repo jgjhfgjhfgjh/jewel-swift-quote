@@ -130,7 +130,7 @@ const cs: ShopText = {
     { name: 'B2B Velkoobchod', desc: 'Nakupujte produkty za velkoobchodní ceny přímo od dodavatele.' },
     { name: 'swelt.feed', desc: 'Automatický feed pro synchronizaci katalogu s vaším existujícím e-shopem.' },
     { name: 'swelt.dropshipping', desc: 'Prodávejte bez skladu. My skladujeme, balíme a expedujeme za vás.' },
-    { name: 'Privátní nákupy', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky.' },
+    { name: 'Nákup bez registrace', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky.' },
   ],
   faq: { heading: 'Nejčastější otázky', sub: 'Vše, co potřebujete vědět před spuštěním.' },
   faqs: [

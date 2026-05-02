@@ -117,7 +117,7 @@ const cs: VelkoobchodText = {
   ecosystem: {
     eyebrow: 'swelt.partner ekosystém',
     heading: 'Velkoobchod je jen začátek',
-    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, privátní nákupy nebo hotový e-shop. Vše propojené, vše pod jednou střechou.',
+    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, nákup bez registrace nebo hotový e-shop. Vše propojené, vše pod jednou střechou.',
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.' },

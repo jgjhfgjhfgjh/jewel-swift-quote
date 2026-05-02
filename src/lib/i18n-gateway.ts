@@ -45,7 +45,7 @@ const cs: GatewayText = {
     ctaLabel: 'Vstoupit do velkoobchodu',
   },
   luxury: {
-    badge: 'swelt.luxury', label: 'Privátní nákupy',
+    badge: 'swelt.luxury', label: 'Nákup bez registrace',
     heading: 'Velkoobchodní ceny. Pro každého. Od 1 kusu.',
     subheading: 'Prémiové hodinky a šperky za velkoobchodní ceny dostupné pro soukromé osoby i firmy. Bez nutnosti IČO. Diskrétní balení. EU doručení.',
     bullets: ['Velkoobchodní ceny bez nutnosti IČO', 'Dostupné od 1 kusu bez minimálního odběru', 'Garance pravosti 100 %', 'Diskrétní balení bez loga na zásilce', 'Doručení po celé EU do 72 hodin'],
