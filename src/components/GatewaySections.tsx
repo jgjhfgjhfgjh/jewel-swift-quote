@@ -4,7 +4,7 @@ import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, Rocket, RefreshCw, Sparkles,
+  Package, Clock, Rocket, RefreshCw, Sparkles, Eye,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
