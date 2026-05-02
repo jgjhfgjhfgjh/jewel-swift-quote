@@ -11,6 +11,7 @@ import { GatewayMascot3D } from './SweltGateway';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
+import { AccessTiersVisual } from '@/components/AccessTiersVisual';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
