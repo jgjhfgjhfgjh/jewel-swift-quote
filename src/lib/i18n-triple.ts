@@ -39,7 +39,7 @@ const cs: TripleText = {
     bullets: ['Bez skladových nákladů a investic', 'Logistika, balení a odeslání pod vaší značkou', 'Dodání přímo ke koncovému zákazníkovi', 'Produktový feed pro váš e-shop', 'Široký katalog světových značek'],
   },
   luxury: {
-    label: 'Swelt.luxury', title: 'Privátní nákupy',
+    label: 'Swelt.luxury', title: 'Nákup bez registrace',
     description: 'Odemykáme vám exkluzivní přístup.',
     ctaLabels: ['Zjistit více'],
     detailsHeading: 'Pro firmy a živnostníky',

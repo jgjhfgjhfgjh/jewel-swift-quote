@@ -11,6 +11,7 @@ import { GatewayMascot3D } from './SweltGateway';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
+import { AccessTiersVisual } from '@/components/AccessTiersVisual';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
@@ -615,11 +616,23 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </div>
 
                 <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
-                  Chcete si nejdřív prohlédnout sortiment?
+                  Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
                 </h3>
-                <p className="text-sm sm:text-base text-zinc-600 mb-5 sm:mb-6 text-left max-w-2xl leading-relaxed">
-                  Zaregistrujte se zdarma přes e-mail, Google nebo Apple a okamžitě nahlédněte do celého katalogu — fotky, dostupnost a doporučené ceny (MOC). Velkoobchodní nákupní ceny se odemknou po schválení B2B účtu.
-                </p>
+                <div className="text-sm sm:text-base text-zinc-600 mb-5 sm:mb-6 text-left max-w-2xl leading-relaxed space-y-3">
+                  <p>
+                    Víme, že vstoupit do nového partnerství chce důvěru. Proto vám umožňujeme nahlédnout do katalogu ještě předtím, než cokoliv rozhodujete. Stačí se přihlásit přes e-mail nebo Google — trvá to 30 sekund.
+                  </p>
+                  <p>
+                    Uvidíte celý sortiment: 3 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC). Takže si rovnou spočítáte, jaké marže vás čekají.
+                  </p>
+                  <p>
+                    Velkoobchodní nákupní ceny jsou skryté a odemknou se automaticky po ověření a schválení vašeho B2B účtu — zpravidla do 24 hodin. Registrace je zcela zdarma.
+                  </p>
+                </div>
+
+                <div className="mb-5 sm:mb-6">
+                  <AccessTiersVisual />
+                </div>
 
                 <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 sm:items-center">
                   <button
@@ -634,13 +647,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     3 000+ produktů · 70+ značek<br className="hidden sm:block" />
                     <span className="sm:hidden"> · </span>Bez závazku
                   </div>
-                </div>
-
-                <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
-                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Fotky a popisy</span>
-                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Skladové zásoby</span>
-                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Doporučené ceny (MOC)</span>
-                  <span className="flex items-center gap-1 text-zinc-400"><Lock className="h-3 w-3" /> VOC po schválení B2B</span>
                 </div>
               </div>
             </div>
@@ -675,7 +681,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </p>
 
               {/* Two CTAs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+              <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
                 {/* AI assistant CTA — preserves original gateway open route */}
                 <button
                   onClick={() => setGatewayOpen(true)}

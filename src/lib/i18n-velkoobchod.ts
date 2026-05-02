@@ -117,12 +117,12 @@ const cs: VelkoobchodText = {
   ecosystem: {
     eyebrow: 'swelt.partner ekosystém',
     heading: 'Velkoobchod je jen začátek',
-    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, privátní nákupy nebo hotový e-shop. Vše propojené, vše pod jednou střechou.',
+    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, nákup bez registrace nebo hotový e-shop. Vše propojené, vše pod jednou střechou.',
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.' },
     { name: 'swelt.dropshipping', desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my mu zboží zabalíme a odešleme přímo pod vaším jménem.' },
-    { name: 'Privátní nákupy', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.' },
+    { name: 'Nákup bez registrace', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.' },
     { name: 'swelt.shop', desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.' },
   ],
   faq: { eyebrow: 'Časté otázky', heading: 'Nejčastější otázky', sub: 'Vše, co potřebujete vědět před registrací.' },
