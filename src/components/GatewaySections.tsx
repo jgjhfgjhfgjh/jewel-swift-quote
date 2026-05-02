@@ -681,7 +681,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </p>
 
               {/* Two CTAs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+              <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
                 {/* AI assistant CTA — preserves original gateway open route */}
                 <button
                   onClick={() => setGatewayOpen(true)}
