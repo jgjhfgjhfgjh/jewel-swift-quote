@@ -367,14 +367,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : null}
 
-          {/* KATALOG 2026 — always far right */}
+          {/* CTA — KATALOG 2026 (logged in) / REGISTROVAT (guests) — always far right */}
           <Button
             size="sm"
             onClick={handleCatalogCta}
             className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
           >
-            <span className="hidden sm:inline">KATALOG 2026</span>
-            <span className="sm:hidden">KATALOG 2026</span>
+            {user ? 'KATALOG 2026' : 'REGISTROVAT'}
           </Button>
         </div>
       </div>
