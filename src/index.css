@@ -131,4 +131,32 @@
     background: hsl(var(--border));
     border-radius: 2px;
   }
+
+  /* Modern SaaS utilities */
+  .bg-gradient-primary { background-image: var(--gradient-primary); }
+  .bg-gradient-subtle { background-image: var(--gradient-subtle); }
+  .bg-mesh { background-image: var(--gradient-mesh); }
+  .shadow-elegant { box-shadow: var(--shadow-md); }
+  .shadow-elevated { box-shadow: var(--shadow-lg); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  /* Subtle grid pattern background */
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+
+  /* Soft hover lift */
+  .hover-lift {
+    transition: transform 250ms var(--ease-out-expo), box-shadow 250ms var(--ease-out-expo);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
 }
