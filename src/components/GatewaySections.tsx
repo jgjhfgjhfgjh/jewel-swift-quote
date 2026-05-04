@@ -570,9 +570,31 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             {g.introSubheading}
           </p>
         </Reveal>
-        {/* Section quick-nav cards — full label always visible, wraps naturally */}
+        {/* Section quick-nav — vertical stack on mobile, horizontal row on desktop */}
         <Reveal delay={100} className="mt-8 px-4 sm:px-6">
-          <div className="flex flex-wrap justify-center gap-2">
+          {/* Mobile: full-width vertical list */}
+          <div className="flex flex-col gap-2 sm:hidden max-w-sm mx-auto">
+            {sections.map((s) => {
+              const Icon = s.icon;
+              return (
+                <a
+                  key={s.id}
+                  href={`#${s.id}`}
+                  className="flex items-center gap-3 w-full bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl px-4 py-3 shadow-sm group"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
+                    <Icon className="h-4 w-4 text-zinc-700 group-hover:text-white transition-colors" />
+                  </div>
+                  <span className="text-zinc-900 font-semibold text-sm flex-1 text-left">{s.label}</span>
+                  <div className="w-6 h-6 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
+                    <ArrowRight className="h-3.5 w-3.5 text-white" />
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+          {/* Desktop: horizontal row, each card auto-width, wraps if needed */}
+          <div className="hidden sm:flex flex-wrap justify-center gap-2">
             {sections.map((s) => {
               const Icon = s.icon;
               return (
