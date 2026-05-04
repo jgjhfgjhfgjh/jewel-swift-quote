@@ -729,27 +729,39 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </div>
         </Reveal>
+        </div>
       </div>
 
       {/* Sections */}
-      {sections.map((section) => {
+      {sections.map((section, idx) => {
         const Icon = section.icon;
         return (
-          <section key={section.id} id={section.id} className={`${section.bg} py-20 scroll-mt-16`}>
-            <div className="mx-auto max-w-6xl px-6">
-              <div className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
+          <section
+            key={section.id}
+            id={section.id}
+            className={`relative py-20 sm:py-28 scroll-mt-16 ${idx % 2 === 0 ? 'bg-background' : 'bg-secondary/40'}`}
+          >
+            {/* Subtle decorative gradient */}
+            <div className={`pointer-events-none absolute inset-0 ${idx % 2 === 0 ? 'bg-mesh opacity-60' : ''}`} />
+
+            <div className="relative mx-auto max-w-6xl px-6">
+              <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
                 {/* Text side */}
                 <Reveal>
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <Icon className="h-5 w-5 text-black" />
-                      <span className="text-[11px] font-semibold text-black">
+                  <div className="space-y-7">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-xs">
+                      <Icon className="h-4 w-4 text-primary" />
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">
                         {section.label}
                       </span>
                     </div>
                     <div>
-                      <h2 className="font-display text-3xl sm:text-4xl font-bold leading-tight mb-4">{section.heading}</h2>
-                      <p className="text-muted-foreground leading-relaxed">{section.subheading}</p>
+                      <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight mb-4 text-balance">
+                        {section.heading}
+                      </h2>
+                      <p className="text-muted-foreground leading-relaxed text-base sm:text-lg text-pretty max-w-xl">
+                        {section.subheading}
+                      </p>
                     </div>
                     <BulletList items={section.bullets} />
                     <div className="pt-2">{section.ctas}</div>
@@ -758,7 +770,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
                 {/* Visual side */}
                 <Reveal delay={120}>
-                  {section.visual}
+                  <div className="relative">
+                    {/* Glow behind visual */}
+                    <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-primary opacity-[0.08] blur-2xl" />
+                    <div className="relative">{section.visual}</div>
+                  </div>
                 </Reveal>
               </div>
             </div>
