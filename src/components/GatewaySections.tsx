@@ -419,18 +419,21 @@ function TrustSection() {
   ];
 
   return (
-    <section className="bg-gradient-to-b from-muted/30 to-white py-20">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="relative bg-gradient-to-b from-background via-secondary/30 to-background py-24 sm:py-28 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-mesh opacity-70" />
+      <div className="relative mx-auto max-w-6xl px-6">
         {/* Stats */}
-        <Reveal className="text-center mb-14">
-          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{g.trustEyebrow}</div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-2">{g.trustHeading}</h2>
+        <Reveal className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+            {g.trustEyebrow}
+          </div>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">{g.trustHeading}</h2>
         </Reveal>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 80}>
-              <div className="text-center rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <div className="font-display text-4xl font-bold text-primary mb-1">
+              <div className="group text-center rounded-2xl border border-border bg-card p-7 shadow-sm hover-lift">
+                <div className="font-display text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
                   <CountUp to={s.val} suffix={s.suf} />
                 </div>
                 <div className="text-sm text-muted-foreground">{s.label}</div>
@@ -440,17 +443,17 @@ function TrustSection() {
         </div>
 
         {/* Testimonials */}
-        <div className="grid sm:grid-cols-3 gap-6 mb-14">
+        <div className="grid sm:grid-cols-3 gap-5 sm:gap-6 mb-16">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 80}>
-              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm flex flex-col gap-3">
+              <div className="rounded-2xl border border-border bg-card p-7 shadow-sm flex flex-col gap-4 h-full hover-lift">
                 <div className="flex gap-0.5">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">"{t.text}"</p>
-                <div>
+                <p className="text-[15px] text-foreground/80 leading-relaxed flex-1 text-pretty">"{t.text}"</p>
+                <div className="pt-2 border-t border-border">
                   <div className="text-sm font-semibold">{t.name}</div>
                   <div className="text-xs text-primary">{t.company}</div>
                 </div>
@@ -461,7 +464,7 @@ function TrustSection() {
 
         {/* Trust badges */}
         <Reveal>
-          <div className="flex flex-wrap items-center justify-center gap-6 py-8 border-t border-border">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-8 border-t border-border">
             {[
               { icon: Shield, text: g.trustBadges[0] },
               { icon: Check,  text: g.trustBadges[1] },
