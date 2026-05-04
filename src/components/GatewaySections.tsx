@@ -548,27 +548,22 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   return (
-    <div
-      className="gateway-sections relative w-full bg-background text-foreground"
-      style={{
-        '--background': '220 30% 98%',
-        '--foreground': '220 25% 10%',
-        '--card': '0 0% 100%',
-        '--primary': '220 80% 50%',
-        '--primary-foreground': '0 0% 100%',
-        '--muted': '220 20% 94%',
-        '--muted-foreground': '220 15% 45%',
-        '--border': '220 20% 88%',
-      } as React.CSSProperties}
-    >
+    <div className="gateway-sections relative w-full bg-background text-foreground">
       {/* Intro strip */}
-      <div className="bg-gradient-to-b from-white/60 to-white border-b border-border py-12 text-center">
+      <div className="relative bg-gradient-subtle border-b border-border py-16 sm:py-20 text-center overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-mesh" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-grid opacity-40" />
+
+        <div className="relative">
         <Reveal>
-          <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{g.introEyebrow}</div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4 max-w-2xl mx-auto px-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-5">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            {g.introEyebrow}
+          </div>
+          <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 max-w-3xl mx-auto px-6 tracking-tight text-balance">
             {g.introHeading}
           </h2>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto px-6">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto px-6 text-pretty">
             {g.introSubheading}
           </p>
         </Reveal>
