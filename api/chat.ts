@@ -112,7 +112,7 @@ function buildSystemPrompt(lang: 'cs' | 'en', partnerContext?: string, catalogRe
 }
 
 function detectLang(messages: { role: string; content: string }[]): 'cs' | 'en' {
-  const last = messages.findLast(m => m.role === 'user')?.content ?? '';
+  const last = [...messages].reverse().find(m => m.role === 'user')?.content ?? '';
   const czChars = (last.match(/[áčďéěíňóřšťúůýž]/gi) ?? []).length;
   return czChars > 0 || /\b(jak|kde|co|pro|jsem|mám|chci|moje|vaše)\b/i.test(last) ? 'cs' : 'en';
 }
@@ -137,7 +137,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!messages?.length) return res.status(400).json({ error: 'messages required' });
 
   const lang = detectLang(messages);
-  const lastUserMsg = messages.findLast(m => m.role === 'user')?.content ?? '';
+  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')?.content ?? '';
 
   // Pre-fetch catalog results if the message is product-related
   const catalogResults = isProductQuery(lastUserMsg)
