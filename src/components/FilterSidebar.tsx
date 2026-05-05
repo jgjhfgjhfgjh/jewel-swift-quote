@@ -102,8 +102,18 @@ export function FilterSidebar({
     return GENDER_ORDER.filter((g) => genderParam.values.includes(g));
   }, [availableParams]);
 
+  // Other params sorted by number of options ascending (fewer options first → easier to scan).
+  // Ties broken alphabetically for stable order across renders.
   const otherParams = useMemo(
-    () => availableParams.filter((p) => p.nazev !== GENDER_PARAM),
+    () =>
+      availableParams
+        .filter((p) => p.nazev !== GENDER_PARAM)
+        .slice()
+        .sort((a, b) => {
+          const diff = a.values.length - b.values.length;
+          if (diff !== 0) return diff;
+          return a.nazev.localeCompare(b.nazev, 'cs');
+        }),
     [availableParams]
   );
 
