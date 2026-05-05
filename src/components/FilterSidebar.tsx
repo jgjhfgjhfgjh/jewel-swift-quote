@@ -225,6 +225,80 @@ export function FilterSidebar({
   const activeBrandsCount = selectedBrands.length;
   const activeDiscountCount = minDiscount > 0 ? 1 : 0;
 
+  // Helper: visual group header inside the sidebar (not an accordion item).
+  const GroupHeader = ({ label }: { label: string }) => (
+    <div className="px-4 pt-4 pb-1.5 bg-muted/30 border-y">
+      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/80">
+        {label}
+      </p>
+    </div>
+  );
+
+  // Helper: renders a single dynamic param accordion item (used in property/technical/misc groups).
+  const renderParamItem = (param: AvailableParam) => {
+    const selectedValues = selectedParams[param.nazev] ?? [];
+    const useToggles = param.values.length <= TOGGLE_THRESHOLD;
+
+    return (
+      <AccordionItem key={param.nazev} value={`param-${param.nazev}`} className="border-b px-2">
+        <AccordionTrigger className="px-2 py-3 hover:no-underline">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {tParamName(param.nazev, lang)}
+            <ActiveBadge count={selectedValues.length} />
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="px-2 pb-3">
+          {selectedValues.length > 0 && (
+            <button
+              onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
+              className="mb-2 text-xs text-primary hover:underline"
+            >
+              Vše
+            </button>
+          )}
+          {useToggles ? (
+            <div className="space-y-2">
+              {param.values.map((value) => (
+                <div key={value} className="flex items-center justify-between">
+                  <span className="text-sm font-medium truncate pr-2">{value}</span>
+                  <Switch
+                    checked={selectedValues.includes(value)}
+                    onCheckedChange={() => toggleParam(param.nazev, value)}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="max-h-48 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+              {param.values.map((value) => (
+                <label
+                  key={value}
+                  className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                >
+                  <Checkbox
+                    checked={selectedValues.includes(value)}
+                    onCheckedChange={() => toggleParam(param.nazev, value)}
+                  />
+                  <span className="truncate">{value}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+    );
+  };
+
+  // Group labels (Czech-first; could be moved to i18n later)
+  const groupLabels = {
+    region: 'Region',
+    commerce: 'Obchod & dostupnost',
+    sortiment: 'Sortiment',
+    properties: 'Vlastnosti produktu',
+    technical: 'Technické parametry',
+    misc: 'Ostatní parametry',
+  };
+
   const content = (
     <div className="flex h-full flex-col">
       {/* Always-visible quick toggle: stock only */}
@@ -233,8 +307,9 @@ export function FilterSidebar({
         <Switch checked={stockOnly} onCheckedChange={setStockOnly} />
       </div>
 
+      {/* === REGION === */}
+      <GroupHeader label={groupLabels.region} />
       <Accordion type="multiple" className="w-full">
-        {/* Language picker — collapsed at top */}
         <AccordionItem value="lang" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
             <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -246,33 +321,41 @@ export function FilterSidebar({
             <LanguagePicker />
           </AccordionContent>
         </AccordionItem>
+      </Accordion>
 
-        {/* Discount tiers (only for logged-in users) */}
-        {user && (
-          <AccordionItem value="discount" className="border-b px-2">
-            <AccordionTrigger className="px-2 py-3 hover:no-underline">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t.discountTiers}
-                <ActiveBadge count={activeDiscountCount} />
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="px-2 pb-3">
-              <div className="space-y-2">
-                {discountTiers.map((tier) => (
-                  <div key={tier.value} className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{tier.label}</span>
-                    <Switch
-                      checked={minDiscount === tier.value}
-                      onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        )}
+      {/* === COMMERCE & AVAILABILITY === */}
+      {user && (
+        <>
+          <GroupHeader label={groupLabels.commerce} />
+          <Accordion type="multiple" className="w-full">
+            <AccordionItem value="discount" className="border-b px-2">
+              <AccordionTrigger className="px-2 py-3 hover:no-underline">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {t.discountTiers}
+                  <ActiveBadge count={activeDiscountCount} />
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-2 pb-3">
+                <div className="space-y-2">
+                  {discountTiers.map((tier) => (
+                    <div key={tier.value} className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{tier.label}</span>
+                      <Switch
+                        checked={minDiscount === tier.value}
+                        onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </>
+      )}
 
-        {/* Brands — promoted to top tier (after Language + Discounts) */}
+      {/* === SORTIMENT (brand / category / gender) === */}
+      <GroupHeader label={groupLabels.sortiment} />
+      <Accordion type="multiple" className="w-full">
         <AccordionItem value="brands" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -306,7 +389,6 @@ export function FilterSidebar({
           </AccordionContent>
         </AccordionItem>
 
-        {/* Categories */}
         <AccordionItem value="categories" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -335,7 +417,6 @@ export function FilterSidebar({
           </AccordionContent>
         </AccordionItem>
 
-        {/* Určení (gender) */}
         {availableGenders.length > 0 && (
           <AccordionItem value="genders" className="border-b px-2">
             <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -367,62 +448,37 @@ export function FilterSidebar({
             </AccordionContent>
           </AccordionItem>
         )}
-
-        {/* Other parameter filters */}
-        {otherParams.map((param) => {
-          const selectedValues = selectedParams[param.nazev] ?? [];
-          const useToggles = param.values.length <= TOGGLE_THRESHOLD;
-
-          return (
-            <AccordionItem key={param.nazev} value={`param-${param.nazev}`} className="border-b px-2">
-              <AccordionTrigger className="px-2 py-3 hover:no-underline">
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {tParamName(param.nazev, lang)}
-                  <ActiveBadge count={selectedValues.length} />
-                </span>
-              </AccordionTrigger>
-              <AccordionContent className="px-2 pb-3">
-                {selectedValues.length > 0 && (
-                  <button
-                    onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
-                    className="mb-2 text-xs text-primary hover:underline"
-                  >
-                    Vše
-                  </button>
-                )}
-                {useToggles ? (
-                  <div className="space-y-2">
-                    {param.values.map((value) => (
-                      <div key={value} className="flex items-center justify-between">
-                        <span className="text-sm font-medium truncate pr-2">{value}</span>
-                        <Switch
-                          checked={selectedValues.includes(value)}
-                          onCheckedChange={() => toggleParam(param.nazev, value)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="max-h-48 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
-                    {param.values.map((value) => (
-                      <label
-                        key={value}
-                        className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-                      >
-                        <Checkbox
-                          checked={selectedValues.includes(value)}
-                          onCheckedChange={() => toggleParam(param.nazev, value)}
-                        />
-                        <span className="truncate">{value}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
       </Accordion>
+
+      {/* === VLASTNOSTI (material, color, stones, design...) === */}
+      {propertyParams.length > 0 && (
+        <>
+          <GroupHeader label={groupLabels.properties} />
+          <Accordion type="multiple" className="w-full">
+            {propertyParams.map(renderParamItem)}
+          </Accordion>
+        </>
+      )}
+
+      {/* === TECHNICAL (movement, water resistance, case, strap...) === */}
+      {technicalParams.length > 0 && (
+        <>
+          <GroupHeader label={groupLabels.technical} />
+          <Accordion type="multiple" className="w-full">
+            {technicalParams.map(renderParamItem)}
+          </Accordion>
+        </>
+      )}
+
+      {/* === MISC (uncategorized) === */}
+      {miscParams.length > 0 && (
+        <>
+          <GroupHeader label={groupLabels.misc} />
+          <Accordion type="multiple" className="w-full">
+            {miscParams.map(renderParamItem)}
+          </Accordion>
+        </>
+      )}
     </div>
   );
 
