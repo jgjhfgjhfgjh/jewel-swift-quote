@@ -152,6 +152,131 @@
   transform: translateY(0);
 }
 
+/* ── Partner Hub mobile responsive layout ──────────────────────── */
+.partner-sidebar {
+  width: 248px;
+  min-width: 248px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--p-surface-1);
+  border-right: 1px solid var(--p-border-soft);
+  display: flex;
+  flex-direction: column;
+  transition: width 320ms var(--p-ease), min-width 320ms var(--p-ease), transform 280ms var(--p-ease);
+  z-index: 60;
+  overflow: hidden;
+}
+.partner-sidebar.collapsed {
+  width: 72px;
+  min-width: 72px;
+}
+.partner-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 55;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.partner-main {
+  margin-left: 248px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left 320ms var(--p-ease);
+  min-width: 0;
+}
+.partner-main.sidebar-collapsed {
+  margin-left: 72px;
+}
+.partner-collapse-toggle {
+  display: flex;
+}
+.partner-mobile-menu-btn {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--p-border);
+  color: var(--p-t1);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+  .partner-sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+    min-width: 280px;
+  }
+  .partner-sidebar.collapsed {
+    /* on mobile, "collapsed" still means closed */
+    width: 280px;
+    min-width: 280px;
+  }
+  .partner-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .partner-sidebar-overlay.mobile-open {
+    display: block;
+    opacity: 1;
+  }
+  .partner-main,
+  .partner-main.sidebar-collapsed {
+    margin-left: 0;
+  }
+  .partner-collapse-toggle {
+    display: none;
+  }
+  .partner-mobile-menu-btn {
+    display: flex;
+  }
+  .partner-header-search {
+    display: none !important;
+  }
+  .partner-header-avatar-text {
+    display: none !important;
+  }
+  .partner-header {
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+  .partner-main-content {
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .partner-header-breadcrumb-home {
+    display: none !important;
+  }
+  .partner-header-actions-extra {
+    display: none !important;
+  }
+}
+
+/* Dashboard responsive grids */
+.partner-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.partner-grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+.partner-grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+@media (max-width: 1023px) {
+  .partner-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .partner-grid-2-1 { grid-template-columns: 1fr; }
+  .partner-grid-1-1 { grid-template-columns: 1fr; }
+}
+@media (max-width: 540px) {
+  .partner-grid-4 { grid-template-columns: 1fr; }
+}
+/* ──────────────────────────────────────────────────────────────── */
+
 /* ── Partner Hub design tokens ───────────────────────────────────── */
 .partner-app {
   --p-bg: #0A0B0F;

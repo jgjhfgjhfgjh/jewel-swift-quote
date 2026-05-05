@@ -337,7 +337,7 @@ export default function PartnerDashboard() {
       </div>
 
       {/* KPI grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+      <div className="partner-grid-4">
         <KpiCard
           icon={Package} label="Objednávky dnes" value="34"
           delta="+18%" dir="up"
@@ -365,7 +365,7 @@ export default function PartnerDashboard() {
       </div>
 
       {/* Recent orders + Quick actions */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+      <div className="partner-grid-2-1">
 
         {/* Recent orders */}
         <Card>
@@ -463,7 +463,7 @@ export default function PartnerDashboard() {
       </div>
 
       {/* Top products + Order status */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="partner-grid-1-1">
 
         {/* Top products */}
         <Card>

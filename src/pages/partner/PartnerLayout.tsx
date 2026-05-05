@@ -1,10 +1,10 @@
-import { useState, CSSProperties } from 'react';
+import { useState, useEffect, CSSProperties } from 'react';
 import { Outlet, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
 import {
   LayoutDashboard, Package, Zap, BookOpen, ShoppingCart,
   Users, Plug, BarChart2, Settings, ChevronLeft, ChevronRight,
-  Search, Bell, Plus, ChevronDown, Home,
+  Search, Bell, Plus, ChevronDown, Home, Menu, X,
 } from 'lucide-react';
 
 type NavItem =
@@ -55,27 +55,37 @@ const iconBtn: CSSProperties = {
 export default function PartnerLayout() {
   const { isB2bApproved, isAdmin, user, profile, loading } = useAuthContext();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Close mobile drawer on route change
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [mobileOpen]);
 
   if (loading) return null;
   if (!user || (!isB2bApproved && !isAdmin)) return <Navigate to="/login" replace />;
 
-  const sw = collapsed ? 72 : 248;
-
   return (
     <div className="partner-app" style={{ display: 'flex', minHeight: '100vh' }}>
 
+      {/* Mobile backdrop */}
+      <div
+        className={`partner-sidebar-overlay${mobileOpen ? ' mobile-open' : ''}`}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden
+      />
+
       {/* ── Sidebar ─────────────────────────────────────────────── */}
-      <aside style={{
-        width: sw, minWidth: sw, height: '100vh',
-        position: 'fixed', top: 0, left: 0,
-        background: 'var(--p-surface-1)',
-        borderRight: '1px solid var(--p-border-soft)',
-        display: 'flex', flexDirection: 'column',
-        transition: `width var(--p-t-slow) var(--p-ease), min-width var(--p-t-slow) var(--p-ease)`,
-        zIndex: 50, overflow: 'hidden',
-      }}>
+      <aside className={`partner-sidebar${collapsed ? ' collapsed' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
 
         {/* Brand */}
         <div style={{
@@ -189,8 +199,9 @@ export default function PartnerLayout() {
           </div>
         )}
 
-        {/* Collapse toggle */}
+        {/* Collapse toggle (desktop only) */}
         <button
+          className="partner-collapse-toggle"
           onClick={() => setCollapsed(v => !v)}
           style={{
             position: 'absolute', top: '50%', right: -12,
@@ -198,7 +209,7 @@ export default function PartnerLayout() {
             width: 24, height: 24, borderRadius: '50%',
             background: 'var(--p-surface-1)', border: '1px solid var(--p-border)',
             color: 'var(--p-t3)', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            alignItems: 'center', justifyContent: 'center',
             zIndex: 10,
           }}
         >
@@ -207,16 +218,10 @@ export default function PartnerLayout() {
       </aside>
 
       {/* ── Main area ───────────────────────────────────────────── */}
-      <div style={{
-        marginLeft: sw,
-        flex: 1, display: 'flex', flexDirection: 'column',
-        minHeight: '100vh',
-        transition: `margin-left var(--p-t-slow) var(--p-ease)`,
-        minWidth: 0,
-      }}>
+      <div className={`partner-main${collapsed ? ' sidebar-collapsed' : ''}`}>
 
         {/* Header */}
-        <header style={{
+        <header className="partner-header" style={{
           height: 60,
           background: 'rgba(10,11,15,0.8)',
           backdropFilter: 'blur(12px)',
@@ -226,20 +231,32 @@ export default function PartnerLayout() {
           position: 'sticky', top: 0, zIndex: 40,
           flexShrink: 0,
         }}>
+          {/* Mobile menu hamburger */}
+          <button
+            className="partner-mobile-menu-btn"
+            onClick={() => setMobileOpen(v => !v)}
+            aria-label="Otevřít menu"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+
           {/* Breadcrumb */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
-            fontSize: 13, color: 'var(--p-t3)', flexShrink: 0,
+            fontSize: 13, color: 'var(--p-t3)', flexShrink: 0, minWidth: 0,
           }}>
-            <Home size={13} />
-            <span>/</span>
-            <span style={{ color: 'var(--p-t1)', fontWeight: 500 }}>
+            <Home size={13} className="partner-header-breadcrumb-home" />
+            <span className="partner-header-breadcrumb-home">/</span>
+            <span style={{
+              color: 'var(--p-t1)', fontWeight: 500,
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
               {getPageTitle(location.pathname)}
             </span>
           </div>
 
-          {/* Search */}
-          <div style={{ flex: 1, maxWidth: 360, margin: '0 auto', position: 'relative' }}>
+          {/* Search (hidden on mobile) */}
+          <div className="partner-header-search" style={{ flex: 1, maxWidth: 360, margin: '0 auto', position: 'relative' }}>
             <Search size={14} style={{
               position: 'absolute', left: 10, top: '50%',
               transform: 'translateY(-50%)', color: 'var(--p-t3)', pointerEvents: 'none',
@@ -263,7 +280,7 @@ export default function PartnerLayout() {
 
           {/* Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto', flexShrink: 0 }}>
-            <button style={iconBtn}>
+            <button className="partner-header-actions-extra" style={iconBtn}>
               <Bell size={15} />
               <span style={{
                 position: 'absolute', top: 7, right: 7,
@@ -271,8 +288,8 @@ export default function PartnerLayout() {
                 background: 'var(--p-bulk)',
               }} />
             </button>
-            <button style={iconBtn}><Plus size={15} /></button>
-            <div style={{ width: 1, height: 24, background: 'var(--p-border)', margin: '0 4px' }} />
+            <button className="partner-header-actions-extra" style={iconBtn}><Plus size={15} /></button>
+            <div className="partner-header-actions-extra" style={{ width: 1, height: 24, background: 'var(--p-border)', margin: '0 4px' }} />
             {/* Avatar pill */}
             <button style={{
               display: 'flex', alignItems: 'center', gap: 8,
@@ -288,7 +305,7 @@ export default function PartnerLayout() {
               }}>
                 {getInitials(profile?.company_name || '')}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+              <div className="partner-header-avatar-text" style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                 <span style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.2 }}>
                   {profile?.company_name || 'Partner'}
                 </span>
@@ -300,7 +317,7 @@ export default function PartnerLayout() {
         </header>
 
         {/* Page content */}
-        <main style={{
+        <main className="partner-main-content" style={{
           flex: 1, padding: '24px',
           background: 'var(--p-bg)',
           overflowY: 'auto', minWidth: 0,
