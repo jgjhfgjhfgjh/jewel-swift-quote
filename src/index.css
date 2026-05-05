@@ -152,6 +152,53 @@
   transform: translateY(0);
 }
 
+/* Same gradient hover, applied to homepage mobile gateway cards */
+.gateway-hub-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 220ms ease;
+}
+.gateway-hub-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #A855F7, #4F6EF7);
+  opacity: 0;
+  transition: opacity 220ms ease;
+  z-index: 0;
+}
+.gateway-hub-card > * {
+  position: relative;
+  z-index: 1;
+}
+.gateway-hub-card:hover {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -6px rgba(168,85,247,0.55), 0 4px 12px -4px rgba(79,110,247,0.45);
+}
+.gateway-hub-card:hover::before {
+  opacity: 1;
+}
+.gateway-hub-card:hover .gateway-hub-text {
+  color: #ffffff !important;
+}
+.gateway-hub-card:hover .gateway-hub-icon-wrap {
+  background-color: rgba(255,255,255,0.18) !important;
+}
+.gateway-hub-card:hover .gateway-hub-icon {
+  color: #ffffff !important;
+}
+.gateway-hub-card:hover .gateway-hub-arrow-wrap {
+  background-color: rgba(255,255,255,0.95) !important;
+}
+.gateway-hub-card:hover .gateway-hub-arrow {
+  color: #4F6EF7 !important;
+}
+.gateway-hub-card:active {
+  transform: translateY(0);
+}
+
 /* ── Partner Hub mobile responsive layout ──────────────────────── */
 .partner-sidebar {
   width: 248px;

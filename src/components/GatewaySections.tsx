@@ -580,14 +580,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="flex items-center gap-3 w-full bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl px-4 py-3 shadow-sm group"
+                  className="gateway-hub-card flex items-center gap-3 w-full bg-white border border-zinc-200 rounded-2xl px-4 py-3 shadow-sm"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
-                    <Icon className="h-4 w-4 text-zinc-700 group-hover:text-white transition-colors" />
+                  <div className="gateway-hub-icon-wrap w-8 h-8 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0 transition-colors">
+                    <Icon className="gateway-hub-icon h-4 w-4 text-zinc-700 transition-colors" />
                   </div>
-                  <span className="text-zinc-900 font-semibold text-sm flex-1 text-left">{s.label}</span>
-                  <div className="w-6 h-6 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-3.5 w-3.5 text-white" />
+                  <span className="gateway-hub-text text-zinc-900 font-semibold text-sm flex-1 text-left transition-colors">{s.label}</span>
+                  <div className="gateway-hub-arrow-wrap w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
+                    <ArrowRight className="gateway-hub-arrow h-3.5 w-3.5 text-white transition-colors" />
                   </div>
                 </a>
               );
