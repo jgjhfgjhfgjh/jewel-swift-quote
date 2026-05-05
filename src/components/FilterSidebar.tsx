@@ -102,6 +102,29 @@ export function FilterSidebar({
     return GENDER_ORDER.filter((g) => genderParam.values.includes(g));
   }, [availableParams]);
 
+  // Classify "other" parameters into logical groups based on Czech parameter names.
+  // Keyword matching is case-insensitive and works on partial matches.
+  // Anything unmatched falls into "Ostatní".
+  const PROPERTY_KEYWORDS = [
+    'materiál', 'material', 'barva', 'color', 'kámen', 'kamen', 'stone',
+    'provedení', 'provedeni', 'styl', 'tvar', 'design', 'kov', 'povrch',
+    'ryzost', 'puncov', 'velikost', 'rozměr', 'rozmer', 'délka', 'delka',
+  ];
+  const TECHNICAL_KEYWORDS = [
+    'pohon', 'strojek', 'mechan', 'quartz', 'automat', 'baterie',
+    'sklíčko', 'sklicko', 'sklo', 'voděod', 'vodeod', 'water',
+    'pásek', 'pasek', 'řemínek', 'reminek', 'náramek', 'naramek',
+    'pouzdro', 'průměr', 'prumer', 'tloušť', 'tloust', 'funkce',
+    'osvit', 'displej', 'chronograf',
+  ];
+
+  const classifyParam = (name: string): 'property' | 'technical' | 'other' => {
+    const n = name.toLowerCase();
+    if (PROPERTY_KEYWORDS.some((k) => n.includes(k))) return 'property';
+    if (TECHNICAL_KEYWORDS.some((k) => n.includes(k))) return 'technical';
+    return 'other';
+  };
+
   // Other params sorted by number of options ascending (fewer options first → easier to scan).
   // Ties broken alphabetically for stable order across renders.
   const otherParams = useMemo(
@@ -115,6 +138,19 @@ export function FilterSidebar({
           return a.nazev.localeCompare(b.nazev, 'cs');
         }),
     [availableParams]
+  );
+
+  const propertyParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'property'),
+    [otherParams]
+  );
+  const technicalParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'technical'),
+    [otherParams]
+  );
+  const miscParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'other'),
+    [otherParams]
   );
 
   const toggleBrand = (name: string) => {
