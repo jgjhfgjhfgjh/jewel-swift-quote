@@ -601,14 +601,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="inline-flex items-center gap-2 shrink-0 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-400 transition-all rounded-2xl px-4 py-2.5 shadow-sm group"
+                  className="gateway-hub-card inline-flex items-center gap-2 shrink-0 bg-white border border-zinc-200 rounded-2xl px-4 py-2.5 shadow-sm"
                 >
-                  <div className="w-7 h-7 rounded-xl bg-zinc-100 group-hover:bg-zinc-900 transition-colors flex items-center justify-center shrink-0">
-                    <Icon className="h-4 w-4 text-zinc-700 group-hover:text-white transition-colors" />
+                  <div className="gateway-hub-icon-wrap w-7 h-7 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0 transition-colors">
+                    <Icon className="gateway-hub-icon h-4 w-4 text-zinc-700 transition-colors" />
                   </div>
-                  <span className="text-zinc-900 font-semibold text-sm whitespace-nowrap">{s.label}</span>
-                  <div className="w-5 h-5 rounded-full bg-zinc-900 group-hover:bg-zinc-700 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-3 w-3 text-white" />
+                  <span className="gateway-hub-text text-zinc-900 font-semibold text-sm whitespace-nowrap transition-colors">{s.label}</span>
+                  <div className="gateway-hub-arrow-wrap w-5 h-5 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
+                    <ArrowRight className="gateway-hub-arrow h-3 w-3 text-white transition-colors" />
                   </div>
                 </a>
               );
@@ -676,15 +676,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         {/* Unified premium gateway — Account Manager + AI assistant */}
         <Reveal delay={150} className="mt-8 px-4 sm:px-6">
           <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-white via-white to-zinc-50 shadow-xl">
-            {/* Decorative glow */}
-            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-amber-200/30 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+            {/* Decorative glow — purple + indigo to match Dropshipping Hub palette */}
+            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#A855F7]/25 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#4F6EF7]/20 blur-3xl" />
 
             <div className="relative p-5 sm:p-7">
               {/* Header */}
               <div className="flex items-center justify-between mb-4 sm:mb-5">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
-                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#A855F7] to-[#4F6EF7] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
+                  <Star className="h-3 w-3 fill-white text-white" />
                   Váš osobní obchodní tým
                 </div>
                 <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
@@ -705,20 +705,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* AI assistant CTA — preserves original gateway open route */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex items-center gap-3 sm:gap-4 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
+                  className="sales-team-cta-ai group flex items-center gap-3 sm:gap-4 text-white rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
                 >
-                  <div className="shrink-0">
+                  <div className="shrink-0 relative z-10">
                     <GatewayMascot3D size={44} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1 text-zinc-400 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
+                  <div className="flex-1 min-w-0 relative z-10">
+                    <div className="flex items-center gap-1 text-white/70 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
                       <Sparkles className="h-3 w-3 shrink-0" />
                       <span>Odpověď do 5 vteřin</span>
                     </div>
                     <p className="font-bold text-sm leading-tight">Promluvit s AI asistentem</p>
-                    <p className="text-[11px] text-zinc-400 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
+                    <p className="text-[11px] text-white/70 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors flex items-center justify-center shrink-0">
+                  <div className="relative z-10 w-8 h-8 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors flex items-center justify-center shrink-0">
                     <ArrowRight className="h-4 w-4 text-white" />
                   </div>
                 </button>
@@ -726,21 +726,22 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Account manager CTA */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex items-center gap-3 sm:gap-4 bg-white hover:bg-amber-50 border border-zinc-200 hover:border-amber-300 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
+                  className="sales-team-cta-am group flex items-center gap-3 sm:gap-4 bg-white border border-zinc-200 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
                 >
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 border border-amber-300/60 flex items-center justify-center shrink-0 shadow-inner">
-                    <Users className="h-5 w-5 sm:h-6 sm:w-6 text-amber-700" />
+                  <div className="sales-team-am-avatar w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 shadow-inner relative z-10 transition-all"
+                       style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.18), rgba(79,110,247,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(168,85,247,0.35)' }}>
+                    <Users className="sales-team-am-icon h-5 w-5 sm:h-6 sm:w-6 transition-colors" style={{ color: '#7c3aed' }} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1 text-amber-700 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
-                      <Star className="h-3 w-3 shrink-0 fill-amber-500 text-amber-500" />
+                  <div className="flex-1 min-w-0 relative z-10">
+                    <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#7c3aed' }}>
+                      <Star className="h-3 w-3 shrink-0" style={{ fill: '#A855F7', color: '#A855F7' }} />
                       <span>Osobní péče</span>
                     </div>
-                    <p className="font-bold text-sm leading-tight text-zinc-900">Kontaktovat account managera</p>
-                    <p className="text-[11px] text-zinc-500 leading-tight mt-0.5">Strategie, individuální nabídka, volání</p>
+                    <p className="sales-team-am-title font-bold text-sm leading-tight text-zinc-900 transition-colors">Kontaktovat account managera</p>
+                    <p className="sales-team-am-desc text-[11px] text-zinc-500 leading-tight mt-0.5 transition-colors">Strategie, individuální nabídka, volání</p>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-zinc-900 group-hover:bg-amber-600 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-4 w-4 text-white" />
+                  <div className="sales-team-am-arrow-wrap relative z-10 w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
+                    <ArrowRight className="sales-team-am-arrow h-4 w-4 text-white transition-colors" />
                   </div>
                 </button>
               </div>

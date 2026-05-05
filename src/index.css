@@ -199,6 +199,85 @@
   transform: translateY(0);
 }
 
+/* ── Sales team section CTAs (homepage) ────────────────────────── */
+/* AI assistant: dark indigo→purple gradient with subtle lift */
+.sales-team-cta-ai {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1A1D24, #2A1F3F);
+}
+.sales-team-cta-ai::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #4F6EF7, #A855F7);
+  opacity: 0;
+  transition: opacity 240ms ease;
+  z-index: 0;
+}
+.sales-team-cta-ai:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -10px rgba(168,85,247,0.55), 0 6px 14px -6px rgba(79,110,247,0.45);
+}
+.sales-team-cta-ai:hover::before {
+  opacity: 1;
+}
+.sales-team-cta-ai:active {
+  transform: translateY(0);
+}
+
+/* Account manager: white card flips to gradient on hover */
+.sales-team-cta-am {
+  position: relative;
+  overflow: hidden;
+}
+.sales-team-cta-am::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #A855F7, #4F6EF7);
+  opacity: 0;
+  transition: opacity 240ms ease;
+  z-index: 0;
+}
+.sales-team-cta-am:hover {
+  border-color: transparent !important;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -10px rgba(168,85,247,0.55), 0 6px 14px -6px rgba(79,110,247,0.45);
+}
+.sales-team-cta-am:hover::before {
+  opacity: 1;
+}
+.sales-team-cta-am:hover .sales-team-am-avatar {
+  background: rgba(255,255,255,0.18) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+.sales-team-cta-am:hover .sales-team-am-icon {
+  color: #ffffff !important;
+}
+.sales-team-cta-am:hover .sales-team-am-eyebrow {
+  color: rgba(255,255,255,0.85) !important;
+}
+.sales-team-cta-am:hover .sales-team-am-eyebrow svg {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+.sales-team-cta-am:hover .sales-team-am-title {
+  color: #ffffff !important;
+}
+.sales-team-cta-am:hover .sales-team-am-desc {
+  color: rgba(255,255,255,0.75) !important;
+}
+.sales-team-cta-am:hover .sales-team-am-arrow-wrap {
+  background-color: #ffffff !important;
+}
+.sales-team-cta-am:hover .sales-team-am-arrow {
+  color: #4F6EF7 !important;
+}
+.sales-team-cta-am:active {
+  transform: translateY(0);
+}
+
 /* ── Partner Hub mobile responsive layout ──────────────────────── */
 .partner-sidebar {
   width: 248px;
