@@ -212,6 +212,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
           {!loading && user ? (
             <>
+              {/* Dropshipping Hub icon — mobile only (left-side button is hidden below sm) */}
+              {(isB2bApproved || isAdmin) && (
+                <button
+                  onClick={() => navigate('/partner')}
+                  title="Dropshipping Hub"
+                  className="dropshipping-hub-btn sm:hidden inline-flex shrink-0 items-center justify-center h-9 w-9 rounded-lg border transition-all duration-200"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                </button>
+              )}
+
               {showSearch && (
                 <Button
                   variant="ghost"
