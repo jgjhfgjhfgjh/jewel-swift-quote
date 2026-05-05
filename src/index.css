@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 @layer base {
   :root {
@@ -116,6 +117,79 @@
     font-family: 'Montserrat', sans-serif;
   }
 }
+
+/* ── Partner Hub design tokens ───────────────────────────────────── */
+.partner-app {
+  --p-bg: #0A0B0F;
+  --p-surface-1: #111318;
+  --p-surface-2: #1A1D24;
+  --p-card: #1E2128;
+  --p-card-hi: #23262F;
+  --p-border: #2A2D35;
+  --p-border-soft: #20232B;
+  --p-hairline: rgba(255,255,255,0.06);
+  --p-primary: #4F6EF7;
+  --p-primary-2: #6E8AFF;
+  --p-bulk: #A855F7;
+  --p-bulk-2: #C084FC;
+  --p-success: #00D2A0;
+  --p-warn: #F5A623;
+  --p-danger: #F74F4F;
+  --p-t1: #F0F2F7;
+  --p-t2: #9CA3AF;
+  --p-t3: #6B7280;
+  --p-t4: #4B5260;
+  --p-font-sans: 'Space Grotesk', sans-serif;
+  --p-font-mono: 'IBM Plex Mono', monospace;
+  --p-radius: 12px;
+  --p-radius-sm: 8px;
+  --p-radius-lg: 16px;
+  --p-ease: cubic-bezier(.2,.7,.2,1);
+  --p-t-fast: 120ms;
+  --p-t: 200ms;
+  --p-t-slow: 320ms;
+  --p-glow-primary: 0 4px 24px -4px rgba(79,110,247,0.45);
+  --p-glow-bulk: 0 4px 24px -4px rgba(168,85,247,0.45);
+
+  background: var(--p-bg);
+  color: var(--p-t1);
+  font-family: var(--p-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  font-feature-settings: 'ss01', 'ss02', 'cv11';
+}
+
+.partner-app input,
+.partner-app button,
+.partner-app select,
+.partner-app textarea,
+.partner-app h1,
+.partner-app h2,
+.partner-app h3,
+.partner-app h4,
+.partner-app h5,
+.partner-app h6,
+.partner-app p,
+.partner-app span,
+.partner-app div,
+.partner-app a,
+.partner-app label {
+  font-family: var(--p-font-sans);
+}
+
+.partner-app .p-mono {
+  font-family: var(--p-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes p-page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.partner-app .p-page {
+  animation: p-page-enter 0.22s var(--p-ease) both;
+}
+/* ─────────────────────────────────────────────────────────────────── */
 
 @layer utilities {
   .scrollbar-thin {

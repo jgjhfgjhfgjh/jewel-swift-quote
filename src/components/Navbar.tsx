@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, LayoutDashboard } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -31,7 +31,7 @@ const HOME_NAV_ITEMS = [
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode, setGatewayOpen } = useStore();
-  const { user, profile, isAdmin, signOut, loading } = useAuthContext();
+  const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
@@ -209,6 +209,20 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   title={t.search}
                 >
                   {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                </Button>
+              )}
+
+              {/* Partner Hub — for dropshipping partners and admins */}
+              {(isB2bApproved || isAdmin) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  style={{ borderColor: 'rgba(168,85,247,0.35)', backgroundColor: 'rgba(168,85,247,0.08)', color: '#7c3aed' }}
+                  className="inline-flex gap-1.5 text-xs h-8 px-3 mr-0.5 border transition-all hover:opacity-80"
+                  onClick={() => navigate('/partner')}
+                >
+                  <LayoutDashboard className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline font-medium">Partner Hub</span>
                 </Button>
               )}
 
@@ -445,6 +459,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           )}
 
+          {(isB2bApproved || isAdmin) && (
+            <>
+              <div className="border-t my-2" />
+              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors" style={{ color: '#7c3aed' }}>
+                <LayoutDashboard className="h-4 w-4" style={{ color: '#7c3aed' }} /> Partner Hub
+              </button>
+            </>
+          )}
           {isAdmin && (
             <>
               <div className="border-t my-2" />

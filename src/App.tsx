@@ -12,7 +12,16 @@ import CustomerManagement from "./pages/CustomerManagement.tsx";
 import CustomerDetail from "./pages/CustomerDetail.tsx";
 import FeedManagement from "./pages/FeedManagement.tsx";
 import Favorites from "./pages/Favorites.tsx";
-import Partner from "./pages/Partner.tsx";
+import PartnerLayout from "./pages/partner/PartnerLayout.tsx";
+import PartnerDashboard from "./pages/partner/PartnerDashboard.tsx";
+import PartnerOrders from "./pages/partner/PartnerOrders.tsx";
+import PartnerBulk from "./pages/partner/PartnerBulk.tsx";
+import PartnerCatalog from "./pages/partner/PartnerCatalog.tsx";
+import PartnerNewOrder from "./pages/partner/PartnerNewOrder.tsx";
+import PartnerCustomers from "./pages/partner/PartnerCustomers.tsx";
+import PartnerIntegrations from "./pages/partner/PartnerIntegrations.tsx";
+import PartnerAnalytics from "./pages/partner/PartnerAnalytics.tsx";
+import PartnerSettings from "./pages/partner/PartnerSettings.tsx";
 import Velkoobchod from "./pages/Velkoobchod.tsx";
 import Dropshipping from "./pages/Dropshipping.tsx";
 import Feed from "./pages/Feed.tsx";
@@ -36,7 +45,18 @@ const App = () => (
             <Route path="/customers/:id" element={<CustomerDetail />} />
             <Route path="/admin/feeds" element={<FeedManagement />} />
             <Route path="/favorites" element={<Favorites />} />
-            <Route path="/partner" element={<Partner />} />
+            {/* Partner Hub — dropshipping dashboard */}
+            <Route path="/partner" element={<PartnerLayout />}>
+              <Route index element={<PartnerDashboard />} />
+              <Route path="orders" element={<PartnerOrders />} />
+              <Route path="bulk" element={<PartnerBulk />} />
+              <Route path="catalog" element={<PartnerCatalog />} />
+              <Route path="new-order" element={<PartnerNewOrder />} />
+              <Route path="customers" element={<PartnerCustomers />} />
+              <Route path="integrations" element={<PartnerIntegrations />} />
+              <Route path="analytics" element={<PartnerAnalytics />} />
+              <Route path="settings" element={<PartnerSettings />} />
+            </Route>
             <Route path="/velkoobchod" element={<Velkoobchod />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/dropshipping" element={<Dropshipping />} />

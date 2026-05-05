@@ -38,10 +38,13 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
+    let currentUserId: string | null = null;
+
     // Set up auth listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         if (session?.user) {
+          currentUserId = session.user.id;
           setState(prev => ({ ...prev, user: session.user, session, loading: true }));
           // Use setTimeout to avoid Supabase auth deadlock
           setTimeout(async () => {
@@ -49,6 +52,7 @@ export function useAuth() {
             setState({ user: session.user, session, profile, role, loading: false });
           }, 0);
         } else {
+          currentUserId = null;
           setState({ user: null, session: null, profile: null, role: null, loading: false });
         }
       }
@@ -57,6 +61,7 @@ export function useAuth() {
     // THEN check existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
+        currentUserId = session.user.id;
         const { profile, role } = await fetchProfileAndRole(session.user.id);
         setState({ user: session.user, session, profile, role, loading: false });
       } else {
@@ -64,7 +69,26 @@ export function useAuth() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Realtime: re-fetch role whenever user_roles row changes for this user
+    const roleChannel = supabase
+      .channel('user_roles_changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'user_roles' },
+        async (payload) => {
+          const changedUserId = (payload.new as any)?.user_id ?? (payload.old as any)?.user_id;
+          if (changedUserId && changedUserId === currentUserId) {
+            const { profile, role } = await fetchProfileAndRole(changedUserId);
+            setState(prev => prev.user ? { ...prev, profile, role } : prev);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+      supabase.removeChannel(roleChannel);
+    };
   }, [fetchProfileAndRole]);
 
   const signUp = async (email: string, password: string, companyName: string, ico: string) => {
