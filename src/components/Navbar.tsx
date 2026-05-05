@@ -218,11 +218,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   variant="ghost"
                   size="sm"
                   style={{ borderColor: 'rgba(168,85,247,0.35)', backgroundColor: 'rgba(168,85,247,0.08)', color: '#7c3aed' }}
-                  className="inline-flex gap-1.5 text-xs h-8 px-3 mr-0.5 border transition-all hover:opacity-80"
+                  className="inline-flex gap-1.5 text-xs h-8 px-2 xl:px-3 mr-0.5 border transition-all hover:opacity-80"
                   onClick={() => navigate('/partner')}
+                  title="Partner Hub"
                 >
                   <LayoutDashboard className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline font-medium">Partner Hub</span>
+                  <span className="hidden xl:inline font-medium">Partner Hub</span>
                 </Button>
               )}
 
