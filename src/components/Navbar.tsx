@@ -163,6 +163,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               className={`h-20 sm:h-12 lg:h-[90px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
             />
           </Link>
+
+          {/* Dropshipping Hub — for dropshipping partners and admins */}
+          {!loading && user && (isB2bApproved || isAdmin) && (
+            <button
+              onClick={() => navigate('/partner')}
+              title="Dropshipping Hub"
+              className="dropshipping-hub-btn group hidden sm:inline-flex shrink-0 items-center gap-2 ml-2 h-9 px-3.5 rounded-lg text-xs font-semibold border transition-all duration-200"
+            >
+              <LayoutDashboard className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+              <span className="hidden md:inline">Dropshipping Hub</span>
+            </button>
+          )}
         </div>
 
         {/* Center: search (catalog) | nav links (home collapsed) */}
@@ -209,20 +221,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   title={t.search}
                 >
                   {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-                </Button>
-              )}
-
-              {/* Partner Hub — for dropshipping partners and admins */}
-              {(isB2bApproved || isAdmin) && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  style={{ borderColor: 'rgba(168,85,247,0.35)', backgroundColor: 'rgba(168,85,247,0.08)', color: '#7c3aed' }}
-                  className="h-8 w-8 mr-0.5 border transition-all hover:opacity-80"
-                  onClick={() => navigate('/partner')}
-                  title="Partner Hub"
-                >
-                  <LayoutDashboard className="h-4 w-4" />
                 </Button>
               )}
 

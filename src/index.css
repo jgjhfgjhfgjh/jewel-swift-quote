@@ -118,6 +118,40 @@
   }
 }
 
+/* ── Dropshipping Hub navbar button ─────────────────────────────── */
+.dropshipping-hub-btn {
+  background: linear-gradient(135deg, rgba(168,85,247,0.10), rgba(79,110,247,0.10));
+  border-color: rgba(168,85,247,0.35);
+  color: #7c3aed;
+  position: relative;
+  overflow: hidden;
+}
+.dropshipping-hub-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #A855F7, #4F6EF7);
+  opacity: 0;
+  transition: opacity 220ms ease;
+  z-index: 0;
+}
+.dropshipping-hub-btn > * {
+  position: relative;
+  z-index: 1;
+}
+.dropshipping-hub-btn:hover {
+  color: #ffffff;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -6px rgba(168,85,247,0.55), 0 4px 12px -4px rgba(79,110,247,0.45);
+}
+.dropshipping-hub-btn:hover::before {
+  opacity: 1;
+}
+.dropshipping-hub-btn:active {
+  transform: translateY(0);
+}
+
 /* ── Partner Hub design tokens ───────────────────────────────────── */
 .partner-app {
   --p-bg: #0A0B0F;
