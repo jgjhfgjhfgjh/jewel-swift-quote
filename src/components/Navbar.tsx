@@ -216,14 +216,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               {(isB2bApproved || isAdmin) && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   style={{ borderColor: 'rgba(168,85,247,0.35)', backgroundColor: 'rgba(168,85,247,0.08)', color: '#7c3aed' }}
-                  className="inline-flex gap-1.5 text-xs h-8 px-2 xl:px-3 mr-0.5 border transition-all hover:opacity-80"
+                  className="h-8 w-8 mr-0.5 border transition-all hover:opacity-80"
                   onClick={() => navigate('/partner')}
                   title="Partner Hub"
                 >
-                  <LayoutDashboard className="h-3.5 w-3.5" />
-                  <span className="hidden xl:inline font-medium">Partner Hub</span>
+                  <LayoutDashboard className="h-4 w-4" />
                 </Button>
               )}
 
