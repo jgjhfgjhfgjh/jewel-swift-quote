@@ -102,8 +102,18 @@ export function FilterSidebar({
     return GENDER_ORDER.filter((g) => genderParam.values.includes(g));
   }, [availableParams]);
 
+  // Other params sorted by number of options ascending (fewer options first → easier to scan).
+  // Ties broken alphabetically for stable order across renders.
   const otherParams = useMemo(
-    () => availableParams.filter((p) => p.nazev !== GENDER_PARAM),
+    () =>
+      availableParams
+        .filter((p) => p.nazev !== GENDER_PARAM)
+        .slice()
+        .sort((a, b) => {
+          const diff = a.values.length - b.values.length;
+          if (diff !== 0) return diff;
+          return a.nazev.localeCompare(b.nazev, 'cs');
+        }),
     [availableParams]
   );
 
@@ -226,6 +236,40 @@ export function FilterSidebar({
           </AccordionItem>
         )}
 
+        {/* Brands — promoted to top tier (after Language + Discounts) */}
+        <AccordionItem value="brands" className="border-b px-2">
+          <AccordionTrigger className="px-2 py-3 hover:no-underline">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t.brands}
+              <ActiveBadge count={activeBrandsCount} />
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pb-3">
+            {activeBrandsCount > 0 && (
+              <button
+                onClick={() => setSelectedBrands([])}
+                className="mb-2 text-sm text-primary hover:underline font-medium"
+              >
+                {t.allBrands}
+              </button>
+            )}
+            <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+              {sortedManufacturers.map((m) => (
+                <label
+                  key={m.name}
+                  className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                >
+                  <Checkbox
+                    checked={selectedBrands.includes(m.name)}
+                    onCheckedChange={() => toggleBrand(m.name)}
+                  />
+                  <span className="truncate">{m.name}</span>
+                </label>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
         {/* Categories */}
         <AccordionItem value="categories" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -342,40 +386,6 @@ export function FilterSidebar({
             </AccordionItem>
           );
         })}
-
-        {/* Brands */}
-        <AccordionItem value="brands" className="px-2">
-          <AccordionTrigger className="px-2 py-3 hover:no-underline">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t.brands}
-              <ActiveBadge count={activeBrandsCount} />
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="px-2 pb-6">
-            {activeBrandsCount > 0 && (
-              <button
-                onClick={() => setSelectedBrands([])}
-                className="mb-2 text-sm text-primary hover:underline font-medium"
-              >
-                {t.allBrands}
-              </button>
-            )}
-            <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
-              {sortedManufacturers.map((m) => (
-                <label
-                  key={m.name}
-                  className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-                >
-                  <Checkbox
-                    checked={selectedBrands.includes(m.name)}
-                    onCheckedChange={() => toggleBrand(m.name)}
-                  />
-                  <span className="truncate">{m.name}</span>
-                </label>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
       </Accordion>
     </div>
   );
