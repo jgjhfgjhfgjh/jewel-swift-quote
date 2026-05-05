@@ -159,22 +159,13 @@
   font-feature-settings: 'ss01', 'ss02', 'cv11';
 }
 
-.partner-app input,
-.partner-app button,
-.partner-app select,
-.partner-app textarea,
-.partner-app h1,
-.partner-app h2,
-.partner-app h3,
-.partner-app h4,
-.partner-app h5,
-.partner-app h6,
-.partner-app p,
-.partner-app span,
-.partner-app div,
-.partner-app a,
-.partner-app label {
-  font-family: var(--p-font-sans);
+.partner-app,
+.partner-app * {
+  font-family: var(--p-font-sans) !important;
+}
+.partner-app .p-mono,
+.partner-app .p-mono * {
+  font-family: var(--p-font-mono) !important;
 }
 
 .partner-app .p-mono {
