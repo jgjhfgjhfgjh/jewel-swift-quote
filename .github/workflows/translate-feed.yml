@@ -1,0 +1,41 @@
+name: Translate product feed
+
+on:
+  schedule:
+    # Every night at 04:00 UTC (1 hour after sync)
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: 'How many products per language to translate this run'
+        required: false
+        default: '50'
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: sync/package.json
+
+      - name: Install dependencies
+        working-directory: sync
+        run: npm install
+
+      - name: Run translation
+        working-directory: sync
+        env:
+          LOVABLE_SUPABASE_URL: ${{ secrets.LOVABLE_SUPABASE_URL }}
+          LOVABLE_SUPABASE_SERVICE_KEY: ${{ secrets.LOVABLE_SUPABASE_SERVICE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TRANSLATE_BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+        run: node translate-feed.js

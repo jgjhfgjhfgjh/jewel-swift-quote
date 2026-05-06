@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "sync": "node sync-feed.js"
+    "sync": "node sync-feed.js",
+    "translate": "node translate-feed.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
     "@supabase/supabase-js": "^2.45.0",
     "dotenv": "^16.4.5",
     "xml2js": "^0.6.2"
