@@ -378,6 +378,196 @@
   transform: translateY(0);
 }
 
+/* ── Catalog filter panel (hi-tech 2026 SaaS) ──────────────────── */
+.filter-panel {
+  background:
+    linear-gradient(180deg, rgba(248,249,255,0.6), rgba(255,255,255,0.95));
+  font-feature-settings: 'ss01', 'cv11';
+}
+
+/* Top quick row: stock + language */
+.filter-quick-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 10px 10px 6px;
+  border-bottom: 1px solid hsl(var(--border));
+  background: linear-gradient(135deg, rgba(168,85,247,0.04), rgba(79,110,247,0.04));
+}
+.filter-quick-stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.filter-quick-stock svg {
+  color: rgba(79,110,247,0.85);
+}
+.filter-lang-item {
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 10px;
+  background: hsl(var(--card));
+  overflow: hidden;
+}
+.filter-lang-trigger {
+  padding: 9px 12px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.filter-lang-trigger:hover {
+  background: rgba(79,110,247,0.04);
+}
+
+/* Group headers — gradient pill with iconified chip */
+.filter-group-header {
+  position: relative;
+  margin: 12px 8px 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(135deg, var(--fg-bg-1, rgba(0,0,0,0.02)) 0%, var(--fg-bg-2, rgba(0,0,0,0.04)) 100%);
+  border-color: var(--fg-border, rgba(0,0,0,0.08));
+}
+.filter-group-header::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--fg-bar, linear-gradient(180deg, #d4d4d8, #a1a1aa));
+}
+.filter-group-header[data-active='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 100% 0%, var(--fg-glow, rgba(168,85,247,0.10)) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+.filter-group-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.filter-group-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--fg-chip-bg, rgba(0,0,0,0.06));
+  color: var(--fg-chip-fg, #71717a);
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 0 rgba(0,0,0,0.02);
+  transition: all 220ms ease;
+}
+.filter-group-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.filter-group-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--fg-label, hsl(var(--foreground)));
+  line-height: 1.2;
+}
+.filter-group-sub {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--fg-sub, hsl(var(--muted-foreground)));
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.filter-group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--fg-bar, linear-gradient(135deg, #71717a, #52525b));
+  box-shadow: 0 2px 6px -2px rgba(0,0,0,0.25);
+}
+
+/* Variant: jewelry — amber/gold */
+.filter-group-jewelry {
+  --fg-bg-1: rgba(252,211,77,0.10);
+  --fg-bg-2: rgba(251,191,36,0.15);
+  --fg-border: rgba(245,158,11,0.30);
+  --fg-bar: linear-gradient(180deg, #fbbf24, #d97706);
+  --fg-chip-bg: linear-gradient(135deg, #fef3c7, #fde68a);
+  --fg-chip-fg: #b45309;
+  --fg-label: #78350f;
+  --fg-sub: #a16207;
+  --fg-glow: rgba(251,191,36,0.20);
+}
+/* Variant: watches — indigo */
+.filter-group-watches {
+  --fg-bg-1: rgba(129,140,248,0.10);
+  --fg-bg-2: rgba(99,102,241,0.15);
+  --fg-border: rgba(79,70,229,0.30);
+  --fg-bar: linear-gradient(180deg, #818cf8, #4f46e5);
+  --fg-chip-bg: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  --fg-chip-fg: #3730a3;
+  --fg-label: #312e81;
+  --fg-sub: #4338ca;
+  --fg-glow: rgba(99,102,241,0.20);
+}
+/* Variant: common — violet */
+.filter-group-common {
+  --fg-bg-1: rgba(192,132,252,0.10);
+  --fg-bg-2: rgba(168,85,247,0.15);
+  --fg-border: rgba(147,51,234,0.30);
+  --fg-bar: linear-gradient(180deg, #c084fc, #9333ea);
+  --fg-chip-bg: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  --fg-chip-fg: #6b21a8;
+  --fg-label: #581c87;
+  --fg-sub: #7e22ce;
+  --fg-glow: rgba(168,85,247,0.20);
+}
+/* Variant: neutral */
+.filter-group-neutral {
+  --fg-bg-1: rgba(0,0,0,0.02);
+  --fg-bg-2: rgba(0,0,0,0.04);
+  --fg-border: rgba(0,0,0,0.08);
+  --fg-bar: linear-gradient(180deg, #a1a1aa, #52525b);
+  --fg-chip-bg: rgba(0,0,0,0.05);
+  --fg-chip-fg: #52525b;
+  --fg-label: #18181b;
+  --fg-sub: #71717a;
+  --fg-glow: rgba(0,0,0,0.06);
+}
+.filter-group-header:hover .filter-group-chip {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* Tighter accordion items inside a group */
+.filter-panel .border-b {
+  border-bottom-color: hsl(var(--border) / 0.6);
+}
+
 /* ── Partner Hub mobile responsive layout ──────────────────────── */
 .partner-sidebar {
   width: 248px;

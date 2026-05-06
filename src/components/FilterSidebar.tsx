@@ -104,24 +104,39 @@ export function FilterSidebar({
 
   // Classify "other" parameters into logical groups based on Czech parameter names.
   // Keyword matching is case-insensitive and works on partial matches.
-  // Anything unmatched falls into "Ostatní".
-  const PROPERTY_KEYWORDS = [
-    'materiál', 'material', 'barva', 'color', 'kámen', 'kamen', 'stone',
-    'provedení', 'provedeni', 'styl', 'tvar', 'design', 'kov', 'povrch',
-    'ryzost', 'puncov', 'velikost', 'rozměr', 'rozmer', 'délka', 'delka',
+  // Strategy:
+  //   - JEWELRY_ONLY → terms that only make sense for jewelry (ryzost, kámen…)
+  //   - WATCH_ONLY   → terms that only make sense for watches (strojek, pohon…)
+  //   - COMMON       → terms that apply to both (barva, design, velikost…)
+  //   - everything else → "ostatní"
+  const JEWELRY_ONLY_KEYWORDS = [
+    'kámen', 'kamen', 'stone', 'drahokam',
+    'ryzost', 'puncov', 'karát', 'karat', 'carat',
+    'briliant', 'diamant', 'perl',
+    'zlato', 'gold', 'stříbro', 'striebro', 'silver', 'platin',
+    'řetízek', 'retizek', 'řetěz', 'retez', 'náušnice',
   ];
-  const TECHNICAL_KEYWORDS = [
+  const WATCH_ONLY_KEYWORDS = [
     'pohon', 'strojek', 'mechan', 'quartz', 'automat', 'baterie',
-    'sklíčko', 'sklicko', 'sklo', 'voděod', 'vodeod', 'water',
-    'pásek', 'pasek', 'řemínek', 'reminek', 'náramek', 'naramek',
-    'pouzdro', 'průměr', 'prumer', 'tloušť', 'tloust', 'funkce',
-    'osvit', 'displej', 'chronograf',
+    'sklíčko', 'sklicko',
+    'voděod', 'vodeod', 'water', 'wr ',
+    'pásek', 'pasek', 'řemínek', 'reminek',
+    'pouzdro', 'tloušť', 'tloust',
+    'osvit', 'displej', 'chronograf', 'tachymetr', 'luneta',
+    'datum', 'budík',
+  ];
+  const COMMON_KEYWORDS = [
+    'barva', 'color', 'farba',
+    'styl', 'tvar', 'design', 'provedení', 'provedeni',
+    'velikost', 'rozměr', 'rozmer', 'délka', 'delka', 'průměr', 'prumer',
+    'materiál', 'material', 'kov', 'povrch',
   ];
 
-  const classifyParam = (name: string): 'property' | 'technical' | 'other' => {
+  const classifyParam = (name: string): 'jewelry' | 'watch' | 'common' | 'other' => {
     const n = name.toLowerCase();
-    if (PROPERTY_KEYWORDS.some((k) => n.includes(k))) return 'property';
-    if (TECHNICAL_KEYWORDS.some((k) => n.includes(k))) return 'technical';
+    if (JEWELRY_ONLY_KEYWORDS.some((k) => n.includes(k))) return 'jewelry';
+    if (WATCH_ONLY_KEYWORDS.some((k) => n.includes(k))) return 'watch';
+    if (COMMON_KEYWORDS.some((k) => n.includes(k))) return 'common';
     return 'other';
   };
 
@@ -140,12 +155,16 @@ export function FilterSidebar({
     [availableParams]
   );
 
-  const propertyParams = useMemo(
-    () => otherParams.filter((p) => classifyParam(p.nazev) === 'property'),
+  const jewelryParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'jewelry'),
     [otherParams]
   );
-  const technicalParams = useMemo(
-    () => otherParams.filter((p) => classifyParam(p.nazev) === 'technical'),
+  const watchParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'watch'),
+    [otherParams]
+  );
+  const commonParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'common'),
     [otherParams]
   );
   const miscParams = useMemo(
@@ -225,63 +244,41 @@ export function FilterSidebar({
   const activeBrandsCount = selectedBrands.length;
   const activeDiscountCount = minDiscount > 0 ? 1 : 0;
 
-  // Helper: visual group header inside the sidebar (not an accordion item).
-  // Variant accents tie the header to the product family it filters:
-  // - "jewelry" → amber/gold (Šperky)
-  // - "watches" → indigo (Hodinky)
-  // - "neutral" → muted (Region, Sortiment, Misc)
-  type GroupVariant = 'neutral' | 'jewelry' | 'watches';
+  // Hi-tech 2026 group header — glassmorphic gradient pill with iconified chip.
+  // Variant accents tie the header to the product family it filters.
+  type GroupVariant = 'neutral' | 'jewelry' | 'watches' | 'common';
   const GroupHeader = ({
     label,
     icon: Icon,
     variant = 'neutral',
     sub,
+    activeCount = 0,
   }: {
     label: string;
     icon?: React.ComponentType<{ className?: string }>;
     variant?: GroupVariant;
     sub?: string;
+    activeCount?: number;
   }) => {
-    const variantStyles: Record<GroupVariant, { bar: string; chipBg: string; chipText: string; iconText: string; labelText: string }> = {
-      neutral: {
-        bar: 'bg-zinc-300',
-        chipBg: 'bg-muted',
-        chipText: 'text-muted-foreground',
-        iconText: 'text-muted-foreground',
-        labelText: 'text-foreground/80',
-      },
-      jewelry: {
-        bar: 'bg-gradient-to-b from-amber-400 to-amber-600',
-        chipBg: 'bg-amber-100',
-        chipText: 'text-amber-800',
-        iconText: 'text-amber-700',
-        labelText: 'text-amber-900',
-      },
-      watches: {
-        bar: 'bg-gradient-to-b from-indigo-400 to-indigo-600',
-        chipBg: 'bg-indigo-100',
-        chipText: 'text-indigo-800',
-        iconText: 'text-indigo-700',
-        labelText: 'text-indigo-900',
-      },
-    };
-    const v = variantStyles[variant];
     return (
-      <div className="relative px-4 pt-4 pb-2 bg-muted/40 border-y">
-        <span className={`absolute left-0 top-3 bottom-2 w-1 rounded-r ${v.bar}`} aria-hidden />
-        <div className="flex items-center gap-2">
+      <div
+        className={`filter-group-header filter-group-${variant}`}
+        data-active={activeCount > 0 ? 'true' : 'false'}
+      >
+        <div className="filter-group-header-inner">
           {Icon && (
-            <span className={`inline-flex h-6 w-6 items-center justify-center rounded-md ${v.chipBg}`}>
-              <Icon className={`h-3.5 w-3.5 ${v.iconText}`} />
+            <span className="filter-group-chip">
+              <Icon className="h-4 w-4" />
             </span>
           )}
-          <p className={`text-[11px] font-bold uppercase tracking-[0.12em] ${v.labelText}`}>
-            {label}
-          </p>
+          <div className="filter-group-text">
+            <span className="filter-group-label">{label}</span>
+            {sub && <span className="filter-group-sub">{sub}</span>}
+          </div>
+          {activeCount > 0 && (
+            <span className="filter-group-count">{activeCount}</span>
+          )}
         </div>
-        {sub && (
-          <p className={`mt-0.5 ml-8 text-[10px] font-medium ${v.chipText}`}>{sub}</p>
-        )}
       </div>
     );
   };
@@ -343,44 +340,48 @@ export function FilterSidebar({
 
   // Group labels (Czech-first; could be moved to i18n later)
   const groupLabels = {
-    region: 'Region',
     commerce: 'Obchod & dostupnost',
+    commerceSub: 'Slevy, dostupnost, akce',
     sortiment: 'Sortiment',
-    properties: 'Vlastnosti šperků',
-    propertiesSub: 'Materiál, kámen, design, ryzost…',
-    technical: 'Parametry hodinek',
-    technicalSub: 'Strojek, voděodolnost, pouzdro, řemínek…',
-    misc: 'Ostatní parametry',
+    sortimentSub: 'Značka, kategorie, určení',
+    jewelry: 'Šperky',
+    jewelrySub: 'Kámen · ryzost · drahokovy',
+    watches: 'Hodinky',
+    watchesSub: 'Strojek · voděodolnost · pouzdro',
+    common: 'Společné vlastnosti',
+    commonSub: 'Barva · velikost · design · materiál',
+    misc: 'Ostatní',
   };
 
   const content = (
-    <div className="flex h-full flex-col">
-      {/* Always-visible quick toggle: stock only */}
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <span className="text-sm font-medium">{t.stockOnly}</span>
-        <Switch checked={stockOnly} onCheckedChange={setStockOnly} />
+    <div className="filter-panel flex h-full flex-col">
+      {/* Top quick row: stock toggle + language picker (no "Region" label — avoids
+          confusion with country of origin) */}
+      <div className="filter-quick-row">
+        <div className="filter-quick-stock">
+          <Sliders className="h-3.5 w-3.5" />
+          <span>{t.stockOnly}</span>
+          <Switch checked={stockOnly} onCheckedChange={setStockOnly} className="ml-auto" />
+        </div>
+        <Accordion type="multiple" className="w-full">
+          <AccordionItem value="lang" className="filter-lang-item">
+            <AccordionTrigger className="filter-lang-trigger">
+              <span className="flex items-center gap-2 text-xs font-semibold">
+                <span className="text-base leading-none">{flags[lang as Lang]}</span>
+                <span>{t.language}</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="px-3 pb-3 pt-1">
+              <LanguagePicker />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
-
-      {/* === REGION === */}
-      <GroupHeader label={groupLabels.region} icon={Globe} />
-      <Accordion type="multiple" className="w-full">
-        <AccordionItem value="lang" className="border-b px-2">
-          <AccordionTrigger className="px-2 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <span className="text-base leading-none">{flags[lang as Lang]}</span>
-              {t.language}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="px-2 pb-3">
-            <LanguagePicker />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
 
       {/* === COMMERCE & AVAILABILITY === */}
       {user && (
         <>
-          <GroupHeader label={groupLabels.commerce} icon={ShoppingBag} />
+          <GroupHeader label={groupLabels.commerce} sub={groupLabels.commerceSub} icon={ShoppingBag} activeCount={activeDiscountCount} />
           <Accordion type="multiple" className="w-full">
             <AccordionItem value="discount" className="border-b px-2">
               <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -408,7 +409,7 @@ export function FilterSidebar({
       )}
 
       {/* === SORTIMENT (brand / category / gender) === */}
-      <GroupHeader label={groupLabels.sortiment} icon={Layers} />
+      <GroupHeader label={groupLabels.sortiment} sub={groupLabels.sortimentSub} icon={Layers} activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount} />
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="brands" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -504,22 +505,50 @@ export function FilterSidebar({
         )}
       </Accordion>
 
-      {/* === VLASTNOSTI (material, color, stones, design...) === */}
-      {propertyParams.length > 0 && (
+      {/* === ŠPERKY — strict jewelry-only attributes === */}
+      {jewelryParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.properties} sub={groupLabels.propertiesSub} icon={Gem} variant="jewelry" />
+          <GroupHeader
+            label={groupLabels.jewelry}
+            sub={groupLabels.jewelrySub}
+            icon={Gem}
+            variant="jewelry"
+            activeCount={jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+          />
           <Accordion type="multiple" className="w-full">
-            {propertyParams.map(renderParamItem)}
+            {jewelryParams.map(renderParamItem)}
           </Accordion>
         </>
       )}
 
-      {/* === TECHNICAL (movement, water resistance, case, strap...) === */}
-      {technicalParams.length > 0 && (
+      {/* === HODINKY — strict watch-only attributes === */}
+      {watchParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.technical} sub={groupLabels.technicalSub} icon={Watch} variant="watches" />
+          <GroupHeader
+            label={groupLabels.watches}
+            sub={groupLabels.watchesSub}
+            icon={Watch}
+            variant="watches"
+            activeCount={watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+          />
           <Accordion type="multiple" className="w-full">
-            {technicalParams.map(renderParamItem)}
+            {watchParams.map(renderParamItem)}
+          </Accordion>
+        </>
+      )}
+
+      {/* === SPOLEČNÉ — attributes that apply to both families === */}
+      {commonParams.length > 0 && (
+        <>
+          <GroupHeader
+            label={groupLabels.common}
+            sub={groupLabels.commonSub}
+            icon={Sliders}
+            variant="common"
+            activeCount={commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+          />
+          <Accordion type="multiple" className="w-full">
+            {commonParams.map(renderParamItem)}
           </Accordion>
         </>
       )}
@@ -527,7 +556,11 @@ export function FilterSidebar({
       {/* === MISC (uncategorized) === */}
       {miscParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.misc} icon={Settings2} />
+          <GroupHeader
+            label={groupLabels.misc}
+            icon={Settings2}
+            activeCount={miscParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+          />
           <Accordion type="multiple" className="w-full">
             {miscParams.map(renderParamItem)}
           </Accordion>
