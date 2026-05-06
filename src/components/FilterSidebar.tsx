@@ -1,4 +1,5 @@
 import { useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Gem, Watch, Sliders, ShoppingBag, Layers, Sparkles, RotateCcw, ArrowRight } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -71,6 +72,7 @@ export function FilterSidebar({
 }: Props) {
   const { user } = useAuthContext();
   const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode, setGatewayOpen } = useStore();
+  const navigate = useNavigate();
   const t = translations[lang];
   const isHome = viewMode === 'home';
 
@@ -516,7 +518,6 @@ export function FilterSidebar({
         sub={groupLabels.sortimentSub}
         icon={Layers}
         activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount + sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-        defaultOpen
       >
         <Accordion type="multiple" className="w-full">
           <AccordionItem value="brands" className="border-b px-2">
@@ -667,17 +668,19 @@ export function FilterSidebar({
 
       {/* === FOOTER — reset + AI help card so the column doesn't end on a filter === */}
       <div className="filter-footer">
-        {totalActiveCount > 0 && (
-          <button
-            type="button"
-            onClick={resetAllFilters}
-            className="filter-reset-btn"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            <span>Resetovat filtry</span>
+        <button
+          type="button"
+          onClick={resetAllFilters}
+          disabled={totalActiveCount === 0}
+          className="filter-reset-btn"
+          data-active={totalActiveCount > 0 ? 'true' : 'false'}
+        >
+          <RotateCcw className="h-3.5 w-3.5" />
+          <span>Resetovat filtry</span>
+          {totalActiveCount > 0 && (
             <span className="filter-reset-count">{totalActiveCount}</span>
-          </button>
-        )}
+          )}
+        </button>
 
         <div className="filter-ai-card">
           <div className="filter-ai-card-glow" aria-hidden />
@@ -695,7 +698,13 @@ export function FilterSidebar({
           </p>
           <button
             type="button"
-            onClick={() => setGatewayOpen(true)}
+            onClick={() => {
+              // GatewayPanel mounts only on homepage, so navigate first
+              // and toggle the store flag — homepage will pick it up.
+              setGatewayOpen(true);
+              setSidebarOpen(false);
+              navigate('/');
+            }}
             className="filter-ai-cta"
           >
             <span>Zeptat se AI</span>

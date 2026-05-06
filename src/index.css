@@ -676,10 +676,14 @@
   cursor: pointer;
   transition: all 180ms ease;
 }
-.filter-reset-btn:hover {
+.filter-reset-btn[data-active='true']:hover {
   color: var(--swelt-blue-700);
   border-color: rgba(37,99,235,0.35);
   background: rgba(37,99,235,0.04);
+}
+.filter-reset-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 .filter-reset-count {
   display: inline-flex;
