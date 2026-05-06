@@ -103,40 +103,67 @@ export function FilterSidebar({
   }, [availableParams]);
 
   // Classify "other" parameters into logical groups based on Czech parameter names.
-  // Keyword matching is case-insensitive and works on partial matches.
-  // Strategy:
-  //   - JEWELRY_ONLY → terms that only make sense for jewelry (ryzost, kámen…)
-  //   - WATCH_ONLY   → terms that only make sense for watches (strojek, pohon…)
-  //   - COMMON       → terms that apply to both (barva, design, velikost…)
-  //   - everything else → "ostatní"
-  const JEWELRY_ONLY_KEYWORDS = [
-    'kámen', 'kamen', 'stone', 'drahokam',
-    'ryzost', 'puncov', 'karát', 'karat', 'carat',
-    'briliant', 'diamant', 'perl',
-    'zlato', 'gold', 'stříbro', 'striebro', 'silver', 'platin',
-    'řetízek', 'retizek', 'řetěz', 'retez', 'náušnice',
+  // We strip diacritics and match against word *stems* (not full forms) so Czech
+  // declensions like "typ strojku", "barva pásku", "tvar pouzdra" match correctly.
+  // Order of checks: WATCH (most specific) → JEWELRY → COMMON → OTHER.
+  // A specific watch/jewelry token in the label always wins over a generic
+  // "barva" / "tvar" / "materiál" so "barva řemínku" goes to Hodinky, not Společné.
+
+  const stripDiacritics = (s: string) =>
+    s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  // Word stems (no full forms — work across all Czech declension endings).
+  const WATCH_STEMS = [
+    // movement / power
+    'strojk', 'strojek', 'mechan', 'kalibr', 'quartz', 'automat',
+    'naviject', 'baterie', 'pohon',
+    // case / body
+    'pouzdr', 'tlousk', 'tloust', 'lunet', 'korunk', 'tlacit',
+    // crystal / glass (NB: "sklo" alone is too generic, prefer "skliček")
+    'sklick', 'safir', 'mineraln', 'akryl',
+    // strap / bracelet
+    'pasek', 'pasku', 'remin', 'naramek', 'naramk', 'spony',
+    // water resistance
+    'vodeod', 'water', 'atm ', 'atm)', 'bar ', ' wr',
+    // dial / display / functions
+    'cifern', 'displej', 'osvit', 'lume',
+    'chronograf', 'tachymetr', 'datumovk', 'datum',
+    'budik', 'gmt', 'mesicni', 'fazi mesic', 'phase',
+    'rezerva chod', 'power reserve',
+    // generic family identifier — covers "typ hodinek", "kategorie hodinek"
+    'hodin',
   ];
-  const WATCH_ONLY_KEYWORDS = [
-    'pohon', 'strojek', 'mechan', 'quartz', 'automat', 'baterie',
-    'sklíčko', 'sklicko',
-    'voděod', 'vodeod', 'water', 'wr ',
-    'pásek', 'pasek', 'řemínek', 'reminek',
-    'pouzdro', 'tloušť', 'tloust',
-    'osvit', 'displej', 'chronograf', 'tachymetr', 'luneta',
-    'datum', 'budík',
+
+  const JEWELRY_STEMS = [
+    // stones
+    'kamen', 'drahokam', 'briliant', 'diamant',
+    'perl', 'zirkon', 'safir kamen', 'rubin', 'smaragd',
+    // purity / hallmark
+    'ryzost', 'puncov', 'karat', 'carat',
+    // precious metals — only when standalone (not "kov" which is generic)
+    'zlato', 'zlate', 'gold', 'stribro', 'stribr', 'silver', 'platin',
+    'palad', 'rhod',
+    // jewelry types — covers "typ šperku", "typ prstenu" etc.
+    'sperk', 'prsten', 'nausn', 'nahrdel', 'naramk svit',
+    'retiz', 'retez', 'privesk', 'manzet knofl', 'broz',
+    // jewelry-specific dimensions
+    'velikost prstenu', 'cm retiz', 'cm retez',
   ];
-  const COMMON_KEYWORDS = [
-    'barva', 'color', 'farba',
-    'styl', 'tvar', 'design', 'provedení', 'provedeni',
-    'velikost', 'rozměr', 'rozmer', 'délka', 'delka', 'průměr', 'prumer',
-    'materiál', 'material', 'kov', 'povrch',
+
+  const COMMON_STEMS = [
+    'barva', 'farba', 'color', 'odstin',
+    'tvar', 'styl', 'design', 'proveden',
+    'velikost', 'rozmer', 'delka', 'sirk', 'sirka',
+    'prumer',
+    'material', 'kov', 'povrch', 'finish',
+    'pohlavi', 'urcen',
   ];
 
   const classifyParam = (name: string): 'jewelry' | 'watch' | 'common' | 'other' => {
-    const n = name.toLowerCase();
-    if (JEWELRY_ONLY_KEYWORDS.some((k) => n.includes(k))) return 'jewelry';
-    if (WATCH_ONLY_KEYWORDS.some((k) => n.includes(k))) return 'watch';
-    if (COMMON_KEYWORDS.some((k) => n.includes(k))) return 'common';
+    const n = stripDiacritics(name);
+    if (WATCH_STEMS.some((k) => n.includes(k))) return 'watch';
+    if (JEWELRY_STEMS.some((k) => n.includes(k))) return 'jewelry';
+    if (COMMON_STEMS.some((k) => n.includes(k))) return 'common';
     return 'other';
   };
 
