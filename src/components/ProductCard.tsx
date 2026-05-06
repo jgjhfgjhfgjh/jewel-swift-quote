@@ -16,6 +16,7 @@ import { ProductDetailModal } from '@/components/ProductDetailModal';
 export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
+    setSelectedBrands, setViewMode, setGatewayOpen,
   } = useStore();
   const { isAdmin, isLead, profile, user } = useAuthContext();
   const navigate = useNavigate();
@@ -201,10 +202,20 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
             )}
           </div>
         )}
-        <p
-          className="text-[10px] font-medium uppercase tracking-wider text-gold cursor-pointer hover:underline"
-          onClick={handleInfoClick}
-        >{product.manufacturer}</p>
+        <button
+          type="button"
+          className="self-start text-[10px] font-medium uppercase tracking-wider text-gold cursor-pointer hover:underline focus:outline-none"
+          title={`Zobrazit jen ${product.manufacturer}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            // Replace selection with just this brand → catalog now shows
+            // only products from this manufacturer.
+            setSelectedBrands([product.manufacturer]);
+            setViewMode('catalog');
+            setGatewayOpen(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >{product.manufacturer}</button>
         <h3
           className="mt-1 line-clamp-2 text-sm font-medium leading-snug cursor-pointer hover:underline"
           onClick={handleInfoClick}
