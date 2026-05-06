@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Gem, Watch, Sliders, Globe, ShoppingBag, Layers, Settings2 } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -226,13 +226,65 @@ export function FilterSidebar({
   const activeDiscountCount = minDiscount > 0 ? 1 : 0;
 
   // Helper: visual group header inside the sidebar (not an accordion item).
-  const GroupHeader = ({ label }: { label: string }) => (
-    <div className="px-4 pt-4 pb-1.5 bg-muted/30 border-y">
-      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/80">
-        {label}
-      </p>
-    </div>
-  );
+  // Variant accents tie the header to the product family it filters:
+  // - "jewelry" → amber/gold (Šperky)
+  // - "watches" → indigo (Hodinky)
+  // - "neutral" → muted (Region, Sortiment, Misc)
+  type GroupVariant = 'neutral' | 'jewelry' | 'watches';
+  const GroupHeader = ({
+    label,
+    icon: Icon,
+    variant = 'neutral',
+    sub,
+  }: {
+    label: string;
+    icon?: React.ComponentType<{ className?: string }>;
+    variant?: GroupVariant;
+    sub?: string;
+  }) => {
+    const variantStyles: Record<GroupVariant, { bar: string; chipBg: string; chipText: string; iconText: string; labelText: string }> = {
+      neutral: {
+        bar: 'bg-zinc-300',
+        chipBg: 'bg-muted',
+        chipText: 'text-muted-foreground',
+        iconText: 'text-muted-foreground',
+        labelText: 'text-foreground/80',
+      },
+      jewelry: {
+        bar: 'bg-gradient-to-b from-amber-400 to-amber-600',
+        chipBg: 'bg-amber-100',
+        chipText: 'text-amber-800',
+        iconText: 'text-amber-700',
+        labelText: 'text-amber-900',
+      },
+      watches: {
+        bar: 'bg-gradient-to-b from-indigo-400 to-indigo-600',
+        chipBg: 'bg-indigo-100',
+        chipText: 'text-indigo-800',
+        iconText: 'text-indigo-700',
+        labelText: 'text-indigo-900',
+      },
+    };
+    const v = variantStyles[variant];
+    return (
+      <div className="relative px-4 pt-4 pb-2 bg-muted/40 border-y">
+        <span className={`absolute left-0 top-3 bottom-2 w-1 rounded-r ${v.bar}`} aria-hidden />
+        <div className="flex items-center gap-2">
+          {Icon && (
+            <span className={`inline-flex h-6 w-6 items-center justify-center rounded-md ${v.chipBg}`}>
+              <Icon className={`h-3.5 w-3.5 ${v.iconText}`} />
+            </span>
+          )}
+          <p className={`text-[11px] font-bold uppercase tracking-[0.12em] ${v.labelText}`}>
+            {label}
+          </p>
+        </div>
+        {sub && (
+          <p className={`mt-0.5 ml-8 text-[10px] font-medium ${v.chipText}`}>{sub}</p>
+        )}
+      </div>
+    );
+  };
 
   // Helper: renders a single dynamic param accordion item (used in property/technical/misc groups).
   const renderParamItem = (param: AvailableParam) => {
@@ -294,8 +346,10 @@ export function FilterSidebar({
     region: 'Region',
     commerce: 'Obchod & dostupnost',
     sortiment: 'Sortiment',
-    properties: 'Vlastnosti produktu',
-    technical: 'Technické parametry',
+    properties: 'Vlastnosti šperků',
+    propertiesSub: 'Materiál, kámen, design, ryzost…',
+    technical: 'Parametry hodinek',
+    technicalSub: 'Strojek, voděodolnost, pouzdro, řemínek…',
     misc: 'Ostatní parametry',
   };
 
@@ -308,7 +362,7 @@ export function FilterSidebar({
       </div>
 
       {/* === REGION === */}
-      <GroupHeader label={groupLabels.region} />
+      <GroupHeader label={groupLabels.region} icon={Globe} />
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="lang" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -326,7 +380,7 @@ export function FilterSidebar({
       {/* === COMMERCE & AVAILABILITY === */}
       {user && (
         <>
-          <GroupHeader label={groupLabels.commerce} />
+          <GroupHeader label={groupLabels.commerce} icon={ShoppingBag} />
           <Accordion type="multiple" className="w-full">
             <AccordionItem value="discount" className="border-b px-2">
               <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -354,7 +408,7 @@ export function FilterSidebar({
       )}
 
       {/* === SORTIMENT (brand / category / gender) === */}
-      <GroupHeader label={groupLabels.sortiment} />
+      <GroupHeader label={groupLabels.sortiment} icon={Layers} />
       <Accordion type="multiple" className="w-full">
         <AccordionItem value="brands" className="border-b px-2">
           <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -453,7 +507,7 @@ export function FilterSidebar({
       {/* === VLASTNOSTI (material, color, stones, design...) === */}
       {propertyParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.properties} />
+          <GroupHeader label={groupLabels.properties} sub={groupLabels.propertiesSub} icon={Gem} variant="jewelry" />
           <Accordion type="multiple" className="w-full">
             {propertyParams.map(renderParamItem)}
           </Accordion>
@@ -463,7 +517,7 @@ export function FilterSidebar({
       {/* === TECHNICAL (movement, water resistance, case, strap...) === */}
       {technicalParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.technical} />
+          <GroupHeader label={groupLabels.technical} sub={groupLabels.technicalSub} icon={Watch} variant="watches" />
           <Accordion type="multiple" className="w-full">
             {technicalParams.map(renderParamItem)}
           </Accordion>
@@ -473,7 +527,7 @@ export function FilterSidebar({
       {/* === MISC (uncategorized) === */}
       {miscParams.length > 0 && (
         <>
-          <GroupHeader label={groupLabels.misc} />
+          <GroupHeader label={groupLabels.misc} icon={Settings2} />
           <Accordion type="multiple" className="w-full">
             {miscParams.map(renderParamItem)}
           </Accordion>
