@@ -471,8 +471,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           {(isB2bApproved || isAdmin) && (
             <>
               <div className="border-t my-2" />
-              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors" style={{ color: '#7c3aed' }}>
-                <LayoutDashboard className="h-4 w-4" style={{ color: '#7c3aed' }} /> Partner Hub
+              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors" style={{ color: '#1D4ED8' }}>
+                <LayoutDashboard className="h-4 w-4" style={{ color: '#1D4ED8' }} /> Partner Hub
               </button>
             </>
           )}

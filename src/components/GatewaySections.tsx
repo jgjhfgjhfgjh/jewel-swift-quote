@@ -676,14 +676,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         {/* Unified premium gateway — Account Manager + AI assistant */}
         <Reveal delay={150} className="mt-8 px-4 sm:px-6">
           <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-white via-white to-zinc-50 shadow-xl">
-            {/* Decorative glow — purple + indigo to match Dropshipping Hub palette */}
-            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#A855F7]/25 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#4F6EF7]/20 blur-3xl" />
+            {/* Decorative glow — Swelt brand blue gradient */}
+            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#2563EB]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#60A5FA]/25 blur-3xl" />
 
             <div className="relative p-5 sm:p-7">
               {/* Header */}
               <div className="flex items-center justify-between mb-4 sm:mb-5">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#A855F7] to-[#4F6EF7] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
                   <Star className="h-3 w-3 fill-white text-white" />
                   Váš osobní obchodní tým
                 </div>
@@ -729,12 +729,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   className="sales-team-cta-am group flex items-center gap-3 sm:gap-4 bg-white border border-zinc-200 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
                 >
                   <div className="sales-team-am-avatar w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 shadow-inner relative z-10 transition-all"
-                       style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.18), rgba(79,110,247,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(168,85,247,0.35)' }}>
-                    <Users className="sales-team-am-icon h-5 w-5 sm:h-6 sm:w-6 transition-colors" style={{ color: '#7c3aed' }} />
+                       style={{ background: 'linear-gradient(135deg, rgba(37,99,235,0.15), rgba(96,165,250,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(37,99,235,0.35)' }}>
+                    <Users className="sales-team-am-icon h-5 w-5 sm:h-6 sm:w-6 transition-colors" style={{ color: '#1D4ED8' }} />
                   </div>
                   <div className="flex-1 min-w-0 relative z-10">
-                    <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#7c3aed' }}>
-                      <Star className="h-3 w-3 shrink-0" style={{ fill: '#A855F7', color: '#A855F7' }} />
+                    <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#1D4ED8' }}>
+                      <Star className="h-3 w-3 shrink-0" style={{ fill: '#2563EB', color: '#2563EB' }} />
                       <span>Osobní péče</span>
                     </div>
                     <p className="sales-team-am-title font-bold text-sm leading-tight text-zinc-900 transition-colors">Kontaktovat account managera</p>
