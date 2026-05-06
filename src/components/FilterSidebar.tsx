@@ -148,11 +148,12 @@ export function FilterSidebar({
     // precious metals — only when standalone (not "kov" which is generic)
     'zlato', 'zlate', 'gold', 'stribro', 'stribr', 'silver', 'platin',
     'palad', 'rhod',
-    // jewelry types — covers "typ šperku", "typ prstenu" etc.
-    'sperk', 'prsten', 'nausn', 'nahrdel', 'naramk svit',
+    // jewelry types — covers "typ šperku", "typ prstenu", "prstýnek" (diminutive)
+    'sperk', 'prsten', 'prstyn', 'prstynk', 'nausn', 'nahrdel', 'naramk svit',
     'retiz', 'retez', 'privesk', 'manzet knofl', 'broz',
     // jewelry-specific dimensions
-    'velikost prstenu', 'cm retiz', 'cm retez',
+    'velikost prstenu', 'velikost prstynku', 'velikost prstynk',
+    'cm retiz', 'cm retez',
   ];
 
   // Sortiment-level params (assortment / merchandising) — origin and packaging
@@ -291,7 +292,8 @@ export function FilterSidebar({
   // Hi-tech 2026 group header — glassmorphic gradient pill with iconified chip.
   // Variant accents tie the header to the product family it filters.
   type GroupVariant = 'neutral' | 'jewelry' | 'watches' | 'common';
-  const GroupHeader = ({
+
+  const GroupHeaderInner = ({
     label,
     icon: Icon,
     variant = 'neutral',
@@ -303,29 +305,63 @@ export function FilterSidebar({
     variant?: GroupVariant;
     sub?: string;
     activeCount?: number;
-  }) => {
-    return (
-      <div
-        className={`filter-group-header filter-group-${variant}`}
-        data-active={activeCount > 0 ? 'true' : 'false'}
-      >
-        <div className="filter-group-header-inner">
-          {Icon && (
-            <span className="filter-group-chip">
-              <Icon className="h-4 w-4" />
-            </span>
-          )}
-          <div className="filter-group-text">
-            <span className="filter-group-label">{label}</span>
-            {sub && <span className="filter-group-sub">{sub}</span>}
-          </div>
-          {activeCount > 0 && (
-            <span className="filter-group-count">{activeCount}</span>
-          )}
+  }) => (
+    <div
+      className={`filter-group-header filter-group-${variant}`}
+      data-active={activeCount > 0 ? 'true' : 'false'}
+    >
+      <div className="filter-group-header-inner">
+        {Icon && (
+          <span className="filter-group-chip">
+            <Icon className="h-4 w-4" />
+          </span>
+        )}
+        <div className="filter-group-text">
+          <span className="filter-group-label">{label}</span>
+          {sub && <span className="filter-group-sub">{sub}</span>}
         </div>
+        {activeCount > 0 && (
+          <span className="filter-group-count">{activeCount}</span>
+        )}
       </div>
-    );
-  };
+    </div>
+  );
+
+  // Collapsible group: clicking the header expands/collapses the entire section.
+  const CollapsibleGroup = ({
+    value, label, sub, icon, variant, activeCount, defaultOpen, children,
+  }: {
+    value: string;
+    label: string;
+    icon?: React.ComponentType<{ className?: string }>;
+    variant?: GroupVariant;
+    sub?: string;
+    activeCount?: number;
+    defaultOpen?: boolean;
+    children: React.ReactNode;
+  }) => (
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={defaultOpen ? value : undefined}
+      className="filter-group-wrap"
+    >
+      <AccordionItem value={value} className="filter-group-acc-item">
+        <AccordionTrigger className="filter-group-acc-trigger">
+          <GroupHeaderInner
+            label={label}
+            sub={sub}
+            icon={icon}
+            variant={variant}
+            activeCount={activeCount}
+          />
+        </AccordionTrigger>
+        <AccordionContent className="filter-group-acc-content">
+          {children}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
 
   // Helper: renders a single dynamic param accordion item (used in property/technical/misc groups).
   const renderParamItem = (param: AvailableParam) => {
@@ -421,10 +457,16 @@ export function FilterSidebar({
         </Accordion>
       </div>
 
-      {/* === COMMERCE & AVAILABILITY === */}
+      {/* === OBCHOD (slevy a akce) — collapsible === */}
       {user && (
-        <>
-          <GroupHeader label={groupLabels.commerce} sub={groupLabels.commerceSub} icon={ShoppingBag} activeCount={activeDiscountCount} />
+        <CollapsibleGroup
+          value="g-obchod"
+          label={groupLabels.commerce}
+          sub={groupLabels.commerceSub}
+          icon={ShoppingBag}
+          activeCount={activeDiscountCount}
+          defaultOpen={activeDiscountCount > 0}
+        >
           <Accordion type="multiple" className="w-full">
             <AccordionItem value="discount" className="border-b px-2">
               <AccordionTrigger className="px-2 py-3 hover:no-underline">
@@ -448,155 +490,163 @@ export function FilterSidebar({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </>
+        </CollapsibleGroup>
       )}
 
-      {/* === SORTIMENT (brand / category / gender) === */}
-      <GroupHeader label={groupLabels.sortiment} sub={groupLabels.sortimentSub} icon={Layers} activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount} />
-      <Accordion type="multiple" className="w-full">
-        <AccordionItem value="brands" className="border-b px-2">
-          <AccordionTrigger className="px-2 py-3 hover:no-underline">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t.brands}
-              <ActiveBadge count={activeBrandsCount} />
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="px-2 pb-3">
-            {activeBrandsCount > 0 && (
-              <button
-                onClick={() => setSelectedBrands([])}
-                className="mb-2 text-sm text-primary hover:underline font-medium"
-              >
-                {t.allBrands}
-              </button>
-            )}
-            <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
-              {sortedManufacturers.map((m) => (
-                <label
-                  key={m.name}
-                  className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-                >
-                  <Checkbox
-                    checked={selectedBrands.includes(m.name)}
-                    onCheckedChange={() => toggleBrand(m.name)}
-                  />
-                  <span className="truncate">{m.name}</span>
-                </label>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="categories" className="border-b px-2">
-          <AccordionTrigger className="px-2 py-3 hover:no-underline">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t.categories}
-              <ActiveBadge count={activeCategoryCount} />
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="px-2 pb-3">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className="mb-2 text-sm text-primary hover:underline font-medium"
-            >
-              {t.allCategories}
-            </button>
-            <div className="space-y-2">
-              {CATEGORY_KEYS.map((cat) => (
-                <div key={cat} className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{tCategory(cat, lang)}</span>
-                  <Switch
-                    checked={selectedCategory === cat}
-                    onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
-                  />
-                </div>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        {availableGenders.length > 0 && (
-          <AccordionItem value="genders" className="border-b px-2">
+      {/* === SORTIMENT (brand / category / gender / origin / packaging) === */}
+      <CollapsibleGroup
+        value="g-sortiment"
+        label={groupLabels.sortiment}
+        sub={groupLabels.sortimentSub}
+        icon={Layers}
+        activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount + sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+        defaultOpen
+      >
+        <Accordion type="multiple" className="w-full">
+          <AccordionItem value="brands" className="border-b px-2">
             <AccordionTrigger className="px-2 py-3 hover:no-underline">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {tParamName('Určení', lang)}
-                <ActiveBadge count={activeGendersCount} />
+                {t.brands}
+                <ActiveBadge count={activeBrandsCount} />
               </span>
             </AccordionTrigger>
             <AccordionContent className="px-2 pb-3">
-              {activeGendersCount > 0 && (
+              {activeBrandsCount > 0 && (
                 <button
-                  onClick={() => setSelectedGenders([])}
-                  className="mb-2 text-xs text-primary hover:underline"
+                  onClick={() => setSelectedBrands([])}
+                  className="mb-2 text-sm text-primary hover:underline font-medium"
                 >
-                  Vše
+                  {t.allBrands}
                 </button>
               )}
+              <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+                {sortedManufacturers.map((m) => (
+                  <label
+                    key={m.name}
+                    className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Checkbox
+                      checked={selectedBrands.includes(m.name)}
+                      onCheckedChange={() => toggleBrand(m.name)}
+                    />
+                    <span className="truncate">{m.name}</span>
+                  </label>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="categories" className="border-b px-2">
+            <AccordionTrigger className="px-2 py-3 hover:no-underline">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t.categories}
+                <ActiveBadge count={activeCategoryCount} />
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="px-2 pb-3">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="mb-2 text-sm text-primary hover:underline font-medium"
+              >
+                {t.allCategories}
+              </button>
               <div className="space-y-2">
-                {availableGenders.map((gender) => (
-                  <div key={gender} className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{tGender(gender, lang)}</span>
+                {CATEGORY_KEYS.map((cat) => (
+                  <div key={cat} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{tCategory(cat, lang)}</span>
                     <Switch
-                      checked={selectedGenders.includes(gender)}
-                      onCheckedChange={() => toggleGender(gender)}
+                      checked={selectedCategory === cat}
+                      onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
                     />
                   </div>
                 ))}
               </div>
             </AccordionContent>
           </AccordionItem>
-        )}
 
-        {/* Země původu, balení (and similar) — assortment-level extras */}
-        {sortimentExtraParams.map(renderParamItem)}
-      </Accordion>
+          {availableGenders.length > 0 && (
+            <AccordionItem value="genders" className="border-b px-2">
+              <AccordionTrigger className="px-2 py-3 hover:no-underline">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {tParamName('Určení', lang)}
+                  <ActiveBadge count={activeGendersCount} />
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-2 pb-3">
+                {activeGendersCount > 0 && (
+                  <button
+                    onClick={() => setSelectedGenders([])}
+                    className="mb-2 text-xs text-primary hover:underline"
+                  >
+                    Vše
+                  </button>
+                )}
+                <div className="space-y-2">
+                  {availableGenders.map((gender) => (
+                    <div key={gender} className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{tGender(gender, lang)}</span>
+                      <Switch
+                        checked={selectedGenders.includes(gender)}
+                        onCheckedChange={() => toggleGender(gender)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+          {/* Země původu, balení (and similar) — assortment-level extras */}
+          {sortimentExtraParams.map(renderParamItem)}
+        </Accordion>
+      </CollapsibleGroup>
 
       {/* === ŠPERKY — strict jewelry-only attributes === */}
       {jewelryParams.length > 0 && (
-        <>
-          <GroupHeader
-            label={groupLabels.jewelry}
-            sub={groupLabels.jewelrySub}
-            icon={Gem}
-            variant="jewelry"
-            activeCount={jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-          />
+        <CollapsibleGroup
+          value="g-jewelry"
+          label={groupLabels.jewelry}
+          sub={groupLabels.jewelrySub}
+          icon={Gem}
+          variant="jewelry"
+          activeCount={jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+        >
           <Accordion type="multiple" className="w-full">
             {jewelryParams.map(renderParamItem)}
           </Accordion>
-        </>
+        </CollapsibleGroup>
       )}
 
       {/* === HODINKY — strict watch-only attributes === */}
       {watchParams.length > 0 && (
-        <>
-          <GroupHeader
-            label={groupLabels.watches}
-            sub={groupLabels.watchesSub}
-            icon={Watch}
-            variant="watches"
-            activeCount={watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-          />
+        <CollapsibleGroup
+          value="g-watches"
+          label={groupLabels.watches}
+          sub={groupLabels.watchesSub}
+          icon={Watch}
+          variant="watches"
+          activeCount={watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+        >
           <Accordion type="multiple" className="w-full">
             {watchParams.map(renderParamItem)}
           </Accordion>
-        </>
+        </CollapsibleGroup>
       )}
 
       {/* === SPOLEČNÉ — attributes that apply to both families === */}
       {commonParams.length > 0 && (
-        <>
-          <GroupHeader
-            label={groupLabels.common}
-            sub={groupLabels.commonSub}
-            icon={Sliders}
-            variant="common"
-            activeCount={commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-          />
+        <CollapsibleGroup
+          value="g-common"
+          label={groupLabels.common}
+          sub={groupLabels.commonSub}
+          icon={Sliders}
+          variant="common"
+          activeCount={commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+        >
           <Accordion type="multiple" className="w-full">
             {commonParams.map(renderParamItem)}
           </Accordion>
-        </>
+        </CollapsibleGroup>
       )}
 
     </div>

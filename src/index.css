@@ -443,15 +443,50 @@
   background: rgba(37,99,235,0.05);
 }
 
+/* CollapsibleGroup wrappers — make AccordionTrigger blend with our pill */
+.filter-group-wrap {
+  margin: 0;
+}
+.filter-group-acc-item {
+  border: none !important;
+}
+.filter-group-acc-trigger {
+  padding: 0 !important;
+  hyphens: none;
+  text-decoration: none !important;
+  width: 100%;
+}
+.filter-group-acc-trigger > svg {
+  /* Default chevron from shadcn AccordionTrigger — push it inside the pill */
+  margin-right: 16px;
+  margin-left: -28px;
+  position: relative;
+  z-index: 2;
+  color: hsl(var(--muted-foreground));
+}
+.filter-group-acc-trigger:hover {
+  text-decoration: none !important;
+}
+.filter-group-acc-trigger:hover .filter-group-header {
+  filter: brightness(1.02);
+}
+.filter-group-acc-content {
+  padding: 0 !important;
+}
+.filter-group-acc-content > div {
+  padding: 0 !important;
+}
+
 /* Group headers — gradient pill with iconified chip */
 .filter-group-header {
   position: relative;
-  margin: 12px 8px 4px;
+  margin: 8px 8px 4px;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid;
   overflow: hidden;
   isolation: isolate;
+  width: 100%;
   background:
     linear-gradient(135deg, var(--fg-bg-1, rgba(0,0,0,0.02)) 0%, var(--fg-bg-2, rgba(0,0,0,0.04)) 100%);
   border-color: var(--fg-border, rgba(0,0,0,0.08));
