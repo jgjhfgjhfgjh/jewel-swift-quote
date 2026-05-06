@@ -586,6 +586,35 @@
   border-bottom-color: hsl(var(--border) / 0.6);
 }
 
+/* Sub-filter accordion triggers — slightly compact, with hover lift */
+.filter-panel [data-radix-accordion-trigger] {
+  transition: background-color 160ms ease, color 160ms ease;
+  border-radius: 8px;
+}
+.filter-panel [data-radix-accordion-trigger]:hover {
+  background-color: rgba(37,99,235,0.04);
+}
+.filter-panel [data-radix-accordion-trigger][data-state='open'] {
+  color: var(--swelt-blue-700);
+}
+
+/* Active filter row — subtle blue tint */
+.filter-panel label:has(input:checked),
+.filter-panel label:has([data-state='checked']) {
+  background-color: rgba(37,99,235,0.06);
+}
+
+/* Spacing between groups */
+.filter-panel > .filter-group-header + * {
+  margin-top: 2px;
+}
+
+/* Reduce Accordion item padding inside groups for denser UX */
+.filter-panel .filter-group-header ~ * [data-radix-accordion-trigger] {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
 /* ── Partner Hub mobile responsive layout ──────────────────────── */
 .partner-sidebar {
   width: 248px;

@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { X, Gem, Watch, Sliders, Globe, ShoppingBag, Layers, Settings2 } from 'lucide-react';
+import { X, Gem, Watch, Sliders, ShoppingBag, Layers } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -119,17 +119,22 @@ export function FilterSidebar({
     'naviject', 'baterie', 'pohon',
     // case / body
     'pouzdr', 'tlousk', 'tloust', 'lunet', 'korunk', 'tlacit',
-    // crystal / glass (NB: "sklo" alone is too generic, prefer "skliček")
-    'sklick', 'safir', 'mineraln', 'akryl',
+    // crystal / glass — covers nominative "sklo" and genitive "skla" (typ skla)
+    'sklo', 'skla', 'sklem', 'sklick', 'krystal', 'crystal', 'safir', 'mineraln', 'akryl',
     // strap / bracelet
     'pasek', 'pasku', 'remin', 'naramek', 'naramk', 'spony',
-    // water resistance
-    'vodeod', 'water', 'atm ', 'atm)', 'bar ', ' wr',
+    // water resistance — voděodolnost / vodotěsnost
+    'vodeod', 'vodotes', 'water', 'atm ', 'atm)', 'bar ', ' wr',
     // dial / display / functions
     'cifern', 'displej', 'osvit', 'lume',
     'chronograf', 'tachymetr', 'datumovk', 'datum',
     'budik', 'gmt', 'mesicni', 'fazi mesic', 'phase',
     'rezerva chod', 'power reserve',
+    'funkce',
+    // care — princip čištění etc.
+    'cisten', 'cleaning',
+    // model / collection — modelová řada, kolekce
+    'modelov', 'kolekce', 'collection',
     // generic family identifier — covers "typ hodinek", "kategorie hodinek"
     'hodin',
   ];
@@ -150,6 +155,13 @@ export function FilterSidebar({
     'velikost prstenu', 'cm retiz', 'cm retez',
   ];
 
+  // Sortiment-level params (assortment / merchandising) — origin and packaging
+  // belong here, alongside brand/category/gender, not to "Společné".
+  const SORTIMENT_STEMS = [
+    'zem puvod', 'puvod', 'origin', 'made in',
+    'baleni', 'package', 'packaging', 'box',
+  ];
+
   const COMMON_STEMS = [
     'barva', 'farba', 'color', 'odstin',
     'tvar', 'styl', 'design', 'proveden',
@@ -159,12 +171,15 @@ export function FilterSidebar({
     'pohlavi', 'urcen',
   ];
 
-  const classifyParam = (name: string): 'jewelry' | 'watch' | 'common' | 'other' => {
+  // Order: WATCH → JEWELRY → SORTIMENT → COMMON. Anything unmatched falls
+  // through to COMMON (no separate "Ostatní" group anymore).
+  const classifyParam = (name: string): 'jewelry' | 'watch' | 'sortiment' | 'common' => {
     const n = stripDiacritics(name);
     if (WATCH_STEMS.some((k) => n.includes(k))) return 'watch';
     if (JEWELRY_STEMS.some((k) => n.includes(k))) return 'jewelry';
+    if (SORTIMENT_STEMS.some((k) => n.includes(k))) return 'sortiment';
     if (COMMON_STEMS.some((k) => n.includes(k))) return 'common';
-    return 'other';
+    return 'common';
   };
 
   // Other params sorted by number of options ascending (fewer options first → easier to scan).
@@ -190,12 +205,14 @@ export function FilterSidebar({
     () => otherParams.filter((p) => classifyParam(p.nazev) === 'watch'),
     [otherParams]
   );
-  const commonParams = useMemo(
-    () => otherParams.filter((p) => classifyParam(p.nazev) === 'common'),
+  // Země původu / balení and similar assortment-level attributes — rendered
+  // inside the Sortiment group right after Značky / Kategorie / Určení.
+  const sortimentExtraParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'sortiment'),
     [otherParams]
   );
-  const miscParams = useMemo(
-    () => otherParams.filter((p) => classifyParam(p.nazev) === 'other'),
+  const commonParams = useMemo(
+    () => otherParams.filter((p) => classifyParam(p.nazev) === 'common'),
     [otherParams]
   );
 
@@ -367,17 +384,16 @@ export function FilterSidebar({
 
   // Group labels (Czech-first; could be moved to i18n later)
   const groupLabels = {
-    commerce: 'Obchod & dostupnost',
-    commerceSub: 'Slevy, dostupnost, akce',
+    commerce: 'Obchod',
+    commerceSub: 'Slevy a akce',
     sortiment: 'Sortiment',
-    sortimentSub: 'Značka, kategorie, určení',
+    sortimentSub: 'Značka · kategorie · určení · původ · balení',
     jewelry: 'Šperky',
     jewelrySub: 'Kámen · ryzost · drahokovy',
     watches: 'Hodinky',
-    watchesSub: 'Strojek · voděodolnost · pouzdro',
+    watchesSub: 'Strojek · sklo · vodotěsnost · funkce',
     common: 'Společné vlastnosti',
     commonSub: 'Barva · velikost · design · materiál',
-    misc: 'Ostatní',
   };
 
   const content = (
@@ -530,6 +546,9 @@ export function FilterSidebar({
             </AccordionContent>
           </AccordionItem>
         )}
+
+        {/* Země původu, balení (and similar) — assortment-level extras */}
+        {sortimentExtraParams.map(renderParamItem)}
       </Accordion>
 
       {/* === ŠPERKY — strict jewelry-only attributes === */}
@@ -580,19 +599,6 @@ export function FilterSidebar({
         </>
       )}
 
-      {/* === MISC (uncategorized) === */}
-      {miscParams.length > 0 && (
-        <>
-          <GroupHeader
-            label={groupLabels.misc}
-            icon={Settings2}
-            activeCount={miscParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-          />
-          <Accordion type="multiple" className="w-full">
-            {miscParams.map(renderParamItem)}
-          </Accordion>
-        </>
-      )}
     </div>
   );
 
