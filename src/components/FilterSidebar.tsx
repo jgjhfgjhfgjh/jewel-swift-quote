@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { X, Gem, Watch, Sliders, ShoppingBag, Layers } from 'lucide-react';
+import { X, Gem, Watch, Sliders, ShoppingBag, Layers, Sparkles, RotateCcw, ArrowRight } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -70,7 +70,7 @@ export function FilterSidebar({
   mobileOnly, desktopOnly,
 }: Props) {
   const { user } = useAuthContext();
-  const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
+  const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode, setGatewayOpen } = useStore();
   const t = translations[lang];
   const isHome = viewMode === 'home';
 
@@ -288,6 +288,22 @@ export function FilterSidebar({
   const activeGendersCount = selectedGenders.length;
   const activeBrandsCount = selectedBrands.length;
   const activeDiscountCount = minDiscount > 0 ? 1 : 0;
+
+  // Total active filter count (for footer reset button)
+  const activeParamCount = useMemo(
+    () => Object.values(selectedParams).reduce((n, vs) => n + (vs?.length ?? 0), 0),
+    [selectedParams]
+  );
+  const totalActiveCount =
+    activeCategoryCount + activeGendersCount + activeBrandsCount + activeDiscountCount + activeParamCount;
+
+  const resetAllFilters = () => {
+    setSelectedBrands([]);
+    setSelectedCategory(null);
+    setSelectedGenders([]);
+    setSelectedParams({});
+    setMinDiscount(0);
+  };
 
   // Hi-tech 2026 group header — glassmorphic gradient pill with iconified chip.
   // Variant accents tie the header to the product family it filters.
@@ -648,6 +664,51 @@ export function FilterSidebar({
           </Accordion>
         </CollapsibleGroup>
       )}
+
+      {/* === FOOTER — reset + AI help card so the column doesn't end on a filter === */}
+      <div className="filter-footer">
+        {totalActiveCount > 0 && (
+          <button
+            type="button"
+            onClick={resetAllFilters}
+            className="filter-reset-btn"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Resetovat filtry</span>
+            <span className="filter-reset-count">{totalActiveCount}</span>
+          </button>
+        )}
+
+        <div className="filter-ai-card">
+          <div className="filter-ai-card-glow" aria-hidden />
+          <div className="filter-ai-card-head">
+            <span className="filter-ai-chip">
+              <Sparkles className="h-3.5 w-3.5" />
+            </span>
+            <div className="filter-ai-text">
+              <span className="filter-ai-title">AI poradce</span>
+              <span className="filter-ai-sub">Hledáte něco konkrétního?</span>
+            </div>
+          </div>
+          <p className="filter-ai-desc">
+            Popište co hledáte vlastními slovy — najdeme produkt na míru.
+          </p>
+          <button
+            type="button"
+            onClick={() => setGatewayOpen(true)}
+            className="filter-ai-cta"
+          >
+            <span>Zeptat se AI</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        <div className="filter-footer-meta">
+          <span>swelt.</span>
+          <span>·</span>
+          <span>Premium katalog 2026</span>
+        </div>
+      </div>
 
     </div>
   );
