@@ -6,17 +6,29 @@ import logo from '@/assets/logo.png';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 
+// Obrázky vybrané tematicky pro jednotlivé hero slidy (Unsplash, ověřeno 200).
 const SLIDE_IMAGES = [
-  'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1920&q=80',
+  // 1) Swelt Dropshipping — sklad / balíky
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
+  // 2) Swelt Luxury — luxusní hodinky
+  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
+  // 3) Nejnovější kolekce — parfémy / kosmetika
+  'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1920&q=80',
+  // 4) Novinky sezóny — šperky (zlatý náhrdelník)
+  'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1920&q=80',
+  // 5) Exkluzivní akce — prodejní/luxury
+  'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1920&q=80',
+  // 6) Rychlé dodání — doručení
+  'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1920&q=80',
+  // 7) Velkoobchodní ceny — business / čísla
   'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1567721913486-6585f069b332?auto=format&fit=crop&w=1920&q=80',
+  // 8) Partnerské značky — kolekce hodinek
+  'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1920&q=80',
+  // 9) Zákaznická podpora — tým
   'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1920&q=80',
+  // 10) Snadná integrace — notebook / API
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80',
+  // 11) Připoj se ke Swelt — handshake / business
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80',
 ];
 
@@ -35,13 +47,7 @@ type Slide = {
 };
 
 // Bannery zobrazené pouze v katalogu (compact). Prepend před standardní slidy.
-const CATALOG_BANNERS: Slide[] = [
-  {
-    image: 'https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/bannery/catalog-cavalli-hero.png',
-    ctaHref: '#katalog',
-    imageOnly: true,
-  },
-];
+const CATALOG_BANNERS: Slide[] = [];
 
 export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const { lang } = useStore();
