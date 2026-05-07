@@ -89,13 +89,13 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
   }, [emblaApi]);
 
   return (
-    <div className="relative w-full group -mt-14 z-0" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="relative w-full group z-0 mt-14" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex">
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
               <div
-                className={`relative bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden pt-14 pb-12 transition-all duration-500 ${
+                className={`relative bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden pb-12 transition-all duration-500 ${
                   compact ? 'h-[70vh] lg:h-[80vh]' : 'h-[80vh] lg:h-[100vh]'
                 }`}
                 style={{ backgroundImage: `url(${slide.image})` }}
