@@ -1,6 +1,7 @@
 import { useState, useEffect, CSSProperties } from 'react';
 import { Outlet, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useStore } from '@/lib/store';
 import {
   LayoutDashboard, Package, Zap, BookOpen, ShoppingCart,
   Users, Plug, BarChart2, Settings, ChevronLeft, ChevronRight,
@@ -58,6 +59,13 @@ export default function PartnerLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const setViewMode = useStore((s) => s.setViewMode);
+
+  const goToCatalog = () => {
+    setViewMode('catalog');
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
 
   // Close mobile drawer on route change
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
@@ -87,13 +95,21 @@ export default function PartnerLayout() {
       {/* ── Sidebar ─────────────────────────────────────────────── */}
       <aside className={`partner-sidebar${collapsed ? ' collapsed' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
 
-        {/* Brand */}
-        <div style={{
-          padding: '18px 16px 14px',
-          borderBottom: '1px solid var(--p-hairline)',
-          display: 'flex', alignItems: 'center', gap: 10,
-          minHeight: 64,
-        }}>
+        {/* Brand — klik vede zpět do hlavního katalogu */}
+        <button
+          type="button"
+          onClick={goToCatalog}
+          title="Zpět do katalogu"
+          aria-label="Zpět do katalogu"
+          style={{
+            padding: '18px 16px 14px',
+            borderBottom: '1px solid var(--p-hairline)',
+            display: 'flex', alignItems: 'center', gap: 10,
+            minHeight: 64,
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            width: '100%', textAlign: 'left',
+          }}
+        >
           <div style={{
             width: 28, height: 28, flexShrink: 0,
             background: 'linear-gradient(135deg, var(--p-primary), var(--p-bulk))',
@@ -111,7 +127,7 @@ export default function PartnerLayout() {
               }}>DROPSHIPPING</div>
             </div>
           )}
-        </div>
+        </button>
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '8px', overflowY: 'auto', overflowX: 'hidden' }}>

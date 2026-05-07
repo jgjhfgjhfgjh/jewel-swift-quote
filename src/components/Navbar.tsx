@@ -390,14 +390,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : null}
 
-          {/* CTA — KATALOG 2026 (logged in) / REGISTROVAT (guests) — always far right */}
-          <Button
-            size="sm"
-            onClick={handleCatalogCta}
-            className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
-          >
-            {user ? 'KATALOG 2026' : 'REGISTROVAT'}
-          </Button>
+          {/* CTA — KATALOG 2026 (logged in) / REGISTROVAT (guests) — always far right.
+              Skryjeme když už uživatel je v katalogu (na homepage v catalog módu). */}
+          {!(user && viewMode === 'catalog' && isOnHomePage) && (
+            <Button
+              size="sm"
+              onClick={handleCatalogCta}
+              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
+            >
+              {user ? 'KATALOG 2026' : 'REGISTROVAT'}
+            </Button>
+          )}
         </div>
       </div>
 
