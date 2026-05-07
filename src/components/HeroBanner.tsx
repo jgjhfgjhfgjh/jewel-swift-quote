@@ -95,15 +95,25 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
           {slides.map((slide, i) => (
             <div key={i} className="flex-[0_0_100%] min-w-0">
               <div
-                className={`relative bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden pb-12 transition-all duration-500 ${
+                className={`relative bg-no-repeat flex items-center justify-center overflow-hidden pb-12 transition-all duration-500 ${
+                  slide.imageOnly ? 'bg-white' : 'bg-cover bg-center'
+                } ${
                   compact ? 'h-[70vh] lg:h-[80vh]' : 'h-[80vh] lg:h-[100vh]'
                 }`}
-                style={{ backgroundImage: `url(${slide.image})` }}
+                style={slide.imageOnly ? undefined : { backgroundImage: `url(${slide.image})` }}
               >
                 {slide.imageOnly ? (
-                  slide.ctaHref ? (
-                    <a href={slide.ctaHref} className="absolute inset-0 z-10" aria-label="Otevřít katalog" />
-                  ) : null
+                  <>
+                    <img
+                      src={slide.image}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-contain"
+                      draggable={false}
+                    />
+                    {slide.ctaHref ? (
+                      <a href={slide.ctaHref} className="absolute inset-0 z-10" aria-label="Otevřít katalog" />
+                    ) : null}
+                  </>
                 ) : (
                   <>
                     {/* Cinematic gradient overlay for legibility */}
