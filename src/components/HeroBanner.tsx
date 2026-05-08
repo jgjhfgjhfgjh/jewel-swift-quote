@@ -8,7 +8,7 @@ import { home } from '@/lib/i18n-homepage';
 
 // Obrázky vybrané tematicky pro jednotlivé hero slidy (Unsplash, ověřeno 200).
 const SLIDE_IMAGES = [
-  // 1) Swelt Dropshipping — sklad / balíky
+  // 1) swelt.Dropshipping — sklad / balíky
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
   // 2) Swelt Luxury — luxusní hodinky
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
