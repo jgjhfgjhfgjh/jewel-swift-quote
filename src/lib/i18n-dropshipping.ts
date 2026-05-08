@@ -31,7 +31,7 @@ export interface DropText {
 
 const cs: DropText = {
   hero: {
-    badge: 'swelt.dropshipping — E-shop bez skladu',
+    badge: 'Nákupy bez registrace — E-shop bez skladu',
     h1Part1: 'Prodávej prémiové produkty', h1Highlight: 'bez skladu.',
     sub: 'Vyber si z 3 000+ produktů od 70+ světových značek. My je zabalíme, zkontrolujeme a odešleme pod tvou značkou do 24–72 hodin. Real-time inventory lock zabrání přeprodeji. swelt.signal ti každý týden řekne, co teď zákazníci chtějí.',
     statLabels: ['let na trhu', 'značek', 'aktivních partnerů'],

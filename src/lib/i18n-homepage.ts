@@ -54,7 +54,7 @@ const en: HomeText = {
   continueWithGoogle: 'Continue with Google',
   continueWithApple: 'Continue with Apple',
   hero: [
-    { title: 'Swelt Dropshipping',           subtitle: 'Your partner for easy logistics.',                       cta: 'Start selling' },
+    { title: 'Purchases without registration',    subtitle: 'Your partner for easy logistics.',                       cta: 'Start selling' },
     { title: 'Swelt Luxury',                 subtitle: 'Personal orders of major brands. No min order.',         cta: 'Explore luxury' },
     { title: 'Discover our latest collections', subtitle: 'Premium fragrances & cosmetics at wholesale prices.', cta: 'View collections' },
     { title: 'New Season Arrivals',          subtitle: 'Explore trending products across top brands.',           cta: 'See new arrivals' },
@@ -86,7 +86,7 @@ const cs: HomeText = {
   continueWithGoogle: 'Pokračovat přes Google',
   continueWithApple: 'Pokračovat přes Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                 subtitle: 'Váš partner pro snadnou logistiku.',                  cta: 'Začít prodávat' },
+    { title: 'Nákupy bez registrace',              subtitle: 'Váš partner pro snadnou logistiku.',                  cta: 'Začít prodávat' },
     { title: 'Swelt Luxury',                       subtitle: 'Osobní objednávky velkých značek. Bez minima.',       cta: 'Prozkoumat luxus' },
     { title: 'Objevte naše nejnovější kolekce',    subtitle: 'Prémiové parfémy a kosmetika za velkoobchodní ceny.', cta: 'Zobrazit kolekce' },
     { title: 'Novinky sezóny',                     subtitle: 'Trendy produkty napříč nejlepšími značkami.',         cta: 'Zobrazit novinky' },
@@ -118,7 +118,7 @@ const sk: HomeText = {
   continueWithGoogle: 'Pokračovať cez Google',
   continueWithApple: 'Pokračovať cez Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                 subtitle: 'Váš partner pre jednoduchú logistiku.',               cta: 'Začať predávať' },
+    { title: 'Nákupy bez registrácie',             subtitle: 'Váš partner pre jednoduchú logistiku.',               cta: 'Začať predávať' },
     { title: 'Swelt Luxury',                       subtitle: 'Osobné objednávky veľkých značiek. Bez minima.',      cta: 'Preskúmať luxus' },
     { title: 'Objavte naše najnovšie kolekcie',    subtitle: 'Prémiové parfumy a kozmetika za veľkoobchodné ceny.', cta: 'Zobraziť kolekcie' },
     { title: 'Novinky sezóny',                     subtitle: 'Trendy produkty naprieč najlepšími značkami.',        cta: 'Zobraziť novinky' },
@@ -150,7 +150,7 @@ const pl: HomeText = {
   continueWithGoogle: 'Kontynuuj z Google',
   continueWithApple: 'Kontynuuj z Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                  subtitle: 'Twój partner do łatwej logistyki.',                 cta: 'Zacznij sprzedaż' },
+    { title: 'Zakupy bez rejestracji',              subtitle: 'Twój partner do łatwej logistyki.',                 cta: 'Zacznij sprzedaż' },
     { title: 'Swelt Luxury',                        subtitle: 'Indywidualne zamówienia znanych marek. Bez minimum.', cta: 'Odkryj luksus' },
     { title: 'Odkryj nasze najnowsze kolekcje',     subtitle: 'Perfumy i kosmetyki premium w cenach hurtowych.',   cta: 'Zobacz kolekcje' },
     { title: 'Nowości sezonu',                      subtitle: 'Trendy produkty od najlepszych marek.',             cta: 'Zobacz nowości' },
@@ -182,7 +182,7 @@ const de: HomeText = {
   continueWithGoogle: 'Mit Google fortfahren',
   continueWithApple: 'Mit Apple fortfahren',
   hero: [
-    { title: 'Swelt Dropshipping',                  subtitle: 'Ihr Partner für einfache Logistik.',                cta: 'Verkaufen starten' },
+    { title: 'Käufe ohne Registrierung',            subtitle: 'Ihr Partner für einfache Logistik.',                cta: 'Verkaufen starten' },
     { title: 'Swelt Luxury',                        subtitle: 'Persönliche Bestellungen großer Marken. Kein Mindestbestellwert.', cta: 'Luxus entdecken' },
     { title: 'Entdecken Sie unsere neuesten Kollektionen', subtitle: 'Premium-Parfüms & Kosmetik zu Großhandelspreisen.', cta: 'Kollektionen ansehen' },
     { title: 'Neue Saison',                         subtitle: 'Trendprodukte von Top-Marken.',                     cta: 'Neuheiten ansehen' },
@@ -214,7 +214,7 @@ const fr: HomeText = {
   continueWithGoogle: 'Continuer avec Google',
   continueWithApple: 'Continuer avec Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                  subtitle: 'Votre partenaire pour une logistique simple.',     cta: 'Commencer à vendre' },
+    { title: 'Achats sans inscription',             subtitle: 'Votre partenaire pour une logistique simple.',     cta: 'Commencer à vendre' },
     { title: 'Swelt Luxury',                        subtitle: 'Commandes personnelles de grandes marques. Sans minimum.', cta: 'Explorer le luxe' },
     { title: 'Découvrez nos dernières collections', subtitle: 'Parfums & cosmétiques premium aux prix de gros.', cta: 'Voir les collections' },
     { title: 'Nouveautés de saison',                subtitle: 'Produits tendance des meilleures marques.',        cta: 'Voir les nouveautés' },
@@ -246,7 +246,7 @@ const es: HomeText = {
   continueWithGoogle: 'Continuar con Google',
   continueWithApple: 'Continuar con Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                  subtitle: 'Tu socio para una logística sencilla.',             cta: 'Empezar a vender' },
+    { title: 'Compras sin registro',                subtitle: 'Tu socio para una logística sencilla.',             cta: 'Empezar a vender' },
     { title: 'Swelt Luxury',                        subtitle: 'Pedidos personales de grandes marcas. Sin mínimo.', cta: 'Explorar lujo' },
     { title: 'Descubre nuestras últimas colecciones', subtitle: 'Perfumes y cosmética premium a precio mayorista.', cta: 'Ver colecciones' },
     { title: 'Novedades de temporada',              subtitle: 'Productos tendencia de las mejores marcas.',        cta: 'Ver novedades' },
@@ -278,7 +278,7 @@ const it: HomeText = {
   continueWithGoogle: 'Continua con Google',
   continueWithApple: 'Continua con Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                  subtitle: 'Il tuo partner per una logistica semplice.',        cta: 'Inizia a vendere' },
+    { title: 'Acquisti senza registrazione',        subtitle: 'Il tuo partner per una logistica semplice.',        cta: 'Inizia a vendere' },
     { title: 'Swelt Luxury',                        subtitle: 'Ordini personali di grandi marchi. Senza minimo.',  cta: 'Esplora il lusso' },
     { title: 'Scopri le ultime collezioni',         subtitle: 'Profumi e cosmetici premium a prezzi all’ingrosso.', cta: 'Vedi collezioni' },
     { title: 'Novità di stagione',                  subtitle: 'Prodotti di tendenza dei migliori marchi.',         cta: 'Vedi novità' },

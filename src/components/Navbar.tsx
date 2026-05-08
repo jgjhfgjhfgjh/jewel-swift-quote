@@ -25,7 +25,7 @@ const HOME_NAV_ITEMS = [
   { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
   { href: '#luxury', label: 'Nákup bez registrace', icon: HandCoins },
   { href: '#feed', label: 'Feed', icon: Rss },
-  { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
+  { href: '#dropshipping', label: 'Nákupy bez registrace', icon: PackageOpen },
   { href: '#shop', label: 'E-shop do 48h', icon: ShoppingCart },
 ];
 
