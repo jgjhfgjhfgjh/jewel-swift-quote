@@ -585,21 +585,21 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   const COUNTRIES = [
-    { flag: '🇨🇿', name: 'Česká republika' },
-    { flag: '🇸🇰', name: 'Slovensko' },
-    { flag: '🇦🇹', name: 'Rakousko' },
-    { flag: '🇩🇪', name: 'Německo' },
-    { flag: '🇵🇱', name: 'Polsko' },
-    { flag: '🇭🇺', name: 'Maďarsko' },
-    { flag: '🇷🇴', name: 'Rumunsko' },
-    { flag: '🇧🇬', name: 'Bulharsko' },
-    { flag: '🇭🇷', name: 'Chorvatsko' },
-    { flag: '🇸🇮', name: 'Slovinsko' },
-    { flag: '🇧🇦', name: 'Bosna a Hercegovina' },
-    { flag: '🇷🇸', name: 'Srbsko' },
-    { flag: '🇬🇷', name: 'Řecko' },
-    { flag: '🇮🇹', name: 'Itálie' },
-    { flag: '🇫🇷', name: 'Francie' },
+    { code: 'cz', name: 'Česká republika' },
+    { code: 'sk', name: 'Slovensko' },
+    { code: 'at', name: 'Rakousko' },
+    { code: 'de', name: 'Německo' },
+    { code: 'pl', name: 'Polsko' },
+    { code: 'hu', name: 'Maďarsko' },
+    { code: 'ro', name: 'Rumunsko' },
+    { code: 'bg', name: 'Bulharsko' },
+    { code: 'hr', name: 'Chorvatsko' },
+    { code: 'si', name: 'Slovinsko' },
+    { code: 'ba', name: 'Bosna a Hercegovina' },
+    { code: 'rs', name: 'Srbsko' },
+    { code: 'gr', name: 'Řecko' },
+    { code: 'it', name: 'Itálie' },
+    { code: 'fr', name: 'Francie' },
   ];
 
   const BRANDS_STANDARD = [
@@ -639,7 +639,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-10">
               {COUNTRIES.map((c) => (
                 <div key={c.name} className="flex items-center gap-2.5 bg-slate-50 border border-border rounded-xl px-4 py-3 hover:border-primary/30 hover:bg-primary/5 transition-colors">
-                  <span className="text-2xl leading-none">{c.flag}</span>
+                  <img
+                    src={`https://flagcdn.com/32x24/${c.code}.png`}
+                    srcSet={`https://flagcdn.com/64x48/${c.code}.png 2x`}
+                    width={32}
+                    height={24}
+                    alt={c.name}
+                    className="rounded-sm shrink-0 object-cover"
+                  />
                   <span className="text-sm font-medium text-foreground/80 leading-tight">{c.name}</span>
                 </div>
               ))}
