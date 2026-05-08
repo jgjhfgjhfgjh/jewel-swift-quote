@@ -1022,7 +1022,7 @@ const Dropshipping = () => {
         <section className="border-y border-border bg-muted/30">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Proč swelt.dropshipping</div>
+              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Proč swelt.Dropshipping</div>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold">Nejsme jen dodavatel. Jsme tvůj byznys partner.</h2>
             </Reveal>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">

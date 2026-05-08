@@ -121,7 +121,7 @@ const cs: VelkoobchodText = {
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.' },
-    { name: 'swelt.dropshipping', desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my mu zboží zabalíme a odešleme přímo pod vaším jménem.' },
+    { name: 'swelt.Dropshipping', desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my mu zboží zabalíme a odešleme přímo pod vaším jménem.' },
     { name: 'Nákup bez registrace', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.' },
     { name: 'swelt.shop', desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.' },
   ],
@@ -244,7 +244,7 @@ const en: VelkoobchodText = {
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatic XML/CSV feed of 3,000+ products. Sync your shop with no manual work.' },
-    { name: 'swelt.dropshipping', desc: 'Sell without a warehouse. Customer orders from you — we pack and ship under your name.' },
+    { name: 'swelt.Dropshipping', desc: 'Sell without a warehouse. Customer orders from you — we pack and ship under your name.' },
     { name: 'Private purchases', desc: 'Premium products for individuals and corporate gifts. Discreet packaging, fast EU delivery.' },
     { name: 'swelt.shop', desc: 'Turnkey e-shop preloaded with 3,000+ products. Live in 48 hours. With or without your own stock.' },
   ],

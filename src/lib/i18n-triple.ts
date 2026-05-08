@@ -31,7 +31,7 @@ const cs: TripleText = {
     bullets: ['Aktuální velkoobchodní ceny a slevy', 'Skladové zásoby v reálném čase', 'Přímý přístup k novinkám a kolekcím', 'Individuální cenová politika', 'Rychlé objednávky a expedice'],
   },
   dropshipping: {
-    label: 'Swelt.dropshipping', title: 'Dropshipping',
+    label: 'swelt.Dropshipping', title: 'Dropshipping',
     description: 'Prodávejte, my se postaráme o zbytek.',
     ctaLabels: ['Chci dropshipping'],
     detailsHeading: 'E-shop bez investic',
@@ -66,7 +66,7 @@ const sk: TripleText = {
     bullets: ['Aktuálne veľkoobchodné ceny a zľavy', 'Skladové zásoby v reálnom čase', 'Priamy prístup k novinkám a kolekciám', 'Individuálna cenová politika', 'Rýchle objednávky a expedícia'],
   },
   dropshipping: {
-    label: 'Swelt.dropshipping', title: 'Dropshipping',
+    label: 'swelt.Dropshipping', title: 'Dropshipping',
     description: 'Predávajte, my sa postaráme o zvyšok.',
     ctaLabels: ['Chcem dropshipping'],
     detailsHeading: 'E-shop bez investícií',
@@ -101,7 +101,7 @@ const en: TripleText = {
     bullets: ['Current wholesale prices and discounts', 'Stock levels in real time', 'Direct access to launches and collections', 'Individual pricing policy', 'Fast ordering and dispatch'],
   },
   dropshipping: {
-    label: 'Swelt.dropshipping', title: 'Dropshipping',
+    label: 'swelt.Dropshipping', title: 'Dropshipping',
     description: 'You sell, we handle the rest.',
     ctaLabels: ['I want dropshipping'],
     detailsHeading: 'Shop without investment',
@@ -136,7 +136,7 @@ const de: TripleText = {
     bullets: ['Aktuelle Großhandelspreise und Rabatte', 'Bestände in Echtzeit', 'Direkter Zugang zu Neuheiten und Kollektionen', 'Individuelle Preispolitik', 'Schnelle Bestellung und Versand'],
   },
   dropshipping: {
-    label: 'Swelt.dropshipping', title: 'Dropshipping',
+    label: 'swelt.Dropshipping', title: 'Dropshipping',
     description: 'Sie verkaufen, wir kümmern uns um den Rest.',
     ctaLabels: ['Ich will Dropshipping'],
     detailsHeading: 'Shop ohne Investitionen',

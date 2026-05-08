@@ -40,10 +40,10 @@ function SeoHead() {
         },
         {
           '@type': 'Question',
-          name: 'Jaký je rozdíl mezi swelt.feed a swelt.dropshipping?',
+          name: 'Jaký je rozdíl mezi swelt.feed a swelt.Dropshipping?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.dropshipping je o krok dál: nulový sklad, nulová logistika.',
+            text: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.Dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.Dropshipping je o krok dál: nulový sklad, nulová logistika.',
           },
         },
         {
@@ -75,7 +75,7 @@ function SeoHead() {
           name: 'Co se stane, když zákazník chce zboží vrátit?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
+            text: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.Dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
           },
         },
       ],
@@ -345,8 +345,8 @@ const FAQS = [
     a: 'Vůbec ne. Pro Shoptet, WooCommerce a Upgates máme připravené přímé integrace — nastavíte je za 10–20 minut bez jediného řádku kódu. Pro ostatní platformy vám pošleme odkaz na feed, který jednoduše vložíte do nastavení vašeho e-shopu. Pokud si nevíte rady, pomůžeme vám zdarma.',
   },
   {
-    q: 'Jaký je rozdíl mezi swelt.feed a swelt.dropshipping?',
-    a: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.dropshipping je o krok dál: nulový sklad, nulová logistika.',
+    q: 'Jaký je rozdíl mezi swelt.feed a swelt.Dropshipping?',
+    a: 'swelt.feed = přenesete náš katalog do svého e-shopu a produkty si musíte nakoupit (nebo mít skladem). swelt.Dropshipping = vůbec nic neskladujete. Zákazník u vás objedná, my mu zboží zabalíme a odešleme přímo jeho jménem — vy jen fakturujete. swelt.Dropshipping je o krok dál: nulový sklad, nulová logistika.',
   },
   {
     q: 'Jak rychle uvidím produkty ve svém e-shopu?',
@@ -362,7 +362,7 @@ const FAQS = [
   },
   {
     q: 'Co se stane, když zákazník chce zboží vrátit?',
-    a: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
+    a: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.Dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.',
   },
 ];
 
@@ -793,7 +793,7 @@ export default function Feed() {
               </ul>
               <p className="text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 leading-relaxed">
                 <strong className="text-foreground">Tip:</strong> Chcete katalog bez starostí o sklad? Přejděte na{' '}
-                <button className="text-primary font-semibold hover:underline" onClick={() => navigate('/dropshipping')}>swelt.dropshipping</button>{' '}
+                <button className="text-primary font-semibold hover:underline" onClick={() => navigate('/dropshipping')}>swelt.Dropshipping</button>{' '}
                 — zákazník objedná, my odešleme, vy jen inkasujete.
               </p>
             </div>
@@ -872,10 +872,10 @@ export default function Feed() {
             <div className="text-center mb-10">
               <Badge className="mb-4 bg-white/20 text-white border-white/30">Chcete jít ještě dál?</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-4">
-                swelt.dropshipping: žádný sklad, žádná logistika
+                swelt.Dropshipping: žádný sklad, žádná logistika
               </h2>
               <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">
-                S feedem stále musíte zboží nakoupit a skladovat. Se swelt.dropshipping to odpadá úplně. Zákazník objedná → vy přepošlete objednávku → my zboží zabalíme a odešleme přímo zákazníkovi pod vaším jménem.
+                S feedem stále musíte zboží nakoupit a skladovat. Se swelt.Dropshipping to odpadá úplně. Zákazník objedná → vy přepošlete objednávku → my zboží zabalíme a odešleme přímo zákazníkovi pod vaším jménem.
               </p>
             </div>
           </Reveal>
@@ -903,7 +903,7 @@ export default function Feed() {
                 className="bg-white text-indigo-700 hover:bg-white/95 px-8 gap-2 font-bold text-base shadow-xl"
                 onClick={() => navigate('/dropshipping')}
               >
-                Zjistit víc o swelt.dropshipping
+                Zjistit víc o swelt.Dropshipping
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>

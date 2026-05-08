@@ -101,7 +101,7 @@ const cs: ShopText = {
     },
     {
       name: 'Business', desc: 'Kompletní řešení s dropshippingem',
-      features: ['E-shop setup (libovolná platforma)', 'Plný katalog 3 000+ produktů', 'swelt.feed (4× denní sync)', 'swelt.dropshipping integrace', 'Premium design s brandingem', 'SEO + Heureka/Zbozi napojení', 'Prioritní podpora'],
+      features: ['E-shop setup (libovolná platforma)', 'Plný katalog 3 000+ produktů', 'swelt.feed (4× denní sync)', 'swelt.Dropshipping integrace', 'Premium design s brandingem', 'SEO + Heureka/Zbozi napojení', 'Prioritní podpora'],
       cta: 'Začít na Business', bespoke: 'Na míru',
     },
     {
@@ -129,7 +129,7 @@ const cs: ShopText = {
   ecosystemItems: [
     { name: 'B2B Velkoobchod', desc: 'Nakupujte produkty za velkoobchodní ceny přímo od dodavatele.' },
     { name: 'swelt.feed', desc: 'Automatický feed pro synchronizaci katalogu s vaším existujícím e-shopem.' },
-    { name: 'swelt.dropshipping', desc: 'Prodávejte bez skladu. My skladujeme, balíme a expedujeme za vás.' },
+    { name: 'swelt.Dropshipping', desc: 'Prodávejte bez skladu. My skladujeme, balíme a expedujeme za vás.' },
     { name: 'Nákup bez registrace', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky.' },
   ],
   faq: { heading: 'Nejčastější otázky', sub: 'Vše, co potřebujete vědět před spuštěním.' },
@@ -213,7 +213,7 @@ const en: ShopText = {
   },
   plans: [
     { name: 'Starter', desc: 'Quick start for the first shop', features: ['Shop setup on Shoptet / WooCommerce', 'Up to 500 products imported', 'swelt.feed (daily sync)', 'Responsive template', 'Basic SEO setup', 'Onboarding and support'], cta: 'Start with Starter', bespoke: 'Bespoke' },
-    { name: 'Business', desc: 'Complete solution with dropshipping', features: ['Shop setup (any platform)', 'Full catalog 3,000+ products', 'swelt.feed (4× daily sync)', 'swelt.dropshipping integration', 'Premium design with branding', 'SEO + Heureka/Zbozi integration', 'Priority support'], cta: 'Start with Business', bespoke: 'Bespoke' },
+    { name: 'Business', desc: 'Complete solution with dropshipping', features: ['Shop setup (any platform)', 'Full catalog 3,000+ products', 'swelt.feed (4× daily sync)', 'swelt.Dropshipping integration', 'Premium design with branding', 'SEO + Heureka/Zbozi integration', 'Priority support'], cta: 'Start with Business', bespoke: 'Bespoke' },
     { name: 'Enterprise', desc: 'Bespoke solution', features: ['Everything from Business', 'Custom shop tailored to you', 'API integration and automation', 'White-label options', 'Dedicated project manager', 'SLA uptime guarantee'], cta: 'Contact sales', bespoke: 'Bespoke' },
   ],
   trust: {
@@ -231,7 +231,7 @@ const en: ShopText = {
   ecosystemItems: [
     { name: 'B2B Wholesale', desc: 'Buy products at wholesale prices direct from the supplier.' },
     { name: 'swelt.feed', desc: 'Automatic feed to sync the catalog with your existing shop.' },
-    { name: 'swelt.dropshipping', desc: 'Sell without stock. We store, pack and ship for you.' },
+    { name: 'swelt.Dropshipping', desc: 'Sell without stock. We store, pack and ship for you.' },
     { name: 'Private purchases', desc: 'Premium products for individuals and corporate gifts.' },
   ],
   faq: { heading: 'Frequently asked questions', sub: 'Everything you need to know before launch.' },
