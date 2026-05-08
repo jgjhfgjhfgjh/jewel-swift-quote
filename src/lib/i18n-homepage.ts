@@ -54,7 +54,7 @@ const en: HomeText = {
   continueWithGoogle: 'Continue with Google',
   continueWithApple: 'Continue with Apple',
   hero: [
-    { title: 'Swelt Dropshipping',           subtitle: 'Your partner for easy logistics.',                       cta: 'Start selling' },
+    { title: 'Purchases without registration',    subtitle: 'Your partner for easy logistics.',                       cta: 'Start selling' },
     { title: 'Swelt Luxury',                 subtitle: 'Personal orders of major brands. No min order.',         cta: 'Explore luxury' },
     { title: 'Discover our latest collections', subtitle: 'Premium fragrances & cosmetics at wholesale prices.', cta: 'View collections' },
     { title: 'New Season Arrivals',          subtitle: 'Explore trending products across top brands.',           cta: 'See new arrivals' },
@@ -86,7 +86,7 @@ const cs: HomeText = {
   continueWithGoogle: 'Pokračovat přes Google',
   continueWithApple: 'Pokračovat přes Apple',
   hero: [
-    { title: 'Swelt Dropshipping',                 subtitle: 'Váš partner pro snadnou logistiku.',                  cta: 'Začít prodávat' },
+    { title: 'Nákupy bez registrace',              subtitle: 'Váš partner pro snadnou logistiku.',                  cta: 'Začít prodávat' },
     { title: 'Swelt Luxury',                       subtitle: 'Osobní objednávky velkých značek. Bez minima.',       cta: 'Prozkoumat luxus' },
     { title: 'Objevte naše nejnovější kolekce',    subtitle: 'Prémiové parfémy a kosmetika za velkoobchodní ceny.', cta: 'Zobrazit kolekce' },
     { title: 'Novinky sezóny',                     subtitle: 'Trendy produkty napříč nejlepšími značkami.',         cta: 'Zobrazit novinky' },
