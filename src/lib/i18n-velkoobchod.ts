@@ -148,11 +148,11 @@ const cs: VelkoobchodText = {
   authTip: 'Registrujte se zdarma a uvidíte i velkoobchodní nákupní ceny — B2B účet schválíme do 24 hodin.',
   whySwelt: {
     eyebrow: 'Proč Swelt',
-    heading: '15 let zkušeností. Přímý vztah s dodavateli.',
-    p: 'Nejsme překupník. Jsme přímý distributor světových hodinářských a klenotnických značek pro střední a východní Evropu. Díky přímému partnerství s výrobci nabízíme ceny, na které jiní distributoři nedosáhnou.',
+    heading: 'Přímý vztah s dodavateli. Férové ceny pro partnery.',
+    p: 'Nejsme překupník. Nakupujeme přímo od výrobců a autorizovaných importérů světových hodinářských a klenotnických značek. Díky přímému přístupu ke zdrojům nabízíme ceny, na které jiní distributoři nedosáhnou.',
     bullets: ['Přímé partnerství s 70+ světovými značkami', 'Garance originality — 100 % autentické produkty', 'Evropský sklad — expedice do 24–48 hodin', 'Certifikovaný záruční a pozáruční servis', 'GDPR compliance a transparentní obchodní podmínky'],
   },
-  whyStats: ['let na trhu', 'aktivních partnerů', 'produktů v katalogu', 'spokojenost partnerů'],
+  whyStats: ['zemí doručení', 'aktivních partnerů', 'produktů v katalogu', 'spokojenost partnerů'],
   testimonials: [
     { name: 'Radek H.', role: 'E-shop hodinek, Praha', text: 'Díky Sweltu jsem rozšířil katalog o 800 produktů za víkend. Marže na Tommy Hilfiger jsou výrazně lepší než u předchozího dodavatele a zásoby jsou vždy aktuální.' },
     { name: 'Monika B.', role: 'Zlatnictví, Brno', text: 'Schválení účtu přišlo do 8 hodin. Přístup do katalogu byl okamžitý. Nikdy jsem nezaznamenala nesoulad zásob — to, co katalog říká „skladem", opravdu je skladem.' },
@@ -271,11 +271,11 @@ const en: VelkoobchodText = {
   authTip: 'Register for free and unlock wholesale prices — your B2B account is approved within 24 hours.',
   whySwelt: {
     eyebrow: 'Why Swelt',
-    heading: '15 years of experience. Direct supplier relationships.',
-    p: 'We are not a reseller. We are the direct distributor of world watch and jewelry brands for Central and Eastern Europe. Thanks to direct partnerships with manufacturers we offer prices other distributors cannot reach.',
+    heading: 'Direct supplier relationships. Fair prices for partners.',
+    p: 'We are not a reseller. We source directly from manufacturers and authorized importers of world watch and jewelry brands. Thanks to direct access to the source we offer prices other distributors cannot reach.',
     bullets: ['Direct partnership with 70+ world brands', 'Originality guarantee — 100 % authentic products', 'European warehouse — dispatch in 24–48 hours', 'Certified warranty and post-warranty service', 'GDPR compliance and transparent terms'],
   },
-  whyStats: ['years on the market', 'active partners', 'products in the catalog', 'partner satisfaction'],
+  whyStats: ['delivery countries', 'active partners', 'products in the catalog', 'partner satisfaction'],
   testimonials: [
     { name: 'Radek H.', role: 'Watch e-shop, Prague', text: 'Thanks to Swelt I expanded my catalog by 800 products over a weekend. Margins on Tommy Hilfiger are dramatically better than my previous supplier and stock is always accurate.' },
     { name: 'Monika B.', role: 'Jewelry shop, Brno', text: 'Account approval came within 8 hours. Catalog access was instant. I have never seen a stock mismatch — what the catalog says "in stock" really is in stock.' },

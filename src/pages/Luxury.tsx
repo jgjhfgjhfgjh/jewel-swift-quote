@@ -128,7 +128,7 @@ export default function Luxury() {
       '@type': 'Service',
       name: 'swelt.luxury — Privátní přístup k prémiím',
       description: 'Exkluzivní přístup k velkoobchodním cenám prémiových hodinek a šperků pro soukromé osoby i firmy. Bez nutnosti IČO, dostupné od 1 kusu, doručení po celé EU.',
-      provider: { '@type': 'Organization', name: 'ZAGO / swelt.partner', url: 'https://swelt.partner' },
+      provider: { '@type': 'Organization', name: 'swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
         { '@type': 'Country', name: 'SK' },

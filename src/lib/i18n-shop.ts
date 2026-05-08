@@ -112,8 +112,8 @@ const cs: ShopText = {
   ],
   trust: {
     eyebrow: 'Proč swelt.shop',
-    heading: 'Nestavíte e-shop od nuly. Stavíte na 15 letech zkušeností.',
-    p: 'Za swelt.shop stojí tým, který vybudoval B2B distribuci pro 500+ partnerů. Víme, které produkty se prodávají, jak nastavit ceny a jak vyhnout se chybám, které stojí začínající e-shopy měsíce a tisíce korun.',
+    heading: 'Nestavíte e-shop od nuly. Stavíte na ověřeném katalogu.',
+    p: 'Za swelt.shop stojí tým, který buduje B2B distribuci pro stovky partnerů. Víme, které produkty se prodávají, jak nastavit ceny a jak vyhnout se chybám, které stojí začínající e-shopy měsíce a tisíce korun.',
     bullets: ['Produkty s prokázanou poptávkou — nenakoupíte ležáky', 'Ceny nastavené pro zdravou marži 30–50 %', 'Automatická aktualizace — žádné ruční práce', 'Podpora při prvních objednávkách a reklamacích', 'Zkušenosti z 500+ spuštěných partnerských e-shopů'],
   },
   testimonials: [
@@ -218,8 +218,8 @@ const en: ShopText = {
   ],
   trust: {
     eyebrow: 'Why swelt.shop',
-    heading: "You're not building from scratch. You're building on 15 years of experience.",
-    p: 'Behind swelt.shop is a team that built B2B distribution for 500+ partners. We know which products sell, how to set prices and how to avoid the mistakes that cost new shops months and thousands.',
+    heading: "You're not building from scratch. You're building on a proven catalog.",
+    p: 'Behind swelt.shop is a team building B2B distribution for hundreds of partners. We know which products sell, how to set prices and how to avoid the mistakes that cost new shops months and thousands.',
     bullets: ['Products with proven demand — no slow movers', 'Prices set for healthy 30–50 % margin', 'Automatic updates — no manual work', 'Support during your first orders and returns', 'Experience from 500+ launched partner shops'],
   },
   testimonials: [

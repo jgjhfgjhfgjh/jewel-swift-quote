@@ -1049,7 +1049,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center text-primary-foreground">
               {[
-                { val: 15, suffix: '+', label: 'let na trhu' },
+                { val: 15, suffix: '+', label: 'zemí doručení' },
                 { val: 70, suffix: '+', label: 'prémiových značek' },
                 { val: 3000, suffix: '+', label: 'produktů v katalogu' },
                 { val: 500, suffix: '+', label: 'aktivních partnerů' },

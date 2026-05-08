@@ -38,7 +38,7 @@ const cs: LuxuryText = {
     sampleLabel: 'Ukázka katalogu', productCount: '3 000+ produktů',
     brandsLabel: 'Značky v katalogu:', moreCount: '+65 dalších',
   },
-  stats: ['Produktů v katalogu', 'Světových značek', 'Průměrná úspora', 'Let ZAGO na trhu'],
+  stats: ['Produktů v katalogu', 'Světových značek', 'Průměrná úspora', 'Zemí doručení'],
   benefits: {
     eyebrow: 'Proč swelt.luxury?', heading: 'Přístup k prémiím bez zbytečných překážek',
     items: [
@@ -73,7 +73,7 @@ const cs: LuxuryText = {
   },
   qtyOptions: ['1 kus', '2–5 kusů', '6–20 kusů', '20+ kusů'],
   budgetOptions: ['do 5 000 Kč', '5 000–15 000 Kč', '15 000–50 000 Kč', '50 000+ Kč'],
-  trustItems: ['15+ let ZAGO na trhu', 'Autorizovaný distributor 70+ značek', 'Garance pravosti produktů', 'Pojištěné zásilky', 'GDPR — vaše data jsou v bezpečí'],
+  trustItems: ['Prémiové značky', 'Garance pravosti produktů', 'Pojištěné zásilky', 'GDPR — vaše data jsou v bezpečí', 'EU doručení do 72 h'],
   notifications: [
     { name: 'Petr K.', city: 'Prahy', product: 'Tommy Hilfiger hodinky' },
     { name: 'Markéta S.', city: 'Brna', product: 'firemní dary' },
@@ -88,11 +88,11 @@ const cs: LuxuryText = {
     { q: 'Musím mít IČO nebo firmu, abych mohl nakoupit?', a: 'Ne. swelt.luxury je dostupné pro soukromé osoby i firmy bez nutnosti IČO. Stačí vyplnit poptávkový formulář. Pro firmy vystavíme fakturu odpovídající jejich potřebám.' },
     { q: 'Jaká je minimální výše objednávky?', a: 'Minimální odběr je 1 kus. Nejsme vázáni žádnými MOQ. Objednáte jeden kus jako narozeninový dárek nebo sto kusů jako firemní prezenty — podmínky jsou stejné.' },
     { q: 'Jak dlouho trvá vyřízení poptávky?', a: 'Odpovídáme do 24 hodin v pracovní dny. Cenová nabídka obsahuje přesnou dostupnost, velkoobchodní cenu a odhadovaný čas doručení. Po potvrzení expedujeme do 24–48 hodin.' },
-    { q: 'Jsou produkty originální?', a: 'Ano. Jsme autorizovaný distributor 70+ světových značek. Každý produkt je originální, pochází přímo od výrobce nebo autorizovaného dovozce a je doplněn dokladem o původu.' },
+    { q: 'Jsou produkty originální?', a: 'Ano. Každý produkt je originální, pochází přímo od výrobce nebo autorizovaného dovozce a je doplněn dokladem o původu. Garance pravosti je součástí každé objednávky.' },
     { q: 'Jak probíhá platba a dodání?', a: 'Po potvrzení nabídky obdržíte fakturu (hotovost, převod nebo karta). Po platbě zásilku expedujeme. Doručení po celé EU do 72 hodin. Zásilka je pojištěná a sledovatelná online.' },
   ],
   cta: { heading: 'Prémiové produkty dostupné pro každého.', sub: 'Vyplňte poptávku — nabídku zašleme do 24 hodin.', button: 'Odeslat poptávku' },
-  trustStrip: ['15+ let ZAGO', 'Autorizovaný distributor', 'Garance pravosti', 'GDPR', 'Pojištěné zásilky'],
+  trustStrip: ['Prémiové značky', 'Garance pravosti', 'GDPR', 'Pojištěné zásilky', 'EU doručení'],
 };
 
 const en: LuxuryText = {
@@ -107,7 +107,7 @@ const en: LuxuryText = {
     sampleLabel: 'Catalog sample', productCount: '3,000+ products',
     brandsLabel: 'Brands in the catalog:', moreCount: '+65 more',
   },
-  stats: ['Products in catalog', 'World brands', 'Average savings', 'Years ZAGO on the market'],
+  stats: ['Products in catalog', 'World brands', 'Average savings', 'Delivery countries'],
   benefits: {
     eyebrow: 'Why swelt.luxury?', heading: 'Premium goods without unnecessary barriers',
     items: [
@@ -142,7 +142,7 @@ const en: LuxuryText = {
   },
   qtyOptions: ['1 piece', '2–5 pieces', '6–20 pieces', '20+ pieces'],
   budgetOptions: ['under €200', '€200–€600', '€600–€2,000', '€2,000+'],
-  trustItems: ['15+ years ZAGO on the market', 'Authorized distributor of 70+ brands', 'Authenticity guarantee', 'Insured shipments', 'GDPR — your data is safe'],
+  trustItems: ['Premium brands', 'Authenticity guarantee', 'Insured shipments', 'GDPR — your data is safe', 'EU delivery in 72 h'],
   notifications: [
     { name: 'Peter K.', city: 'Prague', product: 'Tommy Hilfiger watches' },
     { name: 'Margaret S.', city: 'Brno', product: 'corporate gifts' },
@@ -157,11 +157,11 @@ const en: LuxuryText = {
     { q: 'Do I need a VAT ID or company to buy?', a: 'No. swelt.luxury is available to individuals and companies without a VAT ID. Just fill out the inquiry form. For companies we issue an invoice that fits their needs.' },
     { q: 'What is the minimum order?', a: 'Minimum order is 1 piece. We have no MOQs. You can order one piece for a birthday gift or a hundred for corporate gifts — terms are the same.' },
     { q: 'How long does an inquiry take?', a: 'We reply within 24 hours on business days. The quote includes precise availability, wholesale price and estimated delivery. After confirmation we dispatch within 24–48 hours.' },
-    { q: 'Are the products original?', a: 'Yes. We are an authorized distributor of 70+ world brands. Every product is original, sourced directly from the manufacturer or authorized importer, with proof of origin.' },
+    { q: 'Are the products original?', a: 'Yes. Every product is original, sourced directly from the manufacturer or authorized importer and accompanied by proof of origin. Authenticity is guaranteed with every order.' },
     { q: 'How does payment and delivery work?', a: 'After accepting the quote you receive an invoice (cash, transfer or card). After payment we dispatch the shipment. EU delivery within 72 hours. Shipments are insured and trackable online.' },
   ],
   cta: { heading: 'Premium products available to everyone.', sub: 'Submit an inquiry — we will send the quote within 24 hours.', button: 'Send inquiry' },
-  trustStrip: ['15+ years ZAGO', 'Authorized distributor', 'Authenticity guarantee', 'GDPR', 'Insured shipments'],
+  trustStrip: ['Premium brands', 'Authenticity guarantee', 'GDPR', 'Insured shipments', 'EU delivery'],
 };
 
 const sk = en, pl = en, de = en, fr = en, es = en, it = en, nl = en, pt = en;

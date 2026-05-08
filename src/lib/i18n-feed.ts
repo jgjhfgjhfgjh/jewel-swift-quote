@@ -40,7 +40,7 @@ const cs: FeedText = {
     ctaPrimary: 'Začít s feedem zdarma', ctaSecondary: 'Vyzkoušet na nečisto',
     bullets: ['3 000+ produktů', '7 formátů exportu', 'Aktualizace každé 2 hodiny', 'Bez technických znalostí'],
   },
-  stats: ['produktů v katalogu', 'formátů exportu', 'do spuštění feedu', 'let ZAGO na trhu'],
+  stats: ['produktů v katalogu', 'formátů exportu', 'do spuštění feedu', 'zemí doručení'],
   howItWorks: {
     eyebrow: 'Jak to funguje', heading: 'Jak swelt.feed funguje pro váš e-shop',
     sub: 'Tři jednoduché kroky. Žádný kód. Žádné technické znalosti.',
@@ -111,13 +111,13 @@ const cs: FeedText = {
     { q: 'Co se stane, když zákazník chce zboží vrátit?', a: 'Při modelu swelt.feed (kde vy sami máte zboží) řešíte vrácení standardně jako každý e-shop — zákazník vrátí zboží vám. U swelt.Dropshipping platí B2B pravidla: zákazník vrací zboží vám (ne přímo nám), vy pak situaci řešíte s naším týmem. Před odesláním každé objednávky naše logistika provede vizuální kontrolu kvality.' },
   ],
   finalCta: {
-    badge: '15+ let ZAGO na trhu · autorizovaný distributor',
+    badge: 'Prémiové hodinky a šperky · swelt.partner',
     heading1: 'Přidejte prémiové produkty', heading2: 'do svého e-shopu ještě dnes.',
     sub1: 'První feed připravíme zdarma. Žádná karta, žádný závazek. Spuštění do 48 hodin.',
     sub2Pre: 'Nebo rovnou vyzkoušejte ', sub2Mid: 'swelt.Dropshipping', sub2Post: ' — bez skladu, bez nákupu, bez logistiky.',
     ctaPrimary: 'Spustit swelt.feed', ctaSecondary: 'Zkusit dropshipping',
   },
-  trustStrip: ['15+ let ZAGO na trhu', 'Autorizovaný distributor', 'GDPR', 'Šifrované připojení', 'FedEx · DHL · UPS logistika'],
+  trustStrip: ['Prémiové značky', 'GDPR & bezpečnost', 'Šifrované připojení', 'FedEx · DHL · UPS logistika', 'EU distribuce'],
 };
 
 const en: FeedText = {
@@ -130,7 +130,7 @@ const en: FeedText = {
     ctaPrimary: 'Start free with the feed', ctaSecondary: 'Try the demo',
     bullets: ['3,000+ products', '7 export formats', 'Updates every 2 hours', 'No technical skills'],
   },
-  stats: ['products in the catalog', 'export formats', 'until the feed is live', 'years ZAGO on the market'],
+  stats: ['products in the catalog', 'export formats', 'until the feed is live', 'delivery countries'],
   howItWorks: {
     eyebrow: 'How it works', heading: 'How swelt.feed works for your shop',
     sub: 'Three simple steps. No code. No technical skills.',
@@ -201,13 +201,13 @@ const en: FeedText = {
     { q: 'What happens when a customer wants to return goods?', a: 'With swelt.feed (where you have the goods) you handle returns as any e-shop — the customer returns to you. With swelt.Dropshipping B2B rules apply: the customer returns goods to you (not directly to us) and you settle with our team. Our logistics performs a visual quality check before each shipment.' },
   ],
   finalCta: {
-    badge: '15+ years ZAGO on the market · authorized distributor',
+    badge: 'Premium watches & jewelry · swelt.partner',
     heading1: 'Add premium products', heading2: 'to your shop today.',
     sub1: 'We prepare the first feed for free. No card, no commitment. Live within 48 hours.',
     sub2Pre: 'Or try ', sub2Mid: 'swelt.Dropshipping', sub2Post: ' right away — no stock, no buying, no logistics.',
     ctaPrimary: 'Launch swelt.feed', ctaSecondary: 'Try dropshipping',
   },
-  trustStrip: ['15+ years ZAGO on the market', 'Authorized distributor', 'GDPR', 'Encrypted connection', 'FedEx · DHL · UPS logistics'],
+  trustStrip: ['Premium brands', 'GDPR & security', 'Encrypted connection', 'FedEx · DHL · UPS logistics', 'EU distribution'],
 };
 
 const sk = en, pl = en, de = en, fr = en, es = en, it = en, nl = en, pt = en;

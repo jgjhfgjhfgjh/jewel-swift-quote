@@ -778,8 +778,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         </div>
       </section>
 
-      <TrustSection />
-
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}

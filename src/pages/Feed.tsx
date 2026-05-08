@@ -86,7 +86,7 @@ function SeoHead() {
       '@type': 'Service',
       name: 'swelt.feed — Produktový feed prémiových hodinek a šperků',
       description: 'Automatický produktový feed 3 000+ prémiových hodinek a šperků pro české a slovenské e-shopy. Shoptet, WooCommerce, Heureka, Zbozi.cz, Google Shopping — bez technických znalostí.',
-      provider: { '@type': 'Organization', name: 'ZAGO / swelt.partner', url: 'https://swelt.partner' },
+      provider: { '@type': 'Organization', name: 'swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
         { '@type': 'Country', name: 'SK' },

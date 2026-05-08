@@ -73,12 +73,12 @@ const cs: GatewayText = {
     ctaLabel: 'Chci svůj e-shop',
   },
   trustEyebrow: 'Důvěřují nám',
-  trustHeading: '15 let zkušeností. Tisíce spokojených partnerů.',
-  statYearsLabel: 'let ZAGO na trhu',
+  trustHeading: 'Stovky spokojených partnerů. Po celé Evropě.',
+  statYearsLabel: 'zemí doručení',
   statBrandsLabel: 'světových značek',
   statProductsLabel: 'produktů v katalogu',
   statPartnersLabel: 'aktivních partnerů',
-  trustBadges: ['15+ let ZAGO na trhu', 'Autorizovaný distributor', 'GDPR & bezpečnost', 'EU distribuce', 'Garance pravosti'],
+  trustBadges: ['Prémiové značky', 'GDPR & bezpečnost', 'EU distribuce', 'Garance pravosti', 'Doručení do 48 h'],
   testimonialHeading: 'Co říkají naši partneři',
 };
 
@@ -111,10 +111,10 @@ const sk: GatewayText = {
     subheading: 'Zabudnite na mesiace vývoja a hľadania dodávateľov. Dostanete kompletný e-shop naplnený 3 000+ produktmi — pripravený na predaj ihneď.',
     bullets: ['E-shop setup na Shoptet, WooCommerce alebo Upgates', '3 000+ produktov importovaných od začiatku', 'Automatická synchronizácia cien a zásob cez feed', 'Voľba: dropshipping (bez skladu) alebo vlastný sklad', 'Spustenie do 48 hodín, žiadne skúsenosti netreba'],
     ctaLabel: 'Chcem svoj e-shop' },
-  trustEyebrow: 'Dôverujú nám', trustHeading: '15 rokov skúseností. Tisíce spokojných partnerov.',
-  statYearsLabel: 'rokov ZAGO na trhu', statBrandsLabel: 'svetových značiek',
+  trustEyebrow: 'Dôverujú nám', trustHeading: 'Stovky spokojných partnerov. Po celej Európe.',
+  statYearsLabel: 'krajín doručenia', statBrandsLabel: 'svetových značiek',
   statProductsLabel: 'produktov v katalógu', statPartnersLabel: 'aktívnych partnerov',
-  trustBadges: ['15+ rokov ZAGO na trhu', 'Autorizovaný distribútor', 'GDPR & bezpečnosť', 'EU distribúcia', 'Záruka pravosti'],
+  trustBadges: ['Prémiové značky', 'GDPR & bezpečnosť', 'EU distribúcia', 'Záruka pravosti', 'Doručenie do 48 h'],
   testimonialHeading: 'Čo hovoria naši partneri',
 };
 
@@ -147,10 +147,10 @@ const en: GatewayText = {
     subheading: 'Skip months of development and supplier hunting. Get a complete e-shop preloaded with 3,000+ products — ready to sell.',
     bullets: ['Shop setup on Shoptet, WooCommerce or Upgates', '3,000+ products imported from day one', 'Automatic price and stock sync via feed', 'Choice: dropshipping (no stock) or own stock', 'Live within 48 hours — no experience required'],
     ctaLabel: 'I want my shop' },
-  trustEyebrow: 'Trusted by', trustHeading: '15 years of experience. Thousands of happy partners.',
-  statYearsLabel: 'years ZAGO on the market', statBrandsLabel: 'world brands',
+  trustEyebrow: 'Trusted by', trustHeading: 'Hundreds of happy partners across Europe.',
+  statYearsLabel: 'delivery countries', statBrandsLabel: 'world brands',
   statProductsLabel: 'products in the catalog', statPartnersLabel: 'active partners',
-  trustBadges: ['15+ years ZAGO on the market', 'Authorized distributor', 'GDPR & security', 'EU distribution', 'Authenticity guarantee'],
+  trustBadges: ['Premium brands', 'GDPR & security', 'EU distribution', 'Authenticity guarantee', 'Delivery in 48 h'],
   testimonialHeading: 'What our partners say',
 };
 
@@ -183,10 +183,10 @@ const de: GatewayText = {
     subheading: 'Sparen Sie sich Monate Entwicklung und Lieferantensuche. Sie erhalten einen kompletten Shop mit 3.000+ Produkten — sofort verkaufsbereit.',
     bullets: ['Shop-Setup auf Shoptet, WooCommerce oder Upgates', '3.000+ Produkte vom ersten Tag importiert', 'Automatische Preis- und Bestandssynchronisierung', 'Wahl: Dropshipping (kein Lager) oder eigenes Lager', 'Live in 48 Stunden — keine Erfahrung nötig'],
     ctaLabel: 'Ich will meinen Shop' },
-  trustEyebrow: 'Vertrauen von', trustHeading: '15 Jahre Erfahrung. Tausende zufriedene Partner.',
-  statYearsLabel: 'Jahre ZAGO am Markt', statBrandsLabel: 'Weltmarken',
+  trustEyebrow: 'Vertrauen von', trustHeading: 'Hunderte zufriedene Partner in ganz Europa.',
+  statYearsLabel: 'Lieferländer', statBrandsLabel: 'Weltmarken',
   statProductsLabel: 'Produkte im Katalog', statPartnersLabel: 'aktive Partner',
-  trustBadges: ['15+ Jahre ZAGO am Markt', 'Autorisierter Distributor', 'DSGVO & Sicherheit', 'EU-Distribution', 'Echtheitsgarantie'],
+  trustBadges: ['Premium-Marken', 'DSGVO & Sicherheit', 'EU-Distribution', 'Echtheitsgarantie', 'Lieferung in 48 h'],
   testimonialHeading: 'Was unsere Partner sagen',
 };
 
