@@ -31,7 +31,7 @@ export interface DropText {
 
 const cs: DropText = {
   hero: {
-    badge: 'swelt.dropshipping — E-shop bez skladu',
+    badge: 'swelt.Dropshipping — E-shop bez skladu',
     h1Part1: 'Prodávej prémiové produkty', h1Highlight: 'bez skladu.',
     sub: 'Vyber si z 3 000+ produktů od 70+ světových značek. My je zabalíme, zkontrolujeme a odešleme pod tvou značkou do 24–72 hodin. Real-time inventory lock zabrání přeprodeji. swelt.signal ti každý týden řekne, co teď zákazníci chtějí.',
     statLabels: ['let na trhu', 'značek', 'aktivních partnerů'],
@@ -105,11 +105,11 @@ const cs: DropText = {
   ecosystem: {
     eyebrow: 'Ekosystém',
     heading: 'Nejsme jen dodavatel. Jsme tvůj byznys partner.',
-    sub: 'swelt.dropshipping je součástí širší sady nástrojů — kombinuj je podle potřeby.',
+    sub: 'swelt.Dropshipping je součástí širší sady nástrojů — kombinuj je podle potřeby.',
   },
   platforms: {
     eyebrow: 'Integrace', heading: 'Funguje s platformou, kterou už máš',
-    sub: 'Shoptet, WooCommerce, Upgates, Shopify a další — swelt.dropshipping se napojí bez kódu.',
+    sub: 'Shoptet, WooCommerce, Upgates, Shopify a další — swelt.Dropshipping se napojí bez kódu.',
     items: [
       { name: 'Shoptet',       data: { detail: 'Přímá API integrace. Synchronizace produktů, cen a skladovosti jedním klikem. Nejrychlejší nastavení na CZ trhu.', tag: '#1 v ČR', time: '~15 min' } },
       { name: 'WooCommerce',   data: { detail: 'WordPress plugin s XML feedem. Automatická aktualizace. Plná kontrola nad designem produktových stránek.', tag: 'Open source', time: '~30 min' } },
@@ -182,7 +182,7 @@ const cs: DropText = {
 
 const en: DropText = {
   hero: {
-    badge: 'swelt.dropshipping — A shop without a warehouse',
+    badge: 'swelt.Dropshipping — A shop without a warehouse',
     h1Part1: 'Sell premium products', h1Highlight: 'without a warehouse.',
     sub: 'Pick from 3,000+ products from 70+ world brands. We pack, inspect and ship them under your brand within 24–72 hours. Real-time inventory lock prevents overselling. swelt.signal tells you every week what customers actually want.',
     statLabels: ['years on the market', 'brands', 'active partners'],
@@ -256,11 +256,11 @@ const en: DropText = {
   ecosystem: {
     eyebrow: 'Ecosystem',
     heading: 'We are not just a supplier. We are your business partner.',
-    sub: 'swelt.dropshipping is part of a wider toolkit — combine pieces as needed.',
+    sub: 'swelt.Dropshipping is part of a wider toolkit — combine pieces as needed.',
   },
   platforms: {
     eyebrow: 'Integration', heading: 'Works with the platform you already have',
-    sub: 'Shoptet, WooCommerce, Upgates, Shopify and more — swelt.dropshipping connects with no code.',
+    sub: 'Shoptet, WooCommerce, Upgates, Shopify and more — swelt.Dropshipping connects with no code.',
     items: [
       { name: 'Shoptet',       data: { detail: 'Direct API integration. Sync products, prices and stock with one click. Fastest setup on the CZ market.', tag: '#1 in CZ', time: '~15 min' } },
       { name: 'WooCommerce',   data: { detail: 'WordPress plugin with XML feed. Automatic updates. Full control over product page design.', tag: 'Open source', time: '~30 min' } },
