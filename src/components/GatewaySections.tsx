@@ -618,65 +618,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     <div className="gateway-sections relative w-full bg-background text-foreground">
 
       {/* ══════════════════════════════════════════
-          1. HERO — scannable B2B presentation
-      ══════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-b from-white to-slate-50 border-b border-border py-20 sm:py-28 overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-mesh opacity-60" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-grid opacity-30" />
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
-            <div>
-              <Reveal>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-6">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                  B2B Partner Program · 15 let na trhu
-                </div>
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-[1.05] tracking-tight mb-6 text-balance">
-                  Prémiové hodinky a šperky přímo od zdroje — pro váš byznys.
-                </h1>
-                <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl">
-                  Swelt je český B2B velkoobchodní distributor 70+ světových značek. Nakupujte, prodávejte přes feed, spusťte dropshipping nebo si nechte postavit e-shop. Vše pod jednou střechou.
-                </p>
-              </Reveal>
-              <Reveal delay={80}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8">
-                  {[
-                    { icon: Package, text: '3 000+ produktů v katalogu' },
-                    { icon: Award, text: '70+ světových značek' },
-                    { icon: TrendingUp, text: 'Marže 40–65 % pod MOC' },
-                    { icon: Truck, text: 'Dropshipping do 15+ zemí EU' },
-                    { icon: Clock, text: 'Schválení B2B účtu do 24 h' },
-                    { icon: Shield, text: 'Registrace zdarma, bez závazků' },
-                  ].map(({ icon: Icon, text }) => (
-                    <div key={text} className="flex items-center gap-2.5 text-sm text-foreground/80">
-                      <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <Icon className="h-3.5 w-3.5 text-primary" />
-                      </div>
-                      {text}
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-              <Reveal delay={160}>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button size="lg" className="gap-2 h-12 px-7 text-base" onClick={() => navigate('/velkoobchod')}>
-                    Vstoupit do velkoobchodu <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline" className="gap-2 h-12 px-7 text-base" onClick={() => openAuth('login')}>
-                    <Eye className="h-4 w-4" /> Prohlédnout sortiment
-                  </Button>
-                </div>
-              </Reveal>
-            </div>
-            <Reveal delay={200}>
-              <B2BVisual />
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          2. COUNTRIES — doručovací zóna + dropshipping expanze
+          1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
@@ -805,7 +747,37 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </section>
 
       {/* ══════════════════════════════════════════
-          5. CATEGORY CARDS + LEAD CAPTURE + AI/AM
+          3. CTA — Prohlédnout sortiment + Vytvořit B2B účet
+      ══════════════════════════════════════════ */}
+      <section className="py-14 sm:py-16 bg-slate-50 border-b border-border">
+        <div className="mx-auto max-w-2xl px-6">
+          <Reveal>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2 h-13 px-8 text-base flex-1 sm:flex-none"
+                onClick={() => openAuth('login')}
+              >
+                <Eye className="h-4 w-4" /> Prohlédnout sortiment
+              </Button>
+              <Button
+                size="lg"
+                className="gap-2 h-13 px-8 text-base flex-1 sm:flex-none"
+                onClick={() => openAuth('register')}
+              >
+                Vytvořit B2B účet <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-center text-xs text-muted-foreground mt-4">
+              Registrace zdarma · Schválení do 24 hodin · Bez závazků
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
       <div className="relative bg-gradient-subtle border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-mesh" />
