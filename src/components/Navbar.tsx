@@ -22,11 +22,11 @@ interface NavbarProps {
 }
 
 const HOME_NAV_ITEMS = [
-  { href: '#velkoobchod', label: 'Velkoobchod', icon: Handshake },
-  { href: '#luxury', label: 'Nákup bez registrace', icon: HandCoins },
-  { href: '#feed', label: 'Feed', icon: Rss },
-  { href: '#dropshipping', label: 'Dropshipping', icon: PackageOpen },
-  { href: '#shop', label: 'E-shop do 48h', icon: ShoppingCart },
+  { path: '/velkoobchod', label: 'Velkoobchod', icon: Handshake },
+  { path: '/luxury', label: 'Privátní nákupy', icon: HandCoins },
+  { path: '/feed', label: 'swelt.feed', icon: Rss },
+  { path: '/dropshipping', label: 'Dropshipping', icon: PackageOpen },
+  { path: '/shop', label: 'swelt.shop', icon: ShoppingCart },
 ];
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
@@ -194,15 +194,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         ) : isOnHomePage && isHome ? (
           /* Nav links absolutely centered to viewport — stays centered regardless of left/right widths */
           <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 opacity-100">
-            {HOME_NAV_ITEMS.map(({ href, label, icon: Icon }) => (
-              <a
-                key={href}
-                href={href}
+            {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
+              <button
+                key={path}
+                onClick={() => navigate(path)}
                 className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {label}
-              </a>
+              </button>
             ))}
           </nav>
         ) : null}

@@ -5,6 +5,7 @@ import {
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
   Package, Clock, Rocket, RefreshCw, Sparkles, Eye,
+  Truck, Award, MapPin, Building2,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
@@ -550,215 +551,424 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     },
   ];
 
+  const SERVICE_CARDS = [
+    {
+      id: 'velkoobchod', icon: Handshake, label: 'B2B Velkoobchod', path: '/velkoobchod',
+      desc: 'Nakupujte prémiové hodinky a šperky přímo od dodavatele za velkoobchodní ceny. Pro firmy s IČO.',
+      img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
+      cta: 'Vstoupit do velkoobchodu',
+    },
+    {
+      id: 'luxury', icon: HandCoins, label: 'Privátní nákupy', path: '/luxury',
+      desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez nutnosti IČO, od 1 kusu, diskrétní balení.',
+      img: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80',
+      cta: 'Zjistit více',
+    },
+    {
+      id: 'feed', icon: Rss, label: 'swelt.feed', path: '/feed',
+      desc: 'Automatický XML/CSV feed 3 000+ produktů pro váš e-shop. Heureka, Zbozi.cz, Google Shopping.',
+      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
+      cta: 'Zjistit více o feedu',
+    },
+    {
+      id: 'dropshipping', icon: PackageOpen, label: 'swelt.dropshipping', path: '/dropshipping',
+      desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
+      img: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=800&q=80',
+      cta: 'Chci dropshipping',
+    },
+    {
+      id: 'shop', icon: ShoppingCart, label: 'swelt.shop', path: '/shop',
+      desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
+      img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80',
+      cta: 'Chci svůj e-shop',
+    },
+  ];
+
+  const COUNTRIES = [
+    { flag: '🇨🇿', name: 'Česká republika' },
+    { flag: '🇸🇰', name: 'Slovensko' },
+    { flag: '🇦🇹', name: 'Rakousko' },
+    { flag: '🇩🇪', name: 'Německo' },
+    { flag: '🇵🇱', name: 'Polsko' },
+    { flag: '🇭🇺', name: 'Maďarsko' },
+    { flag: '🇷🇴', name: 'Rumunsko' },
+    { flag: '🇧🇬', name: 'Bulharsko' },
+    { flag: '🇭🇷', name: 'Chorvatsko' },
+    { flag: '🇸🇮', name: 'Slovinsko' },
+    { flag: '🇧🇦', name: 'Bosna a Hercegovina' },
+    { flag: '🇷🇸', name: 'Srbsko' },
+    { flag: '🇬🇷', name: 'Řecko' },
+    { flag: '🇮🇹', name: 'Itálie' },
+    { flag: '🇫🇷', name: 'Francie' },
+  ];
+
+  const BRANDS_STANDARD = [
+    'Tommy Hilfiger', 'Versace', 'Police', 'Seiko', 'Citizen', 'Hugo Boss',
+    'Emporio Armani', 'Guess', 'Casio', 'DKNY', 'Michael Kors', 'Calvin Klein',
+    'Fossil', 'Lacoste', 'Diesel', 'Lotus', 'Swarovski', 'Pandora', 'Morellato',
+    'Daniel Wellington', 'Nixon', 'Bulova', 'Orient', 'Boccia', 'Esprit', 'Festina',
+  ];
+
+  const BRANDS_PREMIUM = [
+    'Tag Heuer', 'Certina', 'Longines', 'Hamilton', 'Tissot',
+    'Frederique Constant', 'Mido', 'Breitling', 'Rado', 'Oris',
+  ];
+
   return (
     <div className="gateway-sections relative w-full bg-background text-foreground">
-      {/* Intro strip */}
-      <div className="relative bg-gradient-subtle border-b border-border py-16 sm:py-20 text-center overflow-hidden">
+
+      {/* ══════════════════════════════════════════
+          1. HERO — scannable B2B presentation
+      ══════════════════════════════════════════ */}
+      <section className="relative bg-gradient-to-b from-white to-slate-50 border-b border-border py-20 sm:py-28 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-mesh opacity-60" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-grid opacity-30" />
+        <div className="relative mx-auto max-w-6xl px-6">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
+            <div>
+              <Reveal>
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-6">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                  B2B Partner Program · 15 let na trhu
+                </div>
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-[1.05] tracking-tight mb-6 text-balance">
+                  Prémiové hodinky a šperky přímo od zdroje — pro váš byznys.
+                </h1>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl">
+                  Swelt je český B2B velkoobchodní distributor 70+ světových značek. Nakupujte, prodávejte přes feed, spusťte dropshipping nebo si nechte postavit e-shop. Vše pod jednou střechou.
+                </p>
+              </Reveal>
+              <Reveal delay={80}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8">
+                  {[
+                    { icon: Package, text: '3 000+ produktů v katalogu' },
+                    { icon: Award, text: '70+ světových značek' },
+                    { icon: TrendingUp, text: 'Marže 40–65 % pod MOC' },
+                    { icon: Truck, text: 'Dropshipping do 15+ zemí EU' },
+                    { icon: Clock, text: 'Schválení B2B účtu do 24 h' },
+                    { icon: Shield, text: 'Registrace zdarma, bez závazků' },
+                  ].map(({ icon: Icon, text }) => (
+                    <div key={text} className="flex items-center gap-2.5 text-sm text-foreground/80">
+                      <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        <Icon className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      {text}
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+              <Reveal delay={160}>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button size="lg" className="gap-2 h-12 px-7 text-base" onClick={() => navigate('/velkoobchod')}>
+                    Vstoupit do velkoobchodu <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  <Button size="lg" variant="outline" className="gap-2 h-12 px-7 text-base" onClick={() => openAuth('login')}>
+                    <Eye className="h-4 w-4" /> Prohlédnout sortiment
+                  </Button>
+                </div>
+              </Reveal>
+            </div>
+            <Reveal delay={200}>
+              <B2BVisual />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          2. COUNTRIES — doručovací zóna + dropshipping expanze
+      ══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20 bg-white border-b border-border">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+                <Globe className="h-3.5 w-3.5" /> Doručovací zóna
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
+                Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
+                Jste partner v ČR nebo SK? Přes <strong>swelt.dropshipping</strong> můžete prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my. Vy pouze přijímáte objednávky.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-10">
+              {COUNTRIES.map((c) => (
+                <div key={c.name} className="flex items-center gap-2.5 bg-slate-50 border border-border rounded-xl px-4 py-3 hover:border-primary/30 hover:bg-primary/5 transition-colors">
+                  <span className="text-2xl leading-none">{c.flag}</span>
+                  <span className="text-sm font-medium text-foreground/80 leading-tight">{c.name}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={140}>
+            <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <Truck className="h-6 w-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="font-display font-black text-foreground mb-1">Expandujte bez rizika. Bez skladu v cílové zemi.</div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.
+                </p>
+              </div>
+              <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
+                Chci dropshipping <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          3. TRUST — statistiky + testimonials (přesunuto sem)
+      ══════════════════════════════════════════ */}
+      <TrustSection />
+
+      {/* ══════════════════════════════════════════
+          4. BRANDS — 70+ značek + premium segment + soukromý nákup
+      ══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20 bg-white border-b border-border">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+                <Award className="h-3.5 w-3.5" /> Katalog značek
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
+                70+ světových značek. V jednom místě.
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto text-base">
+                Prémiové hodinky, šperky a doplňky — všechny dostupné za velkoobchodní ceny s jednou smlouvou.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Standard brands grid */}
+          <Reveal delay={60}>
+            <div className="flex flex-wrap gap-2 justify-center mb-10">
+              {BRANDS_STANDARD.map((b) => (
+                <span key={b} className="rounded-xl border border-border bg-slate-50 px-3.5 py-2 text-sm font-medium text-foreground/75 hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors cursor-default">
+                  {b}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* Premium segment */}
+          <Reveal delay={120}>
+            <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 sm:p-8 mb-8">
+              <div className="flex items-start gap-4 mb-5">
+                <div className="h-11 w-11 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                  <Star className="h-5 w-5 text-amber-600 fill-amber-400" />
+                </div>
+                <div>
+                  <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {BRANDS_PREMIUM.map((b) => (
+                  <span key={b} className="rounded-xl border border-amber-300 bg-white px-3.5 py-2 text-sm font-semibold text-amber-800">
+                    {b}
+                  </span>
+                ))}
+              </div>
+              <Button variant="outline" className="gap-2 border-amber-300 text-amber-800 hover:bg-amber-50" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
+                Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </Reveal>
+
+          {/* Private purchase info */}
+          <Reveal delay={160}>
+            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="h-11 w-11 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                <Building2 className="h-5 w-5 text-emerald-700" />
+              </div>
+              <div className="flex-1">
+                <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
+                </p>
+              </div>
+              <Button className="gap-2 shrink-0 bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('/luxury')}>
+                Soukromý nákup <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          5. CATEGORY CARDS + LEAD CAPTURE + AI/AM
+      ══════════════════════════════════════════ */}
+      <div className="relative bg-gradient-subtle border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-mesh" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-grid opacity-40" />
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-5">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                {g.introEyebrow}
+              </div>
+              <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
+                {g.introHeading}
+              </h2>
+              <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto text-pretty">
+                {g.introSubheading}
+              </p>
+            </div>
+          </Reveal>
 
-        <div className="relative">
-        <Reveal>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-5">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            {g.introEyebrow}
-          </div>
-          <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 max-w-3xl mx-auto px-6 tracking-tight text-balance">
-            {g.introHeading}
-          </h2>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto px-6 text-pretty">
-            {g.introSubheading}
-          </p>
-        </Reveal>
-        {/* Section quick-nav — vertical stack on mobile, horizontal row on desktop */}
-        <Reveal delay={100} className="mt-8 px-4 sm:px-6">
-          {/* Mobile: full-width vertical list */}
-          <div className="flex flex-col gap-2 sm:hidden max-w-sm mx-auto">
-            {sections.map((s) => {
-              const Icon = s.icon;
+          {/* Service cards — vertical stack, image + content + button */}
+          <div className="flex flex-col gap-4 mb-10">
+            {SERVICE_CARDS.map((card, i) => {
+              const Icon = card.icon;
               return (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="gateway-hub-card flex items-center gap-3 w-full bg-white border border-zinc-200 rounded-2xl px-4 py-3 shadow-sm"
-                >
-                  <div className="gateway-hub-icon-wrap w-8 h-8 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0 transition-colors">
-                    <Icon className="gateway-hub-icon h-4 w-4 text-zinc-700 transition-colors" />
+                <Reveal key={card.id} delay={i * 60}>
+                  <div className="group bg-white border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row">
+                    {/* Image */}
+                    <div className="sm:w-48 h-40 sm:h-auto shrink-0 overflow-hidden">
+                      <img
+                        src={card.img}
+                        alt={card.label}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    </div>
+                    {/* Content */}
+                    <div className="flex flex-1 items-center gap-4 p-5">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                            <Icon className="h-3.5 w-3.5 text-primary" />
+                          </div>
+                          <span className="font-display font-black text-foreground text-base">{card.label}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5 shrink-0 hidden sm:inline-flex"
+                        onClick={() => navigate(card.path)}
+                      >
+                        {card.cta} <ArrowRight className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                    {/* Mobile CTA */}
+                    <div className="px-5 pb-4 sm:hidden">
+                      <Button variant="outline" size="sm" className="gap-1.5 w-full" onClick={() => navigate(card.path)}>
+                        {card.cta} <ArrowRight className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   </div>
-                  <span className="gateway-hub-text text-zinc-900 font-semibold text-sm flex-1 text-left transition-colors">{s.label}</span>
-                  <div className="gateway-hub-arrow-wrap w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
-                    <ArrowRight className="gateway-hub-arrow h-3.5 w-3.5 text-white transition-colors" />
-                  </div>
-                </a>
+                </Reveal>
               );
             })}
           </div>
-          {/* Desktop: horizontal row, each card auto-width, wraps if needed */}
-          <div className="hidden sm:flex flex-wrap justify-center gap-2">
-            {sections.map((s) => {
-              const Icon = s.icon;
-              return (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="gateway-hub-card inline-flex items-center gap-2 shrink-0 bg-white border border-zinc-200 rounded-2xl px-4 py-2.5 shadow-sm"
-                >
-                  <div className="gateway-hub-icon-wrap w-7 h-7 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0 transition-colors">
-                    <Icon className="gateway-hub-icon h-4 w-4 text-zinc-700 transition-colors" />
-                  </div>
-                  <span className="gateway-hub-text text-zinc-900 font-semibold text-sm whitespace-nowrap transition-colors">{s.label}</span>
-                  <div className="gateway-hub-arrow-wrap w-5 h-5 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
-                    <ArrowRight className="gateway-hub-arrow h-3 w-3 text-white transition-colors" />
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </Reveal>
 
-        {/* Lead capture — preview catalog (only when not logged in) */}
-        {!user && (
-          <Reveal delay={130} className="mt-8 px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-white shadow-xl">
-              <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-blue-200/40 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+          {/* Lead capture */}
+          {!user && (
+            <Reveal delay={100} className="mb-6">
+              <div className="relative overflow-hidden rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-white shadow-xl">
+                <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-blue-200/40 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+                <div className="relative p-5 sm:p-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                      <Eye className="h-3 w-3" /> Zdarma · 30 sekund
+                    </div>
+                    <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Bez čekání
+                    </div>
+                  </div>
+                  <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
+                    Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
+                  </h3>
+                  <div className="text-sm sm:text-base text-zinc-600 mb-5 text-left max-w-2xl leading-relaxed space-y-3">
+                    <p>Víme, že vstoupit do nového partnerství chce důvěru. Proto vám umožňujeme nahlédnout do katalogu předtím, než cokoliv rozhodujete. Stačí se přihlásit přes e-mail nebo Google — trvá to 30 sekund.</p>
+                    <p>Velkoobchodní nákupní ceny se odemknou automaticky po ověření B2B účtu — zpravidla do 24 hodin. Registrace je zcela zdarma.</p>
+                  </div>
+                  <div className="mb-5"><AccessTiersVisual /></div>
+                  <div className="flex flex-col sm:flex-row gap-2.5 sm:items-center">
+                    <button onClick={() => openAuth('login')} className="group flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-5 py-3.5 shadow-lg transition-all font-bold text-sm sm:text-base">
+                      <Eye className="h-4 w-4 shrink-0" /> Prohlédnout sortiment <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                    <div className="text-[11px] text-zinc-500 sm:ml-2">3 000+ produktů · 70+ značek · Bez závazku</div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          )}
 
-              <div className="relative p-5 sm:p-8">
-                <div className="flex items-center justify-between mb-4 sm:mb-5">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
-                    <Eye className="h-3 w-3" />
-                    Zdarma · 30 sekund
+          {/* AI / Account Manager gateway */}
+          <Reveal delay={150}>
+            <div className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-white via-white to-zinc-50 shadow-xl">
+              <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#2563EB]/20 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#60A5FA]/25 blur-3xl" />
+              <div className="relative p-5 sm:p-7">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
+                    <Star className="h-3 w-3 fill-white text-white" /> Váš osobní obchodní tým
                   </div>
                   <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Bez čekání
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online teď
                   </div>
                 </div>
-
-                <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
-                  Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
-                </h3>
-                <div className="text-sm sm:text-base text-zinc-600 mb-5 sm:mb-6 text-left max-w-2xl leading-relaxed space-y-3">
-                  <p>
-                    Víme, že vstoupit do nového partnerství chce důvěru. Proto vám umožňujeme nahlédnout do katalogu ještě předtím, než cokoliv rozhodujete. Stačí se přihlásit přes e-mail nebo Google — trvá to 30 sekund.
-                  </p>
-                  <p>
-                    Uvidíte celý sortiment: 3 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC). Takže si rovnou spočítáte, jaké marže vás čekají.
-                  </p>
-                  <p>
-                    Velkoobchodní nákupní ceny jsou skryté a odemknou se automaticky po ověření a schválení vašeho B2B účtu — zpravidla do 24 hodin. Registrace je zcela zdarma.
-                  </p>
-                </div>
-
-                <div className="mb-5 sm:mb-6">
-                  <AccessTiersVisual />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 sm:items-center">
-                  <button
-                    onClick={() => openAuth('login')}
-                    className="group flex items-center justify-center gap-2 sm:gap-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 shadow-lg transition-all font-bold text-sm sm:text-base"
-                  >
-                    <Eye className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
-                    <span>Prohlédnout sortiment</span>
-                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1.5 text-left">Potřebujete poradit? Jsme tu pro vás.</h3>
+                <p className="text-sm text-zinc-600 mb-5 text-left max-w-xl">Vyberte si, jak vám pomůžeme nejrychleji — okamžitá odpověď AI asistenta, nebo osobní péče account managera.</p>
+                <div className="grid grid-cols-1 gap-2.5">
+                  <button onClick={() => setGatewayOpen(true)} className="sales-team-cta-ai group flex items-center gap-3 sm:gap-4 text-white rounded-2xl px-4 py-3.5 shadow-md transition-all text-left">
+                    <div className="shrink-0 relative z-10"><GatewayMascot3D size={44} /></div>
+                    <div className="flex-1 min-w-0 relative z-10">
+                      <div className="flex items-center gap-1 text-white/70 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
+                        <Sparkles className="h-3 w-3 shrink-0" /> Odpověď do 5 vteřin
+                      </div>
+                      <p className="font-bold text-sm leading-tight">Promluvit s AI asistentem</p>
+                      <p className="text-[11px] text-white/70 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
+                    </div>
+                    <div className="relative z-10 w-8 h-8 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors flex items-center justify-center shrink-0">
+                      <ArrowRight className="h-4 w-4 text-white" />
+                    </div>
                   </button>
-                  <div className="text-[11px] sm:text-xs text-zinc-500 sm:ml-2">
-                    3 000+ produktů · 70+ značek<br className="hidden sm:block" />
-                    <span className="sm:hidden"> · </span>Bez závazku
-                  </div>
+                  <button onClick={() => navigate('/partner')} className="sales-team-cta-am group flex items-center gap-3 sm:gap-4 bg-white border border-zinc-200 rounded-2xl px-4 py-3.5 shadow-md transition-all text-left">
+                    <div className="sales-team-am-avatar w-11 h-11 rounded-full flex items-center justify-center shrink-0 shadow-inner relative z-10 transition-all"
+                         style={{ background: 'linear-gradient(135deg, rgba(37,99,235,0.15), rgba(96,165,250,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(37,99,235,0.35)' }}>
+                      <Users className="sales-team-am-icon h-5 w-5 transition-colors" style={{ color: '#1D4ED8' }} />
+                    </div>
+                    <div className="flex-1 min-w-0 relative z-10">
+                      <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#1D4ED8' }}>
+                        <Star className="h-3 w-3 shrink-0" style={{ fill: '#2563EB', color: '#2563EB' }} /> Osobní péče
+                      </div>
+                      <p className="sales-team-am-title font-bold text-sm leading-tight text-zinc-900 transition-colors">Kontaktovat account managera</p>
+                      <p className="sales-team-am-desc text-[11px] text-zinc-500 leading-tight mt-0.5 transition-colors">Strategie, individuální nabídka, volání</p>
+                    </div>
+                    <div className="sales-team-am-arrow-wrap relative z-10 w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
+                      <ArrowRight className="sales-team-am-arrow h-4 w-4 text-white transition-colors" />
+                    </div>
+                  </button>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Zdarma a nezávazně</span>
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Odpověď do 24 h</span>
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Česky &amp; slovensky</span>
                 </div>
               </div>
             </div>
           </Reveal>
-        )}
-
-        {/* Unified premium gateway — Account Manager + AI assistant */}
-        <Reveal delay={150} className="mt-8 px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl relative overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-br from-white via-white to-zinc-50 shadow-xl">
-            {/* Decorative glow — Swelt brand blue gradient */}
-            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#2563EB]/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#60A5FA]/25 blur-3xl" />
-
-            <div className="relative p-5 sm:p-7">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4 sm:mb-5">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
-                  <Star className="h-3 w-3 fill-white text-white" />
-                  Váš osobní obchodní tým
-                </div>
-                <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Online teď
-                </div>
-              </div>
-
-              <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1.5 text-left">
-                Potřebujete poradit? Jsme tu pro vás.
-              </h3>
-              <p className="text-sm text-zinc-600 mb-5 sm:mb-6 text-left max-w-xl">
-                Vyberte si, jak vám pomůžeme nejrychleji — okamžitá odpověď AI asistenta, nebo osobní péče vašeho account managera.
-              </p>
-
-              {/* Two CTAs */}
-              <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
-                {/* AI assistant CTA — preserves original gateway open route */}
-                <button
-                  onClick={() => setGatewayOpen(true)}
-                  className="sales-team-cta-ai group flex items-center gap-3 sm:gap-4 text-white rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
-                >
-                  <div className="shrink-0 relative z-10">
-                    <GatewayMascot3D size={44} />
-                  </div>
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <div className="flex items-center gap-1 text-white/70 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
-                      <Sparkles className="h-3 w-3 shrink-0" />
-                      <span>Odpověď do 5 vteřin</span>
-                    </div>
-                    <p className="font-bold text-sm leading-tight">Promluvit s AI asistentem</p>
-                    <p className="text-[11px] text-white/70 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
-                  </div>
-                  <div className="relative z-10 w-8 h-8 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors flex items-center justify-center shrink-0">
-                    <ArrowRight className="h-4 w-4 text-white" />
-                  </div>
-                </button>
-
-                {/* Account manager CTA */}
-                <button
-                  onClick={() => navigate('/partner')}
-                  className="sales-team-cta-am group flex items-center gap-3 sm:gap-4 bg-white border border-zinc-200 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-md transition-all text-left"
-                >
-                  <div className="sales-team-am-avatar w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 shadow-inner relative z-10 transition-all"
-                       style={{ background: 'linear-gradient(135deg, rgba(37,99,235,0.15), rgba(96,165,250,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(37,99,235,0.35)' }}>
-                    <Users className="sales-team-am-icon h-5 w-5 sm:h-6 sm:w-6 transition-colors" style={{ color: '#1D4ED8' }} />
-                  </div>
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#1D4ED8' }}>
-                      <Star className="h-3 w-3 shrink-0" style={{ fill: '#2563EB', color: '#2563EB' }} />
-                      <span>Osobní péče</span>
-                    </div>
-                    <p className="sales-team-am-title font-bold text-sm leading-tight text-zinc-900 transition-colors">Kontaktovat account managera</p>
-                    <p className="sales-team-am-desc text-[11px] text-zinc-500 leading-tight mt-0.5 transition-colors">Strategie, individuální nabídka, volání</p>
-                  </div>
-                  <div className="sales-team-am-arrow-wrap relative z-10 w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
-                    <ArrowRight className="sales-team-am-arrow h-4 w-4 text-white transition-colors" />
-                  </div>
-                </button>
-              </div>
-
-              {/* Footer reassurance */}
-              <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
-                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Zdarma a nezávazně</span>
-                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Odpověď do 24 h</span>
-                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Česky &amp; slovensky</span>
-              </div>
-            </div>
-          </div>
-        </Reveal>
         </div>
       </div>
 
-      {/* Sections */}
+      {/* ══════════════════════════════════════════
+          6. GATEWAY SECTIONS — 5 alternujících sekcí
+      ══════════════════════════════════════════ */}
       {sections.map((section, idx) => {
         const Icon = section.icon;
         return (
@@ -767,19 +977,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             id={section.id}
             className={`relative py-20 sm:py-28 scroll-mt-16 ${idx % 2 === 0 ? 'bg-background' : 'bg-secondary/40'}`}
           >
-            {/* Subtle decorative gradient */}
             <div className={`pointer-events-none absolute inset-0 ${idx % 2 === 0 ? 'bg-mesh opacity-60' : ''}`} />
-
             <div className="relative mx-auto max-w-6xl px-6">
               <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
-                {/* Text side */}
                 <Reveal>
                   <div className="space-y-7">
                     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-xs">
                       <Icon className="h-4 w-4 text-primary" />
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">
-                        {section.label}
-                      </span>
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">{section.label}</span>
                     </div>
                     <div>
                       <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight mb-4 text-balance">
@@ -793,11 +998,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     <div className="pt-2">{section.ctas}</div>
                   </div>
                 </Reveal>
-
-                {/* Visual side */}
                 <Reveal delay={120}>
                   <div className="relative">
-                    {/* Glow behind visual */}
                     <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-primary opacity-[0.08] blur-2xl" />
                     <div className="relative">{section.visual}</div>
                   </div>
@@ -809,9 +1011,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       })}
 
       <SectionDivider />
-
-      {/* Trust section */}
-      <TrustSection />
 
       <FloatingNotif />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
