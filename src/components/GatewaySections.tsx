@@ -665,12 +665,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </section>
 
       {/* ══════════════════════════════════════════
-          3. TRUST — statistiky + testimonials (přesunuto sem)
-      ══════════════════════════════════════════ */}
-      <TrustSection />
-
-      {/* ══════════════════════════════════════════
-          4. BRANDS — 70+ značek + premium segment + soukromý nákup
+          2. BRANDS — 70+ značek + premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
@@ -775,6 +770,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
         </div>
       </section>
+
+      <TrustSection />
 
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
