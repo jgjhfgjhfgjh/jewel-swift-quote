@@ -23,10 +23,10 @@ interface NavbarProps {
 
 const HOME_NAV_ITEMS = [
   { path: '/velkoobchod', label: 'Velkoobchod', icon: Handshake },
-  { path: '/luxury', label: 'Privátní nákupy', icon: HandCoins },
-  { path: '/feed', label: 'swelt.feed', icon: Rss },
+  { path: '/luxury', label: 'Nákup bez registrace', icon: HandCoins },
+  { path: '/feed', label: 'Feed', icon: Rss },
   { path: '/dropshipping', label: 'Dropshipping', icon: PackageOpen },
-  { path: '/shop', label: 'swelt.shop', icon: ShoppingCart },
+  { path: '/shop', label: 'E-shop do 48h', icon: ShoppingCart },
 ];
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
