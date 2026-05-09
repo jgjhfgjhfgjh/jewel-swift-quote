@@ -107,7 +107,7 @@ export function ChatWidget({ partnerContext }: ChatWidgetProps) {
               V
             </div>
             <div>
-              <p className="text-sm font-semibold text-zinc-900 dark:text-white leading-none">AI asistent</p>
+              <p className="text-sm font-semibold text-zinc-900 dark:text-white leading-none">AI obchodní zástupce</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">swelt.partner</p>
             </div>
           </div>

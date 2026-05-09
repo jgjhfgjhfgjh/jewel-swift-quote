@@ -11,22 +11,23 @@ function getGreeting(): string {
   return 'Dobrý den';
 }
 
-/* ── 3D sphere — plain, no eyes ── */
+/* ── AI rep avatar — professional photo ── */
 export function GatewayMascot3D({ size = 96 }: { size?: number }) {
   return (
-    <div
+    <img
+      src="/ai-rep.jpg"
+      alt="AI obchodní zástupce"
+      width={size}
+      height={size}
       style={{
         width: size,
         height: size,
         borderRadius: '50%',
         flexShrink: 0,
-        background: `radial-gradient(circle at 34% 32%, #5a5a5a 0%, #2a2a2a 28%, #111111 52%, #000000 72%, #050505 100%)`,
-        boxShadow: `
-          inset -${size * 0.08}px -${size * 0.08}px ${size * 0.18}px rgba(0,0,0,0.85),
-          inset ${size * 0.04}px ${size * 0.04}px ${size * 0.12}px rgba(255,255,255,0.08),
-          0 ${size * 0.14}px ${size * 0.36}px rgba(0,0,0,0.6),
-          0 ${size * 0.04}px ${size * 0.1}px rgba(0,0,0,0.4)
-        `,
+        objectFit: 'cover',
+        objectPosition: 'center top',
+        boxShadow: `0 ${Math.round(size * 0.06)}px ${Math.round(size * 0.18)}px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.10)`,
+        border: '2px solid rgba(255,255,255,0.5)',
       }}
     />
   );
@@ -131,7 +132,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
               <Sparkles className="h-3 w-3" />
               <span>Dostupný 24h denně</span>
             </div>
-            <p className="text-sm font-bold text-zinc-900 leading-none">AI asistent obchodního zástupce</p>
+            <p className="text-sm font-bold text-zinc-900 leading-none">AI obchodní zástupce</p>
           </div>
         </div>
         <button
@@ -175,7 +176,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
               </div>
 
               <h1 className="mt-8 text-2xl font-bold text-zinc-900 leading-tight">
-                AI asistent<br />obchodního zástupce
+                AI obchodní<br />zástupce
               </h1>
               <p className="mt-3 text-zinc-500 text-sm leading-relaxed max-w-[260px]">
                 Pomůžu vám s katalogem, dropshippingem a vším o swelt.partner

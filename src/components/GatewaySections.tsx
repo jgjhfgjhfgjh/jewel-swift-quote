@@ -888,51 +888,85 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-[#2563EB]/20 blur-3xl" />
               <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-[#60A5FA]/25 blur-3xl" />
               <div className="relative p-5 sm:p-7">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
-                    <Star className="h-3 w-3 fill-white text-white" /> Váš osobní obchodní tým
+                    <Star className="h-3 w-3 fill-white text-white" /> Váš obchodní tým
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
+                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online teď
                   </div>
                 </div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1.5 text-left">Potřebujete poradit? Jsme tu pro vás.</h3>
-                <p className="text-sm text-zinc-600 mb-5 text-left max-w-xl">Vyberte si, jak vám pomůžeme nejrychleji — okamžitá odpověď AI asistenta, nebo osobní péče account managera.</p>
-                <div className="grid grid-cols-1 gap-2.5">
-                  <button onClick={() => setGatewayOpen(true)} className="sales-team-cta-ai group flex items-center gap-3 sm:gap-4 text-white rounded-2xl px-4 py-3.5 shadow-md transition-all text-left">
-                    <div className="shrink-0 relative z-10"><GatewayMascot3D size={44} /></div>
-                    <div className="flex-1 min-w-0 relative z-10">
-                      <div className="flex items-center gap-1 text-white/70 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider mb-0.5">
-                        <Sparkles className="h-3 w-3 shrink-0" /> Odpověď do 5 vteřin
-                      </div>
-                      <p className="font-bold text-sm leading-tight">Promluvit s AI asistentem</p>
-                      <p className="text-[11px] text-white/70 leading-tight mt-0.5">Ceny, dostupnost, doporučení 24/7</p>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1 text-left">Potřebujete poradit?</h3>
+                <p className="text-sm text-zinc-500 mb-5 text-left">Vyberte si způsob — okamžitý AI zástupce nebo osobní account manager.</p>
+
+                {/* Karty — vedle sebe na desktopu, pod sebou na mobilu */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                  {/* Karta 1 — AI obchodní zástupce */}
+                  <button
+                    onClick={() => setGatewayOpen(true)}
+                    className="sales-team-cta-ai group flex flex-col items-center text-center rounded-2xl p-5 sm:p-6 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 relative overflow-hidden"
+                    style={{ background: 'linear-gradient(160deg, #1E3A8A 0%, #2563EB 100%)' }}
+                  >
+                    <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+                    {/* Avatar */}
+                    <div className="relative mb-3 z-10">
+                      <img
+                        src="/ai-rep.jpg"
+                        alt="AI obchodní zástupce"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover object-top shadow-xl border-2 border-white/40 mx-auto"
+                      />
+                      <span className="absolute bottom-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#2563EB] border-2 border-white shadow">
+                        <Sparkles className="h-2 w-2 text-white" />
+                      </span>
                     </div>
-                    <div className="relative z-10 w-8 h-8 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors flex items-center justify-center shrink-0">
-                      <ArrowRight className="h-4 w-4 text-white" />
+                    {/* Badge */}
+                    <div className="flex items-center gap-1 text-white/60 text-[10px] font-medium uppercase tracking-wider mb-1.5 z-10">
+                      <Sparkles className="h-2.5 w-2.5 shrink-0" /> Odpověď do 5 vteřin · 24/7
+                    </div>
+                    {/* Title */}
+                    <p className="font-display font-bold text-base sm:text-lg text-white leading-tight mb-1 z-10">AI obchodní zástupce</p>
+                    <p className="text-[12px] text-white/65 leading-snug mb-4 max-w-[200px] z-10">Ceny, dostupnost, doporučení produktů — okamžitě</p>
+                    {/* CTA */}
+                    <div className="mt-auto w-full bg-white/15 group-hover:bg-white/25 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5 z-10">
+                      Zahájit konverzaci <ArrowRight className="h-3.5 w-3.5" />
                     </div>
                   </button>
-                  <button onClick={() => navigate('/partner')} className="sales-team-cta-am group flex items-center gap-3 sm:gap-4 bg-white border border-zinc-200 rounded-2xl px-4 py-3.5 shadow-md transition-all text-left">
-                    <div className="sales-team-am-avatar w-11 h-11 rounded-full flex items-center justify-center shrink-0 shadow-inner relative z-10 transition-all"
-                         style={{ background: 'linear-gradient(135deg, rgba(37,99,235,0.15), rgba(96,165,250,0.18))', borderWidth: 1, borderStyle: 'solid', borderColor: 'rgba(37,99,235,0.35)' }}>
-                      <Users className="sales-team-am-icon h-5 w-5 transition-colors" style={{ color: '#1D4ED8' }} />
+
+                  {/* Karta 2 — Osobní account manager */}
+                  <button
+                    onClick={() => navigate('/partner')}
+                    className="group flex flex-col items-center text-center bg-white border border-zinc-200 rounded-2xl p-5 sm:p-6 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-[#2563EB]/30 relative overflow-hidden"
+                  >
+                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-[#2563EB]/6 blur-2xl" />
+                    {/* Avatar */}
+                    <div className="relative mb-3 z-10">
+                      <img
+                        src="/ai-rep.jpg"
+                        alt="Osobní account manager"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover object-top shadow-xl border-2 border-[#2563EB]/20 mx-auto"
+                      />
+                      <span className="absolute bottom-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 border-2 border-white shadow" />
                     </div>
-                    <div className="flex-1 min-w-0 relative z-10">
-                      <div className="sales-team-am-eyebrow flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider mb-0.5 transition-colors" style={{ color: '#1D4ED8' }}>
-                        <Star className="h-3 w-3 shrink-0" style={{ fill: '#2563EB', color: '#2563EB' }} /> Osobní péče
-                      </div>
-                      <p className="sales-team-am-title font-bold text-sm leading-tight text-zinc-900 transition-colors">Kontaktovat account managera</p>
-                      <p className="sales-team-am-desc text-[11px] text-zinc-500 leading-tight mt-0.5 transition-colors">Strategie, individuální nabídka, volání</p>
+                    {/* Badge */}
+                    <div className="flex items-center gap-1 text-[#1D4ED8] text-[10px] font-medium uppercase tracking-wider mb-1.5 z-10">
+                      <Star className="h-2.5 w-2.5 shrink-0 fill-current" /> Osobní péče · Odpověď do 24 h
                     </div>
-                    <div className="sales-team-am-arrow-wrap relative z-10 w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 transition-colors">
-                      <ArrowRight className="sales-team-am-arrow h-4 w-4 text-white transition-colors" />
+                    {/* Title */}
+                    <p className="font-display font-bold text-base sm:text-lg text-zinc-900 leading-tight mb-1 z-10">Osobní account manager</p>
+                    <p className="text-[12px] text-zinc-500 leading-snug mb-4 max-w-[200px] z-10">Strategie, individuální nabídka, telefonní konzultace</p>
+                    {/* CTA */}
+                    <div className="mt-auto w-full bg-zinc-900 group-hover:bg-[#1D4ED8] transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5 z-10">
+                      Kontaktovat <ArrowRight className="h-3.5 w-3.5" />
                     </div>
                   </button>
+
                 </div>
+
                 <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-zinc-500">
                   <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Zdarma a nezávazně</span>
-                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Odpověď do 24 h</span>
                   <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Česky &amp; slovensky</span>
+                  <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-600" /> Bez závazku</span>
                 </div>
               </div>
             </div>
