@@ -119,7 +119,7 @@ const sk: GatewayText = {
 };
 
 const en: GatewayText = {
-  introEyebrow: 'swelt.partner ecosystem',
+  introEyebrow: 'partner ecosystem',
   introHeading: 'One partner. Five ways to earn more.',
   introSubheading: 'Pick the model that fits your business — or combine several at once.',
   velkoobchod: { badge: 'B2B Wholesale', label: 'Wholesale',
