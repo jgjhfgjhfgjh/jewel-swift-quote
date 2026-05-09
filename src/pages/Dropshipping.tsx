@@ -141,7 +141,7 @@ function Reveal({ children, delay = 0, className = '' }: { children: React.React
 const painPoints = [
   { problem: 'Nemám peníze na naskladnění', icon: AlertCircle, title: 'Platíš až po prodeji', text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
   { problem: 'Nevím jak řešit logistiku', icon: Truck, title: 'O expedici se staráme my', text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-  { problem: 'Bojím se špatně zvolit produkty', icon: Target, title: 'swelt.signal ti poradí', text: 'AI modul sleduje trendy napříč distribucí. Každý týden dostaneš top 10 trending produktů pro tvůj segment — přestaneš hádat.' },
+  { problem: 'Bojím se že zvolím špatné produkty', icon: Target, title: 'S plánem silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou \nDropshippingu — přestaneš hádat co nakoupit' },
   { problem: 'Bojím se přeprodat zákazníkovi', icon: Lock, title: 'Real-time inventory lock', text: 'Jakmile zákazník nakoupí, zásoby se okamžitě uzamknou v systému. Žádné "promiňte, zboží se vyprodalo po zaplacení."' },
 ];
 
