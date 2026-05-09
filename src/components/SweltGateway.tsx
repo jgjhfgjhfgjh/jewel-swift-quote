@@ -111,7 +111,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
   };
 
   const suggestions = [
-    'Co je swelt.partner?',
+    'Co je partner?',
     'Jak funguje dropshipping?',
     'Ukažte mi katalog produktů',
   ];
