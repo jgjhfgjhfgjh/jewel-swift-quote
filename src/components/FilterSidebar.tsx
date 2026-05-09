@@ -713,7 +713,7 @@ export function FilterSidebar({
         </div>
 
         <div className="filter-footer-meta">
-          <span>swelt.</span>
+          <span>partner.</span>
           <span>·</span>
           <span>Premium katalog 2026</span>
         </div>
