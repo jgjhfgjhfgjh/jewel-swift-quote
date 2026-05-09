@@ -749,9 +749,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </section>
 
       {/* ══════════════════════════════════════════
-          3. CTA — Prohlédnout sortiment + Vytvořit B2B účet
+          3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      <section className="py-14 sm:py-20 bg-background border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-background border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="rounded-3xl border border-border bg-card shadow-sm p-8 sm:p-12 text-center">
@@ -788,7 +788,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
         </div>
-      </section>
+      </section>}
 
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
