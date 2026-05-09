@@ -155,7 +155,7 @@ const en: GatewayText = {
 };
 
 const de: GatewayText = {
-  introEyebrow: 'swelt.partner Ökosystem',
+  introEyebrow: 'partner Ökosystem',
   introHeading: 'Ein Partner. Fünf Wege, mehr zu verdienen.',
   introSubheading: 'Wählen Sie das Modell, das zu Ihrem Geschäft passt — oder kombinieren Sie mehrere.',
   velkoobchod: { badge: 'B2B-Großhandel', label: 'Großhandel',
