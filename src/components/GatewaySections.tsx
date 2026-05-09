@@ -691,14 +691,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* Standard brands grid */}
+          {/* Standard brands grid — first 18 + expand button */}
           <Reveal delay={60}>
             <div className="flex flex-wrap gap-2 justify-center mb-10">
-              {BRANDS_STANDARD.map((b) => (
+              {BRANDS_STANDARD.slice(0, 18).map((b) => (
                 <span key={b} className="rounded-xl border border-border bg-slate-50 px-3.5 py-2 text-sm font-medium text-foreground/75 hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors cursor-default">
                   {b}
                 </span>
               ))}
+              <button
+                onClick={() => navigate('/brands')}
+                className="rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors"
+              >
+                +50 dalších →
+              </button>
             </div>
           </Reveal>
 

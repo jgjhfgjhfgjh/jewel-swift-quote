@@ -27,6 +27,7 @@ import Dropshipping from "./pages/Dropshipping.tsx";
 import Feed from "./pages/Feed.tsx";
 import Luxury from "./pages/Luxury.tsx";
 import Shop from "./pages/Shop.tsx";
+import Brands from "./pages/Brands.tsx";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/dropshipping" element={<Dropshipping />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/luxury" element={<Luxury />} />
+            <Route path="/brands" element={<Brands />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
