@@ -59,7 +59,7 @@ const cs: GatewayText = {
     ctaLabel: 'Zjistit více o swelt.feed',
   },
   dropshipping: {
-    badge: 'swelt.Dropshipping', label: 'Dropshipping',
+    badge: 'Dropshipping', label: 'Dropshipping',
     heading: 'E-shop bez skladu. Prodávej, my zabalíme.',
     subheading: 'Prémiové hodinky a šperky prodávané přes tvůj e-shop. Swelt vyřizuje sklad, balení, expedici a bílý štítek — vše pod tvou značkou.',
     bullets: ['Bez skladových nákladů a investic', 'Logistika, balení a expedice pod vaší značkou', 'Dodání přímo ke koncovému zákazníkovi do 24–72 h', 'White-label fakturace s vaším logem', 'Marže 40–60 % při doporučené MOC', 'swelt.signal — trendová data každý týden'],
