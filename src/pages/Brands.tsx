@@ -121,7 +121,7 @@ export default function Brands() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
-  const { openAuth } = useStore();
+  const { setGatewayOpen: openAuth } = useStore();
 
   useEffect(() => {
     fetch('/products.json')
