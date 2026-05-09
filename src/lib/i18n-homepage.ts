@@ -160,7 +160,7 @@ const pl: HomeText = {
     { title: 'Marki partnerskie',                   subtitle: 'Autoryzowany dystrybutor 200+ marek.',              cta: 'Nasze marki' },
     { title: 'Wsparcie klienta',                    subtitle: 'Dedykowani opiekunowie kont dla Twojego sukcesu.',  cta: 'Skontaktuj się' },
     { title: 'Łatwa integracja',                    subtitle: 'Połącz swój e-sklep w minuty przez API.',           cta: 'Zobacz API' },
-    { title: 'Dołącz do Swelt już dziś',            subtitle: 'Zacznij sprzedawać produkty premium bez ryzyka.',   cta: 'Zarejestruj się' },
+    { title: 'Dołącz do nas już dziś',            subtitle: 'Zacznij sprzedawać produkty premium bez ryzyka.',   cta: 'Zarejestruj się' },
   ],
 };
 
