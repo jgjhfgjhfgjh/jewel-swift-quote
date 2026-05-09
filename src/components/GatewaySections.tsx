@@ -633,7 +633,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
-                Jste partner v ČR nebo SK? Přes <strong>Dropshipping</strong> můžete prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my. Vy pouze přijímáte objednávky.
+                Začneš ve své zemi. Škáluješ do celé EU. Přes <strong>Dropshipping</strong> můžeš prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my.
               </p>
             </div>
           </Reveal>
@@ -660,7 +660,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Truck className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
-                <div className="font-display font-black text-foreground mb-1">Expandujte bez rizika. Bez skladu v cílové zemi.</div>
+                <div className="font-display font-black text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.
                 </p>
