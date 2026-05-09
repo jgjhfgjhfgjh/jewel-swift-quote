@@ -119,7 +119,7 @@ export default function PartnerLayout() {
           {!collapsed && (
             <div style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--p-t1)' }}>
-                swelt<span style={{ color: 'var(--p-t3)' }}>.partner</span>
+                partner<span style={{ color: 'var(--p-t3)' }}>.hub</span>
               </div>
               <div style={{
                 fontSize: 10, fontWeight: 600, letterSpacing: '0.08em',
