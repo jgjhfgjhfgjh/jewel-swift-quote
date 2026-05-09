@@ -159,7 +159,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           >
             <img
               src={logo}
-              alt="swelt."
+              alt="partner."
               className={`h-20 sm:h-12 lg:h-[90px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
             />
           </Link>

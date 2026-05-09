@@ -61,7 +61,7 @@ export function CatalogGateway() {
         {/* Logo */}
         <div className="text-center">
           <Link to="/">
-            <img src={logo} alt="swelt." className="mx-auto h-20 object-contain cursor-pointer" />
+            <img src={logo} alt="partner." className="mx-auto h-20 object-contain cursor-pointer" />
           </Link>
           <h1 className="mt-4 font-display text-2xl font-semibold">{h.catalogAccess}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{h.catalogAccessSubtitle}</p>

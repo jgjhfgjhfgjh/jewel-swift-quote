@@ -8,9 +8,9 @@ import { home } from '@/lib/i18n-homepage';
 
 // Obrázky vybrané tematicky pro jednotlivé hero slidy (Unsplash, ověřeno 200).
 const SLIDE_IMAGES = [
-  // 1) swelt.Dropshipping — sklad / balíky
+  // 1) Dropshipping — sklad / balíky
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
-  // 2) Swelt Luxury — luxusní hodinky
+  // 2) Luxury — luxusní hodinky
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
   // 3) Nejnovější kolekce — parfémy / kosmetika
   'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1920&q=80',
@@ -28,7 +28,7 @@ const SLIDE_IMAGES = [
   'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1920&q=80',
   // 10) Snadná integrace — notebook / API
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80',
-  // 11) Připoj se ke Swelt — handshake / business
+  // 11) Připoj se k nám — handshake / business
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80',
 ];
 
