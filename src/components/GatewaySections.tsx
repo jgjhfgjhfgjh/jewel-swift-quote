@@ -678,7 +678,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {[
             { icon: HandCoins, label: 'Nemám peníze na naskladnění',     labelIcon: AlertCircle, title: 'Platíš až po prodeji',           text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
             { icon: Truck,     label: 'Nevím jak řešit logistiku',       labelIcon: Truck,       title: 'O expedici se staráme my',       text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-            { icon: Target,    label: 'Bojím se špatně zvolit produkty', labelIcon: Target,      title: 'S plánem silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
+            { icon: Target,    label: 'Bojím se že špatně zvolím produkty ', labelIcon: Target,      title: 'S plánem Silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit' },
           ].map((item, idx) => (
             <Reveal key={item.title} delay={180 + idx * 60}>
               <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
