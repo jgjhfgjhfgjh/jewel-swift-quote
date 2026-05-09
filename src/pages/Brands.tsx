@@ -275,7 +275,7 @@ export default function Brands() {
                 Zaregistrujte se zdarma a získejte okamžitý přístup k celému katalogu s velkoobchodními cenami.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button size="lg" className="gap-2 px-8" onClick={() => openAuth('register')}>
+                <Button size="lg" className="gap-2 px-8" onClick={() => openAuth(true)}>
                   Vytvořit B2B účet <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" className="gap-2 px-8" onClick={() => navigate('/')}>
