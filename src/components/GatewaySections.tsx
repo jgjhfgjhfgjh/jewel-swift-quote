@@ -17,6 +17,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
+import sweltLogo from '@/assets/logo.png';
 
 /* ── Reveal on scroll ── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
