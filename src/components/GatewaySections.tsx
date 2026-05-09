@@ -751,29 +751,41 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet
       ══════════════════════════════════════════ */}
-      <section className="py-14 sm:py-16 bg-slate-50 border-b border-border">
-        <div className="mx-auto max-w-2xl px-6">
+      <section className="py-14 sm:py-20 bg-background border-b border-border">
+        <div className="mx-auto max-w-3xl px-6">
           <Reveal>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2 h-13 px-8 text-base flex-1 sm:flex-none"
-                onClick={() => openAuth('login')}
-              >
-                <Eye className="h-4 w-4" /> Prohlédnout sortiment
-              </Button>
-              <Button
-                size="lg"
-                className="gap-2 h-13 px-8 text-base flex-1 sm:flex-none"
-                onClick={() => openAuth('register')}
-              >
-                Vytvořit B2B účet <ArrowRight className="h-4 w-4" />
-              </Button>
+            <div className="rounded-3xl border border-border bg-card shadow-sm p-8 sm:p-12 text-center">
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">Začněte ještě dnes</p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
+                Přístup k 3 000+ produktům.<br className="hidden sm:block" /> Velkoobchodní ceny od prvního kusu.
+              </h2>
+              <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
+                Zaregistrujte se zdarma a získejte okamžitý přístup k B2B katalogu — nebo si prohlédněte sortiment bez registrace.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button
+                  size="lg"
+                  className="gap-2 px-8 text-base font-semibold"
+                  onClick={() => openAuth('register')}
+                >
+                  Vytvořit B2B účet <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="gap-2 px-8 text-base"
+                  onClick={() => openAuth('login')}
+                >
+                  <Eye className="h-4 w-4" /> Prohlédnout sortiment
+                </Button>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted-foreground">
+                <span className="flex items-center gap-1.5"><Check className="h-3 w-3 text-emerald-500" /> Registrace zdarma</span>
+                <span className="flex items-center gap-1.5"><Check className="h-3 w-3 text-emerald-500" /> Schválení do 24 hodin</span>
+                <span className="flex items-center gap-1.5"><Check className="h-3 w-3 text-emerald-500" /> Bez závazků</span>
+                <span className="flex items-center gap-1.5"><Check className="h-3 w-3 text-emerald-500" /> Bez kreditní karty</span>
+              </div>
             </div>
-            <p className="text-center text-xs text-muted-foreground mt-4">
-              Registrace zdarma · Schválení do 24 hodin · Bez závazků
-            </p>
           </Reveal>
         </div>
       </section>
