@@ -573,8 +573,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'dropshipping', icon: PackageOpen, label: 'Dropshipping', path: '/dropshipping',
       desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
-      img: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=800&q=80',
+      img: 'https://cdn.b2bzago.com/images/0/40e7be43bcf6ce73/100/hodinky-calvin-klein-model-even-k7b21626.jpg?hash=-2',
+      img2: 'https://cdn.b2bzago.com/images/0/cdefdb9188767a36/100/nahrdelnik-calvin-klein-model-35000294.jpg?hash=-2',
       cta: 'Chci dropshipping',
+      contain: true,
     },
     {
       id: 'shop', icon: ShoppingCart, label: 'E-shop do 48h', path: '/shop',
@@ -827,13 +829,24 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Reveal key={card.id} delay={i * 60}>
                   <div className="group bg-white border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row">
                     {/* Image */}
-                    <div className="sm:w-48 h-40 sm:h-auto shrink-0 overflow-hidden">
-                      <img
-                        src={card.img}
-                        alt={card.label}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
+                    <div className={`sm:w-48 h-40 sm:h-auto shrink-0 overflow-hidden ${(card as any).contain ? 'bg-zinc-50 flex' : ''}`}>
+                      {(card as any).contain && (card as any).img2 ? (
+                        <div className="flex w-full h-full">
+                          <div className="flex-1 flex items-center justify-center p-2 border-r border-zinc-100">
+                            <img src={card.img} alt={card.label} loading="lazy" className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                          </div>
+                          <div className="flex-1 flex items-center justify-center p-2">
+                            <img src={(card as any).img2} alt={card.label} loading="lazy" className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                          </div>
+                        </div>
+                      ) : (
+                        <img
+                          src={card.img}
+                          alt={card.label}
+                          className={`w-full h-full group-hover:scale-105 transition-transform duration-500 ${(card as any).contain ? 'object-contain p-3' : 'object-cover'}`}
+                          loading="lazy"
+                        />
+                      )}
                     </div>
                     {/* Content */}
                     <div className="flex flex-1 items-center gap-4 p-5">
