@@ -33,7 +33,7 @@ const SLIDE_IMAGES = [
 ];
 
 const SLIDE_HREFS = [
-  '#katalog', '#katalog', '#katalog', '#katalog', '#katalog',
+  '#dropshipping', '#katalog', '#katalog', '#katalog', '#katalog',
   '#katalog', '#katalog', '#katalog', '#kontakt', '#api', '/register',
 ];
 
