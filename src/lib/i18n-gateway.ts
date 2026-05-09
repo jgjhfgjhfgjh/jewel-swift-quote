@@ -173,7 +173,7 @@ const de: GatewayText = {
     subheading: 'Automatischer XML/CSV-Feed mit 3.000+ Premium-Produkten. Heureka, Zbozi.cz, Google Shopping, Shoptet — vollautomatisch synchronisiert.',
     bullets: ['XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping', 'Preis- und Bestandsupdates bis zu 4× täglich', 'Filter nach Kategorie, Marke und Verfügbarkeit', 'Eigene Preisregeln und Aufschläge', 'Einfache Integration — live in 48 Stunden'],
     ctaLabel: 'Mehr über swelt.feed' },
-  dropshipping: { badge: 'swelt.Dropshipping', label: 'Dropshipping',
+  dropshipping: { badge: 'Dropshipping', label: 'Dropshipping',
     heading: 'Shop ohne Lager. Sie verkaufen, wir packen.',
     subheading: 'Premium-Uhren und Schmuck über Ihren Shop verkauft. Swelt übernimmt Lager, Verpackung, Versand und White-Label — alles unter Ihrer Marke.',
     bullets: ['Keine Lagerkosten und Investitionen', 'Logistik, Verpackung und Versand unter Ihrer Marke', 'Lieferung direkt an Ihren Kunden in 24–72 h', 'White-Label-Rechnung mit Ihrem Logo', 'Margen 40–60 % bei empfohlener UVP', 'swelt.signal — wöchentliche Trenddaten'],
