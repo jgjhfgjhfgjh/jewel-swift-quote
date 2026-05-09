@@ -179,7 +179,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
                 AI obchodní<br />zástupce
               </h1>
               <p className="mt-3 text-zinc-500 text-sm leading-relaxed max-w-[260px]">
-                Pomůžu vám s katalogem, dropshippingem a vším o swelt.partner
+                Pomůžu vám s katalogem, dropshippingem a vším o partnerovi
               </p>
             </div>
 
