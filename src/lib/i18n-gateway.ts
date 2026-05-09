@@ -83,7 +83,7 @@ const cs: GatewayText = {
 };
 
 const sk: GatewayText = {
-  introEyebrow: 'swelt.partner ekosystém',
+  introEyebrow: 'partner ekosystém',
   introHeading: 'Jeden partner. Päť spôsobov, ako zarobiť viac.',
   introSubheading: 'Vyberte si model, ktorý sedí vášmu biznisu — alebo kombinujte viac naraz.',
   velkoobchod: { badge: 'B2B Veľkoobchod', label: 'Veľkoobchod',
