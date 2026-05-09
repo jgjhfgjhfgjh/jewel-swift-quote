@@ -660,6 +660,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Truck className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
+                  <Globe className="h-3.5 w-3.5" /> Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat
+                </div>
                 <div className="font-display font-black text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.
