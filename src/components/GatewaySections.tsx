@@ -603,14 +603,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   const BRANDS_STANDARD = [
-    'Tommy Hilfiger', 'Versace', 'Police', 'Seiko', 'Citizen', 'Hugo Boss',
-    'Emporio Armani', 'Guess', 'Casio', 'DKNY', 'Michael Kors', 'Calvin Klein',
-    'Fossil', 'Lacoste', 'Diesel', 'Lotus', 'Swarovski', 'Pandora', 'Morellato',
-    'Daniel Wellington', 'Nixon', 'Bulova', 'Orient', 'Boccia', 'Esprit', 'Festina',
+    'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess', 'Police',
+    'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil', 'DKNY',
+    'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit', 'Pierre Lannier',
+    'Roberto Cavalli', 'Sector', 'Invicta', 'Timex', 'Nautica', 'Fila',
+    'Breil', 'Viceroy', 'Mark Maddox', 'Moschino', 'Versus Versace', 'Just Cavalli',
   ];
 
   const BRANDS_PREMIUM = [
-    'Tag Heuer', 'Certina', 'Longines', 'Hamilton', 'Tissot',
+    'Tag Heuer', 'Longines', 'Hamilton', 'Certina',
     'Frederique Constant', 'Mido', 'Breitling', 'Rado', 'Oris',
   ];
 
