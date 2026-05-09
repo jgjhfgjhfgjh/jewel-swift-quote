@@ -137,7 +137,7 @@ const en: GatewayText = {
     subheading: 'Automatic XML/CSV feed of 3,000+ premium products. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronized hands-free.',
     bullets: ['XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping', 'Price and stock updates up to 4× per day', 'Filter by category, brand and availability', 'Custom pricing rules and markups', 'Simple integration — live within 48 hours'],
     ctaLabel: 'Learn more about swelt.feed' },
-  dropshipping: { badge: 'swelt.Dropshipping', label: 'Dropshipping',
+  dropshipping: { badge: 'Dropshipping', label: 'Dropshipping',
     heading: 'A shop without a warehouse. You sell — we pack.',
     subheading: 'Premium watches and jewelry sold through your e-shop. Swelt handles stock, packaging, dispatch and white-label — all under your brand.',
     bullets: ['No stock costs or investment', 'Logistics, packing and dispatch under your brand', 'Delivery direct to your customer in 24–72 h', 'White-label invoicing with your logo', 'Margins 40–60 % at recommended RRP', 'swelt.signal — weekly trend data'],
