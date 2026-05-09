@@ -5,7 +5,7 @@ import {
   HeadphonesIcon, BarChart2, Check, ChevronDown, TrendingUp,
   Store, Globe, Sparkles, Calculator, RefreshCw, AlertCircle,
   ArrowUpRight, Layers, Bell, Target, Lock, FileText,
-  Camera, Award, MapPin, X,
+  Camera, Award, MapPin, X, ShoppingCart,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -717,42 +717,40 @@ const Dropshipping = () => {
               </div>
             </Reveal>
 
-            {/* Live signal hero card */}
+            {/* How it works hero card */}
             <Reveal delay={200}>
-              <div className="relative rounded-2xl border border-border bg-white shadow-2xl p-6 max-w-md ml-auto">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">swelt.signal — Trending now</div>
-                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="rounded-2xl border border-border bg-white shadow-2xl p-6 max-w-md ml-auto space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="text-[11px] font-bold text-primary uppercase tracking-wider">Jak to funguje</div>
+                  <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-50 text-[10px]">Bez skladu</Badge>
                 </div>
                 <div className="space-y-3">
-                  {signalProducts.map((p) => {
-                    const tc = p.actionTone === 'success' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                      p.actionTone === 'destructive' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-blue-50 text-blue-700 border-blue-200';
-                    const bc = p.actionTone === 'success' ? '#10b981' : p.actionTone === 'destructive' ? '#ef4444' : 'hsl(220 80% 50%)';
-                    return (
-                      <div key={p.sku} className="rounded-xl border border-border p-3">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <div>
-                            <div className="text-[10px] text-muted-foreground">{p.sku}</div>
-                            <div className="text-sm font-medium leading-snug">{p.name}</div>
-                          </div>
-                          <div className="text-right shrink-0">
-                            <div className="text-sm font-bold" style={{ color: bc }}>{p.change}</div>
-                            <span className={`text-[10px] border rounded px-1.5 py-0.5 font-medium ${tc}`}>{p.action}</span>
-                          </div>
-                        </div>
-                        <div className="h-1 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${p.trend}%`, background: bc }} />
-                        </div>
+                  {[
+                    { n: '01', label: 'Zákazník objedná', sub: 'na tvém e-shopu', Icon: ShoppingCart },
+                    { n: '02', label: 'swelt zabalí', sub: 'pod tvou značkou', Icon: PackageOpen },
+                    { n: '03', label: 'Doručení', sub: 'do 24–48 hodin', Icon: Truck },
+                  ].map((s) => (
+                    <div key={s.n} className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center shrink-0">
+                        <s.Icon className="h-5 w-5 text-primary" />
                       </div>
-                    );
-                  })}
+                      <div className="flex-1">
+                        <div className="text-sm font-semibold">{s.label}</div>
+                        <div className="text-[11px] text-muted-foreground">{s.sub}</div>
+                      </div>
+                      <div className="text-[10px] font-bold text-primary/60">{s.n}</div>
+                    </div>
+                  ))}
                 </div>
-                <div className="mt-4 pt-4 border-t flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Aktualizováno dnes v 09:00</span>
-                  <button className="text-primary font-medium hover:underline flex items-center gap-1">
-                    Zobrazit vše <ArrowRight className="h-3 w-3" />
-                  </button>
+                <div className="rounded-xl bg-muted/40 border border-border p-3 grid grid-cols-2 gap-2 text-center">
+                  <div>
+                    <div className="text-base font-bold text-emerald-600">60 %</div>
+                    <div className="text-[10px] text-muted-foreground">průměrná marže</div>
+                  </div>
+                  <div>
+                    <div className="text-base font-bold text-primary">0 Kč</div>
+                    <div className="text-[10px] text-muted-foreground">investice do skladu</div>
+                  </div>
                 </div>
               </div>
             </Reveal>
