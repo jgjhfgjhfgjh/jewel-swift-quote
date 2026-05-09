@@ -627,7 +627,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
             <img
-              src="/src/assets/logo.png"
+              src={sweltLogo}
               alt="Swelt"
               className="mx-auto h-24 sm:h-32 md:h-40 w-auto select-none"
               draggable={false}
