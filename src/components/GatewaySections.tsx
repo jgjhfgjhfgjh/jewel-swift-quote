@@ -633,7 +633,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
-                Jste partner v ČR nebo SK? Přes <strong>swelt.dropshipping</strong> můžete prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my. Vy pouze přijímáte objednávky.
+                Jste partner v ČR nebo SK? Přes <strong>Dropshipping</strong> můžete prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my. Vy pouze přijímáte objednávky.
               </p>
             </div>
           </Reveal>
