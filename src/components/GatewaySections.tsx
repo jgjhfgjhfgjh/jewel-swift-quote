@@ -670,6 +670,28 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </Button>
             </div>
           </Reveal>
+
+          {/* Tři obavy → tři gateway karty */}
+          {[
+            { icon: HandCoins,    title: 'Platíš až po prodeji',          text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
+            { icon: Truck,        title: 'O expedici se staráme my',      text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
+            { icon: Target,       title: 'S plánem silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
+          ].map((item, idx) => (
+            <Reveal key={item.title} delay={180 + idx * 60}>
+              <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <item.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-display font-black text-foreground mb-1">{item.title}</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
+                </div>
+                <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
+                  Chci dropshipping <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
