@@ -5,7 +5,7 @@ import {
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
   Package, Clock, Rocket, RefreshCw, Sparkles, Eye,
-  Truck, Award, MapPin, Building2,
+  Truck, Award, MapPin, Building2, AlertCircle, Target,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
