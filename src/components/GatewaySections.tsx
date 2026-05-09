@@ -703,10 +703,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* Premium segment */}
           <Reveal delay={120}>
-            <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 sm:p-8 mb-8">
+            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 mb-4">
               <div className="flex items-start gap-4 mb-5">
-                <div className="h-11 w-11 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
-                  <Star className="h-5 w-5 text-amber-600 fill-amber-400" />
+                <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <Star className="h-5 w-5 text-primary fill-primary/30" />
                 </div>
                 <div>
                   <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
@@ -717,12 +717,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </div>
               <div className="flex flex-wrap gap-2 mb-5">
                 {BRANDS_PREMIUM.map((b) => (
-                  <span key={b} className="rounded-xl border border-amber-300 bg-white px-3.5 py-2 text-sm font-semibold text-amber-800">
+                  <span key={b} className="rounded-xl border border-border bg-background px-3.5 py-2 text-sm font-semibold text-foreground">
                     {b}
                   </span>
                 ))}
               </div>
-              <Button variant="outline" className="gap-2 border-amber-300 text-amber-800 hover:bg-amber-50" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
+              <Button variant="outline" className="gap-2" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
                 Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
@@ -730,9 +730,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* Private purchase info */}
           <Reveal delay={160}>
-            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="h-11 w-11 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
-                <Building2 className="h-5 w-5 text-emerald-700" />
+            <div className="rounded-2xl border border-border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <Building2 className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
                 <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
@@ -740,7 +740,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
                 </p>
               </div>
-              <Button className="gap-2 shrink-0 bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('/luxury')}>
+              <Button className="gap-2 shrink-0" onClick={() => navigate('/luxury')}>
                 Soukromý nákup <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
