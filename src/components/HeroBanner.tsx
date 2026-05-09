@@ -28,7 +28,7 @@ const SLIDE_IMAGES = [
   'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1920&q=80',
   // 10) Snadná integrace — notebook / API
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80',
-  // 11) Připoj se ke Swelt — handshake / business
+  // 11) Připoj se k nám — handshake / business
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80',
 ];
 
