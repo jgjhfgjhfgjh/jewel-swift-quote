@@ -101,7 +101,7 @@ const sk: GatewayText = {
     subheading: 'Automatický XML/CSV feed 3 000+ prémiových produktov. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronizované bez vašej práce.',
     bullets: ['XML, CSV, JSON, Heureka, Zbozi.cz, Google Shopping', 'Aktualizácia cien a zásob až 4× denne', 'Filtrácia podľa kategórie, značky a dostupnosti', 'Vlastné cenové pravidlá a prirážky', 'Jednoduchá integrácia — funguje do 48 hodín'],
     ctaLabel: 'Zistiť viac o swelt.feed' },
-  dropshipping: { badge: 'swelt.Dropshipping', label: 'Dropshipping',
+  dropshipping: { badge: 'Dropshipping', label: 'Dropshipping',
     heading: 'E-shop bez skladu. Predávaj, my zabalíme.',
     subheading: 'Prémiové hodinky a šperky predávané cez tvoj e-shop. Swelt rieši sklad, balenie, expedíciu a biely štítok — všetko pod tvojou značkou.',
     bullets: ['Bez skladových nákladov a investícií', 'Logistika, balenie a expedícia pod vašou značkou', 'Doručenie priamo ku koncovému zákazníkovi do 24–72 h', 'White-label fakturácia s vaším logom', 'Marža 40–60 % pri odporúčanej MOC', 'swelt.signal — trendové dáta každý týždeň'],
