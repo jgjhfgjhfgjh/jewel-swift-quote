@@ -620,6 +620,27 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     <div className="gateway-sections relative w-full bg-background text-foreground">
 
       {/* ══════════════════════════════════════════
+          0. INTRO — logo + tagline
+      ══════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 bg-white border-b border-border">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <Reveal>
+            <img
+              src="/src/assets/logo.png"
+              alt="Swelt"
+              className="mx-auto h-24 sm:h-32 md:h-40 w-auto select-none"
+              draggable={false}
+            />
+          </Reveal>
+          <Reveal delay={120}>
+            <h1 className="font-display mt-6 sm:mt-8 text-2xl sm:text-3xl md:text-4xl font-black text-foreground tracking-tight text-balance">
+              Evropský velkoobchod hodinkami a šperky světových značek
+            </h1>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-white border-b border-border">
