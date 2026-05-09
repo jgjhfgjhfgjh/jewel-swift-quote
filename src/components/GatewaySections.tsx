@@ -676,9 +676,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* Tři obavy → tři gateway karty */}
           {[
-            { icon: HandCoins,    title: 'Platíš až po prodeji',          text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
-            { icon: Truck,        title: 'O expedici se staráme my',      text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-            { icon: Target,       title: 'S plánem silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
+            { icon: HandCoins, label: 'Nemám peníze na naskladnění',     labelIcon: AlertCircle, title: 'Platíš až po prodeji',           text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
+            { icon: Truck,     label: 'Nevím jak řešit logistiku',       labelIcon: Truck,       title: 'O expedici se staráme my',       text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
+            { icon: Target,    label: 'Bojím se špatně zvolit produkty', labelIcon: Target,      title: 'S plánem silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
           ].map((item, idx) => (
             <Reveal key={item.title} delay={180 + idx * 60}>
               <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
@@ -686,6 +686,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <item.icon className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
+                    <item.labelIcon className="h-3.5 w-3.5" /> {item.label}
+                  </div>
                   <div className="font-display font-black text-foreground mb-1">{item.title}</div>
                   <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
                 </div>
