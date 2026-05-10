@@ -87,7 +87,7 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
           phase === 'in' ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 -translate-y-3 blur-sm'
         }`}
       >
-        .{words[i]}
+        {words[i]}
       </span>
     </span>
   );
