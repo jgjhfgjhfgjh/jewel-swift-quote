@@ -200,7 +200,7 @@ const Intelligence = () => {
       </div>
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} whiteLogo />
 
-      <main className="flex-1 pt-14 text-foreground">
+      <main className="flex-1 pt-24 text-foreground">
         {/* HERO */}
         <section className="relative overflow-hidden border-b border-white/10">
           <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 grid lg:grid-cols-2 gap-12 items-center">

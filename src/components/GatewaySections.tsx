@@ -65,29 +65,40 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
-/* ── Rotating suffix (.PARTNER / .EU / .DROPSHIPPING) ── */
+/* ── Rotating suffix (cylinder roller — prev/curr/next visible) ── */
 function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
-  const [i, setI] = useState(0);
-  const [phase, setPhase] = useState<'in' | 'out'>('in');
+  const [k, setK] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => {
-      setPhase('out');
-      setTimeout(() => {
-        setI((v) => (v + 1) % words.length);
-        setPhase('in');
-      }, 350);
-    }, interval);
+    const t = setInterval(() => setK((v) => v + 1), interval);
     return () => clearInterval(t);
-  }, [interval, words.length]);
+  }, [interval]);
+  const n = words.length;
+  // Render enough items so we always have prev (k), curr (k+1), next (k+2) visible.
+  const visibleCount = k + 3;
+  const items: string[] = [];
+  for (let j = 0; j < visibleCount; j++) {
+    items.push(words[((j - 1) % n + n) % n]);
+  }
   return (
-    <span className="font-sans font-extrabold tracking-tight text-foreground text-lg sm:text-2xl md:text-3xl lg:text-4xl inline-block whitespace-nowrap leading-none">
+    <span
+      className="relative inline-block overflow-hidden align-baseline"
+      style={{ height: '3em', lineHeight: '1' }}
+      aria-label={words[k % n]}
+    >
       <span
-        key={i}
-        className={`inline-block transition-all duration-300 ease-out ${
-          phase === 'in' ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 -translate-y-3 blur-sm'
-        }`}
+        className="block transition-transform ease-out"
+        style={{ transform: `translateY(-${k}em)`, transitionDuration: '650ms' }}
       >
-        {words[i]}
+        {items.map((word, j) => (
+          <span
+            key={j}
+            className={`block leading-[1em] h-[1em] whitespace-nowrap ${
+              j === k + 1 ? 'text-foreground' : 'text-foreground/25'
+            }`}
+          >
+            {word}
+          </span>
+        ))}
       </span>
     </span>
   );
@@ -656,14 +667,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal>
             <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
-                className="font-spartan font-black tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
+                className="font-spartan font-extrabold tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
                 style={{ letterSpacing: '-0.05em' }}
               >
                 swelt.
               </h1>
               <span className="relative ml-1 sm:ml-2">
-                <span aria-hidden className="invisible font-display font-black text-lg sm:text-2xl md:text-3xl lg:text-4xl">EU</span>
-                <span className="absolute left-0 top-0 whitespace-nowrap">
+                {/* Width placeholder = PARTNER (canonical reference for centering) */}
+                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl">PARTNER</span>
+                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
                 </span>
               </span>

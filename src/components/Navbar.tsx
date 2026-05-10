@@ -133,10 +133,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         WebkitBackdropFilter: 'blur(14px)',
       }}
     >
+      {/* ── Logo row — h-10, centered text wordmark ── */}
+      <div className="h-10 flex items-center justify-center border-b border-border/40">
+        <Link
+          to="/"
+          onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          className="flex items-baseline gap-1 select-none"
+          aria-label="swelt.PARTNER — domů"
+        >
+          <span className={`font-spartan font-extrabold text-xl sm:text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}>swelt.</span>
+          <span className={`font-sans font-extrabold text-[10px] sm:text-xs leading-none tracking-[0.18em] ${whiteLogo ? 'text-white/90' : 'text-foreground/85'}`}>PARTNER</span>
+        </Link>
+      </div>
+
       {/* ── Toolbar row — always h-14 ── */}
       <div className="relative h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
 
-        {/* Left: hamburger (always) + logo (always mobile, hidden desktop when expanded) */}
+        {/* Left: hamburger */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
           <Button
             ref={desktopMenuButtonRef}
@@ -150,19 +163,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           >
             <Menu className="h-5 w-5" />
           </Button>
-
-          {/* Logo in toolbar: always on mobile, fades out on desktop when expanded */}
-          <Link
-            to="/"
-            onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="shrink-0 opacity-100"
-          >
-            <img
-              src={logo}
-              alt="partner."
-              className={`h-20 sm:h-12 lg:h-[90px] object-contain my-0 px-0 py-0 mx-0 ${whiteLogo ? 'brightness-0 invert' : ''}`}
-            />
-          </Link>
 
           {/* Dropshipping Hub — for dropshipping partners and admins */}
           {!loading && user && (isB2bApproved || isAdmin) && (
