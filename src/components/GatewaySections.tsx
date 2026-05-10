@@ -87,7 +87,7 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
           phase === 'in' ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 -translate-y-3 blur-sm'
         }`}
       >
-        .{words[i]}
+        {words[i]}
       </span>
     </span>
   );
@@ -662,7 +662,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 swelt.
               </h1>
               <span className="relative ml-1 sm:ml-2">
-                <span aria-hidden className="invisible font-display font-black text-lg sm:text-2xl md:text-3xl lg:text-4xl">.EU</span>
+                <span aria-hidden className="invisible font-display font-black text-lg sm:text-2xl md:text-3xl lg:text-4xl">EU</span>
                 <span className="absolute left-0 top-0 whitespace-nowrap">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
                 </span>
