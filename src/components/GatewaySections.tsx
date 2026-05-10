@@ -654,14 +654,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <div className="flex items-baseline justify-center gap-1 sm:gap-2">
+            <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
                 className="font-display font-black tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
                 style={{ letterSpacing: '-0.05em' }}
               >
-                swelt<span className="text-foreground">.</span>
+                swelt.
               </h1>
-              <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+              <span className="relative ml-1 sm:ml-2">
+                <span aria-hidden className="invisible font-display font-black text-lg sm:text-2xl md:text-3xl lg:text-4xl">.EU</span>
+                <span className="absolute left-0 top-0 whitespace-nowrap">
+                  <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+                </span>
+              </span>
             </div>
           </Reveal>
           <Reveal delay={120}>
