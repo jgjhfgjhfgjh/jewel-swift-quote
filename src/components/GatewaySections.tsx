@@ -80,7 +80,7 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
     return () => clearInterval(t);
   }, [interval, words.length]);
   return (
-    <span className="font-display font-black tracking-tight text-foreground text-2xl sm:text-4xl md:text-5xl lg:text-6xl inline-block overflow-hidden leading-none">
+    <span className="font-display font-black tracking-tight text-foreground text-lg sm:text-2xl md:text-3xl lg:text-4xl inline-block whitespace-nowrap leading-none">
       <span
         key={i}
         className={`inline-block transition-all duration-300 ease-out ${
