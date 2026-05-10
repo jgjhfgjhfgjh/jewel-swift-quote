@@ -80,7 +80,7 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
     return () => clearInterval(t);
   }, [interval, words.length]);
   return (
-    <span className="font-display font-black tracking-tight text-foreground text-lg sm:text-2xl md:text-3xl lg:text-4xl inline-block whitespace-nowrap leading-none">
+    <span className="font-sans font-extrabold tracking-tight text-foreground text-lg sm:text-2xl md:text-3xl lg:text-4xl inline-block whitespace-nowrap leading-none">
       <span
         key={i}
         className={`inline-block transition-all duration-300 ease-out ${
@@ -656,7 +656,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal>
             <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
-                className="font-display font-black tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
+                className="font-spartan font-black tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
                 style={{ letterSpacing: '-0.05em' }}
               >
                 swelt.
@@ -670,7 +670,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-display mt-1 sm:mt-2 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mt-1 sm:mt-2 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
@@ -703,7 +703,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   {[...row, ...row, ...row].map((brand, i) => (
                     <span
                       key={i}
-                      className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
+                      className="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
                     >
                       {brand}
                     </span>

@@ -14,6 +14,7 @@ export default {
       fontFamily: {
         display: ['Montserrat', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
+        spartan: ['"League Spartan"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
