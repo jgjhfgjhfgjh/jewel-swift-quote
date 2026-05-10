@@ -654,14 +654,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <div className="flex items-center justify-center gap-1 sm:gap-2">
-              <img
-                src={sweltLogo}
-                alt="Swelt"
-                className="h-48 sm:h-64 md:h-80 w-auto select-none transition-transform duration-500 hover:scale-105"
-                style={{ transform: 'translateX(10px)' }}
-                draggable={false}
-              />
+            <div className="flex items-baseline justify-center gap-1 sm:gap-2">
+              <h1
+                className="font-display font-black tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
+                style={{ letterSpacing: '-0.05em' }}
+              >
+                swelt<span className="text-foreground">.</span>
+              </h1>
               <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
             </div>
           </Reveal>
