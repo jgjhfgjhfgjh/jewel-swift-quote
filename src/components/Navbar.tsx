@@ -133,8 +133,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         WebkitBackdropFilter: 'blur(14px)',
       }}
     >
-      {/* ── Logo row — h-16, centered text wordmark (2x bigger) ── */}
-      <div className="h-16 flex items-center justify-center border-b border-border/40">
+      {/* ── Logo row — h-12, centered text wordmark, shifted up, no border (merged with toolbar) ── */}
+      <div className="h-12 flex items-end justify-center pb-0">
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
@@ -149,8 +149,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         </Link>
       </div>
 
-      {/* ── Toolbar row — always h-14 ── */}
-      <div className="relative h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+      {/* ── Toolbar row — h-12, items shifted up, no border between rows ── */}
+      <div className="relative h-12 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
 
         {/* Left: hamburger */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
