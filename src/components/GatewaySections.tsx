@@ -81,14 +81,14 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
   }
   return (
     <span
-      className="relative inline-block align-baseline"
+      className="relative block align-baseline w-full"
       style={{ height: '1em', lineHeight: '1' }}
       aria-label={words[k % n]}
     >
       {/* Cylinder — extends DOWN from baseline; slot 0 = current = aligned with swelt. */}
       <span
-        className="absolute left-0 top-0 inline-block overflow-hidden"
-        style={{ height: '3em', width: '100%' }}
+        className="absolute left-0 top-0 block"
+        style={{ height: '3em', width: '100%', overflow: 'hidden visible' }}
       >
         <span
           className="block transition-transform ease-out"
@@ -688,10 +688,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               >
                 swelt.
               </h1>
-              <span className="relative ml-1 sm:ml-2">
+              <span className="relative ml-1 sm:ml-2 inline-block">
                 {/* Width placeholder = PARTNER (canonical reference for centering) */}
-                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl">PARTNER</span>
-                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
+                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
+                <span className="absolute left-0 top-0 w-full font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
                 </span>
               </span>
