@@ -65,57 +65,31 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
-/* ── Rotating suffix (current glued to baseline, grays cascading below) ── */
+/* ── Rotating suffix (simple fade/slide swap between words) ── */
 function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
-  const [k, setK] = useState(0);
+  const [i, setI] = useState(0);
+  const [phase, setPhase] = useState<'in' | 'out'>('in');
   useEffect(() => {
-    const t = setInterval(() => setK((v) => v + 1), interval);
+    const t = setInterval(() => {
+      setPhase('out');
+      setTimeout(() => {
+        setI((v) => (v + 1) % words.length);
+        setPhase('in');
+      }, 280);
+    }, interval);
     return () => clearInterval(t);
-  }, [interval]);
-  const n = words.length;
-  // Render items from 0 to k+3. Current is items[k] (top slot, baseline-aligned with swelt.)
-  const visibleCount = k + 4;
-  const items: string[] = [];
-  for (let j = 0; j < visibleCount; j++) {
-    items.push(words[((j) % n + n) % n]);
-  }
+  }, [interval, words.length]);
   return (
     <span
-      className="relative block align-baseline w-full"
-      style={{ height: '1em', lineHeight: '1' }}
-      aria-label={words[k % n]}
+      key={i}
+      className={`inline-block whitespace-nowrap transition-all duration-300 ease-out ${
+        phase === 'in'
+          ? 'opacity-100 translate-y-0 blur-0'
+          : 'opacity-0 -translate-y-2 blur-sm'
+      }`}
+      aria-label={words[i]}
     >
-      {/* Cylinder — extends DOWN from baseline; slot 0 = current = aligned with swelt. */}
-      <span
-        className="absolute left-0 top-0 block"
-        style={{ height: '3em', width: '100%', overflow: 'hidden visible' }}
-      >
-        <span
-          className="block transition-transform ease-out"
-          style={{ transform: `translateY(-${k}em)`, transitionDuration: '650ms' }}
-        >
-          {items.map((word, j) => {
-            const isCurrent = j === k;
-            return (
-              <span
-                key={j}
-                className={`block leading-[1em] h-[1em] whitespace-nowrap transition-all duration-500 ${
-                  isCurrent
-                    ? 'text-foreground'
-                    : 'text-foreground/10'
-                }`}
-                style={
-                  isCurrent
-                    ? undefined
-                    : { transform: 'scale(0.6)', transformOrigin: 'left top' }
-                }
-              >
-                {word}
-              </span>
-            );
-          })}
-        </span>
-      </span>
+      {words[i]}
     </span>
   );
 }
@@ -689,26 +663,45 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 swelt.
               </h1>
               <span className="relative ml-1 sm:ml-2 inline-block">
-                {/* Width placeholder = PARTNER (canonical reference for centering) */}
-                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
-                <span className="absolute left-0 top-0 w-full font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
+                {/* Width placeholder — uses longest word so layout doesn't shift */}
+                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">DROPSHIPPING</span>
+                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
                 </span>
               </span>
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-sans mt-16 sm:mt-20 md:mt-24 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mt-2 sm:mt-3 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
-          <Reveal delay={200}>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <button className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]">
-                CTA Placeholder 1
+
+          <Reveal delay={180}>
+            <p className="font-sans mt-8 text-base sm:text-lg font-semibold text-foreground tracking-tight">
+              Přístup k 5 000+ produktům za velkoobchodní ceny
+            </p>
+            <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
+            </ul>
+          </Reveal>
+
+          <Reveal delay={240}>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <button
+                onClick={() => openAuth('register')}
+                className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
+              >
+                Vytvořit účet
               </button>
-              <button className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]">
-                CTA Placeholder 2
+              <button
+                onClick={() => openAuth('login')}
+                className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
+              >
+                Prohlédnout katalog
               </button>
             </div>
           </Reveal>
