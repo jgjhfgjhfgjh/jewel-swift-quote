@@ -133,16 +133,19 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         WebkitBackdropFilter: 'blur(14px)',
       }}
     >
-      {/* ── Logo row — h-10, centered text wordmark ── */}
-      <div className="h-10 flex items-center justify-center border-b border-border/40">
+      {/* ── Logo row — h-16, centered text wordmark (2x bigger) ── */}
+      <div className="h-16 flex items-center justify-center border-b border-border/40">
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="flex items-baseline gap-1 select-none"
+          className="flex items-baseline gap-1.5 select-none"
           aria-label="swelt.PARTNER — domů"
         >
-          <span className={`font-spartan font-extrabold text-xl sm:text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}>swelt.</span>
-          <span className={`font-sans font-extrabold text-[10px] sm:text-xs leading-none tracking-[0.18em] ${whiteLogo ? 'text-white/90' : 'text-foreground/85'}`}>PARTNER</span>
+          <span
+            className={`font-spartan font-extrabold text-4xl sm:text-5xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            style={{ letterSpacing: '-0.05em' }}
+          >swelt.</span>
+          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
       </div>
 

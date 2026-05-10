@@ -65,7 +65,7 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
-/* ── Rotating suffix (cylinder roller — prev/curr/next visible) ── */
+/* ── Rotating suffix (cylinder roller — prev/curr/next visible, perspective scale) ── */
 function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
   const [k, setK] = useState(0);
   useEffect(() => {
@@ -82,23 +82,33 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
   return (
     <span
       className="relative inline-block overflow-hidden align-baseline"
-      style={{ height: '3em', lineHeight: '1' }}
+      style={{ height: '3em', lineHeight: '1', perspective: '500px' }}
       aria-label={words[k % n]}
     >
       <span
         className="block transition-transform ease-out"
         style={{ transform: `translateY(-${k}em)`, transitionDuration: '650ms' }}
       >
-        {items.map((word, j) => (
-          <span
-            key={j}
-            className={`block leading-[1em] h-[1em] whitespace-nowrap ${
-              j === k + 1 ? 'text-foreground' : 'text-foreground/25'
-            }`}
-          >
-            {word}
-          </span>
-        ))}
+        {items.map((word, j) => {
+          const isCurrent = j === k + 1;
+          return (
+            <span
+              key={j}
+              className={`block leading-[1em] h-[1em] whitespace-nowrap origin-left transition-all duration-500 ${
+                isCurrent
+                  ? 'text-foreground scale-100 opacity-100'
+                  : 'text-foreground/55 opacity-90'
+              }`}
+              style={
+                isCurrent
+                  ? undefined
+                  : { transform: 'scale(0.78) scaleY(0.7)', transformOrigin: 'left center' }
+              }
+            >
+              {word}
+            </span>
+          );
+        })}
       </span>
     </span>
   );
