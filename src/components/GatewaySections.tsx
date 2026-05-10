@@ -65,6 +65,34 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
+/* ── Rotating suffix (.PARTNER / .EU / .DROPSHIPPING) ── */
+function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
+  const [i, setI] = useState(0);
+  const [phase, setPhase] = useState<'in' | 'out'>('in');
+  useEffect(() => {
+    const t = setInterval(() => {
+      setPhase('out');
+      setTimeout(() => {
+        setI((v) => (v + 1) % words.length);
+        setPhase('in');
+      }, 350);
+    }, interval);
+    return () => clearInterval(t);
+  }, [interval, words.length]);
+  return (
+    <span className="font-display font-black tracking-tight text-foreground text-2xl sm:text-4xl md:text-5xl lg:text-6xl inline-block overflow-hidden leading-none">
+      <span
+        key={i}
+        className={`inline-block transition-all duration-300 ease-out ${
+          phase === 'in' ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 -translate-y-3 blur-sm'
+        }`}
+      >
+        .{words[i]}
+      </span>
+    </span>
+  );
+}
+
 /* ── Floating social proof ── */
 function FloatingNotif() {
   const notifs = [
@@ -626,15 +654,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <img
-              src={sweltLogo}
-              alt="Swelt"
-              className="mx-auto h-48 sm:h-64 md:h-80 w-auto select-none"
-              draggable={false}
-            />
+            <div className="flex items-center justify-center gap-1 sm:gap-2">
+              <img
+                src={sweltLogo}
+                alt="Swelt"
+                className="h-48 sm:h-64 md:h-80 w-auto select-none transition-transform duration-500 hover:scale-105"
+                style={{ transform: 'translateX(10px)' }}
+                draggable={false}
+              />
+              <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+            </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-display mt-4 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-display mt-1 sm:mt-2 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
