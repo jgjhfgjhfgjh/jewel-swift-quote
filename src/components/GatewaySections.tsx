@@ -65,7 +65,7 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
-/* ── Rotating suffix (cylinder roller — prev/curr/next visible, perspective scale) ── */
+/* ── Rotating suffix (current glued to baseline, grays cascading below) ── */
 function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
   const [k, setK] = useState(0);
   useEffect(() => {
@@ -73,42 +73,48 @@ function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?
     return () => clearInterval(t);
   }, [interval]);
   const n = words.length;
-  // Render enough items so we always have prev (k), curr (k+1), next (k+2) visible.
-  const visibleCount = k + 3;
+  // Render items from 0 to k+3. Current is items[k] (top slot, baseline-aligned with swelt.)
+  const visibleCount = k + 4;
   const items: string[] = [];
   for (let j = 0; j < visibleCount; j++) {
-    items.push(words[((j - 1) % n + n) % n]);
+    items.push(words[((j) % n + n) % n]);
   }
   return (
     <span
-      className="relative inline-block overflow-hidden align-baseline"
-      style={{ height: '3em', lineHeight: '1', perspective: '500px' }}
+      className="relative inline-block align-baseline"
+      style={{ height: '1em', lineHeight: '1' }}
       aria-label={words[k % n]}
     >
+      {/* Cylinder — extends DOWN from baseline; slot 0 = current = aligned with swelt. */}
       <span
-        className="block transition-transform ease-out"
-        style={{ transform: `translateY(-${k}em)`, transitionDuration: '650ms' }}
+        className="absolute left-0 top-0 inline-block overflow-hidden"
+        style={{ height: '3em', width: '100%' }}
       >
-        {items.map((word, j) => {
-          const isCurrent = j === k + 1;
-          return (
-            <span
-              key={j}
-              className={`block leading-[1em] h-[1em] whitespace-nowrap origin-left transition-all duration-500 ${
-                isCurrent
-                  ? 'text-foreground scale-100 opacity-100'
-                  : 'text-foreground/55 opacity-90'
-              }`}
-              style={
-                isCurrent
-                  ? undefined
-                  : { transform: 'scale(0.78) scaleY(0.7)', transformOrigin: 'left center' }
-              }
-            >
-              {word}
-            </span>
-          );
-        })}
+        <span
+          className="block transition-transform ease-out"
+          style={{ transform: `translateY(-${k}em)`, transitionDuration: '650ms' }}
+        >
+          {items.map((word, j) => {
+            const isCurrent = j === k;
+            return (
+              <span
+                key={j}
+                className={`block leading-[1em] h-[1em] whitespace-nowrap transition-all duration-500 ${
+                  isCurrent
+                    ? 'text-foreground'
+                    : 'text-foreground/10'
+                }`}
+                style={
+                  isCurrent
+                    ? undefined
+                    : { transform: 'scale(0.6)', transformOrigin: 'left top' }
+                }
+              >
+                {word}
+              </span>
+            );
+          })}
+        </span>
       </span>
     </span>
   );
@@ -692,7 +698,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-sans mt-1 sm:mt-2 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mt-16 sm:mt-20 md:mt-24 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
