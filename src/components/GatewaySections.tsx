@@ -65,6 +65,34 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString('cs')}{suffix}</span>;
 }
 
+/* ── Rotating suffix (.PARTNER / .EU / .DROPSHIPPING) ── */
+function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
+  const [i, setI] = useState(0);
+  const [phase, setPhase] = useState<'in' | 'out'>('in');
+  useEffect(() => {
+    const t = setInterval(() => {
+      setPhase('out');
+      setTimeout(() => {
+        setI((v) => (v + 1) % words.length);
+        setPhase('in');
+      }, 350);
+    }, interval);
+    return () => clearInterval(t);
+  }, [interval, words.length]);
+  return (
+    <span className="font-display font-black tracking-tight text-foreground text-2xl sm:text-4xl md:text-5xl lg:text-6xl inline-block overflow-hidden leading-none">
+      <span
+        key={i}
+        className={`inline-block transition-all duration-300 ease-out ${
+          phase === 'in' ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 -translate-y-3 blur-sm'
+        }`}
+      >
+        .{words[i]}
+      </span>
+    </span>
+  );
+}
+
 /* ── Floating social proof ── */
 function FloatingNotif() {
   const notifs = [
