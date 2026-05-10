@@ -623,22 +623,70 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-white border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 text-center">
+      <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
+        <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
             <img
               src={sweltLogo}
               alt="Swelt"
-              className="mx-auto h-24 sm:h-32 md:h-40 w-auto select-none"
+              className="mx-auto h-48 sm:h-64 md:h-80 w-auto select-none"
               draggable={false}
             />
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-display mt-6 sm:mt-8 text-2xl sm:text-3xl md:text-4xl font-black text-foreground tracking-tight text-balance">
+            <h1 className="font-display mt-4 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
+          <Reveal delay={200}>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <button className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]">
+                CTA Placeholder 1
+              </button>
+              <button className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]">
+                CTA Placeholder 2
+              </button>
+            </div>
+          </Reveal>
         </div>
+
+        {/* Brands marquee — two rows, opposite directions */}
+        <Reveal delay={280}>
+          <div className="mt-14 sm:mt-20 w-full space-y-6">
+            {[
+              ['SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN', 'TISSOT', 'PIERRE LANNIER', 'LONGINES'],
+              ['TAG HEUER', 'HAMILTON', 'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT'],
+            ].map((row, idx) => (
+              <div key={idx} className="relative w-full overflow-hidden">
+                <div
+                  className="flex gap-12 sm:gap-16 whitespace-nowrap"
+                  style={{
+                    animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
+                  }}
+                >
+                  {[...row, ...row, ...row].map((brand, i) => (
+                    <span
+                      key={i}
+                      className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
+                    >
+                      {brand}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+        <style>{`
+          @keyframes marquee-left {
+            from { transform: translateX(0); }
+            to { transform: translateX(-33.333%); }
+          }
+          @keyframes marquee-right {
+            from { transform: translateX(-33.333%); }
+            to { transform: translateX(0); }
+          }
+        `}</style>
       </section>
 
       {/* ══════════════════════════════════════════
