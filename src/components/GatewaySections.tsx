@@ -626,18 +626,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <img
-              src={sweltLogo}
-              alt="Swelt"
-              className="mx-auto h-48 sm:h-64 md:h-80 w-auto select-none transition-transform duration-500 hover:scale-105"
-              style={{ transform: 'translateX(10px)' }}
-              draggable={false}
-            />
+            <div className="flex items-center justify-center gap-1 sm:gap-2">
+              <img
+                src={sweltLogo}
+                alt="Swelt"
+                className="h-48 sm:h-64 md:h-80 w-auto select-none transition-transform duration-500 hover:scale-105"
+                style={{ transform: 'translateX(10px)' }}
+                draggable={false}
+              />
+              <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+            </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-display -mt-2 sm:-mt-4 md:-mt-6 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto inline-flex flex-wrap items-baseline justify-center gap-x-1">
-              <span>Evropský velkoobchod hodinkami a šperky světových značek</span>
-              <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+            <h1 className="font-display mt-1 sm:mt-2 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
           <Reveal delay={200}>
