@@ -133,27 +133,25 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         WebkitBackdropFilter: 'blur(14px)',
       }}
     >
-      {/* ── Logo row — h-12, centered text wordmark, shifted up, no border (merged with toolbar) ── */}
-      <div className="h-12 flex items-end justify-center pb-0">
+      {/* ── Row 1: hamburger | logo (absolute center) | icons + CTA ── */}
+      <div className="relative h-14 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+
+        {/* Logo absolutely centered — stays in the middle regardless of left/right widths */}
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="flex items-baseline gap-1.5 select-none"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-baseline gap-1.5 select-none pointer-events-auto"
           aria-label="swelt.PARTNER — domů"
         >
           <span
-            className={`font-spartan font-extrabold text-4xl sm:text-5xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            className={`font-spartan font-extrabold text-3xl sm:text-4xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
-          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+          <span className={`font-sans font-extrabold text-sm sm:text-base leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
-      </div>
-
-      {/* ── Toolbar row — h-12, items shifted up, no border between rows ── */}
-      <div className="relative h-12 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
 
         {/* Left: hamburger */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0 relative z-10">
           <Button
             ref={desktopMenuButtonRef}
             variant="ghost"
@@ -180,38 +178,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           )}
         </div>
 
-        {/* Center: search (catalog) | nav links (home collapsed) */}
-        {showSearch ? (
-          <div className="hidden lg:flex flex-1 justify-center mx-2 md:mx-4">
-            <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder={t.search}
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); }}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              />
-            </div>
-          </div>
-        ) : isOnHomePage && isHome ? (
-          /* Nav links absolutely centered to viewport — stays centered regardless of left/right widths */
-          <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 opacity-100">
-            {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
-              <button
-                key={path}
-                onClick={() => navigate(path)}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
-              >
-                <Icon className="h-3.5 w-3.5" />
-                {label}
-              </button>
-            ))}
-          </nav>
-        ) : null}
-
         {/* Right: icons + CTA — always visible */}
-        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
+        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
           {!loading && user ? (
             <>
@@ -407,7 +375,36 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         </div>
       </div>
 
-      {/* Expanded hero section removed — navbar no longer expands over the hero banner */}
+      {/* ── Row 2: nav links (home) OR search (catalog) — desktop only ── */}
+      {(showSearch || (isOnHomePage && isHome)) && (
+        <div className="hidden lg:flex h-10 px-4 items-center justify-center">
+          {showSearch ? (
+            <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder={t.search}
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); }}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+          ) : (
+            <nav className="flex items-center gap-1">
+              {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
+                <button
+                  key={path}
+                  onClick={() => navigate(path)}
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {label}
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
+      )}
 
       {/* Mobile search expansion — catalog mode only */}
       {showSearch && mobileSearchOpen && (
