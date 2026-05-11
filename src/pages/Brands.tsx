@@ -123,6 +123,11 @@ export default function Brands() {
   const navigate = useNavigate();
   const { setGatewayOpen: openAuth } = useStore();
 
+  // Scroll to top on mount (page transitions don't reset scroll by default)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
   useEffect(() => {
     fetch('/products.json')
       .then((r) => r.json())
