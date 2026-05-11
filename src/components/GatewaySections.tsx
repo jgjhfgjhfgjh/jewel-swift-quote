@@ -696,7 +696,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* 2) Subtitle — close to logo, lead-in to pills */}
           <Reveal delay={80}>
             <h1 className="font-sans mt-5 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky:
+              Evropský velkoobchod hodinkami a šperky
             </h1>
           </Reveal>
 
