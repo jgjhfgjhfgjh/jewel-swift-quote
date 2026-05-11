@@ -252,9 +252,9 @@ export default function BrandDetail() {
               </h1>
             </Reveal>
 
-            {/* Sample product — centered on white background */}
+            {/* Sample product — centered on white background, no frame */}
             <Reveal delay={120}>
-              <div className="mx-auto max-w-md aspect-square bg-white rounded-2xl border border-border overflow-hidden flex items-center justify-center p-8 shadow-sm">
+              <div className="mx-auto w-56 sm:w-72 md:w-80 aspect-square bg-white flex items-center justify-center p-4">
                 <img
                   src={brandData.sampleProduct.img}
                   alt={`${brandData.name} — ukázkový produkt`}
@@ -333,32 +333,32 @@ export default function BrandDetail() {
                   Co od {brandData.name} máme v katalogu
                 </h2>
               </Reveal>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {brandData.topProducts.map((p, i) => {
                   const discount = p.price > 0 ? Math.round((1 - p.wholesale / p.price) * 100) : 0;
                   return (
                     <Reveal key={p.id} delay={Math.min(i, 7) * 50}>
-                      <div className="group rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all h-full flex flex-col">
-                        <div className="relative aspect-square bg-zinc-50 overflow-hidden">
+                      <div className="group rounded-xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all h-full flex flex-col">
+                        <div className="relative aspect-square bg-white overflow-hidden">
                           <img
                             src={p.img}
                             alt={p.name}
                             loading="lazy"
-                            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-300"
                           />
                           {discount > 0 && (
-                            <span className="absolute top-2 right-2 bg-primary text-white text-[10px] font-bold rounded-full px-2 py-0.5">
+                            <span className="absolute top-1.5 right-1.5 bg-primary text-white text-[9px] sm:text-[10px] font-bold rounded-full px-1.5 sm:px-2 py-0.5">
                               −{discount}%
                             </span>
                           )}
                           {!p.inStock && (
-                            <span className="absolute top-2 left-2 bg-zinc-900/80 text-white text-[10px] font-semibold rounded-full px-2 py-0.5">
+                            <span className="absolute top-1.5 left-1.5 bg-zinc-900/80 text-white text-[9px] sm:text-[10px] font-semibold rounded-full px-1.5 sm:px-2 py-0.5">
                               Na poptávku
                             </span>
                           )}
                         </div>
-                        <div className="p-3 border-t border-border flex-1">
-                          <p className="text-[12px] font-medium leading-tight text-foreground line-clamp-2">{p.name}</p>
+                        <div className="p-2 sm:p-3 border-t border-border flex-1">
+                          <p className="text-[11px] sm:text-xs font-medium leading-tight text-foreground line-clamp-2">{p.name}</p>
                         </div>
                       </div>
                     </Reveal>
