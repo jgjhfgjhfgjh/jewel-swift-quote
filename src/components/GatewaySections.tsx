@@ -655,6 +655,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
+            <h1 className="font-sans mb-3 sm:mb-4 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky světových značek
+            </h1>
+          </Reveal>
+          <Reveal delay={80}>
             <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
                 className="font-spartan font-extrabold tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
@@ -670,11 +675,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </span>
               </span>
             </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <h1 className="font-sans mt-0 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky světových značek
-            </h1>
           </Reveal>
 
           <Reveal delay={180}>

@@ -669,7 +669,7 @@ const Dropshipping = () => {
       <BackButton />
       <FloatingNotif />
 
-      <main className="flex-1 pt-14">
+      <main className="flex-1 pt-24">
 
         {/* ══ HERO ══ */}
         <section className="relative overflow-hidden border-b border-border">
