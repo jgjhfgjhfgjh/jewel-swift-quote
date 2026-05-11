@@ -804,7 +804,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               ))}
             </div>
           </Reveal>
-          <Reveal delay={140}>
+          {/* Section heading — recognize yourself in these obstacles? */}
+          <Reveal delay={120}>
+            <div className="text-center mb-8 sm:mb-10">
+              <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
+                Poznáš se v tom?
+              </div>
+              <h3 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">
+                Čtyři překážky, které řešíme za tebe
+              </h3>
+            </div>
+          </Reveal>
+
+          <Reveal delay={160}>
             <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <Truck className="h-6 w-6 text-primary" />
