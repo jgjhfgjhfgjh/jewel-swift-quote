@@ -726,9 +726,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 4) Value prop — mobile keeps big gap (CTA group pushed down); desktop tight to pills */}
+          {/* 4) Value prop — tight gap from pills on both mobile and desktop */}
           <Reveal delay={200}>
-            <p className="font-sans mt-24 sm:mt-10 text-base sm:text-lg font-semibold text-foreground tracking-tight">
+            <p className="font-sans mt-10 text-base sm:text-lg font-semibold text-foreground tracking-tight">
               Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
             </p>
           </Reveal>
