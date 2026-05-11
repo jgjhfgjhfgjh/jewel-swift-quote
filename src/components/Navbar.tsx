@@ -29,6 +29,28 @@ const HOME_NAV_ITEMS = [
   { path: '/shop', label: 'E-shop do 48h', icon: ShoppingCart },
 ];
 
+// Map Lang code -> ISO 3166-1 alpha-2 country code for flagcdn.com
+// (emoji 🇨🇿 etc. don't render on Windows — use bitmap fallback)
+const LANG_TO_COUNTRY: Record<string, string> = {
+  cs: 'cz', sk: 'sk', pl: 'pl', de: 'de', en: 'gb', fr: 'fr',
+  es: 'es', it: 'it', nl: 'nl', pt: 'pt', hu: 'hu', ro: 'ro',
+  sv: 'se', da: 'dk', fi: 'fi', no: 'no', el: 'gr', is: 'is',
+};
+
+function FlagImg({ lang, className = '' }: { lang: string; className?: string }) {
+  const code = LANG_TO_COUNTRY[lang] || lang;
+  return (
+    <img
+      src={`https://flagcdn.com/24x18/${code}.png`}
+      srcSet={`https://flagcdn.com/48x36/${code}.png 2x`}
+      width={20}
+      height={15}
+      alt=""
+      className={`inline-block rounded-[2px] shrink-0 object-cover ${className}`}
+    />
+  );
+}
+
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode, setGatewayOpen } = useStore();
   const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
@@ -181,7 +203,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   onClick={() => setLang(l)}
                   className={`gap-2 text-sm cursor-pointer ${l === lang ? 'bg-accent/40 font-semibold' : ''}`}
                 >
-                  <span className="text-base">{flags[l]}</span>
+                  <FlagImg lang={l} />
                   <span>{langNames[l]}</span>
                 </DropdownMenuItem>
               ))}
@@ -309,7 +331,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         >
                           {ALL_LANGS.map((l) => (
                             <option key={l} value={l}>
-                              {flags[l]} {langNames[l]}
+                              {langNames[l]}
                             </option>
                           ))}
                         </select>
@@ -347,7 +369,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         >
                           {ALL_LANGS.map((l) => (
                             <option key={l} value={l}>
-                              {flags[l]} {langNames[l]}
+                              {langNames[l]}
                             </option>
                           ))}
                         </select>
