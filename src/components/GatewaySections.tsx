@@ -692,7 +692,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 Vytvořit účet
               </button>
               <button
-                onClick={() => openAuth('login')}
+                onClick={() => openAuth('register')}
                 className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
               >
                 Prohlédnout katalog
