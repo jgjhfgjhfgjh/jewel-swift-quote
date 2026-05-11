@@ -5,7 +5,7 @@ import {
   Check, ArrowRight, ChevronRight, Users, Star, Shield,
   TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
   Package, Clock, Rocket, RefreshCw, Sparkles, Eye,
-  Truck, Award, MapPin, Building2, AlertCircle, Target,
+  Truck, Award, MapPin, Building2, AlertCircle, Target, X,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
@@ -106,8 +106,13 @@ function FloatingNotif() {
   ];
   const [idx, setIdx] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('floatingNotifDismissed') === '1';
+  });
 
   useEffect(() => {
+    if (dismissed) return;
     const show = () => { setVisible(true); setTimeout(() => setVisible(false), 4500); };
     const interval = setInterval(() => {
       setIdx(i => (i + 1) % notifs.length);
@@ -115,11 +120,19 @@ function FloatingNotif() {
     }, 10000);
     const t = setTimeout(show, 3500);
     return () => { clearInterval(interval); clearTimeout(t); };
-  }, []);
+  }, [dismissed]);
+
+  const handleClose = () => {
+    setVisible(false);
+    setDismissed(true);
+    try { sessionStorage.setItem('floatingNotifDismissed', '1'); } catch {}
+  };
+
+  if (dismissed) return null;
 
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-      <div className="flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 max-w-xs">
+      <div className="relative flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 pr-9 max-w-xs">
         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
           <Users className="h-4 w-4 text-primary" />
         </div>
@@ -127,6 +140,13 @@ function FloatingNotif() {
           <div className="text-xs font-semibold">{notifs[idx].name} z {notifs[idx].city}</div>
           <div className="text-[11px] text-muted-foreground">{notifs[idx].action} · právě teď</div>
         </div>
+        <button
+          onClick={handleClose}
+          aria-label="Zavřít notifikaci"
+          className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
   );

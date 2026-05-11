@@ -196,7 +196,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <span>{lang}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-44 max-h-[60vh] overflow-y-auto">
+            <DropdownMenuContent align="start" sideOffset={8} className="w-44 max-h-[60vh] overflow-y-auto z-[105]">
               {ALL_LANGS.map((l) => (
                 <DropdownMenuItem
                   key={l}
