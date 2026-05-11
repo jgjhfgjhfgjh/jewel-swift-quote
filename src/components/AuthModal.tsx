@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 import { auth as authT } from '@/lib/i18n-auth';
@@ -129,17 +129,26 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
   const handleSocialAuth = async (provider: 'google' | 'apple') => {
     setSocialLoading(provider);
+    setError('');
     try {
-      const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+      // Direct Supabase OAuth — redirects to provider, then back to the app
+      // with tokens in the URL fragment which Supabase auto-parses.
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: window.location.href,
+          queryParams: provider === 'google'
+            ? { access_type: 'offline', prompt: 'select_account' }
+            : undefined,
+        },
       });
-      if (result.error) {
-        setError(result.error instanceof Error ? result.error.message : h.loginFailed);
+      if (oauthError) {
+        setError(oauthError.message || h.loginFailed);
+        setSocialLoading(null);
       }
-      if (result.redirected) return;
+      // If no error, the browser redirects to the provider — no further code runs here.
     } catch (err: any) {
-      setError(err.message || h.loginFailed);
-    } finally {
+      setError(err?.message || h.loginFailed);
       setSocialLoading(null);
     }
   };

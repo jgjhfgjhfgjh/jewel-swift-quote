@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 import logo from '@/assets/logo.png';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
@@ -36,17 +36,23 @@ export function CatalogGateway() {
 
   const handleSocialAuth = async (provider: 'google' | 'apple') => {
     setSocialLoading(provider);
+    setError('');
     try {
-      const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: window.location.href,
+          queryParams: provider === 'google'
+            ? { access_type: 'offline', prompt: 'select_account' }
+            : undefined,
+        },
       });
-      if (result.error) {
-        setError(result.error instanceof Error ? result.error.message : h.loginFailed);
+      if (oauthError) {
+        setError(oauthError.message || h.loginFailed);
+        setSocialLoading(null);
       }
-      if (result.redirected) return;
     } catch (err: any) {
-      setError(err.message || h.loginFailed);
-    } finally {
+      setError(err?.message || h.loginFailed);
       setSocialLoading(null);
     }
   };
