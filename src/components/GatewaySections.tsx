@@ -672,7 +672,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-20 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
@@ -693,9 +693,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 2) Subtitle — close to logo, lead-in to pills */}
+          {/* 2) Subtitle — matches section pt so logo sits vertically centered between page top and subtitle */}
           <Reveal delay={80}>
-            <h1 className="font-sans mt-2 sm:mt-6 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mt-10 sm:mt-6 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky
             </h1>
           </Reveal>
