@@ -172,7 +172,7 @@ export default function Brands() {
     <>
       <Navbar />
       <BackButton />
-      <main className="min-h-screen bg-background pt-24">
+      <main className="min-h-screen bg-background pt-14 sm:pt-24">
 
         {/* ── Hero ── */}
         <section className="py-16 sm:py-20 bg-white border-b border-border text-center">
@@ -190,7 +190,7 @@ export default function Brands() {
         </section>
 
         {/* ── Search bar ── */}
-        <div className="sticky top-24 z-30 bg-white/95 backdrop-blur border-b border-border py-3">
+        <div className="sticky top-14 sm:top-24 z-30 bg-white/95 backdrop-blur border-b border-border py-3">
           <div className="mx-auto max-w-6xl px-6 flex items-center gap-4">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />

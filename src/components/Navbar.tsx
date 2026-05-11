@@ -83,17 +83,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       // When the page is scrolled back to the very top, allow the navbar to
       // re-expand by clearing any wheel-over-navbar collapse override
       if (y === 0) setNavbarHoverCollapsed(false);
-      // Only hide navbar in catalog mode; in home mode it just collapses
-      if (isHome) {
-        setHidden(false);
-      } else {
-        setHidden(y > lastScrollY.current && y > 50);
-      }
+      // Hide on scroll down, show on scroll up — everywhere (including home)
+      setHidden(y > lastScrollY.current && y > 50);
       lastScrollY.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [isHome]);
+  }, []);
 
   // Wheel over the navbar: don't scroll the page, just drive the navbar
   // collapse/expand. The hero stays exposed so the customer can browse it.
@@ -133,14 +129,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         WebkitBackdropFilter: 'blur(14px)',
       }}
     >
-      {/* ── Row 1: hamburger | logo (absolute center, bottom-aligned with space above) | icons + CTA ── */}
-      <div className="relative h-24 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+      {/* ── Row 1: mobile = h-14, hamburger + small left logo; desktop = h-24, hamburger + centered big logo ── */}
+      <div className="relative h-14 sm:h-24 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
 
-        {/* Logo absolutely positioned — centered horizontally, bottom-aligned with space above */}
+        {/* Desktop logo — absolute centered, bottom-aligned with space above */}
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="absolute left-1/2 bottom-3 -translate-x-1/2 flex items-baseline gap-1.5 select-none pointer-events-auto"
+          className="hidden sm:flex absolute left-1/2 bottom-3 -translate-x-1/2 items-baseline gap-1.5 select-none pointer-events-auto"
           aria-label="swelt.PARTNER — domů"
         >
           <span
@@ -150,7 +146,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
 
-        {/* Left: hamburger */}
+        {/* Left: hamburger + (mobile-only inline logo) */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0 relative z-10">
           <Button
             ref={desktopMenuButtonRef}
@@ -164,6 +160,20 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           >
             <Menu className="h-5 w-5" />
           </Button>
+
+          {/* Mobile logo — small, inline left, hidden on sm+ */}
+          <Link
+            to="/"
+            onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="sm:hidden flex items-baseline gap-1 select-none ml-0.5"
+            aria-label="swelt.PARTNER — domů"
+          >
+            <span
+              className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+              style={{ letterSpacing: '-0.05em' }}
+            >swelt.</span>
+            <span className={`font-sans font-extrabold text-[10px] leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+          </Link>
 
           {/* Dropshipping Hub — for dropshipping partners and admins */}
           {!loading && user && (isB2bApproved || isAdmin) && (

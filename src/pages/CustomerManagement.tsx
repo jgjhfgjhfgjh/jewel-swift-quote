@@ -91,7 +91,7 @@ export default function CustomerManagement() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <div className="h-24" />
+      <div className="h-14 sm:h-24" />
       <div className="mx-auto w-full max-w-4xl p-4">
         <div className="flex items-center gap-3 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>

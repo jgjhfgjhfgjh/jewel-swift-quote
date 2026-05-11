@@ -278,7 +278,7 @@ export default function CustomerDetail() {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
-        <div className="h-24" />
+        <div className="h-14 sm:h-24" />
         <div className="mx-auto w-full max-w-4xl p-4">
           <Button variant="ghost" onClick={() => navigate('/customers')} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />Zpět
@@ -292,7 +292,7 @@ export default function CustomerDetail() {
   return (
     <div className="flex min-h-screen flex-col bg-muted/30">
       <Navbar />
-      <div className="h-24" />
+      <div className="h-14 sm:h-24" />
       <div className="mx-auto w-full max-w-6xl p-4 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
