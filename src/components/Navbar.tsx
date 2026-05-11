@@ -418,7 +418,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Button
               size="sm"
               onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
+              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-primary hover:bg-primary/90 transition-all hover:-translate-y-0.5 shrink-0"
             >
               {user ? 'KATALOG 2026' : 'B2B registrace'}
             </Button>
@@ -490,6 +490,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col py-2">
+          {/* Primary services — same items as desktop row 2 (Velkoobchod, Feed, ...) */}
+          {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
+            <button
+              key={path}
+              onClick={() => { setMenuOpen(false); navigate(path); }}
+              className="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-muted/50 transition-colors"
+            >
+              <Icon className="h-4 w-4 text-primary" /> {label}
+            </button>
+          ))}
+          <div className="border-t my-2" />
+
           {isHome ? (
             <>
               <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">

@@ -738,7 +738,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
-                className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
+                className="px-8 py-3 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition min-w-[200px]"
               >
                 B2B registrace
               </button>
