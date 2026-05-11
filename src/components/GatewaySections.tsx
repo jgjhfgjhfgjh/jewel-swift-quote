@@ -66,7 +66,7 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
 }
 
 /* ── Rotating suffix (simple fade/slide swap between words) ── */
-function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
+export function RotatingSuffix({ words, interval = 2200 }: { words: string[]; interval?: number }) {
   const [i, setI] = useState(0);
   const [phase, setPhase] = useState<'in' | 'out'>('in');
   useEffect(() => {
@@ -691,7 +691,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Width placeholder = PARTNER (centerpiece reference) */}
                 <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
                 <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
-                  <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
+                  <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
                 </span>
               </span>
             </div>
@@ -730,43 +730,22 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
         </div>
 
-        {/* Brands marquee — two rows, opposite directions */}
+        {/* Brands list — static grid, desktop only (hidden on mobile) */}
         <Reveal delay={280}>
-          <div className="mt-14 sm:mt-20 w-full space-y-6">
-            {[
-              ['SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN', 'TISSOT', 'PIERRE LANNIER', 'LONGINES'],
-              ['TAG HEUER', 'HAMILTON', 'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT'],
-            ].map((row, idx) => (
-              <div key={idx} className="relative w-full overflow-hidden">
-                <div
-                  className="flex gap-12 sm:gap-16 whitespace-nowrap"
-                  style={{
-                    animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
-                  }}
-                >
-                  {[...row, ...row, ...row].map((brand, i) => (
-                    <span
-                      key={i}
-                      className="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
-                    >
-                      {brand}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="hidden sm:block mt-14 sm:mt-20 w-full">
+            <div className="mx-auto max-w-5xl px-6 flex flex-wrap items-center justify-center gap-x-8 md:gap-x-12 gap-y-4 font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/70 tracking-wider">
+              {[
+                'SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN',
+                'TISSOT', 'PIERRE LANNIER', 'LONGINES', 'TAG HEUER', 'HAMILTON',
+                'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT',
+              ].map((brand) => (
+                <span key={brand} className="select-none whitespace-nowrap">
+                  {brand}
+                </span>
+              ))}
+            </div>
           </div>
         </Reveal>
-        <style>{`
-          @keyframes marquee-left {
-            from { transform: translateX(0); }
-            to { transform: translateX(-33.333%); }
-          }
-          @keyframes marquee-right {
-            from { transform: translateX(-33.333%); }
-            to { transform: translateX(0); }
-          }
-        `}</style>
       </section>
 
       {/* ══════════════════════════════════════════

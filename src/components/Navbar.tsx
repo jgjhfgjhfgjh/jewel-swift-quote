@@ -14,6 +14,9 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
+import { RotatingSuffix } from '@/components/GatewaySections';
+
+const SUFFIX_WORDS = ['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL'];
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -165,7 +168,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
-          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+          <span className="relative inline-block">
+            {/* Width placeholder = PARTNER for stable layout */}
+            <span aria-hidden className={`invisible font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight whitespace-nowrap ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+            <span className={`absolute left-0 top-0 font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+              <RotatingSuffix words={SUFFIX_WORDS} />
+            </span>
+          </span>
         </Link>
 
         {/* Left: hamburger + (mobile-only inline logo) */}
@@ -221,7 +230,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            <span className={`font-sans font-extrabold text-[10px] leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+            <span className="relative inline-block">
+              {/* Width placeholder = DROPSHIPPING (longest) for stable mobile layout */}
+              <span aria-hidden className={`invisible font-sans font-extrabold text-[10px] leading-none tracking-tight whitespace-nowrap ${whiteLogo ? 'text-white' : 'text-foreground'}`}>DROPSHIPPING</span>
+              <span className={`absolute left-0 top-0 font-sans font-extrabold text-[10px] leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+                <RotatingSuffix words={SUFFIX_WORDS} />
+              </span>
+            </span>
           </Link>
 
           {/* Dropshipping Hub — for dropshipping partners and admins */}
