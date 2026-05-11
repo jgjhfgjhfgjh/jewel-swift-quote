@@ -693,16 +693,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 2) Subtitle */}
+          {/* 2) Subtitle — pulled closer to pills as a lead-in */}
           <Reveal delay={80}>
-            <h1 className="font-sans mt-4 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky světových značek
+            <h1 className="font-sans mt-10 sm:mt-14 md:mt-16 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky světových značek jako
             </h1>
           </Reveal>
 
           {/* 3) Brand pills — clickable, all screens, where the big logo used to live */}
           <Reveal delay={140}>
-            <div className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
+            <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
               {[
                 'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
                 'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
