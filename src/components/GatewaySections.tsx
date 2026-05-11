@@ -663,8 +663,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 swelt.
               </h1>
               <span className="relative ml-1 sm:ml-2 inline-block">
-                {/* Width placeholder — uses longest word so layout doesn't shift */}
-                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">DROPSHIPPING</span>
+                {/* Width placeholder = PARTNER (centerpiece reference) */}
+                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
                 <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING']} />
                 </span>
@@ -672,7 +672,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <h1 className="font-sans mt-2 sm:mt-3 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mt-0 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
@@ -681,16 +681,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             <p className="font-sans mt-8 text-base sm:text-lg font-semibold text-foreground tracking-tight">
               Přístup k 5 000+ produktům za velkoobchodní ceny
             </p>
-            <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
-            </ul>
           </Reveal>
 
           <Reveal delay={240}>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('register')}
                 className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
@@ -704,6 +698,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 Prohlédnout katalog
               </button>
             </div>
+          </Reveal>
+
+          <Reveal delay={280}>
+            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
+            </ul>
           </Reveal>
         </div>
 

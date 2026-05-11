@@ -326,50 +326,27 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : !loading ? (
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="shrink-0" title={t.login}>
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => openAuth('login')} className="gap-2 text-sm cursor-pointer">
-                    <LogIn className="h-4 w-4" /> Přihlášení
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => openAuth('register')} className="gap-2 text-sm cursor-pointer">
-                    <UserPlus className="h-4 w-4" /> B2B Registrace
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <div className="px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
-                      <Globe className="h-3 w-3" /> Jazyk
-                    </p>
-                    <select
-                      value={lang}
-                      onChange={(e) => setLang(e.target.value as Lang)}
-                      className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-                    >
-                      {ALL_LANGS.map((l) => (
-                        <option key={l} value={l}>
-                          {flags[l]} {langNames[l]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* White CTA — Přihlásit (guests) */}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => openAuth('login')}
+                className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white hover:bg-zinc-100 border border-border transition-all hover:-translate-y-0.5 shrink-0"
+              >
+                Přihlásit
+              </Button>
             </>
           ) : null}
 
-          {/* CTA — KATALOG 2026 (logged in) / REGISTROVAT (guests) — always far right.
+          {/* CTA — KATALOG 2026 (logged in) / Vytvořit účet (guests) — always far right.
               Skryjeme když už uživatel je v katalogu (na homepage v catalog módu). */}
           {!(user && viewMode === 'catalog' && isOnHomePage) && (
             <Button
               size="sm"
-              onClick={handleCatalogCta}
+              onClick={user ? handleCatalogCta : () => openAuth('register')}
               className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
             >
-              {user ? 'KATALOG 2026' : 'REGISTROVAT'}
+              {user ? 'KATALOG 2026' : 'Vytvořit účet'}
             </Button>
           )}
         </div>
