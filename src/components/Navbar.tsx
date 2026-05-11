@@ -223,17 +223,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <Link
             to="/"
             onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="sm:hidden flex items-baseline gap-1 select-none ml-0.5"
+            className="sm:hidden flex items-baseline select-none ml-0.5"
             aria-label="swelt.PARTNER — domů"
           >
             <span
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            <span className="relative inline-block">
-              {/* Width placeholder = DROPSHIPPING (longest) for stable mobile layout */}
-              <span aria-hidden className={`invisible font-sans font-extrabold text-[10px] leading-none tracking-tight whitespace-nowrap ${whiteLogo ? 'text-white' : 'text-foreground'}`}>DROPSHIPPING</span>
-              <span className={`absolute left-0 top-0 font-sans font-extrabold text-[10px] leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+            <span className="relative ml-1 inline-block">
+              {/* Width placeholder = PARTNER (matches homepage canonical reference) */}
+              <span aria-hidden className={`invisible font-sans font-extrabold text-[11px] whitespace-nowrap tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+              <span className={`absolute left-0 top-0 font-sans font-extrabold text-[11px] tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
                 <RotatingSuffix words={SUFFIX_WORDS} />
               </span>
             </span>
