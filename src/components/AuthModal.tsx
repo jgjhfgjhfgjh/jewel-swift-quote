@@ -96,7 +96,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
       aria-modal="true"
       aria-label={h.catalogAccess}
       onClick={close}
-      className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
     >
       {/* Close — same style as ProductImageGallery */}
       <button
@@ -111,6 +111,8 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         <X className="h-6 w-6" />
       </button>
 
+      {/* Centering container — allows card to scroll within viewport when too tall */}
+      <div className="flex min-h-full items-start sm:items-center justify-center p-4 py-10">
       {/* Card */}
       <div
         onClick={(e) => e.stopPropagation()}
@@ -279,6 +281,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>,
     document.body,
