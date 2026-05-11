@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
+import { AuthModal } from '@/components/AuthModal';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -113,15 +115,19 @@ interface BrandData {
   maxDiscount: number;
   categories: string[];
   inStockCount: number;
+  rawManufacturers: string[];
 }
 
 /* ─── Component ─── */
 export default function BrandDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { openAuth: _open } = useStore() as any;
+  const { user } = useAuthContext();
+  const { setSelectedBrands, setViewMode } = useStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
 
   // Scroll to top whenever slug changes
   useEffect(() => {
@@ -140,11 +146,15 @@ export default function BrandDetail() {
     const targetKey = slug.toUpperCase().replace(/-/g, ' ');
 
     const brandProducts: Product[] = [];
+    const rawManufacturers = new Set<string>();
     for (const p of products) {
       if (!p.manufacturer) continue;
       const raw = p.manufacturer.trim();
       const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
-      if (key === targetKey) brandProducts.push(p);
+      if (key === targetKey) {
+        brandProducts.push(p);
+        rawManufacturers.add(raw);
+      }
     }
 
     if (brandProducts.length === 0) return null;
@@ -179,8 +189,23 @@ export default function BrandDetail() {
       maxDiscount,
       categories,
       inStockCount: inStockProducts.length,
+      rawManufacturers: Array.from(rawManufacturers),
     };
   }, [products, slug]);
+
+  /* ─── Open brand in catalog: logged-in → activate filter & go to catalog; guest → open auth ─── */
+  const handleOpenInCatalog = () => {
+    if (!brandData) return;
+    if (user) {
+      setSelectedBrands(brandData.rawManufacturers);
+      setViewMode('catalog');
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    } else {
+      setAuthTab('login');
+      setAuthOpen(true);
+    }
+  };
 
   if (loading) {
     return (
@@ -243,6 +268,24 @@ export default function BrandDetail() {
               <p className="text-center text-xs sm:text-sm text-muted-foreground mt-6">
                 {brandData.sampleProduct.name}
               </p>
+            </Reveal>
+
+            {/* Primary CTA — open brand in catalog */}
+            <Reveal delay={260}>
+              <div className="mt-8 flex justify-center">
+                <Button
+                  size="lg"
+                  onClick={handleOpenInCatalog}
+                  className="gap-2 px-8 font-semibold"
+                >
+                  <Search className="h-4 w-4" /> Otevřít {brandData.name} v katalogu
+                </Button>
+              </div>
+              {!user && (
+                <p className="text-center text-[11px] text-muted-foreground mt-3">
+                  Pro vstup do katalogu se přihlaste nebo vytvořte účet (zdarma).
+                </p>
+              )}
             </Reveal>
           </div>
         </section>
@@ -426,11 +469,11 @@ export default function BrandDetail() {
                 Zaregistrujte se zdarma jako B2B partner a získejte přístup k velkoobchodním cenám, kompletnímu katalogu a dropshippingu.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button size="lg" className="gap-2 px-8 bg-white text-primary hover:bg-white/90" onClick={handleOpenInCatalog}>
+                  <Search className="h-4 w-4" /> Otevřít v katalogu
+                </Button>
                 <Button size="lg" variant="secondary" className="gap-2 px-8" onClick={() => navigate('/brands')}>
                   <ArrowLeft className="h-4 w-4" /> Zpět na katalog značek
-                </Button>
-                <Button size="lg" className="gap-2 px-8 bg-white text-primary hover:bg-white/90" onClick={() => navigate('/luxury')}>
-                  <MessageSquare className="h-4 w-4" /> Nezávazná poptávka
                 </Button>
               </div>
               <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm opacity-80">
@@ -443,6 +486,23 @@ export default function BrandDetail() {
         </section>
 
       </main>
+
+      {/* Auth modal — opened for guests when they click 'Open in catalog' */}
+      <AuthModal
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        defaultTab={authTab}
+        tip={brandData ? `Pro vstup do katalogu ${brandData.name} se nejprve přihlaste.` : undefined}
+        onLoginSuccess={() => {
+          // After successful login, open the catalog with this brand filter active
+          if (brandData) {
+            setSelectedBrands(brandData.rawManufacturers);
+            setViewMode('catalog');
+            navigate('/');
+            window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+          }
+        }}
+      />
     </>
   );
 }
