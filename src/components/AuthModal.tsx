@@ -11,7 +11,6 @@ import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 import { auth as authT } from '@/lib/i18n-auth';
 import { AccessTiersVisual } from '@/components/AccessTiersVisual';
-import logo from '@/assets/logo.png';
 
 interface AuthModalProps {
   open: boolean;
@@ -98,19 +97,6 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
       onClick={close}
       className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
     >
-      {/* Close — same style as ProductImageGallery */}
-      <button
-        type="button"
-        aria-label={a.closeLabel}
-        onClick={(e) => {
-          e.stopPropagation();
-          close();
-        }}
-        className="fixed right-4 top-4 z-[20002] flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-gray-900 shadow-md transition hover:bg-white"
-      >
-        <X className="h-6 w-6" />
-      </button>
-
       {/* Centering container — allows card to scroll within viewport when too tall */}
       <div className="flex min-h-full items-start sm:items-center justify-center p-4 py-10">
       {/* Card */}
@@ -118,10 +104,22 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         onClick={(e) => e.stopPropagation()}
         className="relative z-[20001] w-full max-w-md rounded-2xl bg-card shadow-2xl border border-border/60 overflow-hidden animate-in zoom-in-95 duration-200"
       >
-        {/* Header */}
+        {/* Close — anchored to card top-right so it always scrolls with content */}
+        <button
+          type="button"
+          aria-label={a.closeLabel}
+          onClick={(e) => {
+            e.stopPropagation();
+            close();
+          }}
+          className="absolute right-3 top-3 z-[20002] flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-900 shadow-md transition hover:bg-white border border-border/40"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        {/* Header — no logo, just title + subtitle */}
         <div className="px-8 pt-8 pb-6 bg-gradient-to-b from-primary/5 to-transparent">
-          <img src={logo} alt="swelt." className="h-14 px-0 mx-[150px] object-contain" />
-          <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-tight pr-10">
             {tab === 'register' ? a.tabRegister : a.modalLoginHeading}
           </h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
