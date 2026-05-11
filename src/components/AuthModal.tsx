@@ -14,7 +14,7 @@ import { AccessTiersVisual } from '@/components/AccessTiersVisual';
 interface AuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  defaultTab?: 'login' | 'register';
+  defaultTab?: 'login' | 'register' | 'b2b';
   onLoginSuccess?: () => void;
   tip?: string;
 }
@@ -24,7 +24,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
   const { lang } = useStore();
   const h = home[lang];
   const a = authT[lang];
-  const [tab, setTab] = useState<'login' | 'register'>(defaultTab);
+  const [tab, setTab] = useState<'login' | 'register' | 'b2b'>(defaultTab);
 
   useEffect(() => {
     if (open) setTab(defaultTab);
@@ -32,6 +32,8 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [ico, setIco] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
@@ -94,6 +96,37 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     }
   };
 
+  const handleB2BRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (!companyName.trim()) {
+      setError('Vyplňte název firmy');
+      return;
+    }
+    if (!/^\d{6,8}$/.test(ico.trim())) {
+      setError('IČO musí obsahovat 6–8 číslic');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Heslo musí mít alespoň 6 znaků');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Hesla se neshodují');
+      return;
+    }
+    setLoading(true);
+    try {
+      await signUp(email, password, companyName.trim(), ico.trim());
+      close();
+      onLoginSuccess?.();
+    } catch (err: any) {
+      setError(err.message || 'B2B registrace se nezdařila. Zkuste to prosím znovu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSocialAuth = async (provider: 'google' | 'apple') => {
     setSocialLoading(provider);
     try {
@@ -144,37 +177,49 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         {/* Header — title + subtitle adapt to current tab */}
         <div className="px-8 pt-8 pb-6 bg-gradient-to-b from-primary/5 to-transparent">
           <h2 className="font-display text-2xl font-semibold tracking-tight pr-10">
-            {tab === 'register' ? 'Vytvořit účet' : 'Přihlášení'}
+            {tab === 'b2b' ? 'B2B registrace partnera' : tab === 'register' ? 'Vytvořit účet' : 'Přihlášení'}
           </h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {tab === 'register'
+            {tab === 'b2b'
+              ? 'Plný přístup k velkoobchodním cenám. Schválení do 24 hodin.'
+              : tab === 'register'
               ? 'Zdarma, bez závazku — okamžitý přístup k prohlížení katalogu.'
               : 'Vítejte zpět. Přihlaste se ke svému účtu.'}
           </p>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs — 3 levels: Přihlášení | Vytvořit účet | B2B */}
         <div className="px-8">
-          <div className="flex p-1 bg-muted rounded-lg">
+          <div className="flex p-1 bg-muted rounded-lg gap-0.5">
             <button
-              onClick={() => setTab('login')}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
+              onClick={() => { setError(''); setTab('login'); }}
+              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
                 tab === 'login'
                   ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {a.tabLogin}
+              Přihlášení
             </button>
             <button
-              onClick={() => setTab('register')}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
+              onClick={() => { setError(''); setTab('register'); }}
+              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
                 tab === 'register'
                   ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {a.tabRegister}
+              Vytvořit účet
+            </button>
+            <button
+              onClick={() => { setError(''); setTab('b2b'); }}
+              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
+                tab === 'b2b'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              B2B registrace
             </button>
           </div>
         </div>
@@ -244,17 +289,29 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
               </form>
 
-              {/* Switch to register */}
-              <p className="text-center text-xs text-muted-foreground -mt-1">
-                Ještě nemáte účet?{' '}
-                <button
-                  type="button"
-                  onClick={() => { setError(''); setTab('register'); }}
-                  className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
-                >
-                  Vytvořit účet
-                </button>
-              </p>
+              {/* Switch links */}
+              <div className="text-center text-xs text-muted-foreground -mt-1 space-y-1">
+                <p>
+                  Ještě nemáte účet?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('register'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    Vytvořit účet
+                  </button>
+                </p>
+                <p>
+                  Jste firma s IČO?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('b2b'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    B2B registrace partnera
+                  </button>
+                </p>
+              </div>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -295,7 +352,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
               </div>
             </>
-          ) : (
+          ) : tab === 'register' ? (
             <>
               {/* Access tiers — show what unlocks at each step */}
               <div>
@@ -399,17 +456,146 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
               </div>
 
-              {/* Switch to login */}
-              <p className="text-center text-xs text-muted-foreground">
-                Už máte účet?{' '}
-                <button
-                  type="button"
-                  onClick={() => { setError(''); setTab('login'); }}
-                  className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
-                >
-                  Přihlásit
-                </button>
+              {/* Switch links */}
+              <div className="text-center text-xs text-muted-foreground space-y-1">
+                <p>
+                  Už máte účet?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('login'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    Přihlásit
+                  </button>
+                </p>
+                <p>
+                  Jste firma s IČO?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('b2b'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    B2B registrace partnera
+                  </button>
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* B2B registration — full form with company name + IČO */}
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 mb-2">
+                  Co získáte jako B2B partner
+                </p>
+                <AccessTiersVisual compact />
+              </div>
+
+              <form onSubmit={handleB2BRegister} className="space-y-3">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    Název firmy *
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Vaše firma s.r.o."
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    IČO *
+                  </label>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d{6,8}"
+                    placeholder="12345678"
+                    value={ico}
+                    onChange={(e) => setIco(e.target.value.replace(/\D/g, ''))}
+                    required
+                    maxLength={8}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="vas@firma.cz"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    <Lock className="h-3.5 w-3.5" /> Heslo
+                  </label>
+                  <PasswordInput
+                    placeholder="alespoň 6 znaků"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    <Lock className="h-3.5 w-3.5" /> Heslo znovu
+                  </label>
+                  <PasswordInput
+                    placeholder="zopakujte heslo"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="h-10"
+                  />
+                </div>
+                {error && (
+                  <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                    {error}
+                  </p>
+                )}
+                <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                  {loading ? 'Odesílám…' : 'Registrovat se jako B2B partner'}
+                </Button>
+              </form>
+
+              <p className="text-[11px] text-muted-foreground text-center leading-relaxed -mt-1">
+                Žádost o B2B schválení odesíláme okamžitě. <strong className="text-foreground">Schválení do 24 hodin</strong> v pracovní dny. Až do schválení máte přístup ke katalogu jako běžný účet.
               </p>
+
+              {/* Switch links */}
+              <div className="text-center text-xs text-muted-foreground space-y-1">
+                <p>
+                  Už máte účet?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('login'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    Přihlásit
+                  </button>
+                </p>
+                <p>
+                  Jen nakouknout do katalogu?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(''); setTab('register'); }}
+                    className="font-semibold text-foreground underline underline-offset-2 hover:text-primary transition-colors"
+                  >
+                    Vytvořit účet zdarma
+                  </button>
+                </p>
+              </div>
             </>
           )}
         </div>

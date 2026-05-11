@@ -527,9 +527,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   const { lang, gatewayOpen, setGatewayOpen } = useStore();
   const g = gateway[lang];
   const [authOpen, setAuthOpen] = useState(false);
-  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+  const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
 
-  const openAuth = (tab: 'login' | 'register') => {
+  const openAuth = (tab: 'login' | 'register' | 'b2b') => {
     setAuthTab(tab);
     setAuthOpen(true);
   };
@@ -686,10 +686,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal delay={240}>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
-                onClick={() => openAuth('register')}
+                onClick={() => openAuth('b2b')}
                 className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
               >
-                Vytvořit účet
+                B2B registrace
               </button>
               <button
                 onClick={() => openAuth('register')}

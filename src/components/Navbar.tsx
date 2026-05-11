@@ -44,9 +44,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+  const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
 
-  const openAuth = (tab: 'login' | 'register') => {
+  const openAuth = (tab: 'login' | 'register' | 'b2b') => {
     setAuthTab(tab);
     setAuthOpen(true);
   };
@@ -353,10 +353,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           {!(user && viewMode === 'catalog' && isOnHomePage) && (
             <Button
               size="sm"
-              onClick={user ? handleCatalogCta : () => openAuth('register')}
+              onClick={user ? handleCatalogCta : () => openAuth('b2b')}
               className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
             >
-              {user ? 'KATALOG 2026' : 'Vytvořit účet'}
+              {user ? 'KATALOG 2026' : 'B2B registrace'}
             </Button>
           )}
         </div>
