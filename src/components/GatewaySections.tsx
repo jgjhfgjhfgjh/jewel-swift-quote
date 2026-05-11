@@ -672,7 +672,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-4 sm:pt-6 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-[60px] sm:pt-[80px] md:pt-[84px] pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
