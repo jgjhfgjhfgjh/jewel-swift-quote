@@ -672,7 +672,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-[60px] sm:pt-[80px] md:pt-[84px] pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
@@ -693,14 +693,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 2) Subtitle — pulled closer to pills as a lead-in */}
+          {/* 2) Subtitle — close to logo, lead-in to pills */}
           <Reveal delay={80}>
-            <h1 className="font-sans mt-[60px] sm:mt-[80px] md:mt-[84px] text-base sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky světových značek jako:
+            <h1 className="font-sans mt-5 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky:
             </h1>
           </Reveal>
 
-          {/* 3) Brand pills — clickable, all screens, where the big logo used to live */}
+          {/* 3) Brand pills — clickable, all screens, tight to subtitle */}
           <Reveal delay={140}>
             <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
               {[
@@ -726,25 +726,25 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 4) Value prop */}
+          {/* 4) Value prop — dominant, vertically centered between pills and bullets */}
           <Reveal delay={200}>
-            <p className="font-sans mt-10 sm:mt-12 text-base sm:text-lg font-semibold text-foreground tracking-tight">
+            <p className="font-sans mt-24 sm:mt-32 md:mt-40 text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">
               Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
             </p>
           </Reveal>
 
-          {/* 5) CTAs */}
+          {/* 5) CTAs — larger, more prominent */}
           <Reveal delay={240}>
-            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
-                className="px-8 py-3 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition min-w-[200px]"
+                className="px-10 py-4 rounded-md bg-primary text-primary-foreground font-bold text-base hover:bg-primary/90 transition min-w-[220px] shadow-sm hover:shadow-md hover:-translate-y-0.5"
               >
                 B2B registrace
               </button>
               <button
                 onClick={() => openAuth('register')}
-                className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
+                className="px-10 py-4 rounded-md border border-border bg-background text-foreground font-bold text-base hover:bg-muted transition min-w-[220px] hover:-translate-y-0.5"
               >
                 Prohlédnout katalog
               </button>
