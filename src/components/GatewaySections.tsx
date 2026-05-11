@@ -699,7 +699,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           <Reveal delay={180}>
             <p className="font-sans mt-0 text-base sm:text-lg font-semibold text-foreground tracking-tight">
-              Přístup k 5 000+ produktům za velkoobchodní ceny
+              Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
             </p>
           </Reveal>
 
