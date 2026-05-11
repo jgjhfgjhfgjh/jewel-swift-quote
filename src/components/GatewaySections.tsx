@@ -726,25 +726,25 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 4) Value prop — dominant, vertically centered between pills and bullets */}
+          {/* 4) Value prop — tight to pills (block moved up) */}
           <Reveal delay={200}>
-            <p className="font-sans mt-24 sm:mt-32 md:mt-40 text-lg sm:text-xl md:text-2xl font-bold text-foreground tracking-tight">
+            <p className="font-sans mt-8 sm:mt-10 text-base sm:text-lg font-semibold text-foreground tracking-tight">
               Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
             </p>
           </Reveal>
 
-          {/* 5) CTAs — larger, more prominent */}
+          {/* 5) CTAs — original compact size */}
           <Reveal delay={240}>
-            <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
-                className="px-10 py-4 rounded-md bg-primary text-primary-foreground font-bold text-base hover:bg-primary/90 transition min-w-[220px] shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                className="px-8 py-3 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition min-w-[200px]"
               >
                 B2B registrace
               </button>
               <button
                 onClick={() => openAuth('register')}
-                className="px-10 py-4 rounded-md border border-border bg-background text-foreground font-bold text-base hover:bg-muted transition min-w-[220px] hover:-translate-y-0.5"
+                className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
               >
                 Prohlédnout katalog
               </button>
