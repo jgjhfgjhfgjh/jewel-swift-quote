@@ -730,22 +730,71 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
         </div>
 
-        {/* Brands list — static grid, desktop only (hidden on mobile) */}
-        <Reveal delay={280}>
-          <div className="hidden sm:block mt-14 sm:mt-20 w-full">
-            <div className="mx-auto max-w-5xl px-6 flex flex-wrap items-center justify-center gap-x-8 md:gap-x-12 gap-y-4 font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/70 tracking-wider">
+        {/* Brand pills — clickable, all screens */}
+        <Reveal delay={260}>
+          <div className="mt-12 sm:mt-16 w-full">
+            <div className="mx-auto max-w-4xl px-6 flex flex-wrap items-center justify-center gap-2">
               {[
-                'SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN',
-                'TISSOT', 'PIERRE LANNIER', 'LONGINES', 'TAG HEUER', 'HAMILTON',
-                'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT',
+                'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
+                'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
+                'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
+                'Pierre Lannier',
               ].map((brand) => (
-                <span key={brand} className="select-none whitespace-nowrap">
+                <button
+                  key={brand}
+                  onClick={() => navigate(`/brands#${brand.toLowerCase().replace(/\s+/g, '-')}`)}
+                  className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs sm:text-sm font-medium text-foreground/75 hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors"
+                >
                   {brand}
-                </span>
+                </button>
               ))}
+              <button
+                onClick={() => navigate('/brands')}
+                className="rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors"
+              >
+                +50 dalších →
+              </button>
             </div>
           </div>
         </Reveal>
+
+        {/* Brands marquee — two rows opposite directions, desktop only */}
+        <Reveal delay={320}>
+          <div className="hidden sm:block mt-12 sm:mt-14 w-full space-y-6">
+            {[
+              ['SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN', 'TISSOT', 'PIERRE LANNIER', 'LONGINES'],
+              ['TAG HEUER', 'HAMILTON', 'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT'],
+            ].map((row, idx) => (
+              <div key={idx} className="relative w-full overflow-hidden">
+                <div
+                  className="flex gap-12 sm:gap-16 whitespace-nowrap"
+                  style={{
+                    animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
+                  }}
+                >
+                  {[...row, ...row, ...row].map((brand, i) => (
+                    <span
+                      key={i}
+                      className="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
+                    >
+                      {brand}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+        <style>{`
+          @keyframes marquee-left {
+            from { transform: translateX(0); }
+            to { transform: translateX(-33.333%); }
+          }
+          @keyframes marquee-right {
+            from { transform: translateX(-33.333%); }
+            to { transform: translateX(0); }
+          }
+        `}</style>
       </section>
 
       {/* ══════════════════════════════════════════

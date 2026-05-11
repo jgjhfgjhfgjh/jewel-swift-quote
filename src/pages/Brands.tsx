@@ -123,9 +123,11 @@ export default function Brands() {
   const navigate = useNavigate();
   const { setGatewayOpen: openAuth } = useStore();
 
-  // Scroll to top on mount (page transitions don't reset scroll by default)
+  // Scroll to top on mount, or to specific brand if URL has hash like #tommy-hilfiger
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    }
   }, []);
 
   useEffect(() => {
@@ -134,6 +136,23 @@ export default function Brands() {
       .then((data) => { setProducts(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  // After products load & render, scroll to anchored brand card if hash present
+  useEffect(() => {
+    if (loading) return;
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
+    // Wait a tick for the grid to paint
+    const timer = setTimeout(() => {
+      const el = document.getElementById(`brand-${hash}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2500);
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   const brands = useMemo<BrandInfo[]>(() => {
     const map = new Map<string, { imgs: string[]; count: number; maxDiscount: number }>();
@@ -232,7 +251,10 @@ export default function Brands() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {filtered.map((brand, i) => (
                   <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
-                    <div className="group flex flex-col rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all cursor-pointer h-full">
+                    <div
+                      id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="group flex flex-col rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all cursor-pointer h-full scroll-mt-28"
+                    >
                       {/* Image */}
                       <div className="relative aspect-square bg-zinc-50 overflow-hidden">
                         {brand.img ? (
