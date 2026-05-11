@@ -230,10 +230,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            <span className="relative ml-0.5 inline-block leading-none">
-              {/* Width placeholder = PARTNER (matches homepage canonical reference) */}
-              <span aria-hidden className={`invisible font-sans font-extrabold text-xs leading-none whitespace-nowrap tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
-              <span className={`absolute left-0 top-0 font-sans font-extrabold text-xs leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+            <span className="relative ml-0.5 inline-block">
+              {/* Width placeholder = PARTNER. NO leading-none (matches homepage suffix exactly). */}
+              <span aria-hidden className={`invisible font-sans font-extrabold text-xs whitespace-nowrap tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
+              <span className={`absolute left-0 top-0 font-sans font-extrabold text-xs tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
                 <RotatingSuffix words={SUFFIX_WORDS} />
               </span>
             </span>
