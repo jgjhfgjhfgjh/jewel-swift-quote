@@ -652,10 +652,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-4 sm:pt-6 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Reveal>
-            <h1 className="font-sans mb-3 sm:mb-4 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+            <h1 className="font-sans mb-16 sm:mb-20 md:mb-24 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
               Evropský velkoobchod hodinkami a šperky světových značek
             </h1>
           </Reveal>
@@ -678,13 +678,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="font-sans mt-8 text-base sm:text-lg font-semibold text-foreground tracking-tight">
+            <p className="font-sans mt-0 text-base sm:text-lg font-semibold text-foreground tracking-tight">
               Přístup k 5 000+ produktům za velkoobchodní ceny
             </p>
           </Reveal>
 
           <Reveal delay={240}>
-            <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('register')}
                 className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
@@ -701,7 +701,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
 
           <Reveal delay={280}>
-            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
               <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
               <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
               <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
