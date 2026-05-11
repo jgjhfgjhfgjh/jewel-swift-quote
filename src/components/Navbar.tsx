@@ -223,19 +223,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <Link
             to="/"
             onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="sm:hidden flex items-baseline select-none ml-0.5"
+            className="sm:hidden flex items-end select-none ml-0.5 leading-none"
             aria-label="swelt.PARTNER — domů"
           >
             <span
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            <span className="relative ml-0.5 inline-block">
-              {/* Width placeholder = PARTNER. NO leading-none (matches homepage suffix exactly). */}
-              <span aria-hidden className={`invisible font-sans font-extrabold text-xs whitespace-nowrap tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
-              <span className={`absolute left-0 top-0 font-sans font-extrabold text-xs tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
-                <RotatingSuffix words={SUFFIX_WORDS} />
-              </span>
+            {/* Suffix — bottom-aligned with swelt (items-end on parent + leading-none + mb-0.5 fine-tune) */}
+            <span className={`font-sans font-extrabold text-xs leading-none tracking-tight ml-0.5 mb-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+              <RotatingSuffix words={SUFFIX_WORDS} />
             </span>
           </Link>
 
