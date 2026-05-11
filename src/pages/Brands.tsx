@@ -251,9 +251,11 @@ export default function Brands() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {filtered.map((brand, i) => (
                   <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
-                    <div
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/brands/${brand.key.toLowerCase().replace(/\s+/g, '-')}`)}
                       id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="group flex flex-col rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all cursor-pointer h-full scroll-mt-28"
+                      className="group flex flex-col text-left w-full rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all cursor-pointer h-full scroll-mt-28"
                     >
                       {/* Image */}
                       <div className="relative aspect-square bg-zinc-50 overflow-hidden">
@@ -283,7 +285,7 @@ export default function Brands() {
                           <p className="text-[11px] text-primary font-semibold mt-0.5">Sleva až {brand.maxDiscount}%</p>
                         )}
                       </div>
-                    </div>
+                    </button>
                   </Reveal>
                 ))}
               </div>
