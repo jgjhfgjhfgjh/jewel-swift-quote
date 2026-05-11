@@ -700,9 +700,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </h1>
           </Reveal>
 
-          {/* 3) Brand pills — clickable, all screens, tight to subtitle */}
+          {/* 3) Brand pills — clickable, all screens, with breathing room from subtitle */}
           <Reveal delay={140}>
-            <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
+            <div className="mt-8 sm:mt-8 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
               {[
                 'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
                 'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
