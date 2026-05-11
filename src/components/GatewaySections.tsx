@@ -672,21 +672,21 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-5 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
             <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
-                className="font-spartan font-extrabold tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
+                className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
                 style={{ letterSpacing: '-0.05em' }}
               >
                 swelt.
               </h1>
               <span className="relative ml-1 sm:ml-2 inline-block">
                 {/* Width placeholder = PARTNER (centerpiece reference) */}
-                <span aria-hidden className="invisible font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
-                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-lg sm:text-2xl md:text-3xl lg:text-4xl">
+                <span aria-hidden className="invisible font-sans font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
+                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl">
                   <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
                 </span>
               </span>
