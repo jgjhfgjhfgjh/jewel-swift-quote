@@ -161,6 +161,33 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Menu className="h-5 w-5" />
           </Button>
 
+          {/* Globe / Language switcher — desktop only, next to hamburger */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 h-9 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-semibold uppercase tracking-wide"
+                title="Jazyk"
+              >
+                <Globe className="h-4 w-4" />
+                <span>{lang}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-44 max-h-[60vh] overflow-y-auto">
+              {ALL_LANGS.map((l) => (
+                <DropdownMenuItem
+                  key={l}
+                  onClick={() => setLang(l)}
+                  className={`gap-2 text-sm cursor-pointer ${l === lang ? 'bg-accent/40 font-semibold' : ''}`}
+                >
+                  <span className="text-base">{flags[l]}</span>
+                  <span>{langNames[l]}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {/* Mobile logo — small, inline left, hidden on sm+ */}
           <Link
             to="/"
