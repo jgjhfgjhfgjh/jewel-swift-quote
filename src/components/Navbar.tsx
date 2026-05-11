@@ -230,8 +230,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            {/* Suffix — bottom-aligned with swelt (items-end on parent + leading-none + mb-0.5 fine-tune) */}
-            <span className={`font-sans font-extrabold text-xs leading-none tracking-tight ml-0.5 mb-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
+            {/* Suffix — proportional to swelt (3.0× ratio like homepage: 24px / 8px) */}
+            <span className={`font-sans font-extrabold text-[8px] leading-none tracking-tight ml-0.5 mb-1 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
               <RotatingSuffix words={SUFFIX_WORDS} />
             </span>
           </Link>
