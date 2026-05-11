@@ -674,12 +674,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       ══════════════════════════════════════════ */}
       <section className="pt-4 sm:pt-6 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
+          {/* 1) Big swelt. logo — at the top */}
           <Reveal>
-            <h1 className="font-sans mb-16 sm:mb-20 md:mb-24 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky světových značek
-            </h1>
-          </Reveal>
-          <Reveal delay={80}>
             <div className="relative inline-flex items-baseline justify-center mx-auto">
               <h1
                 className="font-spartan font-extrabold tracking-tighter text-foreground text-6xl sm:text-8xl md:text-9xl leading-none select-none"
@@ -697,43 +693,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          <Reveal delay={180}>
-            <p className="font-sans mt-0 text-base sm:text-lg font-semibold text-foreground tracking-tight">
-              Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
-            </p>
+          {/* 2) Subtitle */}
+          <Reveal delay={80}>
+            <h1 className="font-sans mt-4 sm:mt-6 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky světových značek
+            </h1>
           </Reveal>
 
-          <Reveal delay={240}>
-            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <button
-                onClick={() => openAuth('b2b')}
-                className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
-              >
-                B2B registrace
-              </button>
-              <button
-                onClick={() => openAuth('register')}
-                className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
-              >
-                Prohlédnout katalog
-              </button>
-            </div>
-          </Reveal>
-
-          <Reveal delay={280}>
-            <ul className="mt-3 sm:mt-[22px] flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
-              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
-              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
-            </ul>
-          </Reveal>
-        </div>
-
-        {/* Brand pills — clickable, all screens */}
-        <Reveal delay={260}>
-          <div className="mt-12 sm:mt-16 w-full">
-            <div className="mx-auto max-w-4xl px-6 flex flex-wrap items-center justify-center gap-2">
+          {/* 3) Brand pills — clickable, all screens, where the big logo used to live */}
+          <Reveal delay={140}>
+            <div className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
               {[
                 'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
                 'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
@@ -755,8 +724,43 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 +50 dalších →
               </button>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+
+          {/* 4) Value prop */}
+          <Reveal delay={200}>
+            <p className="font-sans mt-10 sm:mt-12 text-base sm:text-lg font-semibold text-foreground tracking-tight">
+              Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
+            </p>
+          </Reveal>
+
+          {/* 5) CTAs */}
+          <Reveal delay={240}>
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <button
+                onClick={() => openAuth('b2b')}
+                className="px-8 py-3 rounded-md bg-foreground text-background font-semibold text-sm hover:bg-foreground/90 transition min-w-[200px]"
+              >
+                B2B registrace
+              </button>
+              <button
+                onClick={() => openAuth('register')}
+                className="px-8 py-3 rounded-md border border-border bg-background text-foreground font-semibold text-sm hover:bg-muted transition min-w-[200px]"
+              >
+                Prohlédnout katalog
+              </button>
+            </div>
+          </Reveal>
+
+          {/* 6) Bullets */}
+          <Reveal delay={280}>
+            <ul className="mt-3 sm:mt-[22px] flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
+              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
+              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
+              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
+            </ul>
+          </Reveal>
+        </div>
 
         {/* Brands marquee — two rows opposite directions, desktop only */}
         <Reveal delay={320}>
