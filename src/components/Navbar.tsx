@@ -476,7 +476,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
         side="left"
-        className="w-72 p-0 z-[95]"
+        className="w-72 p-0 z-[95] !top-14 sm:!top-24 !h-[calc(100vh-3.5rem)] sm:!h-[calc(100vh-6rem)]"
         onInteractOutside={(e) => {
           if (desktopMenuButtonRef.current?.contains(e.target as Node)) {
             e.preventDefault();
