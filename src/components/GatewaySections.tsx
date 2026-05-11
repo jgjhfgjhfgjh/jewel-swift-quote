@@ -695,8 +695,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* 2) Subtitle — pulled closer to pills as a lead-in */}
           <Reveal delay={80}>
-            <h1 className="font-sans mt-10 sm:mt-14 md:mt-16 text-base sm:text-lg md:text-xl font-medium text-muted-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky světových značek jako
+            <h1 className="font-sans mt-[60px] sm:mt-[80px] md:mt-[84px] text-base sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Evropský velkoobchod hodinkami a šperky světových značek jako:
             </h1>
           </Reveal>
 
