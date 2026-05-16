@@ -251,7 +251,7 @@ export default function AdminDeals() {
       <Navbar />
       <BackButton />
 
-      <div className="mx-auto max-w-5xl px-6 py-10">
+      <div className="mx-auto max-w-5xl px-6 pb-16 pt-24 sm:pt-32">
         <h1 className="font-display text-3xl font-black text-slate-900">Správa DEAL nabídek</h1>
         <p className="mt-1 text-sm text-slate-500">
           Nahrajte Excel tabulku closeout nabídky — vytvoří se katalog včetně obrázků a FOMO prvků.

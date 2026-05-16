@@ -5,7 +5,7 @@ import { useStore } from '@/lib/store';
 import {
   LayoutDashboard, Package, Zap, BookOpen, ShoppingCart,
   Users, Plug, BarChart2, Settings, ChevronLeft, ChevronRight,
-  Search, Bell, Plus, ChevronDown, Home, Menu, X,
+  Search, Bell, Plus, ChevronDown, Home, Menu, X, Flame,
 } from 'lucide-react';
 
 type NavItem =
@@ -82,6 +82,11 @@ export default function PartnerLayout() {
   if (loading) return null;
   if (!user || (!isB2bApproved && !isAdmin)) return <Navigate to="/login" replace />;
 
+  // Admins get an extra section linking out to the DEAL offers manager.
+  const nav: NavItem[] = isAdmin
+    ? [...NAV, { section: 'Admin' }, { id: 'admin-deals', label: 'DEAL nabídky', icon: Flame, path: '/admin/deals' }]
+    : NAV;
+
   return (
     <div className="partner-app" style={{ display: 'flex', minHeight: '100vh' }}>
 
@@ -131,7 +136,7 @@ export default function PartnerLayout() {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '8px', overflowY: 'auto', overflowX: 'hidden' }}>
-          {NAV.map((item, i) => {
+          {nav.map((item, i) => {
             if ('section' in item) {
               return !collapsed
                 ? <div key={i} style={{

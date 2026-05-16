@@ -116,7 +116,7 @@ export default function DealDetail() {
 
       {/* ── Hero ── */}
       <section className="border-b border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800">
-        <div className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-6 pb-12 pt-24 sm:pb-16 sm:pt-32">
           {deal.supplier && (
             <div className="text-xs font-bold uppercase tracking-wider text-amber-400">
               {d.detail.supplier}: {deal.supplier}
