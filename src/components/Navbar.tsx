@@ -90,7 +90,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const lastScrollY = useRef(0);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
+  const menuOpenRef = useRef(false);
   const [navbarHoverCollapsed, setNavbarHoverCollapsed] = useState(false);
+  // Actual rendered navbar height — drives where the menu drawer starts.
+  const [headerHeight, setHeaderHeight] = useState(0);
   const isHome = viewMode === 'home';
   const isOnHomePage = location.pathname === '/';
 
@@ -109,13 +112,34 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       // When the page is scrolled back to the very top, allow the navbar to
       // re-expand by clearing any wheel-over-navbar collapse override
       if (y === 0) setNavbarHoverCollapsed(false);
-      // Hide on scroll down, show on scroll up — everywhere (including home)
-      setHidden(y > lastScrollY.current && y > 50);
+      // Hide on scroll down, show on scroll up — but never while the menu is
+      // open, so the drawer keeps starting flush against the navbar.
+      setHidden(!menuOpenRef.current && y > lastScrollY.current && y > 50);
       lastScrollY.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Track the real navbar height so the menu drawer can start exactly below it.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const measure = () => setHeaderHeight(el.offsetHeight);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Keep the navbar pinned (visible) the whole time the menu is open.
+  useEffect(() => {
+    menuOpenRef.current = menuOpen;
+    if (menuOpen) {
+      setHidden(false);
+      setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
+    }
+  }, [menuOpen]);
 
   // Wheel over the navbar: don't scroll the page, just drive the navbar
   // collapse/expand. The hero stays exposed so the customer can browse it.
@@ -477,7 +501,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
         side="left"
-        className="flex flex-col w-72 p-0 z-[95] !top-14 sm:!top-24 !h-[calc(100vh-3.5rem)] sm:!h-[calc(100vh-6rem)]"
+        className="flex flex-col w-72 p-0 z-[95]"
+        style={{ top: headerHeight, height: `calc(100dvh - ${headerHeight}px)` }}
         onInteractOutside={(e) => {
           if (desktopMenuButtonRef.current?.contains(e.target as Node)) {
             e.preventDefault();
