@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, LayoutDashboard, Flame } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ interface NavbarProps {
 }
 
 const HOME_NAV_ITEMS = [
+  { path: '/deals', label: 'DEAL nabídky', icon: Flame },
   { path: '/velkoobchod', label: 'Velkoobchod', icon: Handshake },
   { path: '/luxury', label: 'Nákup bez registrace', icon: HandCoins },
   { path: '/feed', label: 'Feed', icon: Rss },
@@ -544,6 +545,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <div className="border-t my-2" />
               <button onClick={() => { setMenuOpen(false); navigate('/customers'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
                 <Users className="h-4 w-4 text-muted-foreground" /> Správa zákazníků
+              </button>
+              <button onClick={() => { setMenuOpen(false); navigate('/admin/deals'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <Flame className="h-4 w-4 text-muted-foreground" /> Správa DEAL nabídek
               </button>
             </>
           )}

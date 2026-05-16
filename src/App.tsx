@@ -29,6 +29,9 @@ import Luxury from "./pages/Luxury.tsx";
 import Shop from "./pages/Shop.tsx";
 import Brands from "./pages/Brands.tsx";
 import BrandDetail from "./pages/BrandDetail.tsx";
+import Deals from "./pages/Deals.tsx";
+import DealDetail from "./pages/DealDetail.tsx";
+import AdminDeals from "./pages/admin/AdminDeals.tsx";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +69,10 @@ const App = () => (
             <Route path="/luxury" element={<Luxury />} />
             <Route path="/brands" element={<Brands />} />
             <Route path="/brands/:slug" element={<BrandDetail />} />
+            {/* DEAL offers — closeout catalogs */}
+            <Route path="/deals" element={<Deals />} />
+            <Route path="/deals/:slug" element={<DealDetail />} />
+            <Route path="/admin/deals" element={<AdminDeals />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

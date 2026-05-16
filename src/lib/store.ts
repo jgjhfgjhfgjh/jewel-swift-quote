@@ -23,6 +23,13 @@ interface AppState {
   setItemDiscount: (productId: string, percent: number | undefined) => void;
   clearCart: () => void;
 
+  // Deal order carts — keyed by dealId, then productId -> quantity.
+  dealCart: Record<string, Record<string, number>>;
+  setDealItemQty: (dealId: string, productId: string, qty: number) => void;
+  addDealItem: (dealId: string, productId: string) => void;
+  removeDealItem: (dealId: string, productId: string) => void;
+  clearDealCart: (dealId: string) => void;
+
   // Individual product discount overrides (single source of truth)
   productDiscounts: Record<string, number>;
   setProductDiscount: (productId: string, percent: number | undefined) => void;
@@ -110,6 +117,32 @@ export const useStore = create<AppState>()(
         };
       }),
       clearCart: () => set({ cart: [] }),
+
+      dealCart: {},
+      setDealItemQty: (dealId, productId, qty) => set((s) => {
+        const deal = { ...(s.dealCart[dealId] ?? {}) };
+        if (qty <= 0) {
+          delete deal[productId];
+        } else {
+          deal[productId] = qty;
+        }
+        return { dealCart: { ...s.dealCart, [dealId]: deal } };
+      }),
+      addDealItem: (dealId, productId) => set((s) => {
+        const deal = { ...(s.dealCart[dealId] ?? {}) };
+        deal[productId] = (deal[productId] ?? 0) + 1;
+        return { dealCart: { ...s.dealCart, [dealId]: deal } };
+      }),
+      removeDealItem: (dealId, productId) => set((s) => {
+        const deal = { ...(s.dealCart[dealId] ?? {}) };
+        delete deal[productId];
+        return { dealCart: { ...s.dealCart, [dealId]: deal } };
+      }),
+      clearDealCart: (dealId) => set((s) => {
+        const next = { ...s.dealCart };
+        delete next[dealId];
+        return { dealCart: next };
+      }),
 
       productDiscounts: {},
       setProductDiscount: (id, percent) => set((s) => {
@@ -208,6 +241,7 @@ export const useStore = create<AppState>()(
         lang: state.lang,
         isAdmin: state.isAdmin,
         cart: state.cart,
+        dealCart: state.dealCart,
         brandDiscounts: state.brandDiscounts,
         productDiscounts: state.productDiscounts,
         // Filters intentionally NOT persisted — start fresh each session
