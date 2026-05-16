@@ -477,17 +477,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
         side="left"
-        className="w-72 p-0 z-[95] !top-14 sm:!top-24 !h-[calc(100vh-3.5rem)] sm:!h-[calc(100vh-6rem)]"
+        className="flex flex-col w-72 p-0 z-[95] !top-14 sm:!top-24 !h-[calc(100vh-3.5rem)] sm:!h-[calc(100vh-6rem)]"
         onInteractOutside={(e) => {
           if (desktopMenuButtonRef.current?.contains(e.target as Node)) {
             e.preventDefault();
           }
         }}
       >
-        <SheetHeader className="px-4 py-4 border-b">
+        <SheetHeader className="px-4 py-4 border-b shrink-0">
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
-        <nav className="flex flex-col py-2">
+        <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto py-2">
           {/* Primary services — same items as desktop row 2 (Velkoobchod, Feed, ...) */}
           {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
             <button
