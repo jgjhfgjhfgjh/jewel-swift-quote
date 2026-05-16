@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
@@ -54,8 +54,21 @@ export default function DealDetail() {
   const [search, setSearch] = useState('');
   const [detailProduct, setDetailProduct] = useState<DealProduct | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
+  const [barHidden, setBarHidden] = useState(false);
+  const lastScrollRef = useRef(0);
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  // Hide the filter bar on scroll-down, reveal on scroll-up — like the navbar.
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setBarHidden(y > lastScrollRef.current && y > 140);
+      lastScrollRef.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const cart = (deal && dealCart[deal.id]) || {};
   const totalQty = useMemo(() => Object.values(cart).reduce((s, q) => s + q, 0), [cart]);
@@ -194,8 +207,30 @@ export default function DealDetail() {
         )}
       </section>
 
+      {/* ── Conditions (right under the FOMO elements) ── */}
+      <section className="mx-auto max-w-7xl px-6 pb-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <h3 className="mb-4 font-display text-lg font-black text-slate-900">{d.conditions.heading}</h3>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Condition icon={Truck} text={`${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}`} />
+            <Condition icon={CreditCard} text={lang === 'cs'
+              ? `Záloha ${deal.deposit_percent} % bankovním převodem`
+              : `${deal.deposit_percent} % deposit by bank transfer`} />
+            <Condition icon={ListOrdered} text={d.conditions.items[4].desc} />
+          </div>
+          {deal.payment_terms && (
+            <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500">
+              {deal.payment_terms}
+            </p>
+          )}
+        </div>
+      </section>
+
       {/* ── Sticky filter bar ── */}
-      <div className="sticky top-14 z-30 border-y border-slate-200 bg-slate-50/95 backdrop-blur sm:top-24">
+      <div
+        className={`sticky top-14 z-30 border-y border-slate-200 bg-slate-50/95 backdrop-blur transition-transform duration-300 sm:top-24
+          ${barHidden ? '-translate-y-[140%]' : 'translate-y-0'}`}
+      >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-6 py-3">
           <div className="relative min-w-[180px] flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -262,25 +297,6 @@ export default function DealDetail() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* ── Conditions ── */}
-      <section className="mx-auto max-w-7xl px-6 pb-10">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h3 className="mb-4 font-display text-lg font-black text-slate-900">{d.conditions.heading}</h3>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Condition icon={Truck} text={`${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}`} />
-            <Condition icon={CreditCard} text={lang === 'cs'
-              ? `Záloha ${deal.deposit_percent} % bankovním převodem`
-              : `${deal.deposit_percent} % deposit by bank transfer`} />
-            <Condition icon={ListOrdered} text={d.conditions.items[4].desc} />
-          </div>
-          {deal.payment_terms && (
-            <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500">
-              {deal.payment_terms}
-            </p>
-          )}
-        </div>
       </section>
 
       {/* ── Sticky order bar ── */}
