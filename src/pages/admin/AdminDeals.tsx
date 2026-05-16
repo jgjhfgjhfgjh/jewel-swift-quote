@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   Upload, FileSpreadsheet, Loader2, CheckCircle2, AlertTriangle, Trash2,
-  Eye, EyeOff, ExternalLink, Plus, X,
+  Eye, EyeOff, ExternalLink, Plus, X, Pencil, Save,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -12,7 +12,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import {
   dealsTable, dealProductsTable, slugify, DEFAULT_TIERS,
-  type DealTier, type DealCategory, type DealStatus,
+  type Deal, type DealTier, type DealCategory, type DealStatus,
 } from '@/lib/deals';
 import { useDeals } from '@/hooks/useDeals';
 import { parseXlsx } from '@/lib/xlsxReader';
@@ -51,6 +51,30 @@ const emptyForm = (): FormState => ({
   tiers: DEFAULT_TIERS.map((t) => ({ ...t })),
 });
 
+/** ISO timestamp → value for an <input type="datetime-local">. */
+function toDatetimeLocal(iso: string): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/** Prefill the form from an existing deal for editing. */
+function formFromDeal(deal: Deal): FormState {
+  return {
+    title: deal.title,
+    subtitle: deal.subtitle,
+    supplier: deal.supplier,
+    category: deal.category,
+    deadline: toDatetimeLocal(deal.deadline),
+    deposit: deal.deposit_percent,
+    weeksMin: deal.delivery_weeks_min,
+    weeksMax: deal.delivery_weeks_max,
+    paymentTerms: deal.payment_terms,
+    status: deal.status,
+    tiers: deal.tiers.map((t) => ({ ...t })),
+  };
+}
+
 /** Run async workers over a list with a fixed concurrency limit. */
 async function runPool<T>(
   items: T[],
@@ -78,6 +102,7 @@ export default function AdminDeals() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [parsed, setParsed] = useState<DealParseResult | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [phase, setPhase] = useState<'idle' | 'parsing' | 'ready' | 'publishing'>('idle');
   const [progress, setProgress] = useState<{ stage: string; current: number; total: number }>({
     stage: '', current: 0, total: 0,
@@ -99,6 +124,26 @@ export default function AdminDeals() {
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  const resetForm = () => {
+    setForm(emptyForm());
+    setParsed(null);
+    setParseError(null);
+    setEditingId(null);
+    setPhase('idle');
+    setProgress({ stage: '', current: 0, total: 0 });
+    if (fileInput.current) fileInput.current.value = '';
+  };
+
+  const startEdit = (deal: Deal) => {
+    setEditingId(deal.id);
+    setForm(formFromDeal(deal));
+    setParsed(null);
+    setParseError(null);
+    setPhase('ready');
+    if (fileInput.current) fileInput.current.value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // ── parse uploaded workbook ─────────────────────────────
   const handleFile = async (file: File) => {
     setPhase('parsing');
@@ -116,28 +161,88 @@ export default function AdminDeals() {
       setPhase('ready');
     } catch (e) {
       setParseError(e instanceof Error ? e.message : 'Soubor se nepodařilo zpracovat.');
-      setPhase('idle');
+      setPhase(editingId ? 'ready' : 'idle');
     }
   };
 
-  // ── publish ─────────────────────────────────────────────
-  const handlePublish = async () => {
-    if (!parsed || !form.title.trim()) {
-      toast.error('Vyplňte název nabídky a nahrajte tabulku.');
+  /** Upload parsed product images and insert deal_products for a deal. */
+  const uploadAndInsertProducts = async (dealId: string) => {
+    if (!parsed) return;
+    setProgress({ stage: 'Nahrávám obrázky', current: 0, total: parsed.products.length });
+    const imageUrls: (string | null)[] = new Array(parsed.products.length).fill(null);
+    let done = 0;
+    await runPool(parsed.products, async (p, i) => {
+      if (p.image) {
+        const safeSku = (p.sku || String(i)).replace(/[^A-Za-z0-9_-]/g, '');
+        const path = `${dealId}/${i}-${safeSku}.${p.image.ext}`;
+        const { error } = await supabase.storage
+          .from(BUCKET)
+          .upload(path, p.image.blob, { contentType: p.image.blob.type, upsert: true });
+        if (!error) {
+          imageUrls[i] = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+          return;
+        }
+      }
+      imageUrls[i] = p.cdnUrl || null;
+    }, 8, () => {
+      done++;
+      if (done % 5 === 0 || done === parsed.products.length) {
+        setProgress({ stage: 'Nahrávám obrázky', current: done, total: parsed.products.length });
+      }
+    });
+
+    const rows = parsed.products.map((p, i) => ({
+      deal_id: dealId,
+      brand: p.brand,
+      sku: p.sku,
+      ean: p.ean,
+      gender: p.gender,
+      collection: p.collection,
+      item_status: p.item_status,
+      attr_movement: p.attr_movement,
+      attr_material: p.attr_material,
+      attr_size: p.attr_size,
+      retail_price: p.retail_price,
+      wholesale_tier1: p.wholesale_tier1,
+      wholesale_tier2: p.wholesale_tier2,
+      wholesale_tier3: p.wholesale_tier3,
+      available: p.available,
+      image_url: imageUrls[i],
+      sort_order: p.sort_order,
+    }));
+    const CHUNK = 200;
+    for (let i = 0; i < rows.length; i += CHUNK) {
+      setProgress({ stage: 'Ukládám produkty', current: i, total: rows.length });
+      const { error } = await dealProductsTable().insert(rows.slice(i, i + CHUNK));
+      if (error) throw new Error('Uložení produktů selhalo: ' + error.message);
+    }
+  };
+
+  /** Remove a deal's stored images (used before replacing products). */
+  const clearDealImages = async (dealId: string) => {
+    const { data: files } = await supabase.storage.from(BUCKET).list(dealId);
+    if (files?.length) {
+      await supabase.storage.from(BUCKET).remove(files.map((f) => `${dealId}/${f.name}`));
+    }
+  };
+
+  // ── create / save ───────────────────────────────────────
+  const handleSave = async () => {
+    if (!form.title.trim()) {
+      toast.error('Vyplňte název nabídky.');
+      return;
+    }
+    if (!editingId && !parsed) {
+      toast.error('Nahrajte Excel tabulku s produkty.');
       return;
     }
     setPhase('publishing');
     try {
-      // 1) create the deal row (retry slug on collision)
-      let slug = slugify(form.title);
-      const dealPayload = {
+      const base = {
         title: form.title.trim(),
         subtitle: form.subtitle.trim(),
         supplier: form.supplier.trim(),
         category: form.category,
-        description: '',
-        brands: parsed.brands,
-        currency: 'USD',
         tiers: form.tiers,
         deposit_percent: form.deposit,
         delivery_weeks_min: form.weeksMin,
@@ -145,83 +250,44 @@ export default function AdminDeals() {
         payment_terms: form.paymentTerms.trim(),
         deadline: new Date(form.deadline).toISOString(),
         status: form.status,
-        created_by: user.id,
       };
 
-      let dealId = '';
-      for (let attempt = 0; attempt < 4 && !dealId; attempt++) {
-        const trySlug = attempt === 0 ? slug : `${slug}-${Date.now().toString(36).slice(-4)}`;
-        const { data, error } = await dealsTable()
-          .insert({ ...dealPayload, slug: trySlug })
-          .select('id, slug')
-          .single();
-        if (!error && data) { dealId = data.id; slug = data.slug; break; }
-        if (error && error.code !== '23505') throw new Error(error.message);
-      }
-      if (!dealId) throw new Error('Nepodařilo se vytvořit nabídku (slug).');
-
-      // 2) upload product images
-      setProgress({ stage: 'Nahrávám obrázky', current: 0, total: parsed.products.length });
-      const imageUrls: (string | null)[] = new Array(parsed.products.length).fill(null);
-      let done = 0;
-      await runPool(parsed.products, async (p, i) => {
-        if (p.image) {
-          const safeSku = (p.sku || String(i)).replace(/[^A-Za-z0-9_-]/g, '');
-          const path = `${dealId}/${i}-${safeSku}.${p.image.ext}`;
-          const { error } = await supabase.storage
-            .from(BUCKET)
-            .upload(path, p.image.blob, { contentType: p.image.blob.type, upsert: true });
-          if (!error) {
-            imageUrls[i] = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
-            return;
-          }
+      if (editingId) {
+        // ── update existing deal ──
+        const patch = parsed ? { ...base, brands: parsed.brands } : base;
+        const { error } = await dealsTable().update(patch).eq('id', editingId);
+        if (error) throw new Error(error.message);
+        if (parsed) {
+          // replacing the product table: drop old images + rows, insert new
+          await clearDealImages(editingId);
+          await dealProductsTable().delete().eq('deal_id', editingId);
+          await uploadAndInsertProducts(editingId);
         }
-        imageUrls[i] = p.cdnUrl || null;
-      }, 8, () => {
-        done++;
-        if (done % 5 === 0 || done === parsed.products.length) {
-          setProgress({ stage: 'Nahrávám obrázky', current: done, total: parsed.products.length });
+        toast.success('Nabídka upravena', { description: form.title });
+      } else {
+        // ── create new deal ──
+        const slug = slugify(form.title);
+        let dealId = '';
+        for (let attempt = 0; attempt < 4 && !dealId; attempt++) {
+          const trySlug = attempt === 0 ? slug : `${slug}-${Date.now().toString(36).slice(-4)}`;
+          const { data, error } = await dealsTable()
+            .insert({ ...base, slug: trySlug, description: '', currency: 'USD', brands: parsed!.brands, created_by: user.id })
+            .select('id')
+            .single();
+          if (!error && data) { dealId = data.id; break; }
+          if (error && error.code !== '23505') throw new Error(error.message);
         }
-      });
-
-      // 3) insert deal_products in chunks
-      const rows = parsed.products.map((p, i) => ({
-        deal_id: dealId,
-        brand: p.brand,
-        sku: p.sku,
-        ean: p.ean,
-        gender: p.gender,
-        collection: p.collection,
-        item_status: p.item_status,
-        attr_movement: p.attr_movement,
-        attr_material: p.attr_material,
-        attr_size: p.attr_size,
-        retail_price: p.retail_price,
-        wholesale_tier1: p.wholesale_tier1,
-        wholesale_tier2: p.wholesale_tier2,
-        wholesale_tier3: p.wholesale_tier3,
-        available: p.available,
-        image_url: imageUrls[i],
-        sort_order: p.sort_order,
-      }));
-      const CHUNK = 200;
-      for (let i = 0; i < rows.length; i += CHUNK) {
-        setProgress({ stage: 'Ukládám produkty', current: i, total: rows.length });
-        const { error } = await dealProductsTable().insert(rows.slice(i, i + CHUNK));
-        if (error) throw new Error('Uložení produktů selhalo: ' + error.message);
+        if (!dealId) throw new Error('Nepodařilo se vytvořit nabídku (slug).');
+        await uploadAndInsertProducts(dealId);
+        toast.success('Nabídka publikována', {
+          description: `${form.title} — ${parsed!.products.length} produktů`,
+        });
       }
 
-      toast.success('Nabídka publikována', {
-        description: `${form.title} — ${rows.length} produktů`,
-      });
-      setForm(emptyForm());
-      setParsed(null);
-      setPhase('idle');
-      setProgress({ stage: '', current: 0, total: 0 });
-      if (fileInput.current) fileInput.current.value = '';
+      resetForm();
       reload();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Publikování selhalo.');
+      toast.error(e instanceof Error ? e.message : 'Uložení selhalo.');
       setPhase('ready');
     }
   };
@@ -235,16 +301,18 @@ export default function AdminDeals() {
 
   const deleteDeal = async (id: string, title: string) => {
     if (!window.confirm(`Smazat nabídku „${title}" včetně všech produktů?`)) return;
-    const { data: files } = await supabase.storage.from(BUCKET).list(id);
-    if (files?.length) {
-      await supabase.storage.from(BUCKET).remove(files.map((f) => `${id}/${f.name}`));
-    }
+    await clearDealImages(id);
     const { error } = await dealsTable().delete().eq('id', id);
     if (error) toast.error(error.message);
-    else { toast.success('Nabídka smazána'); reload(); }
+    else {
+      toast.success('Nabídka smazána');
+      if (editingId === id) resetForm();
+      reload();
+    }
   };
 
   const busy = phase === 'publishing' || phase === 'parsing';
+  const showForm = !!parsed || !!editingId;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 font-sans">
@@ -259,7 +327,17 @@ export default function AdminDeals() {
 
         {/* ── Upload + form ── */}
         <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
-          <h2 className="mb-4 font-display text-lg font-black text-slate-900">Nová nabídka</h2>
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-black text-slate-900">
+              {editingId ? 'Upravit nabídku' : 'Nová nabídka'}
+            </h2>
+            {editingId && (
+              <button onClick={resetForm} disabled={busy}
+                className="text-xs font-semibold text-slate-500 hover:text-slate-900">
+                + Nová nabídka místo úprav
+              </button>
+            )}
+          </div>
 
           {/* dropzone */}
           <label
@@ -287,9 +365,15 @@ export default function AdminDeals() {
                 ? 'Zpracovávám tabulku…'
                 : parsed
                   ? `Načteno: ${parsed.products.length} produktů, ${parsed.brands.length} značek`
-                  : 'Klikněte a vyberte .xlsx soubor nabídky'}
+                  : editingId
+                    ? 'Nahradit produkty — klikněte a vyberte nový .xlsx (volitelné)'
+                    : 'Klikněte a vyberte .xlsx soubor nabídky'}
             </div>
-            {!parsed && <div className="text-xs text-slate-400">Excel tabulka closeout nabídky (DEAL Offer …)</div>}
+            <div className="text-xs text-slate-400">
+              {editingId && !parsed
+                ? 'Bez nahrání nového souboru zůstanou stávající produkty beze změny.'
+                : 'Excel tabulka closeout nabídky (DEAL Offer …)'}
+            </div>
           </label>
 
           {parseError && (
@@ -314,6 +398,12 @@ export default function AdminDeals() {
                       <AlertTriangle className="h-3.5 w-3.5 shrink-0" /> {w}
                     </div>
                   ))}
+                </div>
+              )}
+              {editingId && (
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                  Uložením se stávající produkty této nabídky nahradí novými.
                 </div>
               )}
               <div className="mt-3 flex flex-wrap gap-1.5">
@@ -352,8 +442,12 @@ export default function AdminDeals() {
                   </tbody>
                 </table>
               </div>
+            </>
+          )}
 
-              {/* metadata form */}
+          {/* metadata form */}
+          {showForm && (
+            <>
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <Field label="Název nabídky *">
                   <input className={inputCls} value={form.title}
@@ -426,17 +520,18 @@ export default function AdminDeals() {
                     </button>
                   </div>
                 </Field>
-                <Field label="Stav po publikaci">
+                <Field label="Stav">
                   <select className={inputCls} value={form.status}
                     onChange={(e) => set('status', e.target.value as DealStatus)}>
                     <option value="active">Aktivní (viditelná)</option>
                     <option value="draft">Koncept (skrytá)</option>
+                    <option value="ended">Ukončená</option>
                   </select>
                 </Field>
               </div>
 
-              {/* publish */}
-              {phase === 'publishing' && (
+              {/* progress */}
+              {phase === 'publishing' && progress.total > 0 && (
                 <div className="mt-5">
                   <div className="mb-1 flex justify-between text-xs font-semibold text-slate-500">
                     <span>{progress.stage}…</span>
@@ -450,13 +545,14 @@ export default function AdminDeals() {
               )}
 
               <div className="mt-5 flex gap-3">
-                <Button onClick={handlePublish} disabled={busy} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+                <Button onClick={handleSave} disabled={busy} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
                   {phase === 'publishing'
-                    ? <><Loader2 className="h-4 w-4 animate-spin" /> Publikuji…</>
-                    : <><Upload className="h-4 w-4" /> Publikovat nabídku</>}
+                    ? <><Loader2 className="h-4 w-4 animate-spin" /> Ukládám…</>
+                    : editingId
+                      ? <><Save className="h-4 w-4" /> Uložit změny</>
+                      : <><Upload className="h-4 w-4" /> Publikovat nabídku</>}
                 </Button>
-                <Button variant="outline" disabled={busy}
-                  onClick={() => { setParsed(null); setForm(emptyForm()); setPhase('idle'); if (fileInput.current) fileInput.current.value = ''; }}>
+                <Button variant="outline" disabled={busy} onClick={resetForm}>
                   Zrušit
                 </Button>
               </div>
@@ -478,11 +574,18 @@ export default function AdminDeals() {
           ) : (
             <div className="space-y-2">
               {deals.map((deal) => (
-                <div key={deal.id} className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-4">
+                <div key={deal.id}
+                  className={`flex flex-wrap items-center gap-3 rounded-xl border bg-white p-4
+                    ${editingId === deal.id ? 'border-emerald-400 ring-1 ring-emerald-200' : 'border-slate-200'}`}>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="truncate font-semibold text-slate-900">{deal.title}</span>
                       <StatusBadge status={deal.status} />
+                      {editingId === deal.id && (
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                          UPRAVUJETE
+                        </span>
+                      )}
                     </div>
                     <div className="mt-0.5 text-xs text-slate-400">
                       {productCounts[deal.id] ?? 0} produktů · {deal.brands.length} značek ·
@@ -498,12 +601,16 @@ export default function AdminDeals() {
                     <option value="active">Aktivní</option>
                     <option value="ended">Ukončená</option>
                   </select>
+                  <button onClick={() => startEdit(deal)} disabled={busy}
+                    title="Upravit" className="rounded-lg p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-40">
+                    <Pencil className="h-4 w-4" />
+                  </button>
                   <button onClick={() => navigate(`/deals/${deal.slug}`)}
                     title="Zobrazit" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
                     <ExternalLink className="h-4 w-4" />
                   </button>
-                  <button onClick={() => deleteDeal(deal.id, deal.title)}
-                    title="Smazat" className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600">
+                  <button onClick={() => deleteDeal(deal.id, deal.title)} disabled={busy}
+                    title="Smazat" className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-40">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
