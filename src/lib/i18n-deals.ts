@@ -19,11 +19,22 @@ export interface DealsText {
     backToDeals: string;
     supplier: string;
     catalogHeading: string;
-    filterAll: string;
     searchPlaceholder: string;
     noMatch: string;
     loginToOrder: string;
     closedNotice: string;
+    results: string;
+    clearFilters: string;
+  };
+  // filter field labels (catalog filter bar)
+  filters: {
+    brand: string;
+    gender: string;
+    collection: string;
+    type: string;
+    material: string;
+    size: string;
+    all: string; // "all" prefix shown inside selects
   };
   countdown: { label: string; closed: string; days: string; hours: string; minutes: string; seconds: string };
   progress: {
@@ -31,12 +42,12 @@ export interface DealsText {
     minOrder: string;
     pcs: string;
     validUnlocked: string;
-    needMoreForValid: string; // {n}
-    unlockNext: string;       // {n} {percent}
-    topReached: string;       // {percent}
+    needMoreForValid: string;
+    unlockNext: string;
+    topReached: string;
     currentDiscount: string;
-    tierUnlocked: string;     // {percent}
-    tierLocked: string;       // {qty}
+    tierUnlocked: string;
+    tierLocked: string;
   };
   orderBar: {
     items: string;
@@ -44,10 +55,13 @@ export interface DealsText {
     margin: string;
     discount: string;
     submit: string;
-    submitLocked: string; // {n}
+    submitLocked: string;
     empty: string;
+    openCart: string;
   };
-  product: { rrp: string; yourPrice: string; inStock: string; soldOut: string; margin: string; add: string; perPc: string };
+  product: { rrp: string; yourPrice: string; inStock: string; soldOut: string; margin: string; marginTotal: string; add: string; perPc: string; voc: string; moc: string; detail: string };
+  cart: { title: string; empty: string; clear: string; remove: string; total: string; submit: string };
+  modal: { availability: string; sku: string; ean: string; priceTiers: string; tier: string; close: string };
 }
 
 const cs: DealsText = {
@@ -95,11 +109,21 @@ const cs: DealsText = {
     backToDeals: 'Zpět na nabídky',
     supplier: 'Dodavatel',
     catalogHeading: 'Katalog nabídky',
-    filterAll: 'Všechny značky',
     searchPlaceholder: 'Hledat model, SKU, EAN…',
     noMatch: 'Žádný model neodpovídá filtru.',
     loginToOrder: 'Pro objednání a zobrazení cen se přihlaste.',
     closedNotice: 'Tato nabídka je uzavřená — objednávky již nelze zadávat.',
+    results: 'modelů',
+    clearFilters: 'Zrušit filtry',
+  },
+  filters: {
+    brand: 'Značka',
+    gender: 'Pohlaví',
+    collection: 'Kolekce',
+    type: 'Typ',
+    material: 'Materiál',
+    size: 'Velikost',
+    all: 'Vše',
   },
   countdown: {
     label: 'Nabídka končí za', closed: 'Nabídka uzavřena',
@@ -125,10 +149,20 @@ const cs: DealsText = {
     submit: 'Odeslat poptávku',
     submitLocked: 'Přidejte ještě {n} ks',
     empty: 'Vyberte modely a sestavte objednávku.',
+    openCart: 'Zobrazit košík',
   },
   product: {
     rrp: 'RRP', yourPrice: 'Vaše cena', inStock: 'skladem', soldOut: 'Vyprodáno',
-    margin: 'Marže', add: 'Přidat', perPc: 'za ks',
+    margin: 'Marže', marginTotal: 'Marže celkem', add: 'Přidat', perPc: 'za ks',
+    voc: 'VOC', moc: 'MOC', detail: 'Detail produktu',
+  },
+  cart: {
+    title: 'Objednávka nabídky', empty: 'Zatím jste nevybrali žádné modely.',
+    clear: 'Vyprázdnit', remove: 'Odebrat', total: 'Celkem', submit: 'Odeslat poptávku',
+  },
+  modal: {
+    availability: 'Dostupnost', sku: 'SKU', ean: 'EAN',
+    priceTiers: 'Ceny dle množství', tier: 'od {qty} ks', close: 'Zavřít',
   },
 };
 
@@ -177,11 +211,21 @@ const en: DealsText = {
     backToDeals: 'Back to offers',
     supplier: 'Supplier',
     catalogHeading: 'Offer catalog',
-    filterAll: 'All brands',
     searchPlaceholder: 'Search model, SKU, EAN…',
     noMatch: 'No model matches the filter.',
     loginToOrder: 'Sign in to order and see prices.',
     closedNotice: 'This offer is closed — orders can no longer be placed.',
+    results: 'models',
+    clearFilters: 'Clear filters',
+  },
+  filters: {
+    brand: 'Brand',
+    gender: 'Gender',
+    collection: 'Collection',
+    type: 'Type',
+    material: 'Material',
+    size: 'Size',
+    all: 'All',
   },
   countdown: {
     label: 'Offer ends in', closed: 'Offer closed',
@@ -207,10 +251,20 @@ const en: DealsText = {
     submit: 'Send enquiry',
     submitLocked: 'Add {n} more pcs',
     empty: 'Pick models and build your order.',
+    openCart: 'View cart',
   },
   product: {
     rrp: 'RRP', yourPrice: 'Your price', inStock: 'in stock', soldOut: 'Sold out',
-    margin: 'Margin', add: 'Add', perPc: 'per pc',
+    margin: 'Margin', marginTotal: 'Total margin', add: 'Add', perPc: 'per pc',
+    voc: 'Cost', moc: 'RRP', detail: 'Product detail',
+  },
+  cart: {
+    title: 'Offer order', empty: 'You have not picked any models yet.',
+    clear: 'Clear', remove: 'Remove', total: 'Total', submit: 'Send enquiry',
+  },
+  modal: {
+    availability: 'Availability', sku: 'SKU', ean: 'EAN',
+    priceTiers: 'Prices by quantity', tier: 'from {qty} pcs', close: 'Close',
   },
 };
 

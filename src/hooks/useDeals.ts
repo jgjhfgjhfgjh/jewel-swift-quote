@@ -72,13 +72,24 @@ export function useDeal(slug: string | undefined) {
       return;
     }
     const normalized = normalizeDeal(dealRow as Record<string, unknown>);
-    const { data: prodRows, error: prodErr } = await dealProductsTable()
-      .select('*')
-      .eq('deal_id', normalized.id)
-      .order('sort_order', { ascending: true });
+    // Paginate — PostgREST caps each response at 1000 rows.
+    const PAGE = 1000;
+    const all: DealProduct[] = [];
+    let prodErr: string | null = null;
+    for (let from = 0; ; from += PAGE) {
+      const { data, error: pErr } = await dealProductsTable()
+        .select('*')
+        .eq('deal_id', normalized.id)
+        .order('sort_order', { ascending: true })
+        .range(from, from + PAGE - 1);
+      if (pErr) { prodErr = pErr.message; break; }
+      const chunk = (data as DealProduct[]) ?? [];
+      all.push(...chunk);
+      if (chunk.length < PAGE) break;
+    }
     setDeal(normalized);
-    setProducts((prodRows as DealProduct[]) ?? []);
-    setError(prodErr?.message ?? null);
+    setProducts(all);
+    setError(prodErr);
     setLoading(false);
   }, [slug]);
 
