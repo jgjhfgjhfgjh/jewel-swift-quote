@@ -29,6 +29,9 @@ function money(currency: string, value: number): string {
   return `${symbol}${value.toLocaleString('cs-CZ', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
+// Catalog renders incrementally — this many cards are added per scroll batch.
+const PAGE_SIZE = 60;
+
 export default function DealDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -46,8 +49,10 @@ export default function DealDetail() {
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const lastScrollRef = useRef(0);
   const flowBarRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
@@ -107,6 +112,23 @@ export default function DealDetail() {
         .some((f) => f && f.toLowerCase().includes(q));
     });
   }, [products, filters, search]);
+
+  // Incremental rendering — keeps the DOM small so mobile scrolling stays smooth.
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filtered]);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
+        }
+      },
+      { rootMargin: '800px 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [filtered.length, visibleCount]);
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length + (search.trim() ? 1 : 0);
 
@@ -175,11 +197,11 @@ export default function DealDetail() {
       <section className="border-b border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="mx-auto max-w-7xl px-6 pb-10 pt-24 sm:pb-12 sm:pt-32">
           {deal.supplier && (
-            <div className="text-xs font-bold uppercase tracking-wider text-amber-400">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
               {d.detail.supplier}: {deal.supplier}
             </div>
           )}
-          <h1 className="mt-2 font-display text-3xl font-black text-white sm:text-5xl">{deal.title}</h1>
+          <h1 className="mt-2 font-sans text-3xl font-bold text-white sm:text-5xl">{deal.title}</h1>
           {deal.subtitle && <p className="mt-3 max-w-2xl text-slate-300">{deal.subtitle}</p>}
           {deal.brands.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
@@ -207,7 +229,7 @@ export default function DealDetail() {
           <MinOrderProgress tiers={deal.tiers} qty={totalQty} />
         </div>
         {!user && (
-          <div className="mt-3 rounded-xl bg-amber-50 px-4 py-3 text-xs font-medium text-amber-700">
+          <div className="mt-3 rounded-xl bg-slate-100 px-4 py-3 text-xs font-medium text-slate-700">
             {d.detail.loginToOrder}
           </div>
         )}
@@ -216,7 +238,7 @@ export default function DealDetail() {
       {/* ── Conditions ── */}
       <section className="mx-auto max-w-7xl px-6 pb-6">
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h3 className="mb-4 font-display text-lg font-black text-slate-900">{d.conditions.heading}</h3>
+          <h3 className="mb-4 font-sans text-lg font-bold text-slate-900">{d.conditions.heading}</h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <Condition icon={Truck} text={`${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}`} />
             <Condition icon={CreditCard} text={lang === 'cs'
@@ -250,24 +272,31 @@ export default function DealDetail() {
             {d.detail.noMatch}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {filtered.map((p) => (
-              <DealProductCard
-                key={p.id}
-                product={p}
-                tierIndex={tierIndex}
-                tiers={deal.tiers}
-                currency={deal.currency}
-                qty={cart[p.id] ?? 0}
-                canSeePrices={canSeePrices}
-                closed={closed}
-                onAdd={() => addDealItem(deal.id, p.id)}
-                onSet={(q) => setDealItemQty(deal.id, p.id, Math.min(q, p.available))}
-                onBrandClick={handleBrandClick}
-                onOpenDetail={() => setDetailProduct(p)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {filtered.slice(0, visibleCount).map((p) => (
+                <DealProductCard
+                  key={p.id}
+                  product={p}
+                  tierIndex={tierIndex}
+                  tiers={deal.tiers}
+                  currency={deal.currency}
+                  qty={cart[p.id] ?? 0}
+                  canSeePrices={canSeePrices}
+                  closed={closed}
+                  onAdd={() => addDealItem(deal.id, p.id)}
+                  onSet={(q) => setDealItemQty(deal.id, p.id, Math.min(q, p.available))}
+                  onBrandClick={handleBrandClick}
+                  onOpenDetail={() => setDetailProduct(p)}
+                />
+              ))}
+            </div>
+            {visibleCount < filtered.length && (
+              <div ref={sentinelRef} className="flex justify-center py-10 text-slate-400">
+                <Loader2 className="h-5 w-5 animate-spin" />
+              </div>
+            )}
+          </>
         )}
       </section>
 
@@ -351,7 +380,7 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
   return (
     <div>
       <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</div>
-      <div className={`font-display text-base font-black tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+      <div className={`font-sans text-base font-bold tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
         {value}
       </div>
     </div>

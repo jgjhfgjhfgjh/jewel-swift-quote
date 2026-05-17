@@ -48,7 +48,7 @@ export function DealCard({ deal, count }: { deal: Deal; count: number }) {
         {maxDiscount > 0 && (
           <div className="absolute right-3 top-3 rounded-xl bg-red-600 px-2.5 py-1.5 text-right text-white shadow-lg">
             <div className="text-[9px] font-semibold uppercase leading-none tracking-wide">{t.discountUpTo}</div>
-            <div className="font-display text-lg font-black leading-none">−{maxDiscount} %</div>
+            <div className="font-sans text-lg font-bold leading-none">−{maxDiscount} %</div>
           </div>
         )}
       </div>
@@ -56,11 +56,11 @@ export function DealCard({ deal, count }: { deal: Deal; count: number }) {
       {/* body */}
       <div className="flex flex-1 flex-col p-5">
         {deal.supplier && (
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
             {deal.supplier}
           </span>
         )}
-        <h3 className="mt-1 font-display text-lg font-black leading-tight text-slate-900">
+        <h3 className="mt-1 font-sans text-lg font-bold leading-tight text-slate-900">
           {deal.title}
         </h3>
         {deal.subtitle && (

@@ -82,8 +82,8 @@ export function DealProductModal({
 
           {/* info */}
           <div className="flex flex-col p-6">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-600">{product.brand}</span>
-            <h2 className="mt-1 font-display text-xl font-black text-slate-900">{title || product.sku}</h2>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-600">{product.brand}</span>
+            <h2 className="mt-1 font-sans text-xl font-bold text-slate-900">{title || product.sku}</h2>
 
             <dl className="mt-4 space-y-1.5 text-sm">
               {attrs.map(([k, v]) => (
@@ -115,7 +115,7 @@ export function DealProductModal({
                         {fillTemplate(t.modal.tier, { qty: tier.min_qty })}
                         <span className="ml-1 text-[11px] font-semibold text-red-500">−{tier.discount_percent}%</span>
                       </span>
-                      <span className="font-display font-black tabular-nums text-slate-900">
+                      <span className="font-sans font-bold tabular-nums text-slate-900">
                         {fmt(currency, wholesaleForTierIndex(product, i))}
                       </span>
                     </div>

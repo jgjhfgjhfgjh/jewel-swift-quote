@@ -137,7 +137,7 @@ export function DealFilterSheet({
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
       <div className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col rounded-t-2xl bg-white animate-in slide-in-from-bottom duration-300">
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3">
-          <h3 className="font-display text-base font-black text-slate-900">
+          <h3 className="font-sans text-base font-bold text-slate-900">
             {d.filters.title}
           </h3>
           <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600">

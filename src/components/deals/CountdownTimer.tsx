@@ -52,7 +52,7 @@ export function CountdownTimer({
             ? 'bg-slate-100 text-slate-500'
             : urgent
               ? 'bg-red-50 text-red-600 ring-1 ring-red-200'
-              : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'}`}
+              : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'}`}
       >
         <Clock className={`h-3 w-3 ${urgent && !expired ? 'animate-pulse' : ''}`} />
         {expired
@@ -86,10 +86,10 @@ export function CountdownTimer({
       className={`rounded-2xl border px-5 py-4 transition-colors
         ${urgent
           ? 'border-red-200 bg-gradient-to-br from-red-50 to-white'
-          : 'border-amber-200 bg-gradient-to-br from-amber-50 to-white'}`}
+          : 'border-slate-200 bg-gradient-to-br from-slate-100 to-white'}`}
     >
       <div className={`mb-3 flex items-center justify-center gap-1.5 text-xs font-bold uppercase tracking-wider
-        ${urgent ? 'text-red-600' : 'text-amber-700'}`}>
+        ${urgent ? 'text-red-600' : 'text-slate-700'}`}>
         <AlarmClock className={`h-3.5 w-3.5 ${critical ? 'animate-bounce' : urgent ? 'animate-pulse' : ''}`} />
         {t.label}
       </div>
@@ -103,7 +103,7 @@ export function CountdownTimer({
                   animate-in zoom-in-95 duration-300
                   ${urgent ? 'bg-red-600 text-white' : 'bg-slate-900 text-white'}`}
               >
-                <span className="font-display text-2xl sm:text-3xl font-black leading-none">
+                <span className="font-sans text-2xl sm:text-3xl font-bold leading-none">
                   {String(seg.value).padStart(2, '0')}
                 </span>
               </div>
@@ -113,7 +113,7 @@ export function CountdownTimer({
               </span>
             </div>
             {i < segments.length - 1 && (
-              <span className={`pb-5 font-display text-2xl font-black ${urgent ? 'text-red-300' : 'text-slate-300'}`}>:</span>
+              <span className={`pb-5 font-sans text-2xl font-bold ${urgent ? 'text-red-300' : 'text-slate-300'}`}>:</span>
             )}
           </div>
         ))}

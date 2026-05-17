@@ -52,7 +52,7 @@ export default function Deals() {
               <Flame className="h-4 w-4" />
               {d.hero.badge}
             </div>
-            <h1 className="font-display text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+            <h1 className="font-sans text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
               {d.hero.heading}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
@@ -71,7 +71,7 @@ export default function Deals() {
                 { v: maxDiscount ? `${maxDiscount} %` : '—', l: d.stats.discount },
               ].map((s) => (
                 <div key={s.l}>
-                  <div className="font-display text-3xl font-black text-white">{s.v}</div>
+                  <div className="font-sans text-3xl font-bold text-white">{s.v}</div>
                   <div className="mt-1 text-xs text-slate-400">{s.l}</div>
                 </div>
               ))}
@@ -84,7 +84,7 @@ export default function Deals() {
       <section id="active-deals" className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="mb-10">
           <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.active.eyebrow}</div>
-          <h2 className="mt-2 font-display text-3xl font-black text-slate-900 sm:text-4xl">{d.active.heading}</h2>
+          <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.active.heading}</h2>
           <p className="mt-2 max-w-2xl text-slate-500">{d.active.sub}</p>
         </div>
 
@@ -112,20 +112,20 @@ export default function Deals() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
             <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.how.eyebrow}</div>
-            <h2 className="mt-2 font-display text-3xl font-black text-slate-900 sm:text-4xl">{d.how.heading}</h2>
+            <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.how.heading}</h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {d.how.steps.map((step, i) => {
               const Icon = STEP_ICONS[i];
               return (
                 <div key={step.title} className="relative rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                  <div className="mb-3 select-none font-display text-5xl font-black leading-none text-slate-200">
+                  <div className="mb-3 select-none font-sans text-5xl font-bold leading-none text-slate-200">
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-100">
                     <Icon className="h-5 w-5 text-red-600" />
                   </div>
-                  <h3 className="font-display font-black text-slate-900">{step.title}</h3>
+                  <h3 className="font-sans font-bold text-slate-900">{step.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{step.desc}</p>
                 </div>
               );
@@ -138,7 +138,7 @@ export default function Deals() {
       <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="mb-12 text-center">
           <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.conditions.eyebrow}</div>
-          <h2 className="mt-2 font-display text-3xl font-black text-slate-900 sm:text-4xl">{d.conditions.heading}</h2>
+          <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.conditions.heading}</h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {d.conditions.items.map((item, i) => {
@@ -149,7 +149,7 @@ export default function Deals() {
                   <Icon className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-display font-black text-slate-900">{item.title}</h3>
+                  <h3 className="font-sans font-bold text-slate-900">{item.title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-slate-500">{item.desc}</p>
                 </div>
               </div>

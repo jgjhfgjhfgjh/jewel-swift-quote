@@ -81,7 +81,7 @@ export function DealCartDrawer({
         {/* header */}
         <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-5 py-3">
           <ShoppingBag className="h-5 w-5 text-slate-700" />
-          <h2 className="font-display text-lg font-black text-slate-900">{t.cart.title}</h2>
+          <h2 className="font-sans text-lg font-bold text-slate-900">{t.cart.title}</h2>
           {totalQty > 0 && (
             <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs font-bold text-white tabular-nums">
               {totalQty} {t.progress.pcs}
@@ -139,7 +139,7 @@ export function DealCartDrawer({
 
             {/* purchase terms */}
             <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5">
-              <h3 className="mb-3 font-display text-base font-black text-slate-900">{t.conditions.heading}</h3>
+              <h3 className="mb-3 font-sans text-base font-bold text-slate-900">{t.conditions.heading}</h3>
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
                   { icon: Truck, text: `${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}` },
@@ -193,7 +193,7 @@ function Total({ label, value, accent }: { label: string; value: string; accent?
   return (
     <div>
       <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</div>
-      <div className={`font-display text-base font-black tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+      <div className={`font-sans text-base font-bold tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
         {value}
       </div>
     </div>

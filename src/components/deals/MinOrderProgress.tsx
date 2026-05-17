@@ -49,7 +49,7 @@ export function MinOrderProgress({
 
   const fillClass = prog.minimumReached
     ? 'bg-gradient-to-r from-emerald-400 to-emerald-600'
-    : 'bg-gradient-to-r from-amber-300 to-amber-500';
+    : 'bg-gradient-to-r from-slate-300 to-slate-500';
   const fillWidth = `${Math.max(prog.percentOverall, qty > 0 ? 4 : 0)}%`;
 
   // ── compact strip (sticky order bar) ────────────────────
@@ -80,7 +80,6 @@ export function MinOrderProgress({
               className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
               style={{ width: fillWidth }}
             >
-              <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
             </div>
           </div>
           {/* tier dots */}
@@ -102,8 +101,8 @@ export function MinOrderProgress({
             ? <PartyPopper className="h-4 w-4 shrink-0 text-emerald-600" />
             : prog.minimumReached
               ? <Check className="h-4 w-4 shrink-0 text-emerald-600" strokeWidth={3} />
-              : <Lock className="h-3.5 w-3.5 shrink-0 text-amber-600" />}
-          <span className={prog.minimumReached ? 'text-emerald-700' : 'text-amber-700'}>{callout}</span>
+              : <Lock className="h-3.5 w-3.5 shrink-0 text-slate-600" />}
+          <span className={prog.minimumReached ? 'text-emerald-700' : 'text-slate-700'}>{callout}</span>
         </div>
       </div>
     );
@@ -113,20 +112,20 @@ export function MinOrderProgress({
   return (
     <div
       className={`rounded-2xl border bg-white p-5 transition-colors ${className}
-        ${prog.minimumReached ? 'border-emerald-200' : 'border-amber-200'}
+        ${prog.minimumReached ? 'border-emerald-200' : 'border-slate-200'}
         ${justUnlocked ? 'ring-2 ring-emerald-400' : ''}`}
     >
       {/* header */}
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className={`h-4 w-4 ${prog.minimumReached ? 'text-emerald-600' : 'text-amber-600'}`} />
+          <TrendingUp className={`h-4 w-4 ${prog.minimumReached ? 'text-emerald-600' : 'text-slate-600'}`} />
           <span className="text-sm font-bold text-slate-800">{t.title}</span>
         </div>
         <div className="text-right">
           <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
             {t.currentDiscount}
           </div>
-          <div className={`font-display text-xl font-black leading-none tabular-nums
+          <div className={`font-sans text-xl font-bold leading-none tabular-nums
             ${prog.minimumReached ? 'text-emerald-600' : 'text-slate-300'}`}>
             {prog.minimumReached ? `${prog.effectiveTier.discount_percent} %` : '—'}
           </div>
@@ -140,7 +139,6 @@ export function MinOrderProgress({
             className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
             style={{ width: fillWidth }}
           >
-            <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
           </div>
         </div>
 
@@ -149,7 +147,7 @@ export function MinOrderProgress({
             className="absolute top-0 -translate-x-1/2 transition-[left] duration-700 ease-out"
             style={{ left: `${Math.min(100, Math.max(prog.percentOverall, 4))}%` }}
           >
-            <span className="rounded-md bg-slate-900 px-1.5 py-0.5 text-[10px] font-black tabular-nums text-white">
+            <span className="rounded-md bg-slate-900 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-white">
               {qty}
             </span>
           </div>
@@ -185,7 +183,7 @@ export function MinOrderProgress({
       {/* callout */}
       <div
         className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold
-          ${prog.minimumReached ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}
+          ${prog.minimumReached ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'}`}
       >
         {prog.nextTier === null && prog.minimumReached
           ? <PartyPopper className="h-4 w-4 shrink-0" />

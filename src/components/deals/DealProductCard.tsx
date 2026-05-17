@@ -55,6 +55,7 @@ export function DealProductCard({
   return (
     <div
       className={`group flex flex-col overflow-hidden rounded-xl border bg-white transition-all
+        [content-visibility:auto] [contain-intrinsic-size:auto_340px]
         ${selected ? 'border-emerald-400 bg-emerald-50/40 ring-1 ring-emerald-200' : 'border-slate-200 hover:shadow-md'}
         ${outOfStock ? 'opacity-60' : ''}`}
     >
@@ -79,7 +80,7 @@ export function DealProductCard({
               </div>
             )}
             {canSeePrices && discountPercent > 0 && (
-              <Badge className="absolute right-2 top-2 bg-red-600 text-[11px] font-black text-white hover:bg-red-600">
+              <Badge className="absolute right-2 top-2 bg-red-600 text-[11px] font-bold text-white hover:bg-red-600">
                 −{discountPercent} %
               </Badge>
             )}
@@ -103,7 +104,7 @@ export function DealProductCard({
         <button
           type="button"
           onClick={() => onBrandClick(product.brand)}
-          className="self-start text-[10px] font-bold uppercase tracking-wider text-amber-600 hover:underline"
+          className="self-start text-[10px] font-bold uppercase tracking-wider text-slate-600 hover:underline"
           title={`Zobrazit jen ${product.brand}`}
         >
           {product.brand}
@@ -124,7 +125,7 @@ export function DealProductCard({
         <div className="mt-auto pt-3">
           {canSeePrices ? (
             <>
-              <p className="font-display text-lg font-black leading-none text-emerald-600 tabular-nums">
+              <p className="font-sans text-lg font-bold leading-none text-emerald-600 tabular-nums">
                 {qty > 1 ? t.marginTotal : t.margin}: {fmt(currency, totalMargin)}
               </p>
               {qty > 1 && (
