@@ -7,14 +7,19 @@ import { dealProgress, sortedTiers, type DealTier } from '@/lib/deals';
 /**
  * The central FOMO element: an animated bar that fills as the partner adds
  * units to the deal order, unlocking higher discount tiers (66 → 67 → 68 %).
+ *
+ * variant "full"    — the rich card shown at the top of the deal page.
+ * variant "compact" — a slim strip for the always-visible sticky order bar.
  */
 export function MinOrderProgress({
   tiers,
   qty,
+  variant = 'full',
   className = '',
 }: {
   tiers: DealTier[];
   qty: number;
+  variant?: 'full' | 'compact';
   className?: string;
 }) {
   const lang = useStore((s) => s.lang);
@@ -42,6 +47,69 @@ export function MinOrderProgress({
       ? fillTemplate(t.unlockNext, { n: prog.remainingToNext, percent: prog.nextTier.discount_percent })
       : fillTemplate(t.topReached, { percent: prog.effectiveTier.discount_percent });
 
+  const fillClass = prog.minimumReached
+    ? 'bg-gradient-to-r from-emerald-400 to-emerald-600'
+    : 'bg-gradient-to-r from-amber-300 to-amber-500';
+  const fillWidth = `${Math.max(prog.percentOverall, qty > 0 ? 4 : 0)}%`;
+
+  // ── compact strip (sticky order bar) ────────────────────
+  if (variant === 'compact') {
+    return (
+      <div className={`flex items-center gap-3 sm:gap-5 ${className}`}>
+        <div className="relative flex-1 pt-4">
+          {/* tier markers + % labels */}
+          {t2.map((tier) => {
+            const reached = qty >= tier.min_qty;
+            const pos = Math.min(100, (tier.min_qty / top) * 100);
+            return (
+              <div
+                key={tier.min_qty}
+                className="absolute top-0 flex -translate-x-1/2 flex-col items-center"
+                style={{ left: `${pos}%` }}
+              >
+                <span className={`text-[9px] font-bold tabular-nums leading-none
+                  ${reached ? 'text-emerald-700' : 'text-slate-400'}`}>
+                  {tier.discount_percent}%
+                </span>
+              </div>
+            );
+          })}
+          <div className={`mt-0.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-200 transition-shadow
+            ${justUnlocked ? 'ring-2 ring-emerald-400' : ''}`}>
+            <div
+              className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
+              style={{ width: fillWidth }}
+            >
+              <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
+            </div>
+          </div>
+          {/* tier dots */}
+          {t2.map((tier) => {
+            const reached = qty >= tier.min_qty;
+            const pos = Math.min(100, (tier.min_qty / top) * 100);
+            return (
+              <span
+                key={tier.min_qty}
+                className={`absolute -translate-x-1/2 rounded-full border-2 border-white transition-colors
+                  ${reached ? 'bg-emerald-600' : 'bg-slate-300'}`}
+                style={{ left: `${pos}%`, top: '17px', width: 10, height: 10 }}
+              />
+            );
+          })}
+        </div>
+        <div className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs font-bold sm:text-sm">
+          {prog.nextTier === null && prog.minimumReached
+            ? <PartyPopper className="h-4 w-4 shrink-0 text-emerald-600" />
+            : prog.minimumReached
+              ? <Check className="h-4 w-4 shrink-0 text-emerald-600" strokeWidth={3} />
+              : <Lock className="h-3.5 w-3.5 shrink-0 text-amber-600" />}
+          <span className={prog.minimumReached ? 'text-emerald-700' : 'text-amber-700'}>{callout}</span>
+        </div>
+      </div>
+    );
+  }
+
+  // ── full card (top of deal page) ────────────────────────
   return (
     <div
       className={`rounded-2xl border bg-white p-5 transition-colors ${className}
@@ -69,17 +137,13 @@ export function MinOrderProgress({
       <div className="relative pt-2 pb-9">
         <div className="h-3 w-full overflow-hidden rounded-full bg-slate-100">
           <div
-            className={`relative h-full rounded-full transition-[width] duration-700 ease-out
-              ${prog.minimumReached
-                ? 'bg-gradient-to-r from-emerald-400 to-emerald-600'
-                : 'bg-gradient-to-r from-amber-300 to-amber-500'}`}
-            style={{ width: `${Math.max(prog.percentOverall, qty > 0 ? 4 : 0)}%` }}
+            className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
+            style={{ width: fillWidth }}
           >
             <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
           </div>
         </div>
 
-        {/* current-qty knob */}
         {qty > 0 && (
           <div
             className="absolute top-0 -translate-x-1/2 transition-[left] duration-700 ease-out"
@@ -91,7 +155,6 @@ export function MinOrderProgress({
           </div>
         )}
 
-        {/* tier milestone markers */}
         {t2.map((tier) => {
           const reached = qty >= tier.min_qty;
           const pos = Math.min(100, (tier.min_qty / top) * 100);
@@ -122,11 +185,7 @@ export function MinOrderProgress({
       {/* callout */}
       <div
         className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold
-          ${prog.nextTier === null && prog.minimumReached
-            ? 'bg-emerald-50 text-emerald-700'
-            : prog.minimumReached
-              ? 'bg-emerald-50 text-emerald-700'
-              : 'bg-amber-50 text-amber-700'}`}
+          ${prog.minimumReached ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}
       >
         {prog.nextTier === null && prog.minimumReached
           ? <PartyPopper className="h-4 w-4 shrink-0" />

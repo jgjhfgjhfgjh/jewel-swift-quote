@@ -167,7 +167,7 @@ export default function DealDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-28 font-sans">
+    <div className="min-h-screen bg-slate-50 pb-36 font-sans">
       <Navbar />
       <BackButton />
 
@@ -271,9 +271,12 @@ export default function DealDetail() {
         )}
       </section>
 
-      {/* ── Sticky order bar ── */}
+      {/* ── Sticky order bar (with always-visible fill progress) ── */}
       {canSeePrices && !closed && (
         <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur">
+          <div className="mx-auto max-w-7xl border-b border-slate-100 px-6 pb-1.5 pt-2">
+            <MinOrderProgress tiers={deal.tiers} qty={totalQty} variant="compact" />
+          </div>
           <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
             <button
               onClick={() => setCartOpen(true)}
