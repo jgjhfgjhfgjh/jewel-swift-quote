@@ -3,29 +3,18 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 
-// ── Images (Unsplash, verified free licence) ─────────────────────────────
+// ── Images (Unsplash, verified 200) ──────────────────────────────────────
 const SLIDE_IMAGES = [
-  // 1 Dropshipping — cardboard boxes on white metal rack, clean warehouse
-  'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1920&q=80',
-  // 2 Luxury — Rolex Submariner on wrist, polished metallic, close-up
-  'https://images.unsplash.com/photo-1670404160620-a3a86428560e?auto=format&fit=crop&w=1920&q=80',
-  // 3 Nová kolekce — elegant woman in white turtleneck, face visible
-  'https://images.unsplash.com/photo-1604912537399-500a3de6e3a7?auto=format&fit=crop&w=1920&q=80',
-  // 4 Novinky sezóny — woman's necklace on skin, fashion editorial, no perfumes
-  'https://images.unsplash.com/photo-1698161767770-7983f9ea55cf?auto=format&fit=crop&w=1920&q=80',
-  // 5 Exkluzivní akce — three luxury watches on table, flat-lay
-  'https://images.unsplash.com/photo-1634394412850-b3a7571b334b?auto=format&fit=crop&w=1920&q=80',
-  // 6 Logistika — two women walking through warehouse, one with clipboard
-  'https://images.unsplash.com/photo-1664382953403-fc1ac77073a0?auto=format&fit=crop&w=1920&q=80',
-  // 7 B2B Velkoobchod — two people shaking hands across wooden table
-  'https://images.unsplash.com/photo-1638262052640-82e94d64664a?auto=format&fit=crop&w=1920&q=80',
-  // 8 Partnerské značky — selective focus watches in retail display
-  'https://images.unsplash.com/photo-1558505780-e7a9d70b4bab?auto=format&fit=crop&w=1920&q=80',
-  // 9 Zákaznická podpora — smiling woman with headset at computer
-  'https://images.unsplash.com/photo-1766066014237-00645c74e9c6?auto=format&fit=crop&w=1920&q=80',
-  // 10 Integrace & API — analytics dashboard / business data
+  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1920&q=80',
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80',
-  // 11 Partnerský program — team in modern office, people visible
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80',
 ];
 
@@ -36,17 +25,17 @@ const SLIDE_HREFS = [
 
 // ── Per-slide metadata (language-independent) ────────────────────────────
 const SLIDE_META = [
-  { eyebrow: 'Dropshipping',        secondaryCta: 'Zjistit více',          imgPos: 'object-center'          },
-  { eyebrow: 'Luxury',              secondaryCta: 'Prohlédnout hodinky',   imgPos: 'object-[60%_center]'   },
-  { eyebrow: 'Nová kolekce',        secondaryCta: 'Celá kolekce',          imgPos: 'object-[65%_top]'      },
-  { eyebrow: 'Novinky sezóny',      secondaryCta: 'Všechny novinky',       imgPos: 'object-[55%_center]'   },
+  { eyebrow: 'Dropshipping',        secondaryCta: 'Zjistit více',          imgPos: 'object-left'            },
+  { eyebrow: 'Luxury',              secondaryCta: 'Prohlédnout hodinky',   imgPos: 'object-center'          },
+  { eyebrow: 'Nová kolekce',        secondaryCta: 'Celá kolekce',          imgPos: 'object-center'          },
+  { eyebrow: 'Novinky sezóny',      secondaryCta: 'Všechny novinky',       imgPos: 'object-[30%_center]'   },
   { eyebrow: 'Exkluzivní akce',     secondaryCta: 'Všechny slevy',         imgPos: 'object-center'          },
-  { eyebrow: 'Logistika',           secondaryCta: 'Podmínky doručení',     imgPos: 'object-[55%_center]'   },
-  { eyebrow: 'B2B Velkoobchod',     secondaryCta: 'Prozkoumat katalog',    imgPos: 'object-[60%_center]'   },
+  { eyebrow: 'Logistika',           secondaryCta: 'Podmínky doručení',     imgPos: 'object-[20%_center]'   },
+  { eyebrow: 'B2B Velkoobchod',     secondaryCta: 'Prozkoumat katalog',    imgPos: 'object-center'          },
   { eyebrow: 'Partnerské značky',   secondaryCta: 'Všechny značky',        imgPos: 'object-center'          },
-  { eyebrow: 'Zákaznická podpora',  secondaryCta: 'Kontaktovat tým',       imgPos: 'object-[55%_top]'      },
+  { eyebrow: 'Zákaznická podpora',  secondaryCta: 'Kontaktovat tým',       imgPos: 'object-[25%_center]'   },
   { eyebrow: 'Integrace & API',     secondaryCta: 'Dokumentace',           imgPos: 'object-center'          },
-  { eyebrow: 'Partnerský program',  secondaryCta: 'Jak začít',             imgPos: 'object-[55%_center]'   },
+  { eyebrow: 'Partnerský program',  secondaryCta: 'Jak začít',             imgPos: 'object-[30%_center]'   },
 ];
 
 type Slide = {
@@ -142,10 +131,10 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                 /* ── Standard editorial slide ── */
                 <div className="relative h-full">
 
-                  {/* Solid left panel (desktop only) */}
-                  <div className="absolute inset-y-0 left-0 w-[48%] bg-slate-100 hidden lg:block" />
+                  {/* Solid left panel — pure white, desktop only */}
+                  <div className="absolute inset-y-0 left-0 w-[46%] bg-white hidden lg:block" />
 
-                  {/* Photo — full card on mobile, right 55% on desktop */}
+                  {/* Photo — full card on mobile, right 56% on desktop */}
                   <div className="absolute inset-0 lg:left-[44%]">
                     <img
                       src={slide.image}
@@ -156,11 +145,11 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                     />
                     {/* Mobile: dark gradient so text is legible */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15 lg:hidden" />
-                    {/* Desktop: bleed image gently into solid left panel */}
+                    {/* Desktop: 4-stop gentle fade from white into image — more image visible */}
                     <div
-                      className="absolute inset-y-0 left-0 w-[60%] hidden lg:block"
+                      className="absolute inset-y-0 left-0 w-[65%] hidden lg:block"
                       style={{
-                        background: 'linear-gradient(to right, #f1f5f9 0%, #f1f5f9 30%, transparent 100%)',
+                        background: 'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.55) 72%, transparent 100%)',
                       }}
                     />
                   </div>

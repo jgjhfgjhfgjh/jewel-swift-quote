@@ -339,12 +339,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
         ${hidden ? '-translate-y-full' : 'translate-y-0'}
-        border-b border-border
+        border-b border-white/25
       `}
       style={{
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 100%)',
-        backdropFilter: 'blur(14px)',
-        WebkitBackdropFilter: 'blur(14px)',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0.46) 100%)',
+        backdropFilter: 'blur(32px) saturate(190%)',
+        WebkitBackdropFilter: 'blur(32px) saturate(190%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 28px rgba(0,0,0,0.07)',
       }}
     >
       {/* ── Row 1: mobile = h-14, hamburger + small left logo; desktop = h-24, hamburger + centered big logo ── */}
@@ -691,8 +692,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         <>
           {/* Panel */}
           <div
-            className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
-            style={{ top: headerHeight }}
+            className="fixed left-0 right-0 z-[95] border-b border-white/20 hidden lg:block"
+            style={{
+              top: headerHeight,
+              background: 'rgba(255,255,255,0.82)',
+              backdropFilter: 'blur(32px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+            }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
           >
@@ -742,8 +749,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     {/* ── AI panel ── */}
     {activeNav === '/ai' && (
       <div
-        className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
-        style={{ top: headerHeight }}
+        className="fixed left-0 right-0 z-[95] border-b border-white/20 hidden lg:block"
+        style={{
+          top: headerHeight,
+          background: 'rgba(255,255,255,0.82)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+        }}
         onMouseEnter={handlePanelEnter}
         onMouseLeave={handlePanelLeave}
       >

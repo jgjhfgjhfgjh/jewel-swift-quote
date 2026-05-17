@@ -90,8 +90,8 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Parallax sticky in home mode, normal scroll in catalog — starts BELOW navbar, sticks BELOW navbar */}
-      <div className={viewMode === 'home' ? 'sticky top-14 sm:top-24 lg:top-[136px] mt-14 sm:mt-24 lg:mt-[136px] z-0' : 'relative z-0 mt-14 sm:mt-24 lg:mt-[136px]'}>
+      {/* Banner — normal document flow, scrolls with page */}
+      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[136px]">
         <HeroBanner compact={viewMode === 'catalog'} />
       </div>
 
@@ -110,9 +110,7 @@ const Index = () => {
 
       {viewMode === 'home' && (
         <div className="relative z-10 animate-fade-in">
-          <div className="relative z-20 -mt-20 sm:-mt-24">
-            <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
-          </div>
+          <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
         </div>
       )}
 
