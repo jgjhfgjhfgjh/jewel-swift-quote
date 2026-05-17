@@ -470,7 +470,7 @@ function TrustSection() {
   ];
 
   return (
-    <section className="relative bg-white py-24 sm:py-28 overflow-hidden">
+    <section className="relative bg-slate-50 py-24 sm:py-28 overflow-hidden">
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Stats */}
         <Reveal className="text-center mb-16">
@@ -668,7 +668,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-slate-50 border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
@@ -800,7 +800,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white border-b border-border">
+      <section className="py-16 sm:py-20 bg-slate-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
@@ -813,21 +813,27 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </p>
             </div>
           </Reveal>
-          {/* Interactive Europe map */}
+          {/* Map + countries — 2-col desktop, stacked mobile */}
           <Reveal delay={80}>
-            <div className="max-w-2xl mx-auto mb-6">
-              <EuropeMap />
-            </div>
-          </Reveal>
-          {/* Simple country list */}
-          <Reveal delay={140}>
-            <div className="flex flex-wrap justify-center gap-x-2.5 gap-y-2 max-w-3xl mx-auto mb-12">
-              {COUNTRIES.map((c, i) => (
-                <span key={c.name} className="flex items-center text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground/75">{c.name}</span>
-                  {i < COUNTRIES.length - 1 && <span className="ml-2.5 text-border">·</span>}
-                </span>
-              ))}
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12">
+              {/* Left: interactive map */}
+              <div className="max-w-sm mx-auto w-full lg:max-w-none">
+                <EuropeMap />
+              </div>
+              {/* Right: country list */}
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-4">
+                  15 doručovacích zemí
+                </p>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+                  {COUNTRIES.map((c) => (
+                    <div key={c.name} className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                      <span className="text-sm font-medium text-foreground/75">{c.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </Reveal>
           {/* Section heading — recognize yourself in these obstacles? */}
@@ -869,7 +875,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           2. BRANDS — 70+ značek + premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white border-b border-border">
+      <section className="py-16 sm:py-20 bg-slate-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-10">
@@ -939,7 +945,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-white border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-slate-50 border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center">
@@ -981,7 +987,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-white border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative bg-slate-50 border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
@@ -1164,7 +1170,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <section
             key={section.id}
             id={section.id}
-            className="relative py-20 sm:py-28 scroll-mt-16 bg-white border-b border-border"
+            className="relative py-20 sm:py-28 scroll-mt-16 bg-slate-50 border-b border-border"
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">

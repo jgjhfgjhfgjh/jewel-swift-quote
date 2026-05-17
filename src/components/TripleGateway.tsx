@@ -207,7 +207,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
 
   return (
     <div
-      className="relative w-full px-3 pt-5 pb-12 sm:px-6 sm:pt-8 sm:pb-20 lg:px-8 lg:pt-14 lg:pb-24 bg-zinc-100 border-t border-zinc-200 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.12)]"
+      className="relative w-full px-3 pt-5 pb-12 sm:px-6 sm:pt-8 sm:pb-20 lg:px-8 lg:pt-14 lg:pb-24 bg-slate-50 border-t border-slate-200 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.08)]"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
