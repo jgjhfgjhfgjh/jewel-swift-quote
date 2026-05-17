@@ -855,7 +855,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Truck className="h-6 w-6 text-zinc-600" />
               </div>
               <div className="flex-1">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-300 px-3 py-1 text-xs font-semibold text-zinc-600 mb-2">
                   <Globe className="h-3.5 w-3.5" /> Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat
                 </div>
                 <div className="font-display font-semibold text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
@@ -881,7 +881,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <item.icon className="h-6 w-6 text-zinc-600" />
                 </div>
                 <div className="flex-1">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-300 px-3 py-1 text-xs font-semibold text-zinc-600 mb-2">
                     <item.labelIcon className="h-3.5 w-3.5" /> {item.label}
                   </div>
                   <div className="font-display font-semibold text-foreground mb-1">{item.title}</div>
