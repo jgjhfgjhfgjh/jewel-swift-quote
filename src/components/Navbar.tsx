@@ -257,14 +257,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const menuOpenRef = useRef(false);
-  const [navbarHoverCollapsed, setNavbarHoverCollapsed] = useState(false);
   // Actual rendered navbar height — drives where the menu drawer starts.
   const [headerHeight, setHeaderHeight] = useState(0);
   const isHome = viewMode === 'home';
   const isOnHomePage = location.pathname === '/';
-
-  // Expanded = homepage at top AND not collapsed by wheel-over-navbar
-  const isExpanded = isHome && isAtTop && isOnHomePage && !navbarHoverCollapsed;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -275,9 +271,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     const onScroll = () => {
       const y = window.scrollY;
       setIsAtTop(y < 60);
-      // When the page is scrolled back to the very top, allow the navbar to
-      // re-expand by clearing any wheel-over-navbar collapse override
-      if (y === 0) setNavbarHoverCollapsed(false);
       // Hide on scroll down, show on scroll up — but never while the menu is
       // open, so the drawer keeps starting flush against the navbar.
       setHidden(!menuOpenRef.current && y > lastScrollY.current && y > 50);
@@ -306,23 +299,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
     }
   }, [menuOpen]);
-
-  // Wheel over the navbar: don't scroll the page, just drive the navbar
-  // collapse/expand. The hero stays exposed so the customer can browse it.
-  useEffect(() => {
-    const el = headerRef.current;
-    if (!el || !isHome || !isOnHomePage) return;
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (e.deltaY > 0) {
-        setNavbarHoverCollapsed(true);
-      } else if (e.deltaY < 0 && window.scrollY === 0) {
-        setNavbarHoverCollapsed(false);
-      }
-    };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, [isHome, isOnHomePage]);
 
   // Close mega-menu on Escape or when navbar hides on scroll
   useEffect(() => {
