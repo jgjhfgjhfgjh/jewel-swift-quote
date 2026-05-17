@@ -1,39 +1,41 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import logo from '@/assets/logo.png';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
 
-// Thematic images for each hero slide (Unsplash, verified 200).
+// ── Images (Unsplash, verified 200) ──────────────────────────────────────
 const SLIDE_IMAGES = [
-  // 1) Dropshipping — warehouse / packages
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
-  // 2) Luxury — luxury watches
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1920&q=80',
-  // 3) New collection — perfumes / cosmetics
   'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1920&q=80',
-  // 4) Season novelties — jewellery (gold necklace)
   'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1920&q=80',
-  // 5) Exclusive deals — sales / luxury
   'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1920&q=80',
-  // 6) Fast delivery — courier
   'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1920&q=80',
-  // 7) Wholesale prices — business / numbers
   'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80',
-  // 8) Partner brands — watch collection
   'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1920&q=80',
-  // 9) Customer support — team
   'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1920&q=80',
-  // 10) Easy integration — notebook / API
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80',
-  // 11) Join us — handshake / business
   'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80',
 ];
 
 const SLIDE_HREFS = [
   '#dropshipping', '#katalog', '#katalog', '#katalog', '#katalog',
   '#katalog', '#katalog', '#katalog', '#kontakt', '#api', '/register',
+];
+
+// ── Per-slide metadata (language-independent) ────────────────────────────
+const SLIDE_META = [
+  { eyebrow: 'Dropshipping',        secondaryCta: 'Zjistit více',          imgPos: 'object-left'            },
+  { eyebrow: 'Luxury',              secondaryCta: 'Prohlédnout hodinky',   imgPos: 'object-center'          },
+  { eyebrow: 'Nová kolekce',        secondaryCta: 'Celá kolekce',          imgPos: 'object-center'          },
+  { eyebrow: 'Novinky sezóny',      secondaryCta: 'Všechny novinky',       imgPos: 'object-[30%_center]'   },
+  { eyebrow: 'Exkluzivní akce',     secondaryCta: 'Všechny slevy',         imgPos: 'object-center'          },
+  { eyebrow: 'Logistika',           secondaryCta: 'Podmínky doručení',     imgPos: 'object-[20%_center]'   },
+  { eyebrow: 'B2B Velkoobchod',     secondaryCta: 'Prozkoumat katalog',    imgPos: 'object-center'          },
+  { eyebrow: 'Partnerské značky',   secondaryCta: 'Všechny značky',        imgPos: 'object-center'          },
+  { eyebrow: 'Zákaznická podpora',  secondaryCta: 'Kontaktovat tým',       imgPos: 'object-[25%_center]'   },
+  { eyebrow: 'Integrace & API',     secondaryCta: 'Dokumentace',           imgPos: 'object-center'          },
+  { eyebrow: 'Partnerský program',  secondaryCta: 'Jak začít',             imgPos: 'object-[30%_center]'   },
 ];
 
 type Slide = {
@@ -47,11 +49,12 @@ type Slide = {
 
 const CATALOG_BANNERS: Slide[] = [];
 
-/** Duration of the opacity crossfade in ms */
+/** Crossfade duration (ms) */
 const FADE_MS = 1400;
-/** How long each slide stays visible before fading to the next */
+/** Time each slide stays visible (ms) */
 const INTERVAL_MS = 7500;
 
+// ─────────────────────────────────────────────────────────────────────────
 export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const { lang } = useStore();
   const [current, setCurrent] = useState(0);
@@ -70,9 +73,10 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
 
   const startInterval = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setCurrent(c => (c + 1) % slides.length);
-    }, INTERVAL_MS);
+    intervalRef.current = setInterval(
+      () => setCurrent(c => (c + 1) % slides.length),
+      INTERVAL_MS,
+    );
   }, [slides.length]);
 
   useEffect(() => {
@@ -80,136 +84,176 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [startInterval]);
 
-  const handlePrev = () => {
-    setCurrent(c => (c - 1 + slides.length) % slides.length);
-    startInterval();
-  };
+  const handlePrev = () => { setCurrent(c => (c - 1 + slides.length) % slides.length); startInterval(); };
+  const handleNext = () => { setCurrent(c => (c + 1) % slides.length); startInterval(); };
+  const handleDot  = (i: number) => { setCurrent(i); startInterval(); };
 
-  const handleNext = () => {
-    setCurrent(c => (c + 1) % slides.length);
-    startInterval();
-  };
-
-  const handleDot = (i: number) => {
-    setCurrent(i);
-    startInterval();
-  };
-
-  const heightCls = compact
-    ? 'h-[70vh] lg:h-[80vh]'
-    : 'h-[80vh] lg:h-[100vh]';
+  // Card height — compact for catalog view, full for homepage
+  const cardMinH = compact
+    ? 'min-h-[400px] sm:min-h-[460px] lg:min-h-[520px]'
+    : 'min-h-[500px] sm:min-h-[580px] lg:min-h-[660px]';
 
   return (
     <div
-      className="relative w-full group z-0"
+      className="relative w-full group"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
     >
-      {/* ── Crossfade stack ── */}
-      <div className={`relative overflow-hidden ${heightCls}`}>
-        {slides.map((slide, i) => (
-          <div
-            key={i}
-            aria-hidden={i !== current}
-            className={`absolute inset-0 transition-opacity ease-in-out ${
-              i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
-            style={{ transitionDuration: `${FADE_MS}ms` }}
-          >
-            {slide.imageOnly ? (
-              <div className="relative h-full bg-white flex items-center justify-center">
-                <img
-                  src={slide.image}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-contain"
-                  draggable={false}
-                />
-                {slide.ctaHref && (
-                  <a href={slide.ctaHref} className="absolute inset-0 z-10" aria-label="Otevřít katalog" />
-                )}
-              </div>
-            ) : (
-              <div
-                className="relative h-full bg-cover bg-center flex items-center justify-center pb-12"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              >
-                {/* Cinematic gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/50 to-black/80" />
+      {/* ── Card shell — rounded corners, overflow clips image ── */}
+      <div className={`relative mx-3 sm:mx-5 lg:mx-8 rounded-2xl sm:rounded-3xl overflow-hidden shadow-md ${cardMinH}`}>
 
-                {/* Logo watermark */}
-                <img
-                  src={logo}
-                  alt=""
-                  className={`absolute inset-0 m-auto opacity-[0.06] pointer-events-none select-none ${
-                    compact ? 'w-20 sm:w-24 lg:w-56' : 'w-32 sm:w-40 md:w-48 lg:w-56'
-                  }`}
-                  draggable={false}
-                />
-
-                {/* Text + CTA */}
-                <div className="relative z-10 text-center px-6 max-w-2xl flex flex-col items-center">
-                  <h2
-                    className={`text-white font-semibold tracking-tight text-balance drop-shadow-xl ${
-                      compact
-                        ? 'text-base sm:text-lg lg:text-4xl'
-                        : 'text-2xl sm:text-3xl md:text-4xl lg:text-6xl'
-                    }`}
-                  >
-                    {slide.title}
-                  </h2>
-                  <p
-                    className={`text-white/80 mt-2 sm:mt-3 max-w-xl text-pretty drop-shadow-md font-light ${
-                      compact
-                        ? 'text-xs sm:text-sm lg:text-xl'
-                        : 'text-sm sm:text-base md:text-lg lg:text-xl'
-                    }`}
-                  >
-                    {slide.subtitle}
-                  </p>
-                  <Button
-                    asChild
-                    size={compact ? 'sm' : 'lg'}
-                    className="mt-5 sm:mt-7 bg-white text-zinc-900 hover:bg-white/90 shadow-lg font-medium rounded-none px-8 tracking-wide text-sm border-0"
-                  >
-                    <a href={slide.ctaHref}>{slide.cta}</a>
-                  </Button>
+        {/* ── Crossfade slides ── */}
+        {slides.map((slide, i) => {
+          const meta = SLIDE_META[i] ?? SLIDE_META[0];
+          return (
+            <div
+              key={i}
+              aria-hidden={i !== current}
+              className={`absolute inset-0 bg-slate-100 transition-opacity ease-in-out ${
+                i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+              style={{ transitionDuration: `${FADE_MS}ms` }}
+            >
+              {slide.imageOnly ? (
+                /* ── Image-only slide ── */
+                <div className="relative h-full flex items-center justify-center bg-white">
+                  <img
+                    src={slide.image}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-contain"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    draggable={false}
+                  />
+                  {slide.ctaHref && (
+                    <a href={slide.ctaHref} className="absolute inset-0 z-10" aria-label="Otevřít katalog" />
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              ) : (
+                /* ── Standard editorial slide ── */
+                <div className="relative h-full">
 
-      {/* ── Desktop arrows ── */}
-      <button
-        onClick={handlePrev}
-        className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/40 transition opacity-0 group-hover:opacity-100"
-        aria-label="Previous"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        onClick={handleNext}
-        className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/40 transition opacity-0 group-hover:opacity-100"
-        aria-label="Next"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
+                  {/* Solid left panel (desktop only) */}
+                  <div className="absolute inset-y-0 left-0 w-[48%] bg-slate-100 hidden lg:block" />
 
-      {/* ── Paginator dots ── */}
-      <div
-        className="absolute bottom-28 sm:bottom-32 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none"
-        style={{ transform: 'translateY(5px)' }}
-      >
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => handleDot(i)}
-            className={`h-2 rounded-full transition-all duration-300 pointer-events-auto ${
-              i === current ? 'w-5 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'
-            }`}
-            aria-label={`Slide ${i + 1}`}
-          />
-        ))}
+                  {/* Photo — full card on mobile, right 55% on desktop */}
+                  <div className="absolute inset-0 lg:left-[44%]">
+                    <img
+                      src={slide.image}
+                      alt=""
+                      className={`w-full h-full object-cover ${meta.imgPos}`}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      draggable={false}
+                    />
+                    {/* Mobile: dark gradient so text is legible */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15 lg:hidden" />
+                    {/* Desktop: bleed image gently into solid left panel */}
+                    <div
+                      className="absolute inset-y-0 left-0 w-[60%] hidden lg:block"
+                      style={{
+                        background: 'linear-gradient(to right, #f1f5f9 0%, #f1f5f9 30%, transparent 100%)',
+                      }}
+                    />
+                  </div>
+
+                  {/* ── Text content ── */}
+                  <div
+                    className={`relative z-10 flex flex-col h-full
+                      justify-end pb-14 p-7
+                      sm:p-10 sm:pb-14
+                      lg:justify-center lg:pb-0 lg:p-14
+                      lg:w-[50%]`}
+                  >
+                    {/* Eyebrow */}
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] mb-3.5
+                                  text-white/65 lg:text-zinc-400">
+                      swelt.PARTNER&nbsp;&nbsp;·&nbsp;&nbsp;{meta.eyebrow}
+                    </p>
+
+                    {/* Headline */}
+                    <h2
+                      className={`font-bold tracking-tight text-balance leading-[1.08] mb-4
+                                  text-white lg:text-zinc-900
+                                  ${compact
+                                    ? 'text-2xl sm:text-3xl lg:text-4xl'
+                                    : 'text-[1.75rem] sm:text-4xl lg:text-[3rem]'}`}
+                    >
+                      {slide.title}
+                    </h2>
+
+                    {/* Subtitle */}
+                    <p
+                      className={`font-light leading-relaxed mb-7 text-pretty
+                                  text-white/75 lg:text-zinc-500
+                                  ${compact
+                                    ? 'text-sm max-w-xs'
+                                    : 'text-sm sm:text-base lg:text-lg max-w-sm'}`}
+                    >
+                      {slide.subtitle}
+                    </p>
+
+                    {/* CTA row */}
+                    <div className="flex flex-wrap gap-2.5">
+                      <a
+                        href={slide.ctaHref}
+                        className="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-sm transition-colors
+                                   bg-white text-zinc-900 hover:bg-zinc-50
+                                   lg:bg-zinc-900 lg:text-white lg:hover:bg-zinc-800"
+                      >
+                        {slide.cta}
+                      </a>
+                      <a
+                        href="/velkoobchod"
+                        className="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-sm transition-colors
+                                   border border-white/35 text-white hover:bg-white/10
+                                   lg:border-zinc-300 lg:text-zinc-700 lg:hover:bg-zinc-100"
+                      >
+                        {meta.secondaryCta}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* ── Navigation arrows (desktop, appear on group-hover) ── */}
+        <button
+          onClick={handlePrev}
+          className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
+                     h-10 w-10 items-center justify-center rounded-full
+                     bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm
+                     hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          onClick={handleNext}
+          className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
+                     h-10 w-10 items-center justify-center rounded-full
+                     bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm
+                     hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+          aria-label="Next"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+
+        {/* ── Dot indicators ── */}
+        <div className="absolute bottom-5 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handleDot(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 pointer-events-auto
+                          drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)] ${
+                i === current
+                  ? 'w-6 bg-white'
+                  : 'w-1.5 bg-white/50 hover:bg-white/80'
+              }`}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
