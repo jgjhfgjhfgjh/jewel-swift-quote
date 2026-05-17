@@ -1,149 +1,201 @@
-import { X, Minus, Plus, Trash2, Send } from 'lucide-react';
+import { useEffect } from 'react';
+import { X, Send, ShoppingBag, Truck, CreditCard, ListOrdered, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useStore } from '@/lib/store';
-import { dealsI18n } from '@/lib/i18n-deals';
-import { wholesaleForTierIndex, type Deal, type DealProduct } from '@/lib/deals';
+import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
+import { dealProgress, wholesaleForTierIndex, type Deal, type DealProduct } from '@/lib/deals';
+import { DealProductCard } from './DealProductCard';
+import { MinOrderProgress } from './MinOrderProgress';
 
-function fmt(currency: string, value: number): string {
+function money(currency: string, value: number): string {
   const symbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency + ' ';
   return `${symbol}${value.toLocaleString('cs-CZ', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-/** Interactive order cart for a single deal. */
+/**
+ * Full-page order cart for a deal — slides up from the bottom.
+ * Shows the picked products as full catalog-style cards, the live discount
+ * panel, the purchase terms and the order totals.
+ */
 export function DealCartDrawer({
   deal,
   products,
   open,
   onClose,
   tierIndex,
+  canSeePrices,
   onSubmit,
   submitDisabled,
+  onSet,
+  onBrandClick,
+  onOpenDetail,
 }: {
   deal: Deal;
   products: DealProduct[];
   open: boolean;
   onClose: () => void;
   tierIndex: number;
+  canSeePrices: boolean;
   onSubmit: () => void;
   submitDisabled: boolean;
+  onSet: (productId: string, qty: number) => void;
+  onBrandClick: (brand: string) => void;
+  onOpenDetail: (p: DealProduct) => void;
 }) {
   const lang = useStore((s) => s.lang);
-  const { dealCart, setDealItemQty, removeDealItem, clearDealCart } = useStore();
+  const { dealCart, clearDealCart } = useStore();
   const t = dealsI18n[lang];
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open, onClose]);
 
   if (!open) return null;
 
   const cart = dealCart[deal.id] || {};
-  const lines = products
-    .filter((p) => cart[p.id] > 0)
-    .map((p) => {
-      const qty = cart[p.id];
-      const unit = wholesaleForTierIndex(p, tierIndex);
-      return { p, qty, unit, rowValue: unit * qty, rowMargin: (p.retail_price - unit) * qty };
-    });
-  const totalQty = lines.reduce((s, l) => s + l.qty, 0);
-  const totalValue = lines.reduce((s, l) => s + l.rowValue, 0);
-  const totalMargin = lines.reduce((s, l) => s + l.rowMargin, 0);
+  const lines = products.filter((p) => cart[p.id] > 0);
+  const totalQty = lines.reduce((s, p) => s + cart[p.id], 0);
+  const prog = dealProgress(totalQty, deal.tiers);
+
+  let value = 0, retail = 0;
+  for (const p of lines) {
+    const q = cart[p.id];
+    value += q * wholesaleForTierIndex(p, tierIndex);
+    retail += q * p.retail_price;
+  }
+  const margin = retail - value;
 
   return (
-    <div className="fixed inset-0 z-[14000]">
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
-      <aside className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-slate-200 p-4">
-          <h2 className="font-display text-lg font-black text-slate-900">{t.cart.title}</h2>
-          <div className="flex gap-1">
-            {lines.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={() => clearDealCart(deal.id)}
-                className="text-xs text-red-500 hover:text-red-600">
-                {t.cart.clear}
-              </Button>
-            )}
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+    <div className="fixed inset-0 z-[14000] flex flex-col">
+      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
 
-        {lines.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center px-8 text-center text-sm text-slate-400">
-            {t.cart.empty}
+      <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col bg-slate-50 animate-in slide-in-from-bottom duration-300">
+        {/* header */}
+        <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-5 py-3">
+          <ShoppingBag className="h-5 w-5 text-slate-700" />
+          <h2 className="font-display text-lg font-black text-slate-900">{t.cart.title}</h2>
+          {totalQty > 0 && (
+            <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs font-bold text-white tabular-nums">
+              {totalQty} {t.progress.pcs}
+            </span>
+          )}
+          <div className="ml-auto flex items-center gap-2">
+            {lines.length > 0 && (
+              <button
+                onClick={() => clearDealCart(deal.id)}
+                className="flex items-center gap-1 text-xs font-semibold text-red-500 hover:text-red-600"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> {t.cart.clear}
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              aria-label={t.modal.close}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-        ) : (
-          <>
-            <ScrollArea className="flex-1">
-              <div className="divide-y divide-slate-100 px-3 py-2">
-                {lines.map(({ p, qty, unit, rowValue }) => (
-                  <div key={p.id} className="flex gap-3 py-3">
-                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
-                      {p.image_url
-                        ? <img src={p.image_url} alt="" className="h-full w-full object-contain p-1" />
-                        : <div className="flex h-full items-center justify-center text-[9px] text-slate-300">{p.brand}</div>}
-                    </div>
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600">{p.brand}</span>
-                      <span className="truncate text-sm font-semibold text-slate-800">
-                        {[p.collection, p.sku].filter(Boolean).join(' · ')}
-                      </span>
-                      <div className="mt-1 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={() => setDealItemQty(deal.id, p.id, qty - 1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-300 hover:bg-slate-900 hover:text-white"
-                          >
-                            <Minus className="h-3 w-3" />
-                          </button>
-                          <span className="w-8 text-center text-sm font-semibold tabular-nums">{qty}</span>
-                          <button
-                            onClick={() => setDealItemQty(deal.id, p.id, Math.min(p.available, qty + 1))}
-                            disabled={qty >= p.available}
-                            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-300 hover:bg-slate-900 hover:text-white disabled:opacity-40"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-black tabular-nums text-slate-900">{fmt(deal.currency, rowValue)}</div>
-                          <div className="text-[10px] text-slate-400 tabular-nums">{fmt(deal.currency, unit)} / {t.progress.pcs}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => removeDealItem(deal.id, p.id)}
-                      title={t.cart.remove}
-                      className="self-start text-slate-300 hover:text-red-500"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+        </header>
+
+        {/* body */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-7xl px-5 py-6">
+            {/* live discount panel */}
+            <MinOrderProgress tiers={deal.tiers} qty={totalQty} className="mb-6" />
+
+            {lines.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-24 text-center text-slate-400">
+                {t.cart.empty}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {lines.map((p) => (
+                  <DealProductCard
+                    key={p.id}
+                    product={p}
+                    tierIndex={tierIndex}
+                    tiers={deal.tiers}
+                    currency={deal.currency}
+                    qty={cart[p.id]}
+                    canSeePrices={canSeePrices}
+                    closed={false}
+                    onAdd={() => onSet(p.id, cart[p.id] + 1)}
+                    onSet={(q) => onSet(p.id, q)}
+                    onBrandClick={(b) => { onClose(); onBrandClick(b); }}
+                    onOpenDetail={() => onOpenDetail(p)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* purchase terms */}
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5">
+              <h3 className="mb-3 font-display text-base font-black text-slate-900">{t.conditions.heading}</h3>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  { icon: Truck, text: `${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}` },
+                  { icon: CreditCard, text: lang === 'cs' ? `Záloha ${deal.deposit_percent} % bankovním převodem` : `${deal.deposit_percent} % deposit by bank transfer` },
+                  { icon: ListOrdered, text: t.conditions.items[4].desc },
+                ].map(({ icon: Icon, text }) => (
+                  <div key={text} className="flex items-start gap-2 text-xs text-slate-600">
+                    <Icon className="h-4 w-4 shrink-0 text-slate-400" />
+                    <span>{text}</span>
                   </div>
                 ))}
               </div>
-            </ScrollArea>
-
-            <div className="border-t border-slate-200 p-4">
-              <div className="mb-1 flex justify-between text-sm">
-                <span className="text-slate-500">{t.orderBar.items}</span>
-                <span className="font-semibold tabular-nums">{totalQty} {t.progress.pcs}</span>
-              </div>
-              <div className="mb-1 flex justify-between text-sm">
-                <span className="text-slate-500">{t.cart.total}</span>
-                <span className="font-display text-lg font-black tabular-nums">{fmt(deal.currency, totalValue)}</span>
-              </div>
-              <div className="mb-3 flex justify-between text-sm">
-                <span className="text-slate-500">{t.orderBar.margin}</span>
-                <span className="font-semibold tabular-nums text-emerald-600">{fmt(deal.currency, totalMargin)}</span>
-              </div>
-              <Button
-                onClick={onSubmit}
-                disabled={submitDisabled}
-                className="w-full gap-2 bg-red-600 hover:bg-red-700"
-              >
-                <Send className="h-4 w-4" /> {t.cart.submit}
-              </Button>
+              {deal.payment_terms && (
+                <p className="mt-3 border-t border-slate-100 pt-3 text-[11px] leading-relaxed text-slate-500">
+                  {deal.payment_terms}
+                </p>
+              )}
             </div>
-          </>
-        )}
-      </aside>
+          </div>
+        </div>
+
+        {/* footer totals */}
+        <footer className="shrink-0 border-t border-slate-200 bg-white">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-2 px-5 py-3">
+            <Total label={t.orderBar.items} value={`${totalQty} ${t.progress.pcs}`} />
+            <Total label={t.cart.total} value={canSeePrices ? money(deal.currency, value) : '—'} />
+            <Total label={t.orderBar.margin} value={canSeePrices ? money(deal.currency, margin) : '—'} accent />
+            <Total
+              label={t.orderBar.discount}
+              value={prog.minimumReached ? `${prog.effectiveTier.discount_percent} %` : '—'}
+            />
+            <Button
+              size="lg"
+              disabled={submitDisabled}
+              onClick={onSubmit}
+              className="ml-auto gap-2 bg-red-600 hover:bg-red-700"
+            >
+              <Send className="h-4 w-4" />
+              {prog.minimumReached
+                ? t.cart.submit
+                : fillTemplate(t.orderBar.submitLocked, { n: prog.remainingToNext })}
+            </Button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+function Total({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div>
+      <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</div>
+      <div className={`font-display text-base font-black tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+        {value}
+      </div>
     </div>
   );
 }

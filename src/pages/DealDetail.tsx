@@ -60,10 +60,14 @@ export default function DealDetail() {
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
   // Hide the filter bar on scroll-down, reveal on scroll-up — like the navbar.
+  // Only reacts to a meaningful scroll delta to avoid jitter near the top.
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setBarHidden(y > lastScrollRef.current && y > 140);
+      const delta = y - lastScrollRef.current;
+      if (Math.abs(delta) < 8) return;
+      if (delta > 0 && y > 320) setBarHidden(true);
+      else if (delta < 0) setBarHidden(false);
       lastScrollRef.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -228,8 +232,8 @@ export default function DealDetail() {
 
       {/* ── Sticky filter bar ── */}
       <div
-        className={`sticky top-14 z-30 border-y border-slate-200 bg-slate-50/95 backdrop-blur transition-transform duration-300 sm:top-24
-          ${barHidden ? '-translate-y-[140%]' : 'translate-y-0'}`}
+        className={`sticky top-14 z-30 border-y border-slate-200 bg-slate-50/95 backdrop-blur transition-transform duration-300 ease-out sm:top-24
+          ${barHidden ? '-translate-y-[calc(100%_+_7rem)]' : 'translate-y-0'}`}
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-6 py-3">
           <div className="relative min-w-[180px] flex-1">
@@ -342,8 +346,15 @@ export default function DealDetail() {
         open={cartOpen}
         onClose={() => setCartOpen(false)}
         tierIndex={tierIndex}
+        canSeePrices={canSeePrices}
         onSubmit={handleSubmit}
         submitDisabled={!prog?.minimumReached}
+        onSet={(id, q) => {
+          const p = products.find((x) => x.id === id);
+          setDealItemQty(deal.id, id, Math.min(q, p?.available ?? q));
+        }}
+        onBrandClick={handleBrandClick}
+        onOpenDetail={setDetailProduct}
       />
 
       <DealProductModal
