@@ -478,36 +478,18 @@
   padding: 0 !important;
 }
 
-/* Group headers — gradient pill with iconified chip */
+/* Group headers — card-style matching quick-row pills (Pouze skladem / Jazyk) */
 .filter-group-header {
-  position: relative;
-  margin: 8px 8px 4px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid;
-  overflow: hidden;
-  isolation: isolate;
+  margin: 6px 8px 4px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
   width: 100%;
-  background:
-    linear-gradient(135deg, var(--fg-bg-1, rgba(0,0,0,0.02)) 0%, var(--fg-bg-2, rgba(0,0,0,0.04)) 100%);
-  border-color: var(--fg-border, rgba(0,0,0,0.08));
 }
-.filter-group-header::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 8px; bottom: 8px;
-  width: 3px;
-  border-radius: 3px;
-  background: var(--fg-bar, linear-gradient(180deg, #d4d4d8, #a1a1aa));
-}
-.filter-group-header[data-active='true']::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(60% 50% at 100% 0%, var(--fg-glow, rgba(168,85,247,0.10)) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: -1;
+.filter-group-header[data-active='true'] {
+  border-color: rgba(37,99,235,0.30);
+  background: rgba(37,99,235,0.03);
 }
 .filter-group-header-inner {
   display: flex;
@@ -521,8 +503,8 @@
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: var(--fg-chip-bg, rgba(0,0,0,0.06));
-  color: var(--fg-chip-fg, #71717a);
+  background: var(--fg-chip-bg, rgba(37,99,235,0.08));
+  color: var(--fg-chip-fg, #2563eb);
   flex-shrink: 0;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 0 rgba(0,0,0,0.02);
   transition: all 220ms ease;
@@ -534,17 +516,17 @@
   flex: 1;
 }
 .filter-group-label {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--fg-label, hsl(var(--foreground)));
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: hsl(var(--foreground));
   line-height: 1.2;
 }
 .filter-group-sub {
   font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--fg-sub, hsl(var(--muted-foreground)));
+  letter-spacing: 0;
+  color: hsl(var(--muted-foreground));
   margin-top: 2px;
   line-height: 1.3;
 }
@@ -560,57 +542,26 @@
   font-variant-numeric: tabular-nums;
   border-radius: 999px;
   color: #fff;
-  background: var(--fg-bar, linear-gradient(135deg, #71717a, #52525b));
+  background: var(--swelt-grad);
   box-shadow: 0 2px 6px -2px rgba(0,0,0,0.25);
 }
 
-/* Variant: jewelry — deep navy blue (distinct from watches via depth, not hue) */
+/* Variant chip accents — karta bílá, čip zachovává barevný nádech */
 .filter-group-jewelry {
-  --fg-bg-1: rgba(30,58,138,0.06);
-  --fg-bg-2: rgba(30,64,175,0.10);
-  --fg-border: rgba(30,64,175,0.30);
-  --fg-bar: linear-gradient(180deg, #3b82f6, #1e40af);
   --fg-chip-bg: linear-gradient(135deg, #dbeafe, #bfdbfe);
   --fg-chip-fg: #1e3a8a;
-  --fg-label: #1e3a8a;
-  --fg-sub: #1d4ed8;
-  --fg-glow: rgba(30,64,175,0.18);
 }
-/* Variant: watches — primary blue */
 .filter-group-watches {
-  --fg-bg-1: rgba(96,165,250,0.08);
-  --fg-bg-2: rgba(37,99,235,0.12);
-  --fg-border: rgba(37,99,235,0.30);
-  --fg-bar: linear-gradient(180deg, #60a5fa, #2563eb);
   --fg-chip-bg: linear-gradient(135deg, #dbeafe, #93c5fd);
   --fg-chip-fg: #1d4ed8;
-  --fg-label: #1e40af;
-  --fg-sub: #2563eb;
-  --fg-glow: rgba(37,99,235,0.20);
 }
-/* Variant: common — sky / lighter blue */
 .filter-group-common {
-  --fg-bg-1: rgba(125,211,252,0.10);
-  --fg-bg-2: rgba(56,189,248,0.12);
-  --fg-border: rgba(14,165,233,0.30);
-  --fg-bar: linear-gradient(180deg, #7dd3fc, #0284c7);
   --fg-chip-bg: linear-gradient(135deg, #e0f2fe, #bae6fd);
   --fg-chip-fg: #075985;
-  --fg-label: #0c4a6e;
-  --fg-sub: #0369a1;
-  --fg-glow: rgba(14,165,233,0.18);
 }
-/* Variant: neutral — slate */
 .filter-group-neutral {
-  --fg-bg-1: rgba(100,116,139,0.04);
-  --fg-bg-2: rgba(71,85,105,0.06);
-  --fg-border: rgba(71,85,105,0.18);
-  --fg-bar: linear-gradient(180deg, #94a3b8, #475569);
   --fg-chip-bg: linear-gradient(135deg, #f1f5f9, #e2e8f0);
   --fg-chip-fg: #334155;
-  --fg-label: #1e293b;
-  --fg-sub: #64748b;
-  --fg-glow: rgba(71,85,105,0.10);
 }
 .filter-group-header:hover .filter-group-chip {
   transform: scale(1.05);
