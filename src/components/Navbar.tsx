@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, Settings, Package, X, Home, Info, Briefcase, Phone, BookOpen, LogIn, UserPlus, Handshake, Rss, PackageOpen, HandCoins, LayoutDashboard, Flame } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,13 +25,140 @@ interface NavbarProps {
 }
 
 const HOME_NAV_ITEMS = [
-  { path: '/deals', label: 'DEAL nabídky', icon: Flame },
-  { path: '/velkoobchod', label: 'Velkoobchod', icon: Handshake },
-  { path: '/luxury', label: 'Nákup bez registrace', icon: HandCoins },
-  { path: '/feed', label: 'Feed', icon: Rss },
-  { path: '/dropshipping', label: 'Dropshipping', icon: PackageOpen },
-  { path: '/shop', label: 'E-shop do 48h', icon: ShoppingCart },
+  { path: '/deals',        label: 'DEAL nabídky' },
+  { path: '/velkoobchod', label: 'Velkoobchod' },
+  { path: '/luxury',      label: 'Nákup bez registrace' },
+  { path: '/feed',        label: 'Feed' },
+  { path: '/dropshipping',label: 'Dropshipping' },
+  { path: '/shop',        label: 'E-shop do 48h' },
+  { path: '/support',     label: 'Support' },
 ];
+
+type NavPanelCol = { title: string; links: { label: string; desc: string; path: string }[] };
+type NavPanel = { heading: string; desc: string; cols: NavPanelCol[]; cta: { label: string; path: string } };
+
+const NAV_PANELS: Record<string, NavPanel> = {
+  '/deals': {
+    heading: 'DEAL nabídky',
+    desc: 'Časově omezené akce na prémiové hodinky a šperky za výjimečné ceny.',
+    cols: [
+      { title: 'Kategorie', links: [
+        { label: 'Hodinky', desc: 'Luxusní a sportovní hodinky ve slevě', path: '/deals' },
+        { label: 'Šperky', desc: 'Náhrdelníky, náramky, prsteny', path: '/deals' },
+        { label: 'Dárkové sady', desc: 'Kompletní sety za speciální cenu', path: '/deals' },
+      ]},
+      { title: 'Aktuální akce', links: [
+        { label: 'Tommy Hilfiger', desc: 'DEAL: −60 % z MOC', path: '/deals' },
+        { label: 'Versace', desc: 'DEAL: −55 % z MOC', path: '/deals' },
+        { label: 'Hugo Boss', desc: 'DEAL: −58 % z MOC', path: '/deals' },
+      ]},
+    ],
+    cta: { label: 'Zobrazit všechny DEAL nabídky', path: '/deals' },
+  },
+  '/velkoobchod': {
+    heading: 'B2B Velkoobchod',
+    desc: '3 000+ produktů prémiových značek za velkoobchodní ceny. Přístup po schválení.',
+    cols: [
+      { title: 'Katalog', links: [
+        { label: 'Hodinky 70+ značek', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/velkoobchod' },
+        { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/velkoobchod' },
+        { label: 'Slevy 40–65 %', desc: 'Velkoobchodní ceny od 1 kusu', path: '/velkoobchod' },
+      ]},
+      { title: 'Pro firmy', links: [
+        { label: 'B2B registrace', desc: 'Schválení do 24 hodin, zdarma', path: '/register' },
+        { label: 'Firemní dárky', desc: 'Zakázkové sestavy pro celé týmy', path: '/luxury' },
+        { label: 'Individuální ceny', desc: 'Pro větší odběry kontaktujte nás', path: '/support' },
+      ]},
+    ],
+    cta: { label: 'Vstoupit do velkoobchodu', path: '/velkoobchod' },
+  },
+  '/luxury': {
+    heading: 'Nákup bez registrace',
+    desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez B2B účtu, od 1 kusu.',
+    cols: [
+      { title: 'Výhody', links: [
+        { label: 'Bez registrace', desc: 'Stačí IČO nebo soukromá osoba', path: '/luxury' },
+        { label: 'Diskrétní balení', desc: 'Zásilka bez označení odesílatele', path: '/luxury' },
+        { label: 'EU doručení', desc: 'Doručení do 15+ zemí Evropy', path: '/luxury' },
+      ]},
+      { title: 'Oblíbené značky', links: [
+        { label: 'Tommy Hilfiger', desc: 'od 1 790 Kč', path: '/luxury' },
+        { label: 'Versace', desc: 'od 2 890 Kč', path: '/luxury' },
+        { label: 'Swarovski', desc: 'od 990 Kč', path: '/luxury' },
+      ]},
+    ],
+    cta: { label: 'Prohlédnout nabídku', path: '/luxury' },
+  },
+  '/feed': {
+    heading: 'Produktový Feed',
+    desc: 'Automatický XML/CSV feed s 3 000+ produkty. 4× denně aktualizace cen a dostupnosti.',
+    cols: [
+      { title: 'Formáty', links: [
+        { label: 'XML / Heureka', desc: 'Přímá integrace s Heureka.cz', path: '/feed' },
+        { label: 'Zbozi.cz', desc: 'Kompatibilní formát pro Zbozi.cz', path: '/feed' },
+        { label: 'Google Shopping', desc: 'Google Merchant Center feed', path: '/feed' },
+        { label: 'CSV / vlastní', desc: 'Flexibilní formát na míru', path: '/feed' },
+      ]},
+      { title: 'Vlastnosti', links: [
+        { label: '4× denně aktualizace', desc: 'Ceny a dostupnost v reálném čase', path: '/feed' },
+        { label: 'Automatická sync', desc: 'Bez manuálního zásahu', path: '/feed' },
+        { label: 'API přístup', desc: 'Přímé napojení na váš systém', path: '/feed' },
+      ]},
+    ],
+    cta: { label: 'Zjistit více o feedu', path: '/feed' },
+  },
+  '/dropshipping': {
+    heading: 'Dropshipping',
+    desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme.',
+    cols: [
+      { title: 'Jak to funguje', links: [
+        { label: 'Zákazník objedná', desc: 'Na vašem e-shopu nebo platformě', path: '/dropshipping' },
+        { label: 'Swelt zabalí', desc: 'Pod vaší značkou, s vaší fakturou', path: '/dropshipping' },
+        { label: 'Doručení 24–48 h', desc: 'Do celé EU, bez výjimky', path: '/dropshipping' },
+      ]},
+      { title: 'Výhody', links: [
+        { label: '0 Kč do skladu', desc: 'Platíte až po prodeji', path: '/dropshipping' },
+        { label: '60 % průměrná marže', desc: 'Přímé velkoobchodní ceny', path: '/dropshipping' },
+        { label: 'EU expanze', desc: 'Prodávejte do 15+ zemí bez poboček', path: '/dropshipping' },
+      ]},
+    ],
+    cta: { label: 'Chci dropshipping', path: '/dropshipping' },
+  },
+  '/shop': {
+    heading: 'E-shop do 48 hodin',
+    desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
+    cols: [
+      { title: 'Co dostanete', links: [
+        { label: 'Hotový e-shop', desc: 'Design, hosting, produkty — vše v jednom', path: '/shop' },
+        { label: 'Automatický feed', desc: 'Produkty se synchronizují samy', path: '/shop' },
+        { label: 'Platební brána', desc: 'Integrace s oblíbenými systémy', path: '/shop' },
+      ]},
+      { title: 'Technologie', links: [
+        { label: 'Shopify / WooCommerce', desc: 'Váš výběr platformy', path: '/shop' },
+        { label: 'SEO optimalizace', desc: 'Připraveno pro vyhledávače', path: '/shop' },
+        { label: 'Mobilní design', desc: 'Responzivní na všech zařízeních', path: '/shop' },
+      ]},
+    ],
+    cta: { label: 'Chci svůj e-shop', path: '/shop' },
+  },
+  '/support': {
+    heading: 'Podpora & Kontakt',
+    desc: 'Jsme tu pro vás. Odpovíme do 24 hodin v pracovní dny. AI asistent dostupný 24/7.',
+    cols: [
+      { title: 'Kontakt', links: [
+        { label: 'E-mail podpora', desc: 'info@swelt.cz', path: '/support' },
+        { label: 'Živý AI chat', desc: 'Odpověď do 5 vteřin, 24/7', path: '/support' },
+        { label: 'Account manager', desc: 'Osobní péče, telefonická konzultace', path: '/support' },
+      ]},
+      { title: 'Zdroje', links: [
+        { label: 'Časté dotazy (FAQ)', desc: 'Odpovědi na nejčastější otázky', path: '/support' },
+        { label: 'Technická dokumentace', desc: 'Feed API a integrace', path: '/support' },
+        { label: 'Obchodní podmínky', desc: 'GDPR a podmínky spolupráce', path: '/support' },
+      ]},
+    ],
+    cta: { label: 'Kontaktovat podporu', path: '/support' },
+  },
+};
 
 // Map Lang code -> ISO 3166-1 alpha-2 country code for flagcdn.com
 // (emoji 🇨🇿 etc. don't render on Windows — use bitmap fallback)
@@ -71,6 +198,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const [menuOpen, setMenuOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
+  const [activeNav, setActiveNav] = useState<string | null>(null);
 
   const openAuth = (tab: 'login' | 'register' | 'b2b') => {
     setAuthTab(tab);
@@ -157,6 +285,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => el.removeEventListener('wheel', onWheel);
   }, [isHome, isOnHomePage]);
+
+  // Close mega-menu on Escape or when navbar hides on scroll
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setActiveNav(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  useEffect(() => { if (hidden) setActiveNav(null); }, [hidden]);
 
   const handleLogout = async () => {
     await signOut();
@@ -463,15 +600,19 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               />
             </div>
           ) : (
-            <nav className="flex items-center gap-1">
-              {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
+            <nav className="flex items-center gap-0.5">
+              {HOME_NAV_ITEMS.map(({ path, label }) => (
                 <button
                   key={path}
-                  onClick={() => navigate(path)}
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-all"
+                  onClick={() => setActiveNav(activeNav === path ? null : path)}
+                  className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-medium transition-all ${
+                    activeNav === path
+                      ? 'text-zinc-900 bg-zinc-100'
+                      : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                  }`}
                 >
-                  <Icon className="h-3.5 w-3.5" />
                   {label}
+                  <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === path ? 'rotate-180' : ''}`} />
                 </button>
               ))}
             </nav>
@@ -497,6 +638,61 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       )}
     </header>
 
+    {/* ── Mega-menu panel — overlaps hero, desktop only ── */}
+    {activeNav && NAV_PANELS[activeNav] && (() => {
+      const panel = NAV_PANELS[activeNav];
+      return (
+        <>
+          {/* Click-outside backdrop */}
+          <div className="fixed inset-0 z-[94]" onClick={() => setActiveNav(null)} />
+          {/* Panel */}
+          <div
+            className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
+            style={{ top: headerHeight }}
+          >
+            <div className="mx-auto max-w-5xl px-6 py-8">
+              <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
+                {/* Left: heading + desc + CTA */}
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
+                  <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">{panel.heading}</h3>
+                  <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">{panel.desc}</p>
+                  <button
+                    onClick={() => { setActiveNav(null); navigate(panel.cta.path); }}
+                    className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                  >
+                    {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                {/* Right: columns of links */}
+                <div className="flex gap-10">
+                  {panel.cols.map((col) => (
+                    <div key={col.title} className="min-w-[180px]">
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">{col.title}</p>
+                      <ul className="space-y-1">
+                        {col.links.map((link) => (
+                          <li key={link.label}>
+                            <button
+                              onClick={() => { setActiveNav(null); navigate(link.path); }}
+                              className="group flex flex-col text-left w-full rounded-lg px-2 py-2 hover:bg-zinc-50 transition-colors"
+                            >
+                              <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900">{link.label}</span>
+                              <span className="text-[11px] text-zinc-400 leading-tight">{link.desc}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    })()}
+
     {/* Desktop navigation sheet */}
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
@@ -513,14 +709,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <SheetTitle className="text-left">Nabídka</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto py-2">
-          {/* Primary services — same items as desktop row 2 (Velkoobchod, Feed, ...) */}
-          {HOME_NAV_ITEMS.map(({ path, label, icon: Icon }) => (
+          {/* Primary services */}
+          {HOME_NAV_ITEMS.map(({ path, label }) => (
             <button
               key={path}
               onClick={() => { setMenuOpen(false); navigate(path); }}
-              className="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-muted/50 transition-colors"
+              className="flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-zinc-50 transition-colors"
             >
-              <Icon className="h-4 w-4 text-zinc-500" /> {label}
+              {label}
+              <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
             </button>
           ))}
           <div className="border-t my-2" />
