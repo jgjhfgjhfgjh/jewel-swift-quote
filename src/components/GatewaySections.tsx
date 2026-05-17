@@ -2,13 +2,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
-  Check, ArrowRight, ChevronRight, Users, Star, Shield,
-  TrendingUp, Zap, Globe, FileText, BarChart3, Lock,
-  Package, Clock, Rocket, RefreshCw, Sparkles, Eye,
-  Truck, Award, MapPin, Building2, AlertCircle, Target, X,
+  Check, ArrowRight, Users, Star, Shield,
+  Globe, Lock,
+  Rocket, Sparkles, Eye,
+  X,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
-import { GatewayMascot3D } from './SweltGateway';
 import { EuropeMap } from './EuropeMap';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +17,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
-import sweltLogo from '@/assets/logo.png';
+
 
 /* ── Reveal on scroll ── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -471,13 +470,10 @@ function TrustSection() {
   ];
 
   return (
-    <section className="relative bg-zinc-100 py-24 sm:py-28 overflow-hidden">
+    <section className="relative bg-white py-24 sm:py-28 overflow-hidden">
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Stats */}
         <Reveal className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
-            {g.trustEyebrow}
-          </div>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">{g.trustHeading}</h2>
         </Reveal>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
@@ -558,46 +554,46 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   const sections = [
     {
-      id: 'velkoobchod', badgeColor: 'bg-zinc-100 text-zinc-600', icon: Handshake,
+      id: 'velkoobchod',
       ...g.velkoobchod,
       ctas: (<div className="flex flex-col sm:flex-row gap-3">
         <Button onClick={() => navigate('/velkoobchod')} className="gap-2">
           {g.velkoobchod.ctaLabel} <ArrowRight className="h-4 w-4" />
         </Button>
       </div>),
-      visual: <B2BVisual />, reverse: false, bg: 'bg-white',
+      visual: <B2BVisual />, reverse: false,
     },
     {
-      id: 'luxury', badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200', icon: HandCoins,
+      id: 'luxury',
       ...g.luxury,
       ctas: (<Button onClick={() => navigate('/luxury')} className="gap-2">
         {g.luxury.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
-      visual: <LuxuryVisual />, reverse: true, bg: 'bg-muted/20',
+      visual: <LuxuryVisual />, reverse: true,
     },
     {
-      id: 'feed', badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200', icon: Rss,
+      id: 'feed',
       ...g.feed,
       ctas: (<Button onClick={() => navigate('/feed')} className="gap-2">
         {g.feed.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
-      visual: <FeedVisual />, reverse: false, bg: 'bg-white',
+      visual: <FeedVisual />, reverse: false,
     },
     {
-      id: 'dropshipping', badgeColor: 'bg-zinc-100 text-zinc-600', icon: PackageOpen,
+      id: 'dropshipping',
       ...g.dropshipping,
       ctas: (<Button onClick={() => navigate('/dropshipping')} className="gap-2">
         {g.dropshipping.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
-      visual: <DropshippingVisual />, reverse: true, bg: 'bg-muted/20',
+      visual: <DropshippingVisual />, reverse: true,
     },
     {
-      id: 'shop', badgeColor: 'bg-zinc-100 text-zinc-600', icon: ShoppingCart,
+      id: 'shop',
       ...g.shop,
       ctas: (<Button onClick={() => navigate('/shop')} className="gap-2">
         {g.shop.ctaLabel} <ArrowRight className="h-4 w-4" />
       </Button>),
-      visual: <ShopVisual />, reverse: false, bg: 'bg-white',
+      visual: <ShopVisual />, reverse: false,
     },
   ];
 
@@ -672,7 +668,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-zinc-100 border-b border-border overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
@@ -804,14 +800,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-zinc-100 border-b border-border">
+      <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
-                <Globe className="h-3.5 w-3.5" /> Doručovací zóna
-              </div>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
                 Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
               </h2>
@@ -849,63 +842,37 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          <Reveal delay={160}>
-            <div className="rounded-2xl bg-white border border-zinc-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="h-12 w-12 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
-                <Truck className="h-6 w-6 text-zinc-600" />
-              </div>
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-300 px-3 py-1 text-xs font-semibold text-zinc-600 mb-2">
-                  <Globe className="h-3.5 w-3.5" /> Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat
-                </div>
-                <div className="font-display font-semibold text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.
-                </p>
-              </div>
-              <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
-                Chci dropshipping <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Reveal>
-
-          {/* Tři obavy → tři gateway karty */}
-          {[
-            { icon: HandCoins, label: 'Nemám peníze na naskladnění',     labelIcon: AlertCircle, title: 'Platíš až po prodeji',           text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
-            { icon: Truck,     label: 'Nevím jak řešit logistiku',       labelIcon: Truck,       title: 'O expedici se staráme my',       text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-            { icon: Target,    label: 'Bojím se že špatně zvolím produkty ', labelIcon: Target,      title: 'S plánem Silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit' },
-          ].map((item, idx) => (
-            <Reveal key={item.title} delay={180 + idx * 60}>
-              <div className="rounded-2xl bg-white border border-zinc-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
-                <div className="h-12 w-12 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
-                  <item.icon className="h-6 w-6 text-zinc-600" />
-                </div>
-                <div className="flex-1">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-300 px-3 py-1 text-xs font-semibold text-zinc-600 mb-2">
-                    <item.labelIcon className="h-3.5 w-3.5" /> {item.label}
+          <div className="border-t border-zinc-200 divide-y divide-zinc-200">
+            {[
+              { label: 'Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat', title: 'Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.', text: 'Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.' },
+              { label: 'Nemám peníze na naskladnění',                                          title: 'Platíš až po prodeji',                                                              text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
+              { label: 'Nevím jak řešit logistiku',                                            title: 'O expedici se staráme my',                                                         text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
+              { label: 'Bojím se že špatně zvolím produkty',                                   title: 'S plánem Silver 5000+ produktů',                                                   text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
+            ].map((item, idx) => (
+              <Reveal key={item.title} delay={160 + idx * 50}>
+                <div className="py-7 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                  <div className="flex-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{item.label}</p>
+                    <div className="font-display font-semibold text-foreground mb-1">{item.title}</div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
                   </div>
-                  <div className="font-display font-semibold text-foreground mb-1">{item.title}</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
+                  <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
+                    Chci dropshipping <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
-                  Chci dropshipping <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════
           2. BRANDS — 70+ značek + premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-zinc-100 border-b border-border">
+      <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
-                <Award className="h-3.5 w-3.5" /> Katalog značek
-              </div>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
                 70+ světových značek. V jednom místě.
               </h2>
@@ -934,26 +901,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* Premium segment */}
           <Reveal delay={120}>
-            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 mb-4">
-              <div className="flex items-start gap-4 mb-5">
-                <div className="h-11 w-11 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
-                  <Star className="h-5 w-5 text-zinc-500" />
-                </div>
-                <div>
-                  <div className="font-display font-semibold text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
-                  </p>
-                </div>
-              </div>
+            <div className="border-t border-zinc-200 pt-8 pb-6 mb-2">
+              <div className="font-display font-semibold text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
+              </p>
               <div className="flex flex-wrap gap-2 mb-5">
                 {BRANDS_PREMIUM.map((b) => (
-                  <span key={b} className="rounded-xl border border-border bg-background px-3.5 py-2 text-sm font-semibold text-foreground">
+                  <span key={b} className="rounded-xl border border-zinc-200 px-3.5 py-2 text-sm font-semibold text-foreground">
                     {b}
                   </span>
                 ))}
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
+              <Button variant="outline" className="gap-2 border-zinc-900" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
                 Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </div>
@@ -961,10 +921,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* Private purchase info */}
           <Reveal delay={160}>
-            <div className="rounded-2xl border border-border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="h-11 w-11 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
-                <Building2 className="h-5 w-5 text-zinc-500" />
-              </div>
+            <div className="border-t border-zinc-200 py-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="flex-1">
                 <div className="font-display font-semibold text-foreground mb-1">Jakákoliv značka bez registrace?</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -982,10 +939,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-zinc-100 border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
-            <div className="rounded-3xl border border-border bg-card shadow-sm p-8 sm:p-12 text-center">
+            <div className="text-center">
               <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3">Začněte ještě dnes</p>
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
                 Přístup k 3 000+ produktům.<br className="hidden sm:block" /> Velkoobchodní ceny od prvního kusu.
@@ -1004,7 +961,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="gap-2 px-8 text-base"
+                  className="gap-2 px-8 text-base border-zinc-900"
                   onClick={() => openAuth('login')}
                 >
                   <Eye className="h-4 w-4" /> Prohlédnout sortiment
@@ -1024,14 +981,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-zinc-100 border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative bg-white border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-5">
-                <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-pulse" />
-                {g.introEyebrow}
-              </div>
               <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
                 {g.introHeading}
               </h2>
@@ -1082,7 +1035,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="gap-1.5 shrink-0 hidden sm:inline-flex"
+                        className="gap-1.5 shrink-0 hidden sm:inline-flex border-zinc-900"
                         onClick={() => navigate(card.path)}
                       >
                         {card.cta} <ArrowRight className="h-3.5 w-3.5" />
@@ -1090,7 +1043,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     </div>
                     {/* Mobile CTA */}
                     <div className="px-5 pb-4 sm:hidden">
-                      <Button variant="outline" size="sm" className="gap-1.5 w-full" onClick={() => navigate(card.path)}>
+                      <Button variant="outline" size="sm" className="gap-1.5 w-full border-zinc-900" onClick={() => navigate(card.path)}>
                         {card.cta} <ArrowRight className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -1103,8 +1056,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Lead capture */}
           {!user && (
             <Reveal delay={100} className="mb-6">
-              <div className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl">
-                <div className="relative p-5 sm:p-8">
+              <div className="relative border-t border-zinc-200 pt-8">
+                <div className="relative">
                   <div className="flex items-center justify-between mb-4">
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
                       <Eye className="h-3 w-3" /> Zdarma · 30 sekund
@@ -1134,15 +1087,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* AI / Account Manager gateway */}
           <Reveal delay={150}>
-            <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm p-5 sm:p-7">
-              <div className="flex items-center justify-between mb-3">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white text-zinc-600 px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
-                  <Star className="h-3 w-3 fill-zinc-400" /> Váš obchodní tým
-                </div>
-                <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online teď
-                </div>
-              </div>
+            <div className="border-t border-zinc-200 pt-8">
               <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1 text-left">Potřebujete poradit?</h3>
               <p className="text-sm text-zinc-500 mb-5 text-left">Vyberte si způsob — okamžitý AI zástupce nebo osobní account manager.</p>
 
@@ -1214,23 +1159,18 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           6. GATEWAY SECTIONS — 5 alternujících sekcí
       ══════════════════════════════════════════ */}
-      {sections.map((section, idx) => {
-        const Icon = section.icon;
+      {sections.map((section) => {
         return (
           <section
             key={section.id}
             id={section.id}
-            className={`relative py-20 sm:py-28 scroll-mt-16 ${idx % 2 === 0 ? 'bg-zinc-100' : 'bg-zinc-50'}`}
+            className="relative py-20 sm:py-28 scroll-mt-16 bg-white border-b border-border"
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
               <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
                 <Reveal>
                   <div className="space-y-7">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-xs">
-                      <Icon className="h-4 w-4 text-zinc-500" />
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">{section.label}</span>
-                    </div>
                     <div>
                       <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight mb-4 text-balance">
                         {section.heading}

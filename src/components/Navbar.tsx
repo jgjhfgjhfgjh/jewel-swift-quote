@@ -216,6 +216,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   };
 
   const lastScrollY = useRef(0);
+  const navCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const menuOpenRef = useRef(false);
@@ -294,6 +295,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   }, []);
 
   useEffect(() => { if (hidden) setActiveNav(null); }, [hidden]);
+
+  const handleNavEnter = (path: string) => {
+    if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
+    setActiveNav(path);
+  };
+
+  const handleNavLeave = () => {
+    navCloseTimer.current = setTimeout(() => setActiveNav(null), 120);
+  };
+
+  const handlePanelEnter = () => {
+    if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
+  };
+
+  const handlePanelLeave = () => {
+    navCloseTimer.current = setTimeout(() => setActiveNav(null), 120);
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -604,11 +622,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               {HOME_NAV_ITEMS.map(({ path, label }) => (
                 <button
                   key={path}
-                  onClick={() => setActiveNav(activeNav === path ? null : path)}
-                  className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-medium transition-all ${
+                  onMouseEnter={() => handleNavEnter(path)}
+                  onMouseLeave={handleNavLeave}
+                  className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
                     activeNav === path
-                      ? 'text-zinc-900 bg-zinc-100'
-                      : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                      ? 'text-zinc-900'
+                      : 'text-zinc-600 hover:text-zinc-900'
                   }`}
                 >
                   {label}
@@ -643,12 +662,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       const panel = NAV_PANELS[activeNav];
       return (
         <>
-          {/* Click-outside backdrop */}
-          <div className="fixed inset-0 z-[94]" onClick={() => setActiveNav(null)} />
           {/* Panel */}
           <div
             className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
             style={{ top: headerHeight }}
+            onMouseEnter={handlePanelEnter}
+            onMouseLeave={handlePanelLeave}
           >
             <div className="mx-auto max-w-5xl px-6 py-8">
               <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
