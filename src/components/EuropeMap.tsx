@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 /* Low-resolution Europe GeoJSON (jsDelivr CDN, CORS-enabled) */
 const GEO_URL = 'https://cdn.jsdelivr.net/gh/leakyMirror/map-of-europe@master/GeoJSON/europe.geojson';
@@ -31,51 +31,35 @@ const NAME_TO_ISO: Record<string, string> = {
   'Bosnia and Herzegovina': 'BA',
 };
 
-/* ── Mercator projection framed on Europe ── */
-const LON_MIN = -11, LON_MAX = 32, LAT_MIN = 34, LAT_MAX = 62;
-const W = 800, H = 807;
-
 const mercY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
-const MY_MIN = mercY(LAT_MIN);
-const MY_MAX = mercY(LAT_MAX);
 
-function project(lon: number, lat: number): [number, number] {
-  const x = ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * W;
-  const y = ((MY_MAX - mercY(lat)) / (MY_MAX - MY_MIN)) * H;
-  return [x, y];
-}
-
-function ringToPath(ring: number[][]): string {
-  let d = '';
-  for (let i = 0; i < ring.length; i++) {
-    const [lon, lat] = ring[i];
-    const [x, y] = project(lon, lat);
-    d += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
-  }
-  return d + 'Z';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getIso(f: any): string {
+  const p = f.properties || {};
+  const raw = (p.ISO2 || p.iso_a2 || p.ISO_A2 || '').toString().toUpperCase();
+  if (raw && raw !== '-99') return raw;
+  return NAME_TO_ISO[p.NAME || p.name || ''] || '';
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function geometryToPath(geometry: any): string {
-  if (!geometry) return '';
-  if (geometry.type === 'Polygon') {
-    return geometry.coordinates.map(ringToPath).join(' ');
+function eachCoord(geometry: any, cb: (lon: number, lat: number) => void) {
+  if (!geometry) return;
+  const polys =
+    geometry.type === 'Polygon' ? [geometry.coordinates]
+    : geometry.type === 'MultiPolygon' ? geometry.coordinates
+    : [];
+  for (const poly of polys) {
+    for (const ring of poly) {
+      for (const pt of ring) cb(pt[0], pt[1]);
+    }
   }
-  if (geometry.type === 'MultiPolygon') {
-    return geometry.coordinates
-      .map((poly: number[][][]) => poly.map(ringToPath).join(' '))
-      .join(' ');
-  }
-  return '';
 }
 
-interface CountryPath {
-  iso: string;
-  d: string;
-}
+interface CountryPath { iso: string; d: string }
 
 export function EuropeMap() {
-  const [geo, setGeo] = useState<CountryPath[]>([]);
+  const [paths, setPaths] = useState<CountryPath[]>([]);
+  const [dims, setDims] = useState({ w: 800, h: 500 });
   const [hovered, setHovered] = useState<string | null>(null);
 
   useEffect(() => {
@@ -84,16 +68,61 @@ export function EuropeMap() {
       .then((r) => r.json())
       .then((data) => {
         if (!alive || !data?.features) return;
+
+        /* Keep only delivery countries */
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const parsed: CountryPath[] = data.features.map((f: any) => {
-          const p = f.properties || {};
-          const rawIso = (p.ISO2 || p.iso_a2 || p.ISO_A2 || '').toString().toUpperCase();
-          const iso = rawIso && rawIso !== '-99'
-            ? rawIso
-            : (NAME_TO_ISO[p.NAME || p.name || ''] || '');
-          return { iso, d: geometryToPath(f.geometry) };
-        });
-        setGeo(parsed);
+        const features = data.features.filter((f: any) => DELIVERY[getIso(f)]);
+        if (features.length === 0) return;
+
+        /* Bounding box of delivery countries */
+        let lonMin = Infinity, lonMax = -Infinity, latMin = Infinity, latMax = -Infinity;
+        for (const f of features) {
+          eachCoord(f.geometry, (lon, lat) => {
+            if (lon < lonMin) lonMin = lon;
+            if (lon > lonMax) lonMax = lon;
+            if (lat < latMin) latMin = lat;
+            if (lat > latMax) latMax = lat;
+          });
+        }
+
+        /* Mercator projection auto-fitted to the bbox, correct aspect ratio */
+        const W = 800;
+        const pad = 14;
+        const lonSpan = ((lonMax - lonMin) * Math.PI) / 180;
+        const myMax = mercY(latMax);
+        const myMin = mercY(latMin);
+        const mySpan = myMax - myMin;
+        const H = Math.round(W * (mySpan / lonSpan));
+
+        const project = (lon: number, lat: number): [number, number] => {
+          const x = ((lon - lonMin) / (lonMax - lonMin)) * (W - pad * 2) + pad;
+          const y = ((myMax - mercY(lat)) / mySpan) * (H - pad * 2) + pad;
+          return [x, y];
+        };
+
+        const ringPath = (ring: number[][]): string => {
+          let d = '';
+          for (let i = 0; i < ring.length; i++) {
+            const [x, y] = project(ring[i][0], ring[i][1]);
+            d += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+          }
+          return d + 'Z';
+        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const geomPath = (g: any): string => {
+          if (!g) return '';
+          if (g.type === 'Polygon') return g.coordinates.map(ringPath).join(' ');
+          if (g.type === 'MultiPolygon') {
+            return g.coordinates
+              .map((poly: number[][][]) => poly.map(ringPath).join(' '))
+              .join(' ');
+          }
+          return '';
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setPaths(features.map((f: any) => ({ iso: getIso(f), d: geomPath(f.geometry) })));
+        setDims({ w: W, h: H });
       })
       .catch(() => {});
     return () => { alive = false; };
@@ -102,9 +131,9 @@ export function EuropeMap() {
   const hoveredName = hovered ? DELIVERY[hovered] : null;
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center justify-center">
       {/* Hovered country label */}
-      <div className="pointer-events-none absolute left-1/2 top-3 z-10 flex h-7 -translate-x-1/2 items-center">
+      <div className="pointer-events-none absolute left-1/2 top-0 z-10 flex h-7 -translate-x-1/2 items-center">
         {hoveredName && (
           <span className="inline-flex items-center gap-2 rounded-full bg-foreground px-3.5 py-1 text-xs font-semibold text-background shadow-lg">
             <span className="h-1.5 w-1.5 rounded-full bg-white" />
@@ -114,33 +143,23 @@ export function EuropeMap() {
       </div>
 
       <svg
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={`0 0 ${dims.w} ${dims.h}`}
         className="w-full h-auto"
         role="img"
         aria-label="Mapa zemí doručení v Evropě"
       >
-        {geo.map((c, i) => {
-          const isDelivery = Boolean(DELIVERY[c.iso]);
+        {paths.map((c, i) => {
           const isHovered = hovered === c.iso;
           return (
             <path
               key={c.iso || i}
               d={c.d}
-              fill={
-                isDelivery
-                  ? isHovered
-                    ? 'hsl(240 4% 18%)'
-                    : 'hsl(240 4% 28%)'
-                  : '#ECEEF1'
-              }
+              fill={isHovered ? 'hsl(240 5% 14%)' : 'hsl(240 4% 26%)'}
               stroke="#ffffff"
-              strokeWidth={0.8}
+              strokeWidth={0.9}
               strokeLinejoin="round"
-              style={{
-                transition: 'fill 0.2s ease',
-                cursor: isDelivery ? 'pointer' : 'default',
-              }}
-              onMouseEnter={() => isDelivery && setHovered(c.iso)}
+              style={{ transition: 'fill 0.2s ease', cursor: 'pointer' }}
+              onMouseEnter={() => setHovered(c.iso)}
               onMouseLeave={() => setHovered(null)}
             />
           );
