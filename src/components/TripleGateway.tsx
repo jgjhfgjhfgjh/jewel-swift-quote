@@ -171,7 +171,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                   variant={idx === 0 ? 'default' : 'outline'}
                   className={
                     idx === 0
-                      ? 'w-full bg-primary hover:bg-primary/90 text-primary-foreground border border-primary/40 font-medium text-[10px] sm:text-sm py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-[40px] whitespace-normal break-words leading-[1.15] sm:leading-tight'
+                      ? 'w-full bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 font-medium text-[10px] sm:text-sm py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-[40px] whitespace-normal break-words leading-[1.15] sm:leading-tight'
                       : 'w-full bg-white/10 hover:bg-white/20 text-white border border-white/40 font-medium text-[10px] sm:text-sm py-2 sm:py-2.5 px-1.5 sm:px-3 rounded-md transition-colors h-auto min-h-[40px] sm:min-h-[40px] whitespace-normal break-words leading-[1.15] sm:leading-tight backdrop-blur-sm'
                   }
                 >
@@ -195,7 +195,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
           <ul className="space-y-1.5 sm:space-y-2.5">
             {card.details.bullets.map((bullet, i) => (
               <li key={i} className="flex items-start gap-1.5 sm:gap-2 text-foreground/80 text-[10px] sm:text-sm leading-snug">
-                <Check className="w-3 h-3 sm:w-4 sm:h-4 mt-0.5 text-primary shrink-0" strokeWidth={2.5} />
+                <Check className="w-3 h-3 sm:w-4 sm:h-4 mt-0.5 text-zinc-500 shrink-0" strokeWidth={2.5} />
                 <span>{bullet}</span>
               </li>
             ))}
@@ -235,7 +235,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
                 key={i}
                 onClick={() => emblaApi?.scrollTo(i)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  i === selectedIndex ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'
+                  i === selectedIndex ? 'w-5 bg-zinc-900' : 'w-2 bg-muted-foreground/30'
                 }`}
                 aria-label={`Slide ${i + 1}`}
               />

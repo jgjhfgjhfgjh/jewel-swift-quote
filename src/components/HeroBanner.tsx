@@ -122,31 +122,30 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                   </>
                 ) : (
                   <>
-                    {/* Cinematic gradient overlay for legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/55 to-black/85" />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent mix-blend-overlay" />
+                    {/* Cinematic gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/50 to-black/80" />
 
                     {/* Logo watermark */}
                     <img
                       src={logo}
                       alt=""
-                      className={`absolute inset-0 m-auto opacity-[0.07] pointer-events-none select-none transition-all duration-500 ${
+                      className={`absolute inset-0 m-auto opacity-[0.06] pointer-events-none select-none transition-all duration-500 ${
                         compact ? 'w-20 sm:w-24 lg:w-56' : 'w-32 sm:w-40 md:w-48 lg:w-56'
                       }`}
                       draggable={false}
                     />
                     {/* Text + CTA overlay */}
                     <div className="relative z-10 text-center px-6 max-w-2xl flex flex-col items-center">
-                      <h2 className={`text-white font-bold tracking-tight text-balance drop-shadow-2xl transition-all duration-500 ${
+                      <h2 className={`text-white font-semibold tracking-tight text-balance drop-shadow-xl transition-all duration-500 ${
                         compact ? 'text-base sm:text-lg lg:text-4xl' : 'text-2xl sm:text-3xl md:text-4xl lg:text-6xl'
                       }`}>{slide.title}</h2>
-                      <p className={`text-white/90 mt-2 sm:mt-3 max-w-xl text-pretty drop-shadow-lg transition-all duration-500 ${
+                      <p className={`text-white/80 mt-2 sm:mt-3 max-w-xl text-pretty drop-shadow-md transition-all duration-500 font-light ${
                         compact ? 'text-xs sm:text-sm lg:text-xl' : 'text-sm sm:text-base md:text-lg lg:text-xl'
                       }`}>{slide.subtitle}</p>
                       <Button
                         asChild
                         size={compact ? 'sm' : 'lg'}
-                        className="mt-5 sm:mt-7 bg-white text-zinc-900 hover:bg-white/90 shadow-xl font-semibold rounded-full px-7"
+                        className="mt-5 sm:mt-7 bg-white text-zinc-900 hover:bg-white/90 shadow-lg font-medium rounded-none px-8 tracking-wide text-sm border-0"
                       >
                         <a href={slide.ctaHref}>
                           {slide.cta}

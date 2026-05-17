@@ -56,7 +56,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           {/* Home */}
           <button
             onClick={() => { setViewMode('home'); navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px]"
           >
             <Home className="h-5 w-5" />
             <span className="text-[10px]">Domů</span>
@@ -65,7 +65,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           {/* Menu/Filters */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px]"
           >
             <Menu className="h-5 w-5" />
             <span className="text-[10px]">Menu</span>
@@ -75,12 +75,12 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           {user ? (
             <button
               onClick={() => setCartOpen(true)}
-              className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px] relative"
+              className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px] relative"
             >
               <div className="relative">
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <Badge className="absolute -right-2 -top-2 h-4 min-w-4 justify-center rounded-full bg-primary px-1 text-[8px] font-bold text-primary-foreground">
+                  <Badge className="absolute -right-2 -top-2 h-4 min-w-4 justify-center rounded-full bg-zinc-900 px-1 text-[8px] font-bold text-white">
                     {totalItems}
                   </Badge>
                 )}
@@ -90,7 +90,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+              className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px]"
             >
               <ShoppingCart className="h-5 w-5" />
               <span className="text-[10px]">Košík</span>
@@ -106,13 +106,13 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
                 navigate('/favorites');
               }
             }}
-            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-primary transition-colors min-w-[48px]"
+            className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px]"
             title={salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
           >
             <div className="relative">
               <Heart className="h-5 w-5" />
               {wishlistCount > 0 && (
-                <Badge className="absolute -right-2 -top-2 h-4 min-w-4 justify-center rounded-full bg-primary px-1 text-[8px] font-bold text-primary-foreground">
+                <Badge className="absolute -right-2 -top-2 h-4 min-w-4 justify-center rounded-full bg-zinc-900 px-1 text-[8px] font-bold text-white">
                   {wishlistCount}
                 </Badge>
               )}
@@ -124,7 +124,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           <button
             onClick={() => setProfileOpen(true)}
             className={`flex flex-col items-center gap-0.5 transition-colors min-w-[48px] ${
-              isAdmin && salesCustomer ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+              isAdmin && salesCustomer ? 'text-zinc-900' : 'text-muted-foreground hover:text-zinc-900'
             }`}
           >
             <User className="h-5 w-5" />
@@ -145,12 +145,12 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
           <div className="mt-4 space-y-4">
             {isAdmin && salesCustomer ? (
               <>
-                <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
-                  <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Zákazník</p>
+                <div className="rounded-lg bg-zinc-50 border border-zinc-200 p-3">
+                  <p className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">Zákazník</p>
                   <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
                   {salesCustomer.ico && <p className="text-xs text-muted-foreground">IČO: {salesCustomer.ico}</p>}
                   {salesCustomer.base_discount > 0 && (
-                    <p className="text-xs text-primary font-semibold mt-1">Sleva: {salesCustomer.base_discount}%</p>
+                    <p className="text-xs text-zinc-700 font-semibold mt-1">Sleva: {salesCustomer.base_discount}%</p>
                   )}
                 </div>
                 <Button variant="outline" className="w-full gap-2 text-xs" onClick={() => { setProfileOpen(false); navigate('/customers'); }}>
@@ -166,7 +166,7 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
                   <p className="text-sm font-semibold">{profile.company_name || 'Zákazník'}</p>
                   {profile.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
                   {profile.base_discount > 0 && (
-                    <p className="text-xs text-primary font-semibold mt-1">Sleva: {profile.base_discount}%</p>
+                    <p className="text-xs text-zinc-700 font-semibold mt-1">Sleva: {profile.base_discount}%</p>
                   )}
                 </div>
                 <Button variant="destructive" className="w-full gap-2" onClick={handleLogout}>

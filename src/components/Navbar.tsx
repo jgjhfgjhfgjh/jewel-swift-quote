@@ -309,9 +309,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 onClick={() => navigate('/favorites')}
                 title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
-                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-primary text-primary' : ''}`} />
+                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-zinc-900 text-zinc-900' : ''}`} />
                 {wishlistCount > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-zinc-900 px-1 text-[10px] font-bold text-white">
                     {wishlistCount}
                   </Badge>
                 )}
@@ -320,7 +320,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button variant="ghost" size="icon" className="relative hidden lg:inline-flex" onClick={() => setCartOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-zinc-900 px-1 text-[10px] font-bold text-white">
                     {totalItems}
                   </Badge>
                 )}
@@ -331,26 +331,26 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`gap-1 sm:gap-1.5 text-xs px-1.5 sm:px-2 ${isAdmin && salesCustomer ? 'border border-primary/50 bg-primary/5' : ''}`}
+                    className={`gap-1 sm:gap-1.5 text-xs px-1.5 sm:px-2 ${isAdmin && salesCustomer ? 'border border-zinc-300 bg-zinc-50' : ''}`}
                   >
                     <User className="h-4 w-4" />
                     <span className="hidden xl:inline max-w-[120px] truncate">
                       {isAdmin && salesCustomer ? salesCustomer.company_name : (profile?.company_name || 'Účet')}
                     </span>
                     {isAdmin && salesCustomer && (
-                      <Badge className="ml-1 h-4 px-1 text-[8px] bg-primary text-primary-foreground">Sales</Badge>
+                      <Badge className="ml-1 h-4 px-1 text-[8px] bg-zinc-900 text-white">Sales</Badge>
                     )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   {isAdmin && salesCustomer ? (
                     <>
-                      <div className="px-3 py-2 border-b border-primary/20 bg-primary/5">
-                        <p className="text-[10px] text-primary font-semibold uppercase tracking-wider">Režim nabídky</p>
+                      <div className="px-3 py-2 border-b border-zinc-200 bg-zinc-50">
+                        <p className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">Režim nabídky</p>
                         <p className="text-sm font-semibold">{salesCustomer.company_name}</p>
                         {salesCustomer.ico && <p className="text-xs text-muted-foreground">IČO: {salesCustomer.ico}</p>}
                         {salesCustomer.base_discount > 0 && (
-                          <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {salesCustomer.base_discount}%</p>
+                          <p className="text-xs text-zinc-700 font-semibold mt-0.5">Sleva: {salesCustomer.base_discount}%</p>
                         )}
                       </div>
                       <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
@@ -384,7 +384,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         <p className="text-sm font-semibold">{profile?.company_name || 'Zákazník'}</p>
                         {profile?.ico && <p className="text-xs text-muted-foreground">IČO: {profile.ico}</p>}
                         {profile && profile.base_discount > 0 && (
-                          <p className="text-xs text-primary font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
+                          <p className="text-xs text-zinc-700 font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
                         )}
                       </div>
                       {isAdmin && (
@@ -440,7 +440,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Button
               size="sm"
               onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-primary-foreground bg-primary hover:bg-primary/90 transition-all hover:-translate-y-0.5 shrink-0"
+              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-zinc-900 hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
             >
               {user ? 'KATALOG 2026' : 'B2B registrace'}
             </Button>
@@ -468,7 +468,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <button
                   key={path}
                   onClick={() => navigate(path)}
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-black hover:text-primary hover:bg-black/5 transition-all"
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 transition-all"
                 >
                   <Icon className="h-3.5 w-3.5" />
                   {label}
@@ -520,7 +520,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               onClick={() => { setMenuOpen(false); navigate(path); }}
               className="flex items-center gap-3 px-4 py-3 text-sm font-medium hover:bg-muted/50 transition-colors"
             >
-              <Icon className="h-4 w-4 text-primary" /> {label}
+              <Icon className="h-4 w-4 text-zinc-500" /> {label}
             </button>
           ))}
           <div className="border-t my-2" />
@@ -560,8 +560,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           {(isB2bApproved || isAdmin) && (
             <>
               <div className="border-t my-2" />
-              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors" style={{ color: '#1D4ED8' }}>
-                <LayoutDashboard className="h-4 w-4" style={{ color: '#1D4ED8' }} /> Partner Hub
+              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 hover:bg-muted/50 transition-colors">
+                <LayoutDashboard className="h-4 w-4 text-zinc-500" /> Partner Hub
               </button>
             </>
           )}

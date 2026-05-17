@@ -134,8 +134,8 @@ function FloatingNotif() {
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
       <div className="relative flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 pr-9 max-w-xs">
-        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-          <Users className="h-4 w-4 text-primary" />
+        <div className="h-8 w-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0">
+          <Users className="h-4 w-4 text-zinc-500" />
         </div>
         <div>
           <div className="text-xs font-semibold">{notifs[idx].name} z {notifs[idx].city}</div>
@@ -164,7 +164,7 @@ function BulletList({ items }: { items: string[] }) {
     <ul className="space-y-2.5">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
-          <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
+          <Check className="h-4 w-4 text-zinc-500 shrink-0 mt-0.5" strokeWidth={2.5} />
           <span>{item}</span>
         </li>
       ))}
@@ -198,14 +198,14 @@ function B2BVisual() {
               <div key={i} className="bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm">
                 <div className="relative">
                   <img src={item.img} alt={item.brand} className="w-full aspect-square object-cover object-center" loading="lazy" />
-                  <div className="absolute top-1.5 right-1.5 bg-primary text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md">{item.disc}</div>
+                  <div className="absolute top-1.5 right-1.5 bg-zinc-900 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md">{item.disc}</div>
                   <div className="absolute top-1.5 left-1.5">
                     <span className="h-2 w-2 rounded-full bg-emerald-400 block ring-2 ring-white" />
                   </div>
                 </div>
                 <div className="p-2">
                   <div className="text-[9px] font-bold text-amber-600 truncate">{item.brand}</div>
-                  <div className="text-[10px] font-bold text-primary">{item.voc}</div>
+                  <div className="text-[10px] font-bold text-zinc-800">{item.voc}</div>
                   <div className="text-[9px] text-slate-400 line-through">{item.moc}</div>
                 </div>
               </div>
@@ -220,15 +220,15 @@ function B2BVisual() {
         style={{
           backdropFilter: 'blur(5px) saturate(1.2)',
           WebkitBackdropFilter: 'blur(5px) saturate(1.2)',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(219,234,254,0.30) 100%)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.22) 100%)',
           borderRadius: 'inherit',
         }}
       >
         {/* Glow ring around lock */}
         <div className="relative flex items-center justify-center">
-          <div className="absolute h-20 w-20 rounded-full bg-primary/20 blur-md animate-pulse" />
+          <div className="absolute h-20 w-20 rounded-full bg-zinc-900/10 blur-md animate-pulse" />
           <div className="relative h-16 w-16 rounded-full bg-white/80 border border-white/70 shadow-xl flex items-center justify-center">
-            <Lock className="h-7 w-7 text-primary" />
+            <Lock className="h-7 w-7 text-zinc-700" />
           </div>
         </div>
 
@@ -250,7 +250,7 @@ function B2BVisual() {
 
         <div className="flex items-center gap-3 text-[11px] text-foreground/60 flex-wrap justify-center">
           <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />Live zásoby</span>
-          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />Aktualizace denně</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-zinc-400 shrink-0" />Aktualizace denně</span>
           <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />Ceny bez DPH</span>
         </div>
       </div>
@@ -263,11 +263,11 @@ function FeedVisual() {
   const [active, setActive] = useState(0);
   return (
     <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
-      <div className="text-[11px] font-bold text-primary uppercase tracking-wider">swelt.feed — Live preview</div>
+      <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">swelt.feed — Live preview</div>
       <div className="flex flex-wrap gap-1.5">
         {formats.map((f, i) => (
           <button key={f} onClick={() => setActive(i)}
-            className={`rounded-lg px-3 py-1 text-[11px] font-semibold transition-all border ${active === i ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:border-primary/40'}`}>
+            className={`rounded-lg px-3 py-1 text-[11px] font-semibold transition-all border ${active === i ? 'bg-zinc-900 text-white border-zinc-900' : 'border-border text-muted-foreground hover:border-zinc-400'}`}>
             {f}
           </button>
         ))}
@@ -307,11 +307,11 @@ function FeedVisual() {
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div className="rounded-lg bg-muted/40 border border-border p-2 text-center">
-          <div className="text-lg font-bold text-primary">3 000+</div>
+          <div className="text-lg font-bold text-zinc-900">3 000+</div>
           <div className="text-[10px] text-muted-foreground">produktů v feedu</div>
         </div>
         <div className="rounded-lg bg-muted/40 border border-border p-2 text-center">
-          <div className="text-lg font-bold text-primary">4×/den</div>
+          <div className="text-lg font-bold text-zinc-900">4×/den</div>
           <div className="text-[10px] text-muted-foreground">aktualizace cen</div>
         </div>
       </div>
@@ -328,22 +328,22 @@ function DropshippingVisual() {
   return (
     <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <div className="text-[11px] font-bold text-primary uppercase tracking-wider">Jak to funguje</div>
+        <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">Jak to funguje</div>
         <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-50 text-[10px]">Bez skladu</Badge>
       </div>
       <div className="space-y-3">
         {steps.map((s, i) => (
           <div key={s.n} className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center text-lg shrink-0">
+            <div className="h-10 w-10 rounded-full bg-zinc-100 border-2 border-zinc-200 flex items-center justify-center text-lg shrink-0">
               {s.icon}
             </div>
             <div className="flex-1">
               <div className="text-sm font-semibold">{s.label}</div>
               <div className="text-[11px] text-muted-foreground">{s.sub}</div>
             </div>
-            <div className="text-[10px] font-bold text-primary/60">{s.n}</div>
+            <div className="text-[10px] font-bold text-zinc-400">{s.n}</div>
             {i < steps.length - 1 && (
-              <div className="absolute ml-5 mt-12 w-px h-4 bg-primary/20" />
+              <div className="absolute ml-5 mt-12 w-px h-4 bg-zinc-200" />
             )}
           </div>
         ))}
@@ -354,7 +354,7 @@ function DropshippingVisual() {
           <div className="text-[10px] text-muted-foreground">průměrná marže</div>
         </div>
         <div>
-          <div className="text-base font-bold text-primary">0 Kč</div>
+          <div className="text-base font-bold text-zinc-800">0 Kč</div>
           <div className="text-[10px] text-muted-foreground">investice do skladu</div>
         </div>
       </div>
@@ -366,16 +366,16 @@ function LuxuryVisual() {
   const brands = ['Tommy Hilfiger', 'Versace', 'Police', 'Tissot', 'Seiko', 'Hugo Boss', 'Armani', 'Citizen'];
   return (
     <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
-      <div className="text-[11px] font-bold text-primary uppercase tracking-wider">Dostupné značky</div>
+      <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">Dostupné značky</div>
       <div className="flex flex-wrap gap-2">
         {brands.map(b => (
           <span key={b} className="rounded-lg border border-border bg-muted/40 px-2.5 py-1 text-[11px] font-medium text-foreground/80">{b}</span>
         ))}
-        <span className="rounded-lg border border-primary/30 bg-primary/5 px-2.5 py-1 text-[11px] font-medium text-primary">+62 dalších</span>
+        <span className="rounded-lg border border-zinc-300 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-700">+62 dalších</span>
       </div>
-      <div className="rounded-xl bg-primary text-primary-foreground p-4">
+      <div className="rounded-xl bg-zinc-900 text-white p-4">
         <div className="text-[10px] opacity-70 uppercase tracking-wider mb-1">Příklad úspory</div>
-        <div className="text-2xl font-bold mb-0.5">2 685 Kč</div>
+        <div className="text-2xl font-semibold mb-0.5">2 685 Kč</div>
         <div className="text-xs opacity-80">ušetříte na 1 Tommy Hilfiger hodinkách</div>
         <div className="mt-2 flex justify-between text-[11px] opacity-70">
           <span>Retail cena: 4 475 Kč</span>
@@ -383,7 +383,7 @@ function LuxuryVisual() {
         </div>
       </div>
       <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-        <Shield className="h-3.5 w-3.5 text-primary shrink-0" />
+        <Shield className="h-3.5 w-3.5 text-zinc-500 shrink-0" />
         Garance pravosti | Diskrétní balení | EU doručení
       </div>
     </div>
@@ -415,16 +415,16 @@ function ShopVisual() {
       </div>
       {/* Fake shop nav */}
       <div className="border-b border-slate-100 px-4 py-2 flex items-center justify-between bg-white">
-        <div className="font-display font-black text-[11px] text-slate-800">WatchStore.cz</div>
+        <div className="font-display font-semibold text-[11px] text-slate-800">WatchStore.cz</div>
         <div className="flex gap-3">
           {tabs.map((t, i) => (
             <button key={t} onClick={() => setTab(i)}
-              className={`text-[10px] font-semibold pb-0.5 border-b transition-colors ${tab === i ? 'text-primary border-primary' : 'text-slate-400 border-transparent'}`}>
+              className={`text-[10px] font-semibold pb-0.5 border-b transition-colors ${tab === i ? 'text-zinc-900 border-zinc-900' : 'text-slate-400 border-transparent'}`}>
               {t}
             </button>
           ))}
         </div>
-        <ShoppingCart className="h-3.5 w-3.5 text-primary" />
+        <ShoppingCart className="h-3.5 w-3.5 text-zinc-700" />
       </div>
       {/* Product grid */}
       <div className="p-3 grid grid-cols-2 gap-2 bg-slate-50">
@@ -432,11 +432,11 @@ function ShopVisual() {
           <div key={p.name} className="bg-white rounded-xl overflow-hidden border border-slate-100">
             <div className="relative">
               <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" loading="lazy" />
-              {p.badge && <div className="absolute top-1 right-1 bg-primary text-white text-[7px] font-black px-1 py-0.5 rounded">{p.badge}</div>}
+              {p.badge && <div className="absolute top-1 right-1 bg-zinc-900 text-white text-[7px] font-semibold px-1 py-0.5 rounded">{p.badge}</div>}
             </div>
             <div className="p-1.5">
               <div className="text-[9px] text-slate-500 truncate">{p.name}</div>
-              <div className="text-[10px] font-black text-primary">{p.price}</div>
+              <div className="text-[10px] font-semibold text-zinc-900">{p.price}</div>
             </div>
           </div>
         ))}
@@ -472,20 +472,19 @@ function TrustSection() {
 
   return (
     <section className="relative bg-gradient-to-b from-background via-secondary/30 to-background py-24 sm:py-28 overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-mesh opacity-70" />
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Stats */}
         <Reveal className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
             {g.trustEyebrow}
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">{g.trustHeading}</h2>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">{g.trustHeading}</h2>
         </Reveal>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 80}>
               <div className="group text-center rounded-2xl border border-border bg-card p-7 shadow-sm hover-lift">
-                <div className="font-display text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+                <div className="font-display text-4xl sm:text-5xl font-semibold text-zinc-900 mb-2">
                   <CountUp to={s.val} suffix={s.suf} />
                 </div>
                 <div className="text-sm text-muted-foreground">{s.label}</div>
@@ -507,7 +506,7 @@ function TrustSection() {
                 <p className="text-[15px] text-foreground/80 leading-relaxed flex-1 text-pretty">"{t.text}"</p>
                 <div className="pt-2 border-t border-border">
                   <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-primary">{t.company}</div>
+                  <div className="text-xs text-zinc-500">{t.company}</div>
                 </div>
               </div>
             </Reveal>
@@ -525,7 +524,7 @@ function TrustSection() {
               { icon: Star,   text: g.trustBadges[4] },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Icon className="h-4 w-4 text-primary shrink-0" />
+                <Icon className="h-4 w-4 text-zinc-500 shrink-0" />
                 {text}
               </div>
             ))}
@@ -559,7 +558,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   const sections = [
     {
-      id: 'velkoobchod', badgeColor: 'bg-primary/10 text-primary', icon: Handshake,
+      id: 'velkoobchod', badgeColor: 'bg-zinc-100 text-zinc-600', icon: Handshake,
       ...g.velkoobchod,
       ctas: (<div className="flex flex-col sm:flex-row gap-3">
         <Button onClick={() => navigate('/velkoobchod')} className="gap-2">
@@ -585,7 +584,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       visual: <FeedVisual />, reverse: false, bg: 'bg-white',
     },
     {
-      id: 'dropshipping', badgeColor: 'bg-primary/10 text-primary', icon: PackageOpen,
+      id: 'dropshipping', badgeColor: 'bg-zinc-100 text-zinc-600', icon: PackageOpen,
       ...g.dropshipping,
       ctas: (<Button onClick={() => navigate('/dropshipping')} className="gap-2">
         {g.dropshipping.ctaLabel} <ArrowRight className="h-4 w-4" />
@@ -593,7 +592,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       visual: <DropshippingVisual />, reverse: true, bg: 'bg-muted/20',
     },
     {
-      id: 'shop', badgeColor: 'bg-primary/10 text-primary', icon: ShoppingCart,
+      id: 'shop', badgeColor: 'bg-zinc-100 text-zinc-600', icon: ShoppingCart,
       ...g.shop,
       ctas: (<Button onClick={() => navigate('/shop')} className="gap-2">
         {g.shop.ctaLabel} <ArrowRight className="h-4 w-4" />
@@ -713,14 +712,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <button
                   key={brand}
                   onClick={() => navigate(`/brands#${brand.toLowerCase().replace(/\s+/g, '-')}`)}
-                  className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs sm:text-sm font-medium text-foreground/75 hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors"
+                  className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs sm:text-sm font-medium text-foreground/75 hover:border-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
                 >
                   {brand}
                 </button>
               ))}
               <button
                 onClick={() => navigate('/brands')}
-                className="rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
               >
                 +50 dalších →
               </button>
@@ -739,7 +738,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
-                className="px-8 py-3 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition min-w-[200px]"
+                className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px]"
               >
                 B2B registrace
               </button>
@@ -810,10 +809,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Header — copywriting */}
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
                 <Globe className="h-3.5 w-3.5" /> Doručovací zóna
               </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
                 Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
@@ -841,25 +840,25 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Section heading — recognize yourself in these obstacles? */}
           <Reveal delay={120}>
             <div className="text-center mb-8 sm:mb-10">
-              <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
+              <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 mb-3">
                 Poznáš se v tom?
               </div>
-              <h3 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">
+              <h3 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
                 Čtyři překážky, které řešíme za tebe
               </h3>
             </div>
           </Reveal>
 
           <Reveal delay={160}>
-            <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Truck className="h-6 w-6 text-primary" />
+            <div className="rounded-2xl bg-zinc-50 border border-zinc-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <div className="h-12 w-12 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
+                <Truck className="h-6 w-6 text-zinc-600" />
               </div>
               <div className="flex-1">
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
                   <Globe className="h-3.5 w-3.5" /> Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat
                 </div>
-                <div className="font-display font-black text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
+                <div className="font-display font-semibold text-foreground mb-1">Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.
                 </p>
@@ -877,15 +876,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             { icon: Target,    label: 'Bojím se že špatně zvolím produkty ', labelIcon: Target,      title: 'S plánem Silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit' },
           ].map((item, idx) => (
             <Reveal key={item.title} delay={180 + idx * 60}>
-              <div className="rounded-2xl bg-gradient-to-r from-primary/8 to-primary/5 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <item.icon className="h-6 w-6 text-primary" />
+              <div className="rounded-2xl bg-zinc-50 border border-zinc-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
+                <div className="h-12 w-12 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
+                  <item.icon className="h-6 w-6 text-zinc-600" />
                 </div>
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 mb-2">
                     <item.labelIcon className="h-3.5 w-3.5" /> {item.label}
                   </div>
-                  <div className="font-display font-black text-foreground mb-1">{item.title}</div>
+                  <div className="font-display font-semibold text-foreground mb-1">{item.title}</div>
                   <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
                 </div>
                 <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
@@ -904,10 +903,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-4">
                 <Award className="h-3.5 w-3.5" /> Katalog značek
               </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
                 70+ světových značek. V jednom místě.
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto text-base">
@@ -920,13 +919,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal delay={60}>
             <div className="flex flex-wrap gap-2 justify-center mb-10">
               {BRANDS_STANDARD.slice(0, 18).map((b) => (
-                <span key={b} className="rounded-xl border border-border bg-slate-50 px-3.5 py-2 text-sm font-medium text-foreground/75 hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors cursor-default">
+                <span key={b} className="rounded-xl border border-border bg-slate-50 px-3.5 py-2 text-sm font-medium text-foreground/75 hover:border-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-default">
                   {b}
                 </span>
               ))}
               <button
                 onClick={() => navigate('/brands')}
-                className="rounded-xl border border-primary/30 bg-primary/5 px-3.5 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
               >
                 +50 dalších →
               </button>
@@ -937,11 +936,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal delay={120}>
             <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 mb-4">
               <div className="flex items-start gap-4 mb-5">
-                <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Star className="h-5 w-5 text-primary fill-primary/30" />
+                <div className="h-11 w-11 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
+                  <Star className="h-5 w-5 text-zinc-500" />
                 </div>
                 <div>
-                  <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
+                  <div className="font-display font-semibold text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
                   </p>
@@ -963,11 +962,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Private purchase info */}
           <Reveal delay={160}>
             <div className="rounded-2xl border border-border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Building2 className="h-5 w-5 text-primary" />
+              <div className="h-11 w-11 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
+                <Building2 className="h-5 w-5 text-zinc-500" />
               </div>
               <div className="flex-1">
-                <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
+                <div className="font-display font-semibold text-foreground mb-1">Jakákoliv značka bez registrace?</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
                 </p>
@@ -987,7 +986,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="rounded-3xl border border-border bg-card shadow-sm p-8 sm:p-12 text-center">
-              <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">Začněte ještě dnes</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3">Začněte ještě dnes</p>
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
                 Přístup k 3 000+ produktům.<br className="hidden sm:block" /> Velkoobchodní ceny od prvního kusu.
               </h2>
@@ -1025,14 +1024,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-gradient-subtle border-b border-border py-16 sm:py-20 overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-mesh" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-grid opacity-40" />
+      <div className="relative bg-zinc-50 border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-5">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-zinc-600 font-semibold mb-5">
+                <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-pulse" />
                 {g.introEyebrow}
               </div>
               <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
@@ -1075,10 +1072,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     <div className="flex flex-1 items-center gap-4 p-5">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                            <Icon className="h-3.5 w-3.5 text-primary" />
+                          <div className="h-7 w-7 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
+                            <Icon className="h-3.5 w-3.5 text-zinc-500" />
                           </div>
-                          <span className="font-display font-black text-foreground text-base">{card.label}</span>
+                          <span className="font-display font-semibold text-foreground text-base">{card.label}</span>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
                       </div>
@@ -1106,19 +1103,17 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Lead capture */}
           {!user && (
             <Reveal delay={100} className="mb-6">
-              <div className="relative overflow-hidden rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-white shadow-xl">
-                <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-blue-200/40 blur-3xl" />
-                <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl">
                 <div className="relative p-5 sm:p-8">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
                       <Eye className="h-3 w-3" /> Zdarma · 30 sekund
                     </div>
                     <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Bez čekání
                     </div>
                   </div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
+                  <h3 className="font-display text-2xl sm:text-3xl font-semibold text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
                     Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
                   </h3>
                   <div className="text-sm sm:text-base text-zinc-600 mb-5 text-left max-w-2xl leading-relaxed space-y-3">
@@ -1141,8 +1136,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal delay={150}>
             <div className="rounded-3xl border border-zinc-200 bg-white shadow-sm p-5 sm:p-7">
               <div className="flex items-center justify-between mb-3">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
-                  <Star className="h-3 w-3 fill-primary" /> Váš obchodní tým
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 text-zinc-600 px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                  <Star className="h-3 w-3 fill-zinc-400" /> Váš obchodní tým
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online teď
@@ -1157,7 +1152,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-primary/30 bg-zinc-50 hover:bg-primary/5 rounded-2xl p-5 sm:p-6 transition-all"
+                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-zinc-400 bg-zinc-50 hover:bg-zinc-100 rounded-2xl p-5 sm:p-6 transition-all"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
@@ -1166,17 +1161,17 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                       alt="AI obchodní zástupce"
                       className="w-20 h-20 rounded-full object-cover object-top border border-zinc-200 mx-auto"
                     />
-                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary border-2 border-white">
+                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 border-2 border-white">
                       <Sparkles className="h-2.5 w-2.5 text-white" />
                     </span>
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-primary mb-1.5">AI · Dostupný 24/7</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 mb-1.5">AI · Dostupný 24/7</span>
                   {/* Title + desc */}
                   <p className="font-bold text-sm text-zinc-900 leading-tight mb-1">AI obchodní zástupce</p>
                   <p className="text-[12px] text-zinc-500 leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-primary group-hover:bg-primary/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-zinc-900 group-hover:bg-zinc-800 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
                     Zahájit konverzaci <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>
@@ -1184,7 +1179,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-primary/30 bg-zinc-50 hover:bg-primary/5 rounded-2xl p-5 sm:p-6 transition-all"
+                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-zinc-400 bg-zinc-50 hover:bg-zinc-100 rounded-2xl p-5 sm:p-6 transition-all"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">
@@ -1194,12 +1189,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 border-2 border-white" />
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-primary mb-1.5">Osobní péče · Do 24 h</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 mb-1.5">Osobní péče · Do 24 h</span>
                   {/* Title + desc */}
                   <p className="font-bold text-sm text-zinc-900 leading-tight mb-1">Osobní account manager</p>
                   <p className="text-[12px] text-zinc-500 leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-zinc-900 group-hover:bg-primary transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-zinc-900 group-hover:bg-zinc-800 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
                     Kontaktovat <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>
@@ -1227,13 +1222,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             id={section.id}
             className={`relative py-20 sm:py-28 scroll-mt-16 ${idx % 2 === 0 ? 'bg-background' : 'bg-secondary/40'}`}
           >
-            <div className={`pointer-events-none absolute inset-0 ${idx % 2 === 0 ? 'bg-mesh opacity-60' : ''}`} />
+            <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
               <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
                 <Reveal>
                   <div className="space-y-7">
                     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-xs">
-                      <Icon className="h-4 w-4 text-primary" />
+                      <Icon className="h-4 w-4 text-zinc-500" />
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/80">{section.label}</span>
                     </div>
                     <div>
@@ -1250,7 +1245,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </Reveal>
                 <Reveal delay={120}>
                   <div className="relative">
-                    <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-primary opacity-[0.08] blur-2xl" />
+                    <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-zinc-900/5 blur-2xl" />
                     <div className="relative">{section.visual}</div>
                   </div>
                 </Reveal>
