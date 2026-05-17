@@ -303,18 +303,20 @@ export default function DealDetail() {
       {/* ── Sticky order bar (with always-visible fill progress) ── */}
       {canSeePrices && !closed && (
         <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur">
-          <div className="mx-auto max-w-7xl border-b border-slate-100 px-6 pb-1.5 pt-2">
+          <div className="mx-auto max-w-7xl border-b border-slate-100 px-4 py-1.5 sm:px-6 sm:py-2">
             <MinOrderProgress tiers={deal.tiers} qty={totalQty} variant="compact" />
           </div>
-          <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:gap-4 sm:px-6 sm:py-3">
             <button
               onClick={() => setCartOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-300 px-2.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
             >
               <ShoppingCart className="h-4 w-4" />
               <span className="tabular-nums">{totalQty}</span>
             </button>
-            <div className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-1">
+
+            {/* desktop — labelled stats */}
+            <div className="hidden flex-1 flex-wrap items-center gap-x-6 gap-y-1 sm:flex">
               <Stat label={d.orderBar.value} value={money(deal.currency, totals.value)} />
               <Stat label={d.orderBar.margin} value={money(deal.currency, totals.margin)} accent />
               <Stat
@@ -322,11 +324,22 @@ export default function DealDetail() {
                 value={prog?.minimumReached ? `${prog.effectiveTier.discount_percent} %` : '—'}
               />
             </div>
+
+            {/* mobile — compact stats */}
+            <div className="grid flex-1 grid-cols-3 gap-1.5 sm:hidden">
+              <MiniStat label={d.orderBar.valueShort} value={money(deal.currency, totals.value)} />
+              <MiniStat label={d.orderBar.marginShort} value={money(deal.currency, totals.margin)} accent />
+              <MiniStat
+                label={d.orderBar.discountShort}
+                value={prog?.minimumReached ? `${prog.effectiveTier.discount_percent} %` : '—'}
+              />
+            </div>
+
             <Button
               size="lg"
               disabled={!prog?.minimumReached}
               onClick={handleSubmit}
-              className="gap-2 bg-red-600 hover:bg-red-700"
+              className="h-10 shrink-0 gap-1.5 bg-red-600 px-3 hover:bg-red-700 sm:h-11 sm:px-8"
             >
               <Send className="h-4 w-4" />
               <span className="hidden sm:inline">
@@ -334,7 +347,7 @@ export default function DealDetail() {
                   ? d.orderBar.submit
                   : fillTemplate(d.orderBar.submitLocked, { n: prog?.remainingToNext ?? 0 })}
               </span>
-              <span className="sm:hidden">{d.orderBar.submit}</span>
+              <span className="text-xs sm:hidden">{d.orderBar.submitShort}</span>
             </Button>
           </div>
         </div>
@@ -381,6 +394,19 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
     <div>
       <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</div>
       <div className={`font-sans text-base font-bold tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function MiniStat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="min-w-0">
+      <div className="truncate text-[9px] font-semibold uppercase leading-none tracking-wide text-slate-400">
+        {label}
+      </div>
+      <div className={`mt-0.5 truncate text-[13px] font-bold leading-tight tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
         {value}
       </div>
     </div>

@@ -55,54 +55,42 @@ export function MinOrderProgress({
   // ── compact strip (sticky order bar) ────────────────────
   if (variant === 'compact') {
     return (
-      <div className={`flex items-center gap-3 sm:gap-5 ${className}`}>
-        <div className="relative flex-1 pt-4">
-          {/* tier markers + % labels */}
-          {t2.map((tier) => {
-            const reached = qty >= tier.min_qty;
-            const pos = Math.min(100, (tier.min_qty / top) * 100);
-            return (
-              <div
-                key={tier.min_qty}
-                className="absolute top-0 flex -translate-x-1/2 flex-col items-center"
-                style={{ left: `${pos}%` }}
-              >
-                <span className={`text-[9px] font-bold tabular-nums leading-none
-                  ${reached ? 'text-emerald-700' : 'text-slate-400'}`}>
-                  {tier.discount_percent}%
-                </span>
-              </div>
-            );
-          })}
-          <div className={`mt-0.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-200 transition-shadow
+      <div className={className}>
+        {/* callout line */}
+        <div className="mb-1 flex items-center gap-1.5 text-[11px] font-bold leading-tight sm:text-xs">
+          {prog.nextTier === null && prog.minimumReached
+            ? <PartyPopper className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+            : prog.minimumReached
+              ? <Check className="h-3.5 w-3.5 shrink-0 text-emerald-600" strokeWidth={3} />
+              : <Lock className="h-3 w-3 shrink-0 text-slate-500" />}
+          <span className={`truncate ${prog.minimumReached ? 'text-emerald-700' : 'text-slate-700'}`}>
+            {callout}
+          </span>
+        </div>
+        {/* full-width bar with tier dots */}
+        <div className="relative">
+          <div className={`h-2 w-full overflow-hidden rounded-full bg-slate-200 transition-shadow
             ${justUnlocked ? 'ring-2 ring-emerald-400' : ''}`}>
             <div
               className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
               style={{ width: fillWidth }}
             >
+              <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
             </div>
           </div>
-          {/* tier dots */}
           {t2.map((tier) => {
             const reached = qty >= tier.min_qty;
             const pos = Math.min(100, (tier.min_qty / top) * 100);
             return (
               <span
                 key={tier.min_qty}
-                className={`absolute -translate-x-1/2 rounded-full border-2 border-white transition-colors
+                title={`${tier.min_qty} ${t.pcs} → ${tier.discount_percent}%`}
+                className={`absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white transition-colors
                   ${reached ? 'bg-emerald-600' : 'bg-slate-300'}`}
-                style={{ left: `${pos}%`, top: '17px', width: 10, height: 10 }}
+                style={{ left: `${pos}%` }}
               />
             );
           })}
-        </div>
-        <div className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs font-bold sm:text-sm">
-          {prog.nextTier === null && prog.minimumReached
-            ? <PartyPopper className="h-4 w-4 shrink-0 text-emerald-600" />
-            : prog.minimumReached
-              ? <Check className="h-4 w-4 shrink-0 text-emerald-600" strokeWidth={3} />
-              : <Lock className="h-3.5 w-3.5 shrink-0 text-slate-600" />}
-          <span className={prog.minimumReached ? 'text-emerald-700' : 'text-slate-700'}>{callout}</span>
         </div>
       </div>
     );
@@ -139,6 +127,7 @@ export function MinOrderProgress({
             className={`relative h-full rounded-full transition-[width] duration-700 ease-out ${fillClass}`}
             style={{ width: fillWidth }}
           >
+            <div className="absolute inset-0 animate-pulse rounded-full bg-white/20" />
           </div>
         </div>
 

@@ -55,6 +55,10 @@ export interface DealsText {
     value: string;
     margin: string;
     discount: string;
+    valueShort: string;
+    marginShort: string;
+    discountShort: string;
+    submitShort: string;
     submit: string;
     submitLocked: string;
     empty: string;
@@ -148,6 +152,10 @@ const cs: DealsText = {
     value: 'Hodnota objednávky',
     margin: 'Vaše marže',
     discount: 'Aktuální sleva',
+    valueShort: 'Hodnota',
+    marginShort: 'Marže',
+    discountShort: 'Sleva',
+    submitShort: 'Odeslat',
     submit: 'Odeslat poptávku',
     submitLocked: 'Přidejte ještě {n} ks',
     empty: 'Vyberte modely a sestavte objednávku.',
@@ -251,6 +259,10 @@ const en: DealsText = {
     value: 'Order value',
     margin: 'Your margin',
     discount: 'Current discount',
+    valueShort: 'Value',
+    marginShort: 'Margin',
+    discountShort: 'Discount',
+    submitShort: 'Send',
     submit: 'Send enquiry',
     submitLocked: 'Add {n} more pcs',
     empty: 'Pick models and build your order.',
