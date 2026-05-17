@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
-  Search, Send, AlertCircle, Truck, CreditCard, ListOrdered, Loader2,
-  ShoppingCart, X,
+  Send, AlertCircle, Truck, CreditCard, ListOrdered, Loader2, ShoppingCart,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -21,23 +20,14 @@ import { DealProductModal } from '@/components/deals/DealProductModal';
 import { DealCartDrawer } from '@/components/deals/DealCartDrawer';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { MinOrderProgress } from '@/components/deals/MinOrderProgress';
+import {
+  DealFilterBar, DealFilterSheet, FILTER_DEFS, type FilterKey, type FilterState,
+} from '@/components/deals/DealFilters';
 
 function money(currency: string, value: number): string {
   const symbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency + ' ';
   return `${symbol}${value.toLocaleString('cs-CZ', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
-
-// Catalog filters mapped to deal_products fields.
-const FILTER_DEFS = [
-  { key: 'brand', field: 'brand' },
-  { key: 'gender', field: 'gender' },
-  { key: 'collection', field: 'collection' },
-  { key: 'type', field: 'attr_movement' },
-  { key: 'material', field: 'attr_material' },
-  { key: 'size', field: 'attr_size' },
-] as const;
-
-type FilterKey = (typeof FILTER_DEFS)[number]['key'];
 
 export default function DealDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -54,20 +44,24 @@ export default function DealDetail() {
   const [search, setSearch] = useState('');
   const [detailProduct, setDetailProduct] = useState<DealProduct | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
-  const [barHidden, setBarHidden] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [pinned, setPinned] = useState(false);
   const lastScrollRef = useRef(0);
+  const flowBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
-  // Hide the filter bar on scroll-down, reveal on scroll-up — like the navbar.
-  // Only reacts to a meaningful scroll delta to avoid jitter near the top.
+  // Pinned filter bar: the in-flow bar scrolls away naturally (never overlaps
+  // the content above it); once it is fully out of view a fixed clone slides
+  // back in on scroll-up.
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       const delta = y - lastScrollRef.current;
-      if (Math.abs(delta) < 8) return;
-      if (delta > 0 && y > 320) setBarHidden(true);
-      else if (delta < 0) setBarHidden(false);
+      if (Math.abs(delta) < 6) return;
+      const flowBottom = flowBarRef.current?.getBoundingClientRect().bottom ?? 999;
+      if (flowBottom > 0) setPinned(false);   // in-flow bar still visible
+      else setPinned(delta < 0);              // out of view: show clone only on scroll-up
       lastScrollRef.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -93,7 +87,6 @@ export default function DealDetail() {
     return { value, retail, margin: retail - value };
   }, [products, cart, tierIndex]);
 
-  // available options per filter (only fields that actually vary)
   const filterOptions = useMemo(() => {
     const out = {} as Record<FilterKey, string[]>;
     for (const def of FILTER_DEFS) {
@@ -126,6 +119,15 @@ export default function DealDetail() {
   const handleBrandClick = (brand: string) => {
     setFilters((f) => ({ ...f, brand }));
     document.getElementById('deal-catalog')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const filterState: FilterState = {
+    search, onSearch: setSearch,
+    filters, onFilter: setFilter,
+    options: filterOptions,
+    resultCount: filtered.length,
+    activeCount: activeFilterCount,
+    onClear: clearFilters,
   };
 
   const handleSubmit = () => {
@@ -211,7 +213,7 @@ export default function DealDetail() {
         )}
       </section>
 
-      {/* ── Conditions (right under the FOMO elements) ── */}
+      {/* ── Conditions ── */}
       <section className="mx-auto max-w-7xl px-6 pb-6">
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <h3 className="mb-4 font-display text-lg font-black text-slate-900">{d.conditions.heading}</h3>
@@ -230,50 +232,16 @@ export default function DealDetail() {
         </div>
       </section>
 
-      {/* ── Sticky filter bar ── */}
-      <div
-        className={`sticky top-14 z-30 border-y border-slate-200 bg-slate-50/95 backdrop-blur transition-transform duration-300 ease-out sm:top-24
-          ${barHidden ? '-translate-y-[calc(100%_+_7rem)]' : 'translate-y-0'}`}
-      >
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-6 py-3">
-          <div className="relative min-w-[180px] flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={d.detail.searchPlaceholder}
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-            />
-          </div>
-          {FILTER_DEFS.map((def) => {
-            const opts = filterOptions[def.key];
-            if (opts.length < 2) return null;
-            return (
-              <select
-                key={def.key}
-                value={filters[def.key]}
-                onChange={(e) => setFilter(def.key, e.target.value)}
-                className={`h-9 rounded-lg border bg-white px-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400
-                  ${filters[def.key] ? 'border-slate-900 font-semibold' : 'border-slate-300'}`}
-              >
-                <option value="">{d.filters[def.key]}: {d.filters.all}</option>
-                {opts.map((o) => <option key={o} value={o}>{o}</option>)}
-              </select>
-            );
-          })}
-          <span className="ml-auto whitespace-nowrap text-xs text-slate-400">
-            {filtered.length} {d.detail.results}
-          </span>
-          {activeFilterCount > 0 && (
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100"
-            >
-              <X className="h-3.5 w-3.5" /> {d.detail.clearFilters}
-            </button>
-          )}
-        </div>
+      {/* ── Filter bar — in flow (scrolls away) + a pinned clone ── */}
+      <div ref={flowBarRef}>
+        <DealFilterBar state={filterState} variant="flow" onOpenMobile={() => setMobileFiltersOpen(true)} />
       </div>
+      <DealFilterBar
+        state={filterState}
+        variant="fixed"
+        pinned={pinned}
+        onOpenMobile={() => setMobileFiltersOpen(true)}
+      />
 
       {/* ── Catalog ── */}
       <section id="deal-catalog" className="mx-auto max-w-7xl px-6 py-8">
@@ -339,6 +307,12 @@ export default function DealDetail() {
           </div>
         </div>
       )}
+
+      <DealFilterSheet
+        state={filterState}
+        open={mobileFiltersOpen}
+        onClose={() => setMobileFiltersOpen(false)}
+      />
 
       <DealCartDrawer
         deal={deal}

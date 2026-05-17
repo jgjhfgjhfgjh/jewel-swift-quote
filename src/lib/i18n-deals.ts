@@ -28,6 +28,7 @@ export interface DealsText {
   };
   // filter field labels (catalog filter bar)
   filters: {
+    title: string;
     brand: string;
     gender: string;
     collection: string;
@@ -117,6 +118,7 @@ const cs: DealsText = {
     clearFilters: 'Zrušit filtry',
   },
   filters: {
+    title: 'Filtry',
     brand: 'Značka',
     gender: 'Pohlaví',
     collection: 'Kolekce',
@@ -219,6 +221,7 @@ const en: DealsText = {
     clearFilters: 'Clear filters',
   },
   filters: {
+    title: 'Filters',
     brand: 'Brand',
     gender: 'Gender',
     collection: 'Collection',
