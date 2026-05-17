@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
 import { GatewayMascot3D } from './SweltGateway';
+import { EuropeMap } from './EuropeMap';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AuthModal } from '@/components/AuthModal';
@@ -806,46 +807,35 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
-          {/* Continental Blackline — dark editorial distribution panel */}
+          {/* Header — copywriting */}
           <Reveal>
-            <div className="relative overflow-hidden rounded-lg bg-[#0E0E10] border border-white/10 px-6 sm:px-10 lg:px-12 py-12 sm:py-16 mb-12">
-              {/* Header */}
-              <div className="max-w-2xl mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="h-px w-10 bg-[#C9A86C]" />
-                  <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#C9A86C]">
-                    Distribuční síť
-                  </span>
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-white leading-[1.14] tracking-tight mb-4">
-                  Doručujeme do 15 zemí Evropy.
-                </h2>
-                <p className="text-zinc-400 text-[15px] leading-relaxed">
-                  Začnete ve své zemi, škálujete napříč celou Evropou. Přes Dropshipping prodáváte do všech zemí distribuční zóny — logistiku, celní odbavení i doručení zajišťujeme my.
-                </p>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] tracking-[0.2em] uppercase text-primary font-semibold mb-4">
+                <Globe className="h-3.5 w-3.5" /> Doručovací zóna
               </div>
-              {/* Rigid bordered country grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 border-l border-t border-white/[0.08]">
-                {COUNTRIES.map((c) => (
-                  <div
-                    key={c.name}
-                    className="group flex items-center gap-3 border-r border-b border-white/[0.08] px-4 py-3.5 transition-colors duration-300 hover:bg-white/[0.03]"
-                  >
-                    <img
-                      src={`https://flagcdn.com/32x24/${c.code}.png`}
-                      srcSet={`https://flagcdn.com/64x48/${c.code}.png 2x`}
-                      width={26}
-                      height={20}
-                      alt=""
-                      className="shrink-0 grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
-                    />
-                    <div className="min-w-0 leading-tight">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#C9A86C]">{c.code.toUpperCase()}</div>
-                      <div className="text-[13px] text-zinc-300 truncate">{c.name}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
+                Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
+                Začneš ve své zemi. Škáluješ do celé EU. Přes <strong>Dropshipping</strong> můžeš prodávat do všech níže uvedených zemí — logistiku, celnici i doručení řešíme my.
+              </p>
+            </div>
+          </Reveal>
+          {/* Interactive Europe map */}
+          <Reveal delay={80}>
+            <div className="max-w-2xl mx-auto mb-6">
+              <EuropeMap />
+            </div>
+          </Reveal>
+          {/* Simple country list */}
+          <Reveal delay={140}>
+            <div className="flex flex-wrap justify-center gap-x-2.5 gap-y-2 max-w-3xl mx-auto mb-12">
+              {COUNTRIES.map((c, i) => (
+                <span key={c.name} className="flex items-center text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground/75">{c.name}</span>
+                  {i < COUNTRIES.length - 1 && <span className="ml-2.5 text-border">·</span>}
+                </span>
+              ))}
             </div>
           </Reveal>
           {/* Section heading — recognize yourself in these obstacles? */}
