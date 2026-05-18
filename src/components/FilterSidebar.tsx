@@ -1,6 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { X, Gem, Watch, Sliders, ShoppingBag, Layers, Sparkles, RotateCcw, ArrowRight } from 'lucide-react';
+import { X, Gem, Watch, Sliders, ShoppingBag, Layers, RotateCcw } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -71,8 +70,7 @@ export function FilterSidebar({
   mobileOnly, desktopOnly,
 }: Props) {
   const { user } = useAuthContext();
-  const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode, setGatewayOpen } = useStore();
-  const navigate = useNavigate();
+  const { lang, setLang, sidebarOpen, setSidebarOpen, viewMode } = useStore();
   const t = translations[lang];
   const isHome = viewMode === 'home';
 
@@ -681,36 +679,6 @@ export function FilterSidebar({
             <span className="filter-reset-count">{totalActiveCount}</span>
           )}
         </button>
-
-        <div className="filter-ai-card">
-          <div className="filter-ai-card-glow" aria-hidden />
-          <div className="filter-ai-card-head">
-            <span className="filter-ai-chip">
-              <Sparkles className="h-3.5 w-3.5" />
-            </span>
-            <div className="filter-ai-text">
-              <span className="filter-ai-title">AI poradce</span>
-              <span className="filter-ai-sub">Hledáte něco konkrétního?</span>
-            </div>
-          </div>
-          <p className="filter-ai-desc">
-            Popište co hledáte vlastními slovy — najdeme produkt na míru.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              // GatewayPanel mounts only on homepage, so navigate first
-              // and toggle the store flag — homepage will pick it up.
-              setGatewayOpen(true);
-              setSidebarOpen(false);
-              navigate('/');
-            }}
-            className="filter-ai-cta"
-          >
-            <span>Zeptat se AI</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
 
         <div className="filter-footer-meta">
           <span>partner.</span>
