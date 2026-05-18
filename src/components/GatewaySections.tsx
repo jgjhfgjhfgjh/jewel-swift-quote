@@ -850,8 +850,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
                 <div className="flex flex-col h-full bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-3">{item.label}</p>
-                  <div className="font-display font-semibold text-foreground text-base mb-2 leading-snug">{item.title}</div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-900 mb-3">{item.label}</p>
+                  <div className="font-display font-semibold text-zinc-400 text-base mb-2 leading-snug">{item.title}</div>
                   <p className="text-sm text-muted-foreground leading-relaxed flex-1">{item.text}</p>
                   <div className="mt-5">
                     <Button size="sm" className="gap-2 w-full sm:w-auto" onClick={() => navigate('/dropshipping')}>
