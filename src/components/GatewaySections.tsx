@@ -841,23 +841,23 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          <div className="border-t border-zinc-200 divide-y divide-zinc-200">
+          <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { label: 'Nevím jak založit pobočku a sklad v zahraničí abych mohl expandovat', title: 'Jeden partner, jeden feed, EU trhy. Bez zakládání poboček nebo skladů v zahraničí.', text: 'Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.' },
-              { label: 'Nemám peníze na naskladnění',                                          title: 'Platíš až po prodeji',                                                              text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
-              { label: 'Nevím jak řešit logistiku',                                            title: 'O expedici se staráme my',                                                         text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-              { label: 'Bojím se že špatně zvolím produkty',                                   title: 'S plánem Silver 5000+ produktů',                                                   text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
+              { label: 'Nevím jak expandovat do zahraničí', title: 'Jeden partner, jeden feed, EU trhy.', text: 'Dropshipping od sweltu je jediný způsob, jak vstoupit na nový evropský trh bez jakýchkoli logistických nákladů. Zákazník objedná ve vaší zemi — my doručíme kamkoli v EU.' },
+              { label: 'Nemám peníze na naskladnění',       title: 'Platíš až po prodeji',               text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
+              { label: 'Nevím jak řešit logistiku',         title: 'O expedici se staráme my',            text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
+              { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="py-7 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                  <div className="flex-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{item.label}</p>
-                    <div className="font-display font-semibold text-foreground mb-1">{item.title}</div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
+                <div className="flex flex-col h-full bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-3">{item.label}</p>
+                  <div className="font-display font-semibold text-foreground text-base mb-2 leading-snug">{item.title}</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">{item.text}</p>
+                  <div className="mt-5">
+                    <Button size="sm" className="gap-2 w-full sm:w-auto" onClick={() => navigate('/dropshipping')}>
+                      Chci dropshipping <ArrowRight className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
-                  <Button className="gap-2 shrink-0" onClick={() => navigate('/dropshipping')}>
-                    Chci dropshipping <ArrowRight className="h-4 w-4" />
-                  </Button>
                 </div>
               </Reveal>
             ))}
