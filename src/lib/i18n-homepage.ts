@@ -280,7 +280,7 @@ const it: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Il tuo partner per una logistica semplice.',        cta: 'Inizia a vendere' },
     { title: 'Luxury',                        subtitle: 'Ordini personali di grandi marchi. Senza minimo.',  cta: 'Esplora il lusso' },
-    { title: ‘Offerte DEAL’, subtitle: "Collezioni closeout di marchi premium. Fino al 68% di sconto, scorte limitate.", cta: ‘Scopri le offerte’ },
+    { title: 'Offerte DEAL', subtitle: "Collezioni closeout di marchi premium. Fino al 68% di sconto, scorte limitate.", cta: 'Scopri le offerte' },
     { title: 'Novità di stagione',                  subtitle: 'Prodotti di tendenza dei migliori marchi.',         cta: 'Vedi novità' },
     { title: 'Offerte esclusive',                   subtitle: 'Fino al 60% di sconto su articoli selezionati.',    cta: 'Vedi offerte' },
     { title: 'Spedizione rapida',                   subtitle: 'Consegna affidabile in Europa in 2–4 giorni.',      cta: 'Info spedizione' },
