@@ -692,7 +692,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* 2) Subtitle — matches section pt so logo sits vertically centered between page top and subtitle */}
           <Reveal delay={80}>
             <h1 className="font-sans mt-10 sm:mt-6 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Evropský velkoobchod hodinkami a šperky
+              Přístup k 5000+ produktům za velkoobchodní ceny
             </h1>
           </Reveal>
 
