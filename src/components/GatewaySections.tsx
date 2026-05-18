@@ -722,12 +722,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 4) Value prop — spacing preserved, text removed */}
-          <div className="mt-10 text-base sm:text-lg" aria-hidden />
-
-          {/* 5) CTAs — original compact size */}
+          {/* 5) CTAs */}
           <Reveal delay={240}>
-            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-14 sm:mt-16 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
                 className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px]"
