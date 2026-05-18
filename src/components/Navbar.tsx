@@ -361,7 +361,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <span
             className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
-          >swelt<span className="text-blue-500">.</span></span>
+          >swelt.</span>
           <span className="relative inline-block">
             {/* Width placeholder = PARTNER for stable layout */}
             <span aria-hidden className={`invisible font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight whitespace-nowrap ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
@@ -423,7 +423,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <span
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
-            >swelt<span className="text-blue-500">.</span></span>
+            >swelt.</span>
             {/* Suffix — inline, 3.0× ratio (24/8), items-baseline aligns its baseline with swelt's dot */}
             <span className={`font-sans font-extrabold text-[8px] tracking-tight ml-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
               <RotatingSuffix words={SUFFIX_WORDS} />
@@ -701,7 +701,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
                 {/* Left: heading + desc + CTA */}
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt<span className="text-blue-500">.</span>PARTNER</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
                   <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">{panel.heading}</h3>
                   <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">{panel.desc}</p>
                   <button
@@ -752,7 +752,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
             {/* Left: heading + desc + CTA */}
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt<span className="text-blue-500">.</span>PARTNER</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
               <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">Zeptej se AI na SWELT.PARTNER</h3>
               <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">
                 Jedním klikem otevřete váš oblíbený AI nástroj s připraveným dotazem o nabídce, dropshippingu nebo doručování.
