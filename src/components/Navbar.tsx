@@ -356,7 +356,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           className="hidden sm:flex absolute left-1/2 bottom-3 -translate-x-1/2 items-baseline gap-1.5 select-none pointer-events-auto"
-          aria-label="swelt<span className="text-blue-500">.</span>PARTNER — domů"
+          aria-label="swelt.PARTNER — domů"
         >
           <span
             className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
@@ -418,7 +418,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             to="/"
             onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="sm:hidden flex items-baseline select-none ml-0.5"
-            aria-label="swelt<span className="text-blue-500">.</span>PARTNER — domů"
+            aria-label="swelt.PARTNER — domů"
           >
             <span
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
