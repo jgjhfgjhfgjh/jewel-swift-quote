@@ -56,7 +56,7 @@ const en: HomeText = {
   hero: [
     { title: 'Dropshipping',           subtitle: 'Your partner for easy logistics.',                       cta: 'Start selling' },
     { title: 'Luxury',                 subtitle: 'Personal orders of major brands. No min order.',         cta: 'Explore luxury' },
-    { title: 'Discover our latest collections', subtitle: 'Premium fragrances & cosmetics at wholesale prices.', cta: 'View collections' },
+    { title: 'DEAL Offers', subtitle: 'Closeout collections from top brands. Up to 68% off, limited stock.', cta: 'Browse deals' },
     { title: 'New Season Arrivals',          subtitle: 'Explore trending products across top brands.',           cta: 'See new arrivals' },
     { title: 'Exclusive Deals',              subtitle: 'Up to 60% off on selected items.',                       cta: 'View deals' },
     { title: 'Fast Shipping',                subtitle: 'Reliable delivery across Europe in 2–4 days.',           cta: 'About shipping' },
@@ -88,7 +88,7 @@ const cs: HomeText = {
   hero: [
     { title: 'Dropshipping',                 subtitle: 'Váš partner pro snadnou logistiku.',                  cta: 'Chci dropshipping' },
     { title: 'Luxury',                       subtitle: 'Osobní objednávky velkých značek. Bez minima.',       cta: 'Prozkoumat luxus' },
-    { title: 'Objevte naše nejnovější kolekce',    subtitle: 'Prémiové parfémy a kosmetika za velkoobchodní ceny.', cta: 'Zobrazit kolekce' },
+    { title: 'DEAL nabídky', subtitle: 'Closeout kolekce prémiových značek. Slevy až 68 %, zásoby limitované.', cta: 'Prozkoumat dealy' },
     { title: 'Novinky sezóny',                     subtitle: 'Trendy produkty napříč nejlepšími značkami.',         cta: 'Zobrazit novinky' },
     { title: 'Exkluzivní akce',                    subtitle: 'Až 60% sleva na vybrané položky.',                    cta: 'Zobrazit slevy' },
     { title: 'Rychlá doprava',                     subtitle: 'Spolehlivé dodání po celé Evropě za 2–4 dny.',        cta: 'Více o dopravě' },
@@ -120,7 +120,7 @@ const sk: HomeText = {
   hero: [
     { title: 'Dropshipping',                 subtitle: 'Váš partner pre jednoduchú logistiku.',               cta: 'Začať predávať' },
     { title: 'Luxury',                       subtitle: 'Osobné objednávky veľkých značiek. Bez minima.',      cta: 'Preskúmať luxus' },
-    { title: 'Objavte naše najnovšie kolekcie',    subtitle: 'Prémiové parfumy a kozmetika za veľkoobchodné ceny.', cta: 'Zobraziť kolekcie' },
+    { title: 'DEAL ponuky', subtitle: 'Closeout kolekcie prémiových značiek. Zľavy až 68 %, zásoby obmedzené.', cta: 'Preskúmať dealy' },
     { title: 'Novinky sezóny',                     subtitle: 'Trendy produkty naprieč najlepšími značkami.',        cta: 'Zobraziť novinky' },
     { title: 'Exkluzívne akcie',                   subtitle: 'Až 60% zľava na vybrané položky.',                    cta: 'Zobraziť zľavy' },
     { title: 'Rýchla doprava',                     subtitle: 'Spoľahlivé doručenie po celej Európe za 2–4 dni.',    cta: 'Viac o doprave' },
@@ -152,7 +152,7 @@ const pl: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Twój partner do łatwej logistyki.',                 cta: 'Zacznij sprzedaż' },
     { title: 'Luxury',                        subtitle: 'Indywidualne zamówienia znanych marek. Bez minimum.', cta: 'Odkryj luksus' },
-    { title: 'Odkryj nasze najnowsze kolekcje',     subtitle: 'Perfumy i kosmetyki premium w cenach hurtowych.',   cta: 'Zobacz kolekcje' },
+    { title: 'Oferty DEAL', subtitle: 'Kolekcje closeout od marek premium. Rabaty do 68%, ograniczone stany.', cta: 'Przeglądaj DEAL' },
     { title: 'Nowości sezonu',                      subtitle: 'Trendy produkty od najlepszych marek.',             cta: 'Zobacz nowości' },
     { title: 'Ekskluzywne oferty',                  subtitle: 'Do 60% zniżki na wybrane produkty.',                cta: 'Zobacz oferty' },
     { title: 'Szybka wysyłka',                      subtitle: 'Niezawodna dostawa w Europie w 2–4 dni.',           cta: 'O dostawie' },
@@ -184,7 +184,7 @@ const de: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Ihr Partner für einfache Logistik.',                cta: 'Verkaufen starten' },
     { title: 'Luxury',                        subtitle: 'Persönliche Bestellungen großer Marken. Kein Mindestbestellwert.', cta: 'Luxus entdecken' },
-    { title: 'Entdecken Sie unsere neuesten Kollektionen', subtitle: 'Premium-Parfüms & Kosmetik zu Großhandelspreisen.', cta: 'Kollektionen ansehen' },
+    { title: 'DEAL-Angebote', subtitle: 'Closeout-Kollektionen von Premium-Marken. Bis zu 68 % Rabatt, limitiertes Lager.', cta: 'Angebote entdecken' },
     { title: 'Neue Saison',                         subtitle: 'Trendprodukte von Top-Marken.',                     cta: 'Neuheiten ansehen' },
     { title: 'Exklusive Angebote',                  subtitle: 'Bis zu 60% Rabatt auf ausgewählte Artikel.',        cta: 'Angebote ansehen' },
     { title: 'Schneller Versand',                   subtitle: 'Zuverlässige Lieferung in Europa in 2–4 Tagen.',    cta: 'Über Versand' },
@@ -216,7 +216,7 @@ const fr: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Votre partenaire pour une logistique simple.',     cta: 'Commencer à vendre' },
     { title: 'Luxury',                        subtitle: 'Commandes personnelles de grandes marques. Sans minimum.', cta: 'Explorer le luxe' },
-    { title: 'Découvrez nos dernières collections', subtitle: 'Parfums & cosmétiques premium aux prix de gros.', cta: 'Voir les collections' },
+    { title: 'Offres DEAL', subtitle: "Collections closeout de marques premium. Jusqu'à 68 % de remise, stocks limités.", cta: 'Voir les offres' },
     { title: 'Nouveautés de saison',                subtitle: 'Produits tendance des meilleures marques.',        cta: 'Voir les nouveautés' },
     { title: 'Offres exclusives',                   subtitle: "Jusqu'à 60% de remise sur articles sélectionnés.", cta: 'Voir les offres' },
     { title: 'Livraison rapide',                    subtitle: 'Livraison fiable en Europe en 2 à 4 jours.',       cta: 'À propos de la livraison' },
@@ -248,7 +248,7 @@ const es: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Tu socio para una logística sencilla.',             cta: 'Empezar a vender' },
     { title: 'Luxury',                        subtitle: 'Pedidos personales de grandes marcas. Sin mínimo.', cta: 'Explorar lujo' },
-    { title: 'Descubre nuestras últimas colecciones', subtitle: 'Perfumes y cosmética premium a precio mayorista.', cta: 'Ver colecciones' },
+    { title: 'Ofertas DEAL', subtitle: 'Colecciones closeout de marcas premium. Hasta 68% de descuento, stock limitado.', cta: 'Ver ofertas DEAL' },
     { title: 'Novedades de temporada',              subtitle: 'Productos tendencia de las mejores marcas.',        cta: 'Ver novedades' },
     { title: 'Ofertas exclusivas',                  subtitle: 'Hasta 60% de descuento en productos seleccionados.', cta: 'Ver ofertas' },
     { title: 'Envío rápido',                        subtitle: 'Entrega fiable en Europa en 2–4 días.',             cta: 'Sobre el envío' },
@@ -280,7 +280,7 @@ const it: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Il tuo partner per una logistica semplice.',        cta: 'Inizia a vendere' },
     { title: 'Luxury',                        subtitle: 'Ordini personali di grandi marchi. Senza minimo.',  cta: 'Esplora il lusso' },
-    { title: 'Scopri le ultime collezioni',         subtitle: 'Profumi e cosmetici premium a prezzi all’ingrosso.', cta: 'Vedi collezioni' },
+    { title: ‘Offerte DEAL’, subtitle: "Collezioni closeout di marchi premium. Fino al 68% di sconto, scorte limitate.", cta: ‘Scopri le offerte’ },
     { title: 'Novità di stagione',                  subtitle: 'Prodotti di tendenza dei migliori marchi.',         cta: 'Vedi novità' },
     { title: 'Offerte esclusive',                   subtitle: 'Fino al 60% di sconto su articoli selezionati.',    cta: 'Vedi offerte' },
     { title: 'Spedizione rapida',                   subtitle: 'Consegna affidabile in Europa in 2–4 giorni.',      cta: 'Info spedizione' },
@@ -312,7 +312,7 @@ const nl: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Uw partner voor eenvoudige logistiek.',             cta: 'Begin met verkopen' },
     { title: 'Luxury',                        subtitle: 'Persoonlijke bestellingen van grote merken. Geen minimum.', cta: 'Ontdek luxe' },
-    { title: 'Ontdek onze nieuwste collecties',     subtitle: 'Premium parfums & cosmetica tegen groothandelsprijzen.', cta: 'Bekijk collecties' },
+    { title: 'DEAL-aanbiedingen', subtitle: 'Closeout-collecties van premium merken. Tot 68% korting, beperkte voorraad.', cta: 'Bekijk deals' },
     { title: 'Nieuw in het seizoen',                subtitle: 'Trendy producten van topmerken.',                   cta: 'Bekijk nieuw' },
     { title: 'Exclusieve aanbiedingen',             subtitle: 'Tot 60% korting op geselecteerde artikelen.',       cta: 'Bekijk aanbiedingen' },
     { title: 'Snelle verzending',                   subtitle: 'Betrouwbare levering in Europa in 2–4 dagen.',      cta: 'Over verzending' },
@@ -344,7 +344,7 @@ const pt: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'O seu parceiro para uma logística simples.',        cta: 'Começar a vender' },
     { title: 'Luxury',                        subtitle: 'Encomendas pessoais de grandes marcas. Sem mínimo.', cta: 'Explorar luxo' },
-    { title: 'Descubra as nossas últimas coleções', subtitle: 'Perfumes e cosmética premium a preços grossistas.', cta: 'Ver coleções' },
+    { title: 'Ofertas DEAL', subtitle: 'Coleções closeout de marcas premium. Até 68% de desconto, stock limitado.', cta: 'Ver ofertas' },
     { title: 'Novidades da estação',                subtitle: 'Produtos em tendência das melhores marcas.',        cta: 'Ver novidades' },
     { title: 'Ofertas exclusivas',                  subtitle: 'Até 60% de desconto em artigos selecionados.',      cta: 'Ver ofertas' },
     { title: 'Envio rápido',                        subtitle: 'Entrega fiável na Europa em 2–4 dias.',             cta: 'Sobre o envio' },
@@ -376,7 +376,7 @@ const hu: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'A partnered az egyszerű logisztikához.',            cta: 'Kezdjen el árulni' },
     { title: 'Luxury',                        subtitle: 'Egyedi rendelések nagy márkáktól. Minimum nélkül.', cta: 'Fedezze fel a luxust' },
-    { title: 'Fedezze fel legújabb kollekcióinkat', subtitle: 'Prémium parfümök és kozmetikumok nagykereskedelmi áron.', cta: 'Kollekciók' },
+    { title: 'DEAL ajánlatok', subtitle: 'Prémium márkák closeout kollekcióit. Akár 68% kedvezmény, korlátozott készlet.', cta: 'DEAL ajánlatok' },
     { title: 'Szezonális újdonságok',               subtitle: 'Trendi termékek a legjobb márkáktól.',              cta: 'Újdonságok' },
     { title: 'Exkluzív ajánlatok',                  subtitle: 'Akár 60% kedvezmény kiválasztott termékekre.',      cta: 'Ajánlatok' },
     { title: 'Gyors szállítás',                     subtitle: 'Megbízható kézbesítés Európában 2–4 nap alatt.',    cta: 'A szállításról' },
@@ -408,7 +408,7 @@ const ro: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Partenerul tău pentru logistică simplă.',           cta: 'Începe să vinzi' },
     { title: 'Luxury',                        subtitle: 'Comenzi personale de la mărci mari. Fără minim.',   cta: 'Explorează luxul' },
-    { title: 'Descoperă cele mai noi colecții',     subtitle: 'Parfumuri și cosmetice premium la prețuri en-gros.', cta: 'Vezi colecții' },
+    { title: 'Oferte DEAL', subtitle: 'Colecții closeout de mărci premium. Până la 68% reducere, stoc limitat.', cta: 'Vezi ofertele' },
     { title: 'Noutăți de sezon',                    subtitle: 'Produse trending de la cele mai bune mărci.',       cta: 'Vezi noutăți' },
     { title: 'Oferte exclusive',                    subtitle: 'Până la 60% reducere la articole selectate.',       cta: 'Vezi oferte' },
     { title: 'Livrare rapidă',                      subtitle: 'Livrare sigură în Europa în 2–4 zile.',             cta: 'Despre livrare' },
@@ -440,7 +440,7 @@ const sv: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Din partner för enkel logistik.',                   cta: 'Börja sälja' },
     { title: 'Luxury',                        subtitle: 'Personliga beställningar av stora märken. Inget minimum.', cta: 'Utforska lyx' },
-    { title: 'Upptäck våra senaste kollektioner',   subtitle: 'Premiumparfymer & kosmetika till grossistpriser.',  cta: 'Se kollektioner' },
+    { title: 'DEAL-erbjudanden', subtitle: 'Closeout-kollektioner från premium varumärken. Upp till 68% rabatt, begränsat lager.', cta: 'Se erbjudanden' },
     { title: 'Säsongsnyheter',                      subtitle: 'Trendprodukter från toppmärken.',                   cta: 'Se nyheter' },
     { title: 'Exklusiva erbjudanden',               subtitle: 'Upp till 60% rabatt på utvalda varor.',             cta: 'Se erbjudanden' },
     { title: 'Snabb frakt',                         subtitle: 'Tillförlitlig leverans i Europa på 2–4 dagar.',     cta: 'Om frakt' },
@@ -472,7 +472,7 @@ const da: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Din partner til nem logistik.',                     cta: 'Begynd at sælge' },
     { title: 'Luxury',                        subtitle: 'Personlige bestillinger af store mærker. Intet minimum.', cta: 'Udforsk luksus' },
-    { title: 'Opdag vores nyeste kollektioner',     subtitle: 'Premium parfumer & kosmetik til engrospriser.',     cta: 'Se kollektioner' },
+    { title: 'DEAL-tilbud', subtitle: 'Closeout-kollektioner fra premium mærker. Op til 68% rabat, begrænset lager.', cta: 'Se tilbud' },
     { title: 'Sæsonens nyheder',                    subtitle: 'Trendprodukter fra topmærker.',                     cta: 'Se nyheder' },
     { title: 'Eksklusive tilbud',                   subtitle: 'Op til 60% rabat på udvalgte varer.',               cta: 'Se tilbud' },
     { title: 'Hurtig levering',                     subtitle: 'Pålidelig levering i Europa på 2–4 dage.',          cta: 'Om levering' },
@@ -504,7 +504,7 @@ const fi: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Kumppanisi helppoon logistiikkaan.',                cta: 'Aloita myynti' },
     { title: 'Luxury',                        subtitle: 'Henkilökohtaiset tilaukset suurilta brändeiltä. Ei minimiä.', cta: 'Tutustu luksukseen' },
-    { title: 'Tutustu uusimpiin mallistoihimme',    subtitle: 'Premium-tuoksut ja kosmetiikka tukkuhintaan.',      cta: 'Katso mallistot' },
+    { title: 'DEAL-tarjoukset', subtitle: 'Closeout-mallistoja premium-brändeiltä. Jopa 68% alennus, rajoitettu varasto.', cta: 'Katso tarjoukset' },
     { title: 'Kauden uutuudet',                     subtitle: 'Trendituotteita huippubrändeiltä.',                 cta: 'Katso uutuudet' },
     { title: 'Erikoistarjoukset',                   subtitle: 'Jopa 60% alennus valituista tuotteista.',           cta: 'Katso tarjoukset' },
     { title: 'Nopea toimitus',                      subtitle: 'Luotettava toimitus Eurooppaan 2–4 päivässä.',      cta: 'Toimituksesta' },
@@ -536,7 +536,7 @@ const no: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Din partner for enkel logistikk.',                  cta: 'Begynn å selge' },
     { title: 'Luxury',                        subtitle: 'Personlige bestillinger av store merker. Ingen minimum.', cta: 'Utforsk luksus' },
-    { title: 'Oppdag våre nyeste kolleksjoner',     subtitle: 'Premium parfymer & kosmetikk til engrospriser.',    cta: 'Se kolleksjoner' },
+    { title: 'DEAL-tilbud', subtitle: 'Closeout-kolleksjoner fra premium merker. Opptil 68% rabatt, begrenset lager.', cta: 'Se tilbud' },
     { title: 'Sesongnyheter',                       subtitle: 'Trendprodukter fra toppmerker.',                    cta: 'Se nyheter' },
     { title: 'Eksklusive tilbud',                   subtitle: 'Opptil 60% rabatt på utvalgte varer.',              cta: 'Se tilbud' },
     { title: 'Rask frakt',                          subtitle: 'Pålitelig levering i Europa på 2–4 dager.',         cta: 'Om frakt' },
@@ -568,7 +568,7 @@ const el: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Ο συνεργάτης σας για εύκολη εφοδιαστική.',          cta: 'Ξεκινήστε πωλήσεις' },
     { title: 'Luxury',                        subtitle: 'Προσωπικές παραγγελίες μεγάλων brands. Χωρίς ελάχιστο.', cta: 'Εξερευνήστε πολυτέλεια' },
-    { title: 'Ανακαλύψτε τις τελευταίες συλλογές',  subtitle: 'Premium αρώματα & καλλυντικά σε χονδρικές τιμές.',  cta: 'Δείτε συλλογές' },
+    { title: 'Προσφορές DEAL', subtitle: 'Closeout συλλογές premium brands. Έως 68% έκπτωση, περιορισμένα αποθέματα.', cta: 'Δείτε προσφορές' },
     { title: 'Νέα της σεζόν',                       subtitle: 'Trend προϊόντα από κορυφαία brands.',               cta: 'Δείτε νέα' },
     { title: 'Αποκλειστικές προσφορές',             subtitle: 'Έως 60% έκπτωση σε επιλεγμένα είδη.',               cta: 'Δείτε προσφορές' },
     { title: 'Γρήγορη αποστολή',                    subtitle: 'Αξιόπιστη παράδοση στην Ευρώπη σε 2–4 ημέρες.',     cta: 'Σχετικά με αποστολή' },
@@ -600,7 +600,7 @@ const is: HomeText = {
   hero: [
     { title: 'Dropshipping',                  subtitle: 'Þinn samstarfsaðili í einföldu vöruflæði.',         cta: 'Byrja að selja' },
     { title: 'Luxury',                        subtitle: 'Persónulegar pantanir á stórum vörumerkjum. Ekkert lágmark.', cta: 'Skoða lúxus' },
-    { title: 'Skoðaðu nýjustu söfnin okkar',        subtitle: 'Hágæða ilmir & snyrtivörur á heildsöluverði.',      cta: 'Sjá söfn' },
+    { title: 'DEAL tilboð', subtitle: 'Closeout söfn frá premium vörumerkjum. Allt að 68% afsláttur, takmarkaðar birgðir.', cta: 'Sjá tilboð' },
     { title: 'Nýjungar tímabilsins',                subtitle: 'Vinsælar vörur frá topp vörumerkjum.',              cta: 'Sjá nýjungar' },
     { title: 'Sérstök tilboð',                      subtitle: 'Allt að 60% afsláttur á völdum vörum.',             cta: 'Sjá tilboð' },
     { title: 'Hröð sending',                        subtitle: 'Áreiðanleg afhending um Evrópu á 2–4 dögum.',       cta: 'Um sendingu' },

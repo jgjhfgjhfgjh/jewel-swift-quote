@@ -7,7 +7,7 @@ import { home } from '@/lib/i18n-homepage';
 const SLIDE_IMAGES = [
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=75',
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=75',
-  'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1200&q=75',
+  'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=75',
   'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=75',
   'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1200&q=75',
   'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1200&q=75',
@@ -19,7 +19,7 @@ const SLIDE_IMAGES = [
 ];
 
 const SLIDE_HREFS = [
-  '#dropshipping', '#katalog', '#katalog', '#katalog', '#katalog',
+  '#dropshipping', '#katalog', '/deals', '#katalog', '#katalog',
   '#katalog', '#katalog', '#katalog', '#kontakt', '#api', '/register',
 ];
 
@@ -27,7 +27,7 @@ const SLIDE_HREFS = [
 const SLIDE_META = [
   { eyebrow: 'Dropshipping',        secondaryCta: 'Zjistit více',          imgPos: 'object-left'            },
   { eyebrow: 'Luxury',              secondaryCta: 'Prohlédnout hodinky',   imgPos: 'object-center'          },
-  { eyebrow: 'Nová kolekce',        secondaryCta: 'Celá kolekce',          imgPos: 'object-center'          },
+  { eyebrow: 'Closeout DEAL',       secondaryCta: 'Jak to funguje',        imgPos: 'object-center'          },
   { eyebrow: 'Novinky sezóny',      secondaryCta: 'Všechny novinky',       imgPos: 'object-[30%_center]'   },
   { eyebrow: 'Exkluzivní akce',     secondaryCta: 'Všechny slevy',         imgPos: 'object-center'          },
   { eyebrow: 'Logistika',           secondaryCta: 'Podmínky doručení',     imgPos: 'object-[20%_center]'   },
