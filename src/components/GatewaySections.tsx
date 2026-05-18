@@ -689,8 +689,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 2) Subtitle — matches section pt so logo sits vertically centered between page top and subtitle */}
-          <div className="mt-10 sm:mt-6 text-sm sm:text-lg md:text-xl" aria-hidden />
+          {/* 2) Subtitle */}
+          <Reveal delay={80}>
+            <h1 className="font-sans mt-10 sm:mt-6 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Přístup k 5 000+ produktům za velkoobchodní ceny
+            </h1>
+          </Reveal>
 
           {/* 3) Brand pills — clickable, all screens, with breathing room from subtitle */}
           <Reveal delay={140}>
@@ -718,12 +722,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* 4) Value prop — tight gap from pills on both mobile and desktop */}
-          <Reveal delay={200}>
-            <p className="font-sans mt-10 text-base sm:text-lg font-semibold text-foreground tracking-tight">
-              Přístup k 5 000+ produktům<span className="hidden sm:inline"> za velkoobchodní ceny</span>
-            </p>
-          </Reveal>
+          {/* 4) Value prop — spacing preserved, text removed */}
+          <div className="mt-10 text-base sm:text-lg" aria-hidden />
 
           {/* 5) CTAs — original compact size */}
           <Reveal delay={240}>
