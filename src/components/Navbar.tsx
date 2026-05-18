@@ -692,14 +692,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         <>
           {/* Panel */}
           <div
-            className="fixed left-0 right-0 z-[95] border-b border-white/20 hidden lg:block"
-            style={{
-              top: headerHeight,
-              background: 'rgba(255,255,255,0.82)',
-              backdropFilter: 'blur(32px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-            }}
+            className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
+            style={{ top: headerHeight }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
           >
@@ -749,14 +743,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     {/* ── AI panel ── */}
     {activeNav === '/ai' && (
       <div
-        className="fixed left-0 right-0 z-[95] border-b border-white/20 hidden lg:block"
-        style={{
-          top: headerHeight,
-          background: 'rgba(255,255,255,0.82)',
-          backdropFilter: 'blur(32px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-        }}
+        className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
+        style={{ top: headerHeight }}
         onMouseEnter={handlePanelEnter}
         onMouseLeave={handlePanelLeave}
       >

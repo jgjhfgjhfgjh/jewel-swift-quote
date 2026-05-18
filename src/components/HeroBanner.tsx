@@ -90,8 +90,8 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
 
   // Card height — compact for catalog view, full for homepage
   const cardMinH = compact
-    ? 'min-h-[400px] sm:min-h-[460px] lg:min-h-[520px]'
-    : 'min-h-[500px] sm:min-h-[580px] lg:min-h-[660px]';
+    ? 'min-h-[360px] sm:min-h-[420px] lg:min-h-[470px]'
+    : 'min-h-[440px] sm:min-h-[510px] lg:min-h-[580px]';
 
   return (
     <div
@@ -131,11 +131,8 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                 /* ── Standard editorial slide ── */
                 <div className="relative h-full">
 
-                  {/* Solid left panel — pure white, desktop only */}
-                  <div className="absolute inset-y-0 left-0 w-[46%] bg-white hidden lg:block" />
-
-                  {/* Photo — full card on mobile, right 56% on desktop */}
-                  <div className="absolute inset-0 lg:left-[44%]">
+                  {/* Photo — full bleed, text overlays on desktop via gradient */}
+                  <div className="absolute inset-0">
                     <img
                       src={slide.image}
                       alt=""
@@ -145,11 +142,11 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                     />
                     {/* Mobile: dark gradient so text is legible */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15 lg:hidden" />
-                    {/* Desktop: 4-stop gentle fade from white into image — more image visible */}
+                    {/* Desktop: white fade only under the text column, image shows freely on the right */}
                     <div
-                      className="absolute inset-y-0 left-0 w-[65%] hidden lg:block"
+                      className="absolute inset-y-0 left-0 w-[58%] hidden lg:block"
                       style={{
-                        background: 'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.55) 72%, transparent 100%)',
+                        background: 'linear-gradient(to right, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.94) 52%, rgba(255,255,255,0.3) 78%, transparent 100%)',
                       }}
                     />
                   </div>
