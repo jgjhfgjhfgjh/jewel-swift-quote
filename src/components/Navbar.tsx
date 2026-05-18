@@ -160,43 +160,6 @@ const NAV_PANELS: Record<string, NavPanel> = {
   },
 };
 
-// ── AI tools for the "Zeptej se AI" mega panel ───────────────────────────
-const SWELT_QUERY = encodeURIComponent(
-  'Co je SWELT.PARTNER? Jak funguje dropshipping a B2B velkoobchod s hodinkami a šperky v EU?'
-);
-const AI_TOOLS = [
-  {
-    name: 'ChatGPT',
-    favicon: 'chatgpt.com',
-    url: `https://chatgpt.com/?q=${SWELT_QUERY}`,
-    hint: 'Připravený dotaz',
-  },
-  {
-    name: 'Claude',
-    favicon: 'claude.ai',
-    url: `https://claude.ai/new?q=${SWELT_QUERY}`,
-    hint: 'Připravený dotaz',
-  },
-  {
-    name: 'Perplexity',
-    favicon: 'perplexity.ai',
-    url: `https://www.perplexity.ai/search?q=${SWELT_QUERY}`,
-    hint: 'Prohledá web',
-  },
-  {
-    name: 'Gemini',
-    favicon: 'gemini.google.com',
-    url: 'https://gemini.google.com/app',
-    hint: 'Google AI',
-  },
-  {
-    name: 'DeepSeek',
-    favicon: 'deepseek.com',
-    url: 'https://chat.deepseek.com',
-    hint: 'Čínský model',
-  },
-];
-
 // Map Lang code -> ISO 3166-1 alpha-2 country code for flagcdn.com
 // (emoji 🇨🇿 etc. don't render on Windows — use bitmap fallback)
 const LANG_TO_COUNTRY: Record<string, string> = {
@@ -648,20 +611,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === path ? 'rotate-180' : ''}`} />
                 </button>
               ))}
-
-              {/* ── AI panel trigger ── */}
-              <button
-                onMouseEnter={() => handleNavEnter('/ai')}
-                onMouseLeave={handleNavLeave}
-                className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ml-1 ${
-                  activeNav === '/ai'
-                    ? 'text-zinc-900'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
-              >
-                Zeptej se AI
-                <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === '/ai' ? 'rotate-180' : ''}`} />
-              </button>
             </nav>
           )}
         </div>
@@ -740,66 +689,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       );
     })()}
 
-    {/* ── AI panel ── */}
-    {activeNav === '/ai' && (
-      <div
-        className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
-        style={{ top: headerHeight }}
-        onMouseEnter={handlePanelEnter}
-        onMouseLeave={handlePanelLeave}
-      >
-        <div className="mx-auto max-w-5xl px-6 py-8">
-          <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
-            {/* Left: heading + desc + CTA */}
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
-              <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">Zeptej se AI na SWELT.PARTNER</h3>
-              <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">
-                Jedním klikem otevřete váš oblíbený AI nástroj s připraveným dotazem o nabídce, dropshippingu nebo doručování.
-              </p>
-              <a
-                href={AI_TOOLS[0].url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setActiveNav(null)}
-                className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
-              >
-                Otevřít ChatGPT <ArrowRight className="h-3.5 w-3.5" />
-              </a>
-            </div>
-
-            {/* Right: AI tool list — same compact style as nav link columns */}
-            <div className="min-w-[200px]">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">AI nástroje</p>
-              <ul className="space-y-0.5">
-                {AI_TOOLS.map((tool) => (
-                  <li key={tool.name}>
-                    <a
-                      href={tool.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setActiveNav(null)}
-                      className="group flex items-center gap-2.5 rounded-lg px-2 py-2 hover:bg-zinc-50 transition-colors"
-                    >
-                      <img
-                        src={`https://www.google.com/s2/favicons?sz=32&domain=${tool.favicon}`}
-                        alt={tool.name}
-                        width={16}
-                        height={16}
-                        className="w-4 h-4 rounded shrink-0"
-                      />
-                      <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900 w-24">{tool.name}</span>
-                      <span className="text-[11px] text-zinc-400 leading-tight">{tool.hint}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
-
     {/* Desktop navigation sheet */}
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
@@ -827,32 +716,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
             </button>
           ))}
-
-          {/* AI — external links, listed inline */}
-          <div className="px-4 py-3 border-t border-zinc-100 mt-1">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-2.5">Zeptej se AI na swelt</p>
-            <div className="flex flex-wrap gap-2">
-              {AI_TOOLS.map((tool) => (
-                <a
-                  key={tool.name}
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-50 text-xs font-medium text-zinc-700 transition-colors"
-                >
-                  <img
-                    src={`https://www.google.com/s2/favicons?sz=32&domain=${tool.favicon}`}
-                    alt=""
-                    width={14}
-                    height={14}
-                    className="w-3.5 h-3.5 rounded"
-                  />
-                  {tool.name}
-                </a>
-              ))}
-            </div>
-          </div>
 
           <div className="border-t my-2" />
 
