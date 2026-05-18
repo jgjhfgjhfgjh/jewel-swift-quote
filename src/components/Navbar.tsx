@@ -430,15 +430,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </span>
           </Link>
 
-          {/* Dropshipping Hub — for dropshipping partners and admins */}
+          {/* Partner Hub — for dropshipping partners and admins */}
           {!loading && user && (isB2bApproved || isAdmin) && (
             <button
               onClick={() => navigate('/partner')}
-              title="Dropshipping Hub"
+              title="Partner Hub"
               className="dropshipping-hub-btn group hidden sm:inline-flex shrink-0 items-center gap-2 ml-2 h-9 px-3.5 rounded-lg text-xs font-semibold border transition-all duration-200"
             >
               <LayoutDashboard className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-              <span className="hidden md:inline">Dropshipping Hub</span>
+              <span className="hidden md:inline">Partner Hub</span>
             </button>
           )}
         </div>
@@ -448,11 +448,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
           {!loading && user ? (
             <>
-              {/* Dropshipping Hub icon — mobile only (left-side button is hidden below sm) */}
+              {/* Partner Hub icon — mobile only (left-side button is hidden below sm) */}
               {(isB2bApproved || isAdmin) && (
                 <button
                   onClick={() => navigate('/partner')}
-                  title="Dropshipping Hub"
+                  title="Partner Hub"
                   className="dropshipping-hub-btn sm:hidden inline-flex shrink-0 items-center justify-center h-9 w-9 rounded-lg border transition-all duration-200"
                 >
                   <LayoutDashboard className="h-4 w-4" />
@@ -749,32 +749,52 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         onMouseLeave={handlePanelLeave}
       >
         <div className="mx-auto max-w-5xl px-6 py-8">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER · AI asistent</p>
-          <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">Zeptej se AI na SWELT.PARTNER</h3>
-          <p className="text-sm text-zinc-500 mb-7 max-w-lg leading-relaxed">
-            Vyberte svůj oblíbený AI nástroj a jedním klikem zjistíte vše o dropshippingu, velkoobchodě nebo doručování do EU. Dotaz za vás připravíme automaticky.
-          </p>
-          <div className="flex gap-3 flex-wrap">
-            {AI_TOOLS.map((tool) => (
+          <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
+            {/* Left: heading + desc + CTA */}
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
+              <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">Zeptej se AI na SWELT.PARTNER</h3>
+              <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">
+                Jedním klikem otevřete váš oblíbený AI nástroj s připraveným dotazem o nabídce, dropshippingu nebo doručování.
+              </p>
               <a
-                key={tool.name}
-                href={tool.url}
+                href={AI_TOOLS[0].url}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setActiveNav(null)}
-                className="group flex flex-col items-center gap-2 px-5 py-4 rounded-xl border border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200 min-w-[110px] text-center"
+                className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
               >
-                <img
-                  src={`https://www.google.com/s2/favicons?sz=64&domain=${tool.favicon}`}
-                  alt={tool.name}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-lg"
-                />
-                <span className="text-sm font-semibold text-zinc-800 group-hover:text-zinc-900">{tool.name}</span>
-                <span className="text-[10px] text-zinc-400 leading-tight">{tool.hint}</span>
+                Otevřít ChatGPT <ArrowRight className="h-3.5 w-3.5" />
               </a>
-            ))}
+            </div>
+
+            {/* Right: AI tool list — same compact style as nav link columns */}
+            <div className="min-w-[200px]">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">AI nástroje</p>
+              <ul className="space-y-0.5">
+                {AI_TOOLS.map((tool) => (
+                  <li key={tool.name}>
+                    <a
+                      href={tool.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setActiveNav(null)}
+                      className="group flex items-center gap-2.5 rounded-lg px-2 py-2 hover:bg-zinc-50 transition-colors"
+                    >
+                      <img
+                        src={`https://www.google.com/s2/favicons?sz=32&domain=${tool.favicon}`}
+                        alt={tool.name}
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 rounded shrink-0"
+                      />
+                      <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900 w-24">{tool.name}</span>
+                      <span className="text-[11px] text-zinc-400 leading-tight">{tool.hint}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
