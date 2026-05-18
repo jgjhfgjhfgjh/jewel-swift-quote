@@ -677,7 +677,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
                 style={{ letterSpacing: '-0.05em' }}
               >
-                swelt.
+                swelt<span className="text-blue-500">.</span>
               </h1>
               <span className="relative ml-1 sm:ml-2 inline-block">
                 {/* Width placeholder = PARTNER (centerpiece reference) */}

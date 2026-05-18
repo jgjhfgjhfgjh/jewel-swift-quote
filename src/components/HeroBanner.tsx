@@ -162,7 +162,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                     {/* Eyebrow */}
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] mb-3.5
                                   text-white/65 lg:text-zinc-400">
-                      swelt.PARTNER&nbsp;&nbsp;·&nbsp;&nbsp;{meta.eyebrow}
+                      swelt<span className="text-blue-500">.</span>PARTNER&nbsp;&nbsp;·&nbsp;&nbsp;{meta.eyebrow}
                     </p>
 
                     {/* Headline */}
