@@ -897,7 +897,7 @@ export function FilterSidebar({
   const activeBarTab = barTabs.find((tb) => tb.id === activeTab);
 
   const desktopBar = (
-    <div className="filter-mega-bar" onMouseLeave={scheduleTabClose}>
+    <div className="filter-mega-bar hidden lg:block" onMouseLeave={scheduleTabClose}>
       <div className="filter-mega-bar-inner">
         <label className="filter-mega-stock">
           <Sliders className="h-3.5 w-3.5" />
