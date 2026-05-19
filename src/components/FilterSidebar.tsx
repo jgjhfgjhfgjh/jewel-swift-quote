@@ -1,5 +1,5 @@
-import { useMemo, useEffect } from 'react';
-import { X, Gem, Watch, Sliders, ShoppingBag, Layers, RotateCcw } from 'lucide-react';
+import { useMemo, useEffect, useState, useRef } from 'react';
+import { X, Gem, Watch, Sliders, ShoppingBag, Layers, RotateCcw, ChevronDown } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -36,24 +36,7 @@ interface Props {
 }
 
 const CATEGORY_KEYS = ['Hodinky', 'Šperky', 'Příslušenství'] as const;
-const HEADER_HEIGHT = 56;
 const TOGGLE_THRESHOLD = 5;
-
-function DesktopSidebar({ children }: { children: React.ReactNode }) {
-  return (
-    <aside
-      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col bg-white sticky self-start overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 hover:scrollbar-thumb-zinc-300"
-      style={{
-        top: HEADER_HEIGHT,
-        maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
-        borderRight: '1px solid #e4e4e7',
-        boxShadow: '2px 0 12px -4px rgba(0,0,0,0.06)',
-      }}
-    >
-      {children}
-    </aside>
-  );
-}
 
 /** Pill-style label showing how many values are active in a group, e.g. "2" */
 function ActiveBadge({ count }: { count: number }) {
@@ -87,6 +70,29 @@ export function FilterSidebar({
     }
     return () => { document.body.style.overflow = ''; };
   }, [sidebarOpen, desktopOnly]);
+
+  // Desktop mega-menu filter bar — open tab + hover-close timer (mirrors navbar)
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const tabCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openTab = (id: string) => {
+    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
+    setActiveTab(id);
+  };
+  const toggleTab = (id: string) => {
+    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
+    setActiveTab((cur) => (cur === id ? null : id));
+  };
+  const scheduleTabClose = () => {
+    tabCloseTimer.current = setTimeout(() => setActiveTab(null), 140);
+  };
+  const cancelTabClose = () => {
+    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
+  };
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setActiveTab(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const discountTiers = [
     { label: t.discount70, value: 70 },
@@ -697,11 +703,254 @@ export function FilterSidebar({
 
   const activeContent = isHome ? homeContent : content;
 
+  // ─── Desktop mega-menu bar: param rendered as a labelled column ───
+  const renderParamColumn = (param: AvailableParam) => {
+    const selectedValues = selectedParams[param.nazev] ?? [];
+    const useToggles = param.values.length <= TOGGLE_THRESHOLD;
+    return (
+      <div key={param.nazev} className="filter-mega-col">
+        <div className="filter-mega-col-title">
+          <span>{tParamName(param.nazev, lang)}</span>
+          {selectedValues.length > 0 && (
+            <span className="filter-mega-dot">{selectedValues.length}</span>
+          )}
+        </div>
+        {selectedValues.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setSelectedParams({ ...selectedParams, [param.nazev]: [] })}
+            className="filter-mega-clearall"
+          >
+            Vymazat
+          </button>
+        )}
+        <div className="filter-mega-scroll">
+          {param.values.map((value) =>
+            useToggles ? (
+              <div key={value} className="filter-mega-opt-row">
+                <span className="truncate pr-2">{value}</span>
+                <Switch
+                  checked={selectedValues.includes(value)}
+                  onCheckedChange={() => toggleParam(param.nazev, value)}
+                />
+              </div>
+            ) : (
+              <label key={value} className="filter-mega-opt">
+                <Checkbox
+                  checked={selectedValues.includes(value)}
+                  onCheckedChange={() => toggleParam(param.nazev, value)}
+                />
+                <span className="truncate">{value}</span>
+              </label>
+            )
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Panels for each bar tab — multi-column mega-menu layout
+  const langPanel = (
+    <div className="filter-mega-panel-inner">
+      <div className="filter-mega-col" style={{ maxWidth: 'none' }}>
+        <div className="filter-mega-col-title"><span>{t.language}</span></div>
+        <div className="grid grid-cols-3 gap-1.5" style={{ maxWidth: 540 }}>
+          {ALL_LANGS.map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang(l as Lang)}
+              className={`flex items-center gap-2 rounded-md px-2.5 py-2 text-xs font-medium transition-colors ${
+                lang === l ? 'bg-zinc-900 text-white' : 'hover:bg-zinc-100 text-zinc-700'
+              }`}
+            >
+              <span className="text-base leading-none">{flags[l as Lang]}</span>
+              <span className="truncate">{langNames[l as Lang]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const obchodPanel = (
+    <div className="filter-mega-panel-inner">
+      <div className="filter-mega-col">
+        <div className="filter-mega-col-title">
+          <span>{t.discountTiers}</span>
+          {activeDiscountCount > 0 && <span className="filter-mega-dot">{activeDiscountCount}</span>}
+        </div>
+        <div className="filter-mega-scroll">
+          {discountTiers.map((tier) => (
+            <div key={tier.value} className="filter-mega-opt-row">
+              <span>{tier.label}</span>
+              <Switch
+                checked={minDiscount === tier.value}
+                onCheckedChange={(checked) => setMinDiscount(checked ? tier.value : 0)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const sortimentPanel = (
+    <div className="filter-mega-panel-inner">
+      <div className="filter-mega-col">
+        <div className="filter-mega-col-title">
+          <span>{t.brands}</span>
+          {activeBrandsCount > 0 && <span className="filter-mega-dot">{activeBrandsCount}</span>}
+        </div>
+        {activeBrandsCount > 0 && (
+          <button type="button" onClick={() => setSelectedBrands([])} className="filter-mega-clearall">
+            {t.allBrands}
+          </button>
+        )}
+        <div className="filter-mega-scroll">
+          {sortedManufacturers.map((m) => (
+            <label key={m.name} className="filter-mega-opt">
+              <Checkbox
+                checked={selectedBrands.includes(m.name)}
+                onCheckedChange={() => toggleBrand(m.name)}
+              />
+              <span className="truncate">{m.name}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="filter-mega-col">
+        <div className="filter-mega-col-title">
+          <span>{t.categories}</span>
+          {activeCategoryCount > 0 && <span className="filter-mega-dot">{activeCategoryCount}</span>}
+        </div>
+        <div className="filter-mega-scroll">
+          {CATEGORY_KEYS.map((cat) => (
+            <div key={cat} className="filter-mega-opt-row">
+              <span>{tCategory(cat, lang)}</span>
+              <Switch
+                checked={selectedCategory === cat}
+                onCheckedChange={(checked) => setSelectedCategory(checked ? cat : null)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {availableGenders.length > 0 && (
+        <div className="filter-mega-col">
+          <div className="filter-mega-col-title">
+            <span>{tParamName('Určení', lang)}</span>
+            {activeGendersCount > 0 && <span className="filter-mega-dot">{activeGendersCount}</span>}
+          </div>
+          <div className="filter-mega-scroll">
+            {availableGenders.map((gender) => (
+              <div key={gender} className="filter-mega-opt-row">
+                <span>{tGender(gender, lang)}</span>
+                <Switch
+                  checked={selectedGenders.includes(gender)}
+                  onCheckedChange={() => toggleGender(gender)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sortimentExtraParams.map(renderParamColumn)}
+    </div>
+  );
+
+  const jewelryPanel = (
+    <div className="filter-mega-panel-inner">{jewelryParams.map(renderParamColumn)}</div>
+  );
+  const watchesPanel = (
+    <div className="filter-mega-panel-inner">{watchParams.map(renderParamColumn)}</div>
+  );
+  const commonPanel = (
+    <div className="filter-mega-panel-inner">{commonParams.map(renderParamColumn)}</div>
+  );
+
+  const sortimentActiveCount =
+    activeBrandsCount + activeCategoryCount + activeGendersCount +
+    sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
+  const jewelryActiveCount = jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
+  const watchesActiveCount = watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
+  const commonActiveCount = commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
+
+  const barTabs: { id: string; label: string; count: number; panel: React.ReactNode }[] = [
+    { id: 'lang', label: t.language, count: 0, panel: langPanel },
+  ];
+  if (user) {
+    barTabs.push({ id: 'obchod', label: groupLabels.commerce, count: activeDiscountCount, panel: obchodPanel });
+  }
+  barTabs.push({ id: 'sortiment', label: groupLabels.sortiment, count: sortimentActiveCount, panel: sortimentPanel });
+  if (jewelryParams.length > 0) {
+    barTabs.push({ id: 'jewelry', label: groupLabels.jewelry, count: jewelryActiveCount, panel: jewelryPanel });
+  }
+  if (watchParams.length > 0) {
+    barTabs.push({ id: 'watches', label: groupLabels.watches, count: watchesActiveCount, panel: watchesPanel });
+  }
+  if (commonParams.length > 0) {
+    barTabs.push({ id: 'common', label: groupLabels.common, count: commonActiveCount, panel: commonPanel });
+  }
+  const activeBarTab = barTabs.find((tb) => tb.id === activeTab);
+
+  const desktopBar = (
+    <div className="filter-mega-bar" onMouseLeave={scheduleTabClose}>
+      <div className="filter-mega-bar-inner">
+        <label className="filter-mega-stock">
+          <Sliders className="h-3.5 w-3.5" />
+          <span>{t.stockOnly}</span>
+          <Switch checked={stockOnly} onCheckedChange={setStockOnly} className="ml-1" />
+        </label>
+
+        <span className="filter-mega-divider" />
+
+        {barTabs.map((tb) => (
+          <button
+            key={tb.id}
+            type="button"
+            className="filter-mega-tab"
+            data-open={activeTab === tb.id ? 'true' : 'false'}
+            data-active={tb.count > 0 ? 'true' : 'false'}
+            onMouseEnter={() => openTab(tb.id)}
+            onClick={() => toggleTab(tb.id)}
+          >
+            <span>{tb.label}</span>
+            {tb.count > 0 && <span className="filter-mega-tab-badge">{tb.count}</span>}
+            <ChevronDown className="filter-mega-tab-chevron h-3.5 w-3.5" />
+          </button>
+        ))}
+
+        <button
+          type="button"
+          onClick={resetAllFilters}
+          disabled={totalActiveCount === 0}
+          className="filter-mega-reset"
+          data-active={totalActiveCount > 0 ? 'true' : 'false'}
+        >
+          <RotateCcw className="h-3.5 w-3.5" />
+          <span>Resetovat filtry</span>
+          {totalActiveCount > 0 && <span className="filter-mega-tab-badge">{totalActiveCount}</span>}
+        </button>
+      </div>
+
+      {activeBarTab && (
+        <div
+          className="filter-mega-panel"
+          onMouseEnter={cancelTabClose}
+          onMouseLeave={scheduleTabClose}
+        >
+          {activeBarTab.panel}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <>
-      {!mobileOnly && !isHome && (
-        <DesktopSidebar>{content}</DesktopSidebar>
-      )}
+      {!mobileOnly && !isHome && desktopBar}
 
       {!desktopOnly && sidebarOpen && (
         <div className="fixed inset-0 z-[90]" style={{ touchAction: 'none' }}>

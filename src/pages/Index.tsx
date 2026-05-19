@@ -115,7 +115,7 @@ const Index = () => {
       )}
 
       {viewMode === 'catalog' && (
-        <div className="relative z-10 bg-background flex flex-1 items-start animate-fade-in">
+        <div className="relative z-10 bg-background flex flex-col flex-1 animate-fade-in">
           <FilterSidebar {...fp} desktopOnly />
           <ProductGrid
             filters={filters}
