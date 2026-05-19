@@ -632,21 +632,21 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   const COUNTRIES = [
-    { code: 'cz', name: 'Česká republika' },
-    { code: 'sk', name: 'Slovensko' },
-    { code: 'at', name: 'Rakousko' },
-    { code: 'de', name: 'Německo' },
-    { code: 'pl', name: 'Polsko' },
-    { code: 'hu', name: 'Maďarsko' },
-    { code: 'ro', name: 'Rumunsko' },
-    { code: 'bg', name: 'Bulharsko' },
-    { code: 'hr', name: 'Chorvatsko' },
-    { code: 'si', name: 'Slovinsko' },
-    { code: 'ba', name: 'Bosna a Hercegovina' },
-    { code: 'rs', name: 'Srbsko' },
-    { code: 'gr', name: 'Řecko' },
-    { code: 'it', name: 'Itálie' },
-    { code: 'fr', name: 'Francie' },
+    { code: 'cz', name: 'Česká republika', market: '10,9 mil.' },
+    { code: 'sk', name: 'Slovensko', market: '5,4 mil.' },
+    { code: 'at', name: 'Rakousko', market: '9,1 mil.' },
+    { code: 'de', name: 'Německo', market: '83 mil.' },
+    { code: 'pl', name: 'Polsko', market: '36,7 mil.' },
+    { code: 'hu', name: 'Maďarsko', market: '9,6 mil.' },
+    { code: 'ro', name: 'Rumunsko', market: '19 mil.' },
+    { code: 'bg', name: 'Bulharsko', market: '6,4 mil.' },
+    { code: 'hr', name: 'Chorvatsko', market: '3,9 mil.' },
+    { code: 'si', name: 'Slovinsko', market: '2,1 mil.' },
+    { code: 'ba', name: 'Bosna a Hercegovina', market: '3,2 mil.' },
+    { code: 'rs', name: 'Srbsko', market: '6,6 mil.' },
+    { code: 'gr', name: 'Řecko', market: '10,4 mil.' },
+    { code: 'it', name: 'Itálie', market: '59 mil.' },
+    { code: 'fr', name: 'Francie', market: '68 mil.' },
   ];
 
   const BRANDS_STANDARD = [
@@ -818,14 +818,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-4">
                   15 doručovacích zemí
                 </p>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-2.5">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                   {COUNTRIES.map((c) => (
-                    <div key={c.name} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
-                      <span className="text-sm font-medium text-foreground/75">{c.name}</span>
+                    <div key={c.name} className="flex items-center justify-between gap-2 border-b border-border/60 py-1.5">
+                      <span className="flex items-center gap-2 min-w-0">
+                        <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                        <span className="text-sm font-medium text-foreground/75 truncate">{c.name}</span>
+                      </span>
+                      <span className="text-xs font-semibold text-muted-foreground tabular-nums shrink-0">{c.market}</span>
                     </div>
                   ))}
                 </div>
+                <p className="text-[11px] text-muted-foreground mt-3">
+                  Počet obyvatel — velikost potenciálního trhu.
+                </p>
               </div>
             </div>
           </Reveal>
