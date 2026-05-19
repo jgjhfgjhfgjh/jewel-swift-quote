@@ -42,8 +42,13 @@ const TOGGLE_THRESHOLD = 5;
 function DesktopSidebar({ children }: { children: React.ReactNode }) {
   return (
     <aside
-      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-r bg-card sticky self-start overflow-y-auto scrollbar-thin scrollbar-thumb-muted hover:scrollbar-thumb-muted-foreground/30"
-      style={{ top: HEADER_HEIGHT, maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}
+      className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col bg-white sticky self-start overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 hover:scrollbar-thumb-zinc-300"
+      style={{
+        top: HEADER_HEIGHT,
+        maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
+        borderRight: '1px solid #e4e4e7',
+        boxShadow: '2px 0 12px -4px rgba(0,0,0,0.06)',
+      }}
     >
       {children}
     </aside>
@@ -701,7 +706,7 @@ export function FilterSidebar({
       {!desktopOnly && sidebarOpen && (
         <div className="fixed inset-0 z-[90]" style={{ touchAction: 'none' }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 bg-card shadow-xl flex flex-col h-full overflow-hidden">
+          <aside className="absolute inset-y-0 left-0 w-72 bg-white shadow-xl flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between border-b p-4 shrink-0">
               <h2 className="font-display font-semibold">{isHome ? 'Menu' : t.filters}</h2>
               <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
