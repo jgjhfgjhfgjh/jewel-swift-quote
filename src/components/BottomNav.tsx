@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Menu, ShoppingCart, Heart, User, LogIn, LogOut, Globe, Users } from 'lucide-react';
+import { Home, SlidersHorizontal, ShoppingCart, Heart, User, LogIn, LogOut, Globe, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
@@ -62,13 +62,13 @@ export function BottomNav({ onOpenWishlist, wishlistCount = 0 }: Props) {
             <span className="text-[10px]">Domů</span>
           </button>
 
-          {/* Menu/Filters */}
+          {/* Filters */}
           <button
             onClick={() => setSidebarOpen(true)}
             className="flex flex-col items-center gap-0.5 text-muted-foreground hover:text-zinc-900 transition-colors min-w-[48px]"
           >
-            <Menu className="h-5 w-5" />
-            <span className="text-[10px]">Menu</span>
+            <SlidersHorizontal className="h-5 w-5" />
+            <span className="text-[10px]">Filtry</span>
           </button>
 
           {/* Cart */}
