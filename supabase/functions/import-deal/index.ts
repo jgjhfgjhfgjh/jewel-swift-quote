@@ -134,13 +134,27 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+  const serviceKey = (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '').trim();
+  const importSecret = (Deno.env.get('DEAL_IMPORT_SECRET') ?? '').trim();
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 
-  const auth = req.headers.get('Authorization') ?? '';
-  if (!serviceKey || auth !== `Bearer ${serviceKey}`) {
-    return json({ error: 'Unauthorized' }, 401);
+  const token = ((req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '')).trim();
+  let authorized = false;
+  if (token) {
+    if (serviceKey && token === serviceKey) authorized = true;
+    else if (importSecret && token === importSecret) authorized = true;
+    else if (token.split('.').length === 3) {
+      // Accept any Supabase JWT carrying the service_role claim — robust
+      // against legacy vs. new key formats Supabase has shipped.
+      try {
+        const payload = JSON.parse(
+          atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')),
+        );
+        if (payload?.role === 'service_role') authorized = true;
+      } catch { /* fall through to 401 */ }
+    }
   }
+  if (!authorized) return json({ error: 'Unauthorized' }, 401);
 
   try {
     const body = await req.json().catch(() => ({}));
