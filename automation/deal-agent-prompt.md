@@ -50,15 +50,18 @@ Pro každý nalezený thread:
      { "message_id": "<message id>", "meta": { ...extrahované údaje... } }
    ```
    Použij k tomu bash + curl, nebo `fetch`, jak ti vyhovuje.
-5. Pokud odpověď obsahuje `ok:true` a pole `deals`, **pro každou vytvořenou nabídku**:
-   - Přes Calendar konektor vytvoř událost (`create_event`):
-     - `summary`: `DEAL nabídka nahrána — <deal.title>` (např. *„DEAL nabídka nahrána — Fossil Group — Hodinky"*)
-     - `allDay`: `true`, `startTime`: dnešní 00:00:00 UTC, `endTime`: dnešní 23:59:59 UTC (formát `YYYY-MM-DDT00:00:00Z`)
-     - `description`: stručně — počet produktů, kategorie, dodavatel, deadline, slug. Připoj odkaz `https://jewel-swift-quote.vercel.app/admin/deals` pro schválení.
-     - `colorId`: `2` (Sage)
-   - Pokud `import-deal` vrátí `error`, nevytvářej událost — místo toho přidej řádek do summary o selhání.
-6. Po zpracování celého threadu (úspěšně, nebo se selháním importu):
-   - Přes Gmail konektor přidej threadu label `deal-imported`. Pokud label ID neznáš, nejdřív zavolej `list_labels` (pokud label neexistuje, vytvoř ho přes `create_label` s display name `deal-imported`).
+5. **Hned po úspěšné odpovědi `ok:true` z `import-deal`** (a před vytvořením kalendáře) přidej threadu label `deal-imported`:
+   - Pokud label ID neznáš, nejdřív zavolej `list_labels`; pokud label neexistuje, vytvoř ho přes `create_label` s display name `deal-imported`.
+   - Tohle pořadí (label dřív než kalendář) je důležité: kdyby selhal kalendář, deal už existuje + thread je olabelovaný, a `import-deal` je idempotentní podle `source_path` — duplikát už vzniknout nemůže.
+   - Pokud `import-deal` vrátí `error` (4xx/5xx), label **NEPŘIDÁVEJ** — nech to na příští hodinu, do souhrnu zaloguj chybu.
+6. Po olabelování threadu vytvoř pro **každou vrácenou nabídku** záznam v kalendáři (`create_event`):
+   - `summary`: `DEAL nabídka nahrána — <deal.title>` (např. *„DEAL nabídka nahrána — Fossil Group — Hodinky"*)
+   - `startTime`: aktuální čas v Europe/Prague jako ISO 8601 (např. `2026-05-20T13:42:00+02:00`)
+   - `endTime`: `startTime + 30 minut`
+   - `timeZone`: `Europe/Prague`
+   - `description`: stručně — počet produktů (`deal.product_count`), kategorie, dodavatel, deadline, slug. Připoj odkaz `https://jewel-swift-quote.vercel.app/admin/deals` pro schválení.
+   - `colorId`: `2` (Sage)
+   - Pokud `deal.already_imported === true`, kalendář **nevytváříš** (deal v ten den už záznam má z prvního importu).
 
 ## Krok 3 — souhrn
 

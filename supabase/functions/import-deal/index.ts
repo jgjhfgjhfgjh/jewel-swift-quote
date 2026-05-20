@@ -66,6 +66,30 @@ async function importOne(
   meta: DealMeta,
   singleFile: boolean,
 ) {
+  // Idempotency — if a deal was already imported from this workbook, return it.
+  const { data: existing } = await supa
+    .from('deals')
+    .select('id, slug, title, category, brands')
+    .eq('source_path', xlsxPath)
+    .maybeSingle();
+  if (existing?.id) {
+    const { count } = await supa
+      .from('deal_products')
+      .select('id', { count: 'exact', head: true })
+      .eq('deal_id', existing.id);
+    return {
+      deal_id: existing.id,
+      slug: existing.slug,
+      title: existing.title,
+      category: existing.category,
+      product_count: count ?? 0,
+      images_matched: 0,
+      brands: existing.brands ?? [],
+      warnings: [],
+      already_imported: true,
+    };
+  }
+
   const { data: file, error: dlErr } = await supa.storage.from('deal-imports').download(xlsxPath);
   if (dlErr || !file) throw new Error('Soubor se nepodařilo načíst: ' + (dlErr?.message ?? xlsxPath));
   const parsed = await parseDealXlsx(await file.arrayBuffer());
@@ -95,6 +119,7 @@ async function importOne(
     payment_terms: meta.payment_terms ?? '',
     deadline,
     status: 'draft',
+    source_path: xlsxPath,
   };
 
   let dealId = '';
