@@ -207,7 +207,10 @@ function skuFromDescr(descr: string): string {
 }
 function cdnUrlFromDescr(descr: string): string {
   if (!descr || !/^https?:\/\//i.test(descr)) return '';
-  return descr.replace(/&amp;/g, '&').replace(/^http:/i, 'https:');
+  const clean = descr.replace(/&amp;/g, '&').replace(/^http:/i, 'https:');
+  const base = clean.replace(/[?&](wid|hei)=\d+/gi, '');
+  const join = base.includes('?') ? '&' : '?';
+  return `${base}${join}wid=1200&hei=1200&fit=constrain`;
 }
 
 /** Parse an .xlsx workbook buffer into structured deal products. */

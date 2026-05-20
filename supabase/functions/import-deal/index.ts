@@ -159,6 +159,16 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json().catch(() => ({}));
     const meta: DealMeta = body.meta ?? {};
+
+    // Require the fields the agent must extract — silent defaults here would
+    // produce drafts with wrong countdowns or empty terms in production.
+    if (!meta.deadline) {
+      return json({ error: 'meta.deadline je povinný (ISO 8601 timestamp).' }, 400);
+    }
+    if (!meta.payment_terms || !meta.payment_terms.trim()) {
+      return json({ error: 'meta.payment_terms je povinný.' }, 400);
+    }
+
     const supa = createClient(supabaseUrl, serviceKey);
 
     // resolve the list of workbook paths to import

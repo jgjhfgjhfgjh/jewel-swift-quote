@@ -61,10 +61,16 @@ function skuFromDescr(descr: string): string {
   return m ? m[1].toUpperCase() : '';
 }
 
-/** Normalise the descr URL into a usable https image URL. */
+/** Normalise the descr URL into a high-resolution https image URL.
+ *  The supplier embeds 100×100 thumbnail URLs; we override the size so
+ *  the catalog cards and the zoom gallery get a usable resolution. */
 function cdnUrlFromDescr(descr: string): string {
   if (!descr || !/^https?:\/\//i.test(descr)) return '';
-  return descr.replace(/&amp;/g, '&').replace(/^http:/i, 'https:');
+  const clean = descr.replace(/&amp;/g, '&').replace(/^http:/i, 'https:');
+  // Drop any existing wid=/hei= query params and append big ones.
+  const base = clean.replace(/[?&](wid|hei)=\d+/gi, '');
+  const join = base.includes('?') ? '&' : '?';
+  return `${base}${join}wid=1200&hei=1200&fit=constrain`;
 }
 
 export function parseDealWorkbook(parsed: ParsedXlsx): DealParseResult {

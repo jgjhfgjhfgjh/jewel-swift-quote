@@ -38,7 +38,8 @@ Pro každý nalezený thread:
      - **delivery_weeks_min**, **delivery_weeks_max** — z *„dodací lhůta cca 4 až 6 týdnů"* dej 4 a 6.
      - **payment_terms** — celý odstavec o platebních podmínkách (od *„Platba předem…"* po *„… expedice"*), seskládaný jako jeden řetězec.
      - **tiers** — slevová pásma z řádků jako *„50 ks – sleva 66 %"*: pole `[{min_qty:50,discount_percent:66}, {min_qty:100,discount_percent:67}, {min_qty:200,discount_percent:68}]`. Když uvidíš jiné hodnoty (jiný počet pásem, jiné %, jiné množství), zapiš je přesně podle e-mailu.
-   - Pole, kterými si nejsi jistý, **vynech** (nepouštěj prázdné). `import-deal` má vlastní výchozí hodnoty.
+   - **`deadline` a `payment_terms` jsou povinné** — `import-deal` vrátí 400, pokud chybí. Když je nemůžeš s jistotou vyčíst, **přeskoč thread** (nepřidávej label `deal-imported`, aby se to zkusilo příští hodinu) a v souhrnu to zalog. U ostatních polí — kterými si nejsi jistý — vynech je (nepouštěj prázdné). `import-deal` má rozumné výchozí hodnoty pro neúzkostné údaje.
+   - **Pozor na české datum:** věty jako *„do středy 20. 5. 2026"* znamenají 20. května 2026. Když email neuvádí čas, použij 17:00 lokálního času (Europe/Prague). Výsledek do ISO formátu `2026-05-20T17:00:00+02:00` (nebo ekvivalent v UTC).
 4. Zavolej `import-deal`:
    ```
    POST https://ijcfcjlfxktvedqrsvqz.supabase.co/functions/v1/import-deal
