@@ -47,8 +47,10 @@ Pro každý nalezený thread:
      Content-Type: application/json
      Authorization: Bearer {{SERVICE_ROLE_KEY}}
    Body:
-     { "message_id": "<message id>", "meta": { ...extrahované údaje... } }
+     { "message_id": "<message id>",
+       "meta": { ...extrahované údaje..., "status": "active" } }
    ```
+   `"status": "active"` přidávej VŽDY — nabídka se má rovnou objevit na webu, ne čekat na schválení.
    Použij k tomu bash + curl, nebo `fetch`, jak ti vyhovuje.
 5. **Hned po úspěšné odpovědi `ok:true` z `import-deal`** (a před vytvořením kalendáře) přidej threadu label `deal-imported`:
    - Pokud label ID neznáš, nejdřív zavolej `list_labels`; pokud label neexistuje, vytvoř ho přes `create_label` s display name `deal-imported`.
@@ -74,6 +76,6 @@ Na konci vypiš krátký souhrn:
 
 - **Štítek `deal-ready`** dává Apps Script — neberou se v úvahu maily bez něj.
 - **Štítek `deal-imported`** je tvůj — používá se k tomu, abys jeden thread nezpracoval dvakrát.
-- Vytvořené nabídky jsou vždy `status:'draft'`. Aktivuje je člověk v admin rozhraní `/admin/deals`. Ty nikdy neměníš status v DB.
+- Agent vytváří nabídky rovnou jako `status: 'active'` (předává v `meta.status`). Žádná ruční aktivace už není potřeba. Admin si v `/admin/deals` může status kdykoli změnit.
 - Pokud nějaký krok selže (Gmail timeout, Supabase 5xx), **nezachycuj a nešiř to dál** — log do summary, štítek `deal-imported` v takovém případě **nepřidávej**, aby se to zkusilo příští hodinu znovu.
 - Při extrakci termínů buď konzervativní: radši nech pole prázdné, než aby ses spletl. `import-deal` má rozumné výchozí hodnoty.

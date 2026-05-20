@@ -38,6 +38,8 @@ interface DealMeta {
   delivery_weeks_max?: number;
   payment_terms?: string;
   tiers?: { min_qty: number; discount_percent: number }[];
+  /** When set to 'active' the deal goes live immediately; defaults to 'draft'. */
+  status?: 'draft' | 'active' | 'ended';
 }
 
 function slugify(input: string): string {
@@ -118,7 +120,7 @@ async function importOne(
     delivery_weeks_max: meta.delivery_weeks_max ?? 6,
     payment_terms: meta.payment_terms ?? '',
     deadline,
-    status: 'draft',
+    status: meta.status === 'active' || meta.status === 'ended' ? meta.status : 'draft',
     source_path: xlsxPath,
   };
 
