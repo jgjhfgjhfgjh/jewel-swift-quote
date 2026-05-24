@@ -18,10 +18,13 @@ const Favorites = lazy(() => import("./pages/Favorites.tsx"));
 const PartnerLayout = lazy(() => import("./pages/partner/PartnerLayout.tsx"));
 const PartnerDashboard = lazy(() => import("./pages/partner/PartnerDashboard.tsx"));
 const PartnerOrders = lazy(() => import("./pages/partner/PartnerOrders.tsx"));
+const PartnerOrderDetail = lazy(() => import("./pages/partner/PartnerOrderDetail.tsx"));
 const PartnerBulk = lazy(() => import("./pages/partner/PartnerBulk.tsx"));
+const PartnerBulkDetail = lazy(() => import("./pages/partner/PartnerBulkDetail.tsx"));
 const PartnerCatalog = lazy(() => import("./pages/partner/PartnerCatalog.tsx"));
 const PartnerNewOrder = lazy(() => import("./pages/partner/PartnerNewOrder.tsx"));
 const PartnerCustomers = lazy(() => import("./pages/partner/PartnerCustomers.tsx"));
+const PartnerCustomerDetail = lazy(() => import("./pages/partner/PartnerCustomerDetail.tsx"));
 const PartnerIntegrations = lazy(() => import("./pages/partner/PartnerIntegrations.tsx"));
 const PartnerAnalytics = lazy(() => import("./pages/partner/PartnerAnalytics.tsx"));
 const PartnerSettings = lazy(() => import("./pages/partner/PartnerSettings.tsx"));
@@ -66,10 +69,13 @@ const App = () => (
               <Route path="/partner" element={<PartnerLayout />}>
                 <Route index element={<PartnerDashboard />} />
                 <Route path="orders" element={<PartnerOrders />} />
+                <Route path="orders/:id" element={<PartnerOrderDetail />} />
                 <Route path="bulk" element={<PartnerBulk />} />
+                <Route path="bulk/:id" element={<PartnerBulkDetail />} />
                 <Route path="catalog" element={<PartnerCatalog />} />
                 <Route path="new-order" element={<PartnerNewOrder />} />
                 <Route path="customers" element={<PartnerCustomers />} />
+                <Route path="customers/:id" element={<PartnerCustomerDetail />} />
                 <Route path="integrations" element={<PartnerIntegrations />} />
                 <Route path="analytics" element={<PartnerAnalytics />} />
                 <Route path="settings" element={<PartnerSettings />} />

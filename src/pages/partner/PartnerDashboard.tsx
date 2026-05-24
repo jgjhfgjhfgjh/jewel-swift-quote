@@ -351,7 +351,7 @@ export default function PartnerDashboard() {
           accent="success"
         />
         <KpiCard
-          icon={Truck} label="Čekající zásilky" value="14"
+          icon={Truck} label="Čekající objednávky" value="14"
           delta="−3" dir="down"
           spark={[22, 19, 18, 17, 16, 15, 14]} sparkColor="#F5A623"
           accent="warn"
