@@ -4,7 +4,11 @@ import { Award, Search, ArrowRight, Package } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
 import { useStore } from '@/lib/store';
+import { useScrollHide } from '@/hooks/useScrollHide';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -120,8 +124,10 @@ export default function Brands() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [jumpValue, setJumpValue] = useState<string>('');
   const navigate = useNavigate();
   const { setGatewayOpen: openAuth } = useStore();
+  const navHidden = useScrollHide();
 
   // Scroll to top on mount, or to specific brand if URL has hash like #tommy-hilfiger
   useEffect(() => {
@@ -192,6 +198,33 @@ export default function Brands() {
     return brands.filter((b) => b.name.toLowerCase().includes(q));
   }, [brands, search]);
 
+  // Brands sorted alphabetically by display name for the jump dropdown
+  const brandsByName = useMemo(
+    () => [...brands].sort((a, b) => a.name.localeCompare(b.name, 'cs')),
+    [brands],
+  );
+
+  const handleJumpToBrand = (key: string) => {
+    setJumpValue(key);
+    const slug = key.toLowerCase().replace(/\s+/g, '-');
+    const scrollAndHighlight = () => {
+      const el = document.getElementById(`brand-${slug}`);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+      setTimeout(() => el.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2500);
+    };
+    // If filter hides the brand, clear search first so the card is rendered
+    if (search.trim() && !brands.find((b) => b.key === key)?.name.toLowerCase().includes(search.toLowerCase())) {
+      setSearch('');
+      setTimeout(scrollAndHighlight, 100);
+    } else {
+      scrollAndHighlight();
+    }
+    // Reset the controlled Select so the same brand can be picked again
+    setTimeout(() => setJumpValue(''), 300);
+  };
+
   return (
     <>
       <Navbar />
@@ -213,10 +246,15 @@ export default function Brands() {
           </div>
         </section>
 
-        {/* ── Search bar ── */}
-        <div className="sticky top-14 sm:top-24 z-30 bg-white/95 backdrop-blur border-b border-border py-3">
-          <div className="mx-auto max-w-6xl px-6 flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
+        {/* ── Search bar — sticky pod navbarem, schovava se s nim ── */}
+        <div
+          className={`sticky top-14 sm:top-24 z-30 bg-white/95 backdrop-blur border-b border-border py-3
+            transition-transform duration-500 ease-in-out
+            ${navHidden ? '-translate-y-[200%]' : 'translate-y-0'}`}
+        >
+          <div className="mx-auto max-w-6xl px-6 flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* Search input */}
+            <div className="relative flex-1 min-w-[180px] max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
               <input
                 value={search}
@@ -225,8 +263,26 @@ export default function Brands() {
                 className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-zinc-50 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/40"
               />
             </div>
+
+            {/* Jump-to-brand dropdown — alphabetical, scrolls to card on select */}
+            {!loading && brandsByName.length > 0 && (
+              <Select value={jumpValue} onValueChange={handleJumpToBrand}>
+                <SelectTrigger className="w-[180px] rounded-xl bg-zinc-50 border-border text-sm">
+                  <SelectValue placeholder="Skočit na značku…" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[60vh]">
+                  {brandsByName.map((b) => (
+                    <SelectItem key={b.key} value={b.key} className="text-sm">
+                      {b.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
+            {/* Count — pushed to the right on wider screens */}
             {!loading && (
-              <span className="text-sm text-muted-foreground hidden sm:block">
+              <span className="text-sm text-muted-foreground hidden sm:block sm:ml-auto">
                 {filtered.length} značek
               </span>
             )}
