@@ -770,7 +770,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
           {/* 6) Bullets */}
           <Reveal delay={280}>
-            <ul className="mt-3 sm:mt-[22px] flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
               <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
               <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
               <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
