@@ -24,12 +24,17 @@ export function BrandLogo({
     return <span className={fallbackClassName || className}>{name}</span>;
   }
 
+  const src1x = getBrandLogoUrl(domain, width, height);
+  const src2x = getBrandLogoUrl(domain, width * 2, height * 2);
+
   return (
     <img
-      src={getBrandLogoUrl(domain, width, height)}
+      src={src1x}
+      srcSet={`${src1x} 1x, ${src2x} 2x`}
       alt={`${name} logo`}
       className={className}
       loading="lazy"
+      decoding="async"
       draggable={false}
       onError={() => setImgError(true)}
     />

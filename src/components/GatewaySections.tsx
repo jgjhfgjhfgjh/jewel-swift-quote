@@ -714,14 +714,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     key={brand.name}
                     onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
                     aria-label={brand.name}
-                    className="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 flex items-center justify-center min-w-[88px] hover:border-zinc-400 hover:bg-zinc-50 transition-colors"
+                    className="rounded-xl bg-white px-4 py-2.5 flex items-center justify-center min-w-[96px] hover:bg-zinc-50 transition-colors"
                   >
                     <BrandLogo
                       name={brand.name}
                       domain={brand.domain}
-                      width={160}
-                      height={64}
-                      className="h-5 sm:h-6 w-auto max-w-[110px] object-contain"
+                      width={320}
+                      height={128}
+                      className="h-6 sm:h-7 w-auto max-w-[120px] object-contain"
                       fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
                     />
                   </button>
@@ -788,10 +788,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                           key={`${brand.domain}-${i}`}
                           name={brand.name}
                           domain={brand.domain}
-                          width={240}
-                          height={96}
-                          className="h-10 sm:h-12 md:h-14 w-auto object-contain shrink-0 select-none opacity-80 hover:opacity-100 transition-opacity"
-                          fallbackClassName="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
+                          width={400}
+                          height={160}
+                          className="h-7 sm:h-8 md:h-9 w-auto object-contain shrink-0 select-none opacity-80 hover:opacity-100 transition-opacity"
+                          fallbackClassName="font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
                         />
                       ))}
                     </div>
