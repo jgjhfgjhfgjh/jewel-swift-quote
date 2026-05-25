@@ -708,9 +708,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
                   'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
                   'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
-                  'Pierre Lannier', 'Michael Kors', 'Disney', 'Timex', 'Swatch',
-                  'Lorus', 'Moschino', 'Nautica', 'Roberto Cavalli', 'Just Cavalli',
-                  'Fila', 'Cerruti 1881', 'Versus Versace',
+                  'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Lorus', 'Moschino',
+                  'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila', 'Invicta',
+                  'Sector', 'Breil',
                 ];
                 const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
                 return (
@@ -785,7 +785,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             {(() => {
               const marqueeNames = [
                 ['Tommy Hilfiger', 'Pandora', 'Swarovski', 'Calvin Klein', 'Hugo Boss', 'Versace', 'Michael Kors', 'Emporio Armani'],
-                ['Tissot', 'Casio', 'Fossil', 'Guess', 'Pierre Lannier', 'DKNY', 'Lacoste', 'Citizen'],
+                ['Tissot', 'Casio', 'Fossil', 'Guess', 'Disney', 'DKNY', 'Lacoste', 'Citizen'],
               ];
               return marqueeNames.map((row, idx) => {
                 const brands = row.map((n) => getBrandByName(n)).filter((b): b is NonNullable<typeof b> => Boolean(b));
@@ -804,7 +804,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                           domain={brand.domain}
                           width={400}
                           height={160}
-                          className="h-7 sm:h-8 md:h-9 w-auto object-contain shrink-0 select-none hover:scale-110 transition-transform duration-300 ease-out"
+                          className="h-6 sm:h-7 md:h-8 w-auto max-w-[110px] sm:max-w-[130px] object-contain shrink-0 select-none hover:scale-110 transition-transform duration-300 ease-out [mix-blend-mode:multiply]"
                           fallbackClassName="font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
                         />
                       ))}
