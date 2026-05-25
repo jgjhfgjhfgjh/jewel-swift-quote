@@ -690,27 +690,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </span>
             </div>
           </Reveal>
-
-          {/* 2) Subtitle */}
-          <Reveal delay={80}>
-            <h1 className="font-sans mt-10 sm:mt-6 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Přístup k 5 000+ produktům za velkoobchodní ceny
-            </h1>
-          </Reveal>
         </div>
 
         {/* 3) Brand pills — full-width row, more brands fit */}
         <Reveal delay={140}>
-          <div className="mt-8 sm:mt-8 w-full px-4 sm:px-6">
+          <div className="mt-10 sm:mt-12 w-full px-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-center gap-2 mx-auto">
               {(() => {
                 const PILL_BRANDS = [
                   'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
                   'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
                   'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
-                  'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Lorus', 'Moschino',
-                  'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila', 'Invicta',
-                  'Sector', 'Breil',
+                  'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Moschino',
+                  'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila',
+                  'Sector', 'Breil', 'Viceroy', 'Alviero Martini',
                 ];
                 const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
                 return (
@@ -723,15 +716,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                           key={brand.name}
                           onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
                           aria-label={brand.name}
-                          className="rounded-xl bg-white px-4 py-2.5 flex items-center justify-center min-w-[96px] hover:bg-zinc-50 transition-colors"
+                          className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
                         >
                           <BrandLogo
                             name={brand.name}
                             domain={brand.domain}
                             width={320}
                             height={128}
-                            className="h-6 sm:h-7 w-auto max-w-[120px] object-contain"
-                            fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
+                            className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                            fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
                           />
                         </button>
                       );
@@ -750,9 +743,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         </Reveal>
 
         <div className="mx-auto max-w-5xl px-6 text-center">
+          {/* 2) Subtitle — now positioned above CTAs */}
+          <Reveal delay={200}>
+            <h1 className="font-sans mt-12 sm:mt-14 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              Přístup k 5 000+ produktům za velkoobchodní ceny
+            </h1>
+          </Reveal>
+
           {/* 5) CTAs */}
           <Reveal delay={240}>
-            <div className="mt-14 sm:mt-16 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={() => openAuth('b2b')}
                 className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px]"
@@ -790,7 +790,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               return marqueeNames.map((row, idx) => {
                 const brands = row.map((n) => getBrandByName(n)).filter((b): b is NonNullable<typeof b> => Boolean(b));
                 return (
-                  <div key={idx} className="relative w-full overflow-hidden">
+                  <div key={idx} className="relative w-full overflow-x-clip overflow-y-visible py-2">
                     <div
                       className="flex items-center gap-12 sm:gap-16 whitespace-nowrap"
                       style={{
