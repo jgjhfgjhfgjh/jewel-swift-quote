@@ -17,6 +17,8 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
+import { getBrandByName } from '@/data/brands';
+import { BrandLogo } from '@/components/BrandLogo';
 
 
 /* ── Reveal on scroll ── */
@@ -704,15 +706,27 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
                 'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
                 'Pierre Lannier',
-              ].map((brand) => (
-                <button
-                  key={brand}
-                  onClick={() => navigate(`/brands#${brand.toLowerCase().replace(/\s+/g, '-')}`)}
-                  className="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-medium text-foreground/75 hover:border-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
-                >
-                  {brand}
-                </button>
-              ))}
+              ].map((brandName) => {
+                const brand = getBrandByName(brandName);
+                if (!brand) return null;
+                return (
+                  <button
+                    key={brand.name}
+                    onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                    aria-label={brand.name}
+                    className="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 flex items-center justify-center min-w-[88px] hover:border-zinc-400 hover:bg-zinc-50 transition-colors"
+                  >
+                    <BrandLogo
+                      name={brand.name}
+                      domain={brand.domain}
+                      width={160}
+                      height={64}
+                      className="h-5 sm:h-6 w-auto max-w-[110px] object-contain"
+                      fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
+                    />
+                  </button>
+                );
+              })}
               <button
                 onClick={() => navigate('/brands')}
                 className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
@@ -754,28 +768,37 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         {/* Brands marquee — two rows opposite directions, desktop only */}
         <Reveal delay={320}>
           <div className="hidden sm:block mt-12 sm:mt-14 w-full space-y-6">
-            {[
-              ['SWAROVSKI', 'PANDORA', 'D1 MILANO', 'TOMMY HILFIGER', 'CALVIN KLEIN', 'TISSOT', 'PIERRE LANNIER', 'LONGINES'],
-              ['TAG HEUER', 'HAMILTON', 'CERTINA', 'BREITLING', 'RADO', 'ORIS', 'MIDO', 'FREDERIQUE CONSTANT'],
-            ].map((row, idx) => (
-              <div key={idx} className="relative w-full overflow-hidden">
-                <div
-                  className="flex gap-12 sm:gap-16 whitespace-nowrap"
-                  style={{
-                    animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
-                  }}
-                >
-                  {[...row, ...row, ...row].map((brand, i) => (
-                    <span
-                      key={i}
-                      className="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none"
+            {(() => {
+              const marqueeNames = [
+                ['Tommy Hilfiger', 'Pandora', 'Swarovski', 'Calvin Klein', 'Hugo Boss', 'Versace', 'Michael Kors', 'Emporio Armani'],
+                ['Tissot', 'Casio', 'Fossil', 'Guess', 'Pierre Lannier', 'DKNY', 'Lacoste', 'Citizen'],
+              ];
+              return marqueeNames.map((row, idx) => {
+                const brands = row.map((n) => getBrandByName(n)).filter((b): b is NonNullable<typeof b> => Boolean(b));
+                return (
+                  <div key={idx} className="relative w-full overflow-hidden">
+                    <div
+                      className="flex items-center gap-12 sm:gap-16 whitespace-nowrap"
+                      style={{
+                        animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
+                      }}
                     >
-                      {brand}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+                      {[...brands, ...brands, ...brands].map((brand, i) => (
+                        <BrandLogo
+                          key={`${brand.domain}-${i}`}
+                          name={brand.name}
+                          domain={brand.domain}
+                          width={240}
+                          height={96}
+                          className="h-10 sm:h-12 md:h-14 w-auto object-contain shrink-0 select-none opacity-80 hover:opacity-100 transition-opacity"
+                          fallbackClassName="font-sans text-xl sm:text-2xl md:text-3xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              });
+            })()}
           </div>
         </Reveal>
         <style>{`
