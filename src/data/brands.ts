@@ -54,6 +54,19 @@ export const BRANDS: Brand[] = [
   { name: 'Fila', domain: 'fila.com' },
 ];
 
+// Premium/luxury watch brands available on request (separate from standard catalog)
+export const BRANDS_PREMIUM: Brand[] = [
+  { name: 'Tag Heuer', domain: 'tagheuer.com' },
+  { name: 'Longines', domain: 'longines.com' },
+  { name: 'Hamilton', domain: 'hamiltonwatch.com' },
+  { name: 'Certina', domain: 'certina.com' },
+  { name: 'Frederique Constant', domain: 'frederiqueconstant.com' },
+  { name: 'Mido', domain: 'midowatches.com' },
+  { name: 'Breitling', domain: 'breitling.com' },
+  { name: 'Rado', domain: 'rado.com' },
+  { name: 'Oris', domain: 'oris.ch' },
+];
+
 const BRANDFETCH_CLIENT_ID = '1bfwsmEH20zzEfSNTed';
 
 export function getBrandLogoUrl(
@@ -66,5 +79,8 @@ export function getBrandLogoUrl(
 
 export function getBrandByName(name: string): Brand | undefined {
   const target = name.toLowerCase();
-  return BRANDS.find((b) => b.name.toLowerCase() === target);
+  return (
+    BRANDS.find((b) => b.name.toLowerCase() === target) ??
+    BRANDS_PREMIUM.find((b) => b.name.toLowerCase() === target)
+  );
 }

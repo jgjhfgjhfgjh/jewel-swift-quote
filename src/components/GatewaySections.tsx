@@ -17,7 +17,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
-import { BRANDS, getBrandByName } from '@/data/brands';
+import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 
 
@@ -651,17 +651,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     { code: 'fr', name: 'Francie', market: '68 mil.' },
   ];
 
-  const BRANDS_STANDARD = [
+  // Curated subset of standard brands shown in the "70+ světových značek" grid.
+  // All verified to return real logos from Brandfetch (no placeholders).
+  const STANDARD_GRID_BRANDS = [
     'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess', 'Police',
     'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil', 'DKNY',
-    'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit', 'Pierre Lannier',
-    'Roberto Cavalli', 'Sector', 'Invicta', 'Timex', 'Nautica', 'Fila',
-    'Breil', 'Viceroy', 'Mark Maddox', 'Moschino', 'Versus Versace', 'Just Cavalli',
-  ];
-
-  const BRANDS_PREMIUM = [
-    'Tag Heuer', 'Longines', 'Hamilton', 'Certina',
-    'Frederique Constant', 'Mido', 'Breitling', 'Rado', 'Oris',
+    'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit', 'Roberto Cavalli',
   ];
 
   return (
@@ -924,19 +919,33 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* Standard brands grid — first 18 + expand button */}
+          {/* Standard brands grid — logos with mix-blend + hover scale, matches homepage pills */}
           <Reveal delay={60}>
-            <div className="flex flex-wrap gap-2 justify-center mb-10">
-              {BRANDS_STANDARD.slice(0, 18).map((b) => (
-                <span key={b} className="rounded-xl border border-border bg-white px-3.5 py-2 text-sm font-medium text-foreground/75 hover:border-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-default">
-                  {b}
-                </span>
-              ))}
+            <div className="flex flex-wrap gap-x-2 gap-y-3 justify-center items-center mb-10">
+              {STANDARD_GRID_BRANDS.map((brandName) => {
+                const brand = getBrandByName(brandName);
+                if (!brand) return null;
+                return (
+                  <div
+                    key={brand.name}
+                    className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
+                  >
+                    <BrandLogo
+                      name={brand.name}
+                      domain={brand.domain}
+                      width={320}
+                      height={128}
+                      className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                      fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
+                    />
+                  </div>
+                );
+              })}
               <button
                 onClick={() => navigate('/brands')}
                 className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
               >
-                +50 dalších →
+                +{Math.max(0, BRANDS.length - STANDARD_GRID_BRANDS.length)} dalších →
               </button>
             </div>
           </Reveal>
@@ -948,11 +957,21 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                 Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
               </p>
-              <div className="flex flex-wrap gap-2 mb-5">
-                {BRANDS_PREMIUM.map((b) => (
-                  <span key={b} className="rounded-xl border border-zinc-200 px-3.5 py-2 text-sm font-semibold text-foreground">
-                    {b}
-                  </span>
+              <div className="flex flex-wrap gap-x-2 gap-y-3 items-center mb-5">
+                {BRANDS_PREMIUM.map((brand) => (
+                  <div
+                    key={brand.name}
+                    className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
+                  >
+                    <BrandLogo
+                      name={brand.name}
+                      domain={brand.domain}
+                      width={320}
+                      height={128}
+                      className="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                      fallbackClassName="text-xs sm:text-sm font-semibold text-foreground"
+                    />
+                  </div>
                 ))}
               </div>
               <Button variant="outline" className="gap-2 border-zinc-900" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
