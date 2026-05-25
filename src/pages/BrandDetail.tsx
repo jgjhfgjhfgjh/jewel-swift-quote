@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/AuthModal';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { BrandLogo } from '@/components/BrandLogo';
+import { getBrandByName } from '@/data/brands';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -245,10 +247,30 @@ export default function BrandDetail() {
         {/* ── 1) Hero — brand logo (text placeholder) + sample product on white ── */}
         <section className="py-12 sm:py-20 bg-white border-b border-border">
           <div className="mx-auto max-w-3xl px-6">
-            {/* Brand logo (text placeholder — replace with real SVG/PNG later) */}
+            {/* Brand logo (image from Brandfetch, text fallback if brand not in BRANDS data) */}
             <Reveal>
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-center mb-8 sm:mb-12 text-foreground">
-                {brandData.name}
+              <h1 className="text-center mb-8 sm:mb-12 flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px]">
+                <span className="sr-only">{brandData.name}</span>
+                {(() => {
+                  const brand = getBrandByName(brandData.name);
+                  if (!brand) {
+                    return (
+                      <span className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground">
+                        {brandData.name}
+                      </span>
+                    );
+                  }
+                  return (
+                    <BrandLogo
+                      name={brand.name}
+                      domain={brand.domain}
+                      width={600}
+                      height={240}
+                      className="h-16 sm:h-20 md:h-28 w-auto max-w-[280px] sm:max-w-[400px] md:max-w-[500px] object-contain [mix-blend-mode:multiply]"
+                      fallbackClassName="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground"
+                    />
+                  );
+                })()}
               </h1>
             </Reveal>
 
@@ -333,7 +355,7 @@ export default function BrandDetail() {
                   Co od {brandData.name} máme v katalogu
                 </h2>
               </Reveal>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                 {brandData.topProducts.map((p, i) => {
                   const discount = p.price > 0 ? Math.round((1 - p.wholesale / p.price) * 100) : 0;
                   return (
