@@ -17,7 +17,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
-import { getBrandByName } from '@/data/brands';
+import { BRANDS, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 
 
@@ -697,45 +697,59 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               Přístup k 5 000+ produktům za velkoobchodní ceny
             </h1>
           </Reveal>
+        </div>
 
-          {/* 3) Brand pills — clickable, all screens, with breathing room from subtitle */}
-          <Reveal delay={140}>
-            <div className="mt-8 sm:mt-8 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
-              {[
-                'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
-                'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
-                'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
-                'Pierre Lannier',
-              ].map((brandName) => {
-                const brand = getBrandByName(brandName);
-                if (!brand) return null;
+        {/* 3) Brand pills — full-width row, more brands fit */}
+        <Reveal delay={140}>
+          <div className="mt-8 sm:mt-8 w-full px-4 sm:px-6">
+            <div className="flex flex-wrap items-center justify-center gap-2 mx-auto">
+              {(() => {
+                const PILL_BRANDS = [
+                  'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
+                  'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
+                  'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
+                  'Pierre Lannier', 'Michael Kors', 'Disney', 'Timex', 'Swatch',
+                  'Lorus', 'Moschino', 'Nautica', 'Roberto Cavalli', 'Just Cavalli',
+                  'Fila', 'Cerruti 1881', 'Versus Versace',
+                ];
+                const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
                 return (
-                  <button
-                    key={brand.name}
-                    onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
-                    aria-label={brand.name}
-                    className="rounded-xl bg-white px-4 py-2.5 flex items-center justify-center min-w-[96px] hover:bg-zinc-50 transition-colors"
-                  >
-                    <BrandLogo
-                      name={brand.name}
-                      domain={brand.domain}
-                      width={320}
-                      height={128}
-                      className="h-6 sm:h-7 w-auto max-w-[120px] object-contain"
-                      fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
-                    />
-                  </button>
+                  <>
+                    {PILL_BRANDS.map((brandName) => {
+                      const brand = getBrandByName(brandName);
+                      if (!brand) return null;
+                      return (
+                        <button
+                          key={brand.name}
+                          onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                          aria-label={brand.name}
+                          className="rounded-xl bg-white px-4 py-2.5 flex items-center justify-center min-w-[96px] hover:bg-zinc-50 transition-colors"
+                        >
+                          <BrandLogo
+                            name={brand.name}
+                            domain={brand.domain}
+                            width={320}
+                            height={128}
+                            className="h-6 sm:h-7 w-auto max-w-[120px] object-contain"
+                            fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
+                          />
+                        </button>
+                      );
+                    })}
+                    <button
+                      onClick={() => navigate('/brands')}
+                      className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
+                    >
+                      +{remaining} dalších →
+                    </button>
+                  </>
                 );
-              })}
-              <button
-                onClick={() => navigate('/brands')}
-                className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
-              >
-                +50 dalších →
-              </button>
+              })()}
             </div>
-          </Reveal>
+          </div>
+        </Reveal>
 
+        <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 5) CTAs */}
           <Reveal delay={240}>
             <div className="mt-14 sm:mt-16 flex flex-col sm:flex-row gap-3 justify-center items-center">
@@ -790,7 +804,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                           domain={brand.domain}
                           width={400}
                           height={160}
-                          className="h-7 sm:h-8 md:h-9 w-auto object-contain shrink-0 select-none opacity-80 hover:opacity-100 transition-opacity"
+                          className="h-7 sm:h-8 md:h-9 w-auto object-contain shrink-0 select-none hover:scale-110 transition-transform duration-300 ease-out"
                           fallbackClassName="font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
                         />
                       ))}

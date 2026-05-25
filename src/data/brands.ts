@@ -6,7 +6,7 @@ export interface Brand {
 export const BRANDS: Brand[] = [
   { name: 'Viceroy', domain: 'viceroy.es' },
   { name: 'Breil', domain: 'breil.com' },
-  { name: 'Pierre Lannier', domain: 'pierrelannier.com' },
+  { name: 'Pierre Lannier', domain: 'pierre-lannier.fr' },
   { name: 'Just Cavalli', domain: 'justcavalli.com' },
   { name: 'Pandora', domain: 'pandora.net' },
   { name: 'Roberto Cavalli', domain: 'robertocavalli.com' },
@@ -25,7 +25,7 @@ export const BRANDS: Brand[] = [
   { name: 'DKNY', domain: 'dkny.com' },
   { name: 'Timex', domain: 'timex.com' },
   { name: 'Millner', domain: 'millnerwatches.com' },
-  { name: 'Tissot', domain: 'tissotwatches.com' },
+  { name: 'Tissot', domain: 'tissot.ch' },
   { name: 'La Petite Story', domain: 'lapetitestory.com' },
   { name: 'Nautica', domain: 'nautica.com' },
   { name: 'Lorus', domain: 'lorus-watches.com' },
