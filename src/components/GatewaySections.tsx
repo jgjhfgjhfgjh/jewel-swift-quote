@@ -651,14 +651,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     { code: 'fr', name: 'Francie', market: '68 mil.' },
   ];
 
-  // Curated subset of standard brands shown in the "70+ světových značek" grid.
-  // All verified to return real logos from Brandfetch (no placeholders).
-  const STANDARD_GRID_BRANDS = [
-    'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess', 'Police',
-    'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil', 'DKNY',
-    'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit', 'Roberto Cavalli',
-  ];
-
   return (
     <div className="gateway-sections relative w-full bg-background text-foreground">
 
@@ -904,55 +896,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </section>
 
       {/* ══════════════════════════════════════════
-          2. BRANDS — 70+ značek + premium segment + soukromý nákup
+          2. BRANDS — premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 bg-slate-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
-          <Reveal>
-            <div className="text-center mb-10">
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
-                70+ světových značek. V jednom místě.
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto text-base">
-                Prémiové hodinky, šperky a doplňky — všechny dostupné za velkoobchodní ceny s jednou smlouvou.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Standard brands grid — logos with mix-blend + hover scale, matches homepage pills */}
-          <Reveal delay={60}>
-            <div className="flex flex-wrap gap-x-2 gap-y-3 justify-center items-center mb-10">
-              {STANDARD_GRID_BRANDS.map((brandName) => {
-                const brand = getBrandByName(brandName);
-                if (!brand) return null;
-                return (
-                  <div
-                    key={brand.name}
-                    className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
-                  >
-                    <BrandLogo
-                      name={brand.name}
-                      domain={brand.domain}
-                      width={320}
-                      height={128}
-                      className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
-                      fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75"
-                    />
-                  </div>
-                );
-              })}
-              <button
-                onClick={() => navigate('/brands')}
-                className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
-              >
-                +{Math.max(0, BRANDS.length - STANDARD_GRID_BRANDS.length)} dalších →
-              </button>
-            </div>
-          </Reveal>
-
           {/* Premium segment */}
           <Reveal delay={120}>
-            <div className="border-t border-zinc-200 pt-8 pb-6 mb-2">
+            <div className="pb-6 mb-2">
               <div className="font-display font-semibold text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                 Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
