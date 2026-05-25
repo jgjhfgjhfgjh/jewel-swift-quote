@@ -249,8 +249,10 @@ export default function Brands() {
         {/* ── Search bar — sticky pod navbarem, schovava se s nim ── */}
         <div
           className={`sticky top-14 sm:top-24 z-30 bg-white/95 backdrop-blur border-b border-border py-3
-            transition-transform duration-500 ease-in-out
-            ${navHidden ? '-translate-y-[200%]' : 'translate-y-0'}`}
+            transition-transform duration-500 ease-in-out will-change-transform
+            ${navHidden
+              ? '-translate-y-[calc(100%+3.5rem)] sm:-translate-y-[calc(100%+6rem)]'
+              : 'translate-y-0'}`}
         >
           <div className="mx-auto max-w-6xl px-6 flex flex-wrap items-center gap-3 sm:gap-4">
             {/* Search input */}
