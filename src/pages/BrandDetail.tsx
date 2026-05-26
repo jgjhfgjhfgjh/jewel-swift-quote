@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
@@ -206,6 +206,36 @@ export default function BrandDetail() {
     };
   }, [products, slug]);
 
+  // All brand keys (alphabetical by display name) — used for prev/next nav arrows
+  const allBrandKeys = useMemo<string[]>(() => {
+    const set = new Set<string>();
+    for (const p of products) {
+      if (!p.manufacturer) continue;
+      const raw = p.manufacturer.trim();
+      const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
+      if (key) set.add(key);
+    }
+    return Array.from(set).sort((a, b) =>
+      toDisplayName(a).localeCompare(toDisplayName(b), 'cs')
+    );
+  }, [products]);
+
+  const { prevBrandKey, nextBrandKey } = useMemo(() => {
+    if (!brandData || allBrandKeys.length < 2) return { prevBrandKey: null, nextBrandKey: null };
+    const idx = allBrandKeys.indexOf(brandData.key);
+    if (idx === -1) return { prevBrandKey: null, nextBrandKey: null };
+    const len = allBrandKeys.length;
+    return {
+      prevBrandKey: allBrandKeys[(idx - 1 + len) % len],
+      nextBrandKey: allBrandKeys[(idx + 1) % len],
+    };
+  }, [allBrandKeys, brandData]);
+
+  const goToBrand = (key: string) => {
+    const slug = key.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/brands/${slug}`);
+  };
+
   // Crossfade slideshow — cycle through up to 10 products in the hero
   const rotationCount = brandData?.rotationProducts.length ?? 0;
   useEffect(() => {
@@ -268,31 +298,55 @@ export default function BrandDetail() {
         {/* ── 1) Hero — brand logo (text placeholder) + sample product on white ── */}
         <section className="py-12 sm:py-20 bg-white border-b border-border">
           <div className="mx-auto max-w-3xl px-6">
-            {/* Brand logo (image from Brandfetch, text fallback if brand not in BRANDS data) */}
+            {/* Brand logo (image from Brandfetch, text fallback if brand not in BRANDS data) + prev/next nav arrows */}
             <Reveal>
-              <h1 className="text-center mb-8 sm:mb-12 flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px]">
-                <span className="sr-only">{brandData.name}</span>
-                {(() => {
-                  const brand = getBrandByName(brandData.name);
-                  if (!brand) {
+              <div className="relative mb-8 sm:mb-12">
+                {prevBrandKey && (
+                  <button
+                    type="button"
+                    onClick={() => goToBrand(prevBrandKey)}
+                    aria-label={`Předchozí značka: ${toDisplayName(prevBrandKey)}`}
+                    title={toDisplayName(prevBrandKey)}
+                    className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.25} />
+                  </button>
+                )}
+                {nextBrandKey && (
+                  <button
+                    type="button"
+                    onClick={() => goToBrand(nextBrandKey)}
+                    aria-label={`Další značka: ${toDisplayName(nextBrandKey)}`}
+                    title={toDisplayName(nextBrandKey)}
+                    className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.25} />
+                  </button>
+                )}
+                <h1 className="text-center flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px] px-14 sm:px-20">
+                  <span className="sr-only">{brandData.name}</span>
+                  {(() => {
+                    const brand = getBrandByName(brandData.name);
+                    if (!brand) {
+                      return (
+                        <span className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground">
+                          {brandData.name}
+                        </span>
+                      );
+                    }
                     return (
-                      <span className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground">
-                        {brandData.name}
-                      </span>
+                      <BrandLogo
+                        name={brand.name}
+                        domain={brand.domain}
+                        width={600}
+                        height={240}
+                        className="h-16 sm:h-20 md:h-28 w-auto max-w-[280px] sm:max-w-[400px] md:max-w-[500px] object-contain [mix-blend-mode:multiply]"
+                        fallbackClassName="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground"
+                      />
                     );
-                  }
-                  return (
-                    <BrandLogo
-                      name={brand.name}
-                      domain={brand.domain}
-                      width={600}
-                      height={240}
-                      className="h-16 sm:h-20 md:h-28 w-auto max-w-[280px] sm:max-w-[400px] md:max-w-[500px] object-contain [mix-blend-mode:multiply]"
-                      fallbackClassName="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground"
-                    />
-                  );
-                })()}
-              </h1>
+                  })()}
+                </h1>
+              </div>
             </Reveal>
 
             {/* Hero slideshow — up to 10 products crossfading every 3.5s */}
