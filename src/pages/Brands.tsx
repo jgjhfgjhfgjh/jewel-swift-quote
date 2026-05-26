@@ -292,12 +292,16 @@ export default function Brands() {
         </div>
 
         {/* ── Brand grid ── */}
-        <section className="py-10 sm:py-14">
+        <section className="py-14 sm:py-20 bg-white">
           <div className="mx-auto max-w-6xl px-6">
             {loading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
                 {Array.from({ length: 20 }).map((_, i) => (
-                  <div key={i} className="rounded-2xl border border-border bg-zinc-50 animate-pulse h-60" />
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="w-full aspect-square rounded-2xl bg-zinc-100 animate-pulse" />
+                    <div className="mt-4 h-3 w-2/3 bg-zinc-100 animate-pulse rounded-full" />
+                    <div className="mt-2 h-2.5 w-1/2 bg-zinc-100 animate-pulse rounded-full" />
+                  </div>
                 ))}
               </div>
             ) : filtered.length === 0 ? (
@@ -306,42 +310,41 @@ export default function Brands() {
                 <p>Žádná značka nenalezena</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
                 {filtered.map((brand, i) => (
                   <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
                     <button
                       type="button"
                       onClick={() => navigate(`/brands/${brand.key.toLowerCase().replace(/\s+/g, '-')}`)}
                       id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="group flex flex-col text-left w-full rounded-2xl border border-border bg-white overflow-hidden hover:border-primary/30 hover:shadow-md transition-all cursor-pointer h-full scroll-mt-28"
+                      className="group flex flex-col items-center text-center w-full cursor-pointer scroll-mt-28 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     >
-                      {/* Image */}
-                      <div className="relative aspect-square bg-zinc-50 overflow-hidden">
+                      {/* Image — clean, no card, no background */}
+                      <div className="relative w-full aspect-square flex items-center justify-center p-4 sm:p-6">
                         {brand.img ? (
                           <img
                             src={brand.img}
                             alt={brand.name}
                             loading="lazy"
-                            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <span className="text-2xl font-black text-zinc-200">{brand.name.slice(0, 2).toUpperCase()}</span>
-                          </div>
+                          <span className="text-4xl font-black text-zinc-200">{brand.name.slice(0, 2).toUpperCase()}</span>
                         )}
                         {brand.maxDiscount > 0 && (
-                          <span className="absolute top-2 right-2 bg-primary text-white text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
+                          <span className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-primary text-white text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
                             −{brand.maxDiscount}%
                           </span>
                         )}
                       </div>
-                      {/* Info */}
-                      <div className="p-3 border-t border-border flex-1 flex flex-col">
-                        <p className="font-bold text-sm text-foreground leading-tight mb-0.5">{brand.name}</p>
-                        <p className="text-[11px] text-muted-foreground">{brand.count} modelů v katalogu</p>
-                        {brand.maxDiscount > 0 && (
-                          <p className="text-[11px] text-primary font-semibold mt-0.5">Sleva až {brand.maxDiscount}%</p>
-                        )}
+                      {/* Info — no card chrome */}
+                      <div className="mt-2 px-2">
+                        <p className="font-bold text-sm sm:text-base text-foreground leading-tight transition-colors group-hover:text-primary">
+                          {brand.name}
+                        </p>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                          {brand.count} modelů
+                        </p>
                       </div>
                     </button>
                   </Reveal>
