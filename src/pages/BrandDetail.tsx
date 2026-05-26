@@ -152,8 +152,8 @@ export default function BrandDetail() {
       .catch(() => setLoading(false));
   }, []);
 
-  // Reset rotation when brand changes
-  useEffect(() => { setRotationIdx(0); }, [slug]);
+  // Reset rotation when brand or active category changes
+  useEffect(() => { setRotationIdx(0); }, [slug, category]);
 
   const brandData = useMemo<BrandData | null>(() => {
     if (!slug) return null;
@@ -176,9 +176,11 @@ export default function BrandDetail() {
     const inStockProducts = brandProducts.filter((p) => p.inStock && p.img);
     const sampleProduct = inStockProducts[0] || brandProducts.find((p) => p.img) || brandProducts[0];
 
-    // Sorted list (with image) — in-stock first, then by discount
+    // Sorted list (with image) — in-stock first, then by discount.
+    // When a category filter is active, restrict to products of that segment
+    // so the hero slideshow & top grid never show jewelry on a "watches" view (and vice versa).
     const sorted = [...brandProducts]
-      .filter((p) => p.img)
+      .filter((p) => p.img && (!category || getCategorySegment(p.category) === category))
       .sort((a, b) => {
         if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
         const da = a.price > 0 ? (1 - a.wholesale / a.price) : 0;
@@ -211,7 +213,7 @@ export default function BrandDetail() {
       inStockCount: inStockProducts.length,
       rawManufacturers: Array.from(rawManufacturers),
     };
-  }, [products, slug]);
+  }, [products, slug, category]);
 
   // All brand keys (alphabetical by display name) — used for prev/next nav arrows
   // When a category filter is active, restrict to brands that have products in that segment
