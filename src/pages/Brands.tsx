@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/select';
 import { useStore } from '@/lib/store';
 import { useScrollHide } from '@/hooks/useScrollHide';
+import { BrandLogo } from '@/components/BrandLogo';
+import { getBrandByName } from '@/data/brands';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -114,7 +116,6 @@ interface Product {
 interface BrandInfo {
   key: string;
   name: string;
-  img: string;
   count: number;
 }
 
@@ -160,30 +161,18 @@ export default function Brands() {
   }, [loading]);
 
   const brands = useMemo<BrandInfo[]>(() => {
-    const map = new Map<string, { imgs: string[]; count: number }>();
+    const map = new Map<string, number>();
 
     for (const p of products) {
       if (!p.manufacturer) continue;
       const raw = p.manufacturer.trim();
       const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
       if (!key) continue;
-
-      if (!map.has(key)) {
-        map.set(key, { imgs: [], count: 0 });
-      }
-      const entry = map.get(key)!;
-      entry.count++;
-      if (p.img && p.inStock && entry.imgs.length < 1) entry.imgs.push(p.img);
-      else if (p.img && !p.inStock && entry.imgs.length === 0) entry.imgs.push(p.img);
+      map.set(key, (map.get(key) ?? 0) + 1);
     }
 
     return Array.from(map.entries())
-      .map(([key, v]) => ({
-        key,
-        name: toDisplayName(key),
-        img: v.imgs[0] || '',
-        count: v.count,
-      }))
+      .map(([key, count]) => ({ key, name: toDisplayName(key), count }))
       .sort((a, b) => b.count - a.count);
   }, [products]);
 
@@ -292,10 +281,9 @@ export default function Brands() {
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
                 {Array.from({ length: 20 }).map((_, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <div className="w-full aspect-square rounded-2xl bg-zinc-100 animate-pulse" />
-                    <div className="mt-4 h-3 w-2/3 bg-zinc-100 animate-pulse rounded-full" />
-                    <div className="mt-2 h-2.5 w-1/2 bg-zinc-100 animate-pulse rounded-full" />
+                  <div key={i} className="flex flex-col items-center py-4">
+                    <div className="h-16 sm:h-20 w-32 sm:w-40 bg-zinc-100 animate-pulse rounded-md" />
+                    <div className="mt-4 h-2.5 w-20 bg-zinc-100 animate-pulse rounded-full" />
                   </div>
                 ))}
               </div>
@@ -306,41 +294,41 @@ export default function Brands() {
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
-                {filtered.map((brand, i) => (
-                  <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
-                    <button
-                      type="button"
-                      onClick={() => navigate(`/brands/${brand.key.toLowerCase().replace(/\s+/g, '-')}`)}
-                      id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="group flex flex-col items-center text-center w-full cursor-pointer scroll-mt-28 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                    >
-                      {/* Image — anchored to bottom so all images share a baseline */}
-                      <div className="w-full aspect-square flex items-end justify-center p-3 sm:p-4">
-                        {brand.img ? (
-                          <img
-                            src={brand.img}
-                            alt={brand.name}
-                            loading="lazy"
-                            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                          />
-                        ) : (
-                          <span className="text-4xl font-black text-zinc-200">
-                            {brand.name.slice(0, 2).toUpperCase()}
-                          </span>
-                        )}
-                      </div>
-                      {/* Info — consistent spacing from image baseline */}
-                      <div className="mt-3 sm:mt-4 px-2">
-                        <p className="font-bold text-sm sm:text-base text-foreground leading-tight transition-colors group-hover:text-primary">
-                          {brand.name}
-                        </p>
-                        <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                {filtered.map((brand, i) => {
+                  const brandMeta = getBrandByName(brand.name);
+                  return (
+                    <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/brands/${brand.key.toLowerCase().replace(/\s+/g, '-')}`)}
+                        id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
+                        className="group flex flex-col items-center text-center w-full cursor-pointer scroll-mt-28 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 py-4"
+                      >
+                        {/* Logo — fixed height for uniform baseline across the whole grid */}
+                        <div className="h-16 sm:h-20 w-full flex items-center justify-center px-2">
+                          {brandMeta ? (
+                            <BrandLogo
+                              name={brandMeta.name}
+                              domain={brandMeta.domain}
+                              width={400}
+                              height={160}
+                              className="max-h-full max-w-full object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-105"
+                              fallbackClassName="font-display text-lg sm:text-xl font-black tracking-tight text-foreground"
+                            />
+                          ) : (
+                            <span className="font-display text-lg sm:text-xl font-black tracking-tight text-foreground">
+                              {brand.name}
+                            </span>
+                          )}
+                        </div>
+                        {/* Info */}
+                        <p className="text-[11px] sm:text-xs text-muted-foreground mt-4">
                           {brand.count} modelů
                         </p>
-                      </div>
-                    </button>
-                  </Reveal>
-                ))}
+                      </button>
+                    </Reveal>
+                  );
+                })}
               </div>
             )}
           </div>
