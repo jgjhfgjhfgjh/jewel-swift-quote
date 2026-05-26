@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Award, Search, ArrowRight, Package } from 'lucide-react';
-import { getCategorySegment, isBrandSegment, SEGMENT_LABEL_GENITIVE, type BrandSegment } from '@/lib/brandSegment';
+import { getCategorySegment, isBrandSegment, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
@@ -341,9 +341,7 @@ export default function Brands() {
                 {filtered.map((brand, i) => {
                   const brandMeta = getBrandByName(brand.name);
                   const displayCount = category ? brand[category] : brand.count;
-                  const countLabel = category
-                    ? `${displayCount} ${SEGMENT_LABEL_GENITIVE[category]}`
-                    : `${displayCount} modelů`;
+                  const countLabel = `${displayCount} modelů`;
                   const slug = brand.key.toLowerCase().replace(/\s+/g, '-');
                   return (
                     <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
