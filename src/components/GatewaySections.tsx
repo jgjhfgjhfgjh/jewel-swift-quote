@@ -766,52 +766,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           </Reveal>
         </div>
 
-        {/* Brands marquee — two rows opposite directions, desktop only */}
-        <Reveal delay={320}>
-          <div className="hidden sm:block mt-12 sm:mt-14 w-full space-y-6">
-            {(() => {
-              const marqueeNames = [
-                ['Tommy Hilfiger', 'Pandora', 'Swarovski', 'Calvin Klein', 'Hugo Boss', 'Versace', 'Michael Kors', 'Emporio Armani'],
-                ['Tissot', 'Casio', 'Fossil', 'Guess', 'Disney', 'DKNY', 'Lacoste', 'Citizen'],
-              ];
-              return marqueeNames.map((row, idx) => {
-                const brands = row.map((n) => getBrandByName(n)).filter((b): b is NonNullable<typeof b> => Boolean(b));
-                return (
-                  <div key={idx} className="relative w-full overflow-x-clip overflow-y-visible py-2">
-                    <div
-                      className="flex items-center gap-12 sm:gap-16 whitespace-nowrap"
-                      style={{
-                        animation: `${idx === 0 ? 'marquee-left' : 'marquee-right'} 40s linear infinite`,
-                      }}
-                    >
-                      {[...brands, ...brands, ...brands].map((brand, i) => (
-                        <BrandLogo
-                          key={`${brand.domain}-${i}`}
-                          name={brand.name}
-                          domain={brand.domain}
-                          width={400}
-                          height={160}
-                          className="h-6 sm:h-7 md:h-8 w-auto max-w-[110px] sm:max-w-[130px] object-contain shrink-0 select-none hover:scale-110 transition-transform duration-300 ease-out [mix-blend-mode:multiply]"
-                          fallbackClassName="font-sans text-base sm:text-lg md:text-xl font-bold text-foreground/80 tracking-wider select-none shrink-0"
-                        />
-                      ))}
-                    </div>
-                  </div>
-                );
-              });
-            })()}
-          </div>
-        </Reveal>
-        <style>{`
-          @keyframes marquee-left {
-            from { transform: translateX(0); }
-            to { transform: translateX(-33.333%); }
-          }
-          @keyframes marquee-right {
-            from { transform: translateX(-33.333%); }
-            to { transform: translateX(0); }
-          }
-        `}</style>
       </section>
 
       {/* ══════════════════════════════════════════
