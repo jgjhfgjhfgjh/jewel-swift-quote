@@ -38,7 +38,7 @@ export function ProductGrid({
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
           {Array.from({ length: 20 }).map((_, i) => (
             <Skeleton key={i} className="aspect-[3/4] rounded-lg" />
           ))}
@@ -56,7 +56,7 @@ export function ProductGrid({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
             {products.map((p) => (
               <ProductCard
                 key={p.id}

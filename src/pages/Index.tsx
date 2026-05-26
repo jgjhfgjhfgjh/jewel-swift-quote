@@ -77,7 +77,7 @@ const Index = () => {
               <Skeleton key={i} className="h-6 w-full" />
             ))}
           </div>
-          <div className="flex-1 p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          <div className="flex-1 p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {Array.from({ length: 20 }).map((_, i) => (
               <Skeleton key={i} className="aspect-[3/4] rounded-lg" />
             ))}
