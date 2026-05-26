@@ -116,7 +116,6 @@ interface BrandInfo {
   name: string;
   img: string;
   count: number;
-  maxDiscount: number;
 }
 
 /* ─── Component ─── */
@@ -161,7 +160,7 @@ export default function Brands() {
   }, [loading]);
 
   const brands = useMemo<BrandInfo[]>(() => {
-    const map = new Map<string, { imgs: string[]; count: number; maxDiscount: number }>();
+    const map = new Map<string, { imgs: string[]; count: number }>();
 
     for (const p of products) {
       if (!p.manufacturer) continue;
@@ -169,14 +168,11 @@ export default function Brands() {
       const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
       if (!key) continue;
 
-      const discount = p.price > 0 ? Math.round((1 - p.wholesale / p.price) * 100) : 0;
-
       if (!map.has(key)) {
-        map.set(key, { imgs: [], count: 0, maxDiscount: 0 });
+        map.set(key, { imgs: [], count: 0 });
       }
       const entry = map.get(key)!;
       entry.count++;
-      if (discount > entry.maxDiscount) entry.maxDiscount = discount;
       if (p.img && p.inStock && entry.imgs.length < 1) entry.imgs.push(p.img);
       else if (p.img && !p.inStock && entry.imgs.length === 0) entry.imgs.push(p.img);
     }
@@ -187,7 +183,6 @@ export default function Brands() {
         name: toDisplayName(key),
         img: v.imgs[0] || '',
         count: v.count,
-        maxDiscount: v.maxDiscount,
       }))
       .sort((a, b) => b.count - a.count);
   }, [products]);
@@ -319,8 +314,8 @@ export default function Brands() {
                       id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
                       className="group flex flex-col items-center text-center w-full cursor-pointer scroll-mt-28 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     >
-                      {/* Image — clean, no card, no background */}
-                      <div className="relative w-full aspect-square flex items-center justify-center p-4 sm:p-6">
+                      {/* Image — anchored to bottom so all images share a baseline */}
+                      <div className="w-full aspect-square flex items-end justify-center p-3 sm:p-4">
                         {brand.img ? (
                           <img
                             src={brand.img}
@@ -329,16 +324,13 @@ export default function Brands() {
                             className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                           />
                         ) : (
-                          <span className="text-4xl font-black text-zinc-200">{brand.name.slice(0, 2).toUpperCase()}</span>
-                        )}
-                        {brand.maxDiscount > 0 && (
-                          <span className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-primary text-white text-[10px] font-bold rounded-full px-2 py-0.5 shadow-sm">
-                            −{brand.maxDiscount}%
+                          <span className="text-4xl font-black text-zinc-200">
+                            {brand.name.slice(0, 2).toUpperCase()}
                           </span>
                         )}
                       </div>
-                      {/* Info — no card chrome */}
-                      <div className="mt-2 px-2">
+                      {/* Info — consistent spacing from image baseline */}
+                      <div className="mt-3 sm:mt-4 px-2">
                         <p className="font-bold text-sm sm:text-base text-foreground leading-tight transition-colors group-hover:text-primary">
                           {brand.name}
                         </p>
