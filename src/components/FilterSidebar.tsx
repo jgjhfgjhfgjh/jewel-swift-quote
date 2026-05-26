@@ -71,27 +71,24 @@ export function FilterSidebar({
     return () => { document.body.style.overflow = ''; };
   }, [sidebarOpen, desktopOnly]);
 
-  // Desktop mega-menu filter bar — open tab + hover-close timer (mirrors navbar)
+  // Desktop mega-menu filter bar — click-only open/close (no hover trigger)
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  const tabCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const openTab = (id: string) => {
-    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
-    setActiveTab(id);
-  };
+  const megaBarRef = useRef<HTMLDivElement | null>(null);
   const toggleTab = (id: string) => {
-    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
     setActiveTab((cur) => (cur === id ? null : id));
-  };
-  const scheduleTabClose = () => {
-    tabCloseTimer.current = setTimeout(() => setActiveTab(null), 140);
-  };
-  const cancelTabClose = () => {
-    if (tabCloseTimer.current) clearTimeout(tabCloseTimer.current);
   };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setActiveTab(null); };
+    const onClick = (e: MouseEvent) => {
+      if (!megaBarRef.current) return;
+      if (!megaBarRef.current.contains(e.target as Node)) setActiveTab(null);
+    };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    document.addEventListener('mousedown', onClick);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.removeEventListener('mousedown', onClick);
+    };
   }, []);
 
   const discountTiers = [
@@ -897,7 +894,7 @@ export function FilterSidebar({
   const activeBarTab = barTabs.find((tb) => tb.id === activeTab);
 
   const desktopBar = (
-    <div className="filter-mega-bar hidden lg:block" onMouseLeave={scheduleTabClose}>
+    <div className="filter-mega-bar hidden lg:block" ref={megaBarRef}>
       <div className="filter-mega-bar-inner">
         <label className="filter-mega-stock">
           <Sliders className="h-3.5 w-3.5" />
@@ -914,7 +911,6 @@ export function FilterSidebar({
             className="filter-mega-tab"
             data-open={activeTab === tb.id ? 'true' : 'false'}
             data-active={tb.count > 0 ? 'true' : 'false'}
-            onMouseEnter={() => openTab(tb.id)}
             onClick={() => toggleTab(tb.id)}
           >
             <span>{tb.label}</span>
@@ -937,11 +933,7 @@ export function FilterSidebar({
       </div>
 
       {activeBarTab && (
-        <div
-          className="filter-mega-panel"
-          onMouseEnter={cancelTabClose}
-          onMouseLeave={scheduleTabClose}
-        >
+        <div className="filter-mega-panel">
           {activeBarTab.panel}
         </div>
       )}
