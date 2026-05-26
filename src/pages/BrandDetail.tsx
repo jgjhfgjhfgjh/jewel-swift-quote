@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search } from 'lucide-react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search, X } from 'lucide-react';
+import { getCategorySegment, isBrandSegment, SEGMENT_LABEL, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
@@ -132,6 +133,12 @@ export default function BrandDetail() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
   const [rotationIdx, setRotationIdx] = useState(0);
+  const [searchParams] = useSearchParams();
+
+  // Category filter inherited from /brands?cat=... — scopes the prev/next nav
+  const rawCat = searchParams.get('cat');
+  const category: BrandSegment | null = isBrandSegment(rawCat) ? rawCat : null;
+  const withCat = (path: string) => (category ? `${path}?cat=${category}` : path);
 
   // Scroll to top whenever slug changes
   useEffect(() => {
@@ -207,18 +214,23 @@ export default function BrandDetail() {
   }, [products, slug]);
 
   // All brand keys (alphabetical by display name) — used for prev/next nav arrows
+  // When a category filter is active, restrict to brands that have products in that segment
   const allBrandKeys = useMemo<string[]>(() => {
-    const set = new Set<string>();
+    const map = new Map<string, { watches: boolean; jewelry: boolean }>();
     for (const p of products) {
       if (!p.manufacturer) continue;
       const raw = p.manufacturer.trim();
       const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
-      if (key) set.add(key);
+      if (!key) continue;
+      if (!map.has(key)) map.set(key, { watches: false, jewelry: false });
+      const seg = getCategorySegment(p.category);
+      if (seg) map.get(key)![seg] = true;
     }
-    return Array.from(set).sort((a, b) =>
-      toDisplayName(a).localeCompare(toDisplayName(b), 'cs')
-    );
-  }, [products]);
+    const keys = Array.from(map.entries())
+      .filter(([, segs]) => !category || segs[category])
+      .map(([k]) => k);
+    return keys.sort((a, b) => toDisplayName(a).localeCompare(toDisplayName(b), 'cs'));
+  }, [products, category]);
 
   const { prevBrandKey, nextBrandKey } = useMemo(() => {
     if (!brandData || allBrandKeys.length < 2) return { prevBrandKey: null, nextBrandKey: null };
@@ -233,7 +245,7 @@ export default function BrandDetail() {
 
   const goToBrand = (key: string) => {
     const slug = key.toLowerCase().replace(/\s+/g, '-');
-    navigate(`/brands/${slug}`);
+    navigate(withCat(`/brands/${slug}`));
   };
 
   // Crossfade slideshow — cycle through up to 10 products in the hero
@@ -281,7 +293,7 @@ export default function BrandDetail() {
           <Package className="h-12 w-12 text-muted-foreground/40 mb-4" />
           <h1 className="font-display text-2xl font-bold mb-2">Značka nenalezena</h1>
           <p className="text-muted-foreground mb-6 max-w-md">Tato značka v našem katalogu zatím není.</p>
-          <Button onClick={() => navigate('/brands')}>
+          <Button onClick={() => navigate(withCat('/brands'))}>
             <ArrowLeft className="h-4 w-4 mr-2" /> Zpět na katalog značek
           </Button>
         </main>
@@ -298,6 +310,28 @@ export default function BrandDetail() {
         {/* ── 1) Hero — brand logo (text placeholder) + sample product on white ── */}
         <section className="py-12 sm:py-20 bg-white border-b border-border">
           <div className="mx-auto max-w-3xl px-6">
+            {/* Active category filter indicator — shown when arrived from /brands?cat=... */}
+            {category && (
+              <Reveal>
+                <div className="flex justify-center mb-6">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 pl-3 pr-1 py-1 text-[11px] sm:text-xs text-primary">
+                    <span className="font-semibold tracking-wide">
+                      Procházíte: {SEGMENT_LABEL[category]}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/brands/${slug}`, { replace: true })}
+                      className="h-5 w-5 rounded-full inline-flex items-center justify-center hover:bg-primary/10 transition-colors"
+                      aria-label="Zrušit filtr"
+                      title="Zrušit filtr a procházet všechny značky"
+                    >
+                      <X className="h-3 w-3" strokeWidth={2.5} />
+                    </button>
+                  </div>
+                </div>
+              </Reveal>
+            )}
+
             {/* Brand logo (image from Brandfetch, text fallback if brand not in BRANDS data) + prev/next nav arrows */}
             <Reveal>
               <div className="relative mb-8 sm:mb-12">
@@ -585,7 +619,7 @@ export default function BrandDetail() {
                 <Button size="lg" className="gap-2 px-8 bg-white text-primary hover:bg-white/90" onClick={handleOpenInCatalog}>
                   <Search className="h-4 w-4" /> Otevřít v katalogu
                 </Button>
-                <Button size="lg" variant="secondary" className="gap-2 px-8" onClick={() => navigate('/brands')}>
+                <Button size="lg" variant="secondary" className="gap-2 px-8" onClick={() => navigate(withCat('/brands'))}>
                   <ArrowLeft className="h-4 w-4" /> Zpět na katalog značek
                 </Button>
               </div>

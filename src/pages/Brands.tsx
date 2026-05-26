@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Award, Search, ArrowRight, Package } from 'lucide-react';
+import { getCategorySegment, isBrandSegment, SEGMENT_LABEL_GENITIVE, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
@@ -117,6 +118,8 @@ interface BrandInfo {
   key: string;
   name: string;
   count: number;
+  watches: number;
+  jewelry: number;
 }
 
 /* ─── Component ─── */
@@ -128,6 +131,20 @@ export default function Brands() {
   const navigate = useNavigate();
   const { setGatewayOpen: openAuth } = useStore();
   const navHidden = useScrollHide();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Category filter — null = all, 'watches', 'jewelry'. Persisted in URL.
+  const rawCat = searchParams.get('cat');
+  const category: BrandSegment | null = isBrandSegment(rawCat) ? rawCat : null;
+  const setCategory = (val: 'all' | BrandSegment) => {
+    const next = new URLSearchParams(searchParams);
+    if (val === 'all') next.delete('cat');
+    else next.set('cat', val);
+    setSearchParams(next, { replace: true });
+  };
+
+  // Append current category param to a URL (so links preserve it)
+  const withCat = (path: string) => (category ? `${path}?cat=${category}` : path);
 
   // Scroll to top on mount, or to specific brand if URL has hash like #tommy-hilfiger
   useEffect(() => {
@@ -161,32 +178,42 @@ export default function Brands() {
   }, [loading]);
 
   const brands = useMemo<BrandInfo[]>(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, { count: number; watches: number; jewelry: number }>();
 
     for (const p of products) {
       if (!p.manufacturer) continue;
       const raw = p.manufacturer.trim();
       const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
       if (!key) continue;
-      map.set(key, (map.get(key) ?? 0) + 1);
+      if (!map.has(key)) map.set(key, { count: 0, watches: 0, jewelry: 0 });
+      const e = map.get(key)!;
+      e.count++;
+      const seg = getCategorySegment(p.category);
+      if (seg === 'watches') e.watches++;
+      else if (seg === 'jewelry') e.jewelry++;
     }
 
     return Array.from(map.entries())
-      .map(([key, count]) => ({ key, name: toDisplayName(key), count }))
+      .map(([key, v]) => ({ key, name: toDisplayName(key), ...v }))
       .sort((a, b) => b.count - a.count);
   }, [products]);
 
   const filtered = useMemo(() => {
-    if (!search.trim()) return brands;
-    const q = search.toLowerCase();
-    return brands.filter((b) => b.name.toLowerCase().includes(q));
-  }, [brands, search]);
+    let list = brands;
+    if (category) list = list.filter((b) => b[category] > 0);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter((b) => b.name.toLowerCase().includes(q));
+    }
+    return list;
+  }, [brands, search, category]);
 
   // Brands sorted alphabetically by display name for the jump dropdown
-  const brandsByName = useMemo(
-    () => [...brands].sort((a, b) => a.name.localeCompare(b.name, 'cs')),
-    [brands],
-  );
+  // — also respects the active category filter
+  const brandsByName = useMemo(() => {
+    const base = category ? brands.filter((b) => b[category] > 0) : brands;
+    return [...base].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+  }, [brands, category]);
 
   const handleJumpToBrand = (key: string) => {
     setJumpValue(key);
@@ -266,6 +293,23 @@ export default function Brands() {
               </Select>
             )}
 
+            {/* Category filter — Vse / Hodinky / Sperky */}
+            {!loading && (
+              <Select
+                value={category ?? 'all'}
+                onValueChange={(v) => setCategory(v as 'all' | BrandSegment)}
+              >
+                <SelectTrigger className="w-[150px] rounded-xl bg-zinc-50 border-border text-sm">
+                  <SelectValue placeholder="Kategorie" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-sm">Vše</SelectItem>
+                  <SelectItem value="watches" className="text-sm">Hodinky</SelectItem>
+                  <SelectItem value="jewelry" className="text-sm">Šperky</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+
             {/* Count — pushed to the right on wider screens */}
             {!loading && (
               <span className="text-sm text-muted-foreground hidden sm:block sm:ml-auto">
@@ -296,12 +340,17 @@ export default function Brands() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
                 {filtered.map((brand, i) => {
                   const brandMeta = getBrandByName(brand.name);
+                  const displayCount = category ? brand[category] : brand.count;
+                  const countLabel = category
+                    ? `${displayCount} ${SEGMENT_LABEL_GENITIVE[category]}`
+                    : `${displayCount} modelů`;
+                  const slug = brand.key.toLowerCase().replace(/\s+/g, '-');
                   return (
                     <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
                       <button
                         type="button"
-                        onClick={() => navigate(`/brands/${brand.key.toLowerCase().replace(/\s+/g, '-')}`)}
-                        id={`brand-${brand.key.toLowerCase().replace(/\s+/g, '-')}`}
+                        onClick={() => navigate(withCat(`/brands/${slug}`))}
+                        id={`brand-${slug}`}
                         className="group flex flex-col items-center text-center w-full cursor-pointer scroll-mt-28 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 py-4"
                       >
                         {/* Logo — fixed height for uniform baseline across the whole grid */}
@@ -323,7 +372,7 @@ export default function Brands() {
                         </div>
                         {/* Info */}
                         <p className="text-[11px] sm:text-xs text-muted-foreground mt-4">
-                          {brand.count} modelů
+                          {countLabel}
                         </p>
                       </button>
                     </Reveal>
