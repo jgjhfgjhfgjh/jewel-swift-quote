@@ -304,7 +304,7 @@ export default function BrandDetail() {
   return (
     <>
       <Navbar />
-      <BackButton />
+      <BackButton to={withCat('/brands')} label="Zpět na seznam značek" />
       <main className="min-h-screen bg-background pt-14 sm:pt-24">
 
         {/* ── 1) Hero — brand logo (text placeholder) + sample product on white ── */}
