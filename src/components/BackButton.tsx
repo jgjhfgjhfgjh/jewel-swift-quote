@@ -1,12 +1,20 @@
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export function BackButton() {
+interface BackButtonProps {
+  /** When set, navigates to this path instead of browser history back. */
+  to?: string;
+  /** Override the aria-label / tooltip. */
+  label?: string;
+}
+
+export function BackButton({ to, label = 'Zpět' }: BackButtonProps = {}) {
   const navigate = useNavigate();
   return (
     <button
-      onClick={() => navigate(-1)}
-      aria-label="Zpět"
+      onClick={() => (to ? navigate(to) : navigate(-1))}
+      aria-label={label}
+      title={label}
       className="fixed top-[72px] sm:top-[112px] left-4 z-[99] flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-200 hover:scale-110 hover:border-white/50"
       style={{
         backdropFilter: 'blur(12px) saturate(1.6)',

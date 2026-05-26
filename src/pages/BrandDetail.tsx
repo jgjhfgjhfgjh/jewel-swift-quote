@@ -276,7 +276,7 @@ export default function BrandDetail() {
     return (
       <>
         <Navbar />
-        <BackButton />
+        <BackButton to={withCat('/brands')} label="Zpět na seznam značek" />
         <main className="min-h-screen bg-background pt-14 sm:pt-24 flex items-center justify-center">
           <div className="text-muted-foreground text-sm">Načítání…</div>
         </main>
@@ -288,7 +288,7 @@ export default function BrandDetail() {
     return (
       <>
         <Navbar />
-        <BackButton />
+        <BackButton to={withCat('/brands')} label="Zpět na seznam značek" />
         <main className="min-h-screen bg-background pt-14 sm:pt-24 flex flex-col items-center justify-center px-6 text-center">
           <Package className="h-12 w-12 text-muted-foreground/40 mb-4" />
           <h1 className="font-display text-2xl font-bold mb-2">Značka nenalezena</h1>
