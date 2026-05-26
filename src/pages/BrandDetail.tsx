@@ -112,6 +112,7 @@ interface BrandData {
   key: string;
   name: string;
   sampleProduct: Product;
+  rotationProducts: Product[];
   topProducts: Product[];
   count: number;
   maxDiscount: number;
@@ -130,6 +131,7 @@ export default function BrandDetail() {
   const [loading, setLoading] = useState(true);
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
+  const [rotationIdx, setRotationIdx] = useState(0);
 
   // Scroll to top whenever slug changes
   useEffect(() => {
@@ -142,6 +144,9 @@ export default function BrandDetail() {
       .then((data) => { setProducts(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  // Reset rotation when brand changes
+  useEffect(() => { setRotationIdx(0); }, [slug]);
 
   const brandData = useMemo<BrandData | null>(() => {
     if (!slug) return null;
@@ -164,16 +169,21 @@ export default function BrandDetail() {
     const inStockProducts = brandProducts.filter((p) => p.inStock && p.img);
     const sampleProduct = inStockProducts[0] || brandProducts.find((p) => p.img) || brandProducts[0];
 
-    // Top products = top 8 by discount, in-stock first
-    const topProducts = [...brandProducts]
+    // Sorted list (with image) — in-stock first, then by discount
+    const sorted = [...brandProducts]
       .filter((p) => p.img)
       .sort((a, b) => {
         if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
         const da = a.price > 0 ? (1 - a.wholesale / a.price) : 0;
         const db = b.price > 0 ? (1 - b.wholesale / b.price) : 0;
         return db - da;
-      })
-      .slice(0, 8);
+      });
+
+    // Hero rotation — up to 10 products that cycle with crossfade
+    const rotationProducts = sorted.slice(0, 10);
+
+    // Top products grid — top 8
+    const topProducts = sorted.slice(0, 8);
 
     const maxDiscount = brandProducts.reduce((max, p) => {
       const d = p.price > 0 ? Math.round((1 - p.wholesale / p.price) * 100) : 0;
@@ -186,6 +196,7 @@ export default function BrandDetail() {
       key: targetKey,
       name: toDisplayName(targetKey),
       sampleProduct,
+      rotationProducts,
       topProducts,
       count: brandProducts.length,
       maxDiscount,
@@ -194,6 +205,16 @@ export default function BrandDetail() {
       rawManufacturers: Array.from(rawManufacturers),
     };
   }, [products, slug]);
+
+  // Crossfade slideshow — cycle through up to 10 products in the hero
+  const rotationCount = brandData?.rotationProducts.length ?? 0;
+  useEffect(() => {
+    if (rotationCount <= 1) return;
+    const id = window.setInterval(() => {
+      setRotationIdx((i) => (i + 1) % rotationCount);
+    }, 3500);
+    return () => window.clearInterval(id);
+  }, [rotationCount]);
 
   /* ─── Open brand in catalog: logged-in → activate filter & go to catalog; guest → open auth ─── */
   const handleOpenInCatalog = () => {
@@ -274,22 +295,38 @@ export default function BrandDetail() {
               </h1>
             </Reveal>
 
-            {/* Sample product — centered on white background, no frame */}
+            {/* Hero slideshow — up to 10 products crossfading every 3.5s */}
             <Reveal delay={120}>
-              <div className="mx-auto w-56 sm:w-72 md:w-80 aspect-square bg-white flex items-center justify-center p-4">
-                <img
-                  src={brandData.sampleProduct.img}
-                  alt={`${brandData.name} — ukázkový produkt`}
-                  className="max-h-full max-w-full object-contain"
-                  loading="eager"
-                />
+              <div className="relative mx-auto w-56 sm:w-72 md:w-80 aspect-square bg-white">
+                {brandData.rotationProducts.map((p, i) => (
+                  <div
+                    key={p.id}
+                    className={`absolute inset-0 flex items-center justify-center p-4 transition-opacity duration-1000 ease-in-out ${i === rotationIdx ? 'opacity-100' : 'opacity-0'}`}
+                    aria-hidden={i !== rotationIdx}
+                  >
+                    <img
+                      src={p.img}
+                      alt={`${brandData.name} — ${p.name}`}
+                      className="max-h-full max-w-full object-contain"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                  </div>
+                ))}
               </div>
             </Reveal>
 
             <Reveal delay={200}>
-              <p className="text-center text-xs sm:text-sm text-muted-foreground mt-6">
-                {brandData.sampleProduct.name}
-              </p>
+              <div className="relative mt-6 min-h-[2.5rem] sm:min-h-[2.75rem]">
+                {brandData.rotationProducts.map((p, i) => (
+                  <p
+                    key={p.id}
+                    className={`absolute inset-x-0 text-center text-xs sm:text-sm text-muted-foreground transition-opacity duration-1000 ease-in-out ${i === rotationIdx ? 'opacity-100' : 'opacity-0'}`}
+                    aria-hidden={i !== rotationIdx}
+                  >
+                    {p.name}
+                  </p>
+                ))}
+              </div>
             </Reveal>
 
             {/* Primary CTA — open brand in catalog */}
