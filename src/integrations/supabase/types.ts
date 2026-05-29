@@ -139,6 +139,7 @@ export type Database = {
       comm_messages: {
         Row: {
           author_label: string
+          author_name: string | null
           author_user_id: string | null
           body: string
           created_at: string
@@ -153,6 +154,7 @@ export type Database = {
         }
         Insert: {
           author_label?: string
+          author_name?: string | null
           author_user_id?: string | null
           body?: string
           created_at?: string
@@ -167,6 +169,7 @@ export type Database = {
         }
         Update: {
           author_label?: string
+          author_name?: string | null
           author_user_id?: string | null
           body?: string
           created_at?: string

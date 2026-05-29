@@ -138,6 +138,11 @@ export async function updateTopicStatus(id: string, status: TopicStatus): Promis
   if (error) throw error;
 }
 
+export async function deleteTopic(id: string): Promise<void> {
+  const { error } = await supabase.from('comm_topics').delete().eq('id', id);
+  if (error) throw error;
+}
+
 // ── Zprávy ─────────────────────────────────────────────────
 export async function listMessages(topicId: string): Promise<CommMessage[]> {
   const { data, error } = await supabase
@@ -173,6 +178,11 @@ export async function postMessage(input: {
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function deleteMessage(id: string): Promise<void> {
+  const { error } = await supabase.from('comm_messages').delete().eq('id', id);
+  if (error) throw error;
 }
 
 // ── Přílohy ────────────────────────────────────────────────
@@ -254,6 +264,14 @@ export async function addMetaAttachment(input: {
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function deleteAttachment(att: { id: string; file_path: string | null }): Promise<void> {
+  if (att.file_path) {
+    await supabase.storage.from(STORAGE_BUCKET).remove([att.file_path]);
+  }
+  const { error } = await supabase.from('comm_attachments').delete().eq('id', att.id);
+  if (error) throw error;
 }
 
 /** Vytvoří dočasnou podepsanou URL pro stažení/náhled přílohy (privátní bucket). */

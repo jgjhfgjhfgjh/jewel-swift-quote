@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import {
-  listTopics, getTopic, createTopic, updateTopicStatus,
-  listMessages, postMessage, listAttachments, uploadAttachment,
+  listTopics, getTopic, createTopic, updateTopicStatus, deleteTopic,
+  listMessages, postMessage, deleteMessage, listAttachments, uploadAttachment, deleteAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
-  addMetaAttachment, postMessage, resolveQuestion,
+  addMetaAttachment, resolveQuestion,
   listTasks, createTask, setTaskDone, deleteTask,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
   type CommMessage, type AttachmentKind,
@@ -74,6 +74,34 @@ export function useUpdateTopicStatus() {
       qc.invalidateQueries({ queryKey: ['comm', 'topics'] });
       qc.invalidateQueries({ queryKey: ['comm', 'topic', vars.id] });
     },
+  });
+}
+
+export function useDeleteTopic() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteTopic(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'topics'] }),
+  });
+}
+
+export function useDeleteMessage(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteMessage(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['comm', 'messages', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] });
+    },
+  });
+}
+
+export function useDeleteAttachment(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (att: { id: string; file_path: string | null }) => deleteAttachment(att),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] }),
   });
 }
 

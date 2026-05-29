@@ -4,9 +4,10 @@ import { format } from 'date-fns';
 import { cs } from 'date-fns/locale';
 import {
   FileText, User, StickyNote,
-  Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X, Mic,
+  Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X, Mic, Trash2,
 } from 'lucide-react';
-import { useAttachments } from '@/hooks/useComm';
+import { useAttachments, useDeleteAttachment } from '@/hooks/useComm';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { useLightbox } from './Lightbox';
 import {
   getSignedUrl, getEmbedUrl, domainOf, normalizeUrl, formatBytes, PARTY_LABELS,
@@ -202,6 +203,8 @@ function searchText(a: CommAttachment): string {
 
 export function AttachmentList({ topicId }: { topicId: string }) {
   const { data: attachments = [] } = useAttachments(topicId);
+  const { isAdmin } = useAuthContext();
+  const del = useDeleteAttachment(topicId);
   const [filter, setFilter] = useState<string>('all');
   const [query, setQuery] = useState('');
 
@@ -277,7 +280,20 @@ export function AttachmentList({ topicId }: { topicId: string }) {
       {attachments.length > 0 && visible.length === 0 && (
         <p className="text-xs text-muted-foreground">Nic neodpovídá filtru ani hledání.</p>
       )}
-      {visible.map(a => <AttachmentItem key={a.id} a={a} />)}
+      {visible.map(a => (
+        <div key={a.id} className="relative">
+          <AttachmentItem a={a} />
+          {isAdmin && (
+            <button
+              onClick={() => { if (confirm('Smazat tuto přílohu?')) del.mutate({ id: a.id, file_path: a.file_path }); }}
+              className="absolute right-1 top-1 z-10 flex h-6 w-6 items-center justify-center rounded-md bg-background/80 text-muted-foreground shadow-sm hover:bg-destructive/10 hover:text-destructive"
+              title="Smazat přílohu (admin)"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { cs } from 'date-fns/locale';
 import { toast } from 'sonner';
-import { ArrowLeft, Bell, CheckCircle2, Clock, Check, RotateCcw, Eye, CornerUpLeft } from 'lucide-react';
+import { ArrowLeft, Bell, CheckCircle2, Clock, Check, RotateCcw, Eye, CornerUpLeft, Trash2 } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import {
   useTopic, useMessages, useAttachments,
   useUpdateTopicStatus, useMyLabel, useTopicRealtime, useResolveQuestion,
+  useDeleteMessage, useDeleteTopic,
 } from '@/hooks/useComm';
 import { AttachmentItem, AttachmentList } from './Attachments';
 import { MessageComposer, type ReplyTarget } from './MessageComposer';
@@ -41,6 +42,8 @@ export default function ComTopicDetail() {
   const { data: attachments = [] } = useAttachments(id);
   const updateStatus = useUpdateTopicStatus();
   const resolve = useResolveQuestion(id!);
+  const delMsg = useDeleteMessage(id!);
+  const delTopic = useDeleteTopic();
   const bottomRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLDivElement>(null);
 
@@ -143,13 +146,28 @@ export default function ComTopicDetail() {
                 </span>
               </div>
             </div>
-            <select
-              value={topic.status}
-              onChange={e => updateStatus.mutate({ id: topic.id, status: e.target.value as TopicStatus })}
-              className="rounded-md border bg-background px-3 py-1.5 text-sm"
-            >
-              {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-            </select>
+            <div className="flex items-center gap-2">
+              <select
+                value={topic.status}
+                onChange={e => updateStatus.mutate({ id: topic.id, status: e.target.value as TopicStatus })}
+                className="rounded-md border bg-background px-3 py-1.5 text-sm"
+              >
+                {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              </select>
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    if (confirm('Smazat celé téma i s celou historií, přílohami a úkoly?')) {
+                      delTopic.mutate(topic.id, { onSuccess: () => navigate('/komunikace') });
+                    }
+                  }}
+                  className="inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 text-sm text-destructive hover:bg-destructive/10"
+                  title="Smazat téma (admin)"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Smazat
+                </button>
+              )}
+            </div>
           </div>
           <div className="mt-3 border-t pt-2">
             {awaiting ? (
@@ -191,7 +209,10 @@ export default function ComTopicDetail() {
                     </button>
                   )}
                   <div className={`mb-0.5 flex items-center gap-2 text-[10px] ${mine ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
-                    <strong>{PARTY_LABELS[m.author_label as PartyLabel] ?? m.author_label}</strong>
+                    <strong>
+                      {PARTY_LABELS[m.author_label as PartyLabel] ?? m.author_label}
+                      {m.author_name ? ` · ${m.author_name}` : ''}
+                    </strong>
                     <span>{format(new Date(m.created_at), 'd. M. yyyy HH:mm', { locale: cs })}</span>
                   </div>
                   {m.body && <div className="whitespace-pre-wrap break-words text-sm">{m.body}</div>}
@@ -246,6 +267,17 @@ export default function ComTopicDetail() {
                       </button>
                     )}
                   </div>
+                )}
+
+                {/* admin smazání zprávy */}
+                {isAdmin && (
+                  <button
+                    onClick={() => { if (confirm('Smazat tuto zprávu?')) delMsg.mutate(m.id); }}
+                    className="mt-1 inline-flex items-center gap-1 text-[10px] text-muted-foreground/70 hover:text-destructive"
+                    title="Smazat zprávu (admin)"
+                  >
+                    <Trash2 className="h-3 w-3" /> Smazat
+                  </button>
                 )}
               </div>
             );
