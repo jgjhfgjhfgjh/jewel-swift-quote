@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Mic, Video as VideoIcon, Square, X } from 'lucide-react';
 
@@ -29,6 +29,15 @@ export function Recorder({ onComplete, disabled }: {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canceledRef = useRef(false);
 
+  // Připoj živý náhled až když je <video> element vykreslený (po setKind).
+  useEffect(() => {
+    if (kind === 'video' && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [kind]);
+
   function cleanup() {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
     streamRef.current?.getTracks().forEach(t => t.stop());
@@ -49,11 +58,7 @@ export function Recorder({ onComplete, disabled }: {
       );
       streamRef.current = stream;
       canceledRef.current = false;
-      if (k === 'video' && videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.muted = true;
-        await videoRef.current.play().catch(() => {});
-      }
+      // Náhled se připojí v useEffect po vykreslení elementu (viz výše).
       const mime = pickMime(k);
       const mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
       chunksRef.current = [];
