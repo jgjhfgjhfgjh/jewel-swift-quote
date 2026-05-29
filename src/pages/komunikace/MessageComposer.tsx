@@ -1,11 +1,17 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
   Send, FileText, Image as ImageIcon, Video, Play, Link2, User, StickyNote,
-  X, Loader2, Bell, Paperclip,
+  X, Loader2, Bell, Paperclip, CornerUpLeft,
 } from 'lucide-react';
 import { useSendMessage, type StagedAttachment } from '@/hooks/useComm';
-import { domainOf } from '@/lib/comm';
+import { domainOf, PARTY_LABELS, type PartyLabel } from '@/lib/comm';
+
+export interface ReplyTarget {
+  id: string;
+  body: string;
+  author_label: string;
+}
 
 type Mode = null | 'link' | 'video' | 'contact' | 'note';
 
@@ -20,13 +26,23 @@ function stagedLabel(s: StagedAttachment): string {
   return s.title || (s.url ? domainOf(s.url) : s.kind);
 }
 
-export function MessageComposer({ topicId }: { topicId: string }) {
+export function MessageComposer({ topicId, replyTo, onClearReply }: {
+  topicId: string;
+  replyTo?: ReplyTarget | null;
+  onClearReply?: () => void;
+}) {
   const send = useSendMessage(topicId);
   const [body, setBody] = useState('');
   const [requiresReply, setRequiresReply] = useState(false);
   const [staged, setStaged] = useState<StagedAttachment[]>([]);
   const [showTypes, setShowTypes] = useState(false);
   const [mode, setMode] = useState<Mode>(null);
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
+  // Když vyberu otázku k odpovědi, zaměř psaní.
+  useEffect(() => {
+    if (replyTo) taRef.current?.focus();
+  }, [replyTo]);
 
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
@@ -68,8 +84,9 @@ export function MessageComposer({ topicId }: { topicId: string }) {
   async function submit() {
     if (!body.trim() && staged.length === 0) return;
     try {
-      await send.mutateAsync({ body: body.trim(), requiresReply, staged });
+      await send.mutateAsync({ body: body.trim(), requiresReply, staged, replyToId: replyTo?.id ?? null });
       setBody(''); setRequiresReply(false); setStaged([]); setShowTypes(false); resetForm();
+      onClearReply?.();
     } catch (e: any) {
       toast.error(e?.message ?? 'Zprávu se nepodařilo odeslat');
     }
@@ -80,7 +97,23 @@ export function MessageComposer({ topicId }: { topicId: string }) {
   const busy = send.isPending;
 
   return (
-    <div className="rounded-xl border bg-background p-3">
+    <div className={`rounded-xl border bg-background p-3 ${replyTo ? 'ring-2 ring-amber-300' : ''}`}>
+      {/* odpověď na otázku */}
+      {replyTo && (
+        <div className="mb-2 flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50/60 p-2 dark:border-amber-900 dark:bg-amber-950/30">
+          <CornerUpLeft className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-600" />
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-semibold text-amber-700 dark:text-amber-300">
+              Odpovídáš na otázku od {PARTY_LABELS[(replyTo.author_label as PartyLabel)] ?? replyTo.author_label}
+            </div>
+            <div className="line-clamp-2 text-xs text-muted-foreground">{replyTo.body || '(příloha)'}</div>
+          </div>
+          <button onClick={() => onClearReply?.()} className="text-muted-foreground hover:text-foreground" title="Zrušit odpověď">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* připravené přílohy */}
       {staged.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1.5">
@@ -100,10 +133,11 @@ export function MessageComposer({ topicId }: { topicId: string }) {
       )}
 
       <textarea
+        ref={taRef}
         value={body}
         onChange={e => setBody(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submit(); }}
-        placeholder="Napiš zprávu… (Ctrl/⌘ + Enter odešle)"
+        placeholder={replyTo ? 'Napiš odpověď… (Ctrl/⌘ + Enter odešle)' : 'Napiš zprávu… (Ctrl/⌘ + Enter odešle)'}
         rows={2}
         className="w-full resize-y rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30"
       />

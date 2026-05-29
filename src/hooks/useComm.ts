@@ -92,8 +92,8 @@ export function usePostMessage(topicId: string) {
 export function useSendMessage(topicId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { body: string; requiresReply: boolean; staged: StagedAttachment[] }) => {
-      const msg = await postMessage({ topicId, body: input.body, requiresReply: input.requiresReply });
+    mutationFn: async (input: { body: string; requiresReply: boolean; staged: StagedAttachment[]; replyToId?: string | null }) => {
+      const msg = await postMessage({ topicId, body: input.body, requiresReply: input.requiresReply, replyToId: input.replyToId });
       for (const s of input.staged) {
         if (s.file) {
           await uploadAttachment(topicId, s.file, msg.id);

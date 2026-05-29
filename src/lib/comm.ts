@@ -153,6 +153,7 @@ export async function postMessage(input: {
   body: string;
   format?: 'text' | 'markdown';
   requiresReply?: boolean;
+  replyToId?: string | null;
 }): Promise<CommMessage> {
   const { data: { user } } = await supabase.auth.getUser();
   const label = await getMyLabel();
@@ -165,6 +166,7 @@ export async function postMessage(input: {
       body: input.body,
       format: input.format ?? 'text',
       requires_reply: input.requiresReply ?? false,
+      reply_to_id: input.replyToId ?? null,
     })
     .select('*')
     .single();

@@ -91,6 +91,7 @@ export type Database = {
           replied: boolean
           replied_at: string | null
           replied_by_label: string | null
+          reply_to_id: string | null
           requires_reply: boolean
           topic_id: string
         }
@@ -104,6 +105,7 @@ export type Database = {
           replied?: boolean
           replied_at?: string | null
           replied_by_label?: string | null
+          reply_to_id?: string | null
           requires_reply?: boolean
           topic_id: string
         }
@@ -117,6 +119,7 @@ export type Database = {
           replied?: boolean
           replied_at?: string | null
           replied_by_label?: string | null
+          reply_to_id?: string | null
           requires_reply?: boolean
           topic_id?: string
         }
