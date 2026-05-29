@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -524,6 +524,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                           <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
                             <Users className="h-3.5 w-3.5" /> Správa zákazníků
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/komunikace')} className="gap-2 text-xs">
+                            <MessagesSquare className="h-3.5 w-3.5" /> Komunikace swelt × zago
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                         </>
                       )}
@@ -767,6 +770,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               </button>
               <button onClick={() => { setMenuOpen(false); navigate('/admin/deals'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
                 <Flame className="h-4 w-4 text-muted-foreground" /> Správa DEAL nabídek
+              </button>
+              <button onClick={() => { setMenuOpen(false); navigate('/komunikace'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <MessagesSquare className="h-4 w-4 text-muted-foreground" /> Komunikace swelt × zago
               </button>
             </>
           )}
