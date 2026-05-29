@@ -8,6 +8,7 @@ export type CommAttachment = Tables<'comm_attachments'>;
 export type CommParticipant = Tables<'comm_participants'>;
 
 export type PartyLabel = 'swelt' | 'zago';
+export type AttachmentKind = 'file' | 'image' | 'video' | 'link' | 'contact' | 'note';
 export type TopicStatus = 'open' | 'in_progress' | 'resolved';
 export type TopicCategory =
   | 'general' | 'pohoda' | 'edi' | 'launch' | 'planning' | 'finance' | 'other';
@@ -48,6 +49,29 @@ export function formatBytes(bytes: number): string {
   const units = ['B', 'kB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0)} ${units[i]}`;
+}
+
+export function normalizeUrl(url: string): string {
+  const u = url.trim();
+  if (!u) return '';
+  return /^https?:\/\//i.test(u) ? u : `https://${u}`;
+}
+
+export function domainOf(url: string): string {
+  try { return new URL(normalizeUrl(url)).hostname.replace(/^www\./, ''); }
+  catch { return url; }
+}
+
+/** YouTube / Vimeo / Loom → embed URL (jinak null). */
+export function getEmbedUrl(url: string): string | null {
+  const u = normalizeUrl(url);
+  const yt = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/i);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vimeo = u.match(/vimeo\.com\/(\d+)/i);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  const loom = u.match(/loom\.com\/share\/([\w-]+)/i);
+  if (loom) return `https://www.loom.com/embed/${loom[1]}`;
+  return null;
 }
 
 /** Vrátí label aktuálně přihlášeného uživatele ('swelt' default pro adminy). */
@@ -157,6 +181,12 @@ export async function listAttachments(topicId: string): Promise<CommAttachment[]
   return data ?? [];
 }
 
+function kindFromMime(mime: string): AttachmentKind {
+  if (mime.startsWith('image/')) return 'image';
+  if (mime.startsWith('video/')) return 'video';
+  return 'file';
+}
+
 export async function uploadAttachment(topicId: string, file: File): Promise<CommAttachment> {
   const { data: { user } } = await supabase.auth.getUser();
   const label = await getMyLabel();
@@ -174,10 +204,40 @@ export async function uploadAttachment(topicId: string, file: File): Promise<Com
     .from('comm_attachments')
     .insert({
       topic_id: topicId,
+      kind: kindFromMime(file.type || ''),
       file_name: file.name,
       file_path: path,
+      title: file.name,
       mime_type: file.type || '',
       size_bytes: file.size,
+      uploaded_by: user?.id ?? null,
+      uploaded_label: label,
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+/** Přidá nesouborovou přílohu: odkaz, video-odkaz, kontakt nebo poznámku. */
+export async function addMetaAttachment(input: {
+  topicId: string;
+  kind: 'link' | 'video' | 'contact' | 'note';
+  title?: string;
+  url?: string;
+  note?: string;
+}): Promise<CommAttachment> {
+  const { data: { user } } = await supabase.auth.getUser();
+  const label = await getMyLabel();
+  const { data, error } = await supabase
+    .from('comm_attachments')
+    .insert({
+      topic_id: input.topicId,
+      kind: input.kind,
+      title: input.title ?? null,
+      url: input.url ?? null,
+      note: input.note ?? null,
+      file_name: input.title ?? null,
       uploaded_by: user?.id ?? null,
       uploaded_label: label,
     })

@@ -121,39 +121,51 @@ export type Database = {
       comm_attachments: {
         Row: {
           created_at: string
-          file_name: string
-          file_path: string
+          file_name: string | null
+          file_path: string | null
           id: string
+          kind: string
           message_id: string | null
           mime_type: string
+          note: string | null
           size_bytes: number
+          title: string | null
           topic_id: string
           uploaded_by: string | null
           uploaded_label: string
+          url: string | null
         }
         Insert: {
           created_at?: string
-          file_name: string
-          file_path: string
+          file_name?: string | null
+          file_path?: string | null
           id?: string
+          kind?: string
           message_id?: string | null
           mime_type?: string
+          note?: string | null
           size_bytes?: number
+          title?: string | null
           topic_id: string
           uploaded_by?: string | null
           uploaded_label?: string
+          url?: string | null
         }
         Update: {
           created_at?: string
-          file_name?: string
-          file_path?: string
+          file_name?: string | null
+          file_path?: string | null
           id?: string
+          kind?: string
           message_id?: string | null
           mime_type?: string
+          note?: string | null
           size_bytes?: number
+          title?: string | null
           topic_id?: string
           uploaded_by?: string | null
           uploaded_label?: string
+          url?: string | null
         }
         Relationships: [
           {

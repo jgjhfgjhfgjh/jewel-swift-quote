@@ -5,6 +5,7 @@ import {
   listTopics, getTopic, createTopic, updateTopicStatus,
   listMessages, postMessage, listAttachments, uploadAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
+  addMetaAttachment,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
   type CommMessage,
 } from '@/lib/comm';
@@ -83,6 +84,15 @@ export function useUploadAttachment(topicId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (file: File) => uploadAttachment(topicId, file),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] }),
+  });
+}
+
+export function useAddMetaAttachment(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { kind: 'link' | 'video' | 'contact' | 'note'; title?: string; url?: string; note?: string }) =>
+      addMetaAttachment({ topicId, ...input }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] }),
   });
 }
