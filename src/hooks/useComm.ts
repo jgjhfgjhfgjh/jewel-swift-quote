@@ -5,7 +5,7 @@ import {
   listTopics, getTopic, createTopic, updateTopicStatus,
   listMessages, postMessage, listAttachments, uploadAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
-  addMetaAttachment, postMessage,
+  addMetaAttachment, postMessage, resolveQuestion,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
   type CommMessage, type AttachmentKind,
 } from '@/lib/comm';
@@ -117,6 +117,18 @@ export function useUploadAttachment(topicId: string) {
   return useMutation({
     mutationFn: (file: File) => uploadAttachment(topicId, file),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] }),
+  });
+}
+
+export function useResolveQuestion(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ messageId, resolved }: { messageId: string; resolved: boolean }) => resolveQuestion(messageId, resolved),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['comm', 'messages', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'topics'] });
+    },
   });
 }
 

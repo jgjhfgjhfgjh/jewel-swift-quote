@@ -530,6 +530,13 @@ export type Database = {
           created_at: string
         }[]
       }
+      comm_resolve_question: {
+        Args: {
+          p_message: string
+          p_resolved?: boolean
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "customer" | "lead" | "b2b_approved"

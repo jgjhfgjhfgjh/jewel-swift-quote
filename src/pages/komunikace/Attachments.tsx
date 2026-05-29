@@ -145,14 +145,57 @@ export function AttachmentItem({ a, compact = false }: { a: CommAttachment; comp
   );
 }
 
+const KIND_FILTERS: { key: string; label: string }[] = [
+  { key: 'all', label: 'Vše' },
+  { key: 'file', label: 'Soubory' },
+  { key: 'image', label: 'Obrázky' },
+  { key: 'video', label: 'Videa' },
+  { key: 'link', label: 'Odkazy' },
+  { key: 'contact', label: 'Kontakty' },
+  { key: 'note', label: 'Poznámky' },
+];
+
 export function AttachmentList({ topicId }: { topicId: string }) {
   const { data: attachments = [] } = useAttachments(topicId);
+  const [filter, setFilter] = useState<string>('all');
+
+  // počty pro každý typ (skryjeme prázdné filtry kromě „Vše")
+  const counts = attachments.reduce<Record<string, number>>((acc, a) => {
+    acc[a.kind] = (acc[a.kind] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  const visible = filter === 'all' ? attachments : attachments.filter(a => a.kind === filter);
+
   return (
     <div className="space-y-2">
+      {attachments.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {KIND_FILTERS.filter(f => f.key === 'all' || (counts[f.key] ?? 0) > 0).map(f => {
+            const n = f.key === 'all' ? attachments.length : (counts[f.key] ?? 0);
+            const active = filter === f.key;
+            return (
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                className={`rounded-full border px-2 py-0.5 text-[11px] transition ${
+                  active ? 'border-primary bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'
+                }`}
+              >
+                {f.label} <span className="opacity-60">{n}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {attachments.length === 0 && (
         <p className="text-xs text-muted-foreground">Zatím nic. Přílohy připojíš ke zprávě v okně chatu níže.</p>
       )}
-      {attachments.map(a => <AttachmentItem key={a.id} a={a} />)}
+      {attachments.length > 0 && visible.length === 0 && (
+        <p className="text-xs text-muted-foreground">V tomto filtru nic není.</p>
+      )}
+      {visible.map(a => <AttachmentItem key={a.id} a={a} />)}
     </div>
   );
 }

@@ -291,3 +291,9 @@ export async function removeParticipant(userId: string): Promise<void> {
   const { error } = await supabase.rpc('comm_remove_participant', { p_user_id: userId });
   if (error) throw error;
 }
+
+// ── Otázky ─────────────────────────────────────────────────
+export async function resolveQuestion(messageId: string, resolved = true): Promise<void> {
+  const { error } = await supabase.rpc('comm_resolve_question', { p_message: messageId, p_resolved: resolved });
+  if (error) throw error;
+}

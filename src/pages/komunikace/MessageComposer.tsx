@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
   Send, FileText, Image as ImageIcon, Video, Play, Link2, User, StickyNote,
-  X, Loader2, Bell,
+  X, Loader2, Bell, Paperclip,
 } from 'lucide-react';
 import { useSendMessage, type StagedAttachment } from '@/hooks/useComm';
 import { domainOf } from '@/lib/comm';
@@ -25,9 +25,9 @@ export function MessageComposer({ topicId }: { topicId: string }) {
   const [body, setBody] = useState('');
   const [requiresReply, setRequiresReply] = useState(false);
   const [staged, setStaged] = useState<StagedAttachment[]>([]);
+  const [showTypes, setShowTypes] = useState(false);
   const [mode, setMode] = useState<Mode>(null);
 
-  // pole inline formulářů
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
@@ -69,7 +69,7 @@ export function MessageComposer({ topicId }: { topicId: string }) {
     if (!body.trim() && staged.length === 0) return;
     try {
       await send.mutateAsync({ body: body.trim(), requiresReply, staged });
-      setBody(''); setRequiresReply(false); setStaged([]); resetForm();
+      setBody(''); setRequiresReply(false); setStaged([]); setShowTypes(false); resetForm();
     } catch (e: any) {
       toast.error(e?.message ?? 'Zprávu se nepodařilo odeslat');
     }
@@ -80,7 +80,7 @@ export function MessageComposer({ topicId }: { topicId: string }) {
   const busy = send.isPending;
 
   return (
-    <div className="sticky bottom-0 rounded-xl border bg-background p-3 shadow-sm">
+    <div className="rounded-xl border bg-background p-3">
       {/* připravené přílohy */}
       {staged.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1.5">
@@ -104,20 +104,22 @@ export function MessageComposer({ topicId }: { topicId: string }) {
         onChange={e => setBody(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submit(); }}
         placeholder="Napiš zprávu… (Ctrl/⌘ + Enter odešle)"
-        rows={3}
-        className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30"
+        rows={2}
+        className="w-full resize-y rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30"
       />
 
-      {/* typy příloh */}
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        <button className={typeBtn} disabled={busy} onClick={() => fileAny.current?.click()}><FileText className="h-3.5 w-3.5" /> Soubor</button>
-        <button className={typeBtn} disabled={busy} onClick={() => fileImg.current?.click()}><ImageIcon className="h-3.5 w-3.5" /> Obrázek</button>
-        <button className={typeBtn} disabled={busy} onClick={() => fileVid.current?.click()}><Video className="h-3.5 w-3.5" /> Video</button>
-        <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'video' ? null : 'video')}><Play className="h-3.5 w-3.5" /> Video odkaz</button>
-        <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'link' ? null : 'link')}><Link2 className="h-3.5 w-3.5" /> Odkaz / web</button>
-        <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'contact' ? null : 'contact')}><User className="h-3.5 w-3.5" /> Kontakt</button>
-        <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'note' ? null : 'note')}><StickyNote className="h-3.5 w-3.5" /> Poznámka</button>
-      </div>
+      {/* typy příloh — jen po rozbalení, aby composer nepřekážel */}
+      {showTypes && (
+        <div className="mt-2 flex flex-wrap gap-1.5 rounded-md border bg-muted/20 p-2">
+          <button className={typeBtn} disabled={busy} onClick={() => fileAny.current?.click()}><FileText className="h-3.5 w-3.5" /> Soubor</button>
+          <button className={typeBtn} disabled={busy} onClick={() => fileImg.current?.click()}><ImageIcon className="h-3.5 w-3.5" /> Obrázek</button>
+          <button className={typeBtn} disabled={busy} onClick={() => fileVid.current?.click()}><Video className="h-3.5 w-3.5" /> Video</button>
+          <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'video' ? null : 'video')}><Play className="h-3.5 w-3.5" /> Video odkaz</button>
+          <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'link' ? null : 'link')}><Link2 className="h-3.5 w-3.5" /> Odkaz / web</button>
+          <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'contact' ? null : 'contact')}><User className="h-3.5 w-3.5" /> Kontakt</button>
+          <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'note' ? null : 'note')}><StickyNote className="h-3.5 w-3.5" /> Poznámka</button>
+        </div>
+      )}
 
       <input ref={fileAny} type="file" className="hidden" onChange={onFile('file')} />
       <input ref={fileImg} type="file" accept="image/*" className="hidden" onChange={onFile('image')} />
@@ -161,8 +163,18 @@ export function MessageComposer({ topicId }: { topicId: string }) {
         </div>
       )}
 
-      {/* spodní lišta: vyžaduje odpověď + odeslat */}
-      <div className="mt-2 flex items-center justify-between gap-2">
+      {/* spodní lišta */}
+      <div className="mt-2 flex items-center gap-2">
+        <button
+          onClick={() => setShowTypes(v => !v)}
+          className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs transition ${
+            showTypes ? 'border-primary bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'
+          }`}
+          title="Připojit přílohu"
+        >
+          <Paperclip className="h-3.5 w-3.5" /> Příloha
+          {staged.length > 0 && <span className="rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">{staged.length}</span>}
+        </button>
         <button
           onClick={() => setRequiresReply(v => !v)}
           className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs transition ${
@@ -175,7 +187,7 @@ export function MessageComposer({ topicId }: { topicId: string }) {
         <button
           onClick={submit}
           disabled={busy || (!body.trim() && staged.length === 0)}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+          className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Odeslat
         </button>
