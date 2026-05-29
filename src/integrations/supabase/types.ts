@@ -14,6 +14,157 @@ export type Database = {
   }
   public: {
     Tables: {
+      comm_participants: {
+        Row: {
+          created_at: string
+          display_name: string
+          label: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          label: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          label?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      comm_topics: {
+        Row: {
+          awaiting_label: string | null
+          category: string
+          created_at: string
+          created_by: string | null
+          created_label: string
+          description: string
+          id: string
+          last_activity_at: string
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          awaiting_label?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          created_label?: string
+          description?: string
+          id?: string
+          last_activity_at?: string
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          awaiting_label?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          created_label?: string
+          description?: string
+          id?: string
+          last_activity_at?: string
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      comm_messages: {
+        Row: {
+          author_label: string
+          author_user_id: string | null
+          body: string
+          created_at: string
+          format: string
+          id: string
+          topic_id: string
+        }
+        Insert: {
+          author_label?: string
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          format?: string
+          id?: string
+          topic_id: string
+        }
+        Update: {
+          author_label?: string
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          format?: string
+          id?: string
+          topic_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comm_messages_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "comm_topics"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      comm_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          id: string
+          message_id: string | null
+          mime_type: string
+          size_bytes: number
+          topic_id: string
+          uploaded_by: string | null
+          uploaded_label: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          id?: string
+          message_id?: string | null
+          mime_type?: string
+          size_bytes?: number
+          topic_id: string
+          uploaded_by?: string | null
+          uploaded_label?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          message_id?: string | null
+          mime_type?: string
+          size_bytes?: number
+          topic_id?: string
+          uploaded_by?: string | null
+          uploaded_label?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comm_attachments_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "comm_topics"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       customer_discounts: {
         Row: {
           created_at: string
@@ -322,6 +473,38 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      comm_is_participant: {
+        Args: Record<string, never>
+        Returns: boolean
+      }
+      comm_my_label: {
+        Args: Record<string, never>
+        Returns: string
+      }
+      comm_add_participant_by_email: {
+        Args: {
+          p_email: string
+          p_label: string
+          p_display_name?: string
+        }
+        Returns: string
+      }
+      comm_remove_participant: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: undefined
+      }
+      comm_list_participants: {
+        Args: Record<string, never>
+        Returns: {
+          user_id: string
+          label: string
+          display_name: string
+          email: string
+          created_at: string
+        }[]
       }
     }
     Enums: {

@@ -38,6 +38,10 @@ const BrandDetail = lazy(() => import("./pages/BrandDetail.tsx"));
 const Deals = lazy(() => import("./pages/Deals.tsx"));
 const DealDetail = lazy(() => import("./pages/DealDetail.tsx"));
 const AdminDeals = lazy(() => import("./pages/admin/AdminDeals.tsx"));
+const ComLayout = lazy(() => import("./pages/komunikace/ComLayout.tsx"));
+const ComOverview = lazy(() => import("./pages/komunikace/ComOverview.tsx"));
+const ComTopicDetail = lazy(() => import("./pages/komunikace/ComTopicDetail.tsx"));
+const ComParticipants = lazy(() => import("./pages/komunikace/ComParticipants.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -91,6 +95,12 @@ const App = () => (
               <Route path="/deals" element={<Deals />} />
               <Route path="/deals/:slug" element={<DealDetail />} />
               <Route path="/admin/deals" element={<AdminDeals />} />
+              {/* Komunikace swelt × zago — interní kolaborační workspace */}
+              <Route path="/komunikace" element={<ComLayout />}>
+                <Route index element={<ComOverview />} />
+                <Route path="t/:id" element={<ComTopicDetail />} />
+                <Route path="ucastnici" element={<ComParticipants />} />
+              </Route>
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
