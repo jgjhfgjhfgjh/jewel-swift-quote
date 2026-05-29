@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { cs } from 'date-fns/locale';
 import {
   FileText, User, StickyNote,
-  Download, ExternalLink, Loader2, Play, Mail, Phone,
+  Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X,
 } from 'lucide-react';
 import { useAttachments } from '@/hooks/useComm';
 import {
@@ -155,9 +155,22 @@ const KIND_FILTERS: { key: string; label: string }[] = [
   { key: 'note', label: 'Poznámky' },
 ];
 
+function displayName(a: CommAttachment): string {
+  if (a.title) return a.title;
+  if (a.file_name) return a.file_name;
+  if (a.url) return domainOf(a.url);
+  if (a.kind === 'note') return 'Poznámka';
+  return a.kind;
+}
+
+function searchText(a: CommAttachment): string {
+  return [a.title, a.file_name, a.url, a.note].filter(Boolean).join(' ').toLowerCase();
+}
+
 export function AttachmentList({ topicId }: { topicId: string }) {
   const { data: attachments = [] } = useAttachments(topicId);
   const [filter, setFilter] = useState<string>('all');
+  const [query, setQuery] = useState('');
 
   // počty pro každý typ (skryjeme prázdné filtry kromě „Vše")
   const counts = attachments.reduce<Record<string, number>>((acc, a) => {
@@ -165,10 +178,46 @@ export function AttachmentList({ topicId }: { topicId: string }) {
     return acc;
   }, {});
 
-  const visible = filter === 'all' ? attachments : attachments.filter(a => a.kind === filter);
+  const q = query.trim().toLowerCase();
+  const visible = attachments
+    .filter(a => filter === 'all' || a.kind === filter)
+    .filter(a => !q || searchText(a).includes(q));
+
+  // našeptávač — unikátní názvy z aktuálního typového filtru
+  const suggestions = Array.from(new Set(
+    attachments
+      .filter(a => filter === 'all' || a.kind === filter)
+      .map(displayName)
+      .filter(Boolean)
+  )).slice(0, 50);
 
   return (
     <div className="space-y-2">
+      {attachments.length > 0 && (
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            list="comm-att-suggestions"
+            placeholder="Hledat přílohu podle názvu…"
+            className="w-full rounded-md border bg-background py-1.5 pl-8 pr-7 text-xs outline-none focus:ring-2 focus:ring-primary/30"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Vymazat hledání"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+          <datalist id="comm-att-suggestions">
+            {suggestions.map(s => <option key={s} value={s} />)}
+          </datalist>
+        </div>
+      )}
+
       {attachments.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {KIND_FILTERS.filter(f => f.key === 'all' || (counts[f.key] ?? 0) > 0).map(f => {
@@ -193,7 +242,7 @@ export function AttachmentList({ topicId }: { topicId: string }) {
         <p className="text-xs text-muted-foreground">Zatím nic. Přílohy připojíš ke zprávě v okně chatu níže.</p>
       )}
       {attachments.length > 0 && visible.length === 0 && (
-        <p className="text-xs text-muted-foreground">V tomto filtru nic není.</p>
+        <p className="text-xs text-muted-foreground">Nic neodpovídá filtru ani hledání.</p>
       )}
       {visible.map(a => <AttachmentItem key={a.id} a={a} />)}
     </div>
