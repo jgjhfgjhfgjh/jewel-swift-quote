@@ -9,7 +9,7 @@ export type CommParticipant = Tables<'comm_participants'>;
 export type CommTask = Tables<'comm_tasks'>;
 
 export type PartyLabel = 'swelt' | 'zago';
-export type AttachmentKind = 'file' | 'image' | 'video' | 'link' | 'contact' | 'note';
+export type AttachmentKind = 'file' | 'image' | 'video' | 'audio' | 'link' | 'contact' | 'note';
 export type TopicStatus = 'open' | 'in_progress' | 'resolved';
 export type TopicCategory =
   | 'general' | 'pohoda' | 'edi' | 'launch' | 'planning' | 'finance' | 'other';
@@ -189,6 +189,7 @@ export async function listAttachments(topicId: string): Promise<CommAttachment[]
 function kindFromMime(mime: string): AttachmentKind {
   if (mime.startsWith('image/')) return 'image';
   if (mime.startsWith('video/')) return 'video';
+  if (mime.startsWith('audio/')) return 'audio';
   return 'file';
 }
 

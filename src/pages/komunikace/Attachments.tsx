@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { cs } from 'date-fns/locale';
 import {
   FileText, User, StickyNote,
-  Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X,
+  Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X, Mic,
 } from 'lucide-react';
 import { useAttachments } from '@/hooks/useComm';
 import { useLightbox } from './Lightbox';
@@ -33,7 +33,7 @@ function useSignedUrl(path: string | null | undefined) {
 
 export function AttachmentItem({ a, compact = false }: { a: CommAttachment; compact?: boolean }) {
   const { open: openLightbox } = useLightbox();
-  const signed = useSignedUrl(a.kind === 'image' || a.kind === 'video' ? a.file_path : null);
+  const signed = useSignedUrl(a.kind === 'image' || a.kind === 'video' || a.kind === 'audio' ? a.file_path : null);
   const by = PARTY_LABELS[(a.uploaded_label as 'swelt' | 'zago')] ?? a.uploaded_label;
   const meta = `${by} · ${whenOf(a)}`;
   const card = 'rounded-md border p-2 bg-background';
@@ -67,6 +67,20 @@ export function AttachmentItem({ a, compact = false }: { a: CommAttachment; comp
           : <div className="mb-1 flex h-24 items-center justify-center rounded bg-muted"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>}
         <div className="truncate text-xs font-medium">{a.title || a.file_name}</div>
         <div className="text-[10px] text-muted-foreground">{formatBytes(a.size_bytes)} · {meta}</div>
+      </div>
+    );
+  }
+
+  // Hlasová zpráva
+  if (a.kind === 'audio') {
+    return (
+      <div className={card}>
+        <div className="mb-1 flex items-center gap-1.5 text-[10px] text-muted-foreground">
+          <Mic className="h-3 w-3" /> Hlasová zpráva · {meta}
+        </div>
+        {signed
+          ? <audio src={signed} controls className="w-full" style={{ height: 36 }} />
+          : <div className="flex h-9 items-center justify-center rounded bg-muted"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>}
       </div>
     );
   }
@@ -168,6 +182,7 @@ const KIND_FILTERS: { key: string; label: string }[] = [
   { key: 'file', label: 'Soubory' },
   { key: 'image', label: 'Obrázky' },
   { key: 'video', label: 'Videa' },
+  { key: 'audio', label: 'Hlas' },
   { key: 'link', label: 'Odkazy' },
   { key: 'contact', label: 'Kontakty' },
   { key: 'note', label: 'Poznámky' },

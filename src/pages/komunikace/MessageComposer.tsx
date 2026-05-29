@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
   Send, FileText, Image as ImageIcon, Video, Play, Link2, User, StickyNote,
-  X, Loader2, Bell, Paperclip, CornerUpLeft,
+  X, Loader2, Bell, Paperclip, CornerUpLeft, Mic,
 } from 'lucide-react';
 import { useSendMessage, type StagedAttachment } from '@/hooks/useComm';
 import { domainOf, PARTY_LABELS, type PartyLabel } from '@/lib/comm';
+import { Recorder } from './Recorder';
 
 export interface ReplyTarget {
   id: string;
@@ -16,7 +17,7 @@ export interface ReplyTarget {
 type Mode = null | 'link' | 'video' | 'contact' | 'note';
 
 const KIND_ICON: Record<string, React.ElementType> = {
-  file: FileText, image: ImageIcon, video: Video, link: Link2, contact: User, note: StickyNote,
+  file: FileText, image: ImageIcon, video: Video, audio: Mic, link: Link2, contact: User, note: StickyNote,
 };
 
 function stagedLabel(s: StagedAttachment): string {
@@ -152,6 +153,7 @@ export function MessageComposer({ topicId, replyTo, onClearReply }: {
           <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'link' ? null : 'link')}><Link2 className="h-3.5 w-3.5" /> Odkaz / web</button>
           <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'contact' ? null : 'contact')}><User className="h-3.5 w-3.5" /> Kontakt</button>
           <button className={typeBtn} disabled={busy} onClick={() => setMode(m => m === 'note' ? null : 'note')}><StickyNote className="h-3.5 w-3.5" /> Poznámka</button>
+          <Recorder disabled={busy} onComplete={(file, kind) => setStaged(s => [...s, { kind, file }])} />
         </div>
       )}
 
