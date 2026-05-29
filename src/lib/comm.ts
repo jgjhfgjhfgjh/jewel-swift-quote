@@ -152,6 +152,7 @@ export async function postMessage(input: {
   topicId: string;
   body: string;
   format?: 'text' | 'markdown';
+  requiresReply?: boolean;
 }): Promise<CommMessage> {
   const { data: { user } } = await supabase.auth.getUser();
   const label = await getMyLabel();
@@ -163,6 +164,7 @@ export async function postMessage(input: {
       author_label: label,
       body: input.body,
       format: input.format ?? 'text',
+      requires_reply: input.requiresReply ?? false,
     })
     .select('*')
     .single();
@@ -187,7 +189,7 @@ function kindFromMime(mime: string): AttachmentKind {
   return 'file';
 }
 
-export async function uploadAttachment(topicId: string, file: File): Promise<CommAttachment> {
+export async function uploadAttachment(topicId: string, file: File, messageId?: string): Promise<CommAttachment> {
   const { data: { user } } = await supabase.auth.getUser();
   const label = await getMyLabel();
   const safeName = file.name.replace(/[^\w.\-]+/g, '_');
@@ -204,6 +206,7 @@ export async function uploadAttachment(topicId: string, file: File): Promise<Com
     .from('comm_attachments')
     .insert({
       topic_id: topicId,
+      message_id: messageId ?? null,
       kind: kindFromMime(file.type || ''),
       file_name: file.name,
       file_path: path,
@@ -222,6 +225,7 @@ export async function uploadAttachment(topicId: string, file: File): Promise<Com
 /** Přidá nesouborovou přílohu: odkaz, video-odkaz, kontakt nebo poznámku. */
 export async function addMetaAttachment(input: {
   topicId: string;
+  messageId?: string;
   kind: 'link' | 'video' | 'contact' | 'note';
   title?: string;
   url?: string;
@@ -233,6 +237,7 @@ export async function addMetaAttachment(input: {
     .from('comm_attachments')
     .insert({
       topic_id: input.topicId,
+      message_id: input.messageId ?? null,
       kind: input.kind,
       title: input.title ?? null,
       url: input.url ?? null,

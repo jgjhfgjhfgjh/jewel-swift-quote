@@ -5,10 +5,18 @@ import {
   listTopics, getTopic, createTopic, updateTopicStatus,
   listMessages, postMessage, listAttachments, uploadAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
-  addMetaAttachment,
+  addMetaAttachment, postMessage,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
-  type CommMessage,
+  type CommMessage, type AttachmentKind,
 } from '@/lib/comm';
+
+export interface StagedAttachment {
+  kind: AttachmentKind;
+  file?: File;
+  url?: string;
+  title?: string;
+  note?: string;
+}
 
 export function useMyLabel() {
   return useQuery<PartyLabel>({
@@ -80,6 +88,30 @@ export function usePostMessage(topicId: string) {
   });
 }
 
+/** Odešle zprávu i s připravenými přílohami (jednou akcí). */
+export function useSendMessage(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { body: string; requiresReply: boolean; staged: StagedAttachment[] }) => {
+      const msg = await postMessage({ topicId, body: input.body, requiresReply: input.requiresReply });
+      for (const s of input.staged) {
+        if (s.file) {
+          await uploadAttachment(topicId, s.file, msg.id);
+        } else if (s.kind === 'link' || s.kind === 'video' || s.kind === 'contact' || s.kind === 'note') {
+          await addMetaAttachment({ topicId, messageId: msg.id, kind: s.kind, url: s.url, title: s.title, note: s.note });
+        }
+      }
+      return msg;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['comm', 'messages', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] });
+      qc.invalidateQueries({ queryKey: ['comm', 'topics'] });
+    },
+  });
+}
+
 export function useUploadAttachment(topicId: string) {
   const qc = useQueryClient();
   return useMutation({
@@ -115,6 +147,11 @@ export function useTopicRealtime(topicId: string | undefined) {
           );
           qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] });
         }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'comm_messages', filter: `topic_id=eq.${topicId}` },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'messages', topicId] })
       )
       .on(
         'postgres_changes',

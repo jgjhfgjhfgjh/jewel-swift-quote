@@ -88,6 +88,10 @@ export type Database = {
           created_at: string
           format: string
           id: string
+          replied: boolean
+          replied_at: string | null
+          replied_by_label: string | null
+          requires_reply: boolean
           topic_id: string
         }
         Insert: {
@@ -97,6 +101,10 @@ export type Database = {
           created_at?: string
           format?: string
           id?: string
+          replied?: boolean
+          replied_at?: string | null
+          replied_by_label?: string | null
+          requires_reply?: boolean
           topic_id: string
         }
         Update: {
@@ -106,6 +114,10 @@ export type Database = {
           created_at?: string
           format?: string
           id?: string
+          replied?: boolean
+          replied_at?: string | null
+          replied_by_label?: string | null
+          requires_reply?: boolean
           topic_id?: string
         }
         Relationships: [
