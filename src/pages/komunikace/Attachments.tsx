@@ -7,10 +7,15 @@ import {
   Download, ExternalLink, Loader2, Play, Mail, Phone, Search, X,
 } from 'lucide-react';
 import { useAttachments } from '@/hooks/useComm';
+import { useLightbox } from './Lightbox';
 import {
   getSignedUrl, getEmbedUrl, domainOf, normalizeUrl, formatBytes, PARTY_LABELS,
   type CommAttachment,
 } from '@/lib/comm';
+
+function isPdf(a: CommAttachment): boolean {
+  return (a.mime_type ?? '').includes('pdf') || !!a.file_name?.toLowerCase().endsWith('.pdf');
+}
 
 function whenOf(a: CommAttachment): string {
   return format(new Date(a.created_at), 'd. M. HH:mm', { locale: cs });
@@ -27,6 +32,7 @@ function useSignedUrl(path: string | null | undefined) {
 }
 
 export function AttachmentItem({ a, compact = false }: { a: CommAttachment; compact?: boolean }) {
+  const { open: openLightbox } = useLightbox();
   const signed = useSignedUrl(a.kind === 'image' || a.kind === 'video' ? a.file_path : null);
   const by = PARTY_LABELS[(a.uploaded_label as 'swelt' | 'zago')] ?? a.uploaded_label;
   const meta = `${by} · ${whenOf(a)}`;
@@ -34,16 +40,21 @@ export function AttachmentItem({ a, compact = false }: { a: CommAttachment; comp
   const maxImg = compact ? 'max-h-32' : 'max-h-40';
   const maxVid = compact ? 'max-h-36' : 'max-h-44';
 
-  // Obrázek — náhled
+  // Obrázek — náhled + lightbox
   if (a.kind === 'image') {
     return (
-      <a href={signed ?? '#'} target="_blank" rel="noopener" className={`${card} block hover:bg-muted/50`}>
+      <button
+        type="button"
+        disabled={!signed}
+        onClick={() => signed && openLightbox({ kind: 'image', url: signed, name: a.file_name ?? a.title ?? '' })}
+        className={`${card} block w-full text-left hover:bg-muted/50`}
+      >
         {signed
           ? <img src={signed} alt={a.file_name ?? ''} className={`mb-1 ${maxImg} w-full rounded object-cover`} />
           : <div className="mb-1 flex h-24 items-center justify-center rounded bg-muted"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>}
         <div className="truncate text-xs font-medium">{a.title || a.file_name}</div>
         <div className="text-[10px] text-muted-foreground">{formatBytes(a.size_bytes)} · {meta}</div>
-      </a>
+      </button>
     );
   }
 
@@ -121,13 +132,18 @@ export function AttachmentItem({ a, compact = false }: { a: CommAttachment; comp
     );
   }
 
-  // Soubor (výchozí) — stažení přes podepsanou URL
+  // Soubor (výchozí) — PDF otevře lightbox, jinak stažení
+  const pdf = isPdf(a);
   return (
     <button
       onClick={async () => {
         if (!a.file_path) return;
         const u = await getSignedUrl(a.file_path);
         if (!u) { toast.error('Soubor se nepodařilo otevřít'); return; }
+        if (pdf) {
+          openLightbox({ kind: 'pdf', url: u, name: a.file_name ?? a.title ?? 'PDF' });
+          return;
+        }
         const link = document.createElement('a');
         link.href = u; link.target = '_blank'; link.rel = 'noopener';
         link.download = a.file_name ?? 'soubor';
@@ -135,12 +151,14 @@ export function AttachmentItem({ a, compact = false }: { a: CommAttachment; comp
       }}
       className={`${card} flex w-full items-center gap-2 text-left hover:bg-muted/50`}
     >
-      <FileText className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+      <FileText className={`h-4 w-4 flex-shrink-0 ${pdf ? 'text-red-500' : 'text-muted-foreground'}`} />
       <div className="min-w-0 flex-1">
         <div className="truncate text-xs font-medium">{a.title || a.file_name}</div>
         <div className="text-[10px] text-muted-foreground">{formatBytes(a.size_bytes)} · {meta}</div>
       </div>
-      <Download className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
+      {pdf
+        ? <ExternalLink className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
+        : <Download className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />}
     </button>
   );
 }

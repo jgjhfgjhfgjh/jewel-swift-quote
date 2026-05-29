@@ -6,6 +6,7 @@ import {
   listMessages, postMessage, listAttachments, uploadAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
   addMetaAttachment, postMessage, resolveQuestion,
+  listTasks, createTask, setTaskDone, deleteTask,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
   type CommMessage, type AttachmentKind,
 } from '@/lib/comm';
@@ -141,6 +142,40 @@ export function useAddMetaAttachment(topicId: string) {
   });
 }
 
+// ── Úkoly ──────────────────────────────────────────────────
+export function useTasks(topicId: string | undefined) {
+  return useQuery({
+    queryKey: ['comm', 'tasks', topicId],
+    queryFn: () => listTasks(topicId!),
+    enabled: !!topicId,
+  });
+}
+
+export function useCreateTask(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { title: string; assigneeLabel?: PartyLabel | null; dueDate?: string | null }) =>
+      createTask({ topicId, ...input }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'tasks', topicId] }),
+  });
+}
+
+export function useSetTaskDone(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ taskId, done }: { taskId: string; done: boolean }) => setTaskDone(taskId, done),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'tasks', topicId] }),
+  });
+}
+
+export function useDeleteTask(topicId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (taskId: string) => deleteTask(taskId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'tasks', topicId] }),
+  });
+}
+
 // ── Realtime ───────────────────────────────────────────────
 /** Živé zprávy + přílohy ve vlákně tématu. */
 export function useTopicRealtime(topicId: string | undefined) {
@@ -174,6 +209,11 @@ export function useTopicRealtime(topicId: string | undefined) {
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'comm_topics', filter: `id=eq.${topicId}` },
         () => qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] })
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'comm_tasks', filter: `topic_id=eq.${topicId}` },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'tasks', topicId] })
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };

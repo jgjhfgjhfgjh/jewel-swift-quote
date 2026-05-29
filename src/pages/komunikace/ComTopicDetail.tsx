@@ -11,6 +11,8 @@ import {
 } from '@/hooks/useComm';
 import { AttachmentItem, AttachmentList } from './Attachments';
 import { MessageComposer, type ReplyTarget } from './MessageComposer';
+import { TasksPanel } from './TasksPanel';
+import { LightboxProvider } from './Lightbox';
 import {
   CATEGORY_LABELS, STATUS_LABELS, PARTY_LABELS,
   type CommAttachment, type CommMessage, type TopicStatus, type TopicCategory, type PartyLabel,
@@ -100,6 +102,7 @@ export default function ComTopicDetail() {
   const awaiting = topic.awaiting_label as PartyLabel | null;
 
   return (
+    <LightboxProvider>
     <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
       <style>{`.comm-flash{animation:commflash 1.5s ease-out;}@keyframes commflash{0%{box-shadow:0 0 0 3px rgba(245,158,11,.5);border-radius:1rem;}100%{box-shadow:0 0 0 0 rgba(245,158,11,0);}}`}</style>
 
@@ -258,6 +261,9 @@ export default function ComTopicDetail() {
 
       {/* ── Boční panel ────────────────────────────────────── */}
       <aside className="space-y-4">
+        {/* Úkoly / další kroky */}
+        <TasksPanel topicId={id!} />
+
         {/* Otevřené otázky */}
         <div className="rounded-xl border bg-background p-4">
           <h2 className="mb-2 flex items-center gap-1.5 text-sm font-semibold">
@@ -329,5 +335,6 @@ export default function ComTopicDetail() {
         </div>
       </aside>
     </div>
+    </LightboxProvider>
   );
 }

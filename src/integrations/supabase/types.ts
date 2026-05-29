@@ -35,6 +35,62 @@ export type Database = {
         }
         Relationships: []
       }
+      comm_tasks: {
+        Row: {
+          assignee_label: string | null
+          created_at: string
+          created_by: string | null
+          created_label: string
+          done: boolean
+          done_at: string | null
+          done_by_label: string | null
+          due_date: string | null
+          id: string
+          sort_order: number
+          title: string
+          topic_id: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_label?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_label?: string
+          done?: boolean
+          done_at?: string | null
+          done_by_label?: string | null
+          due_date?: string | null
+          id?: string
+          sort_order?: number
+          title: string
+          topic_id: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_label?: string | null
+          created_at?: string
+          created_by?: string | null
+          created_label?: string
+          done?: boolean
+          done_at?: string | null
+          done_by_label?: string | null
+          due_date?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+          topic_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comm_tasks_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "comm_topics"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       comm_topics: {
         Row: {
           awaiting_label: string | null

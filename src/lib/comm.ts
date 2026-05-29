@@ -6,6 +6,7 @@ export type CommTopic = Tables<'comm_topics'>;
 export type CommMessage = Tables<'comm_messages'>;
 export type CommAttachment = Tables<'comm_attachments'>;
 export type CommParticipant = Tables<'comm_participants'>;
+export type CommTask = Tables<'comm_tasks'>;
 
 export type PartyLabel = 'swelt' | 'zago';
 export type AttachmentKind = 'file' | 'image' | 'video' | 'link' | 'contact' | 'note';
@@ -259,6 +260,61 @@ export async function getSignedUrl(path: string, expiresInSec = 3600): Promise<s
   const { data, error } = await supabase.storage.from(STORAGE_BUCKET).createSignedUrl(path, expiresInSec);
   if (error) return null;
   return data?.signedUrl ?? null;
+}
+
+// ── Úkoly / další kroky ────────────────────────────────────
+export async function listTasks(topicId: string): Promise<CommTask[]> {
+  const { data, error } = await supabase
+    .from('comm_tasks')
+    .select('*')
+    .eq('topic_id', topicId)
+    .order('done', { ascending: true })
+    .order('due_date', { ascending: true, nullsFirst: false })
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createTask(input: {
+  topicId: string;
+  title: string;
+  assigneeLabel?: PartyLabel | null;
+  dueDate?: string | null;
+}): Promise<CommTask> {
+  const { data: { user } } = await supabase.auth.getUser();
+  const label = await getMyLabel();
+  const { data, error } = await supabase
+    .from('comm_tasks')
+    .insert({
+      topic_id: input.topicId,
+      title: input.title,
+      assignee_label: input.assigneeLabel ?? null,
+      due_date: input.dueDate ?? null,
+      created_by: user?.id ?? null,
+      created_label: label,
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function setTaskDone(taskId: string, done: boolean): Promise<void> {
+  const label = done ? await getMyLabel() : null;
+  const { error } = await supabase
+    .from('comm_tasks')
+    .update({
+      done,
+      done_at: done ? new Date().toISOString() : null,
+      done_by_label: label,
+    })
+    .eq('id', taskId);
+  if (error) throw error;
+}
+
+export async function deleteTask(taskId: string): Promise<void> {
+  const { error } = await supabase.from('comm_tasks').delete().eq('id', taskId);
+  if (error) throw error;
 }
 
 // ── Účastníci ──────────────────────────────────────────────
