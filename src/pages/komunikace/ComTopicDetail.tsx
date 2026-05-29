@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { cs } from 'date-fns/locale';
@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import {
   useTopic, useMessages, useAttachments, usePostMessage,
-  useUploadAttachment, useUpdateTopicStatus, useMyLabel,
+  useUploadAttachment, useUpdateTopicStatus, useMyLabel, useTopicRealtime,
 } from '@/hooks/useComm';
 import {
   CATEGORY_LABELS, STATUS_LABELS, PARTY_LABELS, formatBytes, getSignedUrl,
@@ -18,6 +18,7 @@ import {
 export default function ComTopicDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  useTopicRealtime(id);
   const { data: myLabel } = useMyLabel();
   const { data: topic, isLoading } = useTopic(id);
   const { data: messages = [] } = useMessages(id);
@@ -28,6 +29,12 @@ export default function ComTopicDetail() {
 
   const [draft, setDraft] = useState('');
   const fileInput = useRef<HTMLInputElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll na nejnovější zprávu (i při živém příchodu).
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages.length]);
 
   async function send() {
     if (!draft.trim()) return;
@@ -128,6 +135,7 @@ export default function ComTopicDetail() {
               </div>
             );
           })}
+          <div ref={bottomRef} />
         </div>
 
         {/* Composer */}

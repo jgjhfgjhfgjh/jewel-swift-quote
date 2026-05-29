@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import {
   listTopics, getTopic, createTopic, updateTopicStatus,
   listMessages, postMessage, listAttachments, uploadAttachment,
   getMyLabel, listParticipants, addParticipantByEmail, removeParticipant,
   type TopicFilter, type TopicStatus, type TopicCategory, type PartyLabel,
+  type CommMessage,
 } from '@/lib/comm';
 
 export function useMyLabel() {
@@ -82,6 +85,61 @@ export function useUploadAttachment(topicId: string) {
     mutationFn: (file: File) => uploadAttachment(topicId, file),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] }),
   });
+}
+
+// ── Realtime ───────────────────────────────────────────────
+/** Živé zprávy + přílohy ve vlákně tématu. */
+export function useTopicRealtime(topicId: string | undefined) {
+  const qc = useQueryClient();
+  useEffect(() => {
+    if (!topicId) return;
+    const channel = supabase
+      .channel(`comm-topic-${topicId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'comm_messages', filter: `topic_id=eq.${topicId}` },
+        (payload) => {
+          const m = payload.new as CommMessage;
+          qc.setQueryData<CommMessage[]>(['comm', 'messages', topicId], (old = []) =>
+            old.some((x) => x.id === m.id) ? old : [...old, m]
+          );
+          qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'comm_attachments', filter: `topic_id=eq.${topicId}` },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'attachments', topicId] })
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'comm_topics', filter: `id=eq.${topicId}` },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'topic', topicId] })
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [topicId, qc]);
+}
+
+/** Živý přehled — překreslí seznam témat při jakékoliv změně. */
+export function useTopicsRealtime() {
+  const qc = useQueryClient();
+  useEffect(() => {
+    const channel = supabase
+      .channel('comm-topics-overview')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'comm_topics' },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'topics'] })
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'comm_messages' },
+        () => qc.invalidateQueries({ queryKey: ['comm', 'topics'] })
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
 }
 
 export function useParticipants() {

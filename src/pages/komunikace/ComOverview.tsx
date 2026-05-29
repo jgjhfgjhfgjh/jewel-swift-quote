@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import {
   Plus, Search, MessageCircle, Clock, CheckCircle2, Inbox, ChevronRight, X,
 } from 'lucide-react';
-import { useTopics, useCreateTopic, useMyLabel } from '@/hooks/useComm';
+import { useTopics, useCreateTopic, useMyLabel, useTopicsRealtime } from '@/hooks/useComm';
 import {
   CATEGORY_LABELS, STATUS_LABELS, PARTY_LABELS,
   type TopicCategory, type TopicStatus,
@@ -34,6 +34,7 @@ function Kpi({ icon: Icon, label, value, accent }: {
 
 export default function ComOverview() {
   const navigate = useNavigate();
+  useTopicsRealtime();
   const { data: myLabel } = useMyLabel();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<TopicStatus | 'all'>('all');
