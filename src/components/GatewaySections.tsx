@@ -20,6 +20,10 @@ import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 
+/* Full-bleed hero background — Citizen watch dial (swap URL for a specific shot) */
+const CITIZEN_DIAL_IMAGE =
+  'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
+
 
 /* ── Reveal on scroll ── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -657,115 +661,141 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          {/* 1) Big swelt. logo — at the top */}
+      <section className="relative isolate overflow-hidden border-b border-border">
+        {/* ── Full-bleed Citizen watch-dial background — gives the page depth ── */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src={CITIZEN_DIAL_IMAGE}
+            alt=""
+            aria-hidden
+            className="h-full w-full object-cover object-center scale-105"
+            loading="eager"
+            draggable={false}
+          />
+          {/* Darken + vignette so the frosted-glass panels pop */}
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-900/55 to-zinc-950/80" />
+        </div>
+
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24">
+
+          {/* ── Liquid-glass hero panel ── */}
           <Reveal>
-            <div className="relative inline-flex items-baseline justify-center mx-auto">
-              <h1
-                className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
-                style={{ letterSpacing: '-0.05em' }}
-              >
-                swelt.
-              </h1>
-              <span className="relative ml-1 sm:ml-2 inline-block">
-                {/* Width placeholder = PARTNER (centerpiece reference) */}
-                <span aria-hidden className="invisible font-sans font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
-                <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl">
-                  <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
+            <div
+              className="relative rounded-3xl border border-white/60 px-6 py-10 sm:px-12 sm:py-14 text-center"
+              style={{
+                backdropFilter: 'blur(18px) saturate(1.7)',
+                WebkitBackdropFilter: 'blur(18px) saturate(1.7)',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.60) 0%, rgba(255,255,255,0.38) 100%)',
+                boxShadow: '0 24px 60px -12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.7)',
+              }}
+            >
+              {/* 1) Big swelt. logo */}
+              <div className="relative inline-flex items-baseline justify-center mx-auto">
+                <h1
+                  className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
+                  style={{ letterSpacing: '-0.05em' }}
+                >
+                  swelt.
+                </h1>
+                <span className="relative ml-1 sm:ml-2 inline-block">
+                  {/* Width placeholder = PARTNER (centerpiece reference) */}
+                  <span aria-hidden className="invisible font-sans font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
+                  <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">
+                    <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
+                  </span>
                 </span>
-              </span>
+              </div>
+
+              {/* 2) Subtitle */}
+              <h1 className="font-sans mt-8 sm:mt-10 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+                Přístup k 5 000+ produktům za velkoobchodní ceny
+              </h1>
+
+              {/* 3) CTAs */}
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                <button
+                  onClick={() => openAuth('b2b')}
+                  className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
+                >
+                  B2B registrace
+                </button>
+                <button
+                  onClick={() => openAuth('register')}
+                  className="px-8 py-3 rounded-md border border-white/70 bg-white/70 text-foreground font-semibold text-sm hover:bg-white transition min-w-[200px]"
+                >
+                  Prohlédnout katalog
+                </button>
+              </div>
+
+              {/* 4) Bullets */}
+              <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
+                <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Registrace zdarma</li>
+                <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Schválení do 24 hodin</li>
+                <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Bez závazků</li>
+                <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Bez kreditní karty</li>
+              </ul>
             </div>
           </Reveal>
+
+          {/* ── Brand pills — second frosted-glass strip ── */}
+          <Reveal delay={140}>
+            <div
+              className="mt-5 rounded-2xl border border-white/50 px-3 py-4 sm:px-6"
+              style={{
+                backdropFilter: 'blur(14px) saturate(1.5)',
+                WebkitBackdropFilter: 'blur(14px) saturate(1.5)',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.48) 100%)',
+                boxShadow: '0 16px 40px -16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6)',
+              }}
+            >
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {(() => {
+                  const PILL_BRANDS = [
+                    'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
+                    'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
+                    'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
+                    'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Moschino',
+                    'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila',
+                    'Sector', 'Breil', 'Viceroy', 'Alviero Martini',
+                  ];
+                  const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
+                  return (
+                    <>
+                      {PILL_BRANDS.map((brandName) => {
+                        const brand = getBrandByName(brandName);
+                        if (!brand) return null;
+                        return (
+                          <button
+                            key={brand.name}
+                            onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                            aria-label={brand.name}
+                            className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
+                          >
+                            <BrandLogo
+                              name={brand.name}
+                              domain={brand.domain}
+                              width={320}
+                              height={128}
+                              className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                              fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
+                            />
+                          </button>
+                        );
+                      })}
+                      <button
+                        onClick={() => navigate('/brands')}
+                        className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
+                      >
+                        +{remaining} dalších →
+                      </button>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          </Reveal>
+
         </div>
-
-        {/* 3) Brand pills — full-width row, more brands fit */}
-        <Reveal delay={140}>
-          <div className="mt-10 sm:mt-12 w-full px-4 sm:px-6">
-            <div className="flex flex-wrap items-center justify-center gap-2 mx-auto">
-              {(() => {
-                const PILL_BRANDS = [
-                  'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
-                  'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
-                  'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
-                  'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Moschino',
-                  'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila',
-                  'Sector', 'Breil', 'Viceroy', 'Alviero Martini',
-                ];
-                const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
-                return (
-                  <>
-                    {PILL_BRANDS.map((brandName) => {
-                      const brand = getBrandByName(brandName);
-                      if (!brand) return null;
-                      return (
-                        <button
-                          key={brand.name}
-                          onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
-                          aria-label={brand.name}
-                          className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
-                        >
-                          <BrandLogo
-                            name={brand.name}
-                            domain={brand.domain}
-                            width={320}
-                            height={128}
-                            className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
-                            fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
-                          />
-                        </button>
-                      );
-                    })}
-                    <button
-                      onClick={() => navigate('/brands')}
-                      className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
-                    >
-                      +{remaining} dalších →
-                    </button>
-                  </>
-                );
-              })()}
-            </div>
-          </div>
-        </Reveal>
-
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          {/* 2) Subtitle — now positioned above CTAs */}
-          <Reveal delay={200}>
-            <h1 className="font-sans mt-12 sm:mt-14 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
-              Přístup k 5 000+ produktům za velkoobchodní ceny
-            </h1>
-          </Reveal>
-
-          {/* 5) CTAs */}
-          <Reveal delay={240}>
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <button
-                onClick={() => openAuth('b2b')}
-                className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px]"
-              >
-                B2B registrace
-              </button>
-              <button
-                onClick={() => openAuth('register')}
-                className="px-8 py-3 rounded-md border border-zinc-300 bg-white text-foreground font-semibold text-sm hover:bg-zinc-50 transition min-w-[200px]"
-              >
-                Prohlédnout katalog
-              </button>
-            </div>
-          </Reveal>
-
-          {/* 6) Bullets */}
-          <Reveal delay={280}>
-            <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Registrace zdarma</li>
-              <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Schválení do 24 hodin</li>
-              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez závazků</li>
-              <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" strokeWidth={3} /> Bez kreditní karty</li>
-            </ul>
-          </Reveal>
-        </div>
-
       </section>
 
       {/* ══════════════════════════════════════════
