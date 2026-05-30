@@ -656,24 +656,33 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   return (
-    <div className="gateway-sections relative w-full bg-background text-foreground">
+    <div className="gateway-sections relative isolate w-full bg-white text-foreground">
+
+      {/* ══════════════════════════════════════════
+          Page-wide Citizen watch backdrop. Scoped to this component
+          (absolute inset-0) so it never overlays the hero carousel
+          above it; the inner sticky layer keeps the watch in view as
+          you scroll, so it "travels" down the whole homepage. Heavily
+          lightened so the page still reads white — the frosted sections
+          & glass panels reveal it as subtle liquid-glass depth.
+      ══════════════════════════════════════════ */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
+          <img
+            src={CITIZEN_DIAL_IMAGE}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-40"
+            draggable={false}
+          />
+          {/* White wash keeps the page bright */}
+          <div className="absolute inset-0 bg-white/45" />
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden border-b border-border min-h-[620px] sm:min-h-[720px] flex items-center">
-        {/* ── Full-bleed Citizen watch-dial background — gives the page depth ── */}
-        <img
-          src={CITIZEN_DIAL_IMAGE}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover object-center"
-          loading="eager"
-          draggable={false}
-        />
-        {/* Darken + vignette so the frosted-glass panels pop */}
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-900/55 to-zinc-950/80" />
-
+      <section className="relative overflow-hidden border-b border-border min-h-[560px] sm:min-h-[640px] flex items-center">
         <div className="relative z-10 w-full mx-auto max-w-5xl px-4 sm:px-6 py-14 sm:py-20">
 
           {/* ── Liquid-glass hero panel ── */}
@@ -799,7 +808,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-zinc-50 border-b border-border">
+      <section className="py-16 sm:py-20 bg-zinc-50/60 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
@@ -880,7 +889,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           2. BRANDS — premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white border-b border-border">
+      <section className="py-16 sm:py-20 bg-white/65 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Premium segment */}
           <Reveal delay={120}>
@@ -932,7 +941,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-zinc-50/60 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center">
@@ -974,7 +983,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-white border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative bg-white/65 backdrop-blur-md border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
@@ -1157,7 +1166,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <section
             key={section.id}
             id={section.id}
-            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border ${idx % 2 === 0 ? 'bg-zinc-50' : 'bg-white'}`}
+            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border backdrop-blur-md ${idx % 2 === 0 ? 'bg-zinc-50/60' : 'bg-white/65'}`}
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
