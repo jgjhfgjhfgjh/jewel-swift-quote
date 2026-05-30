@@ -109,7 +109,7 @@ const Index = () => {
       <FilterSidebar {...fp} mobileOnly />
 
       {viewMode === 'home' && (
-        <div className="relative z-10 animate-fade-in">
+        <div className="relative z-10 animate-fade-in bg-white pt-8 sm:pt-12">
           <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
         </div>
       )}
