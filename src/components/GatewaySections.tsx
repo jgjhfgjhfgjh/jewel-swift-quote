@@ -808,7 +808,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-zinc-50/60 backdrop-blur-md border-b border-border">
+      <section className="py-16 sm:py-20 bg-zinc-50/30 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
@@ -889,7 +889,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           2. BRANDS — premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white/65 backdrop-blur-md border-b border-border">
+      <section className="py-16 sm:py-20 bg-white/35 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Premium segment */}
           <Reveal delay={120}>
@@ -941,7 +941,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-zinc-50/60 backdrop-blur-md border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-zinc-50/30 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center">
@@ -983,7 +983,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-white/65 backdrop-blur-md border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative bg-white/35 backdrop-blur-md border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
@@ -1166,7 +1166,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <section
             key={section.id}
             id={section.id}
-            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border backdrop-blur-md ${idx % 2 === 0 ? 'bg-zinc-50/60' : 'bg-white/65'}`}
+            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border backdrop-blur-md ${idx % 2 === 0 ? 'bg-zinc-50/30' : 'bg-white/35'}`}
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
