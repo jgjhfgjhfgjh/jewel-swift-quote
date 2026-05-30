@@ -661,22 +661,20 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative isolate overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden border-b border-border min-h-[620px] sm:min-h-[720px] flex items-center">
         {/* ── Full-bleed Citizen watch-dial background — gives the page depth ── */}
-        <div className="absolute inset-0 -z-10">
-          <img
-            src={CITIZEN_DIAL_IMAGE}
-            alt=""
-            aria-hidden
-            className="h-full w-full object-cover object-center scale-105"
-            loading="eager"
-            draggable={false}
-          />
-          {/* Darken + vignette so the frosted-glass panels pop */}
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-900/55 to-zinc-950/80" />
-        </div>
+        <img
+          src={CITIZEN_DIAL_IMAGE}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover object-center"
+          loading="eager"
+          draggable={false}
+        />
+        {/* Darken + vignette so the frosted-glass panels pop */}
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-900/55 to-zinc-950/80" />
 
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24">
+        <div className="relative z-10 w-full mx-auto max-w-5xl px-4 sm:px-6 py-14 sm:py-20">
 
           {/* ── Liquid-glass hero panel ── */}
           <Reveal>
