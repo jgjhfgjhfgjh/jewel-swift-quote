@@ -43,7 +43,7 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}
+      className={`transition-all duration-500 ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
@@ -192,7 +192,7 @@ function B2BVisual() {
 
       {/* ── Catalog grid behind the glass ── */}
       <div className="absolute inset-0" style={{ filter: 'blur(1.5px) brightness(0.96)' }}>
-        <div className="bg-slate-50 p-3 h-full flex items-center justify-center">
+        <div className="bg-zinc-50 p-3 h-full flex items-center justify-center">
           {/* Centered product grid only — no sidebar, full row visible */}
           <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
             {catalogItems.map((item, i) => (
@@ -428,7 +428,7 @@ function ShopVisual() {
         <ShoppingCart className="h-3.5 w-3.5 text-zinc-700" />
       </div>
       {/* Product grid */}
-      <div className="p-3 grid grid-cols-2 gap-2 bg-slate-50">
+      <div className="p-3 grid grid-cols-2 gap-2 bg-zinc-50">
         {products.map((p) => (
           <div key={p.name} className="bg-white rounded-xl overflow-hidden border border-slate-100">
             <div className="relative">
@@ -472,17 +472,17 @@ function TrustSection() {
   ];
 
   return (
-    <section className="relative bg-slate-50 py-24 sm:py-28 overflow-hidden">
+    <section className="relative bg-zinc-50 py-24 sm:py-28 overflow-hidden">
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Stats */}
         <Reveal className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">{g.trustHeading}</h2>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-balance">{g.trustHeading}</h2>
         </Reveal>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 80}>
               <div className="group text-center rounded-2xl border border-border bg-card p-7 shadow-sm hover-lift">
-                <div className="font-display text-4xl sm:text-5xl font-semibold text-zinc-900 mb-2">
+                <div className="font-display text-4xl sm:text-5xl font-black text-primary mb-2">
                   <CountUp to={s.val} suffix={s.suf} />
                 </div>
                 <div className="text-sm text-muted-foreground">{s.label}</div>
@@ -657,7 +657,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-slate-50 border-b border-border overflow-hidden">
+      <section className="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-white border-b border-border overflow-hidden">
         <div className="mx-auto max-w-5xl px-6 text-center">
           {/* 1) Big swelt. logo — at the top */}
           <Reveal>
@@ -771,12 +771,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-slate-50 border-b border-border">
+      <section className="py-16 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
             <div className="text-center mb-10">
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-3 tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3 tracking-tight">
                 Doručujeme do 15+ zemí Evropy.<br className="hidden sm:block" /> Expandujte s námi.
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-base leading-relaxed">
@@ -793,14 +793,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </div>
               {/* Right: country list */}
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-4">
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-4">
                   15 doručovacích zemí
                 </p>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                   {COUNTRIES.map((c) => (
                     <div key={c.name} className="flex items-center justify-between gap-2 border-b border-border/60 py-1.5">
                       <span className="flex items-center gap-2 min-w-0">
-                        <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400 shrink-0" />
                         <span className="text-sm font-medium text-foreground/75 truncate">{c.name}</span>
                       </span>
                       <span className="text-xs font-semibold text-muted-foreground tabular-nums shrink-0">{c.market}</span>
@@ -816,10 +816,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* Section heading — recognize yourself in these obstacles? */}
           <Reveal delay={120}>
             <div className="text-center mb-8 sm:mb-10">
-              <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 mb-3">
+              <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 Poznáš se v tom?
               </div>
-              <h3 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
+              <h3 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">
                 Čtyři překážky, které řešíme za tebe
               </h3>
             </div>
@@ -852,12 +852,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           2. BRANDS — premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-slate-50 border-b border-border">
+      <section className="py-16 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Premium segment */}
           <Reveal delay={120}>
             <div className="pb-6 mb-2">
-              <div className="font-display font-semibold text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
+              <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
               <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                 Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
               </p>
@@ -888,7 +888,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <Reveal delay={160}>
             <div className="border-t border-zinc-200 py-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="flex-1">
-                <div className="font-display font-semibold text-foreground mb-1">Jakákoliv značka bez registrace?</div>
+                <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
                 </p>
@@ -904,12 +904,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-slate-50 border-b border-border">
+      {!user && <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3">Začněte ještě dnes</p>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Začněte ještě dnes</p>
+              <h2 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-2 leading-tight">
                 Přístup k 3 000+ produktům.<br className="hidden sm:block" /> Velkoobchodní ceny od prvního kusu.
               </h2>
               <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
@@ -946,11 +946,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-slate-50 border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative bg-white border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
-              <h2 className="font-display text-3xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-balance">
+              <h2 className="font-display text-3xl sm:text-5xl font-black text-foreground mb-4 tracking-tight text-balance">
                 {g.introHeading}
               </h2>
               <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto text-pretty">
@@ -993,7 +993,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                           <div className="h-7 w-7 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
                             <Icon className="h-3.5 w-3.5 text-zinc-500" />
                           </div>
-                          <span className="font-display font-semibold text-foreground text-base">{card.label}</span>
+                          <span className="font-display font-black text-foreground text-base">{card.label}</span>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
                       </div>
@@ -1031,7 +1031,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Bez čekání
                     </div>
                   </div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-semibold text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
+                  <h3 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
                     Prohlédněte si celý katalog ještě dnes — zdarma a bez čekání.
                   </h3>
                   <div className="text-sm sm:text-base text-zinc-600 mb-5 text-left max-w-2xl leading-relaxed space-y-3">
@@ -1053,7 +1053,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* AI / Account Manager gateway */}
           <Reveal delay={150}>
             <div className="border-t border-zinc-200 pt-8">
-              <h3 className="font-display text-xl sm:text-2xl font-bold text-zinc-900 leading-tight mb-1 text-left">Potřebujete poradit?</h3>
+              <h3 className="font-display text-xl sm:text-2xl font-black tracking-tight text-zinc-900 leading-tight mb-1 text-left">Potřebujete poradit?</h3>
               <p className="text-sm text-zinc-500 mb-5 text-left">Vyberte si způsob — okamžitý AI zástupce nebo osobní account manager.</p>
 
               {/* Karty — vedle sebe na desktopu, pod sebou na mobilu */}
@@ -1124,12 +1124,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           6. GATEWAY SECTIONS — 5 alternujících sekcí
       ══════════════════════════════════════════ */}
-      {sections.map((section) => {
+      {sections.map((section, idx) => {
         return (
           <section
             key={section.id}
             id={section.id}
-            className="relative py-20 sm:py-28 scroll-mt-16 bg-slate-50 border-b border-border"
+            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border ${idx % 2 === 0 ? 'bg-zinc-50' : 'bg-white'}`}
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
@@ -1137,7 +1137,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Reveal>
                   <div className="space-y-7">
                     <div>
-                      <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight mb-4 text-balance">
+                      <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 text-balance">
                         {section.heading}
                       </h2>
                       <p className="text-muted-foreground leading-relaxed text-base sm:text-lg text-pretty max-w-xl">
