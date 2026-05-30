@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
@@ -53,12 +53,14 @@ const CATALOG_BANNERS: Slide[] = [];
 const FADE_MS = 1400;
 /** Time each slide stays visible (ms) */
 const INTERVAL_MS = 7500;
+/** Slide shown first by default + given 2× dwell time (customer support) */
+const SUPPORT_INDEX = Math.max(0, SLIDE_META.findIndex((m) => m.eyebrow === 'Zákaznická podpora'));
 
 // ─────────────────────────────────────────────────────────────────────────
 export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const { lang } = useStore();
-  const [current, setCurrent] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [current, setCurrent] = useState(SUPPORT_INDEX);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const slides = useMemo<Slide[]>(() => {
     const base: Slide[] = home[lang].hero.map((s, i) => ({
@@ -71,22 +73,21 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
     return compact ? [...CATALOG_BANNERS, ...base] : base;
   }, [lang, compact]);
 
-  const startInterval = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(
-      () => setCurrent(c => (c + 1) % slides.length),
-      INTERVAL_MS,
-    );
-  }, [slides.length]);
-
+  // Auto-advance. The customer-support slide stays visible twice as long.
+  // Re-runs whenever `current` changes, so manual nav also reschedules cleanly.
   useEffect(() => {
-    startInterval();
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [startInterval]);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    const dwell = current === SUPPORT_INDEX ? INTERVAL_MS * 2 : INTERVAL_MS;
+    timeoutRef.current = setTimeout(
+      () => setCurrent(c => (c + 1) % slides.length),
+      dwell,
+    );
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [current, slides.length]);
 
-  const handlePrev = () => { setCurrent(c => (c - 1 + slides.length) % slides.length); startInterval(); };
-  const handleNext = () => { setCurrent(c => (c + 1) % slides.length); startInterval(); };
-  const handleDot  = (i: number) => { setCurrent(i); startInterval(); };
+  const handlePrev = () => setCurrent(c => (c - 1 + slides.length) % slides.length);
+  const handleNext = () => setCurrent(c => (c + 1) % slides.length);
+  const handleDot  = (i: number) => setCurrent(i);
 
   // Card height — compact for catalog view, full for homepage
   const cardMinH = compact
@@ -120,7 +121,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                     src={slide.image}
                     alt=""
                     className="absolute inset-0 w-full h-full object-contain"
-                    loading={i === 0 ? 'eager' : 'lazy'}
+                    loading={i === SUPPORT_INDEX ? 'eager' : 'lazy'}
                     draggable={false}
                   />
                   {slide.ctaHref && (
@@ -137,7 +138,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                       src={slide.image}
                       alt=""
                       className={`w-full h-full object-cover ${meta.imgPos}`}
-                      loading={i === 0 ? 'eager' : 'lazy'}
+                      loading={i === SUPPORT_INDEX ? 'eager' : 'lazy'}
                       draggable={false}
                     />
                     {/* Mobile: dark gradient so text is legible */}
