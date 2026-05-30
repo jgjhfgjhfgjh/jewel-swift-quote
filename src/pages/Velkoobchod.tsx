@@ -38,7 +38,7 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}
+      className={`transition-all duration-500 ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} ${className}`}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
@@ -115,10 +115,10 @@ const TARGET_HIGHLIGHT = [false, true, false];
 const FEATURE_ICONS = [Package, Award, TrendingUp, Clock, Globe, Truck, BarChart3, Zap];
 const VOLUME_FEATURED = [false, true, false];
 const ECOSYSTEM_META = [
-  { icon: Rss,         href: '/feed',         color: 'text-emerald-600 bg-emerald-50' },
-  { icon: PackageOpen, href: '/dropshipping', color: 'text-blue-600 bg-blue-50' },
-  { icon: HandCoins,   href: '/luxury',       color: 'text-amber-600 bg-amber-50' },
-  { icon: ShoppingCart,href: '/shop',         color: 'text-orange-600 bg-orange-50' },
+  { icon: Rss,         href: '/feed',         color: 'text-primary bg-primary/10' },
+  { icon: PackageOpen, href: '/dropshipping', color: 'text-primary bg-primary/10' },
+  { icon: HandCoins,   href: '/luxury',       color: 'text-primary bg-primary/10' },
+  { icon: ShoppingCart,href: '/shop',         color: 'text-primary bg-primary/10' },
 ];
 const TRUST_STRIP_ICONS = [ShieldCheck, Truck, Globe, BadgeCheck, Lock];
 
@@ -138,22 +138,7 @@ const Velkoobchod = () => {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
-    <div
-      className="velo-page min-h-screen font-sans"
-      style={{
-        '--background': '220 30% 98%',
-        '--foreground': '220 25% 10%',
-        '--card': '0 0% 100%',
-        '--card-foreground': '220 25% 10%',
-        '--primary': '220 60% 45%',
-        '--primary-foreground': '0 0% 100%',
-        '--muted': '220 20% 94%',
-        '--muted-foreground': '220 15% 45%',
-        '--border': '220 20% 88%',
-        backgroundColor: 'hsl(220, 30%, 98%)',
-        color: 'hsl(220, 25%, 10%)',
-      } as React.CSSProperties}
-    >
+    <div className="velo-page min-h-screen font-sans bg-background text-foreground">
       <Navbar />
       <BackButton />
       <FloatingNotif />
@@ -165,18 +150,17 @@ const Velkoobchod = () => {
       />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 border-b border-border">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,130,246,0.08),transparent)]" />
-        <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-32">
+      <section className="relative overflow-hidden bg-white border-b border-border">
+        <div className="relative mx-auto max-w-6xl px-6 py-16 sm:py-24">
           <div className="max-w-3xl">
             <Reveal>
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-4 py-1.5 text-sm font-semibold text-primary mb-7">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/5 border border-primary/15 px-4 py-1.5 text-sm font-semibold text-primary mb-7">
                 <Handshake className="h-4 w-4" />
                 {v.hero.badge}
               </div>
             </Reveal>
             <Reveal delay={80}>
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-[1.05] mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.05] mb-6">
                 {v.hero.heading}
               </h1>
             </Reveal>
@@ -219,9 +203,9 @@ const Velkoobchod = () => {
             </Reveal>
             {!user && (
               <Reveal delay={400}>
-                <div className="inline-flex items-start gap-3 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 max-w-xl">
-                  <Eye className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-                  <div className="text-sm text-blue-700/90">{v.hero.banner}</div>
+                <div className="inline-flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/15 px-5 py-4 max-w-xl">
+                  <Eye className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <div className="text-sm text-foreground/70">{v.hero.banner}</div>
                 </div>
               </Reveal>
             )}
@@ -251,18 +235,17 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Nahlédněte do katalogu ── */}
-      <section className="py-20 sm:py-28 bg-white">
+      <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
             {/* Copywriting */}
             <Reveal>
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700 uppercase tracking-wider mb-5">
-                  <Eye className="h-3.5 w-3.5" />
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                   {v.preview.eyebrow}
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
+                </p>
+                <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-5">
                   {v.preview.heading}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">{v.preview.p1}</p>
@@ -293,14 +276,14 @@ const Velkoobchod = () => {
                 {[
                   {
                     label: v.accessTiers[0].label, badge: v.accessTiers[0].badge,
-                    icon: Lock, iconColor: 'text-slate-400',
-                    bg: 'bg-slate-50 border-slate-200', labelColor: 'text-slate-500',
+                    icon: Lock, iconColor: 'text-zinc-400',
+                    bg: 'bg-zinc-50 border-border', labelColor: 'text-zinc-500',
                     items: v.accessItems.map(text => ({ text, ok: false })),
                   },
                   {
                     label: v.accessTiers[1].label, badge: v.accessTiers[1].badge,
-                    icon: Eye, iconColor: 'text-blue-600',
-                    bg: 'bg-blue-50 border-blue-200', labelColor: 'text-blue-700',
+                    icon: Eye, iconColor: 'text-primary',
+                    bg: 'bg-primary/5 border-primary/20', labelColor: 'text-primary',
                     highlight: true,
                     items: v.accessItems.map((text, i) => ({ text, ok: i < 4, locked: i >= 4 })),
                   },
@@ -318,7 +301,7 @@ const Velkoobchod = () => {
                         <TIcon className={`h-4 w-4 shrink-0 ${tier.iconColor}`} />
                         <span className={`font-semibold text-sm ${tier.labelColor}`}>{tier.label}</span>
                         {tier.badge && (
-                          <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${tier.highlight ? 'bg-blue-200 text-blue-800' : 'bg-primary/15 text-primary'}`}>
+                          <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${tier.highlight ? 'bg-primary/15 text-primary' : 'bg-primary/15 text-primary'}`}>
                             {tier.badge}
                           </span>
                         )}
@@ -329,11 +312,11 @@ const Velkoobchod = () => {
                             {item.ok ? (
                               <CheckCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                             ) : item.locked ? (
-                              <Lock className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                              <Lock className="h-3.5 w-3.5 text-zinc-300 shrink-0" />
                             ) : (
-                              <X className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                              <X className="h-3.5 w-3.5 text-zinc-300 shrink-0" />
                             )}
-                            <span className={item.ok ? 'text-foreground/80' : 'text-slate-400'}>
+                            <span className={item.ok ? 'text-foreground/80' : 'text-zinc-400'}>
                               {item.text}
                             </span>
                           </div>
@@ -349,14 +332,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Pro koho jsme ── */}
-      <section className="py-20 sm:py-28 bg-slate-50">
+      <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 {v.forWhom.eyebrow}
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.forWhom.heading}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -400,14 +383,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Onboarding – jak to funguje ── */}
-      <section className="py-20 sm:py-28 bg-white">
+      <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-4">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 {v.onboarding.eyebrow}
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.onboarding.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
@@ -421,7 +404,7 @@ const Velkoobchod = () => {
               const n = String(i + 1).padStart(2, '0');
               return (
                 <Reveal key={n} delay={i * 80}>
-                  <div className="relative bg-slate-50 rounded-2xl border border-border p-6 h-full">
+                  <div className="relative bg-zinc-50 rounded-2xl border border-border p-6 h-full">
                     <div className="font-display text-5xl font-black text-primary/10 mb-3 leading-none select-none">{n}</div>
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mb-4">
                       <Icon className="h-5 w-5 text-primary" />
@@ -452,14 +435,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Co je v katalogu ── */}
-      <section className="py-20 sm:py-28 bg-slate-50">
+      <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 {v.catalog.eyebrow}
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.catalog.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
@@ -506,14 +489,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Partnerské podmínky – cenové tiery ── */}
-      <section className="py-20 sm:py-28 bg-white">
+      <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 {v.partnership.eyebrow}
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.partnership.heading}
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
@@ -577,14 +560,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Ekosystém cross-sell ── */}
-      <section className="py-20 sm:py-28 bg-slate-50">
+      <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
+              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                 {v.ecosystemSell.eyebrow}
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.ecosystemSell.heading}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -618,15 +601,15 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── Proč Swelt – trust ── */}
-      <section className="py-20 sm:py-28 bg-white">
+      <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <Reveal>
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider mb-6">
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
                   {v.whySwelt.eyebrow}
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
+                </p>
+                <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-5">
                   {v.whySwelt.heading}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-8">
@@ -650,7 +633,7 @@ const Velkoobchod = () => {
                   { val: 3000, suffix: '+',  label: v.whyStats[2], icon: Package },
                   { val: 98,   suffix: ' %', label: v.whyStats[3], icon: Star },
                 ].map(({ val, suffix, label, icon: Icon }) => (
-                  <div key={label} className="bg-slate-50 rounded-2xl border border-border p-6 text-center">
+                  <div key={label} className="bg-zinc-50 rounded-2xl border border-border p-6 text-center">
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mx-auto mb-3">
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
@@ -668,7 +651,7 @@ const Velkoobchod = () => {
           <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-5">
             {v.testimonials.map((t, i) => (
               <Reveal key={t.name} delay={i * 100}>
-                <div className="bg-slate-50 rounded-2xl border border-border p-6">
+                <div className="bg-zinc-50 rounded-2xl border border-border p-6">
                   <div className="flex gap-0.5 mb-3">
                     {[1, 2, 3, 4, 5].map(s => (
                       <Star key={s} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
@@ -687,11 +670,11 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-20 sm:py-28 bg-slate-50">
+      <section className="py-14 sm:py-20 bg-zinc-50 border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center mb-12">
-              <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-foreground mb-3">
                 {v.faq.heading}
               </h2>
               <p className="text-muted-foreground">{v.faq.sub}</p>
@@ -702,7 +685,7 @@ const Velkoobchod = () => {
               <Reveal key={i} delay={i * 40}>
                 <div className="bg-white rounded-xl border border-border overflow-hidden">
                   <button
-                    className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 hover:bg-slate-50/50 transition-colors"
+                    className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 hover:bg-zinc-50/50 transition-colors"
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   >
                     <span className="font-semibold text-sm text-foreground">{faq.q}</span>
@@ -721,17 +704,14 @@ const Velkoobchod = () => {
       </section>
 
       {/* ── CTA Bottom ── */}
-      <section
-        className="py-20 sm:py-28"
-        style={{ background: 'linear-gradient(135deg, hsl(220,60%,28%) 0%, hsl(220,60%,45%) 100%)' }}
-      >
+      <section className="py-16 sm:py-24 bg-primary text-primary-foreground">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-sm font-semibold text-white/90 mb-7">
               <Handshake className="h-4 w-4" />
               {v.finalCta.communityBadge}
             </div>
-            <h2 className="font-display text-3xl sm:text-5xl font-black text-white mb-5">
+            <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-white mb-5">
               {v.finalCta.bottomHeading}
             </h2>
             <p className="text-white/75 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
