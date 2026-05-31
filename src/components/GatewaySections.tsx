@@ -837,7 +837,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   {COUNTRIES.map((c) => (
                     <div key={c.name} className="flex items-center justify-between gap-2 border-b border-border/60 py-1.5">
                       <span className="flex items-center gap-2 min-w-0">
-                        <span className="h-1.5 w-1.5 rounded-full bg-zinc-400 shrink-0" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
                         <span className="text-sm font-medium text-foreground/75 truncate">{c.name}</span>
                       </span>
                       <span className="text-xs font-semibold text-muted-foreground tabular-nums shrink-0">{c.market}</span>
