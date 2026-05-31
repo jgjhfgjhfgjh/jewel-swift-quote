@@ -808,7 +808,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           1. COUNTRIES — doručovací zóna + dropshipping expanze
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-zinc-50/30 backdrop-blur-md border-b border-border">
+      <section className="py-16 sm:py-20 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Header — copywriting */}
           <Reveal>
@@ -870,7 +870,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="flex flex-col h-full bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <div className="flex flex-col h-full bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl p-6 shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200">
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-900 mb-3">{item.label}</p>
                   <div className="font-display font-semibold text-zinc-400 text-base mb-2 leading-snug">{item.title}</div>
                   <p className="text-sm text-muted-foreground leading-relaxed flex-1">{item.text}</p>
@@ -889,7 +889,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           2. BRANDS — premium segment + soukromý nákup
       ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white/35 backdrop-blur-md border-b border-border">
+      <section className="py-16 sm:py-20 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
           {/* Premium segment */}
           <Reveal delay={120}>
@@ -941,7 +941,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 bg-zinc-50/30 backdrop-blur-md border-b border-border">
+      {!user && <section className="py-14 sm:py-20 border-b border-border">
         <div className="mx-auto max-w-3xl px-6">
           <Reveal>
             <div className="text-center">
@@ -983,7 +983,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. CATEGORY CARDS + LEAD CAPTURE + AI/AM
       ══════════════════════════════════════════ */}
-      <div className="relative bg-white/35 backdrop-blur-md border-b border-border py-16 sm:py-20 overflow-hidden">
+      <div className="relative border-b border-border py-16 sm:py-20 overflow-hidden">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">
@@ -1002,7 +1002,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               const Icon = card.icon;
               return (
                 <Reveal key={card.id} delay={i * 60}>
-                  <div className="group bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row">
+                  <div className="group bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl overflow-hidden shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row">
                     {/* Image */}
                     <div className="sm:w-48 h-40 sm:h-auto shrink-0 overflow-hidden bg-zinc-100">
                       {'img2' in card ? (
@@ -1099,7 +1099,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-zinc-400 bg-white hover:bg-zinc-50 rounded-2xl p-5 sm:p-6 transition-all"
+                  className="group flex flex-col items-center text-center border border-white/60 bg-white/40 backdrop-blur-md hover:bg-white/55 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
@@ -1126,7 +1126,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-zinc-200 hover:border-zinc-400 bg-white hover:bg-zinc-50 rounded-2xl p-5 sm:p-6 transition-all"
+                  className="group flex flex-col items-center text-center border border-white/60 bg-white/40 backdrop-blur-md hover:bg-white/55 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">
@@ -1161,12 +1161,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           6. GATEWAY SECTIONS — 5 alternujících sekcí
       ══════════════════════════════════════════ */}
-      {sections.map((section, idx) => {
+      {sections.map((section) => {
         return (
           <section
             key={section.id}
             id={section.id}
-            className={`relative py-20 sm:py-28 scroll-mt-16 border-b border-border backdrop-blur-md ${idx % 2 === 0 ? 'bg-zinc-50/30' : 'bg-white/35'}`}
+            className="relative py-20 sm:py-28 scroll-mt-16 border-b border-border"
           >
             <div className="pointer-events-none absolute inset-0" />
             <div className="relative mx-auto max-w-6xl px-6">
