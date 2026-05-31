@@ -24,6 +24,13 @@ import { BrandLogo } from '@/components/BrandLogo';
 const CITIZEN_DIAL_IMAGE =
   'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
 
+/* Three catalog watches (different brands) presented inside the hero card */
+const HERO_CARD_WATCHES = [
+  'https://cdn.b2bzago.com/images/0/e560314614af32c5/100/hodinky-tommy-hilfiger-model-claudia-1781820.jpg?hash=-2',
+  'https://cdn.b2bzago.com/images/0/b805e99da5e011e1/100/hodinky-citizen-model-chrono-an3620-51e.jpg?hash=-2',
+  'https://cdn.b2bzago.com/images/0/7c8b6cdeb3610f12/100/hodinky-tissot-model-t-sport-chrono-xl-t116-617-36-047-00.jpg?hash=-2',
+];
+
 
 /* ── Reveal on scroll ── */
 function useReveal(threshold = 0.12): [React.RefObject<HTMLDivElement>, boolean] {
@@ -716,7 +723,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           {/* ── Liquid-glass hero panel ── */}
           <Reveal>
             <div
-              className="relative rounded-3xl border border-white/60 px-6 py-10 sm:px-12 sm:py-14 text-center"
+              className="relative overflow-hidden rounded-3xl border border-white/60 px-6 py-10 sm:px-12 sm:py-14 text-center"
               style={{
                 backdropFilter: 'blur(18px) saturate(1.7)',
                 WebkitBackdropFilter: 'blur(18px) saturate(1.7)',
@@ -724,6 +731,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 boxShadow: '0 24px 60px -12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
               }}
             >
+              {/* Three-watch catalog presentation — behind the content (multiply drops white bg) */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center gap-1 sm:gap-8 opacity-60">
+                <img src={HERO_CARD_WATCHES[0]} alt="" loading="lazy" draggable={false}
+                  className="h-24 sm:h-40 w-auto object-contain [mix-blend-mode:multiply] -rotate-[10deg] -translate-y-3" />
+                <img src={HERO_CARD_WATCHES[1]} alt="" loading="lazy" draggable={false}
+                  className="h-32 sm:h-56 w-auto object-contain [mix-blend-mode:multiply]" />
+                <img src={HERO_CARD_WATCHES[2]} alt="" loading="lazy" draggable={false}
+                  className="h-24 sm:h-40 w-auto object-contain [mix-blend-mode:multiply] rotate-[10deg] -translate-y-3" />
+              </div>
+
               {/* 1) Big swelt. logo */}
               <div className="relative inline-flex items-baseline justify-center mx-auto">
                 <h1
