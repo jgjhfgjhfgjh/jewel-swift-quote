@@ -19,9 +19,6 @@ import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
-import gatewayB2b from '@/assets/gateway-b2b.jpg';
-import gatewayLuxury from '@/assets/gateway-luxury.jpg';
-import gatewayDropshipping from '@/assets/gateway-dropshipping.jpg';
 
 /* Full-bleed hero background — Citizen watch dial (swap URL for a specific shot) */
 const CITIZEN_DIAL_IMAGE =
@@ -638,25 +635,25 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'velkoobchod', icon: Handshake, label: 'B2B Velkoobchod', path: '/velkoobchod',
       desc: 'Nakupujte prémiové hodinky a šperky přímo od dodavatele za velkoobchodní ceny. Pro firmy s IČO.',
-      img: gatewayB2b,
+      img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
       cta: 'Vstoupit do velkoobchodu',
     },
     {
       id: 'luxury', icon: HandCoins, label: 'Nákup bez registrace', path: '/luxury',
       desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez nutnosti IČO, od 1 kusu, diskrétní balení.',
-      img: gatewayLuxury,
+      img: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80',
       cta: 'Zjistit více',
     },
     {
       id: 'feed', icon: Rss, label: 'Feed', path: '/feed',
       desc: 'Automatický XML/CSV feed 3 000+ produktů pro váš e-shop. Heureka, Zbozi.cz, Google Shopping.',
-      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
       cta: 'Zjistit více o feedu',
     },
     {
       id: 'dropshipping', icon: PackageOpen, label: 'Dropshipping', path: '/dropshipping',
       desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
-      img: gatewayDropshipping,
+      img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80',
       cta: 'Chci dropshipping',
     },
     {
