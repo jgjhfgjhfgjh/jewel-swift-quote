@@ -24,6 +24,10 @@ import { BrandLogo } from '@/components/BrandLogo';
 const CITIZEN_DIAL_IMAGE =
   'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
 
+/* Citizen watch on white bg — corner accent (mix-blend-multiply drops the white) */
+const HERO_CARD_WATCH =
+  'https://cdn.b2bzago.com/images/0/b805e99da5e011e1/100/hodinky-citizen-model-chrono-an3620-51e.jpg?hash=-2';
+
 
 
 /* ── Reveal on scroll ── */
@@ -725,13 +729,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 boxShadow: '0 24px 60px -12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
               }}
             >
-              {/* Oversized cropped Citizen dial in the bottom-right corner */}
+              {/* Oversized Citizen watch in the bottom-right corner — white bg dropped via multiply */}
               <img
                 aria-hidden
-                src={CITIZEN_DIAL_IMAGE}
+                src={HERO_CARD_WATCH}
                 alt=""
                 draggable={false}
-                className="pointer-events-none absolute -bottom-16 -right-16 sm:-bottom-20 sm:-right-20 -z-10 h-72 w-72 sm:h-[30rem] sm:w-[30rem] object-cover object-center opacity-70"
+                className="pointer-events-none absolute -bottom-10 -right-8 sm:-bottom-14 sm:-right-12 -z-10 h-64 w-64 sm:h-[26rem] sm:w-[26rem] object-contain opacity-90 [mix-blend-mode:multiply]"
               />
 
               {/* 1) Big swelt. logo */}
