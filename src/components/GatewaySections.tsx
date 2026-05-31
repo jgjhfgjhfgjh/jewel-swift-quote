@@ -19,6 +19,9 @@ import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
+import gatewayB2b from '@/assets/gateway-b2b.jpg';
+import gatewayLuxury from '@/assets/gateway-luxury.jpg';
+import gatewayDropshipping from '@/assets/gateway-dropshipping.jpg';
 
 /* Full-bleed hero background — Citizen watch dial (swap URL for a specific shot) */
 const CITIZEN_DIAL_IMAGE =
@@ -635,37 +638,37 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'velkoobchod', icon: Handshake, label: 'B2B Velkoobchod', path: '/velkoobchod',
       desc: 'Nakupujte prémiové hodinky a šperky přímo od dodavatele za velkoobchodní ceny. Pro firmy s IČO.',
-      img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+      img: gatewayB2b,
       cta: 'Vstoupit do velkoobchodu',
     },
     {
       id: 'luxury', icon: HandCoins, label: 'Nákup bez registrace', path: '/luxury',
       desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez nutnosti IČO, od 1 kusu, diskrétní balení.',
-      img: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=80',
+      img: gatewayLuxury,
       cta: 'Zjistit více',
     },
     {
       id: 'feed', icon: Rss, label: 'Feed', path: '/feed',
       desc: 'Automatický XML/CSV feed 3 000+ produktů pro váš e-shop. Heureka, Zbozi.cz, Google Shopping.',
-      img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
       cta: 'Zjistit více o feedu',
     },
     {
       id: 'dropshipping', icon: PackageOpen, label: 'Dropshipping', path: '/dropshipping',
       desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
-      img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+      img: gatewayDropshipping,
       cta: 'Chci dropshipping',
     },
     {
       id: 'shop', icon: ShoppingCart, label: 'E-shop do 48h', path: '/shop',
       desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
-      img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80',
       cta: 'Chci svůj e-shop',
     },
     {
       id: 'deals', icon: Tag, label: 'DEAL nabídky', path: '/deals',
       desc: 'Časově omezené closeout nabídky a výprodeje skladových zásob za mimořádné ceny.',
-      img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80',
       cta: 'Prohlédnout nabídky',
     },
   ];
