@@ -24,10 +24,6 @@ import { BrandLogo } from '@/components/BrandLogo';
 const CITIZEN_DIAL_IMAGE =
   'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
 
-/* Citizen watch on white bg — corner accent (mix-blend-multiply drops the white) */
-const HERO_CARD_WATCH =
-  'https://cdn.b2bzago.com/images/0/b805e99da5e011e1/100/hodinky-citizen-model-chrono-an3620-51e.jpg?hash=-2';
-
 
 
 /* ── Reveal on scroll ── */
@@ -718,26 +714,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="relative overflow-hidden border-b border-border min-h-[560px] sm:min-h-[640px] flex items-center">
         <div className="relative z-10 w-full mx-auto max-w-5xl px-4 sm:px-6 py-14 sm:py-20">
 
-          {/* ── Liquid-glass hero panel ── */}
+          {/* ── Hero content — free over the background, no card ── */}
           <Reveal>
-            <div
-              className="relative overflow-hidden rounded-3xl border border-white/60 px-6 py-10 sm:px-12 sm:py-14 text-center"
-              style={{
-                backdropFilter: 'blur(18px) saturate(1.7)',
-                WebkitBackdropFilter: 'blur(18px) saturate(1.7)',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.26) 100%)',
-                boxShadow: '0 24px 60px -12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
-              }}
-            >
-              {/* Oversized Citizen watch in the bottom-right corner — white bg dropped via multiply */}
-              <img
-                aria-hidden
-                src={HERO_CARD_WATCH}
-                alt=""
-                draggable={false}
-                className="pointer-events-none absolute -bottom-10 -right-8 sm:-bottom-14 sm:-right-12 -z-10 h-64 w-64 sm:h-[26rem] sm:w-[26rem] object-contain opacity-90 [mix-blend-mode:multiply]"
-              />
-
+            <div className="text-center">
               {/* 1) Big swelt. logo */}
               <div className="relative inline-flex items-baseline justify-center mx-auto">
                 <h1
@@ -770,7 +749,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 </button>
                 <button
                   onClick={() => openAuth('register')}
-                  className="px-8 py-3 rounded-md border border-white/70 bg-white/70 text-foreground font-semibold text-sm hover:bg-white transition min-w-[200px]"
+                  className="px-8 py-3 rounded-md border border-zinc-300 bg-white text-foreground font-semibold text-sm hover:bg-zinc-50 transition min-w-[200px]"
                 >
                   Prohlédnout katalog
                 </button>
@@ -786,17 +765,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* ── Brand pills — second frosted-glass strip ── */}
+          {/* ── Brand pills — free over the background, no card ── */}
           <Reveal delay={140}>
-            <div
-              className="mt-5 rounded-2xl border border-white/50 px-3 py-4 sm:px-6"
-              style={{
-                backdropFilter: 'blur(14px) saturate(1.5)',
-                WebkitBackdropFilter: 'blur(14px) saturate(1.5)',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.28) 100%)',
-                boxShadow: '0 16px 40px -16px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.55)',
-              }}
-            >
+            <div className="mt-8">
               <div className="flex flex-wrap items-center justify-center gap-2">
                 {(() => {
                   const PILL_BRANDS = [
