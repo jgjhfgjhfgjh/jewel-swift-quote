@@ -24,12 +24,6 @@ import { BrandLogo } from '@/components/BrandLogo';
 const CITIZEN_DIAL_IMAGE =
   'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
 
-/* Three catalog watches (different brands) presented inside the hero card */
-const HERO_CARD_WATCHES = [
-  'https://cdn.b2bzago.com/images/0/e560314614af32c5/100/hodinky-tommy-hilfiger-model-claudia-1781820.jpg?hash=-2',
-  'https://cdn.b2bzago.com/images/0/b805e99da5e011e1/100/hodinky-citizen-model-chrono-an3620-51e.jpg?hash=-2',
-  'https://cdn.b2bzago.com/images/0/7c8b6cdeb3610f12/100/hodinky-tissot-model-t-sport-chrono-xl-t116-617-36-047-00.jpg?hash=-2',
-];
 
 
 /* ── Reveal on scroll ── */
@@ -731,15 +725,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 boxShadow: '0 24px 60px -12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
               }}
             >
-              {/* Three-watch catalog presentation — behind the content (multiply drops white bg) */}
-              <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center gap-1 sm:gap-8 opacity-60">
-                <img src={HERO_CARD_WATCHES[0]} alt="" loading="lazy" draggable={false}
-                  className="h-24 sm:h-40 w-auto object-contain [mix-blend-mode:multiply] -rotate-[10deg] -translate-y-3" />
-                <img src={HERO_CARD_WATCHES[1]} alt="" loading="lazy" draggable={false}
-                  className="h-32 sm:h-56 w-auto object-contain [mix-blend-mode:multiply]" />
-                <img src={HERO_CARD_WATCHES[2]} alt="" loading="lazy" draggable={false}
-                  className="h-24 sm:h-40 w-auto object-contain [mix-blend-mode:multiply] rotate-[10deg] -translate-y-3" />
-              </div>
+              {/* Oversized cropped Citizen dial in the bottom-right corner */}
+              <img
+                aria-hidden
+                src={CITIZEN_DIAL_IMAGE}
+                alt=""
+                draggable={false}
+                className="pointer-events-none absolute -bottom-16 -right-16 sm:-bottom-20 sm:-right-20 -z-10 h-72 w-72 sm:h-[30rem] sm:w-[30rem] object-cover object-center opacity-70"
+              />
 
               {/* 1) Big swelt. logo */}
               <div className="relative inline-flex items-baseline justify-center mx-auto">
