@@ -571,7 +571,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       const rect = root.getBoundingClientRect();
       const scrollable = rect.height - window.innerHeight;
       const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-      const drift = (progress - 0.5) * 160; // total ±80px of vertical movement
+      const drift = (progress - 0.5) * 360; // total ±180px of vertical movement
       img.style.transform = `translate(-50%, calc(-50% + ${drift}px))`;
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
@@ -699,7 +699,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             ref={watchRef}
             src={CITIZEN_DIAL_IMAGE}
             alt=""
-            className="absolute left-1/2 top-1/2 h-[130%] w-[130%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center opacity-40 will-change-transform"
+            className="absolute left-1/2 top-1/2 h-[160%] w-[160%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center opacity-40 will-change-transform"
             draggable={false}
           />
           {/* White wash keeps the page bright */}
@@ -750,7 +750,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <button
                   onClick={() => openAuth('b2b')}
-                  className="px-8 py-3 rounded-md bg-[#5CE671] text-zinc-900 font-bold text-sm hover:bg-[#4cdc62] transition min-w-[200px] shadow-[0_0_12px_rgba(57,255,20,0.28)] hover:shadow-[0_0_16px_rgba(57,255,20,0.38)]"
+                  className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
                 >
                   B2B registrace
                 </button>
