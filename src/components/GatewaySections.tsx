@@ -4,7 +4,7 @@ import {
   Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
   Check, ArrowRight, Users, Star, Shield,
   Globe, Lock,
-  Rocket, Sparkles, Eye,
+  Rocket, Sparkles, Eye, Tag,
   X,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
@@ -635,33 +635,38 @@ export function GatewaySections({ onOpenCatalog }: Props) {
     {
       id: 'velkoobchod', icon: Handshake, label: 'B2B Velkoobchod', path: '/velkoobchod',
       desc: 'Nakupujte prémiové hodinky a šperky přímo od dodavatele za velkoobchodní ceny. Pro firmy s IČO.',
-      img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
       cta: 'Vstoupit do velkoobchodu',
     },
     {
       id: 'luxury', icon: HandCoins, label: 'Nákup bez registrace', path: '/luxury',
       desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez nutnosti IČO, od 1 kusu, diskrétní balení.',
-      img: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=80',
       cta: 'Zjistit více',
     },
     {
       id: 'feed', icon: Rss, label: 'Feed', path: '/feed',
       desc: 'Automatický XML/CSV feed 3 000+ produktů pro váš e-shop. Heureka, Zbozi.cz, Google Shopping.',
-      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
       cta: 'Zjistit více o feedu',
     },
     {
       id: 'dropshipping', icon: PackageOpen, label: 'Dropshipping', path: '/dropshipping',
       desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
-      img: 'https://cdn.b2bzago.com/images/0/40e7be43bcf6ce73/100/hodinky-calvin-klein-model-even-k7b21626.jpg?hash=-2',
-      img2: 'https://cdn.b2bzago.com/images/0/cdefdb9188767a36/100/nahrdelnik-calvin-klein-model-35000294.jpg?hash=-2',
+      img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
       cta: 'Chci dropshipping',
     },
     {
       id: 'shop', icon: ShoppingCart, label: 'E-shop do 48h', path: '/shop',
       desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
-      img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80',
+      img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
       cta: 'Chci svůj e-shop',
+    },
+    {
+      id: 'deals', icon: Tag, label: 'DEAL nabídky', path: '/deals',
+      desc: 'Časově omezené closeout nabídky a výprodeje skladových zásob za mimořádné ceny.',
+      img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+      cta: 'Prohlédnout nabídky',
     },
   ];
 
@@ -1009,60 +1014,40 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
-          {/* Service cards — vertical stack, image + content + button */}
-          <div className="flex flex-col gap-4 mb-10">
+          {/* Service cards — side-by-side grid, liquid glass, futuristic imagery */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
             {SERVICE_CARDS.map((card, i) => {
               const Icon = card.icon;
               return (
-                <Reveal key={card.id} delay={i * 60}>
-                  <div className="group bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl overflow-hidden shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row">
-                    {/* Image */}
-                    <div className="sm:w-48 h-40 sm:h-auto shrink-0 overflow-hidden bg-zinc-100">
-                      {'img2' in card ? (
-                        <div className="flex w-full h-full">
-                          <div className="flex-1 flex items-center justify-center p-2 border-r border-zinc-100">
-                            <img src={card.img} alt={card.label} loading="lazy" className="max-h-full max-w-full object-contain" />
-                          </div>
-                          <div className="flex-1 flex items-center justify-center p-2">
-                            <img src={(card as { img2: string }).img2} alt={card.label} loading="lazy" className="max-h-full max-w-full object-contain" />
-                          </div>
-                        </div>
-                      ) : (
-                        <img
-                          src={card.img}
-                          alt={card.label}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      )}
+                <Reveal key={card.id} delay={(i % 3) * 60} className="h-full">
+                  <button
+                    type="button"
+                    onClick={() => navigate(card.path)}
+                    className="group h-full w-full text-left flex flex-col bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl overflow-hidden shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    {/* Futuristic image */}
+                    <div className="h-36 sm:h-40 w-full overflow-hidden bg-zinc-900/5">
+                      <img
+                        src={card.img}
+                        alt={card.label}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     </div>
                     {/* Content */}
-                    <div className="flex flex-1 items-center gap-4 p-5">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <div className="h-7 w-7 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
-                            <Icon className="h-3.5 w-3.5 text-zinc-500" />
-                          </div>
-                          <span className="font-display font-black text-foreground text-base">{card.label}</span>
+                    <div className="flex flex-col flex-1 p-5">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <div className="h-7 w-7 rounded-lg bg-white/60 border border-white/70 flex items-center justify-center shrink-0">
+                          <Icon className="h-3.5 w-3.5 text-zinc-700" />
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
+                        <span className="font-display font-black text-foreground text-base">{card.label}</span>
                       </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1.5 shrink-0 hidden sm:inline-flex border-zinc-900"
-                        onClick={() => navigate(card.path)}
-                      >
+                      <p className="text-sm text-muted-foreground leading-relaxed flex-1">{card.desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground group-hover:gap-2.5 transition-all">
                         {card.cta} <ArrowRight className="h-3.5 w-3.5" />
-                      </Button>
+                      </div>
                     </div>
-                    {/* Mobile CTA */}
-                    <div className="px-5 pb-4 sm:hidden">
-                      <Button variant="outline" size="sm" className="gap-1.5 w-full border-zinc-900" onClick={() => navigate(card.path)}>
-                        {card.cta} <ArrowRight className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
+                  </button>
                 </Reveal>
               );
             })}
