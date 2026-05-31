@@ -558,6 +558,33 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  // ── Parallax: watch backdrop drifts with scroll (stays present via sticky) ──
+  const pageRef = useRef<HTMLDivElement>(null);
+  const watchRef = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const root = pageRef.current;
+      const img = watchRef.current;
+      if (!root || !img) return;
+      const rect = root.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+      const drift = (progress - 0.5) * 160; // total ±80px of vertical movement
+      img.style.transform = `translate(-50%, calc(-50% + ${drift}px))`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const sections = [
     {
       id: 'velkoobchod',
@@ -656,7 +683,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   return (
-    <div className="gateway-sections relative isolate w-full bg-white text-foreground">
+    <div ref={pageRef} className="gateway-sections relative isolate w-full bg-white text-foreground">
 
       {/* ══════════════════════════════════════════
           Page-wide Citizen watch backdrop. Scoped to this component
@@ -669,9 +696,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
           <img
+            ref={watchRef}
             src={CITIZEN_DIAL_IMAGE}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover object-center opacity-40"
+            className="absolute left-1/2 top-1/2 h-[130%] w-[130%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center opacity-40 will-change-transform"
             draggable={false}
           />
           {/* White wash keeps the page bright */}
