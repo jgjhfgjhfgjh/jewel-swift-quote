@@ -169,7 +169,7 @@ function BulletList({ items }: { items: string[] }) {
     <ul className="space-y-2.5">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
-          <Check className="h-4 w-4 text-zinc-500 shrink-0 mt-0.5" strokeWidth={2.5} />
+          <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={2.5} />
           <span>{item}</span>
         </li>
       ))}
@@ -692,8 +692,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               style={{
                 backdropFilter: 'blur(18px) saturate(1.7)',
                 WebkitBackdropFilter: 'blur(18px) saturate(1.7)',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.60) 0%, rgba(255,255,255,0.38) 100%)',
-                boxShadow: '0 24px 60px -12px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.7)',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.26) 100%)',
+                boxShadow: '0 24px 60px -12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
               }}
             >
               {/* 1) Big swelt. logo */}
@@ -722,7 +722,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <button
                   onClick={() => openAuth('b2b')}
-                  className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
+                  className="px-8 py-3 rounded-md bg-[#39FF14] text-zinc-900 font-bold text-sm hover:bg-[#2fe60f] transition min-w-[200px] shadow-[0_0_24px_rgba(57,255,20,0.55)] hover:shadow-[0_0_32px_rgba(57,255,20,0.75)]"
                 >
                   B2B registrace
                 </button>
@@ -751,8 +751,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               style={{
                 backdropFilter: 'blur(14px) saturate(1.5)',
                 WebkitBackdropFilter: 'blur(14px) saturate(1.5)',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.48) 100%)',
-                boxShadow: '0 16px 40px -16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6)',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.28) 100%)',
+                boxShadow: '0 16px 40px -16px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.55)',
               }}
             >
               <div className="flex flex-wrap items-center justify-center gap-2">
