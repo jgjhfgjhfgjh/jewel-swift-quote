@@ -20,10 +20,6 @@ import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 
-/* Full-bleed hero background — Citizen watch dial (swap URL for a specific shot) */
-const CITIZEN_DIAL_IMAGE =
-  'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=2000&q=80';
-
 
 
 /* ── Reveal on scroll ── */
@@ -559,33 +555,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  // ── Parallax: watch backdrop drifts with scroll (stays present via sticky) ──
-  const pageRef = useRef<HTMLDivElement>(null);
-  const watchRef = useRef<HTMLImageElement>(null);
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const root = pageRef.current;
-      const img = watchRef.current;
-      if (!root || !img) return;
-      const rect = root.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-      const drift = (progress - 0.5) * 360; // total ±180px of vertical movement
-      img.style.transform = `translate(-50%, calc(-50% + ${drift}px))`;
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    update();
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
   const sections = [
     {
       id: 'velkoobchod',
@@ -689,29 +658,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
   ];
 
   return (
-    <div ref={pageRef} className="gateway-sections relative isolate w-full bg-white text-foreground">
-
-      {/* ══════════════════════════════════════════
-          Page-wide Citizen watch backdrop. Scoped to this component
-          (absolute inset-0) so it never overlays the hero carousel
-          above it; the inner sticky layer keeps the watch in view as
-          you scroll, so it "travels" down the whole homepage. Heavily
-          lightened so the page still reads white — the frosted sections
-          & glass panels reveal it as subtle liquid-glass depth.
-      ══════════════════════════════════════════ */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
-          <img
-            ref={watchRef}
-            src={CITIZEN_DIAL_IMAGE}
-            alt=""
-            className="absolute left-1/2 top-1/2 h-[160%] w-[160%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center opacity-40 will-change-transform"
-            draggable={false}
-          />
-          {/* White wash keeps the page bright */}
-          <div className="absolute inset-0 bg-white/45" />
-        </div>
-      </div>
+    <div className="gateway-sections relative w-full bg-white text-foreground">
 
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
@@ -888,12 +835,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="flex flex-col h-full bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl p-6 shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-900 mb-3">{item.label}</p>
-                  <div className="font-display font-semibold text-zinc-400 text-base mb-2 leading-snug">{item.title}</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">{item.text}</p>
+                <div className="flex flex-col h-full bg-zinc-900/50 backdrop-blur-md border border-white/15 rounded-2xl p-6 shadow-lg hover:bg-zinc-900/60 hover:-translate-y-0.5 transition-all duration-200">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-white mb-3">{item.label}</p>
+                  <div className="font-display font-semibold text-white/50 text-base mb-2 leading-snug">{item.title}</div>
+                  <p className="text-sm text-white/70 leading-relaxed flex-1">{item.text}</p>
                   <div className="mt-5">
-                    <Button size="sm" className="gap-2 w-full sm:w-auto" onClick={() => navigate('/dropshipping')}>
+                    <Button size="sm" className="gap-2 w-full sm:w-auto bg-white text-zinc-900 hover:bg-white/90" onClick={() => navigate('/dropshipping')}>
                       Chci dropshipping <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </div>
@@ -1023,10 +970,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <button
                     type="button"
                     onClick={() => navigate(card.path)}
-                    className="group h-full w-full text-left flex flex-col bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl overflow-hidden shadow-lg hover:bg-white/55 hover:-translate-y-0.5 transition-all duration-200"
+                    className="group h-full w-full text-left flex flex-col bg-zinc-900/50 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden shadow-lg hover:bg-zinc-900/60 hover:-translate-y-0.5 transition-all duration-200"
                   >
                     {/* Futuristic image */}
-                    <div className="h-36 sm:h-40 w-full overflow-hidden bg-zinc-900/5">
+                    <div className="h-36 sm:h-40 w-full overflow-hidden bg-black/20">
                       <img
                         src={card.img}
                         alt={card.label}
@@ -1037,13 +984,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     {/* Content */}
                     <div className="flex flex-col flex-1 p-5">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <div className="h-7 w-7 rounded-lg bg-white/60 border border-white/70 flex items-center justify-center shrink-0">
-                          <Icon className="h-3.5 w-3.5 text-zinc-700" />
+                        <div className="h-7 w-7 rounded-lg bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+                          <Icon className="h-3.5 w-3.5 text-white" />
                         </div>
-                        <span className="font-display font-black text-foreground text-base">{card.label}</span>
+                        <span className="font-display font-black text-white text-base">{card.label}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed flex-1">{card.desc}</p>
-                      <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground group-hover:gap-2.5 transition-all">
+                      <p className="text-sm text-white/70 leading-relaxed flex-1">{card.desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white group-hover:gap-2.5 transition-all">
                         {card.cta} <ArrowRight className="h-3.5 w-3.5" />
                       </div>
                     </div>
@@ -1097,26 +1044,26 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-white/60 bg-white/40 backdrop-blur-md hover:bg-white/55 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
+                  className="group flex flex-col items-center text-center border border-white/15 bg-zinc-900/50 backdrop-blur-md hover:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
                     <img
                       src="/ai-rep.jpg"
                       alt="AI obchodní zástupce"
-                      className="w-20 h-20 rounded-full object-cover object-top border border-zinc-200 mx-auto"
+                      className="w-20 h-20 rounded-full object-cover object-top border border-white/25 mx-auto"
                     />
-                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 border-2 border-white">
-                      <Sparkles className="h-2.5 w-2.5 text-white" />
+                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-white border-2 border-zinc-900">
+                      <Sparkles className="h-2.5 w-2.5 text-zinc-900" />
                     </span>
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 mb-1.5">AI · Dostupný 24/7</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-white/60 mb-1.5">AI · Dostupný 24/7</span>
                   {/* Title + desc */}
-                  <p className="font-bold text-sm text-zinc-900 leading-tight mb-1">AI obchodní zástupce</p>
-                  <p className="text-[12px] text-zinc-500 leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
+                  <p className="font-bold text-sm text-white leading-tight mb-1">AI obchodní zástupce</p>
+                  <p className="text-[12px] text-white/60 leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-zinc-900 group-hover:bg-zinc-800 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Zahájit konverzaci <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>
@@ -1124,22 +1071,22 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-white/60 bg-white/40 backdrop-blur-md hover:bg-white/55 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
+                  className="group flex flex-col items-center text-center border border-white/15 bg-zinc-900/50 backdrop-blur-md hover:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">
-                    <div className="w-20 h-20 rounded-full bg-zinc-200 border border-zinc-300 mx-auto flex items-center justify-center">
-                      <Users className="h-8 w-8 text-zinc-400" />
+                    <div className="w-20 h-20 rounded-full bg-white/15 border border-white/25 mx-auto flex items-center justify-center">
+                      <Users className="h-8 w-8 text-white/70" />
                     </div>
-                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 border-2 border-white" />
+                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 border-2 border-zinc-900" />
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 mb-1.5">Osobní péče · Do 24 h</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-white/60 mb-1.5">Osobní péče · Do 24 h</span>
                   {/* Title + desc */}
-                  <p className="font-bold text-sm text-zinc-900 leading-tight mb-1">Osobní account manager</p>
-                  <p className="text-[12px] text-zinc-500 leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
+                  <p className="font-bold text-sm text-white leading-tight mb-1">Osobní account manager</p>
+                  <p className="text-[12px] text-white/60 leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-zinc-900 group-hover:bg-zinc-800 transition-colors rounded-xl py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Kontaktovat <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>

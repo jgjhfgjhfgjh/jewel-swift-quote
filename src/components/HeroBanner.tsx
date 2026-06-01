@@ -133,11 +133,11 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                 draggable={false}
                 className={`absolute inset-0 h-full w-full object-cover ${meta.imgPos} transition-transform duration-700 group-hover/card:scale-105`}
               />
-              {/* Legibility gradient (bottom-up) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/5" />
+              {/* Legibility gradient (top-down, text sits at the top) */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/40 to-black/5" />
 
-              {/* Text only — no CTA */}
-              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 text-white">
+              {/* Text only, at the TOP — no CTA */}
+              <div className="absolute inset-x-0 top-0 p-5 sm:p-6 text-white">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70 mb-2">
                   swelt.PARTNER&nbsp;·&nbsp;{meta.eyebrow}
                 </p>
