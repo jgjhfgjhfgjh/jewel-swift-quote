@@ -775,6 +775,33 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
+          {/* ── On-demand premium segment (below brand logos) ── */}
+          <Reveal delay={200}>
+            <div className="mt-10 pt-8 border-t border-border text-center">
+              <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 max-w-2xl mx-auto">
+                Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
+              </p>
+              <div className="flex flex-wrap gap-x-2 gap-y-3 items-center justify-center mb-5">
+                {BRANDS_PREMIUM.map((brand) => (
+                  <div key={brand.name} className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group">
+                    <BrandLogo
+                      name={brand.name}
+                      domain={brand.domain}
+                      width={320}
+                      height={128}
+                      className="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                      fallbackClassName="text-xs sm:text-sm font-semibold text-foreground"
+                    />
+                  </div>
+                ))}
+              </div>
+              <Button variant="outline" className="gap-2 border-zinc-900" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
+                Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </Reveal>
+
         </div>
       </section>
 
@@ -864,39 +891,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       ══════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 border-b border-border">
         <div className="mx-auto max-w-6xl px-6">
-          {/* Premium segment */}
-          <Reveal delay={120}>
-            <div className="pb-6 mb-2">
-              <div className="font-display font-black text-foreground text-lg mb-1">Na poptávku i prémiový segment</div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                Hledáte značky vyššího segmentu? Na základě poptávky zajistíme i tyto prémiové domy:
-              </p>
-              <div className="flex flex-wrap gap-x-2 gap-y-3 items-center mb-5">
-                {BRANDS_PREMIUM.map((brand) => (
-                  <div
-                    key={brand.name}
-                    className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
-                  >
-                    <BrandLogo
-                      name={brand.name}
-                      domain={brand.domain}
-                      width={320}
-                      height={128}
-                      className="h-6 sm:h-7 w-auto max-w-[130px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
-                      fallbackClassName="text-xs sm:text-sm font-semibold text-foreground"
-                    />
-                  </div>
-                ))}
-              </div>
-              <Button variant="outline" className="gap-2 border-zinc-900" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
-                Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </Reveal>
-
           {/* Private purchase info */}
-          <Reveal delay={160}>
-            <div className="border-t border-zinc-200 py-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+          <Reveal delay={120}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="flex-1">
                 <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
