@@ -802,6 +802,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
 
+          {/* ── Any brand without registration (moved here) ── */}
+          <Reveal delay={260}>
+            <div className="mt-8 pt-8 border-t border-border text-center">
+              <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-4">
+                Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
+              </p>
+              <Button className="gap-2" onClick={() => navigate('/luxury')}>
+                Soukromý nákup <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Reveal>
+
         </div>
       </section>
 
@@ -883,28 +896,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </Reveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          2. BRANDS — premium segment + soukromý nákup
-      ══════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 border-b border-border">
-        <div className="mx-auto max-w-6xl px-6">
-          {/* Private purchase info */}
-          <Reveal delay={120}>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <div className="flex-1">
-                <div className="font-display font-black text-foreground mb-1">Jakákoliv značka bez registrace?</div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Soukromý nákup nebo firemní dárky — zakoupíte cokoliv z katalogu <strong>bez B2B registrace</strong>. Jediným předpokladem k nákupu je <strong>IČO</strong>. Diskrétní balení, EU doručení.
-                </p>
-              </div>
-              <Button className="gap-2 shrink-0" onClick={() => navigate('/luxury')}>
-                Soukromý nákup <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Reveal>
         </div>
       </section>
 
