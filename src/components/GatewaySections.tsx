@@ -19,6 +19,7 @@ import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS, BRANDS_PREMIUM, getBrandByName } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
+import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 
 
 
@@ -663,10 +664,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden border-b border-border min-h-[560px] sm:min-h-[640px] flex items-center">
-        <div className="relative z-10 w-full mx-auto max-w-5xl px-4 sm:px-6 py-14 sm:py-20">
+      <section className="relative border-b border-border pt-12 pb-14 sm:pt-16 sm:pb-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
 
-          {/* ── Hero content — free over the background, no card ── */}
+          {/* ── Hero content — logo, tagline, CTAs, bullets ── */}
           <Reveal>
             <div className="text-center">
               {/* 1) Big swelt. logo */}
@@ -716,10 +717,17 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </ul>
             </div>
           </Reveal>
+        </div>
 
-          {/* ── Brand pills — free over the background, no card ── */}
+        {/* ── Second carousel — brand showcase (mini brand-detail cards) ── */}
+        <div className="mt-10 sm:mt-12">
+          <BrandShowcaseCarousel />
+        </div>
+
+        {/* ── Brand logos ── */}
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <Reveal delay={140}>
-            <div className="mt-8">
+            <div className="mt-10">
               <div className="flex flex-wrap items-center justify-center gap-2">
                 {(() => {
                   const PILL_BRANDS = [
