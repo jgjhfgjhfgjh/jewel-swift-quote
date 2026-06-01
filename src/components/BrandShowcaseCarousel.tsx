@@ -70,7 +70,7 @@ interface BrandCardData {
 
 /** Card sizing — identical to the hero banner cards */
 const CARD_CLASS =
-  'shrink-0 snap-start w-[80%] sm:w-[45%] lg:w-[30%] h-[380px] sm:h-[420px] lg:h-[440px]';
+  'shrink-0 snap-center sm:snap-start w-[80%] sm:w-[45%] lg:w-[30%] h-[380px] sm:h-[420px] lg:h-[440px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 const AUTO_MS = 5000;
@@ -238,7 +238,7 @@ export function BrandShowcaseCarousel() {
       <div
         ref={trackRef}
         className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth
-                   px-3 sm:px-5 lg:px-8 scroll-pl-3 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
+                   px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {brands.map((brand) => (

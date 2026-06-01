@@ -112,7 +112,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
       <div
         ref={trackRef}
         className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth
-                   px-3 sm:px-5 lg:px-8 scroll-pl-3 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
+                   px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {slides.map((slide, i) => {
@@ -122,7 +122,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
               key={i}
               data-card
               href={slide.ctaHref}
-              className={`group/card relative shrink-0 snap-start overflow-hidden rounded-2xl sm:rounded-3xl shadow-md
+              className={`group/card relative shrink-0 snap-center sm:snap-start overflow-hidden rounded-2xl sm:rounded-3xl shadow-md
                           w-[80%] sm:w-[45%] lg:w-[30%] ${cardH}`}
             >
               {/* Image */}
