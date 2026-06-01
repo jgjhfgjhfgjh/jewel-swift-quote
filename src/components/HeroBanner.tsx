@@ -1,7 +1,8 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { home } from '@/lib/i18n-homepage';
+import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 
 // ── Images (Unsplash, verified 200) — optimized width for narrow cards ────
 const SLIDE_IMAGES = [
@@ -51,8 +52,6 @@ const INTERVAL_MS = 5000;
 // ─────────────────────────────────────────────────────────────────────────
 export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const { lang } = useStore();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const slides = useMemo<Slide[]>(
     () =>
@@ -65,36 +64,9 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
     [lang],
   );
 
-  // Scroll the track by one card (loops back at the ends)
-  const scrollByCards = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const cards = el.querySelectorAll<HTMLElement>('[data-card]');
-    if (cards.length === 0) return;
-    const step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
-    if (dir === 1 && el.scrollLeft + el.clientWidth >= el.scrollWidth - 8) {
-      el.scrollTo({ left: 0, behavior: 'smooth' });
-    } else if (dir === -1 && el.scrollLeft <= 8) {
-      el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
-    } else {
-      el.scrollBy({ left: step * dir, behavior: 'smooth' });
-    }
-  };
-
-  const start = () => {
-    stop();
-    intervalRef.current = setInterval(() => scrollByCards(1), INTERVAL_MS);
-  };
-  const stop = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
-  };
-
-  useEffect(() => {
-    start();
-    return stop;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slides.length]);
+  // Render the slides 3× for a seamless infinite loop
+  const loop = useMemo(() => [...slides, ...slides, ...slides], [slides]);
+  const { trackRef, go, start, stop } = useInfiniteCarousel(INTERVAL_MS, slides.length);
 
   // Card height — slightly smaller in catalog (compact) view
   const cardH = compact
@@ -115,8 +87,8 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
                    px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {slides.map((slide, i) => {
-          const meta = SLIDE_META[i] ?? SLIDE_META[0];
+        {loop.map((slide, i) => {
+          const meta = SLIDE_META[i % slides.length] ?? SLIDE_META[0];
           return (
             <a
               key={i}
@@ -155,7 +127,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
 
       {/* ── Navigation arrows (desktop, appear on group-hover) ── */}
       <button
-        onClick={() => scrollByCards(-1)}
+        onClick={() => go(-1)}
         className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
                    h-10 w-10 items-center justify-center rounded-full
                    bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm
@@ -165,7 +137,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
-        onClick={() => scrollByCards(1)}
+        onClick={() => go(1)}
         className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
                    h-10 w-10 items-center justify-center rounded-full
                    bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm

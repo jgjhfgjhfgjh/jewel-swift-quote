@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { getBrandByName } from '@/data/brands';
+import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 
 /* ─── Brand normalization (same as Brands / BrandDetail) ─── */
 const BRAND_ALIASES: Record<string, string> = {
@@ -157,8 +158,6 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
 /* ─── Carousel ─── */
 export function BrandShowcaseCarousel() {
   const [products, setProducts] = useState<Product[]>([]);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     fetch('/products.json')
@@ -195,36 +194,9 @@ export function BrandShowcaseCarousel() {
       .slice(0, 16);
   }, [products]);
 
-  const scrollByCards = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const cards = el.querySelectorAll<HTMLElement>('[data-card]');
-    if (cards.length === 0) return;
-    const step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
-    if (dir === 1 && el.scrollLeft + el.clientWidth >= el.scrollWidth - 8) {
-      el.scrollTo({ left: 0, behavior: 'smooth' });
-    } else if (dir === -1 && el.scrollLeft <= 8) {
-      el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
-    } else {
-      el.scrollBy({ left: step * dir, behavior: 'smooth' });
-    }
-  };
-
-  const start = () => {
-    stop();
-    intervalRef.current = setInterval(() => scrollByCards(1), AUTO_MS);
-  };
-  const stop = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
-  };
-
-  useEffect(() => {
-    if (brands.length === 0) return;
-    start();
-    return stop;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brands.length]);
+  // Render the brand cards 3× for a seamless infinite loop
+  const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);
+  const { trackRef, go, start, stop } = useInfiniteCarousel(AUTO_MS, brands.length);
 
   if (brands.length === 0) return null;
 
@@ -241,21 +213,21 @@ export function BrandShowcaseCarousel() {
                    px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {brands.map((brand) => (
-          <BrandCard key={brand.key} brand={brand} />
+        {loop.map((brand, i) => (
+          <BrandCard key={`${brand.key}-${i}`} brand={brand} />
         ))}
       </div>
 
       {/* Arrows */}
       <button
-        onClick={() => scrollByCards(-1)}
+        onClick={() => go(-1)}
         className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Předchozí"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
-        onClick={() => scrollByCards(1)}
+        onClick={() => go(1)}
         className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Další"
       >
