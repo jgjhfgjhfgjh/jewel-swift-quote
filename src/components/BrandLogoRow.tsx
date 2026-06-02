@@ -22,7 +22,7 @@ export function BrandLogoRow() {
   return (
     <div className="mt-12 sm:mt-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       {/* Header — title + "see more" inline (Amazon style) */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex items-center gap-3 sm:gap-4 mb-4">
+      <div className="px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 mb-4">
         <h2 className="text-sm sm:text-base font-semibold text-foreground">
           Všechny značky
         </h2>
@@ -40,7 +40,10 @@ export function BrandLogoRow() {
       <div className="relative group">
         <div
           ref={trackRef}
-          className="flex gap-3 sm:gap-4 overflow-x-auto snap-x px-4 sm:px-6 lg:px-8 pb-2
+          className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory pb-2
+                     gap-3 min-[480px]:gap-4 md:gap-5 min-[1200px]:gap-6
+                     px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11
+                     scroll-pl-4 min-[480px]:scroll-pl-5 md:scroll-pl-8 min-[1200px]:scroll-pl-11
                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {BRANDS.map((brand) => (
@@ -49,8 +52,9 @@ export function BrandLogoRow() {
               type="button"
               onClick={() => navigate(`/brands/${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
               aria-label={brand.name}
-              className="group/card shrink-0 snap-start w-[150px] sm:w-[200px] lg:w-[220px] aspect-[16/9]
-                         rounded-xl border border-border bg-white shadow-sm flex items-center justify-center p-5
+              className="group/card shrink-0 snap-start aspect-[16/9]
+                         w-[clamp(150px,42vw,200px)] md:w-[240px] min-[1200px]:w-[280px]
+                         rounded-[8px] border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5
                          hover:shadow-md hover:-translate-y-0.5 transition-all"
             >
               <BrandLogo
@@ -58,7 +62,7 @@ export function BrandLogoRow() {
                 domain={brand.domain}
                 width={360}
                 height={160}
-                className="max-h-[40px] sm:max-h-[52px] max-w-[82%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover/card:scale-105"
+                className="max-h-[44px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover/card:scale-105"
                 fallbackClassName="font-display font-black text-foreground text-base"
               />
             </button>
