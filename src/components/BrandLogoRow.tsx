@@ -42,28 +42,61 @@ export function BrandLogoRow() {
     closeRef.current = setTimeout(() => setPreview(null), 90);
   };
 
-  // Open the expand preview after a dwell delay (hover-capable devices only)
-  const handleEnter = (brand: Brand, el: HTMLElement) => {
-    if (typeof window === 'undefined' || !window.matchMedia('(hover: hover)').matches) return;
-    cancelClose();
-    clearDwell();
-    dwellRef.current = setTimeout(() => {
-      const r = el.getBoundingClientRect();
-      const width = Math.round(r.width * 1.56);
-      const left = Math.max(8, Math.min(r.left + r.width / 2 - width / 2, window.innerWidth - width - 8));
-      const top = Math.max(8, r.top - 24);
-      setPreview({ brand, left, top, width });
-    }, 100);
+  const canHover = () => typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches;
+
+  // Position + show the preview over a given card element
+  const openFor = (brand: Brand, el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    const width = Math.round(r.width * 1.56);
+    const left = Math.max(8, Math.min(r.left + r.width / 2 - width / 2, window.innerWidth - width - 8));
+    const top = Math.max(8, r.top - 24);
+    setPreview({ brand, left, top, width });
   };
 
-  // Close preview on any scroll / resize (fixed panel detaches from the card)
+  // Open the expand preview after a short dwell (hover-capable devices only)
+  const handleEnter = (brand: Brand, el: HTMLElement) => {
+    if (!canHover()) return;
+    cancelClose();
+    clearDwell();
+    dwellRef.current = setTimeout(() => openFor(brand, el), 100);
+  };
+
+  // Track the cursor so we can re-evaluate which card is under it after a swipe
+  const pointerRef = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
-    const close = () => { clearDwell(); setPreview(null); };
-    window.addEventListener('scroll', close, { passive: true, capture: true });
-    window.addEventListener('resize', close);
+    const onMove = (e: MouseEvent) => { pointerRef.current = { x: e.clientX, y: e.clientY }; };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  // While scrolling hide the preview; once it settles, re-open it for the card
+  // now sitting under the (possibly stationary) cursor — mouseenter doesn't fire
+  // when content slides under a still pointer, so we resolve it via elementFromPoint.
+  useEffect(() => {
+    let idle: ReturnType<typeof setTimeout> | null = null;
+    const onScroll = () => {
+      clearDwell();
+      setPreview(null);
+      if (idle) clearTimeout(idle);
+      idle = setTimeout(() => {
+        if (!canHover()) return;
+        const p = pointerRef.current;
+        if (!p) return;
+        const hit = document.elementFromPoint(p.x, p.y) as HTMLElement | null;
+        const card = hit?.closest('[data-card]') as HTMLElement | null;
+        if (!card) return;
+        const name = card.getAttribute('data-brand');
+        const domain = card.getAttribute('data-domain');
+        if (name && domain) openFor({ name, domain }, card);
+      }, 150);
+    };
+    const onResize = () => { clearDwell(); setPreview(null); };
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    window.addEventListener('resize', onResize);
     return () => {
-      window.removeEventListener('scroll', close, { capture: true } as EventListenerOptions);
-      window.removeEventListener('resize', close);
+      window.removeEventListener('scroll', onScroll, { capture: true } as EventListenerOptions);
+      window.removeEventListener('resize', onResize);
+      if (idle) clearTimeout(idle);
     };
   }, []);
 
@@ -98,6 +131,9 @@ export function BrandLogoRow() {
             <button
               key={brand.name}
               type="button"
+              data-card
+              data-brand={brand.name}
+              data-domain={brand.domain}
               onClick={() => navigate(`/brands/${slug(brand.name)}`)}
               onMouseEnter={(e) => handleEnter(brand, e.currentTarget)}
               onMouseLeave={() => { clearDwell(); scheduleClose(); }}
