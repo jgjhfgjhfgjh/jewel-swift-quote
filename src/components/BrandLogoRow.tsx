@@ -53,7 +53,7 @@ export function BrandLogoRow() {
       const left = Math.max(8, Math.min(r.left + r.width / 2 - width / 2, window.innerWidth - width - 8));
       const top = Math.max(8, r.top - 24);
       setPreview({ brand, left, top, width });
-    }, 200);
+    }, 100);
   };
 
   // Close preview on any scroll / resize (fixed panel detaches from the card)
@@ -103,7 +103,7 @@ export function BrandLogoRow() {
               onMouseLeave={() => { clearDwell(); scheduleClose(); }}
               aria-label={brand.name}
               className="shrink-0 aspect-[16/9]
-                         w-[clamp(150px,42vw,200px)] md:w-[240px] min-[1200px]:w-[280px]
+                         w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]
                          rounded-[8px] border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5"
             >
               <BrandLogo
@@ -111,7 +111,7 @@ export function BrandLogoRow() {
                 domain={brand.domain}
                 width={360}
                 height={160}
-                className="max-h-[44px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply]"
+                className="max-h-[48px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply]"
                 fallbackClassName="font-display font-black text-foreground text-base"
               />
             </button>
