@@ -53,7 +53,7 @@ export function BrandLogoRow() {
       const left = Math.max(8, Math.min(r.left + r.width / 2 - width / 2, window.innerWidth - width - 8));
       const top = Math.max(8, r.top - 24);
       setPreview({ brand, left, top, width });
-    }, 450);
+    }, 200);
   };
 
   // Close preview on any scroll / resize (fixed panel detaches from the card)
