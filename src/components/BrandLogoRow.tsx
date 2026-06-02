@@ -23,7 +23,7 @@ export function BrandLogoRow() {
     <div className="mt-12 sm:mt-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       {/* Header — title + "see more" inline (Amazon style) */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex items-center gap-3 sm:gap-4 mb-4">
-        <h2 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-foreground">
+        <h2 className="text-sm sm:text-base font-semibold text-foreground">
           Všechny značky
         </h2>
         <button
