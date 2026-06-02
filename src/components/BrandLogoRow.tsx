@@ -88,7 +88,7 @@ export function BrandLogoRow() {
       <div className="relative group">
         <div
           ref={trackRef}
-          className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory pb-2
+          className="flex flex-nowrap overflow-x-auto snap-x snap-proximity [-webkit-overflow-scrolling:touch] pb-2
                      gap-3 min-[480px]:gap-4 md:gap-5 min-[1200px]:gap-6
                      px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11
                      scroll-pl-4 min-[480px]:scroll-pl-5 md:scroll-pl-8 min-[1200px]:scroll-pl-11
