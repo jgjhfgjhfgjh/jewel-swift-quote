@@ -250,6 +250,26 @@ export default function BrandDetail() {
     navigate(withCat(`/brands/${slug}`));
   };
 
+  // Swipe navigation between brands (mobile — replaces the arrows)
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStartRef.current = { x: t.clientX, y: t.clientY };
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const s = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!s) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - s.x;
+    const dy = t.clientY - s.y;
+    // horizontal swipe only (ignore vertical scroll)
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0 && nextBrandKey) goToBrand(nextBrandKey);      // swipe left → next
+      else if (dx > 0 && prevBrandKey) goToBrand(prevBrandKey); // swipe right → prev
+    }
+  };
+
   // Crossfade slideshow — cycle through up to 10 products in the hero
   const rotationCount = brandData?.rotationProducts.length ?? 0;
   useEffect(() => {
@@ -310,7 +330,11 @@ export default function BrandDetail() {
       <main className="min-h-screen bg-background pt-14 sm:pt-24">
 
         {/* ── 1) Hero — brand logo (text placeholder) + sample product on white ── */}
-        <section className="py-12 sm:py-20 bg-white border-b border-border">
+        <section
+          className="py-12 sm:py-20 bg-white border-b border-border"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="mx-auto max-w-3xl px-6">
             {/* Active category filter indicator — shown when arrived from /brands?cat=... */}
             {category && (
@@ -343,7 +367,7 @@ export default function BrandDetail() {
                     onClick={() => goToBrand(prevBrandKey)}
                     aria-label={`Předchozí značka: ${toDisplayName(prevBrandKey)}`}
                     title={toDisplayName(prevBrandKey)}
-                    className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
+                    className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full hidden sm:flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
                   >
                     <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.25} />
                   </button>
@@ -354,12 +378,12 @@ export default function BrandDetail() {
                     onClick={() => goToBrand(nextBrandKey)}
                     aria-label={`Další značka: ${toDisplayName(nextBrandKey)}`}
                     title={toDisplayName(nextBrandKey)}
-                    className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
+                    className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 sm:h-12 sm:w-12 rounded-full hidden sm:flex items-center justify-center text-foreground/70 hover:text-foreground backdrop-blur-md bg-white/40 border border-white/60 shadow-md hover:bg-white/70 hover:scale-105 active:scale-95 transition-all"
                   >
                     <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.25} />
                   </button>
                 )}
-                <h1 className="text-center flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px] px-14 sm:px-20">
+                <h1 className="text-center flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px] px-2 sm:px-20">
                   <span className="sr-only">{brandData.name}</span>
                   {(() => {
                     const brand = getBrandByName(brandData.name);
