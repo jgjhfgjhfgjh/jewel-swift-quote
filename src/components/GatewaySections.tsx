@@ -17,9 +17,10 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { buildPartnerContext } from '@/lib/chatContext';
 import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
-import { BRANDS, BRANDS_PREMIUM } from '@/data/brands';
+import { BRANDS_PREMIUM } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { BrandLogoRow } from '@/components/BrandLogoRow';
 
 
 
@@ -724,28 +725,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <BrandShowcaseCarousel />
         </div>
 
-        {/* ── Brand logos — all brands, full width, edge to edge ── */}
-        <Reveal delay={140} className="block px-3 sm:px-6">
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-            {BRANDS.map((brand) => (
-              <button
-                key={brand.name}
-                onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
-                aria-label={brand.name}
-                className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
-              >
-                <BrandLogo
-                  name={brand.name}
-                  domain={brand.domain}
-                  width={320}
-                  height={128}
-                  className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
-                  fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
-                />
-              </button>
-            ))}
-          </div>
-        </Reveal>
+        {/* ── Brand logos — Amazon-style shelf carousel ── */}
+        <BrandLogoRow />
 
         {/* ── Premium segment + private purchase (contained) ── */}
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
