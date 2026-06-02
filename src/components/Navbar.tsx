@@ -300,8 +300,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <>
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out
-        ${hidden ? '-translate-y-full' : 'translate-y-0'}
+      className={`absolute top-0 left-0 right-0 z-[100]
         border-b border-white/25
       `}
       style={{
@@ -644,7 +643,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         <>
           {/* Panel */}
           <div
-            className="fixed left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
+            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
             style={{ top: headerHeight }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
