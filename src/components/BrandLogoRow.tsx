@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { BRANDS } from '@/data/brands';
 
@@ -21,18 +21,18 @@ export function BrandLogoRow() {
 
   return (
     <div className="mt-12 sm:mt-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-      {/* Header — title + "see more" */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex items-end justify-between mb-4">
+      {/* Header — title + "see more" inline (Amazon style) */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex items-center gap-3 sm:gap-4 mb-4">
         <h2 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-foreground">
           Všechny značky
         </h2>
         <button
           type="button"
           onClick={() => navigate('/brands')}
-          className="group inline-flex items-center gap-1 text-sm font-semibold text-primary shrink-0"
+          className="group inline-flex items-center gap-0.5 text-sm sm:text-base font-semibold text-muted-foreground hover:text-foreground transition-colors"
         >
           Vidět víc
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
 
