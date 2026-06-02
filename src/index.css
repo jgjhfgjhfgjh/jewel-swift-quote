@@ -1224,11 +1224,12 @@
 
   /* Prime-Video-style hover-expand preview (brand logo shelf) */
   .pv-pop {
-    animation: pv-pop 180ms ease-out both;
+    animation: pv-pop 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
     transform-origin: center top;
+    will-change: transform, opacity;
   }
   @keyframes pv-pop {
-    from { opacity: 0; transform: scale(0.92); }
+    from { opacity: 0; transform: scale(0.88); }
     to   { opacity: 1; transform: scale(1); }
   }
 }
