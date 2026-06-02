@@ -55,14 +55,15 @@ export function BrandLogoRow() {
               className="group/card shrink-0 snap-start aspect-[16/9]
                          w-[clamp(150px,42vw,200px)] md:w-[240px] min-[1200px]:w-[280px]
                          rounded-[8px] border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5
-                         hover:shadow-md hover:-translate-y-0.5 transition-all"
+                         transition-[transform,box-shadow] duration-200
+                         [@media(hover:hover)]:hover:shadow-md [@media(hover:hover)]:hover:-translate-y-0.5"
             >
               <BrandLogo
                 name={brand.name}
                 domain={brand.domain}
                 width={360}
                 height={160}
-                className="max-h-[44px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover/card:scale-105"
+                className="max-h-[44px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 [@media(hover:hover)]:group-hover/card:scale-105"
                 fallbackClassName="font-display font-black text-foreground text-base"
               />
             </button>
