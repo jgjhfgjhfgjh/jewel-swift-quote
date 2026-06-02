@@ -176,6 +176,7 @@ export function BrandLogoRow() {
       {/* ── Hover-expand preview (desktop only, fixed overlay) ── */}
       {preview && (
         <div
+          key={preview.brand.name}
           aria-hidden
           className="pv-pop pointer-events-none fixed z-[60] overflow-hidden rounded-[8px] bg-zinc-900 shadow-[0_4px_8px_2px_rgba(0,5,13,0.5)]"
           style={{ left: preview.left, top: preview.top, width: preview.width }}
