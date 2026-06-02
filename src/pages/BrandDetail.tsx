@@ -557,9 +557,9 @@ export default function BrandDetail() {
             </Reveal>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { icon: Rss, title: 'Feed', text: 'Automatický XML/CSV feed produktů této značky přímo do vašeho e‑shopu.', action: () => navigate('/feed') },
-                { icon: PackageOpen, title: 'Dropshipping', text: 'Prodávejte tuto značku bez skladu — balíme a expedujeme pod vaší značkou.', action: () => navigate('/dropshipping') },
-                { icon: HandCoins, title: 'Nákup bez registrace', text: 'Soukromý i firemní nákup této značky bez B2B registrace, stačí IČO.', action: () => navigate('/luxury') },
+                { icon: Rss, title: 'Možnost feedu', text: 'Automatický XML/CSV feed produktů této značky přímo do vašeho e‑shopu.', action: () => navigate('/feed') },
+                { icon: PackageOpen, title: 'Možnost dropshippingu', text: 'Prodávejte tuto značku bez skladu — balíme a expedujeme pod vaší značkou.', action: () => navigate('/dropshipping') },
+                { icon: HandCoins, title: 'Možnost nákupu bez registrace', text: 'Soukromý i firemní nákup této značky bez B2B registrace, stačí IČO.', action: () => navigate('/luxury') },
                 { icon: Truck, title: 'Skladem v EU', text: 'Expedice do 24–48 h ze středoevropského skladu, doručení do 72 h.', action: handleOpenInCatalog },
               ].map(({ icon: Icon, title, text, action }, i) => (
                 <Reveal key={title} delay={Math.min(i, 3) * 70}>
