@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Package, Star, Shield, Truck, Sparkles, Check, MessageSquare, Search, X, Rss, PackageOpen, HandCoins } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Package, Truck, Sparkles, Check, MessageSquare, Search, X, Rss, PackageOpen, HandCoins } from 'lucide-react';
 import { getCategorySegment, isBrandSegment, SEGMENT_LABEL, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -555,16 +555,14 @@ export default function BrandDetail() {
                 Vaše výhody
               </h2>
             </Reveal>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { icon: Rss, title: 'Feed', text: 'Automatický XML/CSV feed produktů této značky přímo do vašeho e‑shopu.', action: () => navigate('/feed') },
                 { icon: PackageOpen, title: 'Dropshipping', text: 'Prodávejte tuto značku bez skladu — balíme a expedujeme pod vaší značkou.', action: () => navigate('/dropshipping') },
                 { icon: HandCoins, title: 'Nákup bez registrace', text: 'Soukromý i firemní nákup této značky bez B2B registrace, stačí IČO.', action: () => navigate('/luxury') },
                 { icon: Truck, title: 'Skladem v EU', text: 'Expedice do 24–48 h ze středoevropského skladu, doručení do 72 h.', action: handleOpenInCatalog },
-                { icon: Shield, title: 'Garance pravosti', text: '100 % originální produkty přímo od autorizovaných importérů.', action: handleOpenInCatalog },
-                { icon: Star, title: 'Velkoobchodní ceny', text: 'Marže 40–60 % oproti běžnému retailu. Žádné minimální odběry.', action: () => navigate('/velkoobchod') },
               ].map(({ icon: Icon, title, text, action }, i) => (
-                <Reveal key={title} delay={Math.min(i, 5) * 70}>
+                <Reveal key={title} delay={Math.min(i, 3) * 70}>
                   <button
                     type="button"
                     onClick={action}
