@@ -1221,4 +1221,14 @@
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
   }
+
+  /* Prime-Video-style hover-expand preview (brand logo shelf) */
+  .pv-pop {
+    animation: pv-pop 180ms ease-out both;
+    transform-origin: center top;
+  }
+  @keyframes pv-pop {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
 }
