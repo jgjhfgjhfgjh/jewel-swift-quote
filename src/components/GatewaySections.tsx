@@ -724,57 +724,58 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           <BrandShowcaseCarousel />
         </div>
 
-        {/* ── Brand logos ── */}
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <Reveal delay={140}>
-            <div className="mt-10">
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {(() => {
-                  const PILL_BRANDS = [
-                    'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
-                    'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
-                    'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
-                    'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Moschino',
-                    'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila',
-                    'Sector', 'Breil', 'Viceroy', 'Alviero Martini',
-                  ];
-                  const remaining = Math.max(0, BRANDS.length - PILL_BRANDS.length);
-                  return (
-                    <>
-                      {PILL_BRANDS.map((brandName) => {
-                        const brand = getBrandByName(brandName);
-                        if (!brand) return null;
-                        return (
-                          <button
-                            key={brand.name}
-                            onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
-                            aria-label={brand.name}
-                            className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
-                          >
-                            <BrandLogo
-                              name={brand.name}
-                              domain={brand.domain}
-                              width={320}
-                              height={128}
-                              className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
-                              fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
-                            />
-                          </button>
-                        );
-                      })}
-                      <button
-                        onClick={() => navigate('/brands')}
-                        className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
-                      >
-                        +{remaining} dalších →
-                      </button>
-                    </>
-                  );
-                })()}
-              </div>
-            </div>
-          </Reveal>
+        {/* ── Brand logos — full width, edge to edge ── */}
+        <Reveal delay={140} className="block px-3 sm:px-6">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            {(() => {
+              const PILL_BRANDS = [
+                'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Hugo Boss', 'Guess',
+                'Police', 'Calvin Klein', 'Citizen', 'Casio', 'Tissot', 'Fossil',
+                'DKNY', 'Lacoste', 'Swarovski', 'Pandora', 'Morellato', 'Esprit',
+                'Michael Kors', 'Disney', 'Timex', 'Swatch', 'Moschino',
+                'Nautica', 'Roberto Cavalli', 'Just Cavalli', 'Fila',
+                'Sector', 'Breil', 'Viceroy', 'Alviero Martini',
+                'Pierre Lannier', 'Mark Maddox', 'Invicta', 'Lorus',
+                'Beverly Hills Polo Club', 'Versus Versace', 'Chronostar', 'Hip Hop',
+                'Miss Sixty', 'La Petite Story', 'Hacker', 'Zoppini', 'Q&Q',
+              ];
+              const shown = PILL_BRANDS
+                .map((n) => getBrandByName(n))
+                .filter((b): b is NonNullable<typeof b> => Boolean(b));
+              const remaining = Math.max(0, BRANDS.length - shown.length);
+              return (
+                <>
+                  {shown.map((brand) => (
+                    <button
+                      key={brand.name}
+                      onClick={() => navigate(`/brands#${brand.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                      aria-label={brand.name}
+                      className="px-4 py-2.5 flex items-center justify-center min-w-[96px] group"
+                    >
+                      <BrandLogo
+                        name={brand.name}
+                        domain={brand.domain}
+                        width={320}
+                        height={128}
+                        className="h-6 sm:h-7 w-auto max-w-[120px] object-contain transition-transform duration-300 ease-out group-hover:scale-110 [mix-blend-mode:multiply]"
+                        fallbackClassName="text-xs sm:text-sm font-medium text-foreground/75 group-hover:text-foreground transition-colors"
+                      />
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => navigate('/brands')}
+                    className="rounded-xl border border-zinc-900 bg-zinc-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 hover:border-zinc-800 transition-colors"
+                  >
+                    +{remaining} dalších →
+                  </button>
+                </>
+              );
+            })()}
+          </div>
+        </Reveal>
 
+        {/* ── Premium segment + private purchase (contained) ── */}
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           {/* ── On-demand premium segment (below brand logos) ── */}
           <Reveal delay={200}>
             <div className="mt-10 pt-8 border-t border-border text-center">
