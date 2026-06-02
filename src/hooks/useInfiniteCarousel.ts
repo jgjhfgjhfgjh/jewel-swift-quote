@@ -7,11 +7,12 @@ import { useCallback, useEffect, useRef } from 'react';
  * and pass the ORIGINAL item count. The hook keeps the scroll position inside
  * the middle copy: whenever it drifts more than half a set toward either edge
  * it instantly shifts by exactly one set width (which is visually identical),
- * so scrolling/auto-advancing never hits a hard end — it loops forever.
+ * so scrolling/arrows never hit a hard end — it loops forever.
+ *
+ * No auto-advance — movement is driven only by the user (swipe) or `go()`.
  */
-export function useInfiniteCarousel(autoMs: number, itemCount: number) {
+export function useInfiniteCarousel(itemCount: number) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const idleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Exact pixel width of one item-set (copy), measured from the cards.
@@ -39,16 +40,6 @@ export function useInfiniteCarousel(autoMs: number, itemCount: number) {
     el.scrollBy({ left: step * dir, behavior: 'smooth' });
   }, [wrap]);
 
-  const stop = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
-  }, []);
-
-  const start = useCallback(() => {
-    stop();
-    intervalRef.current = setInterval(() => go(1), autoMs);
-  }, [autoMs, go, stop]);
-
   // Start in the middle copy so it can loop in both directions.
   useEffect(() => {
     const el = trackRef.current;
@@ -75,12 +66,5 @@ export function useInfiniteCarousel(autoMs: number, itemCount: number) {
     };
   }, [wrap]);
 
-  // Auto-advance
-  useEffect(() => {
-    if (itemCount === 0) return;
-    start();
-    return stop;
-  }, [itemCount, start, stop]);
-
-  return { trackRef, go, start, stop };
+  return { trackRef, go };
 }

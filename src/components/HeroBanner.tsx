@@ -46,9 +46,6 @@ type Slide = {
   ctaHref?: string;
 };
 
-/** Auto-advance interval (ms) */
-const INTERVAL_MS = 5000;
-
 // ─────────────────────────────────────────────────────────────────────────
 export function HeroBanner({ compact = false }: { compact?: boolean }) {
   const { lang } = useStore();
@@ -66,7 +63,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
 
   // Render the slides 3× for a seamless infinite loop
   const loop = useMemo(() => [...slides, ...slides, ...slides], [slides]);
-  const { trackRef, go, start, stop } = useInfiniteCarousel(INTERVAL_MS, slides.length);
+  const { trackRef, go } = useInfiniteCarousel(slides.length);
 
   // Card height — slightly smaller in catalog (compact) view
   const cardH = compact
@@ -77,8 +74,6 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
     <div
       className="relative w-full group"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
-      onMouseEnter={stop}
-      onMouseLeave={start}
     >
       {/* ── Scrollable track — 3 cards + a peek of the 4th ── */}
       <div

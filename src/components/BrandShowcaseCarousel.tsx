@@ -74,7 +74,6 @@ const CARD_CLASS =
   'shrink-0 snap-center sm:snap-start w-[80%] sm:w-[45%] lg:w-[30%] h-[380px] sm:h-[420px] lg:h-[440px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
-const AUTO_MS = 5000;
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({ brand }: { brand: BrandCardData }) {
@@ -196,7 +195,7 @@ export function BrandShowcaseCarousel() {
 
   // Render the brand cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);
-  const { trackRef, go, start, stop } = useInfiniteCarousel(AUTO_MS, brands.length);
+  const { trackRef, go } = useInfiniteCarousel(brands.length);
 
   if (brands.length === 0) return null;
 
@@ -204,8 +203,6 @@ export function BrandShowcaseCarousel() {
     <div
       className="relative w-full group"
       style={{ fontFamily: "'Montserrat', sans-serif" }}
-      onMouseEnter={stop}
-      onMouseLeave={start}
     >
       <div
         ref={trackRef}
