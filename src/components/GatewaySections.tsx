@@ -838,10 +838,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="flex flex-col h-full bg-zinc-900/50 backdrop-blur-md border border-white/15 rounded-2xl p-6 shadow-lg hover:bg-zinc-900/60 hover:-translate-y-0.5 transition-all duration-200">
+                <div className="flex flex-col h-full bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-xl p-6 shadow-lg hover:bg-[#17191c]/90 hover:-translate-y-0.5 transition-all duration-200">
                   <div className="font-display font-black text-emerald-500 text-lg mb-2 leading-snug">{item.label}</div>
-                  <div className="font-display font-semibold text-white text-sm mb-2 leading-snug">{item.title}</div>
-                  <p className="text-sm text-white/70 leading-relaxed flex-1">{item.text}</p>
+                  <div className="font-display font-bold text-white text-sm mb-2 leading-snug">{item.title}</div>
+                  <p className="text-sm text-[#b3b3b3] leading-relaxed flex-1">{item.text}</p>
                   <div className="mt-5">
                     <Button size="sm" className="gap-2 w-full sm:w-auto bg-white text-zinc-900 hover:bg-white/90" onClick={() => navigate('/dropshipping')}>
                       Chci dropshipping <ArrowRight className="h-3.5 w-3.5" />
