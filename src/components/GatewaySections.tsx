@@ -921,7 +921,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <button
                     type="button"
                     onClick={() => navigate(card.path)}
-                    className="group h-full w-full text-left flex flex-col bg-zinc-900/50 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden shadow-lg hover:bg-zinc-900/60 hover:-translate-y-0.5 transition-all duration-200"
+                    className="group h-full w-full text-left flex flex-col bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-xl overflow-hidden shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                   >
                     {/* Futuristic image */}
                     <div className="h-36 sm:h-40 w-full overflow-hidden bg-black/20">
@@ -935,12 +935,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     {/* Content */}
                     <div className="flex flex-col flex-1 p-5">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <div className="h-7 w-7 rounded-lg bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
+                        <div className="h-7 w-7 rounded-lg bg-[#33373d] border border-white/10 flex items-center justify-center shrink-0">
                           <Icon className="h-3.5 w-3.5 text-white" />
                         </div>
                         <span className="font-display font-black text-white text-base">{card.label}</span>
                       </div>
-                      <p className="text-sm text-white/70 leading-relaxed flex-1">{card.desc}</p>
+                      <p className="text-sm text-[#b3b3b3] leading-relaxed flex-1">{card.desc}</p>
                       <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white group-hover:gap-2.5 transition-all">
                         {card.cta} <ArrowRight className="h-3.5 w-3.5" />
                       </div>
@@ -995,7 +995,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-white/15 bg-zinc-900/50 backdrop-blur-md hover:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-xl p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
@@ -1009,10 +1009,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     </span>
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-white/60 mb-1.5">AI · Dostupný 24/7</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-[#999999] mb-1.5">AI · Dostupný 24/7</span>
                   {/* Title + desc */}
                   <p className="font-bold text-sm text-white leading-tight mb-1">AI obchodní zástupce</p>
-                  <p className="text-[12px] text-white/60 leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
+                  <p className="text-[12px] text-[#b3b3b3] leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
                   {/* CTA */}
                   <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Zahájit konverzaci <ArrowRight className="h-3.5 w-3.5" />
@@ -1022,7 +1022,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-white/15 bg-zinc-900/50 backdrop-blur-md hover:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 shadow-lg transition-all"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-xl p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">
@@ -1032,10 +1032,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 border-2 border-zinc-900" />
                   </div>
                   {/* Tag */}
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-white/60 mb-1.5">Osobní péče · Do 24 h</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-[#999999] mb-1.5">Osobní péče · Do 24 h</span>
                   {/* Title + desc */}
                   <p className="font-bold text-sm text-white leading-tight mb-1">Osobní account manager</p>
-                  <p className="text-[12px] text-white/60 leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
+                  <p className="text-[12px] text-[#b3b3b3] leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
                   {/* CTA */}
                   <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Kontaktovat <ArrowRight className="h-3.5 w-3.5" />
