@@ -98,10 +98,50 @@ function toDisplayName(key: string): string {
 }
 
 /* ─── Per-brand stories (keyed by normalized brand key) ─── */
-const BRAND_STORIES: Record<string, string[]> = {
+interface StoryItem {
+  lead: string;
+  text: string;
+}
+interface StoryEra {
+  heading: string;
+  items: StoryItem[];
+}
+const BRAND_STORIES: Record<string, StoryEra[]> = {
   'CALVIN KLEIN': [
-    'Příběh hodinek a šperků značky Calvin Klein se začal psát v roce 1997, kdy tato ikona newyorského minimalismu spojila síly s tehdy největším světovým hodinářským koncernem, švýcarskou Swatch Group. Výsledkem tohoto strategického spojenectví byl vznik společného podniku cK Watch Co. Ltd. Spojení čistého, smyslného designu Calvina Kleina a nekompromisní švýcarské preciznosti s prestižním označením „Swiss Made" okamžitě sklidilo celosvětový úspěch. Značka tím tehdy definovala zcela nový segment tzv. „módních hodinek" (fashion watches), které byly designové, ale zároveň vysoce kvalitní a cenově dostupné. Na tento úspěch pak přirozeně navázala v roce 2004, kdy své portfolio rozšířila o kolekce minimalistických šperků z čistých linií a chirurgické oceli.',
-    'Po více než dvaceti letech úspěšné spolupráce však došlo k zásadnímu obratu. V roce 2019 se společnosti Calvin Klein a Swatch Group rozhodly své licenční partnerství z důvodu odlišných strategických vizí již neobnovovat. Nová éra pro hodinky a šperky Calvin Klein započala v roce 2020, kdy značka podepsala novou exkluzivní licenční smlouvu s globálním hodinářským gigantem Movado Group. Od roku 2022, kdy byla tato nová kapitola oficiálně spuštěna na trh, převzalo Movado kompletní vývoj, výrobu a distribuci. I pod novým vedením si však hodinky a šperky striktně zachovávají svou původní DNA – moderní estetiku, čisté linie a nadčasovou eleganci, která dokonale doplňuje identitu tohoto globálního módního impéria.',
+    {
+      heading: '1997–2019: Švýcarská preciznost a zrod „Fashion Watches"',
+      items: [
+        {
+          lead: '1997 – Spojení se Swatch Group',
+          text: 'Calvin Klein spojil newyorský módní minimalismus s největším švýcarským hodinářským koncernem a založil divizi cK Watch Co. Ltd.',
+        },
+        {
+          lead: 'Prestižní známka „Swiss Made"',
+          text: 'Spojení designu a švýcarské kvality dalo vzniknout zcela novému segmentu cenově dostupných, ale vysoce kvalitních módních hodinek.',
+        },
+        {
+          lead: '2004 – Rozšíření o šperky',
+          text: 'Na celosvětový úspěch hodinek značka navázala uvedením kolekcí minimalistických šperků z čistých linií a chirurgické oceli.',
+        },
+      ],
+    },
+    {
+      heading: '2020–Současnost: Nová éra pod křídly Movado Group',
+      items: [
+        {
+          lead: '2019 – Konec jedné kapitoly',
+          text: 'Po více než 20 letech úspěšné spolupráce došlo k ukončení licenčního partnerství se Swatch Group kvůli odlišným vizím budoucnosti.',
+        },
+        {
+          lead: '2020 – Strategický restart',
+          text: 'Calvin Klein podepsal novou exkluzivní smlouvu s globálním hodinářským gigantem Movado Group.',
+        },
+        {
+          lead: 'Od roku 2022 dodnes',
+          text: 'Movado oficiálně převzalo kompletní vývoj a distribuci. Hodinky a šperky si však striktně zachovávají svou původní DNA – moderní estetiku, čisté linie a nadčasovou eleganci.',
+        },
+      ],
+    },
   ],
 };
 
@@ -498,11 +538,23 @@ export default function BrandDetail() {
                 Příběh značky {brandData.name}
               </h2>
               {BRAND_STORIES[brandData.key] ? (
-                <div className="space-y-4 text-left">
-                  {BRAND_STORIES[brandData.key].map((para, i) => (
-                    <p key={i} className="text-muted-foreground leading-relaxed">
-                      {para}
-                    </p>
+                <div className="space-y-8 text-left">
+                  {BRAND_STORIES[brandData.key].map((era, i) => (
+                    <div key={i}>
+                      <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                        {era.heading}
+                      </h3>
+                      <ul className="space-y-3">
+                        {era.items.map((item, j) => (
+                          <li key={j} className="flex gap-3 text-muted-foreground leading-relaxed">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+                            <span>
+                              <span className="font-semibold text-foreground">{item.lead}:</span> {item.text}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
                 </div>
               ) : (
