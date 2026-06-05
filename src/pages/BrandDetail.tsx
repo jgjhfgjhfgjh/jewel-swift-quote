@@ -97,6 +97,14 @@ function toDisplayName(key: string): string {
   return key.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/* ─── Per-brand stories (keyed by normalized brand key) ─── */
+const BRAND_STORIES: Record<string, string[]> = {
+  'CALVIN KLEIN': [
+    'Příběh hodinek a šperků značky Calvin Klein se začal psát v roce 1997, kdy tato ikona newyorského minimalismu spojila síly s tehdy největším světovým hodinářským koncernem, švýcarskou Swatch Group. Výsledkem tohoto strategického spojenectví byl vznik společného podniku cK Watch Co. Ltd. Spojení čistého, smyslného designu Calvina Kleina a nekompromisní švýcarské preciznosti s prestižním označením „Swiss Made" okamžitě sklidilo celosvětový úspěch. Značka tím tehdy definovala zcela nový segment tzv. „módních hodinek" (fashion watches), které byly designové, ale zároveň vysoce kvalitní a cenově dostupné. Na tento úspěch pak přirozeně navázala v roce 2004, kdy své portfolio rozšířila o kolekce minimalistických šperků z čistých linií a chirurgické oceli.',
+    'Po více než dvaceti letech úspěšné spolupráce však došlo k zásadnímu obratu. V roce 2019 se společnosti Calvin Klein a Swatch Group rozhodly své licenční partnerství z důvodu odlišných strategických vizí již neobnovovat. Nová éra pro hodinky a šperky Calvin Klein započala v roce 2020, kdy značka podepsala novou exkluzivní licenční smlouvu s globálním hodinářským gigantem Movado Group. Od roku 2022, kdy byla tato nová kapitola oficiálně spuštěna na trh, převzalo Movado kompletní vývoj, výrobu a distribuci. I pod novým vedením si však hodinky a šperky striktně zachovávají svou původní DNA – moderní estetiku, čisté linie a nadčasovou eleganci, která dokonale doplňuje identitu tohoto globálního módního impéria.',
+  ],
+};
+
 /* ─── Types ─── */
 interface Product {
   id: string;
@@ -489,9 +497,19 @@ export default function BrandDetail() {
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground mb-6">
                 Příběh značky {brandData.name}
               </h2>
-              <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                <em className="text-foreground/40 not-italic">[Placeholder]</em> — zde bude unikátní příběh značky {brandData.name}, její historie, hodnoty a co ji odlišuje od konkurence. Doplníme postupně textem na míru každé značce.
-              </p>
+              {BRAND_STORIES[brandData.key] ? (
+                <div className="space-y-4 text-left">
+                  {BRAND_STORIES[brandData.key].map((para, i) => (
+                    <p key={i} className="text-muted-foreground leading-relaxed">
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  <em className="text-foreground/40 not-italic">[Placeholder]</em> — zde bude unikátní příběh značky {brandData.name}, její historie, hodnoty a co ji odlišuje od konkurence. Doplníme postupně textem na míru každé značce.
+                </p>
+              )}
             </Reveal>
           </div>
         </section>
