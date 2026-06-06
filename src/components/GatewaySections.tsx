@@ -694,7 +694,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </h1>
 
               {/* 3) CTAs */}
-              <div className="mt-[120px] sm:mt-[160px] flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <div className="mt-[76px] sm:mt-[100px] flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <button
                   onClick={() => openAuth('b2b')}
                   className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
@@ -710,7 +710,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </div>
 
               {/* 4) Bullets */}
-              <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
+              <ul className="mt-[76px] sm:mt-[100px] flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
                 <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Registrace zdarma</li>
                 <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Schválení do 24 hodin</li>
                 <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Bez závazků</li>
