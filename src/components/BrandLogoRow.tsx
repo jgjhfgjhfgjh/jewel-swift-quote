@@ -110,10 +110,10 @@ export function BrandLogoRow() {
         <button
           type="button"
           onClick={() => navigate('/brands')}
-          className="group inline-flex items-center gap-0.5 text-sm sm:text-base font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          className="group inline-flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
         >
           Vidět víc
-          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-0.5" />
+          <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
 
