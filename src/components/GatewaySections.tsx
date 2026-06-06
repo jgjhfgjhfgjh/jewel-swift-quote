@@ -665,7 +665,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative border-b border-border pt-12 pb-14 sm:pt-16 sm:pb-20">
+      <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
 
           {/* ── Hero content — logo, tagline, CTAs, bullets ── */}
@@ -694,7 +694,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               </h1>
 
               {/* 3) CTAs */}
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <div className="mt-[120px] sm:mt-[160px] flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <button
                   onClick={() => openAuth('b2b')}
                   className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
