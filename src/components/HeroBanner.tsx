@@ -90,7 +90,9 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
               data-card
               href={slide.ctaHref}
               className={`group/card relative shrink-0 overflow-hidden rounded-2xl sm:rounded-3xl shadow-md
-                          w-[80%] sm:w-[45%] lg:w-[30%] ${cardH}`}
+                          w-[80%] sm:w-[45%] lg:w-[30%] ${cardH}
+                          transition-[width] duration-500 ease-out
+                          lg:[@media(hover:hover)]:hover:w-[46%] lg:[@media(hover:hover)]:hover:delay-300`}
             >
               {/* Image */}
               <img
