@@ -45,7 +45,7 @@ export function AppsCards() {
   };
 
   const tools: Tool[] = [
-    { icon: PackageOpen, title: 'Dropshipping', desc: 'Prodávejte bez skladu — balíme pod vaší značkou', to: '/dropshipping', badge: 'trending' },
+    { icon: Handshake, title: 'B2B Velkoobchod', desc: '3 000+ produktů za velkoobchodní ceny', to: '/velkoobchod' },
     { icon: Rss, title: 'Automatický feed', desc: 'XML/CSV feed 3 000+ produktů do e-shopu', to: '/feed', badge: 'new' },
     { icon: ShoppingCart, title: 'E-shop do 48 h', desc: 'Hotový obchod naplněný produkty', to: '/shop' },
     { icon: HandCoins, title: 'Nákup bez registrace', desc: 'Velkoobchodní ceny, stačí IČO', to: '/luxury' },
@@ -60,22 +60,27 @@ export function AppsCards() {
         {/* ── HERO card ── */}
         <button
           type="button"
-          onClick={() => navigate('/velkoobchod')}
+          onClick={() => navigate('/dropshipping')}
           className="group relative overflow-hidden rounded-2xl w-full lg:w-[400px] lg:shrink-0 min-h-[200px]
                      bg-[#1c1e20] border border-white/5 p-5 flex flex-col justify-between text-left
                      transition-colors hover:bg-[#23252a]"
         >
           {/* decorative icon */}
-          <Handshake className="pointer-events-none absolute -right-6 -bottom-6 h-40 w-40 text-white/[0.04]" strokeWidth={1.25} />
+          <PackageOpen className="pointer-events-none absolute -right-6 -bottom-6 h-40 w-40 text-white/[0.04]" strokeWidth={1.25} />
           <div className="relative">
             <div className="flex items-center gap-2">
               <h2 className="font-grotesk text-3xl font-extrabold uppercase tracking-tight text-white">
-                B2B Velkoobchod
+                Dropshipping
               </h2>
-              <NewBadge />
+              <span
+                className="font-grotesk text-xs inline-block uppercase px-1.5 rounded-sm font-bold -skew-x-12 text-white"
+                style={{ backgroundImage: 'radial-gradient(39.71% 136.54% at 51.64% 117.31%, #F920D1 0%, #ED1572 100%)' }}
+              >
+                Trending
+              </span>
             </div>
             <p className="mt-3 max-w-[280px] text-sm text-[#898a8b] leading-relaxed">
-              3 000+ produktů a 70+ značek za velkoobchodní ceny. Od jednoho kusu, doručení po celé EU.
+              Prodávejte bez skladu — zákazník objedná u vás, my zabalíme a odešleme pod vaší značkou.
             </p>
           </div>
           <span className="relative mt-6 inline-flex items-center gap-1.5 self-start rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition group-hover:bg-white/90">
@@ -92,7 +97,7 @@ export function AppsCards() {
                 key={t.title}
                 type="button"
                 onClick={() => go(t)}
-                className="group relative overflow-hidden rounded-2xl min-h-[180px] sm:min-h-[210px] p-5 gap-3
+                className="group relative overflow-hidden rounded-2xl min-h-[126px] p-5 gap-3
                            bg-[#1c1e20] border border-white/5 flex flex-col items-start justify-between text-left
                            transition-colors hover:bg-[#23252a]"
               >
