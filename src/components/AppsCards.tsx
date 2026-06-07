@@ -63,7 +63,7 @@ export function AppsCards() {
           onClick={() => navigate('/dropshipping')}
           className="group relative overflow-hidden rounded-2xl w-full lg:w-[400px] lg:shrink-0 min-h-[200px]
                      bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] p-5 flex flex-col justify-between text-left
-                     transition-colors hover:bg-[#23252a]/80"
+                     transition-colors hover:bg-[#0e0f11]/90"
         >
           {/* decorative icon */}
           <PackageOpen className="pointer-events-none absolute -right-6 -bottom-6 h-40 w-40 text-white/[0.04]" strokeWidth={1.25} />
@@ -99,7 +99,7 @@ export function AppsCards() {
                 onClick={() => go(t)}
                 className="group relative overflow-hidden rounded-2xl min-h-[126px] p-5 gap-3
                            bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] flex flex-col items-start justify-between text-left
-                           transition-colors hover:bg-[#23252a]/80"
+                           transition-colors hover:bg-[#0e0f11]/90"
               >
                 {t.badge === 'trending' && <TrendingBadge />}
                 <div className="flex w-full items-start justify-between">
