@@ -669,28 +669,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
 
-          {/* ── Hero content — logo, tagline, CTAs, bullets ── */}
+          {/* ── Hero content — tagline, CTAs, bullets (logo je nad kartami) ── */}
           <Reveal>
             <div className="text-center">
-              {/* 1) Big swelt. logo */}
-              <div className="relative inline-flex items-baseline justify-center mx-auto">
-                <h1
-                  className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
-                  style={{ letterSpacing: '-0.05em' }}
-                >
-                  swelt.
-                </h1>
-                <span className="relative ml-1 sm:ml-2 inline-block">
-                  {/* Width placeholder = PARTNER (centerpiece reference) */}
-                  <span aria-hidden className="invisible font-sans font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
-                  <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">
-                    <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
-                  </span>
-                </span>
-              </div>
-
-              {/* 2) Subtitle */}
-              <h1 className="font-sans mt-8 sm:mt-10 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
+              {/* Subtitle */}
+              <h1 className="font-sans text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl mx-auto">
                 Přístup k 5 000+ produktům za velkoobchodní ceny
               </h1>
 
