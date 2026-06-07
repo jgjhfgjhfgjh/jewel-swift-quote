@@ -21,6 +21,7 @@ import { BRANDS_PREMIUM } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
+import { HomeFooter } from '@/components/HomeFooter';
 
 
 
@@ -1055,45 +1056,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </div>
 
       {/* ══════════════════════════════════════════
-          6. GATEWAY SECTIONS — 5 alternujících sekcí
+          Závěr stránky — užitečné funkce + rozcestník webu
       ══════════════════════════════════════════ */}
-      {sections.map((section) => {
-        return (
-          <section
-            key={section.id}
-            id={section.id}
-            className="relative py-20 sm:py-28 scroll-mt-16 border-b border-border"
-          >
-            <div className="pointer-events-none absolute inset-0" />
-            <div className="relative mx-auto max-w-6xl px-6">
-              <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${section.reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
-                <Reveal>
-                  <div className="space-y-7">
-                    <div>
-                      <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight mb-4 text-balance">
-                        {section.heading}
-                      </h2>
-                      <p className="text-muted-foreground leading-relaxed text-base sm:text-lg text-pretty max-w-xl">
-                        {section.subheading}
-                      </p>
-                    </div>
-                    <BulletList items={section.bullets} />
-                    <div className="pt-2">{section.ctas}</div>
-                  </div>
-                </Reveal>
-                <Reveal delay={120}>
-                  <div className="relative">
-                    <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-zinc-900/5 blur-2xl" />
-                    <div className="relative">{section.visual}</div>
-                  </div>
-                </Reveal>
-              </div>
-            </div>
-          </section>
-        );
-      })}
-
-      <SectionDivider />
+      <HomeFooter />
 
       <FloatingNotif />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} defaultTab={authTab} />
