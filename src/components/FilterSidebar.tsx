@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useRef } from 'react';
-import { X, Gem, Watch, Sliders, ShoppingBag, Layers, RotateCcw, ChevronDown } from 'lucide-react';
+import { X, Sliders, RotateCcw, ChevronDown } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -313,53 +313,13 @@ export function FilterSidebar({
     setMinDiscount(0);
   };
 
-  // Hi-tech 2026 group header — glassmorphic gradient pill with iconified chip.
-  // Variant accents tie the header to the product family it filters.
-  type GroupVariant = 'neutral' | 'jewelry' | 'watches' | 'common';
-
-  const GroupHeaderInner = ({
-    label,
-    icon: Icon,
-    variant = 'neutral',
-    sub,
-    activeCount = 0,
-  }: {
-    label: string;
-    icon?: React.ComponentType<{ className?: string }>;
-    variant?: GroupVariant;
-    sub?: string;
-    activeCount?: number;
-  }) => (
-    <div
-      className={`filter-group-header filter-group-${variant}`}
-      data-active={activeCount > 0 ? 'true' : 'false'}
-    >
-      <div className="filter-group-header-inner">
-        {Icon && (
-          <span className="filter-group-chip">
-            <Icon className="h-4 w-4" />
-          </span>
-        )}
-        <div className="filter-group-text">
-          <span className="filter-group-label">{label}</span>
-          {sub && <span className="filter-group-sub">{sub}</span>}
-        </div>
-        {activeCount > 0 && (
-          <span className="filter-group-count">{activeCount}</span>
-        )}
-      </div>
-    </div>
-  );
-
-  // Collapsible group: clicking the header expands/collapses the entire section.
-  const CollapsibleGroup = ({
-    value, label, sub, icon, variant, activeCount, defaultOpen, children,
+  // Minimal mobile group — mirrors the desktop mega-bar tab look:
+  // plain label + small chevron, optional count badge. No chips, icons, or gradients.
+  const MobileMinimalGroup = ({
+    value, label, activeCount = 0, defaultOpen, children,
   }: {
     value: string;
     label: string;
-    icon?: React.ComponentType<{ className?: string }>;
-    variant?: GroupVariant;
-    sub?: string;
     activeCount?: number;
     defaultOpen?: boolean;
     children: React.ReactNode;
@@ -368,19 +328,18 @@ export function FilterSidebar({
       type="single"
       collapsible
       defaultValue={defaultOpen ? value : undefined}
-      className="filter-group-wrap"
+      className="filter-mob-section"
     >
-      <AccordionItem value={value} className="filter-group-acc-item">
-        <AccordionTrigger className="filter-group-acc-trigger">
-          <GroupHeaderInner
-            label={label}
-            sub={sub}
-            icon={icon}
-            variant={variant}
-            activeCount={activeCount}
-          />
+      <AccordionItem value={value} className="filter-mob-section-item">
+        <AccordionTrigger className="filter-mob-section-trigger">
+          <span className="filter-mob-section-label">
+            {label}
+            {activeCount > 0 && (
+              <span className="filter-mob-section-badge">{activeCount}</span>
+            )}
+          </span>
         </AccordionTrigger>
-        <AccordionContent className="filter-group-acc-content">
+        <AccordionContent className="filter-mob-section-content">
           {children}
         </AccordionContent>
       </AccordionItem>
@@ -457,37 +416,29 @@ export function FilterSidebar({
   };
 
   const content = (
-    <div className="filter-panel flex h-full flex-col">
-      {/* Top quick row: stock toggle + language picker (no "Region" label — avoids
-          confusion with country of origin) */}
-      <div className="filter-quick-row">
-        <div className="filter-quick-stock">
-          <Sliders className="h-3.5 w-3.5" />
-          <span>{t.stockOnly}</span>
-          <Switch checked={stockOnly} onCheckedChange={setStockOnly} className="ml-auto" />
-        </div>
-        <Accordion type="multiple" className="w-full">
-          <AccordionItem value="lang" className="filter-lang-item">
-            <AccordionTrigger className="filter-lang-trigger">
-              <span className="flex items-center gap-2 text-xs font-semibold">
-                <span className="text-base leading-none">{flags[lang as Lang]}</span>
-                <span>{t.language}</span>
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 pb-3 pt-1">
-              <LanguagePicker />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+    <div className="filter-panel filter-panel--mob flex h-full flex-col">
+      {/* Stock toggle — inline row, mirrors desktop mega-bar */}
+      <div className="filter-mob-stock">
+        <Sliders className="h-3.5 w-3.5" />
+        <span>{t.stockOnly}</span>
+        <Switch checked={stockOnly} onCheckedChange={setStockOnly} className="ml-auto" />
       </div>
 
-      {/* === OBCHOD (slevy a akce) — collapsible === */}
+      {/* === Jazyk === */}
+      <MobileMinimalGroup
+        value="mob-lang"
+        label={`${flags[lang as Lang]}  ${t.language}`}
+      >
+        <div className="px-3 pb-3 pt-1">
+          <LanguagePicker />
+        </div>
+      </MobileMinimalGroup>
+
+      {/* === OBCHOD (slevy a akce) === */}
       {user && (
-        <CollapsibleGroup
-          value="g-obchod"
+        <MobileMinimalGroup
+          value="mob-obchod"
           label={groupLabels.commerce}
-          sub={groupLabels.commerceSub}
-          icon={ShoppingBag}
           activeCount={activeDiscountCount}
           defaultOpen={activeDiscountCount > 0}
         >
@@ -514,15 +465,13 @@ export function FilterSidebar({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </CollapsibleGroup>
+        </MobileMinimalGroup>
       )}
 
       {/* === SORTIMENT (brand / category / gender / origin / packaging) === */}
-      <CollapsibleGroup
-        value="g-sortiment"
+      <MobileMinimalGroup
+        value="mob-sortiment"
         label={groupLabels.sortiment}
-        sub={groupLabels.sortimentSub}
-        icon={Layers}
         activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount + sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
       >
         <Accordion type="multiple" className="w-full">
@@ -622,54 +571,45 @@ export function FilterSidebar({
           {/* Země původu, balení (and similar) — assortment-level extras */}
           {sortimentExtraParams.map(renderParamItem)}
         </Accordion>
-      </CollapsibleGroup>
+      </MobileMinimalGroup>
 
       {/* === ŠPERKY — strict jewelry-only attributes === */}
       {jewelryParams.length > 0 && (
-        <CollapsibleGroup
-          value="g-jewelry"
+        <MobileMinimalGroup
+          value="mob-jewelry"
           label={groupLabels.jewelry}
-          sub={groupLabels.jewelrySub}
-          icon={Gem}
-          variant="jewelry"
           activeCount={jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
         >
           <Accordion type="multiple" className="w-full">
             {jewelryParams.map(renderParamItem)}
           </Accordion>
-        </CollapsibleGroup>
+        </MobileMinimalGroup>
       )}
 
       {/* === HODINKY — strict watch-only attributes === */}
       {watchParams.length > 0 && (
-        <CollapsibleGroup
-          value="g-watches"
+        <MobileMinimalGroup
+          value="mob-watches"
           label={groupLabels.watches}
-          sub={groupLabels.watchesSub}
-          icon={Watch}
-          variant="watches"
           activeCount={watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
         >
           <Accordion type="multiple" className="w-full">
             {watchParams.map(renderParamItem)}
           </Accordion>
-        </CollapsibleGroup>
+        </MobileMinimalGroup>
       )}
 
       {/* === SPOLEČNÉ — attributes that apply to both families === */}
       {commonParams.length > 0 && (
-        <CollapsibleGroup
-          value="g-common"
+        <MobileMinimalGroup
+          value="mob-common"
           label={groupLabels.common}
-          sub={groupLabels.commonSub}
-          icon={Sliders}
-          variant="common"
           activeCount={commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
         >
           <Accordion type="multiple" className="w-full">
             {commonParams.map(renderParamItem)}
           </Accordion>
-        </CollapsibleGroup>
+        </MobileMinimalGroup>
       )}
 
       {/* === FOOTER — reset + AI help card so the column doesn't end on a filter === */}

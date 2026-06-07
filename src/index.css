@@ -402,153 +402,69 @@
   font-feature-settings: 'ss01', 'cv11';
 }
 
-/* Top quick row: stock + language */
-.filter-quick-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 10px 10px 6px;
-  border-bottom: 1px solid #e4e4e7;
-  background: #fff;
-}
-.filter-quick-stock {
+/* ── Mobile sidebar — minimalist, mirrors desktop mega-bar typography ── */
+/* Stock toggle row */
+.filter-panel--mob .filter-mob-stock {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 12px;
+  padding: 14px 16px;
   font-size: 13px;
   font-weight: 500;
   color: #18181b;
-  background: #fff;
-  border: 1px solid #e4e4e7;
-  border-radius: 10px;
-  margin-bottom: 6px;
+  border-bottom: 1px solid #f4f4f5;
 }
-.filter-quick-stock svg {
+.filter-panel--mob .filter-mob-stock svg {
   color: #71717a;
 }
-.filter-lang-item {
-  border: 1px solid #e4e4e7 !important;
-  border-radius: 10px;
-  background: #fff;
-  overflow: hidden;
-}
-.filter-lang-trigger {
-  padding: 9px 12px !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-}
-.filter-lang-trigger:hover {
-  background: #f4f4f5;
-}
 
-/* CollapsibleGroup wrappers — AccordionTrigger blends with header pill */
-.filter-group-wrap {
-  margin: 0;
+/* Top-level group: plain text label + small chevron, optional badge */
+.filter-mob-section {
+  border-bottom: 1px solid #f4f4f5;
 }
-.filter-group-acc-item {
-  border: none !important;
+.filter-mob-section-item {
+  border: 0 !important;
 }
-.filter-group-acc-trigger {
-  padding: 0 !important;
-  hyphens: none;
-  text-decoration: none !important;
+.filter-mob-section-trigger {
   width: 100%;
+  padding: 14px 16px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #18181b !important;
+  background: transparent;
+  text-decoration: none !important;
+  border-radius: 0 !important;
 }
-.filter-group-acc-trigger > svg {
-  margin-right: 16px;
-  margin-left: -28px;
-  position: relative;
-  z-index: 2;
+.filter-mob-section-trigger:hover {
+  background: #fafafa;
+  text-decoration: none !important;
+}
+.filter-mob-section-trigger > svg {
+  width: 14px !important;
+  height: 14px !important;
   color: #a1a1aa;
 }
-.filter-group-acc-trigger:hover {
-  text-decoration: none !important;
-}
-.filter-group-acc-trigger:hover .filter-group-header {
-  background: #fafafa;
-}
-.filter-group-acc-content {
-  padding: 0 !important;
-}
-.filter-group-acc-content > div {
-  padding: 0 !important;
-}
-
-/* Group headers — white card, zinc typography (mega-menu inspired) */
-.filter-group-header {
-  margin: 6px 8px 4px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  border: 1px solid #e4e4e7;
-  background: #fff;
-  width: 100%;
-  transition: background 120ms ease;
-}
-.filter-group-header[data-active='true'] {
-  border-color: #d4d4d8;
-  background: #fafafa;
-}
-.filter-group-header-inner {
-  display: flex;
+.filter-mob-section-label {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
-.filter-group-chip {
+.filter-mob-section-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--fg-chip-bg, #f4f4f5);
-  color: var(--fg-chip-fg, #52525b);
-  flex-shrink: 0;
-  transition: background 120ms ease;
-}
-.filter-group-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  flex: 1;
-}
-.filter-group-label {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #18181b;
-  line-height: 1.2;
-}
-.filter-group-sub {
-  font-size: 11px;
-  font-weight: 400;
-  color: #a1a1aa;
-  margin-top: 2px;
-  line-height: 1.3;
-}
-.filter-group-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  font-size: 11px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 10px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   border-radius: 999px;
-  color: #fff;
   background: #18181b;
+  color: #fff;
 }
-
-/* Chip variants — all neutral zinc */
-.filter-group-jewelry { --fg-chip-bg: #f4f4f5; --fg-chip-fg: #52525b; }
-.filter-group-watches { --fg-chip-bg: #f4f4f5; --fg-chip-fg: #52525b; }
-.filter-group-common  { --fg-chip-bg: #f4f4f5; --fg-chip-fg: #52525b; }
-.filter-group-neutral { --fg-chip-bg: #f4f4f5; --fg-chip-fg: #71717a; }
-
-.filter-group-header:hover .filter-group-chip {
-  background: #e4e4e7;
+.filter-mob-section-content {
+  padding: 4px 4px 10px !important;
 }
 
 /* Tighter accordion items inside a group */
@@ -572,15 +488,6 @@
 .filter-panel label:has(input:checked),
 .filter-panel label:has([data-state='checked']) {
   background-color: #f4f4f5;
-}
-
-/* Spacing between groups */
-.filter-panel > .filter-group-header + * {
-  margin-top: 2px;
-}
-.filter-panel .filter-group-header ~ * [data-radix-accordion-trigger] {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
 }
 
 /* ── Filter footer ──────────────────────────────────────────────── */
