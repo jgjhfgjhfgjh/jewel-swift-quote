@@ -69,7 +69,7 @@ export function AppsCards() {
           <PackageOpen className="pointer-events-none absolute -right-6 -bottom-6 h-40 w-40 text-white/[0.04]" strokeWidth={1.25} />
           <div className="relative">
             <div className="flex items-center gap-2">
-              <h2 className="font-grotesk text-3xl font-extrabold uppercase tracking-tight text-white">
+              <h2 className="text-3xl font-semibold tracking-[-0.5px] text-white">
                 Dropshipping
               </h2>
               <span
