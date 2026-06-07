@@ -15,7 +15,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { AppsCards } from '@/components/AppsCards';
-import { SweltLogo } from '@/components/SweltLogo';
+import { HomeHero } from '@/components/HomeHero';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { CatalogGateway } from '@/components/CatalogGateway';
@@ -97,8 +97,8 @@ const Index = () => {
         <HeroBanner compact={viewMode === 'catalog'} />
       </div>
 
-      {/* Big swelt. logo — between the banner and the apps cards */}
-      {viewMode === 'home' && <SweltLogo />}
+      {/* Hero — logo, tagline, CTAs, bullets — between the banner and the apps cards */}
+      {viewMode === 'home' && <HomeHero />}
 
       {/* Apps/tools cards */}
       {viewMode === 'home' && (

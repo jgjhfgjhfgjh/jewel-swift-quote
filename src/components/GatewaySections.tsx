@@ -667,38 +667,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-
-          {/* ── Hero content — CTAs + bullets (logo & tagline jsou nad kartami) ── */}
-          <Reveal>
-            <div className="text-center">
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                <button
-                  onClick={() => openAuth('b2b')}
-                  className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
-                >
-                  B2B registrace
-                </button>
-                <button
-                  onClick={() => openAuth('register')}
-                  className="px-8 py-3 rounded-md border border-zinc-300 bg-white text-foreground font-semibold text-sm hover:bg-zinc-50 transition min-w-[200px]"
-                >
-                  Prohlédnout katalog
-                </button>
-              </div>
-
-              {/* 4) Bullets */}
-              <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
-                <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Registrace zdarma</li>
-                <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Schválení do 24 hodin</li>
-                <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Bez závazků</li>
-                <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} /> Bez kreditní karty</li>
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-
         {/* ── Second carousel — brand showcase (mini brand-detail cards) ── */}
         <div className="mt-10 sm:mt-12">
           <BrandShowcaseCarousel />
