@@ -14,6 +14,7 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
+import { AppsCards } from '@/components/AppsCards';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { CatalogGateway } from '@/components/CatalogGateway';
@@ -94,6 +95,13 @@ const Index = () => {
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[136px] pt-5 sm:pt-7">
         <HeroBanner compact={viewMode === 'catalog'} />
       </div>
+
+      {/* Apps/tools cards — right under the banner, above the big logo */}
+      {viewMode === 'home' && (
+        <div className="relative z-0">
+          <AppsCards />
+        </div>
+      )}
 
       {/* Admin/sales panels — only relevant in the catalog view */}
       {viewMode === 'catalog' && (

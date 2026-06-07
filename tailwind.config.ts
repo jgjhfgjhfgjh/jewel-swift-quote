@@ -15,6 +15,7 @@ export default {
         display: ['Montserrat', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
         spartan: ['"League Spartan"', 'sans-serif'],
+        grotesk: ['"Space Grotesk"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
