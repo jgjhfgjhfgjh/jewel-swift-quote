@@ -92,7 +92,7 @@ export function AppsCards() {
                 key={t.title}
                 type="button"
                 onClick={() => go(t)}
-                className="group relative overflow-hidden rounded-2xl min-h-[126px] p-5 gap-3
+                className="group relative overflow-hidden rounded-2xl min-h-[180px] sm:min-h-[210px] p-5 gap-3
                            bg-[#1c1e20] border border-white/5 flex flex-col items-start justify-between text-left
                            transition-colors hover:bg-[#23252a]"
               >
