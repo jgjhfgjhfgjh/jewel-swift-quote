@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  PackageOpen, Rss, ShoppingCart, HandCoins, Tag, Sparkles, Handshake, ArrowUpRight,
+  PackageOpen, Rss, ShoppingCart, HandCoins, Tag, Headset, Handshake, ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
@@ -50,7 +50,7 @@ export function AppsCards() {
     { icon: ShoppingCart, title: 'E-shop do 48 h', desc: 'Hotový obchod naplněný produkty', to: '/shop' },
     { icon: HandCoins, title: 'Nákup bez registrace', desc: 'Velkoobchodní ceny, stačí IČO', to: '/luxury' },
     { icon: Tag, title: 'DEAL nabídky', desc: 'Closeout výprodeje za mimořádné ceny', to: '/deals', badge: 'new' },
-    { icon: Sparkles, title: 'AI poradce', desc: 'Ceny a dostupnost — odpověď do 5 vteřin', action: 'ai' },
+    { icon: Headset, title: 'Zákaznická podpora', desc: 'Dedikovaní account manageři pro váš úspěch.', action: 'ai' },
   ];
 
   return (
