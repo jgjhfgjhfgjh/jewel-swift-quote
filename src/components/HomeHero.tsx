@@ -30,7 +30,7 @@ export function HomeHero() {
       </p>
 
       {/* CTAs */}
-      <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <div className="mt-6 sm:mt-8 flex flex-col gap-3 justify-center items-center">
         <button
           onClick={() => navigate('/register')}
           className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
