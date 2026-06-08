@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
 
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */
@@ -43,9 +43,10 @@ export function HomeHero() {
         </button>
         <button
           onClick={() => navigate('/login')}
-          className="px-8 py-3 rounded-md border border-white/60 bg-white/70 backdrop-blur-md text-foreground font-semibold text-sm hover:bg-white/85 transition min-w-[200px]"
+          className="group inline-flex items-center justify-center gap-1.5 px-8 py-3 rounded-md border border-white/60 bg-white/70 backdrop-blur-md text-foreground font-semibold text-sm transition-all duration-200 hover:bg-white/85 hover:gap-3 min-w-[200px]"
         >
           Prohlédnout katalog
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
 
