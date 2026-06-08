@@ -33,9 +33,13 @@ export function HomeHero() {
       <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
         <button
           onClick={() => navigate('/register')}
-          className="px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
+          className="relative px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
         >
           B2B registrace
+          {/* lime "24h" badge — sticks out across the top-right corner, slightly crooked */}
+          <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+            24h
+          </span>
         </button>
         <button
           onClick={() => navigate('/login')}
