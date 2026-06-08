@@ -33,7 +33,7 @@ export function HomeHero() {
       <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
         <button
           onClick={() => navigate('/register')}
-          className="relative px-8 py-3 rounded-md bg-zinc-900 text-white font-semibold text-sm hover:bg-zinc-800 transition min-w-[200px] shadow-lg"
+          className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
         >
           B2B registrace
           {/* lime "24h" badge — sticks out across the top-right corner, slightly crooked */}
@@ -43,7 +43,7 @@ export function HomeHero() {
         </button>
         <button
           onClick={() => navigate('/login')}
-          className="px-8 py-3 rounded-md border border-zinc-300 bg-white text-foreground font-semibold text-sm hover:bg-zinc-50 transition min-w-[200px]"
+          className="px-8 py-3 rounded-md border border-white/60 bg-white/70 backdrop-blur-md text-foreground font-semibold text-sm hover:bg-white/85 transition min-w-[200px]"
         >
           Prohlédnout katalog
         </button>
