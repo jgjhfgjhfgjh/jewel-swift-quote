@@ -183,7 +183,7 @@ function FlagImg({ lang, className = '' }: { lang: string; className?: string })
 }
 
 export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
-  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode, setGatewayOpen } = useStore();
+  const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode, setGatewayOpen, authOpen, authTab, openAuthModal, setAuthOpen } = useStore();
   const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -196,14 +196,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const [isAtTop, setIsAtTop] = useState(true);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
   const [activeNav, setActiveNav] = useState<string | null>(null);
 
-  const openAuth = (tab: 'login' | 'register' | 'b2b') => {
-    setAuthTab(tab);
-    setAuthOpen(true);
-  };
+  const openAuth = openAuthModal;
 
   const handleCatalogCta = () => {
     if (user) {
@@ -561,7 +556,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 size="sm"
                 variant="outline"
                 onClick={() => openAuth('login')}
-                className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white hover:bg-zinc-100 border border-border transition-all hover:-translate-y-0.5 shrink-0"
+                className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
               >
                 Přihlásit
               </Button>
@@ -574,7 +569,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Button
               size="sm"
               onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-zinc-900 hover:bg-zinc-800 transition-all hover:-translate-y-0.5 shrink-0"
+              className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
             >
               {user ? 'KATALOG 2026' : 'B2B registrace'}
             </Button>

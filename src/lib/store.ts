@@ -45,6 +45,11 @@ interface AppState {
   setSidebarOpen: (v: boolean) => void;
   gatewayOpen: boolean;
   setGatewayOpen: (v: boolean) => void;
+  // Global auth modal (login/register/b2b) — openable from navbar, hero, anywhere
+  authOpen: boolean;
+  authTab: 'login' | 'register' | 'b2b';
+  openAuthModal: (tab?: 'login' | 'register' | 'b2b') => void;
+  setAuthOpen: (v: boolean) => void;
 
   // Filter state (persisted)
   search: string;
@@ -182,6 +187,10 @@ export const useStore = create<AppState>()(
       setSidebarOpen: (v) => set({ sidebarOpen: v }),
       gatewayOpen: false,
       setGatewayOpen: (v) => set({ gatewayOpen: v }),
+      authOpen: false,
+      authTab: 'login',
+      openAuthModal: (tab = 'login') => set({ authOpen: true, authTab: tab }),
+      setAuthOpen: (v) => set({ authOpen: v }),
 
       // Filter state
       search: '',

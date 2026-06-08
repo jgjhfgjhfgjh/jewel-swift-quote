@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
+import { useStore } from '@/lib/store';
 
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */
 export function HomeHero() {
-  const navigate = useNavigate();
+  const openAuthModal = useStore((s) => s.openAuthModal);
 
   return (
     <div className="mt-6 sm:mt-10 mb-2 flex flex-col items-center px-6 text-center">
@@ -32,7 +32,7 @@ export function HomeHero() {
       {/* CTAs */}
       <div className="mt-6 sm:mt-8 flex flex-col gap-3 justify-center items-center">
         <button
-          onClick={() => navigate('/register')}
+          onClick={() => openAuthModal('b2b')}
           className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
         >
           B2B registrace
@@ -42,7 +42,7 @@ export function HomeHero() {
           </span>
         </button>
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => openAuthModal('login')}
           className="group inline-flex items-center justify-center gap-1.5 px-8 py-3 rounded-md border border-white/60 bg-white/70 backdrop-blur-md text-foreground font-semibold text-sm transition-all duration-200 hover:bg-white/85 hover:gap-3 min-w-[200px]"
         >
           Prohlédnout katalog
