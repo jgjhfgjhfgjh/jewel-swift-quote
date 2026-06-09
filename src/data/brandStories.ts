@@ -13,36 +13,36 @@ import type { StoryEra } from './concerns';
 export const BRAND_STORIES: Record<string, StoryEra[]> = {
   'CALVIN KLEIN': [
     {
-      heading: '1997–2019: Švýcarská preciznost a zrod „Fashion Watches"',
+      heading: 'Švýcarská éra a zrod fashion watches',
       items: [
         {
           lead: '1997 – Spojení se Swatch Group',
-          text: 'Calvin Klein spojil newyorský módní minimalismus s největším švýcarským hodinářským koncernem a založil divizi cK Watch Co. Ltd.',
+          text: 'Newyorský módní minimalismus se spojil s největším švýcarským hodinářským koncernem — vznikla divize cK Watch Co. Ltd. s prestižním označením „Swiss Made".',
         },
         {
-          lead: 'Prestižní známka „Swiss Made"',
-          text: 'Spojení designu a švýcarské kvality dalo vzniknout zcela novému segmentu cenově dostupných, ale vysoce kvalitních módních hodinek.',
+          lead: 'Nový segment módních hodinek',
+          text: 'Spojení čistého designu a švýcarské kvality definovalo zcela nový segment cenově dostupných, ale vysoce kvalitních fashion watches.',
         },
         {
           lead: '2004 – Rozšíření o šperky',
-          text: 'Na celosvětový úspěch hodinek značka navázala uvedením kolekcí minimalistických šperků z čistých linií a chirurgické oceli.',
+          text: 'Na celosvětový úspěch hodinek navázaly kolekce minimalistických šperků z čistých linií a chirurgické oceli.',
         },
       ],
     },
     {
-      heading: '2020–Současnost: Nová éra pod křídly Movado Group',
+      heading: 'Nová éra pod křídly Movado Group',
       items: [
         {
           lead: '2019 – Konec jedné kapitoly',
-          text: 'Po více než 20 letech úspěšné spolupráce došlo k ukončení licenčního partnerství se Swatch Group kvůli odlišným vizím budoucnosti.',
+          text: 'Po více než 20 letech úspěšné spolupráce skončilo licenční partnerství se Swatch Group kvůli odlišným vizím budoucnosti.',
         },
         {
           lead: '2020 – Strategický restart',
-          text: 'Calvin Klein podepsal novou exkluzivní smlouvu s globálním hodinářským gigantem Movado Group.',
+          text: 'Calvin Klein podepsal exkluzivní smlouvu s globálním hodinářským gigantem Movado Group; od roku 2022 Movado řídí kompletní vývoj a distribuci.',
         },
         {
-          lead: 'Od roku 2022 dodnes',
-          text: 'Movado oficiálně převzalo kompletní vývoj a distribuci. Hodinky a šperky si však striktně zachovávají svou původní DNA – moderní estetiku, čisté linie a nadčasovou eleganci.',
+          lead: 'Původní DNA zůstává',
+          text: 'Hodinky a šperky si striktně zachovávají moderní estetiku, čisté linie a nadčasovou eleganci, která doplňuje identitu módního impéria.',
         },
       ],
     },
