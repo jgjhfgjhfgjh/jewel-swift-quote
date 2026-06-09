@@ -10,6 +10,7 @@ import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { BrandLogo } from '@/components/BrandLogo';
 import { getBrandByName } from '@/data/brands';
+import { BRAND_STORIES } from '@/data/brandStories';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -97,53 +98,7 @@ function toDisplayName(key: string): string {
   return key.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-/* ─── Per-brand stories (keyed by normalized brand key) ─── */
-interface StoryItem {
-  lead: string;
-  text: string;
-}
-interface StoryEra {
-  heading: string;
-  items: StoryItem[];
-}
-const BRAND_STORIES: Record<string, StoryEra[]> = {
-  'CALVIN KLEIN': [
-    {
-      heading: '1997–2019: Švýcarská preciznost a zrod „Fashion Watches"',
-      items: [
-        {
-          lead: '1997 – Spojení se Swatch Group',
-          text: 'Calvin Klein spojil newyorský módní minimalismus s největším švýcarským hodinářským koncernem a založil divizi cK Watch Co. Ltd.',
-        },
-        {
-          lead: 'Prestižní známka „Swiss Made"',
-          text: 'Spojení designu a švýcarské kvality dalo vzniknout zcela novému segmentu cenově dostupných, ale vysoce kvalitních módních hodinek.',
-        },
-        {
-          lead: '2004 – Rozšíření o šperky',
-          text: 'Na celosvětový úspěch hodinek značka navázala uvedením kolekcí minimalistických šperků z čistých linií a chirurgické oceli.',
-        },
-      ],
-    },
-    {
-      heading: '2020–Současnost: Nová éra pod křídly Movado Group',
-      items: [
-        {
-          lead: '2019 – Konec jedné kapitoly',
-          text: 'Po více než 20 letech úspěšné spolupráce došlo k ukončení licenčního partnerství se Swatch Group kvůli odlišným vizím budoucnosti.',
-        },
-        {
-          lead: '2020 – Strategický restart',
-          text: 'Calvin Klein podepsal novou exkluzivní smlouvu s globálním hodinářským gigantem Movado Group.',
-        },
-        {
-          lead: 'Od roku 2022 dodnes',
-          text: 'Movado oficiálně převzalo kompletní vývoj a distribuci. Hodinky a šperky si však striktně zachovávají svou původní DNA – moderní estetiku, čisté linie a nadčasovou eleganci.',
-        },
-      ],
-    },
-  ],
-};
+/* Per-brand stories live in @/data/brandStories (same StoryEra format as koncern pages) */
 
 /* ─── Types ─── */
 interface Product {
