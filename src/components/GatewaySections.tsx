@@ -667,13 +667,13 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
-        {/* ── Second carousel — brand showcase (mini brand-detail cards) ── */}
+        {/* ── Brand logos — Amazon-style shelf carousel (all brands, first) ── */}
+        <BrandLogoRow />
+
+        {/* ── Brand showcase carousel — mini brand-detail cards with images ── */}
         <div className="mt-10 sm:mt-12">
           <BrandShowcaseCarousel />
         </div>
-
-        {/* ── Brand logos — Amazon-style shelf carousel ── */}
-        <BrandLogoRow />
 
         {/* ── Premium segment + private purchase (contained) ── */}
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
