@@ -15,7 +15,6 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { AppsCards } from '@/components/AppsCards';
-import { ConcernCarousel } from '@/components/ConcernCarousel';
 import { HomeHero } from '@/components/HomeHero';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
@@ -106,21 +105,6 @@ const Index = () => {
         <div className="relative z-0">
           <AppsCards />
         </div>
-      )}
-
-      {/* Carousel hodinářských koncernů — první sekce pod Higgsfield kartami */}
-      {viewMode === 'home' && (
-        <section className="relative z-0 bg-white pt-8 sm:pt-12">
-          <div className="px-3 sm:px-5 lg:px-8 mb-4 sm:mb-6">
-            <h2 className="font-display text-xl sm:text-2xl font-black tracking-tight text-foreground">
-              Hodinářské koncerny
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              Značky, které u nás najdete, podle mateřských skupin.
-            </p>
-          </div>
-          <ConcernCarousel />
-        </section>
       )}
 
       {/* Admin/sales panels — only relevant in the catalog view */}

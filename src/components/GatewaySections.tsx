@@ -21,6 +21,7 @@ import { BRANDS_PREMIUM } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
+import { ConcernCarousel } from '@/components/ConcernCarousel';
 import { HomeFooter } from '@/components/HomeFooter';
 
 
@@ -673,6 +674,19 @@ export function GatewaySections({ onOpenCatalog }: Props) {
         {/* ── Brand showcase carousel — mini brand-detail cards with images ── */}
         <div className="mt-10 sm:mt-12">
           <BrandShowcaseCarousel />
+        </div>
+
+        {/* ── Concern carousel — hodinářské koncerny (last of the three) ── */}
+        <div className="mt-12 sm:mt-16">
+          <div className="px-3 sm:px-5 lg:px-8 mb-4 sm:mb-6">
+            <h2 className="font-display text-xl sm:text-2xl font-black tracking-tight text-foreground">
+              Hodinářské koncerny
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Značky, které u nás najdete, podle mateřských skupin.
+            </p>
+          </div>
+          <ConcernCarousel />
         </div>
 
         {/* ── Premium segment + private purchase (contained) ── */}
