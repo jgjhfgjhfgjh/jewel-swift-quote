@@ -35,6 +35,7 @@ const Luxury = lazy(() => import("./pages/Luxury.tsx"));
 const Shop = lazy(() => import("./pages/Shop.tsx"));
 const Brands = lazy(() => import("./pages/Brands.tsx"));
 const BrandDetail = lazy(() => import("./pages/BrandDetail.tsx"));
+const ConcernDetail = lazy(() => import("./pages/ConcernDetail.tsx"));
 const Deals = lazy(() => import("./pages/Deals.tsx"));
 const DealDetail = lazy(() => import("./pages/DealDetail.tsx"));
 const AdminDeals = lazy(() => import("./pages/admin/AdminDeals.tsx"));
@@ -91,6 +92,8 @@ const App = () => (
               <Route path="/luxury" element={<Luxury />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/brands/:slug" element={<BrandDetail />} />
+              {/* Hodinářské koncerny — mateřské skupiny značek */}
+              <Route path="/koncerny/:slug" element={<ConcernDetail />} />
               {/* DEAL offers — closeout catalogs */}
               <Route path="/deals" element={<Deals />} />
               <Route path="/deals/:slug" element={<DealDetail />} />
