@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  PackageOpen, Rss, ShoppingCart, HandCoins, Tag, Headset, Handshake, ArrowUpRight,
+  PackageOpen, Rss, ShoppingCart, HandCoins, Tag, Server, Handshake, ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
@@ -45,12 +45,14 @@ export function AppsCards() {
   };
 
   const tools: Tool[] = [
+    // Top row
     { icon: Handshake, title: 'B2B Velkoobchod', desc: '3 000+ produktů za velkoobchodní ceny', to: '/velkoobchod' },
-    { icon: Rss, title: 'Automatický feed', desc: 'XML/CSV feed 3 000+ produktů do e-shopu', to: '/feed', badge: 'new' },
-    { icon: ShoppingCart, title: 'E-shop do 48 h', desc: 'Hotový obchod naplněný produkty', to: '/shop' },
     { icon: HandCoins, title: 'Nákup bez registrace', desc: 'Velkoobchodní ceny, stačí IČO', to: '/luxury' },
-    { icon: Tag, title: 'DEAL nabídky', desc: 'Closeout výprodeje za mimořádné ceny', to: '/deals', badge: 'new' },
-    { icon: Headset, title: 'Zákaznická podpora', desc: 'Dedikovaní account manageři pro váš úspěch.', action: 'ai' },
+    { icon: Tag, title: 'DEAL nabídky', desc: 'Closeout výprodeje za mimořádné ceny', to: '/deals' },
+    // Bottom row
+    { icon: Rss, title: 'Automatický feed', desc: 'XML/CSV feed 3 000+ produktů do e-shopu', to: '/feed' },
+    { icon: ShoppingCart, title: 'E-shop do 48 h', desc: 'Hotový obchod naplněný produkty', to: '/shop' },
+    { icon: Server, title: 'MCP server', desc: 'Napojte AI agenty na náš katalog přes MCP.', to: '/feed', badge: 'new' },
   ];
 
   return (
