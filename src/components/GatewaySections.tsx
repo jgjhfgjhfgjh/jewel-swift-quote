@@ -668,9 +668,15 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
+        {/* ── Small heading between the apps cards and the showcase carousel ── */}
+        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-8 sm:mb-10 lg:mb-16">
+          <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
+          <span className="text-zinc-500">za velkoobchodní ceny</span>
+        </p>
+
         {/* ── Brand showcase carousel — products free on white, first.
              -mt-5 + taller cards + bigger logo gap inside = only the logos
-             sit 20px higher (closer to the apps cards), the rest stays put. ── */}
+             sit 20px higher (closer to the heading above), the rest stays put. ── */}
         <div className="-mt-2.5 sm:-mt-5 lg:-mt-10">
           <BrandShowcaseCarousel />
         </div>
