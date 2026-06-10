@@ -32,24 +32,38 @@ function ConcernCard({ data }: { data: ConcernCardData }) {
       onClick={() => navigate(`/koncerny/${concern.slug}`)}
       className={`group/card relative flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
     >
-      {/* Koncern logo */}
-      <div className="h-16 sm:h-20 flex items-center justify-center px-6 pt-6 shrink-0">
-        <BrandLogo
-          name={concern.name}
-          domain={concern.domain}
-          width={400}
-          height={160}
-          className="max-h-full max-w-[200px] object-contain [mix-blend-mode:multiply]"
-          fallbackClassName="font-display text-xl font-black tracking-tight text-foreground text-center"
-        />
+      {/* Koncern logo — labelled so it reads clearly as the parent group */}
+      <div className="pt-4 shrink-0 flex flex-col items-center">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          Koncern
+        </span>
+        <div className="h-12 sm:h-14 mt-1 flex items-center justify-center px-6">
+          <BrandLogo
+            name={concern.name}
+            domain={concern.domain}
+            width={400}
+            height={160}
+            className="max-h-full max-w-[200px] object-contain [mix-blend-mode:multiply]"
+            fallbackClassName="font-display text-xl font-black tracking-tight text-foreground text-center"
+          />
+        </div>
       </div>
 
-      {/* Brand logos of the koncern */}
-      <div className="flex-1 px-5 sm:px-6 py-3 grid grid-cols-3 gap-x-3 gap-y-2 place-items-center content-center">
+      {/* Divider — separates the group from its member brands */}
+      <div className="px-6 mt-2 shrink-0 flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          Značky koncernu
+        </span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      {/* Member brand logos — wrapped rows, always centred (1 brand = centred) */}
+      <div className="flex-1 px-5 sm:px-6 py-3 flex flex-wrap items-center justify-center content-center gap-x-3 gap-y-2">
         {logoBrands.map((key) => {
           const meta = getBrandByName(toDisplayName(key));
           return (
-            <div key={key} className="flex h-10 w-full items-center justify-center">
+            <div key={key} className="flex h-10 w-[29%] items-center justify-center">
               {meta ? (
                 <BrandLogo
                   name={meta.name}
@@ -115,10 +129,15 @@ export function ConcernCarousel() {
   if (cards.length === 0) return null;
 
   return (
-    <div
-      className="relative w-full group"
-      style={{ fontFamily: "'Montserrat', sans-serif" }}
-    >
+    <div style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      {/* Header — same look as the "Všechny značky" shelf header */}
+      <div className="px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 mb-4">
+        <h2 className="text-sm sm:text-base font-semibold text-foreground">
+          Hodinářské koncerny
+        </h2>
+      </div>
+
+      <div className="relative w-full group">
       <div
         ref={trackRef}
         className="flex gap-3 sm:gap-4 overflow-x-auto [-webkit-overflow-scrolling:touch]
@@ -145,6 +164,7 @@ export function ConcernCarousel() {
       >
         <ChevronRight className="h-5 w-5" />
       </button>
+      </div>
     </div>
   );
 }

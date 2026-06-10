@@ -688,14 +688,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
 
         {/* ── Concern carousel — hodinářské koncerny (last of the three) ── */}
         <div className="mt-12 sm:mt-16">
-          <div className="px-3 sm:px-5 lg:px-8 mb-4 sm:mb-6">
-            <h2 className="font-display text-xl sm:text-2xl font-black tracking-tight text-foreground">
-              Hodinářské koncerny
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              Značky, které u nás najdete, podle mateřských skupin.
-            </p>
-          </div>
           <ConcernCarousel />
         </div>
 
