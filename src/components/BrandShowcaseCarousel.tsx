@@ -48,12 +48,10 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     <div
       ref={rootRef}
       data-card
-      className={`group/card relative flex flex-col ${CARD_CLASS}
-        transition-[width] duration-500 ease-out
-        lg:[@media(hover:hover)]:hover:w-[46%] lg:[@media(hover:hover)]:hover:delay-300`}
+      className={`group/card relative flex flex-col ${CARD_CLASS}`}
     >
       {/* Brand logo */}
-      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
+      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
         {brand.domain ? (
           <BrandLogo
             name={brand.name}
@@ -69,7 +67,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* Crossfading product image — bigger gap below the logo */}
-      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2 origin-bottom transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
+      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2 origin-bottom transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
         {brand.products.map((p, i) => (
           <div
             key={p.id}
@@ -84,7 +82,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* Crossfading product name */}
-      <div className="relative h-5 mx-4 shrink-0 transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:translate-y-2.5 lg:[@media(hover:hover)]:group-hover/card:delay-300">
+      <div className="relative h-5 mx-4 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5">
         {brand.products.map((p, i) => (
           <p
             key={p.id}
@@ -99,7 +97,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* CTA — free-floating, centered (no card frame to fill) */}
-      <div className="p-4 shrink-0 flex justify-center transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:translate-y-2.5 lg:[@media(hover:hover)]:group-hover/card:delay-300">
+      <div className="p-4 shrink-0 flex justify-center transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5">
         <button
           type="button"
           onClick={() => navigate(`/brands/${brand.slug}`)}
@@ -137,6 +135,42 @@ export function BrandShowcaseCarousel() {
   // Render the brand cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);
   const { trackRef, go } = useInfiniteCarousel(brands.length);
+
+  // Scroll-driven "hover": the card at the horizontal centre of the track
+  // carries [data-center] and its content scales up. Transform-only and set
+  // directly on the DOM (no React state, no layout shift) so the swipe stays
+  // perfectly smooth.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || brands.length === 0) return;
+    let raf = 0;
+    let marked: HTMLElement | null = null;
+    const update = () => {
+      raf = 0;
+      const cards = el.querySelectorAll<HTMLElement>('[data-card]');
+      if (cards.length < 2) return;
+      const step = cards[1].offsetLeft - cards[0].offsetLeft;
+      const firstMid = cards[0].offsetLeft + cards[0].offsetWidth / 2;
+      const centerX = el.scrollLeft + el.clientWidth / 2;
+      const idx = Math.min(cards.length - 1, Math.max(0, Math.round((centerX - firstMid) / step)));
+      const next = cards[idx];
+      if (next !== marked) {
+        marked?.removeAttribute('data-center');
+        next.setAttribute('data-center', '');
+        marked = next;
+      }
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      marked?.removeAttribute('data-center');
+    };
+  }, [brands.length, trackRef]);
 
   if (brands.length === 0) return null;
 
