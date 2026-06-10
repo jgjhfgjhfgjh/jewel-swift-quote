@@ -668,8 +668,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
-        {/* ── Brand showcase carousel — products free on white, first ── */}
-        <BrandShowcaseCarousel />
+        {/* ── Brand showcase carousel — products free on white, first.
+             -mt-5 + taller cards + bigger logo gap inside = only the logos
+             sit 20px higher (closer to the apps cards), the rest stays put. ── */}
+        <div className="-mt-5">
+          <BrandShowcaseCarousel />
+        </div>
 
         {/* ── Brand logos — Amazon-style shelf carousel (all brands) ── */}
         <div className="mt-10 sm:mt-12">
