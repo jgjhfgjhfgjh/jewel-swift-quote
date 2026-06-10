@@ -48,10 +48,12 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     <div
       ref={rootRef}
       data-card
-      className={`group/card relative flex flex-col ${CARD_CLASS}`}
+      className={`group/card relative flex flex-col ${CARD_CLASS}
+        transition-[width] duration-500 ease-out
+        lg:[@media(hover:hover)]:hover:w-[46%] lg:[@media(hover:hover)]:hover:delay-300`}
     >
       {/* Brand logo */}
-      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0">
+      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
         {brand.domain ? (
           <BrandLogo
             name={brand.name}
@@ -67,7 +69,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* Crossfading product image — bigger gap below the logo */}
-      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2">
+      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2 transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
         {brand.products.map((p, i) => (
           <div
             key={p.id}
@@ -82,7 +84,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* Crossfading product name */}
-      <div className="relative h-5 mx-4 shrink-0">
+      <div className="relative h-5 mx-4 shrink-0 transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
         {brand.products.map((p, i) => (
           <p
             key={p.id}
@@ -97,7 +99,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* CTA — free-floating, centered (no card frame to fill) */}
-      <div className="p-4 shrink-0 flex justify-center">
+      <div className="p-4 shrink-0 flex justify-center transition-transform duration-500 ease-out lg:[@media(hover:hover)]:group-hover/card:scale-110 lg:[@media(hover:hover)]:group-hover/card:delay-300">
         <button
           type="button"
           onClick={() => navigate(`/brands/${brand.slug}`)}
