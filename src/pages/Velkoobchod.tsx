@@ -14,6 +14,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { velkoobchod } from '@/lib/i18n-velkoobchod';
 
 /* ─── Reveal on scroll ─── */
@@ -102,11 +103,12 @@ function FloatingNotif() {
 }
 
 /* ─── Static structure (text comes from i18n-velkoobchod.ts) ─── */
-const BRANDS = [
-  'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Police', 'Seiko',
+/* Fallback only — the strip prefers live top brands from the catalog feed */
+const BRANDS_FALLBACK = [
+  'Tommy Hilfiger', 'Versace', 'Emporio Armani', 'Police', 'Festina',
   'Hugo Boss', 'Citizen', 'Guess', 'DKNY', 'Calvin Klein',
   'Michael Kors', 'Fossil', 'Casio', 'Tissot', 'Lacoste',
-  'Swarovski', 'Pandora', 'Morellato', 'Festina', 'Pierre Cardin',
+  'Swarovski', 'Pandora', 'Morellato', 'BERING', 'Maserati',
 ];
 
 const STEP_ICONS = [UserPlus, BadgeCheck, Clock, Package];
@@ -128,6 +130,11 @@ const Velkoobchod = () => {
   const { user, isB2bApproved, isLead } = useAuthContext();
   const { setViewMode, lang } = useStore();
   const v = velkoobchod[lang];
+  // Brand strip follows the live catalog (top 20 by product count)
+  const { data: brandCatalog = [] } = useBrandCatalog();
+  const stripBrands = brandCatalog.length > 0
+    ? brandCatalog.slice(0, 20).map((b) => b.name)
+    : BRANDS_FALLBACK;
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -475,7 +482,7 @@ const Velkoobchod = () => {
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{v.catalog.brandsLabel}</p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
-              {BRANDS.map(b => (
+              {stripBrands.map(b => (
                 <span key={b} className="rounded-lg bg-white border border-border px-3 py-1.5 text-xs font-semibold text-foreground/70">
                   {b}
                 </span>

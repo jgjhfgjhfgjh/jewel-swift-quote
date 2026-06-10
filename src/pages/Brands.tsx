@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Award, Search, ArrowRight, Package } from 'lucide-react';
-import { getCategorySegment, isBrandSegment, type BrandSegment } from '@/lib/brandSegment';
+import { isBrandSegment, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import {
 import { useStore } from '@/lib/store';
 import { useScrollHide } from '@/hooks/useScrollHide';
 import { BrandLogo } from '@/components/BrandLogo';
-import { getBrandByName } from '@/data/brands';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -40,92 +40,9 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   );
 }
 
-/* ─── Brand name normalization ─── */
-const BRAND_ALIASES: Record<string, string> = {
-  'TOMMY HILFIGER JEWELS': 'TOMMY HILFIGER',
-  'GUESS JEWELS': 'GUESS',
-  'HUGO BOSS JEWELS': 'HUGO BOSS',
-  'EMPORIO ARMANI JEWELS': 'EMPORIO ARMANI',
-  'EMPORIO ARMANI JEWELRY': 'EMPORIO ARMANI',
-  'CALVIN KLEIN JEWELRY': 'CALVIN KLEIN',
-  'BREIL JEWELS': 'BREIL',
-  'JUST CAVALLI JEWELS': 'JUST CAVALLI',
-  'ROBERTO CAVALLI BY FRANCK MULLER': 'ROBERTO CAVALLI',
-  'ROBERTO CAVALLI by FRANCK MULLER': 'ROBERTO CAVALLI',
-  'POLICE JEWELS': 'POLICE',
-  'SECTOR JEWELS': 'SECTOR',
-  'VICEROY FASHION': 'VICEROY',
-  'VICEROY JEWELS': 'VICEROY',
-  'VICEROY KIDS': 'VICEROY',
-  'VICEROY KIDS JEWELS': 'VICEROY',
-  'DISNEY JEWELS': 'DISNEY',
-  'PIERRE LANNIER JEWELRY': 'PIERRE LANNIER',
-  'PIERRE LANNIER STRAPS': 'PIERRE LANNIER',
-  'HIP HOP STRAPS': 'HIP HOP',
-  'MICHAEL KORS JEWELRY': 'MICHAEL KORS',
-  'ALVIERO MARTINI JEWELS': 'ALVIERO MARTINI',
-  'ZOPPINI JEWELS': 'ZOPPINI',
-  'SWATCH BIJOUX': 'SWATCH',
-  'CHRONOSTAR BY SECTOR': 'CHRONOSTAR',
-  'MARK MADDOX - NEW COLLECTION': 'MARK MADDOX',
-  'HACKER LED WATCHES': 'HACKER',
-};
-
-// Brands with specific capitalization overrides
-const DISPLAY_NAMES: Record<string, string> = {
-  'DKNY': 'DKNY',
-  'Q&Q': 'Q&Q',
-  'HIP HOP': 'Hip Hop',
-  'LA PETITE STORY': 'La Petite Story',
-  'HUGO BOSS': 'Hugo Boss',
-  'EMPORIO ARMANI': 'Emporio Armani',
-  'TOMMY HILFIGER': 'Tommy Hilfiger',
-  'CALVIN KLEIN': 'Calvin Klein',
-  'MICHAEL KORS': 'Michael Kors',
-  'PIERRE LANNIER': 'Pierre Lannier',
-  'ROBERTO CAVALLI': 'Roberto Cavalli',
-  'JUST CAVALLI': 'Just Cavalli',
-  'VERSUS VERSACE': 'Versus Versace',
-  'MISS SIXTY': 'Miss Sixty',
-  'MARK MADDOX': 'Mark Maddox',
-  'BEVERLY HILLS POLO CLUB': 'Beverly Hills Polo Club',
-  'MANUEL ZED': 'Manuel Zed',
-  'ALVIERO MARTINI': 'Alviero Martini',
-  'CERRUTI 1881': 'Cerruti 1881',
-  'DANIEL WELLINGTON': 'Daniel Wellington',
-};
-
-function toDisplayName(key: string): string {
-  if (DISPLAY_NAMES[key]) return DISPLAY_NAMES[key];
-  return key
-    .toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-/* ─── Types ─── */
-interface Product {
-  id: string;
-  name: string;
-  manufacturer: string;
-  img: string;
-  price: number;
-  wholesale: number;
-  inStock: boolean;
-  category: string;
-}
-
-interface BrandInfo {
-  key: string;
-  name: string;
-  count: number;
-  watches: number;
-  jewelry: number;
-}
-
 /* ─── Component ─── */
 export default function Brands() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: catalog = [], isLoading: loading } = useBrandCatalog();
   const [search, setSearch] = useState('');
   const [jumpValue, setJumpValue] = useState<string>('');
   const navigate = useNavigate();
@@ -153,13 +70,6 @@ export default function Brands() {
     }
   }, []);
 
-  useEffect(() => {
-    fetch('/products.json')
-      .then((r) => r.json())
-      .then((data) => { setProducts(data); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, []);
-
   // After products load & render, scroll to anchored brand card if hash present
   useEffect(() => {
     if (loading) return;
@@ -177,26 +87,8 @@ export default function Brands() {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  const brands = useMemo<BrandInfo[]>(() => {
-    const map = new Map<string, { count: number; watches: number; jewelry: number }>();
-
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const raw = p.manufacturer.trim();
-      const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
-      if (!key) continue;
-      if (!map.has(key)) map.set(key, { count: 0, watches: 0, jewelry: 0 });
-      const e = map.get(key)!;
-      e.count++;
-      const seg = getCategorySegment(p.category);
-      if (seg === 'watches') e.watches++;
-      else if (seg === 'jewelry') e.jewelry++;
-    }
-
-    return Array.from(map.entries())
-      .map(([key, v]) => ({ key, name: toDisplayName(key), ...v }))
-      .sort((a, b) => b.count - a.count);
-  }, [products]);
+  // Live brand catalog (bound to the feed via useBrandCatalog), sorted by count
+  const brands = catalog;
 
   const filtered = useMemo(() => {
     let list = brands;
@@ -249,7 +141,7 @@ export default function Brands() {
               <Award className="h-3.5 w-3.5" /> Katalog značek
             </div>
             <h1 className="font-display text-4xl sm:text-5xl font-black text-foreground mb-3 leading-tight">
-              70+ světových značek.<br className="hidden sm:block" /> V jednom místě.
+              {loading ? 'Světové značky.' : `${brands.length} světových značek.`}<br className="hidden sm:block" /> V jednom místě.
             </h1>
             <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
               Prémiové hodinky, šperky a doplňky dostupné od 1 kusu za velkoobchodní ceny.
@@ -339,10 +231,9 @@ export default function Brands() {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-14">
                 {filtered.map((brand, i) => {
-                  const brandMeta = getBrandByName(brand.name);
                   const displayCount = category ? brand[category] : brand.count;
                   const countLabel = `${displayCount} modelů`;
-                  const slug = brand.key.toLowerCase().replace(/\s+/g, '-');
+                  const slug = brand.slug;
                   return (
                     <Reveal key={brand.key} delay={Math.min(i % 10, 9) * 40}>
                       <button
@@ -353,10 +244,10 @@ export default function Brands() {
                       >
                         {/* Logo — fixed height for uniform baseline across the whole grid */}
                         <div className="h-16 sm:h-20 w-full flex items-center justify-center px-2">
-                          {brandMeta ? (
+                          {brand.domain ? (
                             <BrandLogo
-                              name={brandMeta.name}
-                              domain={brandMeta.domain}
+                              name={brand.name}
+                              domain={brand.domain}
                               width={400}
                               height={160}
                               className="max-h-full max-w-full object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-105"

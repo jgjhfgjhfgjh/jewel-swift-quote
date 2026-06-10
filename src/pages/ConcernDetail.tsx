@@ -11,7 +11,8 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { BrandLogo } from '@/components/BrandLogo';
 import { getBrandByName } from '@/data/brands';
 import { getConcernBySlug } from '@/data/concerns';
-import { toBrandKey, toDisplayName } from '@/lib/brandNormalize';
+import { toDisplayName } from '@/lib/brandNormalize';
+import { useBrandCatalog, type BrandPreviewProduct } from '@/hooks/useBrandCatalog';
 
 /* ─── Reveal on scroll (same pattern as BrandDetail) ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -41,17 +42,6 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 /* ─── Types ─── */
-interface Product {
-  id: string;
-  name: string;
-  manufacturer: string;
-  img: string;
-  price: number;
-  wholesale: number;
-  inStock: boolean;
-  category: string;
-}
-
 interface BrandInConcern {
   key: string;
   name: string;
@@ -64,7 +54,7 @@ interface ConcernData {
   productCount: number;
   inStockCount: number;
   brands: BrandInConcern[];
-  topProducts: Product[];
+  topProducts: BrandPreviewProduct[];
   rawManufacturers: string[];
 }
 
@@ -74,7 +64,7 @@ export default function ConcernDetail() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { setSelectedBrands, setViewMode } = useStore();
-  const [products, setProducts] = useState<Product[]>([]);
+  const { data: catalog = [] } = useBrandCatalog();
   const [authOpen, setAuthOpen] = useState(false);
 
   const concern = slug ? getConcernBySlug(slug) : undefined;
@@ -84,57 +74,36 @@ export default function ConcernDetail() {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, [slug]);
 
-  useEffect(() => {
-    fetch('/products.json')
-      .then((r) => r.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
-  }, []);
-
+  // Live brand catalog (bound to the feed) restricted to this koncern's brands
   const data = useMemo<ConcernData | null>(() => {
     if (!concern) return null;
 
-    const concernProducts: Product[] = [];
-    const rawManufacturers = new Set<string>();
-    const perBrand = new Map<string, { count: number }>();
+    const present = catalog.filter((e) => concern.brandKeys.includes(e.key));
 
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const key = toBrandKey(p.manufacturer);
-      if (!concern.brandKeys.includes(key)) continue;
-      concernProducts.push(p);
-      rawManufacturers.add(p.manufacturer.trim());
-      if (!perBrand.has(key)) perBrand.set(key, { count: 0 });
-      perBrand.get(key)!.count++;
-    }
-
-    const sorted = [...concernProducts]
+    const topProducts = present
+      .flatMap((e) => e.products)
       .filter((p) => p.img)
       .sort((a, b) => {
         if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
         const da = a.price > 0 ? 1 - a.wholesale / a.price : 0;
         const db = b.price > 0 ? 1 - b.wholesale / b.price : 0;
         return db - da;
-      });
+      })
+      .slice(0, 12);
 
-    const brands: BrandInConcern[] = Array.from(perBrand.entries())
-      .map(([key, v]) => ({
-        key,
-        name: toDisplayName(key),
-        slug: key.toLowerCase().replace(/\s+/g, '-'),
-        count: v.count,
-      }))
+    const brands: BrandInConcern[] = present
+      .map((e) => ({ key: e.key, name: e.name, slug: e.slug, count: e.count }))
       .sort((a, b) => b.count - a.count);
 
     return {
-      brandCount: perBrand.size,
-      productCount: concernProducts.length,
-      inStockCount: concernProducts.filter((p) => p.inStock).length,
+      brandCount: present.length,
+      productCount: present.reduce((sum, e) => sum + e.count, 0),
+      inStockCount: present.reduce((sum, e) => sum + e.inStockCount, 0),
       brands,
-      topProducts: sorted.slice(0, 12),
-      rawManufacturers: Array.from(rawManufacturers),
+      topProducts,
+      rawManufacturers: present.flatMap((e) => e.rawManufacturers),
     };
-  }, [products, concern]);
+  }, [catalog, concern]);
 
   /* ─── Open koncern in catalog: logged-in → activate filter & go to catalog; guest → auth ─── */
   const handleOpenInCatalog = () => {

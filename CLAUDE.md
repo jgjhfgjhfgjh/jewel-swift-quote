@@ -137,7 +137,15 @@ Role uživatelů (enum `app_role`): `admin`, `customer`, `lead`, `b2b_approved` 
 - `wishlist`
 - `deals`, `deal_products` (z migrace `20260515120000_deals.sql` — POZOR: nejsou v `types.ts`, takže se v kódu volají přes `(supabase as any)`)
 
-**RPC funkce volané z FE:** `get_aggregations` a `get_param_options` ([src/hooks/useProducts.ts](src/hooks/useProducts.ts)).
+**RPC funkce volané z FE:** `get_aggregations`, `get_param_options` ([src/hooks/useProducts.ts](src/hooks/useProducts.ts)), `search_products` ([src/hooks/useProductSearch.ts](src/hooks/useProductSearch.ts)), `get_brand_catalog` ([src/hooks/useBrandCatalog.ts](src/hooks/useBrandCatalog.ts)).
+
+**POZOR (2026-06-10): živá tabulka produktů je `produkty`** (+ `produkty_obrazky`, `produkty_parametry`), ne `products` — starší část dokumentace je v tomhle ohledu zastaralá. **Živý sync JE v repu:** GitHub Action [.github/workflows/sync-feed.yml](.github/workflows/sync-feed.yml) → [sync/sync-feed.js](sync/sync-feed.js) (noční, ~1 h; upsert `produkty` po SKU + přepis `produkty_parametry`, detekce změn přes `content_hash`). Mrtvé jsou naopak: edge function `sync-product-feed` (píše do neexistující tabulky `products` a na projektu není ani nasazená) a admin stránka `/admin/feeds` (čte neexistující `feed_config`/`feed_sync_logs`). Překladový workflow [translate-feed.yml](.github/workflows/translate-feed.yml) běží každou noc, ale fakticky nic nepřekládá (0 řádků v `produkty_preklady`, 14k produktů pending; skript chyby per-produkt polyká a končí zeleně) — rozdělaná budoucí funkce. RLS na `produkty` pouští jen `authenticated`, veřejné stránky proto čtou přes SECURITY DEFINER RPC.
+
+**Brand pipeline (značky) — vazba na feed:**
+- Jediný zdroj pravdy pro všechna zobrazení značek je hook [src/hooks/useBrandCatalog.ts](src/hooks/useBrandCatalog.ts) → RPC `get_brand_catalog` nad `produkty` (fallback `public/products.json`). Staví na něm `/brands`, `/brands/:slug`, `BrandLogoRow`, `BrandShowcaseCarousel`, `ConcernCarousel`, `ConcernDetail` i pruh značek na `/velkoobchod`. Nová značka ve feedu se po syncu objeví všude automaticky (vč. landing page přes slug).
+- Normalizace názvů (aliasy, display names) je POUZE v [src/lib/brandNormalize.ts](src/lib/brandNormalize.ts) — nepřidávat lokální kopie do komponent.
+- DB trigger `produkty_fill_manufacturer` doplňuje chybějící `manufacturer` z posledního segmentu `category_text` (feed občas výrobce neposílá — např. BERING, PHILIPP PLEIN).
+- Ruční metadata: doména loga (Brandfetch) v [src/data/brands.ts](src/data/brands.ts), příběh v [src/data/brandStories.ts](src/data/brandStories.ts). Chybějící metadata hlídá watchdog [scripts/check-brand-coverage.ts](scripts/check-brand-coverage.ts) (GitHub Action `brand-coverage.yml`, denně po syncu; spouští se i ručně: `bun scripts/check-brand-coverage.ts`). ZEPPELIN je vědomě bez loga (Brandfetch nemá použitelné), HACKER/LEVIEN/MANA vědomě bez příběhu.
 
 **Auth flow:** [src/hooks/useAuth.ts](src/hooks/useAuth.ts) — `onAuthStateChange` + ruční `getSession()` + realtime kanál na `user_roles` (admin změní roli → FE okamžitě reaguje). `setTimeout(0)` po onAuthStateChange je **záměrný workaround** Supabase auth deadlocku — nesahat.
 
@@ -178,9 +186,9 @@ Tyhle věci v minulosti zlobily a stálo dost času je dohledat. Před zásahem 
 
 **Příběh:** Aplikace má dva zdroje produktů — Supabase tabulku `products` (živý feed, hlavní zdroj) a statický [public/products.json](public/products.json) (~5 MB, build-time snapshot, fallback). V určité fázi se appka v některých místech servírovala z fallback JSONu — vypadalo to, že produkty jsou, ale **chyběla multi-image data** (`image_urls` / `add_images`), takže galerie ([src/components/ProductImageGallery.tsx](src/components/ProductImageGallery.tsx)) měla jen jeden obrázek nebo nic. Bug se těžko reprodukoval, protože data formálně byla.
 
-**Stav teď (2026-05-24):**
+**Stav teď (2026-06-10):**
 - Hlavní katalog jede přes Supabase (`useProductSearch`, `useProducts` → RPC `get_aggregations` / `get_param_options`).
-- **Ale [src/pages/Brands.tsx:134](src/pages/Brands.tsx) a [src/pages/BrandDetail.tsx:138](src/pages/BrandDetail.tsx) pořád dělají `fetch('/products.json')`** — tj. fallback je stále živý a v těchto stránkách neuvidíš multi-image data, dokud je nepřepíšeš na Supabase.
+- Brand stránky (`Brands`, `BrandDetail`, carousely, koncerny) už jedou přes `useBrandCatalog` → RPC `get_brand_catalog`; `fetch('/products.json')` zůstává jen jako offline fallback uvnitř toho hooku. Snapshot `public/products.json` je ale zastaralý (11 696 produktů vs. ~14 000 živých, chybí v něm novější značky) — kdyby RPC vypadlo, fallback ukáže starý katalog.
 - Multi-image pipeline v živé tabulce funguje: feed `<add_images>` → [sync/sync-feed.js:63](sync/sync-feed.js) sbírá do `all_image_urls` → upsert do sloupce `image_urls` ([sync/sync-feed.js:113](sync/sync-feed.js)) → FE čte v `useProductSearch`, `ProductCard`, `ProductDetailModal`.
 
 **Pravidla pro budoucí práci:**
@@ -189,19 +197,17 @@ Tyhle věci v minulosti zlobily a stálo dost času je dohledat. Před zásahem 
 - Nemaž `public/products.json` jen tak — některé landing/marketing stránky ho stále potřebují. Před smazáním grep `products.json` v `src/`.
 - Sloupec se ve Supabase jmenuje **`image_urls`** (množné, pole stringů); hlavní obrázek je `image_url` (jednotné). XML feed má `<img_url>` (hlavní) a `<add_images>` (pole). Nezaměň.
 
-### 2. Dvě synchronizační cesty (CLI vs. edge function) — pozor, co fixuješ
+### 2. Dvě synchronizační cesty (CLI vs. edge function) — JEN JEDNA ŽIJE (stav 2026-06-10)
 
-Sync produktů existuje **dvojmo**, oba se vyvíjely paralelně:
-
-| Co                              | Kde                                                  | Kdy běží                                     |
+| Co                              | Kde                                                  | Stav                                     |
 |----------------------------------|------------------------------------------------------|----------------------------------------------|
-| Node CLI `sync-feed.js`          | [sync/sync-feed.js](sync/sync-feed.js)               | Nightly GitHub Action ([.github/workflows/sync-feed.yml](.github/workflows/sync-feed.yml)) v 03:00 UTC, taky `workflow_dispatch` |
-| Deno edge function               | [supabase/functions/sync-product-feed/](supabase/functions/sync-product-feed/) | Volaná z `/admin/feeds` UI ([src/pages/FeedManagement.tsx](src/pages/FeedManagement.tsx)) |
+| Node CLI `sync-feed.js`          | [sync/sync-feed.js](sync/sync-feed.js)               | **ŽIVÁ** — nightly GitHub Action ([.github/workflows/sync-feed.yml](.github/workflows/sync-feed.yml)) v 03:00 UTC, zapisuje `produkty` + `produkty_parametry` |
+| Deno edge function               | [supabase/functions/sync-product-feed/](supabase/functions/sync-product-feed/) | **MRTVÁ** — píše do neexistující `products`, není nasazená; `/admin/feeds` UI na ní závisí a je taky nefunkční |
 
 **Pravidla:**
-- **Když měníš shape feedu nebo přidáváš sloupec, uprav OBĚ.** Dřív se opravilo jen jedno místo a druhé dál zapisovalo nesmysly.
-- Nightly cron používá secrets `LOVABLE_SUPABASE_URL` / `LOVABLE_SUPABASE_SERVICE_KEY` (GitHub Actions, ne `.env`).
-- **`PROTECTED_FIELDS`** (`custom_margin`, `manual_price_isk`, `is_featured`, `admin_manual_override`, `admin_notes`) sync **nesmí přepsat** — admin je nastavuje ručně v UI. Pokud přidáváš nové ručně-editovatelné pole, **přidej ho do `PROTECTED_FIELDS`** v obou variantách syncu.
+- Změny shape feedu / nového sloupce dělej v **`sync/sync-feed.js`** (edge function je mrtvý kód — neopravuj ji, dokud se nerozhodne o jejím odstranění/oživení).
+- Nightly cron používá secrets `LOVABLE_SUPABASE_URL` / `LOVABLE_SUPABASE_SERVICE_KEY` (GitHub Actions, ne `.env`) — míří na živý projekt `ijcfcjlfxktvedqrsvqz`.
+- `PROTECTED_FIELDS` koncept existoval jen ve staré pipeline nad `products`; v `produkty` zatím žádná admin-editovatelná pole chráněná před syncem nejsou. Pokud taková přibudou, ochranu je nutné do `sync-feed.js` dopsat.
 
 ### 3. Historické sync past, na které se opakovaně narazilo
 

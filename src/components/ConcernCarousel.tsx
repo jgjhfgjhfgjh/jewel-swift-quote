@@ -1,15 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { getBrandByName } from '@/data/brands';
 import { CONCERNS, type Concern } from '@/data/concerns';
-import { toBrandKey, toDisplayName } from '@/lib/brandNormalize';
+import { toDisplayName } from '@/lib/brandNormalize';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
-
-interface Product {
-  manufacturer: string;
-}
 
 interface ConcernCardData {
   concern: Concern;
@@ -93,40 +90,23 @@ function ConcernCard({ data }: { data: ConcernCardData }) {
 
 /* ─── Carousel ─── */
 export function ConcernCarousel() {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    fetch('/products.json')
-      .then((r) => r.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
-  }, []);
+  // Live brand catalog (bound to the feed) — counts per koncern follow it
+  const { data: catalog = [] } = useBrandCatalog();
 
   const cards = useMemo<ConcernCardData[]>(() => {
-    // Tally product counts and which brand keys appear in the feed, per koncern.
-    const counts = new Map<string, number>(); // concern.slug → product count
-    const presentKeys = new Map<string, Set<string>>(); // concern.slug → brand keys present
-
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const key = toBrandKey(p.manufacturer);
-      const concern = CONCERNS.find((c) => c.brandKeys.includes(key));
-      if (!concern) continue;
-      counts.set(concern.slug, (counts.get(concern.slug) ?? 0) + 1);
-      if (!presentKeys.has(concern.slug)) presentKeys.set(concern.slug, new Set());
-      presentKeys.get(concern.slug)!.add(key);
-    }
-
-    return CONCERNS.map((concern) => ({
-      concern,
-      productCount: counts.get(concern.slug) ?? 0,
-      brandKeys: Array.from(presentKeys.get(concern.slug) ?? []).sort((a, b) =>
-        toDisplayName(a).localeCompare(toDisplayName(b), 'cs'),
-      ),
-    }))
+    return CONCERNS.map((concern) => {
+      const present = catalog.filter((e) => concern.brandKeys.includes(e.key));
+      return {
+        concern,
+        productCount: present.reduce((sum, e) => sum + e.count, 0),
+        brandKeys: present
+          .map((e) => e.key)
+          .sort((a, b) => toDisplayName(a).localeCompare(toDisplayName(b), 'cs')),
+      };
+    })
       .filter((c) => c.productCount > 0)
       .sort((a, b) => b.productCount - a.productCount);
-  }, [products]);
+  }, [catalog]);
 
   // Render the cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...cards, ...cards, ...cards], [cards]);

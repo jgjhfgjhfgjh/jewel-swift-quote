@@ -52,6 +52,15 @@ export const BRANDS: Brand[] = [
   { name: 'Michael Kors', domain: 'michaelkors.com' },
   { name: 'Cerruti 1881', domain: 'cerruti1881.com' },
   { name: 'Fila', domain: 'fila.com' },
+  { name: 'Festina', domain: 'festina.com' },
+  { name: 'GANT', domain: 'gant.com' },
+  { name: 'Daniel Wellington', domain: 'danielwellington.com' },
+  { name: 'Maserati', domain: 'maserati.com' },
+  { name: 'Swiss Alpine Military', domain: 'swissalpinemilitary.ch' },
+  { name: 'BERING', domain: 'beringtime.com' },
+  { name: 'Philipp Plein', domain: 'philipp-plein.com' },
+  // ZEPPELIN: Brandfetch nemá použitelné logo (všechny domény vrací prázdný
+  // bílý obrázek) — záměrně bez záznamu, UI použije textový fallback.
 ];
 
 // Premium/luxury watch brands available on request (separate from standard catalog)

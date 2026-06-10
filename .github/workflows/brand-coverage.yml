@@ -1,0 +1,26 @@
+name: Brand coverage watchdog
+
+# Hlídá vazbu značek na dodavatelský feed: po nočním syncu stáhne živý feed
+# a selže, pokud se objevila značka bez loga/příběhu v repu. Web sám o sobě
+# novou značku zobrazí automaticky (useBrandCatalog) — tohle hlídá jen
+# ruční metadata.
+
+on:
+  schedule:
+    # Daily at 04:30 UTC — after the 03:00 UTC feed sync
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Check brand coverage against the live feed
+        run: bun scripts/check-brand-coverage.ts

@@ -2,69 +2,14 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { getBrandByName } from '@/data/brands';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
-
-/* ─── Brand normalization (same as Brands / BrandDetail) ─── */
-const BRAND_ALIASES: Record<string, string> = {
-  'TOMMY HILFIGER JEWELS': 'TOMMY HILFIGER',
-  'GUESS JEWELS': 'GUESS',
-  'HUGO BOSS JEWELS': 'HUGO BOSS',
-  'EMPORIO ARMANI JEWELS': 'EMPORIO ARMANI',
-  'EMPORIO ARMANI JEWELRY': 'EMPORIO ARMANI',
-  'CALVIN KLEIN JEWELRY': 'CALVIN KLEIN',
-  'BREIL JEWELS': 'BREIL',
-  'JUST CAVALLI JEWELS': 'JUST CAVALLI',
-  'ROBERTO CAVALLI BY FRANCK MULLER': 'ROBERTO CAVALLI',
-  'ROBERTO CAVALLI by FRANCK MULLER': 'ROBERTO CAVALLI',
-  'POLICE JEWELS': 'POLICE',
-  'SECTOR JEWELS': 'SECTOR',
-  'VICEROY FASHION': 'VICEROY',
-  'VICEROY JEWELS': 'VICEROY',
-  'VICEROY KIDS': 'VICEROY',
-  'VICEROY KIDS JEWELS': 'VICEROY',
-  'DISNEY JEWELS': 'DISNEY',
-  'PIERRE LANNIER JEWELRY': 'PIERRE LANNIER',
-  'PIERRE LANNIER STRAPS': 'PIERRE LANNIER',
-  'HIP HOP STRAPS': 'HIP HOP',
-  'MICHAEL KORS JEWELRY': 'MICHAEL KORS',
-  'ALVIERO MARTINI JEWELS': 'ALVIERO MARTINI',
-  'ZOPPINI JEWELS': 'ZOPPINI',
-  'SWATCH BIJOUX': 'SWATCH',
-  'CHRONOSTAR BY SECTOR': 'CHRONOSTAR',
-  'MARK MADDOX - NEW COLLECTION': 'MARK MADDOX',
-  'HACKER LED WATCHES': 'HACKER',
-};
-
-const DISPLAY_NAMES: Record<string, string> = {
-  'DKNY': 'DKNY', 'Q&Q': 'Q&Q', 'HIP HOP': 'Hip Hop', 'LA PETITE STORY': 'La Petite Story',
-  'HUGO BOSS': 'Hugo Boss', 'EMPORIO ARMANI': 'Emporio Armani', 'TOMMY HILFIGER': 'Tommy Hilfiger',
-  'CALVIN KLEIN': 'Calvin Klein', 'MICHAEL KORS': 'Michael Kors', 'PIERRE LANNIER': 'Pierre Lannier',
-  'ROBERTO CAVALLI': 'Roberto Cavalli', 'JUST CAVALLI': 'Just Cavalli', 'VERSUS VERSACE': 'Versus Versace',
-  'MISS SIXTY': 'Miss Sixty', 'MARK MADDOX': 'Mark Maddox', 'BEVERLY HILLS POLO CLUB': 'Beverly Hills Polo Club',
-  'MANUEL ZED': 'Manuel Zed', 'ALVIERO MARTINI': 'Alviero Martini', 'CERRUTI 1881': 'Cerruti 1881',
-  'DANIEL WELLINGTON': 'Daniel Wellington',
-};
-
-function toDisplayName(key: string): string {
-  if (DISPLAY_NAMES[key]) return DISPLAY_NAMES[key];
-  return key.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-interface Product {
-  id: string;
-  name: string;
-  manufacturer: string;
-  img: string;
-  price: number;
-  wholesale: number;
-  inStock: boolean;
-}
 
 interface BrandCardData {
   key: string;
   name: string;
   slug: string;
+  domain?: string;
   count: number;
   products: { id: string; name: string; img: string }[];
 }
@@ -87,8 +32,6 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     return () => clearInterval(id);
   }, [n]);
 
-  const meta = getBrandByName(brand.name);
-
   return (
     <div
       data-card
@@ -96,10 +39,10 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     >
       {/* Brand logo */}
       <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-5 shrink-0">
-        {meta ? (
+        {brand.domain ? (
           <BrandLogo
-            name={meta.name}
-            domain={meta.domain}
+            name={brand.name}
+            domain={brand.domain}
             width={400}
             height={160}
             className="max-h-full max-w-[180px] object-contain [mix-blend-mode:multiply]"
@@ -156,42 +99,25 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
 
 /* ─── Carousel ─── */
 export function BrandShowcaseCarousel() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { data: catalog = [] } = useBrandCatalog();
 
-  useEffect(() => {
-    fetch('/products.json')
-      .then((r) => r.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
-  }, []);
-
+  // Live brand catalog (bound to the feed) — top 16 brands with product previews
   const brands = useMemo<BrandCardData[]>(() => {
-    const map = new Map<string, { count: number; products: { id: string; name: string; img: string }[] }>();
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const key = (BRAND_ALIASES[p.manufacturer.trim()] || p.manufacturer.trim()).toUpperCase();
-      if (!key) continue;
-      if (!map.has(key)) map.set(key, { count: 0, products: [] });
-      const e = map.get(key)!;
-      e.count++;
-      if (p.img && e.products.length < 10) {
-        // prefer in-stock images first
-        if (p.inStock) e.products.unshift({ id: p.id, name: p.name, img: p.img });
-        else e.products.push({ id: p.id, name: p.name, img: p.img });
-      }
-    }
-    return Array.from(map.entries())
-      .map(([key, v]) => ({
-        key,
-        name: toDisplayName(key),
-        slug: key.toLowerCase().replace(/\s+/g, '-'),
-        count: v.count,
-        products: v.products.slice(0, 10),
-      }))
-      .filter((b) => b.products.length > 0)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 16);
-  }, [products]);
+    return catalog
+      .filter((e) => e.products.length > 0)
+      .slice(0, 16)
+      .map((e) => ({
+        key: e.key,
+        name: e.name,
+        slug: e.slug,
+        domain: e.domain,
+        count: e.count,
+        products: e.products
+          .filter((p) => p.img)
+          .slice(0, 10)
+          .map((p) => ({ id: p.id, name: p.name, img: p.img })),
+      }));
+  }, [catalog]);
 
   // Render the brand cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);

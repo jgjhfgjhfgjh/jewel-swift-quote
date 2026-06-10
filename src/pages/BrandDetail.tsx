@@ -9,7 +9,10 @@ import { AuthModal } from '@/components/AuthModal';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { BrandLogo } from '@/components/BrandLogo';
-import { getBrandByName } from '@/data/brands';
+import { toDisplayName } from '@/lib/brandNormalize';
+import {
+  useBrandCatalog, brandKeyToSlug, brandSlugToKey, type BrandPreviewProduct,
+} from '@/hooks/useBrandCatalog';
 import { BRAND_STORIES } from '@/data/brandStories';
 
 /* ─── Reveal on scroll ─── */
@@ -39,85 +42,15 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   );
 }
 
-/* ─── Brand normalization (same as Brands.tsx) ─── */
-const BRAND_ALIASES: Record<string, string> = {
-  'TOMMY HILFIGER JEWELS': 'TOMMY HILFIGER',
-  'GUESS JEWELS': 'GUESS',
-  'HUGO BOSS JEWELS': 'HUGO BOSS',
-  'EMPORIO ARMANI JEWELS': 'EMPORIO ARMANI',
-  'EMPORIO ARMANI JEWELRY': 'EMPORIO ARMANI',
-  'CALVIN KLEIN JEWELRY': 'CALVIN KLEIN',
-  'BREIL JEWELS': 'BREIL',
-  'JUST CAVALLI JEWELS': 'JUST CAVALLI',
-  'ROBERTO CAVALLI BY FRANCK MULLER': 'ROBERTO CAVALLI',
-  'ROBERTO CAVALLI by FRANCK MULLER': 'ROBERTO CAVALLI',
-  'POLICE JEWELS': 'POLICE',
-  'SECTOR JEWELS': 'SECTOR',
-  'VICEROY FASHION': 'VICEROY',
-  'VICEROY JEWELS': 'VICEROY',
-  'VICEROY KIDS': 'VICEROY',
-  'VICEROY KIDS JEWELS': 'VICEROY',
-  'DISNEY JEWELS': 'DISNEY',
-  'PIERRE LANNIER JEWELRY': 'PIERRE LANNIER',
-  'PIERRE LANNIER STRAPS': 'PIERRE LANNIER',
-  'HIP HOP STRAPS': 'HIP HOP',
-  'MICHAEL KORS JEWELRY': 'MICHAEL KORS',
-  'ALVIERO MARTINI JEWELS': 'ALVIERO MARTINI',
-  'ZOPPINI JEWELS': 'ZOPPINI',
-  'SWATCH BIJOUX': 'SWATCH',
-  'CHRONOSTAR BY SECTOR': 'CHRONOSTAR',
-  'MARK MADDOX - NEW COLLECTION': 'MARK MADDOX',
-  'HACKER LED WATCHES': 'HACKER',
-};
-
-const DISPLAY_NAMES: Record<string, string> = {
-  'DKNY': 'DKNY',
-  'Q&Q': 'Q&Q',
-  'HIP HOP': 'Hip Hop',
-  'LA PETITE STORY': 'La Petite Story',
-  'HUGO BOSS': 'Hugo Boss',
-  'EMPORIO ARMANI': 'Emporio Armani',
-  'TOMMY HILFIGER': 'Tommy Hilfiger',
-  'CALVIN KLEIN': 'Calvin Klein',
-  'MICHAEL KORS': 'Michael Kors',
-  'PIERRE LANNIER': 'Pierre Lannier',
-  'ROBERTO CAVALLI': 'Roberto Cavalli',
-  'JUST CAVALLI': 'Just Cavalli',
-  'VERSUS VERSACE': 'Versus Versace',
-  'MISS SIXTY': 'Miss Sixty',
-  'MARK MADDOX': 'Mark Maddox',
-  'BEVERLY HILLS POLO CLUB': 'Beverly Hills Polo Club',
-  'MANUEL ZED': 'Manuel Zed',
-  'ALVIERO MARTINI': 'Alviero Martini',
-  'CERRUTI 1881': 'Cerruti 1881',
-  'DANIEL WELLINGTON': 'Daniel Wellington',
-};
-
-function toDisplayName(key: string): string {
-  if (DISPLAY_NAMES[key]) return DISPLAY_NAMES[key];
-  return key.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 /* Per-brand stories live in @/data/brandStories (same StoryEra format as koncern pages) */
 
 /* ─── Types ─── */
-interface Product {
-  id: string;
-  name: string;
-  manufacturer: string;
-  img: string;
-  price: number;
-  wholesale: number;
-  inStock: boolean;
-  category: string;
-}
-
 interface BrandData {
   key: string;
   name: string;
-  sampleProduct: Product;
-  rotationProducts: Product[];
-  topProducts: Product[];
+  domain?: string;
+  rotationProducts: BrandPreviewProduct[];
+  topProducts: BrandPreviewProduct[];
   count: number;
   maxDiscount: number;
   categories: string[];
@@ -131,8 +64,7 @@ export default function BrandDetail() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { setSelectedBrands, setViewMode } = useStore();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: catalog = [], isLoading: loading } = useBrandCatalog();
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register' | 'b2b'>('login');
   const [rotationIdx, setRotationIdx] = useState(0);
@@ -148,94 +80,45 @@ export default function BrandDetail() {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, [slug]);
 
-  useEffect(() => {
-    fetch('/products.json')
-      .then((r) => r.json())
-      .then((data) => { setProducts(data); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, []);
-
   // Reset rotation when brand or active category changes
   useEffect(() => { setRotationIdx(0); }, [slug, category]);
 
   const brandData = useMemo<BrandData | null>(() => {
     if (!slug) return null;
-    const targetKey = slug.toUpperCase().replace(/-/g, ' ');
+    const targetKey = brandSlugToKey(slug);
+    const entry = catalog.find((e) => e.key === targetKey);
+    if (!entry) return null;
 
-    const brandProducts: Product[] = [];
-    const rawManufacturers = new Set<string>();
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const raw = p.manufacturer.trim();
-      const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
-      if (key === targetKey) {
-        brandProducts.push(p);
-        rawManufacturers.add(raw);
-      }
-    }
-
-    if (brandProducts.length === 0) return null;
-
-    const inStockProducts = brandProducts.filter((p) => p.inStock && p.img);
-    const sampleProduct = inStockProducts[0] || brandProducts.find((p) => p.img) || brandProducts[0];
-
-    // Sorted list (with image) — in-stock first, then by discount.
-    // When a category filter is active, restrict to products of that segment
-    // so the hero slideshow & top grid never show jewelry on a "watches" view (and vice versa).
-    const sorted = [...brandProducts]
-      .filter((p) => p.img && (!category || getCategorySegment(p.category) === category))
-      .sort((a, b) => {
-        if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
-        const da = a.price > 0 ? (1 - a.wholesale / a.price) : 0;
-        const db = b.price > 0 ? (1 - b.wholesale / b.price) : 0;
-        return db - da;
-      });
-
-    // Hero rotation — up to 10 products that cycle with crossfade
-    const rotationProducts = sorted.slice(0, 10);
-
-    // Top products grid — top 8
-    const topProducts = sorted.slice(0, 8);
-
-    const maxDiscount = brandProducts.reduce((max, p) => {
-      const d = p.price > 0 ? Math.round((1 - p.wholesale / p.price) * 100) : 0;
-      return d > max ? d : max;
-    }, 0);
-
-    const categories = Array.from(new Set(brandProducts.map((p) => p.category).filter(Boolean)));
+    // Preview products (in-stock first, by discount — sorted in the hook).
+    // When a category filter is active, restrict to products of that segment;
+    // if no preview matches, fall back to all so the hero never stays empty.
+    const segFiltered = category
+      ? entry.products.filter((p) => getCategorySegment(p.category) === category)
+      : entry.products;
+    const pool = segFiltered.length > 0 ? segFiltered : entry.products;
 
     return {
-      key: targetKey,
-      name: toDisplayName(targetKey),
-      sampleProduct,
-      rotationProducts,
-      topProducts,
-      count: brandProducts.length,
-      maxDiscount,
-      categories,
-      inStockCount: inStockProducts.length,
-      rawManufacturers: Array.from(rawManufacturers),
+      key: entry.key,
+      name: entry.name,
+      domain: entry.domain,
+      rotationProducts: pool.slice(0, 10),
+      topProducts: pool.slice(0, 8),
+      count: entry.count,
+      maxDiscount: entry.maxDiscount,
+      categories: entry.categories,
+      inStockCount: entry.inStockCount,
+      rawManufacturers: entry.rawManufacturers,
     };
-  }, [products, slug, category]);
+  }, [catalog, slug, category]);
 
   // All brand keys (alphabetical by display name) — used for prev/next nav arrows
   // When a category filter is active, restrict to brands that have products in that segment
   const allBrandKeys = useMemo<string[]>(() => {
-    const map = new Map<string, { watches: boolean; jewelry: boolean }>();
-    for (const p of products) {
-      if (!p.manufacturer) continue;
-      const raw = p.manufacturer.trim();
-      const key = (BRAND_ALIASES[raw] || raw).toUpperCase();
-      if (!key) continue;
-      if (!map.has(key)) map.set(key, { watches: false, jewelry: false });
-      const seg = getCategorySegment(p.category);
-      if (seg) map.get(key)![seg] = true;
-    }
-    const keys = Array.from(map.entries())
-      .filter(([, segs]) => !category || segs[category])
-      .map(([k]) => k);
-    return keys.sort((a, b) => toDisplayName(a).localeCompare(toDisplayName(b), 'cs'));
-  }, [products, category]);
+    return catalog
+      .filter((e) => !category || e[category] > 0)
+      .map((e) => e.key)
+      .sort((a, b) => toDisplayName(a).localeCompare(toDisplayName(b), 'cs'));
+  }, [catalog, category]);
 
   const { prevBrandKey, nextBrandKey } = useMemo(() => {
     if (!brandData || allBrandKeys.length < 2) return { prevBrandKey: null, nextBrandKey: null };
@@ -249,8 +132,7 @@ export default function BrandDetail() {
   }, [allBrandKeys, brandData]);
 
   const goToBrand = (key: string) => {
-    const slug = key.toLowerCase().replace(/\s+/g, '-');
-    navigate(withCat(`/brands/${slug}`));
+    navigate(withCat(`/brands/${brandKeyToSlug(key)}`));
   };
 
   // Swipe navigation between brands (mobile — replaces the arrows)
@@ -389,8 +271,7 @@ export default function BrandDetail() {
                 <h1 className="text-center flex items-center justify-center min-h-[80px] sm:min-h-[96px] md:min-h-[128px] px-2 sm:px-20">
                   <span className="sr-only">{brandData.name}</span>
                   {(() => {
-                    const brand = getBrandByName(brandData.name);
-                    if (!brand) {
+                    if (!brandData.domain) {
                       return (
                         <span className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground">
                           {brandData.name}
@@ -399,8 +280,8 @@ export default function BrandDetail() {
                     }
                     return (
                       <BrandLogo
-                        name={brand.name}
-                        domain={brand.domain}
+                        name={brandData.name}
+                        domain={brandData.domain}
                         width={600}
                         height={240}
                         className="h-16 sm:h-20 md:h-28 w-auto max-w-[280px] sm:max-w-[400px] md:max-w-[500px] object-contain [mix-blend-mode:multiply]"

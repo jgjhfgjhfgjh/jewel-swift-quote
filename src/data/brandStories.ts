@@ -1147,6 +1147,210 @@ export const BRAND_STORIES: Record<string, StoryEra[]> = {
     },
   ],
 
+  'FESTINA': [
+    {
+      heading: '1902: Švýcarské kořeny, španělské srdce',
+      items: [
+        {
+          lead: '1902 – La Chaux-de-Fonds',
+          text: 'Značka Festina vznikla ve švýcarské kolébce hodinářství; jméno pochází z latinského „festina lente" — spěchej pomalu.',
+        },
+        {
+          lead: '1984 – Miguel Rodríguez',
+          text: 'Španělský podnikatel značku koupil a vybudoval kolem ní Festina Group, do níž dnes patří i Lotus, Candino, Calypso či Jaguar.',
+        },
+      ],
+    },
+    {
+      heading: 'Hodinky velkého sportu',
+      items: [
+        {
+          lead: 'Ikona cyklistiky',
+          text: 'Festina se proslavila jako dlouholetá oficiální časomíra Tour de France a sponzor profesionální cyklistiky.',
+        },
+        {
+          lead: 'Dostupná kvalita',
+          text: 'Chronografy, potápěčské modely i elegantní řady dělají z Festiny jednu z nejprodávanějších hodinkových značek Evropy.',
+        },
+      ],
+    },
+  ],
+
+  'GANT': [
+    {
+      heading: '1949: Z New Havenu do celého světa',
+      items: [
+        {
+          lead: 'Bernard Gantmacher',
+          text: 'Značka GANT vznikla v univerzitním New Havenu jako košilářská manufaktura — její button-down košile se staly symbolem stylu amerických kampusů.',
+        },
+        {
+          lead: 'American sportswear',
+          text: 'GANT definoval „preppy" styl východního pobřeží: ležérní elegance inspirovaná univerzitním prostředím Ivy League.',
+        },
+      ],
+    },
+    {
+      heading: 'Hodinky s východním pobřežím v DNA',
+      items: [
+        {
+          lead: 'Licencované kolekce',
+          text: 'Hodinky GANT přenášejí americkou sportovní eleganci na zápěstí — čistý design, ocel a kůže v duchu klasického sportswearu.',
+        },
+      ],
+    },
+  ],
+
+  'DANIEL WELLINGTON': [
+    {
+      heading: '2011: Minimalistický fenomén ze Stockholmu',
+      items: [
+        {
+          lead: 'Filip Tysander',
+          text: 'Švédský podnikatel založil značku inspirovanou stylem britského gentlemana, který nosil hodinky na textilním NATO řemínku.',
+        },
+        {
+          lead: 'Hodinky pro éru Instagramu',
+          text: 'Daniel Wellington jako jedna z prvních hodinkových značek vyrostla téměř výhradně díky sociálním sítím a influencer marketingu.',
+        },
+      ],
+    },
+    {
+      heading: 'Skandinávský minimalismus',
+      items: [
+        {
+          lead: 'Tenké pouzdro, čistý ciferník',
+          text: 'Ultratenké hodinky s vyměnitelnými řemínky se staly globálním bestsellerem a vstupní bránou do světa klasické elegance pro mladou generaci.',
+        },
+      ],
+    },
+  ],
+
+  'MASERATI': [
+    {
+      heading: '1914: Trojzubec z Boloně',
+      items: [
+        {
+          lead: 'Bratři Maseratiové',
+          text: 'V Boloni vznikla automobilka, jejíž znak — Neptunův trojzubec z fontány na Piazza Maggiore — patří k nejslavnějším logům světa.',
+        },
+        {
+          lead: 'Závodní legenda',
+          text: 'Maserati psalo dějiny Grand Prix i luxusních gran turismo vozů a stalo se synonymem italské rychlosti a stylu.',
+        },
+      ],
+    },
+    {
+      heading: 'Hodinky pod Morellato Group',
+      items: [
+        {
+          lead: 'Italský design na zápěstí',
+          text: 'Licencované hodinky Maserati vyrábí italská Morellato Group — výrazné chronografy s trojzubcem přenášejí automobilové DNA do hodinářství.',
+        },
+      ],
+    },
+  ],
+
+  'SWISS ALPINE MILITARY': [
+    {
+      heading: 'Švýcarská odolnost by Grovana',
+      items: [
+        {
+          lead: 'Zázemí manufaktury Grovana',
+          text: 'Značku Swiss Alpine Military vyvíjí rodinná švýcarská hodinářka Grovana s kořeny sahajícími do roku 1924.',
+        },
+        {
+          lead: 'Inspirace armádou a horami',
+          text: 'Robustní pouzdra, vysoká voděodolnost a čitelné ciferníky vycházejí z požadavků na vojenské a outdoorové hodinky.',
+        },
+      ],
+    },
+    {
+      heading: 'Swiss Made do terénu',
+      items: [
+        {
+          lead: 'Hodinky do extrémních podmínek',
+          text: 'Od pilotních chronografů po potápěčské modely — vše s certifikací Swiss Made a poctivou švýcarskou mechanikou za dostupnou cenu.',
+        },
+      ],
+    },
+  ],
+
+  'ZEPPELIN': [
+    {
+      heading: 'Odkaz vzducholodí hraběte Zeppelina',
+      items: [
+        {
+          lead: 'Legenda vzduchoplavby',
+          text: 'Značka nese jméno hraběte Ferdinanda von Zeppelina, jehož doutníkové vzducholodě na počátku 20. století fascinovaly celý svět.',
+        },
+        {
+          lead: 'Mnichovská PointTec',
+          text: 'Hodinky Zeppelin vyrábí od 80. let německá rodinná firma PointTec — licence je poctou zlaté éře vzducholodí.',
+        },
+      ],
+    },
+    {
+      heading: 'Retro elegance Made in Germany',
+      items: [
+        {
+          lead: 'Styl 30. let',
+          text: 'Klenuté sklíčko, art-deco číslice a jemné barvy ciferníků evokují palubní přístroje slavné LZ 127 Graf Zeppelin.',
+        },
+      ],
+    },
+  ],
+
+  'BERING': [
+    {
+      heading: '2010: Inspirace arktickou krásou',
+      items: [
+        {
+          lead: 'Dánský design',
+          text: 'Značka BERING vznikla v Dánsku a jméno převzala od mořeplavce Vituse Beringa, který jako první proplul úžinou mezi Asií a Amerikou.',
+        },
+        {
+          lead: '„Inspired by arctic beauty"',
+          text: 'Čisté linie, chladné tóny a minimalismus inspirovaný nekonečným ledem Arktidy definují celou kolekci.',
+        },
+      ],
+    },
+    {
+      heading: 'High-tech materiály',
+      items: [
+        {
+          lead: 'Keramika a safírové sklo',
+          text: 'BERING proslul ultratenkými hodinkami z high-tech keramiky a oceli se safírovým sklem — odolné materiály v severském designu.',
+        },
+      ],
+    },
+  ],
+
+  'PHILIPP PLEIN': [
+    {
+      heading: '1998: Provokatér evropské módy',
+      items: [
+        {
+          lead: 'Německý návrhář',
+          text: 'Philipp Plein vybudoval z vlastního jména globální značku luxusní módy známou odvážným glamour stylem, lebkami a krystaly.',
+        },
+        {
+          lead: 'Celebrity a velkolepé show',
+          text: 'Přehlídky Philipp Plein patří k nejvýstřednějším událostem módního kalendáře a značku oblékají hvězdy hudby i sportu.',
+        },
+      ],
+    },
+    {
+      heading: 'Hodinky pod Timex Group',
+      items: [
+        {
+          lead: 'Licence od roku 2019',
+          text: 'Hodinky Philipp Plein vyvíjí Timex Group — masivní pouzdra, výrazné logo a rebelský luxus pro ty, kdo se nebojí být vidět.',
+        },
+      ],
+    },
+  ],
+
   'MILLNER': [
     {
       heading: '2017: Barcelona',

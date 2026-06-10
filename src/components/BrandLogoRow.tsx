@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { BRANDS } from '@/data/brands';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 
-type Brand = { name: string; domain: string };
+type Brand = { name: string; domain?: string; slug: string };
 type Preview = { brand: Brand; left: number; top: number; width: number };
 
 /**
@@ -17,11 +17,14 @@ export function BrandLogoRow() {
   const navigate = useNavigate();
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // Live brand catalog (bound to the feed) — every brand in the catalog shows
+  // up here automatically; brands without a logo domain render as text.
+  const { data: catalog = [] } = useBrandCatalog();
+  const brands: Brand[] = catalog.map((e) => ({ name: e.name, domain: e.domain, slug: e.slug }));
+
   const [preview, setPreview] = useState<Preview | null>(null);
   const dwellRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const slug = (name: string) => name.toLowerCase().replace(/\s+/g, '-');
 
   const scrollByPage = (dir: 1 | -1) => {
     const el = trackRef.current;
@@ -86,8 +89,9 @@ export function BrandLogoRow() {
         const card = hit?.closest('[data-card]') as HTMLElement | null;
         if (!card) return;
         const name = card.getAttribute('data-brand');
-        const domain = card.getAttribute('data-domain');
-        if (name && domain) openFor({ name, domain }, card);
+        const domain = card.getAttribute('data-domain') || undefined;
+        const cardSlug = card.getAttribute('data-slug');
+        if (name && cardSlug) openFor({ name, domain, slug: cardSlug }, card);
       }, 150);
     };
     const onResize = () => { clearDwell(); setPreview(null); };
@@ -127,14 +131,15 @@ export function BrandLogoRow() {
                      scroll-pl-4 min-[480px]:scroll-pl-5 md:scroll-pl-8 min-[1200px]:scroll-pl-11
                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {BRANDS.map((brand) => (
+          {brands.map((brand) => (
             <button
-              key={brand.name}
+              key={brand.slug}
               type="button"
               data-card
               data-brand={brand.name}
-              data-domain={brand.domain}
-              onClick={() => navigate(`/brands/${slug(brand.name)}`)}
+              data-domain={brand.domain ?? ''}
+              data-slug={brand.slug}
+              onClick={() => navigate(`/brands/${brand.slug}`)}
               onMouseEnter={(e) => handleEnter(brand, e.currentTarget)}
               onMouseLeave={() => { clearDwell(); scheduleClose(); }}
               aria-label={brand.name}
@@ -142,14 +147,18 @@ export function BrandLogoRow() {
                          w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]
                          rounded-[8px] border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5"
             >
-              <BrandLogo
-                name={brand.name}
-                domain={brand.domain}
-                width={360}
-                height={160}
-                className="max-h-[48px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply]"
-                fallbackClassName="font-display font-black text-foreground text-base"
-              />
+              {brand.domain ? (
+                <BrandLogo
+                  name={brand.name}
+                  domain={brand.domain}
+                  width={360}
+                  height={160}
+                  className="max-h-[48px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply]"
+                  fallbackClassName="font-display font-black text-foreground text-base"
+                />
+              ) : (
+                <span className="font-display font-black text-foreground text-base">{brand.name}</span>
+              )}
             </button>
           ))}
         </div>
@@ -183,14 +192,18 @@ export function BrandLogoRow() {
         >
           {/* Logo area — 16:9, white (stand-in for the video still) */}
           <div className="w-full aspect-[16/9] bg-white flex items-center justify-center p-6">
-            <BrandLogo
-              name={preview.brand.name}
-              domain={preview.brand.domain}
-              width={520}
-              height={240}
-              className="max-h-[80px] max-w-[68%] object-contain [mix-blend-mode:multiply]"
-              fallbackClassName="font-display font-black text-2xl text-foreground"
-            />
+            {preview.brand.domain ? (
+              <BrandLogo
+                name={preview.brand.name}
+                domain={preview.brand.domain}
+                width={520}
+                height={240}
+                className="max-h-[80px] max-w-[68%] object-contain [mix-blend-mode:multiply]"
+                fallbackClassName="font-display font-black text-2xl text-foreground"
+              />
+            ) : (
+              <span className="font-display font-black text-2xl text-foreground">{preview.brand.name}</span>
+            )}
           </div>
           {/* Info panel */}
           <div className="px-4 py-3 text-white">

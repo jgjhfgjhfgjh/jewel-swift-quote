@@ -2,7 +2,8 @@
  * Hodinářské koncerny (watch conglomerates) and the catalog brands that fall
  * under them. Purely editorial mapping — `brandKeys` use the canonical brand
  * keys produced by `toBrandKey` (see `@/lib/brandNormalize`). Product counts,
- * logos and featured products are derived at runtime from `/products.json`.
+ * logos and featured products are derived at runtime from the live catalog
+ * via `useBrandCatalog` (feed-bound; products.json is only a fallback).
  *
  * To add or re-map a koncern, edit this file only.
  */

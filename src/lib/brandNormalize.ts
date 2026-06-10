@@ -35,7 +35,12 @@ export const BRAND_ALIASES: Record<string, string> = {
   'SWATCH BIJOUX': 'SWATCH',
   'CHRONOSTAR BY SECTOR': 'CHRONOSTAR',
   'MARK MADDOX - NEW COLLECTION': 'MARK MADDOX',
+  'MARK MADDOX - OUTLET': 'MARK MADDOX',
   'HACKER LED WATCHES': 'HACKER',
+  // Varianty, které se objevují v category_text (DB trigger z nich dopočítává
+  // chybějící manufacturer — viz derive_manufacturer_from_category)
+  'CERUTTI 1881': 'CERRUTI 1881',
+  'MANA MK': 'MANA',
 };
 
 /* Canonical key → display label (override default title-casing where needed) */
@@ -60,6 +65,8 @@ export const DISPLAY_NAMES: Record<string, string> = {
   'ALVIERO MARTINI': 'Alviero Martini',
   'CERRUTI 1881': 'Cerruti 1881',
   'DANIEL WELLINGTON': 'Daniel Wellington',
+  'GANT': 'GANT',
+  'BERING': 'BERING',
 };
 
 /** Raw feed manufacturer string → canonical UPPERCASE brand key. */
