@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 /**
  * Seamless infinite carousel for a native horizontal scroll track.
@@ -40,22 +40,30 @@ export function useInfiniteCarousel(itemCount: number) {
     el.scrollBy({ left: step * dir, behavior: 'smooth' });
   }, [wrap]);
 
-  // Start in the middle copy so it can loop in both directions.
-  useEffect(() => {
+  // Start in the middle copy so it can loop in both directions. Synchronous
+  // (no rAF) — rAF can be throttled in background/occluded windows and the
+  // track would start at the hard left edge, where swiping back jams.
+  useLayoutEffect(() => {
     const el = trackRef.current;
     if (!el || itemCount === 0) return;
-    const raf = requestAnimationFrame(() => {
-      const set = getSet(el);
-      if (set > 0) el.scrollLeft = set;
-    });
-    return () => cancelAnimationFrame(raf);
+    const set = getSet(el);
+    if (set > 0) el.scrollLeft = set;
   }, [itemCount, getSet]);
 
-  // Wrap once scrolling settles — handles manual touch swipes.
+  // Wrap on scroll. Near the physical track edges wrap immediately so touch
+  // momentum never slams into the end mid-swipe; otherwise wait until the
+  // scroll settles (instant jumps mid-momentum are visually identical but
+  // can cut the momentum short, so they're reserved for the danger zone).
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
     const onScroll = () => {
+      const set = getSet(el);
+      if (set > 0) {
+        const margin = (set / itemCount) * 2; // ~two cards from the edge
+        const max = el.scrollWidth - el.clientWidth;
+        if (el.scrollLeft < margin || el.scrollLeft > max - margin) wrap();
+      }
       if (idleRef.current) clearTimeout(idleRef.current);
       idleRef.current = setTimeout(wrap, 120);
     };
@@ -64,7 +72,7 @@ export function useInfiniteCarousel(itemCount: number) {
       el.removeEventListener('scroll', onScroll);
       if (idleRef.current) clearTimeout(idleRef.current);
     };
-  }, [wrap]);
+  }, [wrap, getSet, itemCount]);
 
   return { trackRef, go };
 }

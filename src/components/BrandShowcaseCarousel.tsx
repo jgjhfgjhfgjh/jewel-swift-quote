@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -23,17 +23,30 @@ const ROTATE_MS = 1800;
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({ brand }: { brand: BrandCardData }) {
   const navigate = useNavigate();
+  const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(false);
   const n = brand.products.length;
 
+  // Crossfade only while the card is on screen — with all brands rendered 3x,
+  // off-screen intervals re-render constantly and jank the touch swipe.
   useEffect(() => {
-    if (n <= 1) return;
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => setVisible(entries[entries.length - 1].isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible || n <= 1) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % n), ROTATE_MS);
     return () => clearInterval(id);
-  }, [n]);
+  }, [visible, n]);
 
   return (
     <div
+      ref={rootRef}
       data-card
       className={`group/card relative flex flex-col ${CARD_CLASS}`}
     >
