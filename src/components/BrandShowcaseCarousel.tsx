@@ -181,8 +181,8 @@ export function BrandShowcaseCarousel() {
     >
       <div
         ref={trackRef}
-        className="flex gap-3 sm:gap-4 overflow-x-auto [-webkit-overflow-scrolling:touch]
-                   px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
+        className="flex gap-3 sm:gap-4 overflow-x-auto overflow-y-hidden [-webkit-overflow-scrolling:touch]
+                   px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pt-1 pb-4
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((brand, i) => (
