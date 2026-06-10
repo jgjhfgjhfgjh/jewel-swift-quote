@@ -16,7 +16,7 @@ interface BrandCardData {
 
 /** Card sizing — identical to the hero banner cards */
 const CARD_CLASS =
-  'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[400px] sm:h-[440px] lg:h-[460px]';
+  'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[390px] sm:h-[440px] lg:h-[480px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
@@ -54,7 +54,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       </div>
 
       {/* Crossfading product image — bigger gap below the logo */}
-      <div className="relative flex-1 mx-4 mt-10 mb-2">
+      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2">
         {brand.products.map((p, i) => (
           <div
             key={p.id}
