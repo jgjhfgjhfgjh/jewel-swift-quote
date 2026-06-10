@@ -38,7 +38,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
       className={`group/card relative flex flex-col ${CARD_CLASS}`}
     >
       {/* Brand logo */}
-      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-5 shrink-0">
+      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0">
         {brand.domain ? (
           <BrandLogo
             name={brand.name}
