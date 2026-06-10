@@ -101,11 +101,11 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
 export function BrandShowcaseCarousel() {
   const { data: catalog = [] } = useBrandCatalog();
 
-  // Live brand catalog (bound to the feed) — top 16 brands with product previews
+  // Live brand catalog (bound to the feed) — all brands with product previews,
+  // ordered by product count
   const brands = useMemo<BrandCardData[]>(() => {
     return catalog
       .filter((e) => e.products.length > 0)
-      .slice(0, 16)
       .map((e) => ({
         key: e.key,
         name: e.name,
