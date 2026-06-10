@@ -17,7 +17,7 @@ interface ConcernCardData {
 
 /** Card sizing — mirrors the brand showcase / hero banner cards */
 const CARD_CLASS =
-  'shrink-0 w-[80%] sm:w-[46%] lg:w-[31%] h-[340px] sm:h-[360px]';
+  'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[340px] sm:h-[360px]';
 
 /* ─── Single koncern card — logo + brand logos + stats + CTA (static) ─── */
 function ConcernCard({ data }: { data: ConcernCardData }) {
