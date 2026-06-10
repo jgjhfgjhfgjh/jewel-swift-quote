@@ -10,6 +10,9 @@ export interface SalesCustomer {
   base_discount: number;
 }
 
+/** Admin preview levels — how the site renders for each customer tier */
+export type AdminViewAs = 'real' | 'guest' | 'lead' | 'customer' | 'b2b';
+
 interface AppState {
   lang: Lang;
   setLang: (l: Lang) => void;
@@ -50,6 +53,10 @@ interface AppState {
   authTab: 'login' | 'register' | 'b2b';
   openAuthModal: (tab?: 'login' | 'register' | 'b2b') => void;
   setAuthOpen: (v: boolean) => void;
+
+  // Admin "view as" — preview the site as a customer level (not persisted)
+  adminViewAs: AdminViewAs;
+  setAdminViewAs: (v: AdminViewAs) => void;
 
   // Filter state (persisted)
   search: string;
@@ -191,6 +198,9 @@ export const useStore = create<AppState>()(
       authTab: 'login',
       openAuthModal: (tab = 'login') => set({ authOpen: true, authTab: tab }),
       setAuthOpen: (v) => set({ authOpen: v }),
+
+      adminViewAs: 'real',
+      setAdminViewAs: (v) => set({ adminViewAs: v }),
 
       // Filter state
       search: '',

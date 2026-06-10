@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 
 // Route-level code splitting — each page ships as its own lazy-loaded chunk.
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -108,6 +109,8 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          {/* Admin-only: preview the site as each customer level */}
+          <ViewAsSwitcher />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
