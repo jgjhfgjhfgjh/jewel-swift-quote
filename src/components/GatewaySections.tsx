@@ -668,12 +668,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
-        {/* ── Brand logos — Amazon-style shelf carousel (all brands, first) ── */}
-        <BrandLogoRow />
+        {/* ── Brand showcase carousel — products free on white, first ── */}
+        <BrandShowcaseCarousel />
 
-        {/* ── Brand showcase carousel — mini brand-detail cards with images ── */}
+        {/* ── Brand logos — Amazon-style shelf carousel (all brands) ── */}
         <div className="mt-10 sm:mt-12">
-          <BrandShowcaseCarousel />
+          <BrandLogoRow />
         </div>
 
         {/* ── Concern carousel — hodinářské koncerny (last of the three) ── */}

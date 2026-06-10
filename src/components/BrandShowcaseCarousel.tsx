@@ -35,7 +35,7 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
   return (
     <div
       data-card
-      className={`group/card relative flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-white shadow-md ${CARD_CLASS}`}
+      className={`group/card relative flex flex-col ${CARD_CLASS}`}
     >
       {/* Brand logo */}
       <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-5 shrink-0">
@@ -83,12 +83,12 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="p-4 shrink-0">
+      {/* CTA — free-floating, centered (no card frame to fill) */}
+      <div className="p-4 shrink-0 flex justify-center">
         <button
           type="button"
           onClick={() => navigate(`/brands/${brand.slug}`)}
-          className="w-full inline-flex items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800 transition-colors"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-8 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800 transition-colors min-w-[200px]"
         >
           Zobrazit značku <ArrowRight className="h-3.5 w-3.5" />
         </button>
