@@ -1,10 +1,23 @@
 import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */
 export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
+  const setViewMode = useStore((s) => s.setViewMode);
+  const { user } = useAuthContext();
+
+  // Logged in → straight into the catalog; logged out → create-account modal
+  const openCatalog = () => {
+    if (user) {
+      setViewMode('catalog');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      openAuthModal('register');
+    }
+  };
 
   return (
     <div className="mt-6 sm:mt-10 mb-2 flex flex-col items-center px-6 text-center">
@@ -42,8 +55,8 @@ export function HomeHero() {
           </span>
         </button>
         <button
-          onClick={() => openAuthModal('login')}
-          className="group inline-flex items-center justify-center gap-1.5 px-8 py-3 rounded-md border border-white/60 bg-white/70 backdrop-blur-md text-foreground font-semibold text-sm transition-all duration-200 hover:bg-white/85 hover:gap-3 min-w-[200px]"
+          onClick={openCatalog}
+          className="group inline-flex items-center justify-center gap-1.5 px-2 py-1 text-foreground font-semibold text-sm transition-all duration-200 hover:gap-3"
         >
           Prohlédnout katalog
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
