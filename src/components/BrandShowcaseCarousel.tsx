@@ -53,8 +53,8 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
         )}
       </div>
 
-      {/* Crossfading product image */}
-      <div className="relative flex-1 mx-4 my-2">
+      {/* Crossfading product image — bigger gap below the logo */}
+      <div className="relative flex-1 mx-4 mt-5 mb-2">
         {brand.products.map((p, i) => (
           <div
             key={p.id}
