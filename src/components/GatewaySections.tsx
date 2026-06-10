@@ -667,9 +667,9 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative border-b border-border pt-4 pb-14 sm:pt-16 sm:pb-20">
+      <section className="relative border-b border-border pt-1 sm:pt-[18px] lg:pt-5 pb-14 sm:pb-20">
         {/* ── Small heading between the apps cards and the showcase carousel ── */}
-        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-8 sm:mb-10 lg:mb-16">
+        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-12 sm:mb-[86px] lg:mb-[108px]">
           <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
           <span className="text-zinc-500">za velkoobchodní ceny</span>
         </p>
