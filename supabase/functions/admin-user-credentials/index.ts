@@ -120,9 +120,15 @@ Deno.serve(async (req) => {
 
       const { error: delErr } = await admin.auth.admin.deleteUser(targetUserId);
       if (delErr) {
-        return new Response(JSON.stringify({ error: delErr.message }), {
-          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        // "User not found" = mrtvý profil (auth účet už neexistuje, např. smazán
+        // přes dashboard bez úklidu) — pokračujeme úklidem public tabulek
+        const isGhost = (delErr as { status?: number }).status === 404
+          || /not found/i.test(delErr.message ?? '');
+        if (!isGhost) {
+          return new Response(JSON.stringify({ error: delErr.message }), {
+            status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
       }
 
       // DB nemá FK kaskády na auth.users — související řádky uklízíme ručně.
