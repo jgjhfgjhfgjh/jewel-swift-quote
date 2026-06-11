@@ -14,6 +14,13 @@ interface CustomerRow extends Profile {
   role?: string;
 }
 
+const ROLE_BADGE: Record<string, { label: string; cls: string }> = {
+  admin: { label: 'ADMIN', cls: 'bg-primary/10 text-primary' },
+  b2b_approved: { label: 'B2B', cls: 'bg-emerald-500/10 text-emerald-600' },
+  lead: { label: 'LEAD — ke schválení', cls: 'bg-amber-500/10 text-amber-600' },
+  customer: { label: 'CUSTOMER', cls: 'bg-muted text-muted-foreground' },
+};
+
 export default function CustomerManagement() {
   const { isAdmin, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
@@ -46,10 +53,13 @@ export default function CustomerManagement() {
     const roleMap = new Map(roles?.map(r => [r.user_id, r.role]) ?? []);
 
     setCustomers(
-      (profiles ?? []).map(p => ({
-        ...p,
-        role: roleMap.get(p.user_id) ?? 'customer',
-      }))
+      (profiles ?? [])
+        .map(p => ({
+          ...p,
+          role: roleMap.get(p.user_id) ?? 'customer',
+        }))
+        // leady čekající na schválení nahoru
+        .sort((a, b) => Number(b.role === 'lead') - Number(a.role === 'lead'))
     );
     setLoading(false);
   };
@@ -144,10 +154,10 @@ export default function CustomerManagement() {
                   <Save className="h-3 w-3" />
                 </Button>
               </div>
-              <span className={`text-[10px] font-semibold rounded px-1.5 py-0.5 ${
-                c.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+              <span className={`text-[10px] font-semibold rounded px-1.5 py-0.5 whitespace-nowrap ${
+                (ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer).cls
               }`}>
-                {c.role === 'admin' ? 'ADMIN' : 'CUSTOMER'}
+                {(ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer).label}
               </span>
               <Button
                 size="sm"

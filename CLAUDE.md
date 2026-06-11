@@ -228,7 +228,24 @@ Migrace `20260515120000_deals.sql` přidala `deals` a `deal_products`, ale auto-
 
 `config.toml` → `ktkzibhlzkoklwglkunw`, `.env` → `ijcfcjlfxktvedqrsvqz`. Runtime jede podle `.env`. Když používáš Supabase CLI (`supabase link`, `db push`, `functions deploy`), **ověř, na který projekt cílíš** — jinak ti CLI píše do jiné DB, než aplikace čte.
 
-### 6. Auth deadlock workaround v `useAuth`
+### 6. Schéma živé DB ≠ migrace v repu — chyběl `handle_new_user` trigger (2026-06-12)
+
+**Příběh:** B2B partner se zaregistroval (AuthModal → „Registrovat se jako B2B partner"), ale admin ho neviděl ve `/customers`. Příčina: na živém projektu `ijcfcjlfxktvedqrsvqz` **nikdy neexistoval trigger `on_auth_user_created`** — uživatelé vznikali jen v `auth.users`, bez řádku v `profiles` a `user_roles`. Migrace z repa, které trigger definují, se na živý projekt nikdy neaplikovaly (souvisí s bolístkou č. 5 — config.toml míří jinam).
+
+**Důležité zjištění — schéma živé DB se liší od migrací v repu:**
+- `user_roles.role` je **TEXT**, žádný enum `app_role` na živém projektu neexistuje
+- `profiles` má navíc sloupec `customer_user_id`, `user_id` je nullable
+- RLS používá helper `is_admin()` (ne `has_role()` z repo migrací)
+
+**Fix:** migrace [supabase/migrations/20260612100000_handle_new_user_trigger.sql](supabase/migrations/20260612100000_handle_new_user_trigger.sql) — trigger psaný proti živému schématu (kopíruje i `ico` z metadat) + backfill 3 chybějících uživatelů. Aplikováno přes Supabase MCP.
+
+**Schvalovací flow (rozhodnutí majitele, 2026-06-12):** každá nová registrace začíná jako **`lead`** — i B2B registrace s IČO, i Google/Apple OAuth. Admin B2B partnera ručně schválí ve `/customers/:id` (select Role → `b2b_approved`), tím partner získá ceny a slevy. `/customers` řadí leady nahoru a značí je badge „LEAD — ke schválení".
+
+**Pravidla:**
+- Starší migrace v repu (`20260406…`–`20260420…`) ber jako historii záměru, NE jako popis živého schématu. Před prací s `profiles`/`user_roles` si schéma ověř na živé DB.
+- FE `signUp` v [src/hooks/useAuth.ts](src/hooks/useAuth.ts) dělá po registraci `update profiles` s IČO — to při zapnutém email-confirm tiše selže na RLS (žádná session). IČO reálně plní až trigger z metadat; ten update je redundantní pojistka.
+
+### 7. Auth deadlock workaround v `useAuth`
 
 V [src/hooks/useAuth.ts:50](src/hooks/useAuth.ts) je `setTimeout(async () => { … }, 0)` uvnitř `onAuthStateChange`. **Není to čistota kódu — je to záměr.** Supabase `onAuthStateChange` callback se nesmí blokovat dalším `supabase.*` voláním, jinak vznikne deadlock. Nepřepisuj na přímý `await`.
 
