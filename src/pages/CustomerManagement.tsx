@@ -5,7 +5,8 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Navbar } from '@/components/Navbar';
-import { ArrowLeft, Save, Users } from 'lucide-react';
+import { DeleteCustomerDialog } from '@/components/DeleteCustomerDialog';
+import { ArrowLeft, Save, Trash2, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Profile } from '@/hooks/useAuth';
 
@@ -27,6 +28,7 @@ export default function CustomerManagement() {
   const [customers, setCustomers] = useState<CustomerRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingDiscounts, setEditingDiscounts] = useState<Record<string, string>>({});
+  const [deleteTarget, setDeleteTarget] = useState<CustomerRow | null>(null);
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -159,14 +161,27 @@ export default function CustomerManagement() {
               }`}>
                 {(ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer).label}
               </span>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 text-xs"
-                onClick={() => navigate(`/customers/${c.user_id}`)}
-              >
-                Detail →
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 text-xs"
+                  onClick={() => navigate(`/customers/${c.user_id}`)}
+                >
+                  Detail →
+                </Button>
+                {c.role !== 'admin' && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 w-7 p-0"
+                    title="Smazat zákazníka"
+                    onClick={() => setDeleteTarget(c)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                  </Button>
+                )}
+              </div>
             </div>
           ))}
 
@@ -175,6 +190,13 @@ export default function CustomerManagement() {
           )}
         </div>
       </div>
+
+      <DeleteCustomerDialog
+        open={deleteTarget !== null}
+        onOpenChange={(o) => !o && setDeleteTarget(null)}
+        customer={deleteTarget ? { user_id: deleteTarget.user_id, company_name: deleteTarget.company_name } : null}
+        onDeleted={fetchCustomers}
+      />
     </div>
   );
 }

@@ -31,8 +31,14 @@ Deno.serve(async (req) => {
     }
 
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
-    const { data: isAdmin } = await admin.rpc('has_role', { _user_id: user.id, _role: 'admin' });
-    if (!isAdmin) {
+    // přímý dotaz místo RPC has_role — ta na živé DB neexistuje
+    const { data: adminRole } = await admin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+    if (!adminRole) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -72,19 +78,71 @@ Deno.serve(async (req) => {
           status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      const linkType = action === 'send_recovery' ? 'recovery' : 'magiclink';
+      const email = userData.user.email;
       const redirectTo = body?.redirect_to as string | undefined;
-      const { error } = await admin.auth.admin.generateLink({
-        type: linkType as 'recovery' | 'magiclink',
-        email: userData.user.email,
-        options: redirectTo ? { redirectTo } : undefined,
-      });
+
+      // generateLink odkaz jen vygeneruje, ale email NEodešle — posíláme přes
+      // GoTrue auth API, které email reálně doručí
+      const plainClient = createClient(SUPABASE_URL, ANON_KEY);
+      const { error } = action === 'send_recovery'
+        ? await plainClient.auth.resetPasswordForEmail(email, redirectTo ? { redirectTo } : undefined)
+        : await plainClient.auth.signInWithOtp({
+            email,
+            options: { shouldCreateUser: false, ...(redirectTo ? { emailRedirectTo: redirectTo } : {}) },
+          });
       if (error) {
         return new Response(JSON.stringify({ error: error.message }), {
           status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      return new Response(JSON.stringify({ ok: true, email: userData.user.email }), {
+      return new Response(JSON.stringify({ ok: true, email }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (action === 'delete_user') {
+      if (targetUserId === user.id) {
+        return new Response(JSON.stringify({ error: 'Nemůžete smazat vlastní účet' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const { data: targetAdmin } = await admin
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', targetUserId)
+        .eq('role', 'admin')
+        .maybeSingle();
+      if (targetAdmin) {
+        return new Response(JSON.stringify({ error: 'Účet s rolí admin nelze smazat' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const { error: delErr } = await admin.auth.admin.deleteUser(targetUserId);
+      if (delErr) {
+        return new Response(JSON.stringify({ error: delErr.message }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // DB nemá FK kaskády na auth.users — související řádky uklízíme ručně.
+      // Zprávy v komunikaci zůstávají (mají author_name), jen se odpojí autor.
+      const warnings: string[] = [];
+      const cleanups: [string, PromiseLike<{ error: { message: string } | null }>][] = [
+        ['wishlist', admin.from('wishlist').delete().eq('user_id', targetUserId)],
+        ['customer_discounts', admin.from('customer_discounts').delete().eq('customer_user_id', targetUserId)],
+        ['customer_services', admin.from('customer_services').delete().eq('customer_user_id', targetUserId)],
+        ['comm_participants', admin.from('comm_participants').delete().eq('user_id', targetUserId)],
+        ['comm_messages', admin.from('comm_messages').update({ author_user_id: null }).eq('author_user_id', targetUserId)],
+        ['user_roles', admin.from('user_roles').delete().eq('user_id', targetUserId)],
+        ['profiles', admin.from('profiles').delete().eq('user_id', targetUserId)],
+      ];
+      for (const [table, op] of cleanups) {
+        const { error } = await op;
+        if (error) warnings.push(`${table}: ${error.message}`);
+      }
+
+      return new Response(JSON.stringify({ ok: true, warnings }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }

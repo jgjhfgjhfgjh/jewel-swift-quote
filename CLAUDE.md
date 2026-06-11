@@ -152,7 +152,7 @@ Role uživatelů (enum `app_role`): `admin`, `customer`, `lead`, `b2b_approved` 
 **Edge functions** ([supabase/functions/](supabase/functions/)):
 - `sync-product-feed` — stáhne XML feed dodavatele, parsuje, překládá popisky přes Anthropic (cache v `translation_cache`), bezpečně upsertne do `products` (nepřepíše `PROTECTED_FIELDS`).
 - `import-deal` — deterministicky převede XLSX přílohu z `deal-imports` Storage bucketu na `deal` + `deal_products` (status `draft`, admin schvaluje v `/admin/deals`).
-- `admin-get-user-meta`, `admin-user-credentials` — admin RPC nad `auth.users`.
+- `admin-get-user-meta`, `admin-user-credentials` — admin RPC nad `auth.users`. **Nasazené 2026-06-12** (do té doby na živém projektu chyběly → karta „Přihlašovací údaje" v `/customers/:id` byla prázdná). Admina ověřují přímým dotazem do `user_roles` (RPC `has_role` na živé DB neexistuje). Reset hesla / magic link se posílá přes `resetPasswordForEmail` / `signInWithOtp` — původní `generateLink` email reálně neodesílal. Akce `delete_user` maže zákazníka vč. úklidu souvisejících tabulek (živá DB nemá FK kaskády na `auth.users`!) — FE dvojité potvrzení je v [src/components/DeleteCustomerDialog.tsx](src/components/DeleteCustomerDialog.tsx); sebe ani jiného admina smazat nejde.
 
 **Automatizace deal nabídek** ([automation/README.md](automation/README.md)): Gmail Apps Script (`gmail-deal-export.gs`) kopíruje přílohy do Storage → hodinová Claude routine (`deal-agent-prompt.md`) volá edge function `import-deal`.
 

@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
 import { Navbar } from '@/components/Navbar';
+import { DeleteCustomerDialog } from '@/components/DeleteCustomerDialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -88,6 +89,9 @@ export default function CustomerDetail() {
   // credentials
   const [newPassword, setNewPassword] = useState('');
   const [credBusy, setCredBusy] = useState(false);
+
+  // delete
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleSetPassword = async () => {
     if (!userId || newPassword.length < 6) return;
@@ -554,7 +558,34 @@ export default function CustomerDetail() {
             )}
           </CardContent>
         </Card>
+
+        {/* Danger zone */}
+        {role !== 'admin' && (
+          <Card className="border-destructive/40">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2 text-destructive">
+                <Trash2 className="h-4 w-4" />Smazání zákazníka
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between gap-4 flex-wrap">
+              <p className="text-xs text-muted-foreground max-w-md">
+                Trvale smaže přihlašovací účet, profil firmy, roli, všechny slevy, objednané
+                služby i wishlist. Akce je nevratná a vyžaduje dvojité potvrzení.
+              </p>
+              <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
+                <Trash2 className="h-4 w-4 mr-2" />Smazat zákazníka
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
+
+      <DeleteCustomerDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        customer={profile ? { user_id: profile.user_id, company_name: profile.company_name } : null}
+        onDeleted={() => navigate('/customers')}
+      />
     </div>
   );
 }
