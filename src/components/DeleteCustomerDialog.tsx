@@ -48,7 +48,17 @@ export function DeleteCustomerDialog({ open, onOpenChange, customer, onDeleted }
       body: { action: 'delete_user', user_id: customer.user_id },
     });
     setBusy(false);
-    const errMsg = error?.message || (data as { error?: string })?.error;
+
+    // U non-2xx vrací supabase-js FunctionsHttpError, kde skutečné tělo
+    // (náš { error: "..." }) je v error.context jako Response — ne v `data`.
+    let errMsg = (data as { error?: string })?.error;
+    if (!errMsg && error) {
+      const ctx = (error as { context?: Response }).context;
+      if (ctx && typeof ctx.json === 'function') {
+        try { errMsg = (await ctx.json())?.error; } catch { /* ignore */ }
+      }
+      errMsg = errMsg || error.message;
+    }
     if (errMsg) {
       toast.error('Smazání selhalo: ' + errMsg);
       return;
