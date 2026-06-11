@@ -15,9 +15,9 @@ interface ConcernCardData {
   brandKeys: string[];
 }
 
-/** Card sizing — mirrors the brand showcase / hero banner cards */
+/** Card sizing — same widths as the "Všechny značky" logo shelf cards */
 const CARD_CLASS =
-  'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[340px] sm:h-[360px]';
+  'shrink-0 w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px] h-[340px] sm:h-[360px]';
 
 /* ─── Single koncern card — logo + brand logos + stats + CTA (static) ─── */
 function ConcernCard({ data }: { data: ConcernCardData }) {
@@ -140,8 +140,10 @@ export function ConcernCarousel() {
       <div className="relative w-full group">
       <div
         ref={trackRef}
-        className="flex gap-3 sm:gap-4 overflow-x-auto [-webkit-overflow-scrolling:touch]
-                   px-3 sm:px-5 lg:px-8 scroll-pl-0 sm:scroll-pl-5 lg:scroll-pl-8 pb-1
+        className="flex flex-nowrap overflow-x-auto [-webkit-overflow-scrolling:touch] pb-2
+                   gap-3 min-[480px]:gap-4 md:gap-5 min-[1200px]:gap-6
+                   px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11
+                   scroll-pl-4 min-[480px]:scroll-pl-5 md:scroll-pl-8 min-[1200px]:scroll-pl-11
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((data, i) => (
