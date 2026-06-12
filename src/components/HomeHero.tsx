@@ -1,13 +1,37 @@
+import { useEffect, useState } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 
+/** Live countdown to the 24h approval deadline of a submitted B2B registration */
+function ApprovalCountdown({ requestedAt }: { requestedAt: string }) {
+  const deadline = new Date(requestedAt).getTime() + 24 * 60 * 60 * 1000;
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const left = Math.max(0, deadline - now);
+  if (left === 0) return <>Schvalování probíhá…</>;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const h = Math.floor(left / 3_600_000);
+  const m = Math.floor(left / 60_000) % 60;
+  const s = Math.floor(left / 1_000) % 60;
+  return <>Schválení za <span className="tabular-nums">{pad(h)}:{pad(m)}:{pad(s)}</span></>;
+}
+
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */
 export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const setViewMode = useStore((s) => s.setViewMode);
-  const { user, isB2bApproved } = useAuthContext();
+  const { user, role, profile, isB2bApproved } = useAuthContext();
+
+  // B2B lead = submitted B2B registration (lead with IČO), waiting for approval.
+  // A plain lead (quick account, no IČO) is not waiting for anything.
+  const isB2bLead = !!user && role === 'lead' && !!profile?.ico?.trim();
 
   // Logged in → straight into the catalog; logged out → create-account modal
   const openCatalog = () => {
@@ -44,9 +68,18 @@ export function HomeHero() {
 
       {/* CTAs */}
       <div className="mt-6 sm:mt-8 flex flex-col gap-3 justify-center items-center">
-        {/* B2B CTA — hidden for approved partners; logged-in users get a
-            "finish your registration" nudge instead of the generic label */}
-        {!isB2bApproved && (
+        {/* B2B CTA — hidden for approved partners. A B2B lead (registration
+            submitted) sees a live 24h countdown instead of a clickable CTA;
+            other logged-in users get a "finish your registration" nudge. */}
+        {!isB2bApproved && (isB2bLead ? (
+          <div className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm min-w-[200px] shadow-lg text-center cursor-default select-none">
+            <ApprovalCountdown requestedAt={profile!.created_at} />
+            {/* lime "24h" badge — sticks out across the top-right corner, slightly crooked */}
+            <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+              24h
+            </span>
+          </div>
+        ) : (
           <button
             onClick={() => openAuthModal('b2b')}
             className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
@@ -57,7 +90,7 @@ export function HomeHero() {
               24h
             </span>
           </button>
-        )}
+        ))}
         <button
           onClick={openCatalog}
           className="group inline-flex items-center justify-center gap-1.5 px-2 py-1 text-foreground font-semibold text-sm transition-all duration-200 hover:gap-3"

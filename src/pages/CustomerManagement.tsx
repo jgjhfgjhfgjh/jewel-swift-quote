@@ -22,6 +22,18 @@ const ROLE_BADGE: Record<string, { label: string; cls: string }> = {
   customer: { label: 'CUSTOMER', cls: 'bg-muted text-muted-foreground' },
 };
 
+/** B2B lead (submitted B2B registration, waiting ≤24 h for approval) vs plain lead */
+const isB2bLead = (c: CustomerRow) => c.role === 'lead' && !!c.ico?.trim();
+
+const badgeFor = (c: CustomerRow): { label: string; cls: string } => {
+  if (c.role === 'lead') {
+    return isB2bLead(c)
+      ? { label: 'B2B LEAD — ke schválení', cls: 'bg-amber-500/10 text-amber-600' }
+      : { label: 'LEAD', cls: 'bg-sky-500/10 text-sky-600' };
+  }
+  return ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer;
+};
+
 export default function CustomerManagement() {
   const { isAdmin, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
@@ -60,8 +72,12 @@ export default function CustomerManagement() {
           ...p,
           role: roleMap.get(p.user_id) ?? 'customer',
         }))
-        // leady čekající na schválení nahoru
-        .sort((a, b) => Number(b.role === 'lead') - Number(a.role === 'lead'))
+        // B2B leady (čekají na schválení do 24 h) úplně nahoru, pak obyčejné leady
+        .sort((a, b) => {
+          const score = (c: CustomerRow) =>
+            c.role === 'lead' ? (c.ico?.trim() ? 2 : 1) : 0;
+          return score(b) - score(a);
+        })
     );
     setLoading(false);
   };
@@ -156,10 +172,8 @@ export default function CustomerManagement() {
                   <Save className="h-3 w-3" />
                 </Button>
               </div>
-              <span className={`text-[10px] font-semibold rounded px-1.5 py-0.5 whitespace-nowrap ${
-                (ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer).cls
-              }`}>
-                {(ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer).label}
+              <span className={`text-[10px] font-semibold rounded px-1.5 py-0.5 whitespace-nowrap ${badgeFor(c).cls}`}>
+                {badgeFor(c).label}
               </span>
               <div className="flex items-center gap-1">
                 <Button
