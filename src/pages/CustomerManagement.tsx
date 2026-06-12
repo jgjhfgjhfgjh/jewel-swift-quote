@@ -72,12 +72,9 @@ export default function CustomerManagement() {
           ...p,
           role: roleMap.get(p.user_id) ?? 'customer',
         }))
-        // B2B leady (čekají na schválení do 24 h) úplně nahoru, pak obyčejné leady
-        .sort((a, b) => {
-          const score = (c: CustomerRow) =>
-            c.role === 'lead' ? (c.ico?.trim() ? 2 : 1) : 0;
-          return score(b) - score(a);
-        })
+        // Jen B2B leady (čekají na schválení do 24 h) nahoru — obyčejný lead je
+        // běžný účet bez priority, řadí se normálně mezi ostatní
+        .sort((a, b) => Number(isB2bLead(b)) - Number(isB2bLead(a)))
     );
     setLoading(false);
   };
