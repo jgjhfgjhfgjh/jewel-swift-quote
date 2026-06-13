@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -468,7 +468,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" sideOffset={8} className="w-56 z-[120] max-h-[80vh] overflow-y-auto">
                   {isAdmin && salesCustomer ? (
                     <>
                       <div className="px-3 py-2 border-b border-zinc-200 bg-zinc-50">
@@ -513,6 +513,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                           <p className="text-xs text-zinc-700 font-semibold mt-0.5">Sleva: {profile.base_discount}%</p>
                         )}
                       </div>
+                      <DropdownMenuItem onClick={() => navigate('/orders')} className="gap-2 text-xs">
+                        <Package className="h-3.5 w-3.5" /> Moje objednávky
+                      </DropdownMenuItem>
                       {isAdmin && (
                         <>
                           <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
