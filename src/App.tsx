@@ -16,6 +16,8 @@ const CustomerManagement = lazy(() => import("./pages/CustomerManagement.tsx"));
 const CustomerDetail = lazy(() => import("./pages/CustomerDetail.tsx"));
 const FeedManagement = lazy(() => import("./pages/FeedManagement.tsx"));
 const Favorites = lazy(() => import("./pages/Favorites.tsx"));
+const AccountSettings = lazy(() => import("./pages/AccountSettings.tsx"));
+const Orders = lazy(() => import("./pages/Orders.tsx"));
 const PartnerLayout = lazy(() => import("./pages/partner/PartnerLayout.tsx"));
 const PartnerDashboard = lazy(() => import("./pages/partner/PartnerDashboard.tsx"));
 const PartnerOrders = lazy(() => import("./pages/partner/PartnerOrders.tsx"));
@@ -71,6 +73,8 @@ const App = () => (
               <Route path="/customers/:id" element={<CustomerDetail />} />
               <Route path="/admin/feeds" element={<FeedManagement />} />
               <Route path="/favorites" element={<Favorites />} />
+              <Route path="/ucet" element={<AccountSettings />} />
+              <Route path="/orders" element={<Orders />} />
               {/* Partner Hub — dropshipping dashboard */}
               <Route path="/partner" element={<PartnerLayout />}>
                 <Route index element={<PartnerDashboard />} />

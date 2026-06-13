@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package, Settings } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -515,6 +515,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                       </div>
                       <DropdownMenuItem onClick={() => navigate('/orders')} className="gap-2 text-xs">
                         <Package className="h-3.5 w-3.5" /> Moje objednávky
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/ucet')} className="gap-2 text-xs">
+                        <Settings className="h-3.5 w-3.5" /> Nastavení účtu
                       </DropdownMenuItem>
                       {isAdmin && (
                         <>
