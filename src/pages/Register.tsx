@@ -58,7 +58,7 @@ export default function Register() {
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
           <Link to="/"><img src={logo} alt="swelt." className="mx-auto h-20 object-contain cursor-pointer" /></Link>
-          <h1 className="mt-4 font-display text-2xl font-semibold">{a.registerHeading}</h1>
+          <h1 className="mt-4 font-display text-2xl font-black tracking-tight">{a.registerHeading}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{a.registerSubtitle}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">

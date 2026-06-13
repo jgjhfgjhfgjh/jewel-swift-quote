@@ -39,27 +39,26 @@ export default function Deals() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <BackButton />
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_70%_-10%,rgba(239,68,68,0.18),transparent)]" />
-        <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      {/* ── Hero — white and airy, matching the brand-detail reference ── */}
+      <section className="relative overflow-hidden border-b border-border bg-white">
+        <div className="relative mx-auto max-w-6xl px-6 pt-28 pb-16 sm:pt-36 sm:pb-24">
           <div className="max-w-3xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-4 py-1.5 text-sm font-semibold text-red-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-600">
               <Flame className="h-4 w-4" />
               {d.hero.badge}
             </div>
-            <h1 className="font-sans text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-black tracking-tight leading-[1.05] text-foreground sm:text-5xl lg:text-6xl">
               {d.hero.heading}
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               {d.hero.sub}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" onClick={scrollToDeals} className="gap-2 bg-red-600 text-base hover:bg-red-700">
+              <Button size="lg" onClick={scrollToDeals} className="gap-2 text-base">
                 {d.hero.cta} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -71,8 +70,8 @@ export default function Deals() {
                 { v: maxDiscount ? `${maxDiscount} %` : '—', l: d.stats.discount },
               ].map((s) => (
                 <div key={s.l}>
-                  <div className="font-sans text-3xl font-bold text-white">{s.v}</div>
-                  <div className="mt-1 text-xs text-slate-400">{s.l}</div>
+                  <div className="font-display text-3xl font-black tracking-tight text-foreground">{s.v}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{s.l}</div>
                 </div>
               ))}
             </div>
@@ -83,19 +82,19 @@ export default function Deals() {
       {/* ── Active deals ── */}
       <section id="active-deals" className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="mb-10">
-          <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.active.eyebrow}</div>
-          <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.active.heading}</h2>
-          <p className="mt-2 max-w-2xl text-slate-500">{d.active.sub}</p>
+          <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary">{d.active.eyebrow}</div>
+          <h2 className="mt-2 font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">{d.active.heading}</h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">{d.active.sub}</p>
         </div>
 
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-80 animate-pulse rounded-2xl bg-slate-200" />
+              <div key={i} className="h-80 animate-pulse rounded-2xl bg-zinc-100" />
             ))}
           </div>
         ) : visible.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center text-slate-400">
+          <div className="rounded-2xl border border-dashed border-border bg-white py-20 text-center text-muted-foreground">
             {d.active.empty}
           </div>
         ) : (
@@ -108,25 +107,25 @@ export default function Deals() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="border-y border-slate-200 bg-white py-16 sm:py-20">
+      <section className="border-y border-border bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-12 text-center">
-            <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.how.eyebrow}</div>
-            <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.how.heading}</h2>
+            <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary">{d.how.eyebrow}</div>
+            <h2 className="mt-2 font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">{d.how.heading}</h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {d.how.steps.map((step, i) => {
               const Icon = STEP_ICONS[i];
               return (
-                <div key={step.title} className="relative rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                  <div className="mb-3 select-none font-sans text-5xl font-bold leading-none text-slate-200">
+                <div key={step.title} className="relative rounded-2xl border border-border bg-zinc-50 p-6">
+                  <div className="mb-3 select-none font-display text-5xl font-black leading-none text-zinc-200">
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-red-100">
                     <Icon className="h-5 w-5 text-red-600" />
                   </div>
-                  <h3 className="font-sans font-bold text-slate-900">{step.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{step.desc}</p>
+                  <h3 className="font-semibold text-foreground">{step.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
                 </div>
               );
             })}
@@ -137,20 +136,20 @@ export default function Deals() {
       {/* ── Conditions ── */}
       <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="mb-12 text-center">
-          <div className="text-xs font-bold uppercase tracking-wider text-red-600">{d.conditions.eyebrow}</div>
-          <h2 className="mt-2 font-sans text-3xl font-bold text-slate-900 sm:text-4xl">{d.conditions.heading}</h2>
+          <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary">{d.conditions.eyebrow}</div>
+          <h2 className="mt-2 font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-foreground">{d.conditions.heading}</h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {d.conditions.items.map((item, i) => {
             const Icon = CONDITION_ICONS[i];
             return (
-              <div key={item.title} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-900">
+              <div key={item.title} className="flex gap-4 rounded-2xl border border-border bg-white p-5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-900">
                   <Icon className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-sans font-bold text-slate-900">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-500">{item.desc}</p>
+                  <h3 className="font-semibold text-foreground">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
                 </div>
               </div>
             );

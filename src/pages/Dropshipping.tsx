@@ -508,7 +508,7 @@ function ProductCalculator() {
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-0 right-0 flex justify-center">
-                    <span className={`inline-flex items-center rounded-full px-3 py-0.5 text-[11px] font-semibold shadow-md ${plan.featured ? 'bg-primary text-white' : 'bg-slate-700 text-white'}`}>
+                    <span className={`inline-flex items-center rounded-full px-3 py-0.5 text-[11px] font-semibold shadow-md ${plan.featured ? 'bg-primary text-white' : 'bg-zinc-800 text-white'}`}>
                       {plan.badge}
                     </span>
                   </div>
@@ -684,7 +684,7 @@ const Dropshipping = () => {
                 <PackageOpen className="h-3.5 w-3.5" />
                 {d.hero.badge}
               </div>
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
                 {d.hero.h1Part1}<br /><span className="italic text-primary">{d.hero.h1Highlight}</span>
               </h1>
               <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
@@ -761,7 +761,7 @@ const Dropshipping = () => {
         <section className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-14">
             <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.pain.eyebrow}</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.pain.heading}</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.pain.heading}</h2>
           </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {d.pain.items.map((p, i) => {
@@ -786,7 +786,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.steps.eyebrow}</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.steps.heading}</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.steps.heading}</h2>
               <p className="mt-3 text-muted-foreground">{d.steps.sub}</p>
             </Reveal>
 
@@ -826,7 +826,7 @@ const Dropshipping = () => {
                   <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary mb-6">
                     <Sparkles className="h-3.5 w-3.5" /> Nová služba — swelt.signal
                   </div>
-                  <h2 className="font-display text-3xl sm:text-4xl font-semibold mb-4">
+                  <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight mb-4">
                     Chceš rovnou hotový e-shop?<br /><span className="italic text-primary">swelt.shop ti ho postaví za 48 hodin.</span>
                   </h2>
                   <p className="text-muted-foreground leading-relaxed mb-8">
@@ -917,7 +917,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Spolehlivost</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">Spolehlivost, na které záleží tvým zákazníkům</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Spolehlivost, na které záleží tvým zákazníkům</h2>
               <p className="mt-4 text-muted-foreground">Transparentní logistika. Žádné překvapení.</p>
             </Reveal>
 
@@ -1006,7 +1006,7 @@ const Dropshipping = () => {
         <section id="kalkulator" className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Kalkulačka marže</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Kolik můžeš vydělat?</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Kolik můžeš vydělat?</h2>
             <p className="mt-4 text-muted-foreground">Nastav ceny a počet objednávek — kalkulačka ukáže tvůj potenciál.</p>
           </Reveal>
           <Reveal>
@@ -1021,7 +1021,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Proč swelt.Dropshipping</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">Nejsme jen dodavatel. Jsme tvůj byznys partner.</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Nejsme jen dodavatel. Jsme tvůj byznys partner.</h2>
             </Reveal>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {usps.map((u, i) => {
@@ -1067,7 +1067,7 @@ const Dropshipping = () => {
         <section className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Integrace</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Funguje s platformou, kterou už máš</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Funguje s platformou, kterou už máš</h2>
           </Reveal>
           <Reveal>
             <div className="flex flex-wrap gap-2 justify-center mb-8">
@@ -1100,7 +1100,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center max-w-2xl mx-auto mb-12">
               <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">EU expanze</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">Začneš v ČR. Dorůsteš do celé EU.</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Začneš v ČR. Dorůsteš do celé EU.</h2>
               <p className="mt-4 text-muted-foreground">Jeden partner, jeden feed, čtyři trhy. Bez zakládání poboček nebo skladů v zahraničí.</p>
             </Reveal>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -1127,7 +1127,7 @@ const Dropshipping = () => {
         <section id="cenik" className="mx-auto max-w-6xl px-6 py-20">
           <Reveal className="text-center max-w-2xl mx-auto mb-10">
             <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Ceník</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold">Vyber plán pro svůj e-shop</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Vyber plán pro svůj e-shop</h2>
           </Reveal>
           <Reveal className="flex justify-center mb-10">
             <div className="inline-flex rounded-xl border border-border bg-white p-1 gap-1">
@@ -1156,11 +1156,11 @@ const Dropshipping = () => {
                   <div className={`relative h-full rounded-2xl border bg-white flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all ${t.featured ? 'border-primary border-2 shadow-lg' : 'border-border'}`}>
                     {t.badge && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <Badge className={`text-white hover:opacity-90 ${t.featured ? 'bg-primary' : 'bg-slate-700'}`}>{t.badge}</Badge>
+                        <Badge className={`text-white hover:opacity-90 ${t.featured ? 'bg-primary' : 'bg-zinc-800'}`}>{t.badge}</Badge>
                       </div>
                     )}
                     <div className="p-8 pb-6 border-b border-border text-center">
-                      <h3 className="font-display text-3xl font-semibold mb-2">{t.name}</h3>
+                      <h3 className="font-display text-3xl font-black tracking-tight mb-2">{t.name}</h3>
                       <p className="text-sm text-muted-foreground whitespace-pre-line min-h-[2.5rem]">{t.subtitle}</p>
                       <div className="mt-6 mb-6">
                         {t.monthlyPrice > 0 ? (
@@ -1173,7 +1173,7 @@ const Dropshipping = () => {
                           </>
                         ) : (
                           <>
-                            <div className="font-display text-3xl font-semibold">Na míru</div>
+                            <div className="font-display text-3xl font-black tracking-tight">Na míru</div>
                             <p className="text-xs text-muted-foreground mt-1">{t.priceNote}</p>
                           </>
                         )}
@@ -1218,7 +1218,7 @@ const Dropshipping = () => {
           <div className="mx-auto max-w-3xl px-6 py-20">
             <Reveal className="text-center mb-14">
               <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.faq.eyebrow}</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-semibold">{d.faq.heading}</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.faq.heading}</h2>
             </Reveal>
             <Reveal>
               <div className="rounded-2xl border border-border bg-white shadow-sm px-8 py-2">
@@ -1247,7 +1247,7 @@ const Dropshipping = () => {
                 <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-6">
                   <Calculator className="h-3.5 w-3.5" /> {d.finalCta.badge}
                 </div>
-                <h2 className="font-display text-3xl sm:text-5xl font-semibold mb-4">
+                <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tight mb-4">
                   {d.finalCta.h2Part1}<br /><span className="italic text-primary">{d.finalCta.h2Highlight}</span>
                 </h2>
                 <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg leading-relaxed">

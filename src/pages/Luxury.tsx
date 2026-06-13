@@ -221,7 +221,7 @@ export default function Luxury() {
 
       {/* ── Hero ── */}
       <section className="relative pt-24 pb-16 sm:pt-32 sm:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-slate-50 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-50 via-white to-white pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left */}
@@ -232,7 +232,7 @@ export default function Luxury() {
                 </Badge>
               </Reveal>
               <Reveal delay={80}>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-foreground mb-5">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-foreground mb-5">
                   {l.hero.h1Part1}{' '}
                   <span className="text-primary">{l.hero.h1Highlight}</span>{' '}
                   {l.hero.h1Part2}
@@ -332,8 +332,8 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.benefits.eyebrow}</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.benefits.heading}</h2>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">{l.benefits.eyebrow}</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{l.benefits.heading}</h2>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-6">
             {l.benefits.items.map((b, i) => {
@@ -358,8 +358,8 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.howItWorks.eyebrow}</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.howItWorks.heading}</h2>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">{l.howItWorks.eyebrow}</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{l.howItWorks.heading}</h2>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-8 relative">
             <div className="hidden sm:block absolute top-8 left-1/6 right-1/6 h-0.5 bg-border" style={{ left: '16.67%', right: '16.67%' }} />
@@ -409,8 +409,8 @@ export default function Luxury() {
       <section ref={formRef} className="py-16 sm:py-24 bg-background scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.inquiry.eyebrow}</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.inquiry.heading}</h2>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">{l.inquiry.eyebrow}</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{l.inquiry.heading}</h2>
           </Reveal>
           <div className="grid lg:grid-cols-5 gap-8 items-start">
             {/* Form */}
@@ -575,8 +575,8 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.productsSection.eyebrow}</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.productsSection.heading}</h2>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">{l.productsSection.eyebrow}</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{l.productsSection.heading}</h2>
             <p className="text-muted-foreground text-sm mt-3 max-w-lg mx-auto">
               {l.productsSection.sub}
             </p>
@@ -619,8 +619,8 @@ export default function Luxury() {
       <section className="py-16 sm:py-24 bg-background">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 text-xs uppercase tracking-wider">{l.faq.eyebrow}</Badge>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold">{l.faq.heading}</h2>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">{l.faq.eyebrow}</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">{l.faq.heading}</h2>
           </Reveal>
           <div className="bg-white rounded-2xl border border-border shadow-sm px-6 sm:px-8">
             {l.faqs.map((f, i) => (
@@ -635,7 +635,7 @@ export default function Luxury() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Reveal>
             <Gem className="h-10 w-10 mx-auto mb-5 opacity-80" />
-            <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-3">
               {l.cta.heading}
             </h2>
             <p className="text-base opacity-85 mb-8">

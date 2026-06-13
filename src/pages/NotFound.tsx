@@ -16,7 +16,7 @@ const NotFound = () => {
         Zpět na úvodní stránku
       </Link>
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
+        <h1 className="mb-4 font-display text-4xl font-black tracking-tight">404</h1>
         <p className="mb-4 text-xl text-muted-foreground">Stránka nenalezena</p>
         <Link to="/" className="inline-flex items-center gap-1.5 text-primary underline hover:text-primary/90">
           <ArrowLeft className="h-4 w-4" />

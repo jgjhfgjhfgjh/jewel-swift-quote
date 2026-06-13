@@ -166,9 +166,9 @@ export default function DealDetail() {
   // ── loading / error ─────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-white">
         <Navbar />
-        <div className="flex items-center justify-center py-40 text-slate-400">
+        <div className="flex items-center justify-center py-40 text-muted-foreground">
           <Loader2 className="h-6 w-6 animate-spin" />
         </div>
       </div>
@@ -176,12 +176,12 @@ export default function DealDetail() {
   }
   if (error || !deal) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <BackButton />
         <div className="mx-auto max-w-md px-6 py-40 text-center">
-          <AlertCircle className="mx-auto mb-4 h-10 w-10 text-slate-300" />
-          <p className="text-slate-500">{error ?? 'Nabídka nenalezena.'}</p>
+          <AlertCircle className="mx-auto mb-4 h-10 w-10 text-zinc-300" />
+          <p className="text-muted-foreground">{error ?? 'Nabídka nenalezena.'}</p>
           <Button className="mt-6" onClick={() => navigate('/deals')}>{d.detail.backToDeals}</Button>
         </div>
       </div>
@@ -189,24 +189,24 @@ export default function DealDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-36 font-sans">
+    <div className="min-h-screen bg-white pb-36">
       <Navbar />
       <BackButton />
 
-      {/* ── Hero ── */}
-      <section className="border-b border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800">
+      {/* ── Hero — white and airy, matching the brand-detail reference ── */}
+      <section className="border-b border-border bg-white">
         <div className="mx-auto max-w-7xl px-6 pb-10 pt-24 sm:pb-12 sm:pt-32">
           {deal.supplier && (
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary">
               {d.detail.supplier}: {deal.supplier}
             </div>
           )}
-          <h1 className="mt-2 font-sans text-3xl font-bold text-white sm:text-5xl">{deal.title}</h1>
-          {deal.subtitle && <p className="mt-3 max-w-2xl text-slate-300">{deal.subtitle}</p>}
+          <h1 className="mt-2 font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl">{deal.title}</h1>
+          {deal.subtitle && <p className="mt-3 max-w-2xl text-muted-foreground">{deal.subtitle}</p>}
           {deal.brands.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
               {deal.brands.map((b) => (
-                <span key={b} className="rounded-md bg-white/10 px-2.5 py-1 text-xs font-semibold text-white">
+                <span key={b} className="rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-foreground">
                   {b}
                 </span>
               ))}
@@ -219,7 +219,7 @@ export default function DealDetail() {
       <section className="mx-auto max-w-7xl px-6 py-6">
         <div className="grid gap-4 lg:grid-cols-2">
           {closed ? (
-            <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-500">
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-white px-5 py-4 text-sm font-semibold text-muted-foreground">
               <AlertCircle className="h-5 w-5 shrink-0" />
               {d.detail.closedNotice}
             </div>
@@ -229,7 +229,7 @@ export default function DealDetail() {
           <MinOrderProgress tiers={deal.tiers} qty={totalQty} />
         </div>
         {!user && (
-          <div className="mt-3 rounded-xl bg-slate-100 px-4 py-3 text-xs font-medium text-slate-700">
+          <div className="mt-3 rounded-xl bg-zinc-100 px-4 py-3 text-xs font-medium text-foreground">
             {d.detail.loginToOrder}
           </div>
         )}
@@ -237,8 +237,8 @@ export default function DealDetail() {
 
       {/* ── Conditions ── */}
       <section className="mx-auto max-w-7xl px-6 pb-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h3 className="mb-4 font-sans text-lg font-bold text-slate-900">{d.conditions.heading}</h3>
+        <div className="rounded-2xl border border-border bg-white p-6">
+          <h3 className="mb-4 font-sans text-lg font-bold text-foreground">{d.conditions.heading}</h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <Condition icon={Truck} text={`${deal.delivery_weeks_min}–${deal.delivery_weeks_max} ${lang === 'cs' ? 'týdnů na dodání' : 'weeks delivery'}`} />
             <Condition icon={CreditCard} text={lang === 'cs'
@@ -247,7 +247,7 @@ export default function DealDetail() {
             <Condition icon={ListOrdered} text={d.conditions.items[4].desc} />
           </div>
           {deal.payment_terms && (
-            <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500">
+            <p className="mt-4 border-t border-zinc-100 pt-4 text-xs leading-relaxed text-muted-foreground">
               {deal.payment_terms}
             </p>
           )}
@@ -268,7 +268,7 @@ export default function DealDetail() {
       {/* ── Catalog ── */}
       <section id="deal-catalog" className="mx-auto max-w-7xl px-6 py-8">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-20 text-center text-slate-400">
+          <div className="rounded-2xl border border-dashed border-border bg-white py-20 text-center text-muted-foreground">
             {d.detail.noMatch}
           </div>
         ) : (
@@ -292,7 +292,7 @@ export default function DealDetail() {
               ))}
             </div>
             {visibleCount < filtered.length && (
-              <div ref={sentinelRef} className="flex justify-center py-10 text-slate-400">
+              <div ref={sentinelRef} className="flex justify-center py-10 text-muted-foreground">
                 <Loader2 className="h-5 w-5 animate-spin" />
               </div>
             )}
@@ -302,14 +302,14 @@ export default function DealDetail() {
 
       {/* ── Sticky order bar (with always-visible fill progress) ── */}
       {canSeePrices && !closed && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur">
-          <div className="mx-auto max-w-7xl border-b border-slate-100 px-4 py-1.5 sm:px-6 sm:py-2">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white/95 backdrop-blur">
+          <div className="mx-auto max-w-7xl border-b border-zinc-100 px-4 py-1.5 sm:px-6 sm:py-2">
             <MinOrderProgress tiers={deal.tiers} qty={totalQty} variant="compact" />
           </div>
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:gap-4 sm:px-6 sm:py-3">
             <button
               onClick={() => setCartOpen(true)}
-              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-300 px-2.5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-2.5 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-zinc-100"
             >
               <ShoppingCart className="h-4 w-4" />
               <span className="tabular-nums">{totalQty}</span>
@@ -339,7 +339,7 @@ export default function DealDetail() {
               size="lg"
               disabled={!prog?.minimumReached}
               onClick={handleSubmit}
-              className="h-10 shrink-0 gap-1.5 bg-red-600 px-3 hover:bg-red-700 sm:h-11 sm:px-8"
+              className="h-10 shrink-0 gap-1.5 px-3 sm:h-11 sm:px-8"
             >
               <Send className="h-4 w-4" />
               <span className="hidden sm:inline">
@@ -392,8 +392,8 @@ export default function DealDetail() {
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div>
-      <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</div>
-      <div className={`font-sans text-base font-bold tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+      <div className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className={`text-base font-bold tabular-nums ${accent ? 'text-emerald-600' : 'text-foreground'}`}>
         {value}
       </div>
     </div>
@@ -403,10 +403,10 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 function MiniStat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="min-w-0">
-      <div className="truncate text-[9px] font-semibold uppercase leading-none tracking-wide text-slate-400">
+      <div className="truncate text-[9px] font-semibold uppercase leading-none tracking-wide text-muted-foreground">
         {label}
       </div>
-      <div className={`mt-0.5 truncate text-[13px] font-bold leading-tight tabular-nums ${accent ? 'text-emerald-600' : 'text-slate-900'}`}>
+      <div className={`mt-0.5 truncate text-[13px] font-bold leading-tight tabular-nums ${accent ? 'text-emerald-600' : 'text-foreground'}`}>
         {value}
       </div>
     </div>
@@ -415,8 +415,8 @@ function MiniStat({ label, value, accent }: { label: string; value: string; acce
 
 function Condition({ icon: Icon, text }: { icon: typeof Truck; text: string }) {
   return (
-    <div className="flex items-start gap-2.5 text-sm text-slate-600">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900">
+    <div className="flex items-start gap-2.5 text-sm text-muted-foreground">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-900">
         <Icon className="h-4 w-4 text-white" />
       </span>
       <span className="pt-1.5 leading-snug">{text}</span>

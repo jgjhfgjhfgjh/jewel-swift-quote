@@ -109,7 +109,7 @@ const Favorites = () => {
             <div className="rounded-full bg-muted p-6 mb-6">
               <Heart className="h-12 w-12 text-muted-foreground" />
             </div>
-            <h2 className="text-2xl font-display font-semibold mb-2">
+            <h2 className="font-display text-2xl font-black tracking-tight mb-2">
               Zatím nemáte žádné oblíbené produkty
             </h2>
             <p className="text-muted-foreground mb-6 max-w-md">
