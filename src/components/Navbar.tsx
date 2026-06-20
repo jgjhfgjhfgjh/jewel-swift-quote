@@ -5,6 +5,7 @@ import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
+import { useStockCount } from '@/hooks/useStockCount';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { translations, flags, langNames, ALL_LANGS, type Lang } from '@/lib/i18n';
 import {
@@ -187,6 +188,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+  // Live in-stock product count for the KATALOG CTA badge (logged-in users only).
+  const stockCount = useStockCount(!!user);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -581,6 +584,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               {!user && (
                 <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
                   24h
+                </span>
+              )}
+              {user && stockCount != null && stockCount > 0 && (
+                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+                  {stockCount.toLocaleString('cs-CZ')} skladem
                 </span>
               )}
             </Button>
