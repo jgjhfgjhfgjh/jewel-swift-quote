@@ -29,8 +29,8 @@ export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const setViewMode = useStore((s) => s.setViewMode);
   const { user, role, profile, isB2bApproved } = useAuthContext();
-  // Live in-stock product count for the KATALOG CTA badge (logged-in users only).
-  const stockCount = useStockCount(!!user);
+  // Live in-stock product count for the KATALOG CTA badge (approved B2B partners only).
+  const stockCount = useStockCount(!!isB2bApproved);
 
   // B2B lead = submitted B2B registration (lead with IČO), waiting for approval.
   // A plain lead (quick account, no IČO) is not waiting for anything.
@@ -94,9 +94,10 @@ export function HomeHero() {
             </span>
           </button>
         ))}
-        {user ? (
-          /* Logged-in (incl. approved B2B partners) → same dark KATALOG CTA as
-             the navbar, with the live in-stock count label. */
+        {isB2bApproved ? (
+          /* Approved B2B partners (the only ones left with a standalone catalog
+             button) → same dark KATALOG CTA as the navbar, with the live
+             in-stock count label. */
           <button
             onClick={openCatalog}
             className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
