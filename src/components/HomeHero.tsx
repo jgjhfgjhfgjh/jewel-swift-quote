@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
 import { useStore } from '@/lib/store';
+import { useStockCount } from '@/hooks/useStockCount';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 /** Live countdown to the 24h approval deadline of a submitted B2B registration */
@@ -28,6 +29,8 @@ export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const setViewMode = useStore((s) => s.setViewMode);
   const { user, role, profile, isB2bApproved } = useAuthContext();
+  // Live in-stock product count for the KATALOG CTA badge (logged-in users only).
+  const stockCount = useStockCount(!!user);
 
   // B2B lead = submitted B2B registration (lead with IČO), waiting for approval.
   // A plain lead (quick account, no IČO) is not waiting for anything.
@@ -91,13 +94,29 @@ export function HomeHero() {
             </span>
           </button>
         ))}
-        <button
-          onClick={openCatalog}
-          className="group inline-flex items-center justify-center gap-1.5 px-2 py-1 text-foreground font-semibold text-sm transition-all duration-200 hover:gap-3"
-        >
-          Prohlédnout katalog
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-        </button>
+        {user ? (
+          /* Logged-in (incl. approved B2B partners) → same dark KATALOG CTA as
+             the navbar, with the live in-stock count label. */
+          <button
+            onClick={openCatalog}
+            className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
+          >
+            KATALOG 2026
+            {stockCount != null && stockCount > 0 && (
+              <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+                {stockCount.toLocaleString('cs-CZ')} skladem
+              </span>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={openCatalog}
+            className="group inline-flex items-center justify-center gap-1.5 px-2 py-1 text-foreground font-semibold text-sm transition-all duration-200 hover:gap-3"
+          >
+            Prohlédnout katalog
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </button>
+        )}
       </div>
 
       {/* Bullets — approved partners get next-step nudges instead of signup reassurances */}
