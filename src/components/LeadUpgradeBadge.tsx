@@ -10,7 +10,7 @@ export function LeadUpgradeBadge() {
       <Button
         size="sm"
         className="h-9 w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 rounded-lg text-xs"
-        onClick={() => navigate('/register')}
+        onClick={() => navigate('/ucet')}
       >
         <Lock className="h-3.5 w-3.5" />
         <span className="text-xs">Zobrazit cenu</span>

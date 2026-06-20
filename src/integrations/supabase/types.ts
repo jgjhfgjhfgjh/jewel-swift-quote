@@ -1172,6 +1172,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_customer_emails: {
+        Args: never
+        Returns: {
+          email: string
+          user_id: string
+        }[]
+      }
       build_supplier_payload: { Args: { p_order_id: string }; Returns: Json }
       cancel_order: { Args: { p_order_id: string }; Returns: Json }
       comm_add_participant_by_email: {

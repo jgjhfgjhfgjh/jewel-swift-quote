@@ -12,6 +12,8 @@ const Index = lazy(() => import("./pages/Index.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Register = lazy(() => import("./pages/Register.tsx"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const CustomerManagement = lazy(() => import("./pages/CustomerManagement.tsx"));
 const CustomerDetail = lazy(() => import("./pages/CustomerDetail.tsx"));
 const FeedManagement = lazy(() => import("./pages/FeedManagement.tsx"));
@@ -69,6 +71,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/auth/reset-password" element={<ResetPassword />} />
               <Route path="/customers" element={<CustomerManagement />} />
               <Route path="/customers/:id" element={<CustomerDetail />} />
               <Route path="/admin/feeds" element={<FeedManagement />} />

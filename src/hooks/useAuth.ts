@@ -28,12 +28,10 @@ export function useAuth() {
       supabase.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
       supabase.from('user_roles').select('role').eq('user_id', userId).maybeSingle(),
     ]);
-    console.log('[useAuth] userId:', userId);
-    console.log('[useAuth] profileRes:', { data: profileRes.data, error: profileRes.error });
-    console.log('[useAuth] roleRes:', { data: roleRes.data, error: roleRes.error });
     return {
       profile: profileRes.data as Profile | null,
-      role: (roleRes.data?.role as AppRole) ?? 'customer',
+      // Nový účet zakládá DB trigger handle_new_user s rolí 'lead' — držíme stejný default.
+      role: (roleRes.data?.role as AppRole) ?? 'lead',
     };
   }, []);
 
@@ -76,7 +74,9 @@ export function useAuth() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'user_roles' },
         async (payload) => {
-          const changedUserId = (payload.new as any)?.user_id ?? (payload.old as any)?.user_id;
+          const changedUserId =
+            (payload.new as { user_id?: string } | null)?.user_id ??
+            (payload.old as { user_id?: string } | null)?.user_id;
           if (changedUserId && changedUserId === currentUserId) {
             const { profile, role } = await fetchProfileAndRole(changedUserId);
             setState(prev => prev.user ? { ...prev, profile, role } : prev);
@@ -96,14 +96,19 @@ export function useAuth() {
       email,
       password,
       options: {
+        // Profil (company_name, ico) i roli 'lead' zakládá DB trigger handle_new_user
+        // z těchto metadat — žádný klientský profiles.update už není potřeba (a bez
+        // session by stejně neprošel přes RLS).
         data: { company_name: companyName, ico },
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
     if (error) throw error;
-    // Update profile with ICO after signup trigger creates it
-    if (data.user) {
-      await supabase.from('profiles').update({ ico, company_name: companyName }).eq('user_id', data.user.id);
+    // Při zapnutém potvrzování e-mailu vrací Supabase u JIŽ existujícího e-mailu
+    // uživatele s prázdným polem identities a BEZ chyby (kvůli ochraně proti
+    // zjišťování existence účtů). Tichý průchod odhalíme a dáme srozumitelnou hlášku.
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+      throw new Error('Tento e-mail už je zaregistrovaný. Přihlaste se, nebo si nechte poslat odkaz pro obnovu hesla.');
     }
     return data;
   };
@@ -128,6 +133,13 @@ export function useAuth() {
     await supabase.auth.signOut();
   };
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    if (error) throw error;
+  };
+
   const refreshProfile = useCallback(async () => {
     if (!state.user) return;
     const { profile, role } = await fetchProfileAndRole(state.user.id);
@@ -143,6 +155,7 @@ export function useAuth() {
     signUp,
     signIn,
     signOut,
+    resetPassword,
     refreshProfile,
   };
 }

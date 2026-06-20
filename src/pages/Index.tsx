@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -18,7 +18,6 @@ import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
-import { CatalogGateway } from '@/components/CatalogGateway';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 const Index = () => {
@@ -34,7 +33,7 @@ const Index = () => {
     minDiscount, setMinDiscount,
     selectedGenders, setSelectedGenders,
     selectedParams, setSelectedParams,
-    viewMode, setViewMode,
+    viewMode, setViewMode, openAuthModal,
   } = useStore();
 
   const fp = {
@@ -64,10 +63,17 @@ const Index = () => {
     setSelectedParams({});
   };
 
-  // Show gateway for unauthenticated users trying to access catalog
-  if (!authLoading && !user && viewMode === 'catalog') {
-    return <CatalogGateway />;
-  }
+  // Nepřihlášený uživatel mířící do katalogu → otevřeme přihlašovací popup
+  // (stejný, jaký používáme na homepage) a vrátíme ho na úvod. Nahrazuje
+  // dřívější zastaralou celostránkovou CatalogGateway.
+  const needsAuthForCatalog = !authLoading && !user && viewMode === 'catalog';
+  useEffect(() => {
+    if (needsAuthForCatalog) {
+      openAuthModal('login');
+      setViewMode('home');
+    }
+  }, [needsAuthForCatalog, openAuthModal, setViewMode]);
+  if (needsAuthForCatalog) return null;
 
   if (loading) {
     return (

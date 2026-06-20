@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Check, ArrowRight } from 'lucide-react';
 import { RotatingSuffix } from '@/components/GatewaySections';
 import { useStore } from '@/lib/store';
@@ -28,7 +29,16 @@ function ApprovalCountdown({ requestedAt }: { requestedAt: string }) {
 export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const setViewMode = useStore((s) => s.setViewMode);
+  const navigate = useNavigate();
   const { user, role, profile, isB2bApproved } = useAuthContext();
+
+  // B2B CTA: přihlášený → doplnit údaje v nastavení účtu (tam se i spustí 24h odpočet);
+  // nepřihlášený → registrační popup. Tím se přihlášený uživatel už nikdy znovu
+  // neregistruje od nuly (a nevznikne „ztracený" účet jako dřív).
+  const handleB2BCta = () => {
+    if (user) navigate('/ucet');
+    else openAuthModal('b2b');
+  };
   // Live in-stock product count for the KATALOG CTA badge (approved B2B partners only).
   const stockCount = useStockCount(!!isB2bApproved);
 
@@ -84,7 +94,7 @@ export function HomeHero() {
           </div>
         ) : (
           <button
-            onClick={() => openAuthModal('b2b')}
+            onClick={handleB2BCta}
             className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
           >
             {user ? 'Dokonči B2B registraci' : 'B2B registrace'}

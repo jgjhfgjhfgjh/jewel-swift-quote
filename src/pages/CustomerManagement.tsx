@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Navbar } from '@/components/Navbar';
 import { DeleteCustomerDialog } from '@/components/DeleteCustomerDialog';
-import { ArrowLeft, Save, Trash2, Users } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Users, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Profile } from '@/hooks/useAuth';
 
@@ -41,6 +41,7 @@ export default function CustomerManagement() {
   const [loading, setLoading] = useState(true);
   const [editingDiscounts, setEditingDiscounts] = useState<Record<string, string>>({});
   const [deleteTarget, setDeleteTarget] = useState<CustomerRow | null>(null);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -55,22 +56,23 @@ export default function CustomerManagement() {
 
   const fetchCustomers = async () => {
     setLoading(true);
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('*')
-      .order('company_name');
-
-    const { data: roles } = await supabase
-      .from('user_roles')
-      .select('user_id, role');
+    const [{ data: profiles }, { data: roles }, { data: emails }] = await Promise.all([
+      supabase.from('profiles').select('*').order('company_name'),
+      supabase.from('user_roles').select('user_id, role'),
+      // E-maily z auth.users (jen pro admina) — abychom u leadů bez názvu firmy
+      // měli co zobrazit a šlo podle e-mailu vyhledávat.
+      supabase.rpc('admin_list_customer_emails'),
+    ]);
 
     const roleMap = new Map(roles?.map(r => [r.user_id, r.role]) ?? []);
+    const emailMap = new Map((emails ?? []).map(e => [e.user_id, e.email]));
 
     setCustomers(
       (profiles ?? [])
         .map(p => ({
           ...p,
-          role: roleMap.get(p.user_id) ?? 'customer',
+          role: roleMap.get(p.user_id) ?? 'lead',
+          email: emailMap.get(p.user_id),
         }))
         // Jen B2B leady (čekají na schválení do 24 h) nahoru — obyčejný lead je
         // běžný účet bez priority, řadí se normálně mezi ostatní
@@ -78,6 +80,17 @@ export default function CustomerManagement() {
     );
     setLoading(false);
   };
+
+  // Filtr podle názvu firmy, e-mailu nebo IČO.
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return customers;
+    return customers.filter((c) =>
+      (c.company_name ?? '').toLowerCase().includes(q) ||
+      (c.email ?? '').toLowerCase().includes(q) ||
+      (c.ico ?? '').toLowerCase().includes(q)
+    );
+  }, [customers, query]);
 
   const handleSaveDiscount = async (userId: string) => {
     const val = editingDiscounts[userId];
@@ -118,12 +131,23 @@ export default function CustomerManagement() {
       <Navbar />
       <div className="h-14 sm:h-24" />
       <div className="mx-auto w-full max-w-4xl p-4">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <Users className="h-6 w-6 text-primary" />
           <h1 className="font-display text-2xl font-semibold">Správa zákazníků</h1>
+        </div>
+
+        {/* Hledání podle firmy / e-mailu / IČO */}
+        <div className="relative mb-4">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Hledat podle firmy, e-mailu nebo IČO…"
+            className="pl-9"
+          />
         </div>
 
         <div className="rounded-lg border bg-card">
@@ -135,17 +159,22 @@ export default function CustomerManagement() {
             <span></span>
           </div>
 
-          {customers.map((c) => (
+          {filtered.map((c) => (
             <div
               key={c.id}
               className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-4 items-center border-b last:border-0 p-3 hover:bg-muted/40 transition-colors"
             >
               <button
                 onClick={() => navigate(`/customers/${c.user_id}`)}
-                className="text-left"
+                className="text-left min-w-0"
               >
-                <p className="text-sm font-medium hover:text-primary transition-colors">{c.company_name || '—'}</p>
-                <p className="text-[10px] text-muted-foreground">{c.user_id.slice(0, 8)}...</p>
+                {/* Lead bez názvu firmy → ukážeme e-mail, ať admin pozná, o koho jde */}
+                <p className="truncate text-sm font-medium hover:text-primary transition-colors">
+                  {c.company_name?.trim() || c.email || '—'}
+                </p>
+                <p className="truncate text-[10px] text-muted-foreground">
+                  {c.company_name?.trim() && c.email ? c.email : `${c.user_id.slice(0, 8)}...`}
+                </p>
               </button>
               <span className="text-xs text-muted-foreground">{c.ico || '—'}</span>
               <div className="flex items-center gap-1">
@@ -196,8 +225,10 @@ export default function CustomerManagement() {
             </div>
           ))}
 
-          {customers.length === 0 && (
-            <p className="p-6 text-center text-sm text-muted-foreground">Žádní zákazníci</p>
+          {filtered.length === 0 && (
+            <p className="p-6 text-center text-sm text-muted-foreground">
+              {customers.length === 0 ? 'Žádní zákazníci' : 'Nic neodpovídá hledání'}
+            </p>
           )}
         </div>
       </div>

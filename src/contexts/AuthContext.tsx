@@ -15,9 +15,10 @@ interface AuthContextType {
   isB2bApproved: boolean;
   /** True for the actually signed-in admin, regardless of the "view as" preview */
   realIsAdmin: boolean;
-  signUp: (email: string, password: string, companyName: string, ico: string) => Promise<any>;
-  signIn: (email: string, password: string) => Promise<any>;
+  signUp: (email: string, password: string, companyName: string, ico: string) => Promise<unknown>;
+  signIn: (email: string, password: string) => Promise<unknown>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
 

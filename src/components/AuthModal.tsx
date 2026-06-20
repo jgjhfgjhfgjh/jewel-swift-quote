@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Lock, Eye, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Lock, Eye, Mail, MailCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
@@ -20,8 +21,9 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuccess, tip }: AuthModalProps) {
-  const { signIn, signUp } = useAuthContext();
+  const { signIn, signUp, resetPassword, user } = useAuthContext();
   const { lang } = useStore();
+  const navigate = useNavigate();
   const h = home[lang];
   const a = authT[lang];
   const [tab, setTab] = useState<'login' | 'register' | 'b2b'>(defaultTab);
@@ -37,6 +39,26 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
+  // E-mail, na který jsme odeslali potvrzovací odkaz (po registraci / B2B registraci).
+  const [sentTo, setSentTo] = useState<string | null>(null);
+  // Zapomenuté heslo: režim zadání e-mailu + příznak odeslání odkazu.
+  const [resetMode, setResetMode] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+
+  // Už přihlášený uživatel nemá v modalu co dělat na registračních záložkách —
+  // „dokončení registrace" patří do nastavení účtu (doplnění IČO + odeslání žádosti).
+  // Toto je pojistka pro všechny vstupní body, které modal otevřou s tabem register/b2b.
+  useEffect(() => {
+    if (open && user && (tab === 'register' || tab === 'b2b')) {
+      onOpenChange(false);
+      navigate('/ucet');
+    }
+  }, [open, user, tab, onOpenChange, navigate]);
+
+  // Reset pomocných obrazovek při zavření modalu.
+  useEffect(() => {
+    if (!open) { setSentTo(null); setResetMode(false); setResetSent(false); }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -65,8 +87,23 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
       await signIn(email, password);
       close();
       onLoginSuccess?.();
-    } catch (err: any) {
-      setError(err.message || h.loginFailed);
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : h.loginFailed);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) { setError('Zadejte e-mail'); return; }
+    setError('');
+    setLoading(true);
+    try {
+      await resetPassword(email.trim());
+      setResetSent(true);
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : 'Odeslání odkazu selhalo. Zkuste to prosím znovu.');
     } finally {
       setLoading(false);
     }
@@ -87,10 +124,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     try {
       // Quick free account — without IČO/company name; B2B status can be filled later.
       await signUp(email, password, '', '');
-      close();
-      onLoginSuccess?.();
-    } catch (err: any) {
-      setError(err.message || 'Registrace se nezdařila. Zkuste to prosím znovu.');
+      // Potvrzování e-mailu je zapnuté → není session. Ukážeme „potvrď e-mail".
+      setSentTo(email);
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : 'Registrace se nezdařila. Zkuste to prosím znovu.');
     } finally {
       setLoading(false);
     }
@@ -118,10 +155,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     setLoading(true);
     try {
       await signUp(email, password, companyName.trim(), ico.trim());
-      close();
-      onLoginSuccess?.();
-    } catch (err: any) {
-      setError(err.message || 'B2B registrace se nezdařila. Zkuste to prosím znovu.');
+      // Potvrzování e-mailu je zapnuté → není session. Ukážeme „potvrď e-mail".
+      setSentTo(email);
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : 'B2B registrace se nezdařila. Zkuste to prosím znovu.');
     } finally {
       setLoading(false);
     }
@@ -147,13 +184,60 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         setSocialLoading(null);
       }
       // If no error, the browser redirects to the provider — no further code runs here.
-    } catch (err: any) {
-      setError(err?.message || h.loginFailed);
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : h.loginFailed);
       setSocialLoading(null);
     }
   };
 
   if (!open || typeof document === 'undefined') return null;
+
+  // ── Potvrzovací obrazovka po (B2B) registraci ──
+  if (sentTo) {
+    return createPortal(
+      <div
+        role="dialog"
+        aria-modal="true"
+        onClick={close}
+        className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+      >
+        <div className="flex min-h-full items-start sm:items-center justify-center p-4 py-10">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative z-[20001] w-full max-w-md rounded-2xl bg-card shadow-2xl border border-border/60 overflow-hidden animate-in zoom-in-95 duration-200"
+          >
+            <button
+              type="button"
+              aria-label={a.closeLabel}
+              onClick={(e) => { e.stopPropagation(); close(); }}
+              className="absolute right-3 top-3 z-[20002] flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-900 shadow-md transition hover:bg-white border border-border/40"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="px-8 py-10 text-center space-y-4">
+              <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                <MailCheck className="h-7 w-7 text-primary" />
+              </span>
+              <h2 className="font-display text-2xl font-semibold tracking-tight">Potvrďte svůj e-mail</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Poslali jsme potvrzovací odkaz na <strong className="text-foreground">{sentTo}</strong>.
+                Klikněte na něj a budete rovnou přihlášeni. Pokud e-mail nevidíte, zkontrolujte i složku spam.
+              </p>
+              <Button onClick={close} className="w-full h-10 font-semibold">Rozumím</Button>
+              <button
+                type="button"
+                onClick={() => { setSentTo(null); setTab('login'); }}
+                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+              >
+                Už jsem potvrdil — přihlásit se
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>,
+      document.body,
+    );
+  }
 
   return createPortal(
     <div
@@ -236,6 +320,57 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         {/* Content */}
         <div className="px-8 py-6 space-y-5">
           {tab === 'login' ? (
+            resetMode ? (
+              <div className="space-y-4">
+                <div className="text-center">
+                  <h3 className="font-display text-lg font-semibold">Obnova hesla</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Zadejte e-mail a pošleme vám odkaz pro nastavení nového hesla.
+                  </p>
+                </div>
+                {resetSent ? (
+                  <>
+                    <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-xs text-emerald-800 leading-relaxed">
+                      Pokud účet s tímto e-mailem existuje, poslali jsme na <strong>{email}</strong> odkaz pro obnovu hesla. Zkontrolujte i složku spam.
+                    </div>
+                    <Button type="button" onClick={() => { setResetMode(false); setResetSent(false); }} className="w-full h-10 font-semibold">
+                      Zpět na přihlášení
+                    </Button>
+                  </>
+                ) : (
+                  <form onSubmit={handleResetPassword} className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                        <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
+                      </label>
+                      <Input
+                        type="email"
+                        placeholder="vas@email.cz"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="h-10"
+                      />
+                    </div>
+                    {error && (
+                      <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                        {error}
+                      </p>
+                    )}
+                    <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                      {loading ? 'Odesílám…' : 'Poslat odkaz pro obnovu'}
+                    </Button>
+                    <button
+                      type="button"
+                      onClick={() => { setError(''); setResetMode(false); }}
+                      className="w-full text-center text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+                    >
+                      Zpět na přihlášení
+                    </button>
+                  </form>
+                )}
+              </div>
+            ) : (
             <>
               {tip && (
                 <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 flex items-start gap-3">
@@ -336,6 +471,13 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
                   {loading ? h.signingIn : 'Přihlásit'}
                 </Button>
+                <button
+                  type="button"
+                  onClick={() => { setError(''); setResetMode(true); }}
+                  className="w-full text-center text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+                >
+                  Zapomenuté heslo?
+                </button>
               </form>
 
               {/* Switch links */}
@@ -362,6 +504,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </p>
               </div>
             </>
+            )
           ) : tab === 'register' ? (
             <>
               {/* Access tiers — show what unlocks at each step */}

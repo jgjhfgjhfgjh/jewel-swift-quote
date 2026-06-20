@@ -103,8 +103,12 @@ export default function AccountSettings() {
   const [saving, setSaving] = useState(false);
   const [pw, setPw] = useState({ next: '', confirm: '' });
   const [pwSaving, setPwSaving] = useState(false);
+  const [emailForm, setEmailForm] = useState('');
+  const [emailSaving, setEmailSaving] = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+  // Předvyplníme přihlašovací e-mail (jde ho tu změnit).
+  useEffect(() => { if (user?.email) setEmailForm(user.email); }, [user?.email]);
   useEffect(() => {
     if (!loading && !user) navigate('/');
   }, [loading, user, navigate]);
@@ -167,6 +171,21 @@ export default function AccountSettings() {
 
   const toggleNotify = async (key: 'notify_offers' | 'notify_orders', value: boolean) => {
     await writeProfile({ [key]: value });
+  };
+
+  const handleChangeEmail = async () => {
+    const next = emailForm.trim().toLowerCase();
+    if (!next || next === (user?.email ?? '').toLowerCase()) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(next)) { toast.error('Zadejte platný e-mail'); return; }
+    setEmailSaving(true);
+    // Supabase pošle potvrzovací odkaz na novou adresu; změna se projeví až po potvrzení.
+    const { error } = await supabase.auth.updateUser(
+      { email: next },
+      { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    );
+    setEmailSaving(false);
+    if (error) { toast.error('Změna e-mailu selhala: ' + error.message); return; }
+    toast.success(`Potvrzovací odkaz jsme poslali na ${next}. Změna se projeví po potvrzení.`);
   };
 
   const handlePassword = async () => {
@@ -440,6 +459,27 @@ export default function AccountSettings() {
           <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} className="h-10 w-full sm:w-64 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
             {ALL_LANGS.map((l) => <option key={l} value={l}>{langNames[l]}</option>)}
           </select>
+        </Card>
+
+        {/* ════ LOGIN E-MAIL ════ */}
+        <Card icon={Mail} eyebrow="Přihlášení" title="Přihlašovací e-mail"
+          desc="E-mail, kterým se přihlašujete a na který chodí notifikace. Po změně dorazí potvrzovací odkaz na novou adresu.">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end max-w-xl">
+            <div className="flex-1">
+              <Field label="E-mail">
+                <Input type="email" value={emailForm} onChange={(e) => setEmailForm(e.target.value)} className="h-10" />
+              </Field>
+            </div>
+            <Button
+              variant="outline"
+              onClick={handleChangeEmail}
+              disabled={emailSaving || !emailForm.trim() || emailForm.trim().toLowerCase() === (user.email ?? '').toLowerCase()}
+              className="h-10 gap-2"
+            >
+              {emailSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+              Změnit e-mail
+            </Button>
+          </div>
         </Card>
 
         {/* ════ SECURITY ════ */}
