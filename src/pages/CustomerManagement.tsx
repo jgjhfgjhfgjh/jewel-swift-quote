@@ -81,13 +81,15 @@ export default function CustomerManagement() {
     setLoading(false);
   };
 
-  // Filtr podle názvu firmy, e-mailu nebo IČO.
+  // Filtr podle názvu firmy, e-mailu (přihlašovací + hlavní + další) nebo IČO.
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return customers;
     return customers.filter((c) =>
       (c.company_name ?? '').toLowerCase().includes(q) ||
       (c.email ?? '').toLowerCase().includes(q) ||
+      (c.primary_contact_email ?? '').toLowerCase().includes(q) ||
+      (c.contact_emails ?? []).some((e) => e.toLowerCase().includes(q)) ||
       (c.ico ?? '').toLowerCase().includes(q)
     );
   }, [customers, query]);
@@ -168,13 +170,21 @@ export default function CustomerManagement() {
                 onClick={() => navigate(`/customers/${c.user_id}`)}
                 className="text-left min-w-0"
               >
-                {/* Lead bez názvu firmy → ukážeme e-mail, ať admin pozná, o koho jde */}
-                <p className="truncate text-sm font-medium hover:text-primary transition-colors">
-                  {c.company_name?.trim() || c.email || '—'}
-                </p>
-                <p className="truncate text-[10px] text-muted-foreground">
-                  {c.company_name?.trim() && c.email ? c.email : `${c.user_id.slice(0, 8)}...`}
-                </p>
+                {/* Lead bez názvu firmy → ukážeme hlavní e-mail (nebo přihlašovací),
+                    ať admin pozná, o koho jde */}
+                {(() => {
+                  const effEmail = c.primary_contact_email || c.email;
+                  return (
+                    <>
+                      <p className="truncate text-sm font-medium hover:text-primary transition-colors">
+                        {c.company_name?.trim() || effEmail || '—'}
+                      </p>
+                      <p className="truncate text-[10px] text-muted-foreground">
+                        {c.company_name?.trim() && effEmail ? effEmail : `${c.user_id.slice(0, 8)}...`}
+                      </p>
+                    </>
+                  );
+                })()}
               </button>
               <span className="text-xs text-muted-foreground">{c.ico || '—'}</span>
               <div className="flex items-center gap-1">

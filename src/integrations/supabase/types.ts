@@ -966,6 +966,8 @@ export type Database = {
       }
       profiles: {
         Row: {
+          contact_emails: string[]
+          primary_contact_email: string | null
           address_city: string | null
           address_street: string | null
           address_zip: string | null
@@ -990,6 +992,8 @@ export type Database = {
           vat_id: string | null
         }
         Insert: {
+          contact_emails?: string[]
+          primary_contact_email?: string | null
           address_city?: string | null
           address_street?: string | null
           address_zip?: string | null
@@ -1014,6 +1018,8 @@ export type Database = {
           vat_id?: string | null
         }
         Update: {
+          contact_emails?: string[]
+          primary_contact_email?: string | null
           address_city?: string | null
           address_street?: string | null
           address_zip?: string | null

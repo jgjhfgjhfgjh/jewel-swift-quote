@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Building2, User, MapPin, Bell, Globe, Lock, ShieldCheck, BadgePercent,
-  Rocket, Check, Clock, Loader2, LogOut, Store, Mail,
+  Rocket, Check, Clock, Loader2, LogOut, Store, Mail, Plus, Trash2,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -105,6 +105,8 @@ export default function AccountSettings() {
   const [pwSaving, setPwSaving] = useState(false);
   const [emailForm, setEmailForm] = useState('');
   const [emailSaving, setEmailSaving] = useState(false);
+  const [newContact, setNewContact] = useState('');
+  const [contactSaving, setContactSaving] = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
   // Předvyplníme přihlašovací e-mail (jde ho tu změnit).
@@ -186,6 +188,36 @@ export default function AccountSettings() {
     setEmailSaving(false);
     if (error) { toast.error('Změna e-mailu selhala: ' + error.message); return; }
     toast.success(`Potvrzovací odkaz jsme poslali na ${next}. Změna se projeví po potvrzení.`);
+  };
+
+  // ── Kontaktní e-maily + hlavní e-mail ──
+  const contactEmails = profile?.contact_emails ?? [];
+  const primaryEmail = profile?.primary_contact_email ?? null;
+  // null = hlavní je přihlašovací e-mail
+  const isPrimaryEmail = (em: string | null) => (em === null ? !primaryEmail : primaryEmail === em);
+
+  const setPrimaryEmail = async (em: string | null) => {
+    const ok = await writeProfile({ primary_contact_email: em });
+    if (ok) toast.success('Hlavní e-mail nastaven');
+  };
+
+  const addContactEmail = async () => {
+    const em = newContact.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast.error('Zadejte platný e-mail'); return; }
+    if (em === (user?.email ?? '').toLowerCase() || contactEmails.includes(em)) {
+      toast.error('Tento e-mail už je přidaný'); return;
+    }
+    setContactSaving(true);
+    const ok = await writeProfile({ contact_emails: [...contactEmails, em] });
+    setContactSaving(false);
+    if (ok) { setNewContact(''); toast.success('E-mail přidán'); }
+  };
+
+  const removeContactEmail = async (em: string) => {
+    const patch: TablesUpdate<'profiles'> = { contact_emails: contactEmails.filter((x) => x !== em) };
+    if (primaryEmail === em) patch.primary_contact_email = null; // hlavní se vrací na přihlašovací
+    const ok = await writeProfile(patch);
+    if (ok) toast.success('E-mail odebrán');
   };
 
   const handlePassword = async () => {
@@ -461,24 +493,62 @@ export default function AccountSettings() {
           </select>
         </Card>
 
-        {/* ════ LOGIN E-MAIL ════ */}
-        <Card icon={Mail} eyebrow="Přihlášení" title="Přihlašovací e-mail"
-          desc="E-mail, kterým se přihlašujete a na který chodí notifikace. Po změně dorazí potvrzovací odkaz na novou adresu.">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end max-w-xl">
-            <div className="flex-1">
-              <Field label="E-mail">
-                <Input type="email" value={emailForm} onChange={(e) => setEmailForm(e.target.value)} className="h-10" />
-              </Field>
+        {/* ════ E-MAILY ════ */}
+        <Card icon={Mail} eyebrow="E-maily" title="E-mailové adresy"
+          desc="Přihlašovací e-mail slouží k přihlášení. Hlavní e-mail (✓) vidí náš tým a chodí na něj notifikace.">
+          {/* Přihlašovací e-mail — lze změnit (pošle se potvrzovací odkaz) */}
+          <div className="space-y-2 max-w-xl">
+            <p className="text-xs font-semibold text-foreground">Přihlašovací e-mail</p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <label className="flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap cursor-pointer">
+                <input type="radio" name="primaryEmail" checked={isPrimaryEmail(null)} onChange={() => setPrimaryEmail(null)} />
+                Hlavní
+              </label>
+              <Input type="email" value={emailForm} onChange={(e) => setEmailForm(e.target.value)} className="h-10 flex-1" />
+              <Button
+                variant="outline"
+                onClick={handleChangeEmail}
+                disabled={emailSaving || !emailForm.trim() || emailForm.trim().toLowerCase() === (user.email ?? '').toLowerCase()}
+                className="h-10 gap-2 shrink-0"
+              >
+                {emailSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+                Změnit
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              onClick={handleChangeEmail}
-              disabled={emailSaving || !emailForm.trim() || emailForm.trim().toLowerCase() === (user.email ?? '').toLowerCase()}
-              className="h-10 gap-2"
-            >
-              {emailSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
-              Změnit e-mail
-            </Button>
+          </div>
+
+          {/* Další kontaktní e-maily */}
+          <div className="mt-6 space-y-2 max-w-xl">
+            <p className="text-xs font-semibold text-foreground">Další kontaktní e-maily</p>
+            {contactEmails.length === 0 && (
+              <p className="text-xs text-muted-foreground">Zatím žádné další e-maily.</p>
+            )}
+            {contactEmails.map((em) => (
+              <div key={em} className="flex items-center gap-2">
+                <label className="flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap cursor-pointer">
+                  <input type="radio" name="primaryEmail" checked={isPrimaryEmail(em)} onChange={() => setPrimaryEmail(em)} />
+                  Hlavní
+                </label>
+                <span className="flex-1 truncate text-sm">{em}</span>
+                <Button variant="ghost" size="icon" onClick={() => removeContactEmail(em)} className="h-8 w-8 text-destructive shrink-0" title="Odebrat">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center pt-1">
+              <Input
+                type="email"
+                value={newContact}
+                onChange={(e) => setNewContact(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addContactEmail(); } }}
+                placeholder="dalsi@email.cz"
+                className="h-10 flex-1"
+              />
+              <Button variant="outline" onClick={addContactEmail} disabled={contactSaving || !newContact.trim()} className="h-10 gap-2 shrink-0">
+                {contactSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                Přidat e-mail
+              </Button>
+            </div>
           </div>
         </Card>
 
