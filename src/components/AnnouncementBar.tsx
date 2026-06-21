@@ -28,6 +28,12 @@ function dealsPlural(n: number) {
   return `${n} aktivních dealů`;
 }
 
+/** First few brand names of a deal, "+N" for the rest. */
+function brandList(brands: string[], max: number): { shown: string; extra: number } {
+  const shown = brands.slice(0, max).join(', ');
+  return { shown, extra: Math.max(0, brands.length - max) };
+}
+
 /**
  * Thin lime conversion strip pinned above the navbar. Pushes the whole app down
  * via the `has-announcement` class on <html> (see index.css) so no per-page top
@@ -74,17 +80,21 @@ export function AnnouncementBar() {
       deadline={soonest.deadline}
       browse={onDealsPage}
       count={live.length}
+      brands={soonest.brands}
       onClick={() => navigate(onDealsPage ? '/deals' : `/deals/${soonest.slug}`)}
       onDismiss={dismiss}
     />
   );
 }
 
-function Bar({ deadline, browse, count, onClick, onDismiss }: {
-  deadline: string; browse: boolean; count: number; onClick: () => void; onDismiss: () => void;
+function Bar({ deadline, browse, count, brands, onClick, onDismiss }: {
+  deadline: string; browse: boolean; count: number; brands: string[]; onClick: () => void; onDismiss: () => void;
 }) {
   const { ended, text } = useRemaining(deadline);
   if (!browse && ended) return null;
+
+  const bl = brandList(brands, 3);
+  const blShort = brandList(brands, 1);
 
   return (
     <div className="font-grotesk absolute inset-x-0 -top-9 z-[130] h-9 w-full bg-[#17191c] text-white shadow-sm">
@@ -107,9 +117,13 @@ function Bar({ deadline, browse, count, onClick, onDismiss }: {
             <span className="rounded-[5px] bg-[#d1fe17] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#131517]">
               {text}
             </span>
-            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
-              <span className="hidden sm:inline">Tento deal brzy končí — stihněte ještě tuto nabídku</span>
-              <span className="sm:hidden">Deal brzy končí</span>
+            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap text-white/70">
+              <span className="hidden sm:inline">
+                DEAL na <span className="text-white">{bl.shown}{bl.extra > 0 ? ` +${bl.extra}` : ''}</span> brzy končí — stihněte to
+              </span>
+              <span className="sm:hidden">
+                <span className="text-white">{blShort.shown}{blShort.extra > 0 ? ` +${blShort.extra}` : ''}</span> v akci
+              </span>
             </span>
           </>
         )}
