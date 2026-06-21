@@ -178,7 +178,7 @@ export default function DealDetail() {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
-        <BackButton />
+        <BackButton to="/deals" label="Zpět na nabídky" />
         <div className="mx-auto max-w-md px-6 py-40 text-center">
           <AlertCircle className="mx-auto mb-4 h-10 w-10 text-zinc-300" />
           <p className="text-muted-foreground">{error ?? 'Nabídka nenalezena.'}</p>
@@ -191,7 +191,7 @@ export default function DealDetail() {
   return (
     <div className="min-h-screen bg-white pb-36">
       <Navbar />
-      <BackButton />
+      <BackButton to="/deals" label="Zpět na nabídky" />
 
       {/* ── Hero — white and airy, matching the brand-detail reference ── */}
       <section className="border-b border-border bg-white">
