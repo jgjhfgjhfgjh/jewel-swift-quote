@@ -97,39 +97,39 @@ function Bar({ deadline, browse, count, brands, onClick, onDismiss }: {
   const blShort = brandList(brands, 1);
 
   return (
-    <div className="font-grotesk absolute inset-x-0 -top-9 z-[130] h-9 w-full bg-[#17191c] text-white shadow-sm">
+    <div className="font-grotesk absolute inset-x-0 -top-9 z-[130] h-9 w-full border-b border-border bg-white text-foreground">
       {/* full-width clickable region (separate button so the close X can sit on top) */}
       <button
         type="button"
         onClick={onClick}
         aria-label={browse ? 'Prohlédnout všechny aktivní DEAL nabídky' : 'Zobrazit končící DEAL nabídku'}
-        className="flex h-full w-full items-center justify-center gap-2 px-10 sm:gap-3 transition-colors hover:bg-[#0e0f11]"
+        className="flex h-full w-full items-center justify-center gap-2 px-10 sm:gap-3 transition-colors hover:bg-zinc-50"
       >
-        <Flame className="h-3.5 w-3.5 shrink-0" />
+        <Flame className="h-3.5 w-3.5 shrink-0 text-foreground" />
 
         {browse ? (
-          <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
-            <span className="hidden sm:inline">Prohlédnout všechny aktivní DEAL nabídky — {dealsPlural(count)}</span>
-            <span className="sm:hidden">Všechny dealy ({count})</span>
+          <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap text-muted-foreground">
+            <span className="hidden sm:inline">Prohlédnout všechny aktivní DEAL nabídky — <span className="text-foreground">{dealsPlural(count)}</span></span>
+            <span className="sm:hidden text-foreground">Všechny dealy ({count})</span>
           </span>
         ) : (
           <>
             <span className="rounded-[5px] bg-[#d1fe17] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#131517]">
               {text}
             </span>
-            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap text-white/70">
+            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap text-muted-foreground">
               <span className="hidden sm:inline">
-                DEAL na <span className="text-white">{bl.shown}{bl.extra > 0 ? ` +${bl.extra}` : ''}</span> brzy končí — stihněte to
+                DEAL na <span className="text-foreground">{bl.shown}{bl.extra > 0 ? ` +${bl.extra}` : ''}</span> brzy končí — stihněte to
               </span>
               <span className="sm:hidden">
-                <span className="text-white">{blShort.shown}{blShort.extra > 0 ? ` +${blShort.extra}` : ''}</span> v akci
+                DEAL na <span className="text-foreground">{blShort.shown}{blShort.extra > 0 ? ` +${blShort.extra}` : ''}</span>
               </span>
             </span>
           </>
         )}
 
         {/* Simple chevrons pulling the eye toward the click — like the hamburger arrows */}
-        <span className="flex items-center -space-x-1" aria-hidden>
+        <span className="flex items-center -space-x-1 text-muted-foreground" aria-hidden>
           {[0, 1, 2].map((i) => (
             <ChevronRight
               key={i}
@@ -145,7 +145,7 @@ function Bar({ deadline, browse, count, brands, onClick, onDismiss }: {
         type="button"
         onClick={onDismiss}
         aria-label="Zavřít proužek"
-        className="absolute right-1.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+        className="absolute right-1.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-zinc-100 hover:text-foreground"
       >
         <X className="h-3.5 w-3.5" />
       </button>
