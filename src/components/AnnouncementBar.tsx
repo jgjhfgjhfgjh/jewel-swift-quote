@@ -63,13 +63,13 @@ function Bar({ deadline, onClick }: { deadline: string; onClick: () => void }) {
       className="font-grotesk fixed inset-x-0 top-0 z-[130] flex h-9 w-full items-center justify-center gap-2 sm:gap-3
                  bg-[#d1fe17] px-3 text-[#131517] shadow-sm transition-[filter] hover:brightness-95"
     >
+      <span className="rounded-[5px] bg-[#131517] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#d1fe17]">
+        {text}
+      </span>
       <Flame className="h-3.5 w-3.5 shrink-0" />
       <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
         <span className="hidden sm:inline">Tento deal brzy končí — stihněte ještě tuto nabídku</span>
         <span className="sm:hidden">Deal brzy končí</span>
-      </span>
-      <span className="rounded-[5px] bg-[#131517] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#d1fe17]">
-        {text}
       </span>
       {/* Simple chevrons pulling the eye toward the click — like the hamburger arrows */}
       <span className="flex items-center -space-x-1" aria-hidden>
