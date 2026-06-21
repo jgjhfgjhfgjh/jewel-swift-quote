@@ -80,7 +80,7 @@ function Bar({ deadline, browse, count, onClick }: {
       type="button"
       onClick={onClick}
       aria-label={browse ? 'Prohlédnout všechny aktivní DEAL nabídky' : 'Zobrazit končící DEAL nabídku'}
-      className="font-grotesk fixed inset-x-0 top-0 z-[130] flex h-9 w-full items-center justify-center gap-2 sm:gap-3
+      className="font-grotesk absolute inset-x-0 -top-9 z-[130] flex h-9 w-full items-center justify-center gap-2 sm:gap-3
                  bg-[#d1fe17] px-3 text-[#131517] shadow-sm transition-[filter] hover:brightness-95"
     >
       <Flame className="h-3.5 w-3.5 shrink-0" />
