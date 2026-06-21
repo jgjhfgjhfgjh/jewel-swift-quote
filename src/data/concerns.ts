@@ -7,6 +7,7 @@
  *
  * To add or re-map a koncern, edit this file only.
  */
+import { toBrandKey } from '@/lib/brandNormalize';
 
 export interface StoryItem {
   lead: string;
@@ -305,4 +306,27 @@ export function getConcernBySlug(slug: string): Concern | undefined {
 /** Reverse lookup: which koncern owns a given canonical brand key. */
 export function getConcernForBrandKey(key: string): Concern | undefined {
   return CONCERNS.find((c) => c.brandKeys.includes(key));
+}
+
+/**
+ * Resolve the koncern for a DEAL offer so its detail page can show the concern
+ * logo automatically. Tries, in order: the supplier name (e.g. "Timex Group"),
+ * the supplier read as a brand (e.g. supplier "Tommy Hilfiger"), then any of the
+ * deal's brands. Returns undefined when nothing maps to a known koncern.
+ */
+export function getConcernForDeal(
+  deal: { supplier?: string | null; brands?: string[] | null },
+): Concern | undefined {
+  const supplier = (deal.supplier ?? '').trim();
+  if (supplier) {
+    const byName = CONCERNS.find((c) => c.name.toLowerCase() === supplier.toLowerCase());
+    if (byName) return byName;
+    const bySupplierBrand = getConcernForBrandKey(toBrandKey(supplier));
+    if (bySupplierBrand) return bySupplierBrand;
+  }
+  for (const brand of deal.brands ?? []) {
+    const c = getConcernForBrandKey(toBrandKey(brand));
+    if (c) return c;
+  }
+  return undefined;
 }
