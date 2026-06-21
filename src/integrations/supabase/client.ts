@@ -14,6 +14,10 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: 'pkce',
+    // Implicit flow (ne PKCE): potvrzovací/reset odkazy nesou tokeny přímo v URL
+    // a fungují na JAKÉMKOLIV zařízení/prohlížeči. PKCE vázal potvrzení na zařízení,
+    // kde registrace začala (code verifier v localStorage) → odkaz pak zákazníkovi
+    // na jiném zařízení/prohlížeči (nebo po přeskenování e-mailem) spadl s chybou.
+    flowType: 'implicit',
   }
 });
