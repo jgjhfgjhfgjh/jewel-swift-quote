@@ -37,7 +37,19 @@ export function NavDealsCarousel({ onNavigate }: { onNavigate: () => void }) {
   }
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div>
+      {/* "live" header — makes it obvious these are active, running offers */}
+      <div className="mb-2.5 flex items-center gap-2">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+        </span>
+        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+          Aktivní nabídky · právě běží {live.length}
+        </span>
+      </div>
+
+      <div className="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {live.map((deal) => {
         const concern = concernFor(deal);
         const maxDiscount = deal.tiers.reduce((m, x) => Math.max(m, x.discount_percent), 0);
@@ -79,6 +91,7 @@ export function NavDealsCarousel({ onNavigate }: { onNavigate: () => void }) {
           </button>
         );
       })}
+      </div>
     </div>
   );
 }
