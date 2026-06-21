@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
 import { RotatingSuffix } from '@/components/GatewaySections';
+import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
 
 const SUFFIX_WORDS = ['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL'];
 
@@ -677,7 +678,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   </button>
                 </div>
 
-                {/* Right: columns of links */}
+                {/* Right: DEAL carousel for the deals category, link columns otherwise */}
+                {activeNav === '/deals' ? (
+                  <div className="w-[600px] max-w-[58vw]">
+                    <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
+                  </div>
+                ) : (
                 <div className="flex gap-10">
                   {panel.cols.map((col) => (
                     <div key={col.title} className="min-w-[180px]">
@@ -698,6 +704,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     </div>
                   ))}
                 </div>
+                )}
               </div>
             </div>
           </div>
