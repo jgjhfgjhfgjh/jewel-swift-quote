@@ -55,7 +55,7 @@ Pro každý nalezený thread:
 5. **Hned po úspěšné odpovědi `ok:true` z `import-deal`** (a před vytvořením kalendáře) přidej threadu label `deal-imported`:
    - Pokud label ID neznáš, nejdřív zavolej `list_labels`; pokud label neexistuje, vytvoř ho přes `create_label` s display name `deal-imported`.
    - Tohle pořadí (label dřív než kalendář) je důležité: kdyby selhal kalendář, deal už existuje + thread je olabelovaný, a `import-deal` je idempotentní podle `source_path` — duplikát už vzniknout nemůže.
-   - Pokud `import-deal` vrátí `error` (4xx/5xx), label **NEPŘIDÁVEJ** — nech to na příští hodinu, do souhrnu zaloguj chybu.
+   - Pokud `import-deal` vrátí `error` (4xx/5xx), label **NEPŘIDÁVEJ** a postupuj podle **Kroku 2b** (pošli notifikaci) — nech to na příští běh.
 6. Po olabelování threadu vytvoř pro **každou vrácenou nabídku** záznam v kalendáři (`create_event`):
    - `summary`: `DEAL nabídka nahrána — <deal.title>` (např. *„DEAL nabídka nahrána — Fossil Group — Hodinky"*)
    - `startTime`: aktuální čas v Europe/Prague jako ISO 8601 (např. `2026-05-20T13:42:00+02:00`)
@@ -64,6 +64,25 @@ Pro každý nalezený thread:
    - `description`: stručně — počet produktů (`deal.product_count`), kategorie, dodavatel, deadline, slug. Připoj odkaz `https://jewel-swift-quote.vercel.app/admin/deals` pro schválení.
    - `colorId`: `2` (Sage)
    - Pokud `deal.already_imported === true`, kalendář **nevytváříš** (deal v ten den už záznam má z prvního importu).
+
+## Krok 2b — když thread selže, dej o tom vědět
+
+Pokud u některého threadu import selže — `import-deal` vrátí `error`, nebo spadne jakýkoli krok (Gmail/Supabase timeout, chyba parsování workbooku, neznámý formát souboru atd.) — **nezůstávej potichu**. Selhání se jinak nikde neprojeví a thread by se jen donekonečna zkoušel znovu. Proveď:
+
+1. **Label `deal-imported` NEPŘIDÁVEJ** — thread zůstane `deal-ready`, aby se import zkusil při příštím běhu.
+2. **Pošli e-mail upozornění.** E-mailové notifikace doručuje kalendář (Gmail konektor umí jen draft, ne přímé odeslání), proto:
+   a. Vytvoř přes `create_event` záznam, který zároveň **odešle e-mail** majiteli:
+      - `summary`: `⚠️ DEAL import selhal — <dodavatel nebo subject e-mailu>`
+      - `startTime`: aktuální čas **+ 15 min** v Europe/Prague (ISO 8601)
+      - `endTime`: `startTime + 30 minut`
+      - `timeZone`: `Europe/Prague`
+      - `colorId`: `11` (Tomato — červená)
+      - `description`: dodavatel, předmět e-mailu, `message_id`, `source_path` (`<message_id>/N.xlsx`), **přesná chybová hláška** z `import-deal`, odkaz na thread `https://mail.google.com/mail/u/0/#all/<threadId>` a na `https://jewel-swift-quote.vercel.app/admin/deals`.
+      - `attendees`: `[{ "email": "brgrs.cz@gmail.com" }]`
+      - `notificationLevel`: `ALL`
+      - `overrideReminders`: `[{ "method": "email", "minutes": 15 }, { "method": "popup", "minutes": 15 }]` — e-mailová připomínka 15 min před startem (= teď) zajistí, že majiteli přijde e-mail prakticky okamžitě.
+   b. Pro jistotu vytvoř i `create_draft` se stejnými detaily (`to: ["brgrs.cz@gmail.com"]`, stejný subject i tělo) — trvalý záznam, který jde přeposlat.
+3. Pokračuj dalším threadem; chybu uveď i v závěrečném souhrnu.
 
 ## Krok 3 — souhrn
 
@@ -77,5 +96,5 @@ Na konci vypiš krátký souhrn:
 - **Štítek `deal-ready`** dává Apps Script — neberou se v úvahu maily bez něj.
 - **Štítek `deal-imported`** je tvůj — používá se k tomu, abys jeden thread nezpracoval dvakrát.
 - Agent vytváří nabídky rovnou jako `status: 'active'` (předává v `meta.status`). Žádná ruční aktivace už není potřeba. Admin si v `/admin/deals` může status kdykoli změnit.
-- Pokud nějaký krok selže (Gmail timeout, Supabase 5xx), **nezachycuj a nešiř to dál** — log do summary, štítek `deal-imported` v takovém případě **nepřidávej**, aby se to zkusilo příští hodinu znovu.
+- Pokud nějaký krok selže (Gmail timeout, Supabase 5xx, neznámý formát workbooku), štítek `deal-imported` **nepřidávej** (aby se to zkusilo příští běh) a vždy pošli notifikaci podle **Kroku 2b** (e-mail + kalendář) — selhání nesmí zapadnout. Zaloguj to i do summary.
 - Při extrakci termínů buď konzervativní: radši nech pole prázdné, než aby ses spletl. `import-deal` má rozumné výchozí hodnoty.

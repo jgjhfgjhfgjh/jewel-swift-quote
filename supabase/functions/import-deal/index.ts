@@ -38,6 +38,8 @@ interface DealMeta {
   delivery_weeks_max?: number;
   payment_terms?: string;
   tiers?: { min_qty: number; discount_percent: number }[];
+  /** Overrides the currency auto-detected from the workbook (e.g. 'EUR', 'USD'). */
+  currency?: string;
   /** When set to 'active' the deal goes live immediately; defaults to 'draft'. */
   status?: 'draft' | 'active' | 'ended';
 }
@@ -94,7 +96,70 @@ async function importOne(
 
   const { data: file, error: dlErr } = await supa.storage.from('deal-imports').download(xlsxPath);
   if (dlErr || !file) throw new Error('Soubor se nepodařilo načíst: ' + (dlErr?.message ?? xlsxPath));
+
+  // Guard against workbooks too large to process within one Edge run (memory/time).
+  const MAX_BYTES = 45 * 1024 * 1024;
+  if (typeof file.size === 'number' && file.size > MAX_BYTES) {
+    throw new Error(
+      `Soubor je příliš velký (${Math.round(file.size / 1048576)} MB, limit ${MAX_BYTES / 1048576} MB) — rozděl nabídku na menší dávky.`,
+    );
+  }
+
   const parsed = await parseDealXlsx(await file.arrayBuffer());
+
+  // Embedded images (Czech export) have no CDN host — upload them to the public
+  // deal-images bucket and point each product at the resulting public URL.
+  // Resumable: images already uploaded by an earlier (possibly timed-out) run are
+  // reused, so a large offer finishes across retries instead of redoing every
+  // upload — and each run only does the work that remains.
+  const baseDir = xlsxPath.replace(/\.[^.]+$/, '').replace(/[^A-Za-z0-9_/-]/g, '_');
+  const toUpload: { i: number; name: string; bytes: Uint8Array; contentType: string }[] = [];
+  for (let i = 0; i < parsed.products.length; i++) {
+    const emb = parsed.productImages[i];
+    const p = parsed.products[i];
+    if (p.image_url || !emb) continue;
+    const ext = emb.ext === 'jpeg' ? 'jpg' : emb.ext;
+    const safeSku = (p.sku || String(i)).replace(/[^A-Za-z0-9_-]/g, '') || String(i);
+    const contentType = ext === 'png' ? 'image/png' : ext === 'webp' ? 'image/webp' : 'image/jpeg';
+    toUpload.push({ i, name: `${safeSku}.${ext}`, bytes: emb.bytes, contentType });
+  }
+  if (toUpload.length) {
+    const { data: already } = await supa.storage.from('deal-images').list(baseDir, { limit: 100000 });
+    const have = new Set((already ?? []).map((f: { name: string }) => f.name));
+    const publicUrl = (name: string) =>
+      supa.storage.from('deal-images').getPublicUrl(`${baseDir}/${name}`).data.publicUrl;
+    const pending = toUpload.filter((u) => !have.has(u.name));
+    const CHUNK_IMG = 20;
+    for (let i = 0; i < pending.length; i += CHUNK_IMG) {
+      await Promise.all(pending.slice(i, i + CHUNK_IMG).map(async (u) => {
+        const { error } = await supa.storage.from('deal-images')
+          .upload(`${baseDir}/${u.name}`, u.bytes, { contentType: u.contentType, upsert: true });
+        if (error) throw new Error('Nahrání obrázku selhalo: ' + error.message);
+      }));
+    }
+    // Point every product (freshly uploaded or reused) at its public URL.
+    for (const u of toUpload) parsed.products[u.i].image_url = publicUrl(u.name);
+  }
+
+  // Guard — never publish a product without a photo. Drop photoless products so
+  // the rest of the offer still goes live; block entirely only if NONE have a
+  // photo (which signals a real image-extraction failure, not a few gaps).
+  if (meta.status === 'active') {
+    const withPhoto = parsed.products.filter((p) => p.image_url);
+    const dropped = parsed.products.length - withPhoto.length;
+    if (withPhoto.length === 0) {
+      throw new Error(
+        `Žádný z ${parsed.products.length} produktů nemá fotku — import zastaven (pravděpodobně chyba extrakce obrázků).`,
+      );
+    }
+    if (dropped > 0) {
+      const skus = parsed.products.filter((p) => !p.image_url).slice(0, 10).map((p) => p.sku || '?');
+      parsed.warnings.push(
+        `Vynecháno ${dropped} produktů bez fotky (publikují se jen produkty s fotkou): ${skus.join(', ')}${dropped > 10 ? '…' : ''}`,
+      );
+      parsed.products = withPhoto;
+    }
+  }
 
   const supplier = (meta.supplier ?? '').trim();
   const title = singleFile && meta.title
@@ -113,7 +178,7 @@ async function importOne(
     category: parsed.category,
     description: '',
     brands: parsed.brands,
-    currency: 'USD',
+    currency: (meta.currency ?? parsed.currency ?? 'EUR').toUpperCase(),
     tiers,
     deposit_percent: meta.deposit_percent ?? 30,
     delivery_weeks_min: meta.delivery_weeks_min ?? 4,
