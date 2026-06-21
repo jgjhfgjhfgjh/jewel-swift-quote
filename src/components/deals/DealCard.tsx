@@ -1,9 +1,13 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Watch, Gem, Package, Tag, Layers } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { CountdownTimer } from './CountdownTimer';
+import { BrandLogo } from '@/components/BrandLogo';
+import { CONCERNS, getConcernForBrandKey } from '@/data/concerns';
+import { toBrandKey } from '@/lib/brandNormalize';
 
 const CATEGORY_ICON = { watches: Watch, jewelry: Gem, general: Package } as const;
 
@@ -13,6 +17,19 @@ export function DealCard({ deal, count }: { deal: Deal; count: number }) {
   const t = dealsI18n[lang].card;
   const Icon = CATEGORY_ICON[deal.category] ?? Package;
   const live = dealIsLive(deal);
+
+  // The watch concern behind this deal — matched by supplier/title name first,
+  // then derived from the deal's brands. Its logo is shown on white.
+  const concern = useMemo(() => {
+    const hay = `${deal.supplier} ${deal.title}`.toLowerCase();
+    const byName = CONCERNS.find((c) => hay.includes(c.name.toLowerCase()));
+    if (byName) return byName;
+    for (const b of deal.brands) {
+      const c = getConcernForBrandKey(toBrandKey(b));
+      if (c) return c;
+    }
+    return null;
+  }, [deal]);
   const maxDiscount = deal.tiers.reduce((m, x) => Math.max(m, x.discount_percent), 0);
   const shownBrands = deal.brands.slice(0, 4);
   const extraBrands = deal.brands.length - shownBrands.length;
@@ -23,18 +40,21 @@ export function DealCard({ deal, count }: { deal: Deal; count: number }) {
       className={`group flex flex-col overflow-hidden rounded-2xl border bg-white transition-all duration-200
         hover:-translate-y-1 hover:shadow-xl ${live ? 'border-slate-200' : 'border-slate-200 opacity-80'}`}
     >
-      {/* visual */}
-      <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950">
-        {deal.hero_image_url ? (
-          <img
-            src={deal.hero_image_url}
-            alt={deal.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      {/* visual — concern logo on white */}
+      <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden border-b border-slate-200 bg-white p-6">
+        {concern ? (
+          <BrandLogo
+            name={concern.name}
+            domain={concern.domain}
+            width={440}
+            height={180}
+            className="max-h-16 max-w-[72%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-105"
+            fallbackClassName="font-display text-2xl font-black tracking-tight text-foreground text-center"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <Icon className="h-16 w-16 text-white/15" />
-          </div>
+          <span className="flex items-center gap-2 font-display text-xl font-black tracking-tight text-foreground text-center">
+            <Icon className="h-6 w-6 text-muted-foreground" /> {deal.supplier || deal.title}
+          </span>
         )}
         <div className="absolute left-3 top-3">
           {live ? (
