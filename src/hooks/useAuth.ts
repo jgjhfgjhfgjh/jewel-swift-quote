@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import type { Tables } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
+import { siteUrl } from '@/lib/siteUrl';
 
 export type Profile = Tables<'profiles'>;
 export type AppRole = 'admin' | 'customer' | 'lead' | 'b2b_approved';
@@ -143,7 +144,7 @@ export function useAuth() {
         // z těchto metadat — žádný klientský profiles.update už není potřeba (a bez
         // session by stejně neprošel přes RLS).
         data: { company_name: companyName, ico },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${siteUrl()}/auth/callback`,
       },
     });
     if (error) throw error;
@@ -178,7 +179,7 @@ export function useAuth() {
 
   const resetPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${siteUrl()}/auth/reset-password`,
     });
     if (error) throw error;
   };

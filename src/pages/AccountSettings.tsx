@@ -15,6 +15,7 @@ import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
 import { ALL_LANGS, langNames, type Lang } from '@/lib/i18n';
+import { siteUrl } from '@/lib/siteUrl';
 import { toast } from 'sonner';
 
 const COUNTRIES = [
@@ -183,7 +184,7 @@ export default function AccountSettings() {
     // Supabase pošle potvrzovací odkaz na novou adresu; změna se projeví až po potvrzení.
     const { error } = await supabase.auth.updateUser(
       { email: next },
-      { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      { emailRedirectTo: `${siteUrl()}/auth/callback` },
     );
     setEmailSaving(false);
     if (error) { toast.error('Změna e-mailu selhala: ' + error.message); return; }
