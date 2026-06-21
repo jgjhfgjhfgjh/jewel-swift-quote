@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 
 // Route-level code splitting — each page ships as its own lazy-loaded chunk.
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -66,6 +67,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          {/* Conversion strip above the navbar — soonest-ending DEAL countdown */}
+          <AnnouncementBar />
           <Suspense fallback={<PageFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />

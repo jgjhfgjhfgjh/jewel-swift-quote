@@ -15,7 +15,7 @@ export function BackButton({ to, label = 'Zpět' }: BackButtonProps = {}) {
       onClick={() => (to ? navigate(to) : navigate(-1))}
       aria-label={label}
       title={label}
-      className="fixed top-[72px] sm:top-[112px] left-4 z-[99] flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-200 hover:scale-110 hover:border-white/50"
+      className="swelt-back-btn fixed left-4 z-[99] flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-all duration-200 hover:scale-110 hover:border-white/50"
       style={{
         backdropFilter: 'blur(12px) saturate(1.6)',
         WebkitBackdropFilter: 'blur(12px) saturate(1.6)',

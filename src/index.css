@@ -6,6 +6,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Announcement bar: push the whole app down by the bar height (36px) only while
+   the bar is shown. margin on #root moves the absolute navbar (anchored to
+   #root) + flow content together; --ann-offset lets fixed-to-viewport elements
+   (back button, toasts) add the same offset. The class lives on <html> so the
+   var also reaches body-level portals (toasts). */
+:root { --ann-offset: 0px; }
+#root { position: relative; }
+html.has-announcement { --ann-offset: 2.25rem; }
+html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
+
+/* Back button sits just under the navbar; follows the announcement offset.
+   (Defined here so the sm: breakpoint + inline backdrop styles don't clash.) */
+.swelt-back-btn { top: calc(72px + var(--ann-offset, 0px)); }
+@media (min-width: 640px) {
+  .swelt-back-btn { top: calc(112px + var(--ann-offset, 0px)); }
+}
+
+/* Chevron nudge in the announcement bar */
+@keyframes annNudge {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50% { transform: translateX(2px); opacity: 1; }
+}
+
 @layer base {
   :root {
     --background: 210 40% 98%;
