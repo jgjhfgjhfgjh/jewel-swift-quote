@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronRight, Flame } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive } from '@/lib/deals';
@@ -21,56 +21,87 @@ function useRemaining(deadline: string) {
   return { ended: left === 0, text: d > 0 ? `${d}d ${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(h)}:${pad(m)}:${pad(s)}` };
 }
 
+/** Czech plural for "deal": 1 deal / 2–4 dealy / 5+ dealů */
+function dealsPlural(n: number) {
+  if (n === 1) return 'aktivní deal';
+  if (n >= 2 && n <= 4) return `${n} aktivní dealy`;
+  return `${n} aktivních dealů`;
+}
+
 /**
- * Thin lime conversion strip pinned above the navbar. Shows a live countdown to
- * the soonest-ending active DEAL and links to it. Pushes the whole app down via
- * the `has-announcement` class on #root (see index.css) so no per-page top
+ * Thin lime conversion strip pinned above the navbar. Pushes the whole app down
+ * via the `has-announcement` class on <html> (see index.css) so no per-page top
  * offsets need touching; the absolute navbar is anchored to #root and follows.
+ *
+ * Two modes:
+ *  - default pages → live countdown to the soonest-ending DEAL, links to it
+ *  - on /deals*    → "browse all active deals (N)", links to the deals listing
  */
 export function AnnouncementBar() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { deals } = useDeals();
 
-  // The live deal that ends soonest.
-  const deal = useMemo(() => {
-    return deals
-      .filter(dealIsLive)
-      .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())[0] ?? null;
-  }, [deals]);
+  const live = useMemo(
+    () => deals.filter(dealIsLive).sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+    [deals],
+  );
+  const soonest = live[0] ?? null;
+  const onDealsPage = pathname.startsWith('/deals');
 
   // Toggle the global top offset only while the bar is actually shown. The class
   // lives on <html> so --ann-offset reaches body-level portals (toasts) too.
   useEffect(() => {
     const el = document.documentElement;
-    if (deal) el.classList.add('has-announcement');
+    if (soonest) el.classList.add('has-announcement');
     else el.classList.remove('has-announcement');
     return () => el.classList.remove('has-announcement');
-  }, [deal]);
+  }, [soonest]);
 
-  if (!deal) return null;
-  return <Bar deadline={deal.deadline} onClick={() => navigate(`/deals/${deal.slug}`)} />;
+  if (!soonest) return null;
+  return (
+    <Bar
+      deadline={soonest.deadline}
+      browse={onDealsPage}
+      count={live.length}
+      onClick={() => navigate(onDealsPage ? '/deals' : `/deals/${soonest.slug}`)}
+    />
+  );
 }
 
-function Bar({ deadline, onClick }: { deadline: string; onClick: () => void }) {
+function Bar({ deadline, browse, count, onClick }: {
+  deadline: string; browse: boolean; count: number; onClick: () => void;
+}) {
   const { ended, text } = useRemaining(deadline);
-  if (ended) return null;
+  if (!browse && ended) return null;
 
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label="Zobrazit končící DEAL nabídku"
+      aria-label={browse ? 'Prohlédnout všechny aktivní DEAL nabídky' : 'Zobrazit končící DEAL nabídku'}
       className="font-grotesk fixed inset-x-0 top-0 z-[130] flex h-9 w-full items-center justify-center gap-2 sm:gap-3
                  bg-[#d1fe17] px-3 text-[#131517] shadow-sm transition-[filter] hover:brightness-95"
     >
       <Flame className="h-3.5 w-3.5 shrink-0" />
-      <span className="rounded-[5px] bg-[#131517] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#d1fe17]">
-        {text}
-      </span>
-      <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
-        <span className="hidden sm:inline">Tento deal brzy končí — stihněte ještě tuto nabídku</span>
-        <span className="sm:hidden">Deal brzy končí</span>
-      </span>
+
+      {browse ? (
+        <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
+          <span className="hidden sm:inline">Prohlédnout všechny aktivní DEAL nabídky — {dealsPlural(count)}</span>
+          <span className="sm:hidden">Všechny dealy ({count})</span>
+        </span>
+      ) : (
+        <>
+          <span className="rounded-[5px] bg-[#131517] px-1.5 py-0.5 text-[11px] sm:text-[13px] font-bold tabular-nums text-[#d1fe17]">
+            {text}
+          </span>
+          <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-tight whitespace-nowrap">
+            <span className="hidden sm:inline">Tento deal brzy končí — stihněte ještě tuto nabídku</span>
+            <span className="sm:hidden">Deal brzy končí</span>
+          </span>
+        </>
+      )}
+
       {/* Simple chevrons pulling the eye toward the click — like the hamburger arrows */}
       <span className="flex items-center -space-x-1" aria-hidden>
         {[0, 1, 2].map((i) => (
