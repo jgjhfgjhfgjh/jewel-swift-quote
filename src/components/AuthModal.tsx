@@ -26,6 +26,9 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
   const navigate = useNavigate();
   const h = home[lang];
   const a = authT[lang];
+  // LinkedIn label odvozený z lokalizovaného „… Google" (brand se jen vymění),
+  // ať nemusíme přidávat klíč do všech 18 jazyků.
+  const continueWithLinkedin = h.continueWithGoogle.replace('Google', 'LinkedIn');
   const [tab, setTab] = useState<'login' | 'register' | 'b2b'>(defaultTab);
 
   useEffect(() => {
@@ -164,7 +167,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
     }
   };
 
-  const handleSocialAuth = async (provider: 'google' | 'apple') => {
+  const handleSocialAuth = async (provider: 'google' | 'apple' | 'linkedin_oidc') => {
     setSocialLoading(provider);
     setError('');
     try {
@@ -424,6 +427,17 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                   </svg>
                   {socialLoading === 'apple' ? h.signingIn : h.continueWithApple}
                 </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 gap-2"
+                  onClick={() => handleSocialAuth('linkedin_oidc')}
+                  disabled={!!socialLoading}
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="#0A66C2">
+                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+                  </svg>
+                  {socialLoading === 'linkedin_oidc' ? h.signingIn : continueWithLinkedin}
+                </Button>
               </div>
 
               <div className="relative">
@@ -541,6 +555,17 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                   </svg>
                   {socialLoading === 'apple' ? h.signingIn : h.continueWithApple}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 gap-2"
+                  onClick={() => handleSocialAuth('linkedin_oidc')}
+                  disabled={!!socialLoading}
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="#0A66C2">
+                    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+                  </svg>
+                  {socialLoading === 'linkedin_oidc' ? h.signingIn : continueWithLinkedin}
                 </Button>
               </div>
 
