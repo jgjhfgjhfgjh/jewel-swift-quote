@@ -201,22 +201,24 @@ export default function DealDetail() {
       <section className="border-b border-border bg-white">
         <div className="mx-auto max-w-7xl px-6 pb-10 pt-24 sm:pb-12 sm:pt-32">
           {concern && (
-            <button
-              type="button"
-              onClick={() => navigate(`/koncerny/${concern.slug}`)}
-              title={concern.name}
-              className="mb-5 flex items-center"
-            >
-              <span className="sr-only">{concern.name}</span>
-              <BrandLogo
-                name={concern.name}
-                domain={concern.domain}
-                width={520}
-                height={200}
-                className="h-9 w-auto max-w-[200px] object-contain [mix-blend-mode:multiply] sm:h-12 sm:max-w-[280px]"
-                fallbackClassName="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl"
-              />
-            </button>
+            <div className="mb-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => navigate(`/koncerny/${concern.slug}`)}
+                title={concern.name}
+                className="flex items-center"
+              >
+                <span className="sr-only">{concern.name}</span>
+                <BrandLogo
+                  name={concern.name}
+                  domain={concern.domain}
+                  width={520}
+                  height={200}
+                  className="h-10 w-auto max-w-[220px] object-contain [mix-blend-mode:multiply] sm:h-14 sm:max-w-[320px]"
+                  fallbackClassName="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl"
+                />
+              </button>
+            </div>
           )}
           {deal.supplier && (
             <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary">
