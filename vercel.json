@@ -1,0 +1,14 @@
+{
+  "crons": [
+    {
+      "path": "/api/process-supplier-orders",
+      "schedule": "0 6 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
