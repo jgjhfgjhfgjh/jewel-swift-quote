@@ -89,7 +89,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
               key={i}
               data-card
               href={slide.ctaHref}
-              className={`group/card relative shrink-0 overflow-hidden rounded-2xl sm:rounded-3xl shadow-md
+              className={`group/card relative shrink-0 overflow-hidden rounded-none shadow-md
                           w-[80%] sm:w-[45%] lg:w-[30%] ${cardH}
                           transition-[width] duration-500 ease-out
                           lg:[@media(hover:hover)]:hover:w-[46%] lg:[@media(hover:hover)]:hover:delay-300`}
@@ -126,7 +126,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
       <button
         onClick={() => go(-1)}
         className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
-                   h-10 w-10 items-center justify-center rounded-full
+                   h-10 w-10 items-center justify-center rounded-none
                    bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm
                    hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Předchozí"
@@ -136,7 +136,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
       <button
         onClick={() => go(1)}
         className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
-                   h-10 w-10 items-center justify-center rounded-full
+                   h-10 w-10 items-center justify-center rounded-none
                    bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm
                    hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Další"

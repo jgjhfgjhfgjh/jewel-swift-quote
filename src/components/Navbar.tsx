@@ -566,7 +566,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 size="sm"
                 variant="outline"
                 onClick={() => openAuth('login')}
-                className="h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
+                className="h-8 sm:h-9 px-2 sm:px-4 rounded-none font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
               >
                 Přihlásit
               </Button>
@@ -579,16 +579,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <Button
               size="sm"
               onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-              className="relative h-8 sm:h-9 px-2 sm:px-4 rounded-lg font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
+              className="relative h-8 sm:h-9 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
             >
               {user ? 'KATALOG 2026' : 'B2B registrace'}
               {!user && (
-                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-none bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
                   24h
                 </span>
               )}
               {user && stockCount != null && stockCount > 0 && (
-                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
+                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-none bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
                   {stockCount.toLocaleString('cs-CZ')} skladem
                 </span>
               )}
