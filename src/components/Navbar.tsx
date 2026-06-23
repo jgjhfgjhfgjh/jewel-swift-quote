@@ -326,9 +326,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <span className={`mt-1 text-[11px] font-medium leading-tight tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
             Velkoobchod hodinek a šperků
           </span>
-          <span className={`text-[10px] leading-tight tracking-tight ${whiteLogo ? 'text-white/70' : 'text-muted-foreground'}`}>
-            partner pro státy Evropské unie
-          </span>
         </Link>
 
         {/* Left: hamburger + (mobile-only inline logo) */}

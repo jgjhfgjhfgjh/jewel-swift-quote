@@ -73,9 +73,6 @@ export function HomeHero() {
       <p className="font-sans mt-3 sm:mt-4 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl">
         Velkoobchod hodinek a šperků
       </p>
-      <p className="font-sans mt-1 text-xs sm:text-sm md:text-base text-muted-foreground tracking-tight">
-        partner pro státy Evropské unie
-      </p>
 
       {/* CTAs */}
       <div className="mt-10 sm:mt-12 flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
