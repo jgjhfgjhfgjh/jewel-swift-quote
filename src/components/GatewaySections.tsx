@@ -801,7 +801,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="flex flex-col h-full bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-none p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]">
+                <div className="flex flex-col h-full bg-[#0e0f11]/90 backdrop-blur-md border border-[#66696e] rounded-none p-6 shadow-lg transition duration-200 [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:bg-[#17191c]/80">
                   <div className="font-display font-bold text-[#b3b3b3] text-sm mb-2 leading-snug">{item.title}</div>
                   <div className="font-display font-black text-white text-lg mb-2 leading-snug">{item.label}</div>
                   <p className="text-sm text-[#999999] leading-relaxed flex-1">{item.text}</p>
@@ -884,7 +884,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <button
                     type="button"
                     onClick={() => navigate(card.path)}
-                    className="group h-full w-full text-left flex flex-col bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-none overflow-hidden shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                    className="group h-full w-full text-left flex flex-col bg-[#0e0f11]/90 backdrop-blur-md border border-[#66696e] rounded-none overflow-hidden shadow-lg transition duration-200 [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:bg-[#17191c]/80"
                   >
                     {/* Futuristic image */}
                     <div className="h-36 sm:h-40 w-full overflow-hidden bg-black/20">
@@ -958,7 +958,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#0e0f11]/90 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition duration-200 [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:bg-[#17191c]/80"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
@@ -985,7 +985,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#0e0f11]/90 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition duration-200 [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:bg-[#17191c]/80"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">

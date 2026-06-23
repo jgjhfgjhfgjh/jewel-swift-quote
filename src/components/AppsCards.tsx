@@ -61,8 +61,8 @@ export function AppsCards() {
           type="button"
           onClick={() => navigate('/dropshipping')}
           className="group relative overflow-hidden rounded-none w-full lg:w-[400px] lg:shrink-0 min-h-[200px]
-                     bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] p-5 flex flex-col justify-between text-left
-                     transition-colors hover:bg-[#0e0f11]/90"
+                     bg-[#0e0f11]/90 backdrop-blur-md border border-[#66696e] p-5 flex flex-col justify-between text-left
+                     transition-colors hover:bg-[#17191c]/80"
         >
           {/* decorative icon */}
           <PackageOpen className="pointer-events-none absolute -right-6 -bottom-6 h-40 w-40 text-white/[0.04]" strokeWidth={1.25} />
@@ -94,8 +94,8 @@ export function AppsCards() {
                 type="button"
                 onClick={() => go(t)}
                 className="group relative overflow-hidden rounded-none min-h-[126px] p-5 gap-3
-                           bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] flex flex-col items-start justify-between text-left
-                           transition-colors hover:bg-[#0e0f11]/90"
+                           bg-[#0e0f11]/90 backdrop-blur-md border border-[#66696e] flex flex-col items-start justify-between text-left
+                           transition-colors hover:bg-[#17191c]/80"
               >
                 {t.badge === 'trending' && <TrendingBadge />}
                 <div className="flex w-full items-start justify-between">
@@ -103,10 +103,10 @@ export function AppsCards() {
                   {t.badge === 'new' && <NewBadge />}
                 </div>
                 <div className="min-w-0 w-full">
-                  <h3 className="text-base font-semibold leading-6 text-white tracking-[-0.16px] truncate">
+                  <h3 className="text-base font-semibold leading-6 text-white tracking-[-0.16px] sm:truncate">
                     {t.title}
                   </h3>
-                  <p className="text-xs font-normal leading-[18px] text-[#898a8b] line-clamp-2">
+                  <p className="text-xs font-normal leading-[18px] text-[#898a8b] sm:line-clamp-2">
                     {t.desc}
                   </p>
                 </div>

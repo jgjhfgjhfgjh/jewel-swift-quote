@@ -71,7 +71,10 @@ export function HomeHero() {
 
       {/* Tagline */}
       <p className="font-sans mt-5 sm:mt-7 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl">
-        Profesionální velkoobchod hodinek a šperků — partner pro státy Evropské unie
+        Profesionální velkoobchod hodinek a šperků
+      </p>
+      <p className="font-sans mt-1 text-xs sm:text-sm md:text-base text-muted-foreground tracking-tight">
+        partner pro státy Evropské unie
       </p>
 
       {/* CTAs */}
