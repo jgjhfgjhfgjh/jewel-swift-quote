@@ -597,7 +597,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
       {/* ── Row 2: nav links (home) OR search (catalog) — desktop only ── */}
       {(showSearch || (isOnHomePage && isHome)) && (
-        <div className="hidden lg:flex h-10 px-4 items-center justify-center">
+        <div className="hidden lg:flex h-10 px-4 mt-4 items-center justify-center">
           {showSearch ? (
             <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

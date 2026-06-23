@@ -99,7 +99,7 @@ const Index = () => {
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       {/* Banner — small gap below navbar, scrolls with page */}
-      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[136px] pt-5 sm:pt-7">
+      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px] pt-5 sm:pt-7">
         <HeroBanner compact={viewMode === 'catalog'} />
       </div>
 
