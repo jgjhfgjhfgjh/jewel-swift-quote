@@ -135,8 +135,8 @@ export function EuropeMap() {
       {/* Hovered country label */}
       <div className="pointer-events-none absolute left-1/2 top-0 z-10 flex h-7 -translate-x-1/2 items-center">
         {hoveredName && (
-          <span className="inline-flex items-center gap-2 rounded-full bg-foreground px-3.5 py-1 text-xs font-semibold text-background shadow-lg">
-            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+          <span className="inline-flex items-center gap-2 rounded-none bg-foreground px-3.5 py-1 text-xs font-semibold text-background shadow-lg">
+            <span className="h-1.5 w-1.5 rounded-none bg-white" />
             {hoveredName}
           </span>
         )}

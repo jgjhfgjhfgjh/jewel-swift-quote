@@ -132,15 +132,15 @@ function FloatingNotif() {
   const handleClose = () => {
     setVisible(false);
     setDismissed(true);
-    try { sessionStorage.setItem('floatingNotifDismissed', '1'); } catch {}
+    try { sessionStorage.setItem('floatingNotifDismissed', '1'); } catch { /* private mode — ignorovat */ }
   };
 
   if (dismissed) return null;
 
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-      <div className="relative flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 pr-9 max-w-xs">
-        <div className="h-8 w-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0">
+      <div className="relative flex items-center gap-3 rounded-none border border-border bg-white shadow-xl px-4 py-3 pr-9 max-w-xs">
+        <div className="h-8 w-8 rounded-none bg-zinc-100 flex items-center justify-center shrink-0">
           <Users className="h-4 w-4 text-zinc-500" />
         </div>
         <div>
@@ -150,7 +150,7 @@ function FloatingNotif() {
         <button
           onClick={handleClose}
           aria-label="Zavřít notifikaci"
-          className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
+          className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-none text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -193,7 +193,7 @@ function B2BVisual() {
   ];
 
   return (
-    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/60" style={{ minHeight: '360px' }}>
+    <div className="relative rounded-none overflow-hidden shadow-2xl border border-white/60" style={{ minHeight: '360px' }}>
 
       {/* ── Catalog grid behind the glass ── */}
       <div className="absolute inset-0" style={{ filter: 'blur(1.5px) brightness(0.96)' }}>
@@ -201,12 +201,12 @@ function B2BVisual() {
           {/* Centered product grid only — no sidebar, full row visible */}
           <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
             {catalogItems.map((item, i) => (
-              <div key={i} className="bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm">
+              <div key={i} className="bg-white rounded-none overflow-hidden border border-slate-100 shadow-sm">
                 <div className="relative">
                   <img src={item.img} alt={item.brand} className="w-full aspect-square object-cover object-center" loading="lazy" />
-                  <div className="absolute top-1.5 right-1.5 bg-zinc-900 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md">{item.disc}</div>
+                  <div className="absolute top-1.5 right-1.5 bg-zinc-900 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-none">{item.disc}</div>
                   <div className="absolute top-1.5 left-1.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 block ring-2 ring-white" />
+                    <span className="h-2 w-2 rounded-none bg-emerald-400 block ring-2 ring-white" />
                   </div>
                 </div>
                 <div className="p-2">
@@ -232,8 +232,8 @@ function B2BVisual() {
       >
         {/* Glow ring around lock */}
         <div className="relative flex items-center justify-center">
-          <div className="absolute h-20 w-20 rounded-full bg-zinc-900/10 blur-md animate-pulse" />
-          <div className="relative h-16 w-16 rounded-full bg-white/80 border border-white/70 shadow-xl flex items-center justify-center">
+          <div className="absolute h-20 w-20 rounded-none bg-zinc-900/10 blur-md animate-pulse" />
+          <div className="relative h-16 w-16 rounded-none bg-white/80 border border-white/70 shadow-xl flex items-center justify-center">
             <Lock className="h-7 w-7 text-zinc-700" />
           </div>
         </div>
@@ -255,9 +255,9 @@ function B2BVisual() {
         </div>
 
         <div className="flex items-center gap-3 text-[11px] text-foreground/60 flex-wrap justify-center">
-          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />Live zásoby</span>
-          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-zinc-400 shrink-0" />Aktualizace denně</span>
-          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />Ceny bez DPH</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-none bg-emerald-500 shrink-0" />Live zásoby</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-none bg-zinc-400 shrink-0" />Aktualizace denně</span>
+          <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-none bg-amber-500 shrink-0" />Ceny bez DPH</span>
         </div>
       </div>
     </div>
@@ -268,17 +268,17 @@ function FeedVisual() {
   const formats = ['XML', 'CSV', 'Heureka', 'Zbozi.cz', 'Google'];
   const [active, setActive] = useState(0);
   return (
-    <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
+    <div className="rounded-none border border-border bg-white shadow-lg p-5 space-y-4">
       <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">swelt.feed — Live preview</div>
       <div className="flex flex-wrap gap-1.5">
         {formats.map((f, i) => (
           <button key={f} onClick={() => setActive(i)}
-            className={`rounded-lg px-3 py-1 text-[11px] font-semibold transition-all border ${active === i ? 'bg-zinc-900 text-white border-zinc-900' : 'border-border text-muted-foreground hover:border-zinc-400'}`}>
+            className={`rounded-none px-3 py-1 text-[11px] font-semibold transition-all border ${active === i ? 'bg-zinc-900 text-white border-zinc-900' : 'border-border text-muted-foreground hover:border-zinc-400'}`}>
             {f}
           </button>
         ))}
       </div>
-      <div className="rounded-xl bg-slate-900 text-slate-300 p-3 font-mono text-[10px] leading-relaxed overflow-hidden">
+      <div className="rounded-none bg-slate-900 text-slate-300 p-3 font-mono text-[10px] leading-relaxed overflow-hidden">
         {active === 0 && (
           <>
             <div className="text-slate-500">{'<?xml version="1.0"?>'}</div>
@@ -312,11 +312,11 @@ function FeedVisual() {
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg bg-muted/40 border border-border p-2 text-center">
+        <div className="rounded-none bg-muted/40 border border-border p-2 text-center">
           <div className="text-lg font-bold text-zinc-900">3 000+</div>
           <div className="text-[10px] text-muted-foreground">produktů v feedu</div>
         </div>
-        <div className="rounded-lg bg-muted/40 border border-border p-2 text-center">
+        <div className="rounded-none bg-muted/40 border border-border p-2 text-center">
           <div className="text-lg font-bold text-zinc-900">4×/den</div>
           <div className="text-[10px] text-muted-foreground">aktualizace cen</div>
         </div>
@@ -332,7 +332,7 @@ function DropshippingVisual() {
     { n: '03', label: 'Doručení', sub: 'do 24–48 hodin', icon: '🚚' },
   ];
   return (
-    <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
+    <div className="rounded-none border border-border bg-white shadow-lg p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">Jak to funguje</div>
         <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-50 text-[10px]">Bez skladu</Badge>
@@ -340,7 +340,7 @@ function DropshippingVisual() {
       <div className="space-y-3">
         {steps.map((s, i) => (
           <div key={s.n} className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-zinc-100 border-2 border-zinc-200 flex items-center justify-center text-lg shrink-0">
+            <div className="h-10 w-10 rounded-none bg-zinc-100 border-2 border-zinc-200 flex items-center justify-center text-lg shrink-0">
               {s.icon}
             </div>
             <div className="flex-1">
@@ -354,7 +354,7 @@ function DropshippingVisual() {
           </div>
         ))}
       </div>
-      <div className="rounded-xl bg-muted/40 border border-border p-3 grid grid-cols-2 gap-2 text-center">
+      <div className="rounded-none bg-muted/40 border border-border p-3 grid grid-cols-2 gap-2 text-center">
         <div>
           <div className="text-base font-bold text-emerald-600">60 %</div>
           <div className="text-[10px] text-muted-foreground">průměrná marže</div>
@@ -371,15 +371,15 @@ function DropshippingVisual() {
 function LuxuryVisual() {
   const brands = ['Tommy Hilfiger', 'Versace', 'Police', 'Tissot', 'Seiko', 'Hugo Boss', 'Armani', 'Citizen'];
   return (
-    <div className="rounded-2xl border border-border bg-white shadow-lg p-5 space-y-4">
+    <div className="rounded-none border border-border bg-white shadow-lg p-5 space-y-4">
       <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">Dostupné značky</div>
       <div className="flex flex-wrap gap-2">
         {brands.map(b => (
-          <span key={b} className="rounded-lg border border-border bg-muted/40 px-2.5 py-1 text-[11px] font-medium text-foreground/80">{b}</span>
+          <span key={b} className="rounded-none border border-border bg-muted/40 px-2.5 py-1 text-[11px] font-medium text-foreground/80">{b}</span>
         ))}
-        <span className="rounded-lg border border-zinc-300 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-700">+62 dalších</span>
+        <span className="rounded-none border border-zinc-300 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-700">+62 dalších</span>
       </div>
-      <div className="rounded-xl bg-zinc-900 text-white p-4">
+      <div className="rounded-none bg-zinc-900 text-white p-4">
         <div className="text-[10px] opacity-70 uppercase tracking-wider mb-1">Příklad úspory</div>
         <div className="text-2xl font-semibold mb-0.5">2 685 Kč</div>
         <div className="text-xs opacity-80">ušetříte na 1 Tommy Hilfiger hodinkách</div>
@@ -406,18 +406,18 @@ function ShopVisual() {
     { img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=200&q=70', name: 'Seiko', price: '5 250 Kč' },
   ];
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+    <div className="rounded-none border border-slate-200 bg-white shadow-lg overflow-hidden">
       {/* Browser chrome */}
       <div className="bg-slate-100 border-b border-slate-200 px-3 py-2 flex items-center gap-2">
         <div className="flex gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-full bg-red-400" />
-          <div className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
-          <div className="h-2.5 w-2.5 rounded-full bg-green-400" />
+          <div className="h-2.5 w-2.5 rounded-none bg-red-400" />
+          <div className="h-2.5 w-2.5 rounded-none bg-yellow-400" />
+          <div className="h-2.5 w-2.5 rounded-none bg-green-400" />
         </div>
-        <div className="flex-1 bg-white rounded px-2 py-0.5 text-[10px] text-slate-400 border border-slate-200">
+        <div className="flex-1 bg-white rounded-none px-2 py-0.5 text-[10px] text-slate-400 border border-slate-200">
           vaseshop.cz
         </div>
-        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="h-2 w-2 rounded-none bg-emerald-400 animate-pulse" />
       </div>
       {/* Fake shop nav */}
       <div className="border-b border-slate-100 px-4 py-2 flex items-center justify-between bg-white">
@@ -435,10 +435,10 @@ function ShopVisual() {
       {/* Product grid */}
       <div className="p-3 grid grid-cols-2 gap-2 bg-zinc-50">
         {products.map((p) => (
-          <div key={p.name} className="bg-white rounded-xl overflow-hidden border border-slate-100">
+          <div key={p.name} className="bg-white rounded-none overflow-hidden border border-slate-100">
             <div className="relative">
               <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" loading="lazy" />
-              {p.badge && <div className="absolute top-1 right-1 bg-zinc-900 text-white text-[7px] font-semibold px-1 py-0.5 rounded">{p.badge}</div>}
+              {p.badge && <div className="absolute top-1 right-1 bg-zinc-900 text-white text-[7px] font-semibold px-1 py-0.5 rounded-none">{p.badge}</div>}
             </div>
             <div className="p-1.5">
               <div className="text-[9px] text-slate-500 truncate">{p.name}</div>
@@ -449,7 +449,7 @@ function ShopVisual() {
       </div>
       {/* Status */}
       <div className="px-3 py-2 border-t border-slate-100 bg-white flex items-center gap-1.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <span className="h-1.5 w-1.5 rounded-none bg-emerald-400" />
         <span className="text-[9px] text-emerald-600 font-semibold">Aktualizováno před 2 hod. · 3 000+ produktů</span>
         <div className="ml-auto flex items-center gap-1">
           <Rocket className="h-3 w-3 text-orange-400" />
@@ -486,7 +486,7 @@ function TrustSection() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 80}>
-              <div className="group text-center rounded-2xl border border-border bg-card p-7 shadow-sm hover-lift">
+              <div className="group text-center rounded-none border border-border bg-card p-7 shadow-sm hover-lift">
                 <div className="font-display text-4xl sm:text-5xl font-black text-primary mb-2">
                   <CountUp to={s.val} suffix={s.suf} />
                 </div>
@@ -500,7 +500,7 @@ function TrustSection() {
         <div className="grid sm:grid-cols-3 gap-5 sm:gap-6 mb-16">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delay={i * 80}>
-              <div className="rounded-2xl border border-border bg-card p-7 shadow-sm flex flex-col gap-4 h-full hover-lift">
+              <div className="rounded-none border border-border bg-card p-7 shadow-sm flex flex-col gap-4 h-full hover-lift">
                 <div className="flex gap-0.5">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
@@ -714,8 +714,8 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   </div>
                 ))}
               </div>
-              <Button variant="outline" className="gap-2 border-zinc-900" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
-                Poslat poptávku <ArrowRight className="h-3.5 w-3.5" />
+              <Button variant="outline" className="gap-2" onClick={() => window.location.href = 'mailto:info@swelt.cz'}>
+                Poslat poptávku
               </Button>
             </div>
           </Reveal>
@@ -768,7 +768,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   {COUNTRIES.map((c) => (
                     <div key={c.name} className="flex items-center justify-between gap-2 border-b border-border/60 py-1.5">
                       <span className="flex items-center gap-2 min-w-0">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="h-1.5 w-1.5 rounded-none bg-emerald-500 shrink-0" />
                         <span className="text-sm font-medium text-foreground/75 truncate">{c.name}</span>
                       </span>
                       <span className="text-xs font-semibold text-muted-foreground tabular-nums shrink-0">{c.market}</span>
@@ -801,7 +801,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               { label: 'Bojím se špatně zvolit produkty',   title: 'S plánem Silver 5 000+ produktů',    text: 'S plánem Silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit.' },
             ].map((item, idx) => (
               <Reveal key={item.title} delay={160 + idx * 50}>
-                <div className="flex flex-col h-full bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-xl p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]">
+                <div className="flex flex-col h-full bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-none p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]">
                   <div className="font-display font-bold text-[#b3b3b3] text-sm mb-2 leading-snug">{item.title}</div>
                   <div className="font-display font-black text-white text-lg mb-2 leading-snug">{item.label}</div>
                   <p className="text-sm text-[#999999] leading-relaxed flex-1">{item.text}</p>
@@ -842,10 +842,10 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="gap-2 px-8 text-base border-zinc-900"
+                  className="gap-2 px-8 text-base"
                   onClick={() => openAuth('login')}
                 >
-                  <Eye className="h-4 w-4" /> Prohlédnout sortiment
+                  Prohlédnout sortiment
                 </Button>
               </div>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted-foreground">
@@ -884,7 +884,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <button
                     type="button"
                     onClick={() => navigate(card.path)}
-                    className="group h-full w-full text-left flex flex-col bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-xl overflow-hidden shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                    className="group h-full w-full text-left flex flex-col bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] rounded-none overflow-hidden shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                   >
                     {/* Futuristic image */}
                     <div className="h-36 sm:h-40 w-full overflow-hidden bg-black/20">
@@ -898,7 +898,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     {/* Content */}
                     <div className="flex flex-col flex-1 p-5">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <div className="h-7 w-7 rounded-lg bg-[#33373d] border border-white/10 flex items-center justify-center shrink-0">
+                        <div className="h-7 w-7 rounded-none bg-[#33373d] border border-white/10 flex items-center justify-center shrink-0">
                           <Icon className="h-3.5 w-3.5 text-white" />
                         </div>
                         <span className="font-display font-black text-white text-base">{card.label}</span>
@@ -920,11 +920,11 @@ export function GatewaySections({ onOpenCatalog }: Props) {
               <div className="relative border-t border-zinc-200 pt-8">
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                    <div className="inline-flex items-center gap-1.5 rounded-none bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
                       <Eye className="h-3 w-3" /> Zdarma · 30 sekund
                     </div>
                     <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Bez čekání
+                      <span className="h-1.5 w-1.5 rounded-none bg-emerald-500 animate-pulse" /> Bez čekání
                     </div>
                   </div>
                   <h3 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 leading-tight mb-2 sm:mb-3 text-left">
@@ -936,7 +936,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   </div>
                   <div className="mb-5"><AccessTiersVisual /></div>
                   <div className="flex flex-col sm:flex-row gap-2.5 sm:items-center">
-                    <button onClick={() => openAuth('login')} className="group flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-2xl px-5 py-3.5 shadow-lg transition-all font-bold text-sm sm:text-base">
+                    <button onClick={() => openAuth('login')} className="group flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-none px-5 py-3.5 shadow-lg transition-all font-bold text-sm sm:text-base">
                       <Eye className="h-4 w-4 shrink-0" /> Prohlédnout sortiment <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                     </button>
                     <div className="text-[11px] text-zinc-500 sm:ml-2">3 000+ produktů · 70+ značek · Bez závazku</div>
@@ -958,16 +958,16 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 1 — AI obchodní zástupce */}
                 <button
                   onClick={() => setGatewayOpen(true)}
-                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-xl p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                 >
                   {/* Avatar */}
                   <div className="relative mb-4">
                     <img
                       src="/ai-rep.jpg"
                       alt="AI obchodní zástupce"
-                      className="w-20 h-20 rounded-full object-cover object-top border border-white/25 mx-auto"
+                      className="w-20 h-20 rounded-none object-cover object-top border border-white/25 mx-auto"
                     />
-                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-white border-2 border-zinc-900">
+                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-none bg-white border-2 border-zinc-900">
                       <Sparkles className="h-2.5 w-2.5 text-zinc-900" />
                     </span>
                   </div>
@@ -977,7 +977,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <p className="font-bold text-sm text-white leading-tight mb-1">AI obchodní zástupce</p>
                   <p className="text-[12px] text-[#b3b3b3] leading-snug mb-5">Ceny, dostupnost, doporučení — odpověď do 5 vteřin</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-none py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Zahájit konverzaci <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>
@@ -985,14 +985,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                 {/* Karta 2 — Osobní account manager */}
                 <button
                   onClick={() => navigate('/partner')}
-                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-xl p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
+                  className="group flex flex-col items-center text-center border border-[#66696e] bg-[#17191c]/80 backdrop-blur-md rounded-none p-5 sm:p-6 shadow-lg transition-transform duration-200 [@media(hover:hover)]:hover:scale-[1.03]"
                 >
                   {/* Avatar placeholder */}
                   <div className="relative mb-4">
-                    <div className="w-20 h-20 rounded-full bg-white/15 border border-white/25 mx-auto flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-none bg-white/15 border border-white/25 mx-auto flex items-center justify-center">
                       <Users className="h-8 w-8 text-white/70" />
                     </div>
-                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 border-2 border-zinc-900" />
+                    <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-none bg-emerald-500 border-2 border-zinc-900" />
                   </div>
                   {/* Tag */}
                   <span className="text-[10px] font-medium uppercase tracking-wider text-[#999999] mb-1.5">Osobní péče · Do 24 h</span>
@@ -1000,7 +1000,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                   <p className="font-bold text-sm text-white leading-tight mb-1">Osobní account manager</p>
                   <p className="text-[12px] text-[#b3b3b3] leading-snug mb-5">Strategie, individuální nabídka, telefonní konzultace</p>
                   {/* CTA */}
-                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-xl py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
+                  <div className="mt-auto w-full bg-white group-hover:bg-white/90 transition-colors rounded-none py-2.5 text-sm font-semibold text-zinc-900 flex items-center justify-center gap-1.5">
                     Kontaktovat <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </button>

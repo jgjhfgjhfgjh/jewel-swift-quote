@@ -54,7 +54,7 @@ export function HomeFooter() {
 
           <div>
             {sent ? (
-              <div className="flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-4">
+              <div className="flex items-center gap-3 rounded-none border border-emerald-500/40 bg-emerald-500/10 px-5 py-4">
                 <Check className="h-5 w-5 text-emerald-400 shrink-0" strokeWidth={3} />
                 <p className="text-sm text-white/90">Hotovo — díky! Nejlepší nabídky vám dorazí do schránky.</p>
               </div>
@@ -68,12 +68,12 @@ export function HomeFooter() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="vas@email.cz"
-                    className="w-full h-12 pl-10 pr-4 rounded-xl bg-white/5 border border-[#66696e] text-sm text-white placeholder:text-[#777] focus:outline-none focus:border-white/60 transition-colors"
+                    className="w-full h-12 pl-10 pr-4 rounded-none bg-white/5 border border-[#66696e] text-sm text-white placeholder:text-[#777] focus:outline-none focus:border-white/60 transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="h-12 px-6 rounded-xl bg-white text-zinc-900 font-semibold text-sm hover:bg-white/90 transition-colors shrink-0 inline-flex items-center justify-center gap-1.5"
+                  className="h-12 px-6 rounded-none bg-white text-zinc-900 font-semibold text-sm hover:bg-white/90 transition-colors shrink-0 inline-flex items-center justify-center gap-1.5"
                 >
                   Odebírat <ArrowRight className="h-4 w-4" />
                 </button>

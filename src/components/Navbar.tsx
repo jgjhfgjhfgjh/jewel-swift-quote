@@ -15,10 +15,7 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
-import { RotatingSuffix } from '@/components/GatewaySections';
 import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
-
-const SUFFIX_WORDS = ['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL'];
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -323,13 +320,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
-          <span className="relative inline-block">
-            {/* Width placeholder = PARTNER for stable layout */}
-            <span aria-hidden className={`invisible font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight whitespace-nowrap ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
-            <span className={`absolute left-0 top-0 font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
-              <RotatingSuffix words={SUFFIX_WORDS} />
-            </span>
-          </span>
+          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
 
         {/* Left: hamburger + (mobile-only inline logo) */}
@@ -385,10 +376,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
               style={{ letterSpacing: '-0.05em' }}
             >swelt.</span>
-            {/* Suffix — inline, 3.0× ratio (24/8), items-baseline aligns its baseline with swelt's dot */}
-            <span className={`font-sans font-extrabold text-[8px] tracking-tight ml-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
-              <RotatingSuffix words={SUFFIX_WORDS} />
-            </span>
+            {/* Suffix — static "PARTNER" */}
+            <span className={`font-sans font-extrabold text-[8px] tracking-tight ml-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
           </Link>
 
           {/* Partner Hub — for dropshipping partners and admins */}
@@ -441,7 +430,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               >
                 <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-zinc-900 text-zinc-900' : ''}`} />
                 {wishlistCount > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-zinc-900 px-1 text-[10px] font-bold text-white">
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
                     {wishlistCount}
                   </Badge>
                 )}
@@ -450,7 +439,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button variant="ghost" size="icon" className="relative hidden lg:inline-flex" onClick={() => setCartOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-full bg-zinc-900 px-1 text-[10px] font-bold text-white">
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
                     {totalItems}
                   </Badge>
                 )}
@@ -576,23 +565,24 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           {/* CTA — KATALOG 2026 (logged in) / Vytvořit účet (guests) — always far right.
               Skryjeme když už uživatel je v katalogu (na homepage v catalog módu). */}
           {!(user && viewMode === 'catalog' && isOnHomePage) && (
-            <Button
-              size="sm"
-              onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-              className="relative h-8 sm:h-9 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
-            >
-              {user ? 'KATALOG 2026' : 'B2B registrace'}
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Pure-information label next to the CTA — countdown-style typography (font jako odpočet v proužku) */}
               {!user && (
-                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-none bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
-                  24h
-                </span>
+                <span className="hidden sm:inline font-display text-[11px] tabular-nums tracking-wide text-muted-foreground whitespace-nowrap">24h</span>
               )}
               {user && stockCount != null && stockCount > 0 && (
-                <span className="font-grotesk pointer-events-none absolute -top-2 -right-2 z-10 rotate-[8deg] -skew-x-12 rounded-none bg-[#d1fe17] px-1 py-0.5 text-[9px] font-bold uppercase leading-none text-[#131517] shadow-sm">
-                  {stockCount.toLocaleString('cs-CZ')} skladem
+                <span className="hidden sm:inline font-display text-[11px] tracking-wide text-muted-foreground whitespace-nowrap">
+                  <span className="tabular-nums">{stockCount.toLocaleString('cs-CZ')}</span> skladem
                 </span>
               )}
-            </Button>
+              <Button
+                size="sm"
+                onClick={user ? handleCatalogCta : () => openAuth('b2b')}
+                className="h-8 sm:h-9 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
+              >
+                {user ? 'KATALOG 2026' : 'B2B registrace'}
+              </Button>
+            </div>
           )}
         </div>
       </div>

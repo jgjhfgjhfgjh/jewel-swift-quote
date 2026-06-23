@@ -18,17 +18,14 @@ interface Tool {
 /* ── Badges ── */
 function NewBadge() {
   return (
-    <span className="font-grotesk text-xs inline-block uppercase px-1.5 rounded-sm font-bold -skew-x-12 bg-[#d1fe17] text-[#131517]">
+    <span className="font-display text-[10px] inline-block uppercase tracking-wide px-1.5 py-0.5 rounded-none bg-white/10 text-white/80 border border-white/20">
       New
     </span>
   );
 }
 function TrendingBadge() {
   return (
-    <span
-      className="absolute right-3 top-3 pointer-events-none font-grotesk text-xs inline-block uppercase px-1.5 rounded-sm font-bold -skew-x-12 text-white"
-      style={{ backgroundImage: 'radial-gradient(39.71% 136.54% at 51.64% 117.31%, #F920D1 0%, #ED1572 100%)' }}
-    >
+    <span className="absolute right-3 top-3 pointer-events-none font-display text-[10px] inline-block uppercase tracking-wide px-1.5 py-0.5 rounded-none bg-white/10 text-white/80 border border-white/20">
       Trending
     </span>
   );
@@ -63,7 +60,7 @@ export function AppsCards() {
         <button
           type="button"
           onClick={() => navigate('/dropshipping')}
-          className="group relative overflow-hidden rounded-2xl w-full lg:w-[400px] lg:shrink-0 min-h-[200px]
+          className="group relative overflow-hidden rounded-none w-full lg:w-[400px] lg:shrink-0 min-h-[200px]
                      bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] p-5 flex flex-col justify-between text-left
                      transition-colors hover:bg-[#0e0f11]/90"
         >
@@ -74,10 +71,7 @@ export function AppsCards() {
               <h2 className="text-3xl font-semibold tracking-[-0.5px] text-white">
                 Dropshipping
               </h2>
-              <span
-                className="font-grotesk text-xs inline-block uppercase px-1.5 rounded-sm font-bold -skew-x-12 text-white"
-                style={{ backgroundImage: 'radial-gradient(39.71% 136.54% at 51.64% 117.31%, #F920D1 0%, #ED1572 100%)' }}
-              >
+              <span className="font-display text-[10px] inline-block uppercase tracking-wide px-1.5 py-0.5 rounded-none bg-white/10 text-white/80 border border-white/20">
                 Trending
               </span>
             </div>
@@ -85,7 +79,7 @@ export function AppsCards() {
               Prodávejte bez skladu — zákazník objedná u vás, my zabalíme a odešleme pod vaší značkou.
             </p>
           </div>
-          <span className="relative mt-6 inline-flex items-center gap-1.5 self-start rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition group-hover:bg-white/90">
+          <span className="relative mt-6 inline-flex items-center gap-1.5 self-start rounded-none bg-white px-5 py-3 text-sm font-semibold text-black transition group-hover:bg-white/90">
             Vstoupit <ArrowUpRight className="h-4 w-4" />
           </span>
         </button>
@@ -99,7 +93,7 @@ export function AppsCards() {
                 key={t.title}
                 type="button"
                 onClick={() => go(t)}
-                className="group relative overflow-hidden rounded-2xl min-h-[126px] p-5 gap-3
+                className="group relative overflow-hidden rounded-none min-h-[126px] p-5 gap-3
                            bg-[#17191c]/80 backdrop-blur-md border border-[#66696e] flex flex-col items-start justify-between text-left
                            transition-colors hover:bg-[#0e0f11]/90"
               >

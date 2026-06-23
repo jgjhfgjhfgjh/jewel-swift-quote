@@ -81,7 +81,7 @@ export function AccessTiersVisual({ compact = false }: AccessTiersVisualProps) {
         return (
           <div
             key={tier.key}
-            className={`rounded-2xl border ${borderClass} ${compact ? 'px-3 py-2.5' : 'px-4 py-3'}`}
+            className={`rounded-none border ${borderClass} ${compact ? 'px-3 py-2.5' : 'px-4 py-3'}`}
           >
             <div className="flex items-center justify-between mb-2">
               <div className={`flex items-center gap-1.5 font-semibold ${compact ? 'text-xs' : 'text-sm'} ${titleColor}`}>
@@ -90,7 +90,7 @@ export function AccessTiersVisual({ compact = false }: AccessTiersVisualProps) {
               </div>
               {tier.badge && (
                 <span
-                  className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${badgeClass}`}
+                  className={`shrink-0 rounded-none border px-2 py-0.5 text-[10px] font-semibold ${badgeClass}`}
                 >
                   {tier.badge}
                 </span>

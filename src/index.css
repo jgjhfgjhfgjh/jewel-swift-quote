@@ -60,7 +60,7 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
     --input: 220 14% 91%;
     --ring: 240 4% 10%;
 
-    --radius: 0.75rem;
+    --radius: 0rem;
 
     /* Modern SaaS surfaces */
     --surface-1: 220 30% 99%;

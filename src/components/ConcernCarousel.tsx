@@ -30,7 +30,7 @@ function ConcernCard({ data }: { data: ConcernCardData }) {
       type="button"
       data-card
       onClick={() => navigate(`/koncerny/${concern.slug}`)}
-      className={`group/card relative flex flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
+      className={`group/card relative flex flex-col overflow-hidden rounded-none border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
     >
       {/* Koncern logo — labelled so it reads clearly as the parent group */}
       <div className="pt-4 shrink-0 flex flex-col items-center">
@@ -154,14 +154,14 @@ export function ConcernCarousel() {
       {/* Arrows */}
       <button
         onClick={() => go(-1)}
-        className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+        className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-none bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Předchozí"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
         onClick={() => go(1)}
-        className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+        className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-none bg-white/70 backdrop-blur-sm text-zinc-700 shadow-sm hover:bg-white transition-all opacity-0 group-hover:opacity-100"
         aria-label="Další"
       >
         <ChevronRight className="h-5 w-5" />

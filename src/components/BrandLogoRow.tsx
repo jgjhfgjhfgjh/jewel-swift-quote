@@ -145,7 +145,7 @@ export function BrandLogoRow() {
               aria-label={brand.name}
               className="shrink-0 aspect-[16/9]
                          w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]
-                         rounded-[8px] border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5"
+                         rounded-none border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5"
             >
               {brand.domain ? (
                 <BrandLogo
@@ -167,7 +167,7 @@ export function BrandLogoRow() {
         <button
           type="button"
           onClick={() => scrollByPage(-1)}
-          className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+          className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-none bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
           aria-label="Předchozí"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -175,7 +175,7 @@ export function BrandLogoRow() {
         <button
           type="button"
           onClick={() => scrollByPage(1)}
-          className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+          className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-none bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
           aria-label="Další"
         >
           <ChevronRight className="h-5 w-5" />
@@ -187,7 +187,7 @@ export function BrandLogoRow() {
         <div
           key={preview.brand.name}
           aria-hidden
-          className="pv-pop pointer-events-none fixed z-[60] overflow-hidden rounded-[8px] bg-zinc-900 shadow-[0_4px_8px_2px_rgba(0,5,13,0.5)]"
+          className="pv-pop pointer-events-none fixed z-[60] overflow-hidden rounded-none bg-zinc-900 shadow-[0_4px_8px_2px_rgba(0,5,13,0.5)]"
           style={{ left: preview.left, top: preview.top, width: preview.width }}
         >
           {/* Logo area — 16:9, white (stand-in for the video still) */}

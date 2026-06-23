@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, ArrowRight } from 'lucide-react';
-import { RotatingSuffix } from '@/components/GatewaySections';
+import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
 import { useStockCount } from '@/hooks/useStockCount';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -66,67 +66,53 @@ export function HomeHero() {
         >
           swelt.
         </h1>
-        <span className="relative ml-1 sm:ml-2 inline-block">
-          <span aria-hidden className="invisible font-sans font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">PARTNER</span>
-          <span className="absolute left-0 top-0 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">
-            <RotatingSuffix words={['PARTNER', 'EU', 'DROPSHIPPING', 'FEED', 'DEAL']} />
-          </span>
-        </span>
+        <span className="ml-1 sm:ml-2 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">PARTNER</span>
       </div>
 
       {/* Tagline */}
       <p className="font-sans mt-5 sm:mt-7 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl">
-        Přístup k 5 000+ produktům za velkoobchodní ceny
+        Profesionální velkoobchod hodinek a šperků — partner pro státy Evropské unie
       </p>
 
       {/* CTAs */}
-      <div className="mt-6 sm:mt-8 flex flex-col gap-3 justify-center items-center">
+      <div className="mt-6 sm:mt-8 flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
         {/* B2B CTA — hidden for approved partners. A B2B lead (registration
             submitted) sees a live 24h countdown instead of a clickable CTA;
             other logged-in users get a "finish your registration" nudge. */}
         {!isB2bApproved && (isB2bLead ? (
-          <div className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm min-w-[200px] shadow-lg text-center cursor-default select-none">
+          <div className="font-display w-full px-8 py-3 rounded-none bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm shadow-lg text-center cursor-default select-none tabular-nums">
             <ApprovalCountdown requestedAt={profile!.created_at} />
-            {/* lime "24h" badge — sticks out across the top-right corner, slightly crooked */}
-            <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
-              24h
-            </span>
           </div>
         ) : (
-          <button
-            onClick={handleB2BCta}
-            className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
-          >
-            {user ? 'Dokonči B2B registraci' : 'B2B registrace'}
-            {/* lime "24h" badge — sticks out across the top-right corner, slightly crooked */}
-            <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
-              24h
+          <div className="flex flex-col items-center gap-1.5 w-full">
+            <Button size="lg" className="w-full gap-2 px-8" onClick={handleB2BCta}>
+              {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
+            </Button>
+            {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
+            <span className="text-[11px] text-muted-foreground">
+              Schválení do <span className="tabular-nums">24 h</span>
             </span>
-          </button>
+          </div>
         ))}
         {isB2bApproved ? (
           /* Approved B2B partners (the only ones left with a standalone catalog
              button) → same dark KATALOG CTA as the navbar, with the live
              in-stock count label. */
-          <button
-            onClick={openCatalog}
-            className="relative px-8 py-3 rounded-md bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm hover:bg-[#0e0f11]/90 transition min-w-[200px] shadow-lg"
-          >
-            KATALOG 2026
+          <div className="flex flex-col items-center gap-1.5 w-full">
+            <Button size="lg" className="w-full gap-2 px-8" onClick={openCatalog}>
+              KATALOG 2026 <ArrowRight className="h-4 w-4" />
+            </Button>
+            {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
             {stockCount != null && stockCount > 0 && (
-              <span className="font-grotesk pointer-events-none absolute -top-2.5 -right-3.5 z-10 rotate-[8deg] -skew-x-12 rounded-sm bg-[#d1fe17] px-1.5 py-0.5 text-[11px] font-bold uppercase leading-none text-[#131517] shadow-sm">
-                {stockCount.toLocaleString('cs-CZ')} skladem
+              <span className="text-[11px] text-muted-foreground">
+                <span className="tabular-nums">{stockCount.toLocaleString('cs-CZ')}</span> skladem
               </span>
             )}
-          </button>
+          </div>
         ) : (
-          <button
-            onClick={openCatalog}
-            className="group inline-flex items-center justify-center gap-1.5 px-2 py-1 text-foreground font-semibold text-sm transition-all duration-200 hover:gap-3"
-          >
+          <Button size="lg" variant="outline" className="w-full gap-2 px-8" onClick={openCatalog}>
             Prohlédnout katalog
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </button>
+          </Button>
         )}
       </div>
 

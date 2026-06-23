@@ -48,7 +48,7 @@ export function GatewayPanel({ open, onClose, partnerContext }: GatewayPanelProp
           aria-label="Zavřít AI asistenta"
           className="lg:hidden flex-shrink-0 flex items-center justify-center w-full py-3 touch-manipulation"
         >
-          <div className="w-12 h-1.5 rounded-full bg-zinc-300" />
+          <div className="w-12 h-1.5 rounded-none bg-zinc-300" />
         </button>
         <SweltGateway onClose={onClose} partnerContext={partnerContext} />
       </div>
