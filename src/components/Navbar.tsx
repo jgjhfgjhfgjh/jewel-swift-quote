@@ -313,19 +313,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-col items-center select-none pointer-events-auto"
+          className="hidden sm:flex absolute left-1/2 bottom-3 -translate-x-1/2 items-baseline gap-1.5 select-none pointer-events-auto"
           aria-label="swelt.PARTNER — domů"
         >
-          <span className="flex items-baseline gap-1.5">
-            <span
-              className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
-              style={{ letterSpacing: '-0.05em' }}
-            >swelt.</span>
-            <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
-          </span>
-          <span className={`mt-1 text-[11px] font-medium leading-tight tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
-            Wholesale
-          </span>
+          <span
+            className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            style={{ letterSpacing: '-0.05em' }}
+          >swelt.</span>
+          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
 
         {/* Left: hamburger + (mobile-only inline logo) */}
