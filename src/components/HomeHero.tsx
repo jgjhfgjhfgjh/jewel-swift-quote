@@ -69,11 +69,6 @@ export function HomeHero() {
         <span className="ml-1 sm:ml-2 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">PARTNER</span>
       </div>
 
-      {/* Tagline */}
-      <p className="font-sans mt-3 sm:mt-4 text-sm sm:text-lg md:text-xl font-medium text-foreground tracking-tight text-balance max-w-2xl">
-        Velkoobchod hodinek a šperků
-      </p>
-
       {/* CTAs */}
       <div className="mt-10 sm:mt-12 flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
         {/* B2B CTA — hidden for approved partners. A B2B lead (registration

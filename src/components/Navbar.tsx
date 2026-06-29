@@ -324,7 +324,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
           </span>
           <span className={`mt-1 text-[11px] font-medium leading-tight tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>
-            Velkoobchod hodinek a šperků
+            Wholesale
           </span>
         </Link>
 
