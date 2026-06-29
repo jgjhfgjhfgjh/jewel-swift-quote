@@ -520,6 +520,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                           <DropdownMenuItem onClick={() => navigate('/komunikace')} className="gap-2 text-xs">
                             <MessagesSquare className="h-3.5 w-3.5" /> Komunikace swelt × zago
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/admin/audit')} className="gap-2 text-xs">
+                            <LayoutDashboard className="h-3.5 w-3.5" /> Web Cockpit (audit)
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                         </>
                       )}
@@ -783,6 +786,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               </button>
               <button onClick={() => { setMenuOpen(false); navigate('/komunikace'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
                 <MessagesSquare className="h-4 w-4 text-muted-foreground" /> Komunikace swelt × zago
+              </button>
+              <button onClick={() => { setMenuOpen(false); navigate('/admin/audit'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
+                <LayoutDashboard className="h-4 w-4 text-muted-foreground" /> Web Cockpit (audit)
               </button>
             </>
           )}

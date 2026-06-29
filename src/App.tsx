@@ -45,6 +45,7 @@ const ConcernDetail = lazy(() => import("./pages/ConcernDetail.tsx"));
 const Deals = lazy(() => import("./pages/Deals.tsx"));
 const DealDetail = lazy(() => import("./pages/DealDetail.tsx"));
 const AdminDeals = lazy(() => import("./pages/admin/AdminDeals.tsx"));
+const AuditCockpit = lazy(() => import("./pages/admin/AuditCockpit.tsx"));
 const ComLayout = lazy(() => import("./pages/komunikace/ComLayout.tsx"));
 const ComOverview = lazy(() => import("./pages/komunikace/ComOverview.tsx"));
 const ComTopicDetail = lazy(() => import("./pages/komunikace/ComTopicDetail.tsx"));
@@ -110,6 +111,8 @@ const App = () => (
               <Route path="/deals" element={<Deals />} />
               <Route path="/deals/:slug" element={<DealDetail />} />
               <Route path="/admin/deals" element={<AdminDeals />} />
+              {/* Swelt Web Cockpit — audit copy + struktury */}
+              <Route path="/admin/audit" element={<AuditCockpit />} />
               {/* Komunikace swelt × zago — interní kolaborační workspace */}
               <Route path="/komunikace" element={<ComLayout />}>
                 <Route index element={<ComOverview />} />

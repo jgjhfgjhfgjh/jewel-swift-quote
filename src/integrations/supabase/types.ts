@@ -265,6 +265,42 @@ export type Database = {
         }
         Relationships: []
       }
+      content_audit: {
+        Row: {
+          copy_status: string
+          is_live: boolean
+          node_id: string
+          notes: string | null
+          reviewer: string | null
+          structure_checks: Json
+          structure_status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          copy_status?: string
+          is_live?: boolean
+          node_id: string
+          notes?: string | null
+          reviewer?: string | null
+          structure_checks?: Json
+          structure_status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          copy_status?: string
+          is_live?: boolean
+          node_id?: string
+          notes?: string | null
+          reviewer?: string | null
+          structure_checks?: Json
+          structure_status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       customer_discounts: {
         Row: {
           created_at: string | null
@@ -966,8 +1002,6 @@ export type Database = {
       }
       profiles: {
         Row: {
-          contact_emails: string[]
-          primary_contact_email: string | null
           address_city: string | null
           address_street: string | null
           address_zip: string | null
@@ -976,6 +1010,7 @@ export type Database = {
           brand_logo_url: string | null
           brand_name: string | null
           company_name: string | null
+          contact_emails: string[]
           contact_name: string | null
           country: string
           created_at: string | null
@@ -987,13 +1022,12 @@ export type Database = {
           notify_orders: boolean
           payment_terms: string
           phone: string | null
+          primary_contact_email: string | null
           updated_at: string | null
           user_id: string | null
           vat_id: string | null
         }
         Insert: {
-          contact_emails?: string[]
-          primary_contact_email?: string | null
           address_city?: string | null
           address_street?: string | null
           address_zip?: string | null
@@ -1002,6 +1036,7 @@ export type Database = {
           brand_logo_url?: string | null
           brand_name?: string | null
           company_name?: string | null
+          contact_emails?: string[]
           contact_name?: string | null
           country?: string
           created_at?: string | null
@@ -1013,13 +1048,12 @@ export type Database = {
           notify_orders?: boolean
           payment_terms?: string
           phone?: string | null
+          primary_contact_email?: string | null
           updated_at?: string | null
           user_id?: string | null
           vat_id?: string | null
         }
         Update: {
-          contact_emails?: string[]
-          primary_contact_email?: string | null
           address_city?: string | null
           address_street?: string | null
           address_zip?: string | null
@@ -1028,6 +1062,7 @@ export type Database = {
           brand_logo_url?: string | null
           brand_name?: string | null
           company_name?: string | null
+          contact_emails?: string[]
           contact_name?: string | null
           country?: string
           created_at?: string | null
@@ -1039,6 +1074,7 @@ export type Database = {
           notify_orders?: boolean
           payment_terms?: string
           phone?: string | null
+          primary_contact_email?: string | null
           updated_at?: string | null
           user_id?: string | null
           vat_id?: string | null
