@@ -38,6 +38,7 @@ const Velkoobchod = lazy(() => import("./pages/Velkoobchod.tsx"));
 const Dropshipping = lazy(() => import("./pages/Dropshipping.tsx"));
 const Feed = lazy(() => import("./pages/Feed.tsx"));
 const Luxury = lazy(() => import("./pages/Luxury.tsx"));
+const Prestige = lazy(() => import("./pages/Prestige.tsx"));
 const Shop = lazy(() => import("./pages/Shop.tsx"));
 const Brands = lazy(() => import("./pages/Brands.tsx"));
 const BrandDetail = lazy(() => import("./pages/BrandDetail.tsx"));
@@ -103,6 +104,7 @@ const App = () => (
               <Route path="/dropshipping" element={<Dropshipping />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/luxury" element={<Luxury />} />
+              <Route path="/prestige" element={<Prestige />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/brands/:slug" element={<BrandDetail />} />
               {/* Hodinářské koncerny — mateřské skupiny značek */}

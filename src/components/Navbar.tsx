@@ -27,6 +27,7 @@ const HOME_NAV_ITEMS = [
   { path: '/deals',        label: 'DEAL nabídky' },
   { path: '/velkoobchod', label: 'Velkoobchod' },
   { path: '/luxury',      label: 'Nákup bez registrace' },
+  { path: '/prestige',    label: 'Luxury' },
   { path: '/feed',        label: 'Feed' },
   { path: '/dropshipping',label: 'Dropshipping' },
   { path: '/shop',        label: 'E-shop do 48h' },
@@ -87,6 +88,23 @@ const NAV_PANELS: Record<string, NavPanel> = {
       ]},
     ],
     cta: { label: 'Prohlédnout nabídku', path: '/luxury' },
+  },
+  '/prestige': {
+    heading: 'Luxury — prémiový segment',
+    desc: 'Hodinky vyššího segmentu na poptávku. Originál s dokumentací, závazná cena, diskrétní doručení po EU.',
+    cols: [
+      { title: 'Prémiové domy', links: [
+        { label: 'Rolex, Omega, Cartier', desc: 'Ikonické modely na poptávku', path: '/prestige' },
+        { label: 'Patek Philippe, AP', desc: 'Vysoká horologie na míru', path: '/prestige' },
+        { label: 'Tudor, Longines, Oris', desc: 'Dostupný prémiový segment', path: '/prestige' },
+      ]},
+      { title: 'Jak to funguje', links: [
+        { label: 'Sestavte poptávku', desc: 'Z katalogu nebo vlastní reference', path: '/prestige' },
+        { label: 'Závazná nabídka do 48 h', desc: 'Ověříme dostupnost i cenu', path: '/prestige' },
+        { label: 'Diskrétní doručení', desc: 'Pojištěně po celé EU', path: '/prestige' },
+      ]},
+    ],
+    cta: { label: 'Sestavit poptávku', path: '/prestige' },
   },
   '/feed': {
     heading: 'Produktový Feed',
