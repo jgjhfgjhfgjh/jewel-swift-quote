@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, Watch } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 import { LUXURY_HOUSES, formatFrom, type LuxuryHouse } from '@/data/luxuryCatalog';
@@ -51,25 +51,22 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
           />
         </div>
 
-        {/* Decorative watch glyph */}
-        <div className="pointer-events-none relative flex flex-1 items-center justify-center">
-          <Watch className="h-24 w-24 text-zinc-200/70 transition-transform duration-500 ease-out group-data-[center]/card:scale-110" strokeWidth={0.75} />
-          {/* Crossfading model name + price, overlaid on the glyph */}
-          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-center px-5 text-center">
-            {house.models.map((m, i) => (
-              <div
-                key={m.model}
-                aria-hidden={i !== idx}
-                className={`absolute inset-0 flex flex-col items-center justify-center px-5 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
-              >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                  {m.collection && m.collection !== m.model ? m.collection : 'Kolekce'}
-                </p>
-                <p className="mt-1 text-2xl leading-tight text-zinc-900 sm:text-[1.7rem]" style={display}>{m.model}</p>
-                <p className="mt-1.5 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
-              </div>
-            ))}
-          </div>
+        {/* Crossfading model — clean typography (these houses have no product photos) */}
+        <div className="relative flex flex-1 items-center justify-center px-5 text-center">
+          {house.models.map((m, i) => (
+            <div
+              key={m.model}
+              aria-hidden={i !== idx}
+              className={`absolute inset-0 flex flex-col items-center justify-center px-5 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+                {m.collection && m.collection !== m.model ? m.collection : 'Kolekce'}
+              </p>
+              <p className="mt-3 text-[1.9rem] leading-tight text-zinc-900 sm:text-4xl" style={display}>{m.model}</p>
+              <span className="mt-4 inline-block h-px w-10 bg-zinc-200" />
+              <p className="mt-4 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
+            </div>
+          ))}
         </div>
 
         {/* CTA — adds the currently shown model to the inquiry */}

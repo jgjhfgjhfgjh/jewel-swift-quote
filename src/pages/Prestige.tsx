@@ -1,17 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight, ChevronDown, ShieldCheck, Lock, Gem,
-  FileSearch, BadgeCheck, Truck, X,
+  FileSearch, BadgeCheck, Truck,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
-import { LuxuryWatchSearch } from '@/components/luxury/LuxuryWatchSearch';
 import { LuxuryShowcaseCarousel } from '@/components/luxury/LuxuryShowcaseCarousel';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { LuxuryInquiryCard, type LuxuryInquiryCardHandle } from '@/components/luxury/LuxuryInquiryCard';
 import { useInquiry } from '@/lib/useInquiry';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
@@ -89,8 +87,9 @@ const FAQS = [
 ];
 
 export default function Prestige() {
-  const navigate = useNavigate();
-  const { watches, addWatch, removeWatch, setWatches } = useInquiry();
+  const { addWatch } = useInquiry();
+  const cardRef = useRef<LuxuryInquiryCardHandle>(null);
+  const inquiryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -118,12 +117,17 @@ export default function Prestige() {
     return () => { schemas.forEach((_, i) => document.getElementById(`ld-prestige-${i}`)?.remove()); };
   }, []);
 
-  const startInquiry = () => navigate('/poptavka/vyber');
+  /** Bring the inquiry card into view (reset to the model step). */
+  function goToInquiry() {
+    cardRef.current?.focusModels();
+    inquiryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
-  /** Add a watch to the inquiry "cart" and open the full-page flow (like add-to-cart → cart). */
+  /** Carousel "Poptat" → add to the cart and bring the inquiry card into view. */
   function pickWatch(w: SelectedWatch) {
     addWatch(w);
-    navigate('/poptavka/vyber');
+    cardRef.current?.focusModels();
+    inquiryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   return (
@@ -131,65 +135,33 @@ export default function Prestige() {
       <Navbar />
       <BackButton />
 
-      {/* ── Hero — big logo ── */}
+      {/* ── Hero — eyebrow · big swelt wordmark (text, like navbar) ── */}
       <section className="relative overflow-hidden pt-24 pb-8 sm:pt-32 sm:pb-10">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-[#fafaf8] to-[#fafaf8]" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
           <Reveal>
-            <p className="mb-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
-              <span className="h-px w-8 bg-primary" /> Na poptávku · Prémiový segment <span className="h-px w-8 bg-primary" />
-            </p>
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiový segment</p>
           </Reveal>
           <Reveal delay={80}>
-            <img src={logo} alt="swelt" className="mx-auto mb-6 h-16 w-auto sm:h-24" />
+            <div className="mb-6 flex select-none items-baseline justify-center gap-2">
+              <span className="font-spartan text-6xl font-extrabold leading-none tracking-tighter text-foreground sm:text-8xl" style={{ letterSpacing: '-0.05em' }}>swelt.</span>
+              <span className="font-sans text-lg font-extrabold leading-none tracking-tight text-foreground sm:text-2xl">PARTNER</span>
+            </div>
           </Reveal>
           <Reveal delay={160}>
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-              Prémiový segment na poptávku — zajistíme i nejprestižnější hodinářské domy.
-              Originál s dokumentací, závazná cena a diskrétní doručení po celé Evropě.
+              Zajistíme i nejprestižnější hodinářské domy — originál s dokumentací,
+              závazná cena a diskrétní doručení po celé Evropě.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Search window — the inquiry starts inside the search ── */}
-      <section className="pb-12 sm:pb-16">
+      {/* ── Inquiry card — search + steps in one expanding card (no page change) ── */}
+      <section ref={inquiryRef} id="poptavka" className="scroll-mt-24 pb-12 sm:pb-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <Reveal>
-            <div className="rounded-3xl border border-zinc-200 bg-white p-2.5 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.45)] sm:p-3">
-              <LuxuryWatchSearch
-                variant="hero"
-                showSelected={false}
-                selected={watches}
-                onChange={setWatches}
-                placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…"
-              />
-
-              {watches.length > 0 ? (
-                <div className="mt-2.5 rounded-2xl bg-zinc-50/80 p-3.5">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                      Vybráno {watches.length}:
-                    </span>
-                    {watches.map((w) => (
-                      <span key={w.id} className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white py-1 pl-3 pr-1.5 text-xs font-medium text-zinc-700">
-                        {w.brand} {w.model}
-                        <button type="button" onClick={() => removeWatch(w.id)} className="rounded-full p-0.5 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-700" aria-label={`Odebrat ${w.brand} ${w.model}`}>
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  <Button onClick={startInquiry} className="mt-3 w-full gap-2 bg-zinc-900 text-white hover:bg-zinc-800">
-                    Pokračovat k poptávce ({watches.length}) <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <p className="px-3 py-2.5 text-center text-xs text-zinc-400">
-                  Vyberte model z katalogu níže, nebo napište jakoukoliv referenci — dohledáme cokoliv jako na Chrono24.
-                </p>
-              )}
-            </div>
+            <LuxuryInquiryCard ref={cardRef} />
           </Reveal>
         </div>
       </section>
@@ -295,7 +267,7 @@ export default function Prestige() {
             <p className="mb-8 text-base text-white/70">
               Řekněte nám, co hledáte. Zbytek — dostupnost, cenu i diskrétní doručení — vyřešíme za vás.
             </p>
-            <Button size="lg" className="gap-2 bg-white text-base font-medium text-zinc-900 shadow-lg hover:bg-zinc-100" onClick={startInquiry}>
+            <Button size="lg" className="gap-2 bg-white text-base font-medium text-zinc-900 shadow-lg hover:bg-zinc-100" onClick={goToInquiry}>
               Sestavit poptávku <ArrowRight className="h-4 w-4" />
             </Button>
           </Reveal>
