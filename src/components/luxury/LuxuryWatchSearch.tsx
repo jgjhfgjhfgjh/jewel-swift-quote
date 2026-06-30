@@ -126,7 +126,7 @@ export function LuxuryWatchSearch({
           placeholder={placeholder ?? 'Hledejte model — např. Rolex Submariner, Omega Speedmaster…'}
           className={
             hero
-              ? 'w-full rounded-2xl border border-zinc-300 bg-white pl-12 pr-4 py-4 text-base shadow-[0_18px_50px_-28px_rgba(0,0,0,0.45)] outline-none transition focus:border-zinc-900 focus:ring-4 focus:ring-zinc-900/10 sm:text-lg'
+              ? 'w-full rounded-2xl border border-zinc-200 bg-white pl-12 pr-4 py-4 text-base shadow-sm outline-none transition focus:border-zinc-900 focus:ring-4 focus:ring-zinc-900/10 sm:text-lg'
               : 'w-full rounded-xl border border-zinc-300 bg-white pl-10 pr-3 py-3 text-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10'
           }
           aria-label="Vyhledat luxusní model"

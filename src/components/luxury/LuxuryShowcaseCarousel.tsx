@@ -41,9 +41,9 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
 
   return (
     <div ref={rootRef} data-card className={`group/card relative flex flex-col ${CARD_CLASS}`}>
-      <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-b from-white to-zinc-50 shadow-[0_18px_50px_-34px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-out group-data-[center]/card:scale-[1.03]">
+      <div className="flex flex-1 flex-col transition-transform duration-500 ease-out group-data-[center]/card:scale-[1.04]">
         {/* Logo */}
-        <div className="flex h-16 shrink-0 items-center justify-center border-b border-zinc-100 px-6 pt-1">
+        <div className="flex h-16 shrink-0 items-center justify-center px-6 pt-1">
           <HouseLogo
             name={house.name} domain={house.domain} width={400} height={160}
             className="max-h-8 max-w-[180px] object-contain [mix-blend-mode:multiply]"

@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import {
-  ArrowRight, Check, ChevronDown, ShieldCheck, Lock, Globe, Gem,
+  ArrowRight, ChevronDown, ShieldCheck, Lock, Gem,
   FileSearch, BadgeCheck, Truck, X,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
-import { LuxuryWatchSearch, type SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
+import { LuxuryWatchSearch } from '@/components/luxury/LuxuryWatchSearch';
 import { LuxuryShowcaseCarousel } from '@/components/luxury/LuxuryShowcaseCarousel';
-import { LuxuryInquiryWizard } from '@/components/luxury/LuxuryInquiryWizard';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { useInquiry } from '@/lib/useInquiry';
+import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
 /* Display headings use Montserrat (matches the rest of swelt). */
 const display: React.CSSProperties = { fontFamily: "'Montserrat', sans-serif" };
@@ -86,8 +89,8 @@ const FAQS = [
 ];
 
 export default function Prestige() {
-  const [watches, setWatches] = useState<SelectedWatch[]>([]);
-  const formRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { watches, addWatch, removeWatch, setWatches } = useInquiry();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -115,17 +118,12 @@ export default function Prestige() {
     return () => { schemas.forEach((_, i) => document.getElementById(`ld-prestige-${i}`)?.remove()); };
   }, []);
 
-  function scrollToForm() {
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  const startInquiry = () => navigate('/poptavka/vyber');
 
-  /** Add a watch (deduped) and guide the customer down to the inquiry form. */
-  function addWatch(w: SelectedWatch) {
-    setWatches((prev) => (prev.some((p) => p.id === w.id) ? prev : [...prev, w]));
-    window.setTimeout(scrollToForm, 280);
-  }
-  function removeWatch(id: string) {
-    setWatches((prev) => prev.filter((p) => p.id !== id));
+  /** Add a watch to the inquiry "cart" and open the full-page flow (like add-to-cart → cart). */
+  function pickWatch(w: SelectedWatch) {
+    addWatch(w);
+    navigate('/poptavka/vyber');
   }
 
   return (
@@ -133,91 +131,70 @@ export default function Prestige() {
       <Navbar />
       <BackButton />
 
-      {/* ── Hero intro ── */}
-      <section className="relative overflow-hidden pt-24 pb-6 sm:pt-32 sm:pb-8">
+      {/* ── Hero — big logo ── */}
+      <section className="relative overflow-hidden pt-24 pb-8 sm:pt-32 sm:pb-10">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-[#fafaf8] to-[#fafaf8]" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
           <Reveal>
-            <p className="mb-5 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
+            <p className="mb-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
               <span className="h-px w-8 bg-primary" /> Na poptávku · Prémiový segment <span className="h-px w-8 bg-primary" />
             </p>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mb-5 text-[2.6rem] font-medium leading-[1.05] tracking-tight text-zinc-950 sm:text-6xl" style={display}>
-              Hledáte značky vyššího segmentu?
-            </h1>
+            <img src={logo} alt="swelt" className="mx-auto mb-6 h-16 w-auto sm:h-24" />
           </Reveal>
           <Reveal delay={160}>
             <p className="mx-auto max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-              Na základě poptávky zajistíme i nejprestižnější hodinářské domy — originál
-              s dokumentací, závazná cena a diskrétní doručení po celé Evropě.
+              Prémiový segment na poptávku — zajistíme i nejprestižnější hodinářské domy.
+              Originál s dokumentací, závazná cena a diskrétní doručení po celé Evropě.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Luxury houses carousel (logo + cycling models) ── */}
-      <section className="pb-2">
-        <LuxuryShowcaseCarousel onPick={addWatch} />
-      </section>
-
-      {/* ── Big interactive search — the conversion driver ── */}
-      <section className="pt-6 pb-10 sm:pt-8">
+      {/* ── Search window — the inquiry starts inside the search ── */}
+      <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <Reveal>
-            <LuxuryWatchSearch
-              variant="hero"
-              showSelected={false}
-              selected={watches}
-              onChange={setWatches}
-              placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…"
-            />
-          </Reveal>
+            <div className="rounded-3xl border border-zinc-200 bg-white p-2.5 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.45)] sm:p-3">
+              <LuxuryWatchSearch
+                variant="hero"
+                showSelected={false}
+                selected={watches}
+                onChange={setWatches}
+                placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…"
+              />
 
-          {/* Live conversion guide — selected chips + finish CTA */}
-          {watches.length > 0 ? (
-            <Reveal>
-              <div className="mt-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                    Vybráno {watches.length}:
-                  </span>
-                  {watches.map((w) => (
-                    <span key={w.id} className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 py-1 pl-3 pr-1.5 text-xs font-medium text-zinc-700">
-                      {w.brand} {w.model}
-                      <button type="button" onClick={() => removeWatch(w.id)} className="rounded-full p-0.5 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-700" aria-label={`Odebrat ${w.brand} ${w.model}`}>
-                        <X className="h-3 w-3" />
-                      </button>
+              {watches.length > 0 ? (
+                <div className="mt-2.5 rounded-2xl bg-zinc-50/80 p-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                      Vybráno {watches.length}:
                     </span>
-                  ))}
+                    {watches.map((w) => (
+                      <span key={w.id} className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white py-1 pl-3 pr-1.5 text-xs font-medium text-zinc-700">
+                        {w.brand} {w.model}
+                        <button type="button" onClick={() => removeWatch(w.id)} className="rounded-full p-0.5 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-700" aria-label={`Odebrat ${w.brand} ${w.model}`}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <Button onClick={startInquiry} className="mt-3 w-full gap-2 bg-zinc-900 text-white hover:bg-zinc-800">
+                    Pokračovat k poptávce ({watches.length}) <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Button onClick={scrollToForm} className="mt-3 w-full gap-2 bg-zinc-900 text-white hover:bg-zinc-800">
-                  Dokončit poptávku ({watches.length}) <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </Reveal>
-          ) : (
-            <Reveal>
-              <p className="mt-3 text-center text-xs text-zinc-400">
-                Vyberte model z nabídky výše, nebo napište jakoukoliv referenci — dohledáme cokoliv jako na Chrono24.
-              </p>
-            </Reveal>
-          )}
-        </div>
-      </section>
-
-      {/* ── All-brands showcase (homepage Netflix carousel) ── */}
-      <section className="border-y border-zinc-200 bg-white py-12 sm:py-14">
-        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Celý katalog swelt</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Prozkoumejte naše značky</h2>
+              ) : (
+                <p className="px-3 py-2.5 text-center text-xs text-zinc-400">
+                  Vyberte model z katalogu níže, nebo napište jakoukoliv referenci — dohledáme cokoliv jako na Chrono24.
+                </p>
+              )}
+            </div>
           </Reveal>
         </div>
-        <BrandShowcaseCarousel />
       </section>
 
-      {/* ── How it works (three steps) ── */}
+      {/* ── How it works (three steps) — right after the search ── */}
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-12 text-center">
@@ -246,6 +223,28 @@ export default function Prestige() {
         </div>
       </section>
 
+      {/* ── Luxury houses carousel (frameless) ── */}
+      <section className="border-t border-zinc-200 bg-white py-12 sm:py-16">
+        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Prémiové domy</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
+          </Reveal>
+        </div>
+        <LuxuryShowcaseCarousel onPick={pickWatch} />
+      </section>
+
+      {/* ── All-brands showcase (homepage Netflix carousel) ── */}
+      <section className="border-y border-zinc-200 bg-white py-12 sm:py-14">
+        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Celý katalog swelt</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Prozkoumejte naše značky</h2>
+          </Reveal>
+        </div>
+        <BrandShowcaseCarousel />
+      </section>
+
       {/* ── Benefits ── */}
       <section className="border-y border-zinc-200 bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -268,53 +267,6 @@ export default function Prestige() {
                 </Reveal>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Inquiry (catalog + autocomplete + form) ── */}
-      <section ref={formRef} className="scroll-mt-20 py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="mb-12 text-center">
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Nezávazná poptávka</p>
-            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl" style={display}>Sestavte si poptávku</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
-              Krok za krokem, nic složitého. Zabere to necelou minutu a k ničemu vás nezavazuje —
-              do 48 hodin se ozveme se závaznou nabídkou.
-            </p>
-          </Reveal>
-
-          <div className="grid items-start gap-8 lg:grid-cols-5">
-            {/* Stepped inquiry wizard */}
-            <div className="lg:col-span-3">
-              <LuxuryInquiryWizard watches={watches} onWatchesChange={setWatches} />
-            </div>
-
-            {/* Trust side */}
-            <div className="space-y-5 lg:col-span-2">
-              <Reveal>
-                <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                  <h3 className="mb-4 text-base font-semibold">Proč nám klienti věří</h3>
-                  <ul className="space-y-3">
-                    {['Originál s dokumentací a garancí pravosti', 'Diskrétní, pojištěné doručení po EU', 'Závazná cena bez skrytých poplatků', 'Privátní concierge přístup ke každé poptávce'].map((t) => (
-                      <li key={t} className="flex items-center gap-3 text-sm">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
-                          <Check className="h-4 w-4 text-emerald-600" />
-                        </span>
-                        <span className="text-zinc-700">{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-              <Reveal delay={100}>
-                <div className="rounded-2xl border border-primary/15 bg-primary/5 p-5 text-center">
-                  <Globe className="mx-auto mb-2 h-6 w-6 text-primary" />
-                  <p className="mb-1 text-sm font-semibold">Doručujeme do 15+ zemí EU</p>
-                  <p className="text-xs text-zinc-500">Vždy pojištěně a v neutrálním balení.</p>
-                </div>
-              </Reveal>
-            </div>
           </div>
         </div>
       </section>
@@ -343,7 +295,7 @@ export default function Prestige() {
             <p className="mb-8 text-base text-white/70">
               Řekněte nám, co hledáte. Zbytek — dostupnost, cenu i diskrétní doručení — vyřešíme za vás.
             </p>
-            <Button size="lg" className="gap-2 bg-white text-base font-medium text-zinc-900 shadow-lg hover:bg-zinc-100" onClick={scrollToForm}>
+            <Button size="lg" className="gap-2 bg-white text-base font-medium text-zinc-900 shadow-lg hover:bg-zinc-100" onClick={startInquiry}>
               Sestavit poptávku <ArrowRight className="h-4 w-4" />
             </Button>
           </Reveal>
