@@ -19,7 +19,7 @@ import { useStore } from '@/lib/store';
 import { gateway } from '@/lib/i18n-gateway';
 import { BRANDS_PREMIUM } from '@/data/brands';
 import { BrandLogo } from '@/components/BrandLogo';
-import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { HeroBanner } from '@/components/HeroBanner';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 import { ConcernCarousel } from '@/components/ConcernCarousel';
 import { HomeFooter } from '@/components/HomeFooter';
@@ -668,18 +668,14 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-1 sm:pt-[18px] lg:pt-5 pb-14 sm:pb-20">
-        {/* ── Small heading between the apps cards and the showcase carousel ── */}
-        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-12 sm:mb-[86px] lg:mb-[108px]">
+        {/* ── Small heading above the hero banner (swapped in from the top) ── */}
+        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-6 sm:mb-8">
           <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
           <span className="text-zinc-500">za velkoobchodní ceny</span>
         </p>
 
-        {/* ── Brand showcase carousel — products free on white, first.
-             -mt-5 + taller cards + bigger logo gap inside = only the logos
-             sit 20px higher (closer to the heading above), the rest stays put. ── */}
-        <div className="-mt-3.5 sm:-mt-6 lg:-mt-11">
-          <BrandShowcaseCarousel />
-        </div>
+        {/* ── Hero banner — swapped down here from the top of the page ── */}
+        <HeroBanner />
 
         {/* ── Brand logos — Amazon-style shelf carousel (all brands) ── */}
         <div className="mt-7 sm:mt-9">

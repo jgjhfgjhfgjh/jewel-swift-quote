@@ -14,6 +14,7 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
+import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
 import { GatewaySections } from '@/components/GatewaySections';
@@ -98,9 +99,10 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Banner — small gap below navbar, scrolls with page */}
+      {/* Top slot — product showcase carousel (home) / banner (catalog).
+          Swapped with the hero banner, which now sits lower in GatewaySections. */}
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px] pt-5 sm:pt-7">
-        <HeroBanner compact={viewMode === 'catalog'} />
+        {viewMode === 'home' ? <BrandShowcaseCarousel /> : <HeroBanner compact />}
       </div>
 
       {/* Hero — logo, tagline, CTAs, bullets — between the banner and the apps cards */}
