@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,8 +8,6 @@ import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useProductCommerce, getProductImages } from '@/hooks/useProductCommerce';
 import type { Product } from '@/lib/types';
 
-const SWIPE = 50;
-
 interface Props {
   products: Product[];
   index: number | null;          // null = closed
@@ -18,76 +16,86 @@ interface Props {
 }
 
 /**
- * Fullscreen catalog browser. Opened from a product image, it lets you page
- * through the catalog products with arrows/swipe, add to cart with quantity and
- * a live margin (same as the grid), and — for products with several photos —
- * pick which photo is maximised via thumbnails. The product photo is never
- * shrunk to make room; on mobile the commerce panel floats over its bottom.
+ * Fullscreen catalog browser. Opened from a product image, it pages through the
+ * catalog as a native horizontal snap carousel — one product per screen —
+ * driven by swipe / trackpad / scroll (arrows just scroll it), exactly like the
+ * homepage brand showcase. The centred product drives a live margin + add-to-cart
+ * panel; products with several photos expose thumbnails to maximise a given shot.
  */
 export function CatalogLightbox({ products, index, onIndexChange, onClose }: Props) {
   const open = index !== null && products[index] != null;
-  const product = open ? products[index] : null;
-
-  if (!open || !product) return null;
+  if (!open) return null;
   return (
     <LightboxInner
       products={products}
-      index={index as number}
-      product={product}
+      openIndex={index as number}
       onIndexChange={onIndexChange}
       onClose={onClose}
     />
   );
 }
 
-function LightboxInner({ products, index, product, onIndexChange, onClose }: {
-  products: Product[]; index: number; product: Product; onIndexChange: (i: number) => void; onClose: () => void;
+function LightboxInner({ products, openIndex, onIndexChange, onClose }: {
+  products: Product[]; openIndex: number; onIndexChange: (i: number) => void; onClose: () => void;
 }) {
   const lang = useStore((s) => s.lang);
   const t = translations[lang];
   const openAuthModal = useStore((s) => s.openAuthModal);
-  const c = useProductCommerce(product);
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  const settleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [current, setCurrent] = useState(openIndex);
+  const [photoIdx, setPhotoIdx] = useState(0);
+
+  const product = products[current] ?? products[0];
+  const c = useProductCommerce(product);
   const images = getProductImages(product);
-  const [imgIdx, setImgIdx] = useState(0);
-  const [dir, setDir] = useState<1 | -1>(1);
   const hasMultiple = images.length > 1;
 
-  const touchX = useRef<number | null>(null);
-  const touchY = useRef<number | null>(null);
+  // Start the track on the product that was opened (before paint, no flash).
+  useLayoutEffect(() => {
+    const el = trackRef.current;
+    if (el) el.scrollLeft = openIndex * el.clientWidth;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Reset to the first photo whenever we move to another product.
-  useEffect(() => { setImgIdx(0); }, [index]);
+  // Track which product is centred as the user swipes/scrolls.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (settleRef.current) clearTimeout(settleRef.current);
+      settleRef.current = setTimeout(() => {
+        const w = el.clientWidth || 1;
+        const i = Math.max(0, Math.min(products.length - 1, Math.round(el.scrollLeft / w)));
+        setCurrent((prev) => {
+          if (prev !== i) { setPhotoIdx(0); onIndexChange(i); }
+          return i;
+        });
+      }, 70);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => { el.removeEventListener('scroll', onScroll); if (settleRef.current) clearTimeout(settleRef.current); };
+  }, [products.length, onIndexChange]);
 
-  const prevProduct = () => { setDir(-1); onIndexChange((index - 1 + products.length) % products.length); };
-  const nextProduct = () => { setDir(1); onIndexChange((index + 1) % products.length); };
+  const go = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth, behavior: 'smooth' });
+  };
 
-  // ESC / arrows + body scroll lock
+  // ESC / arrow keys + body scroll lock.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      else if (e.key === 'ArrowRight') nextProduct();
-      else if (e.key === 'ArrowLeft') prevProduct();
+      else if (e.key === 'ArrowRight') go(1);
+      else if (e.key === 'ArrowLeft') go(-1);
     };
     window.addEventListener('keydown', onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prevOverflow; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, products.length]);
-
-  const onTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; touchY.current = e.touches[0].clientY; };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchX.current === null || touchY.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchX.current;
-    const dy = e.changedTouches[0].clientY - touchY.current;
-    if (Math.abs(dy) > Math.abs(dx) && dy > SWIPE) onClose();
-    else if (Math.abs(dx) > SWIPE) (dx < 0 ? nextProduct : prevProduct)();
-    touchX.current = null; touchY.current = null;
-  };
+  }, []);
 
   // ── Shared pieces (reused in the mobile overlay + desktop side panel) ──
   const marginEl = c.canSeePrices ? (
@@ -101,7 +109,6 @@ function LightboxInner({ products, index, product, onIndexChange, onClose }: {
     </div>
   ) : null;
 
-  // Square ("hranaté") add-to-cart CTA / quantity stepper.
   const ctaEl = c.canSeePrices ? (
     c.qty === 0 ? (
       <Button
@@ -135,33 +142,29 @@ function LightboxInner({ products, index, product, onIndexChange, onClose }: {
     <button
       key={i}
       type="button"
-      onClick={() => setImgIdx(i)}
+      onClick={() => setPhotoIdx(i)}
       aria-label={`Foto ${i + 1}`}
       className={`h-11 w-11 shrink-0 overflow-hidden rounded-lg border bg-white p-1 transition ${
-        i === imgIdx ? 'border-foreground' : 'border-border hover:border-foreground/40'
+        i === photoIdx ? 'border-foreground' : 'border-border hover:border-foreground/40'
       }`}
     >
       <img src={src} alt="" className="h-full w-full object-contain" loading="lazy" />
     </button>
   ));
 
-  const arrowBtn = (dir: 'prev' | 'next') => (
+  const arrowBtn = (dir: 1 | -1) => (
     <button
       type="button"
-      aria-label={dir === 'prev' ? 'Předchozí produkt' : 'Další produkt'}
-      onClick={dir === 'prev' ? prevProduct : nextProduct}
+      aria-label={dir === -1 ? 'Předchozí produkt' : 'Další produkt'}
+      onClick={() => go(dir)}
       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-zinc-100"
     >
-      {dir === 'prev' ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+      {dir === -1 ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
     </button>
   );
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[20000] flex flex-col bg-white animate-in fade-in duration-150 lg:flex-row"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
+    <div className="fixed inset-0 z-[20000] flex flex-col bg-white animate-in fade-in duration-150 lg:flex-row">
       {/* Close */}
       <button
         type="button"
@@ -172,19 +175,32 @@ function LightboxInner({ products, index, product, onIndexChange, onClose }: {
         <X className="h-5 w-5" />
       </button>
 
-      {/* ── Image area — photo maximised ── */}
-      <div className="relative flex min-h-0 flex-1 items-center justify-center">
-        <img
-          key={product.id}
-          src={images[imgIdx] ?? product.img}
-          alt={product.name}
-          draggable={false}
-          className={`max-h-full max-w-full select-none object-contain p-3 sm:p-6 ${dir === 1 ? 'animate-[lbNext_0.35s_ease-out]' : 'animate-[lbPrev_0.35s_ease-out]'}`}
-        />
+      {/* ── Image carousel — native horizontal snap track, one product per screen ── */}
+      <div className="relative flex min-h-0 flex-1">
+        <div
+          ref={trackRef}
+          className="flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden [-webkit-overflow-scrolling:touch] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {products.map((p, i) => {
+            const imgs = getProductImages(p);
+            const src = (i === current ? imgs[photoIdx] : imgs[0]) ?? imgs[0] ?? p.img;
+            return (
+              <div key={p.id} className="flex h-full w-full shrink-0 snap-center items-center justify-center">
+                <img
+                  src={src}
+                  alt={p.name}
+                  draggable={false}
+                  loading="lazy"
+                  className="max-h-full max-w-full select-none object-contain p-3 sm:p-6"
+                />
+              </div>
+            );
+          })}
+        </div>
 
         {/* desktop arrows — beside the watch */}
-        <div className="absolute left-4 top-1/2 hidden -translate-y-1/2 lg:block">{arrowBtn('prev')}</div>
-        <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 lg:block">{arrowBtn('next')}</div>
+        <div className="absolute left-4 top-1/2 hidden -translate-y-1/2 lg:block">{arrowBtn(-1)}</div>
+        <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 lg:block">{arrowBtn(1)}</div>
 
         {/* mobile: margin (top-left) */}
         {marginEl && <div className="absolute left-4 top-4 z-[20005] lg:hidden">{marginEl}</div>}
@@ -198,9 +214,9 @@ function LightboxInner({ products, index, product, onIndexChange, onClose }: {
 
         {/* mobile: prev · CTA · next at the bottom */}
         <div className="absolute bottom-4 left-1/2 z-[20006] flex -translate-x-1/2 items-center gap-2 lg:hidden">
-          {arrowBtn('prev')}
+          {arrowBtn(-1)}
           {ctaEl}
-          {arrowBtn('next')}
+          {arrowBtn(1)}
         </div>
       </div>
 
