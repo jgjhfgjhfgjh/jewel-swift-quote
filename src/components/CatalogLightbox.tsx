@@ -168,24 +168,26 @@ function ProductSlide({ product, t, openAuthModal, isWishlisted, onToggleWishlis
         </div>
       )}
 
-      {/* Photo */}
-      <div className="relative flex min-h-0 w-full flex-1 items-center justify-center">
-        <img
-          src={images[photoIdx] ?? images[0] ?? product.img}
-          alt={product.name}
-          draggable={false}
-          className="max-h-full max-w-full select-none object-contain"
-        />
-        {onToggleWishlist && (
-          <button
-            type="button"
-            aria-label="Přidat do oblíbených"
-            onClick={() => (c.isLoggedIn ? onToggleWishlist(product.id) : openAuthModal('login'))}
-            className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-zinc-100 hover:text-foreground"
-          >
-            <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-primary text-primary' : ''}`} />
-          </button>
-        )}
+      {/* Photo — constrained box so the wishlist heart sits right by the watch */}
+      <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+        <div className="relative flex h-full w-full max-w-[20rem] items-center justify-center sm:max-w-[26rem]">
+          <img
+            src={images[photoIdx] ?? images[0] ?? product.img}
+            alt={product.name}
+            draggable={false}
+            className="max-h-full max-w-full select-none object-contain"
+          />
+          {onToggleWishlist && (
+            <button
+              type="button"
+              aria-label="Přidat do oblíbených"
+              onClick={() => (c.isLoggedIn ? onToggleWishlist(product.id) : openAuthModal('login'))}
+              className="absolute right-0 top-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-muted-foreground backdrop-blur-sm transition hover:bg-zinc-100 hover:text-foreground"
+            >
+              <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-primary text-primary' : ''}`} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Thumbnails — one row (only when several photos); click maximises */}

@@ -48,7 +48,8 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     <div
       ref={rootRef}
       data-card
-      className={`group/card relative flex flex-col ${CARD_CLASS}`}
+      onClick={() => navigate(`/brands/${brand.slug}`)}
+      className={`group/card relative flex flex-col cursor-pointer ${CARD_CLASS}`}
     >
       {/* Brand logo */}
       <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
