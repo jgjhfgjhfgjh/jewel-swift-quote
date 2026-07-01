@@ -99,9 +99,15 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Top slot — product showcase carousel (home) / banner (catalog).
-          Swapped with the hero banner, which now sits lower in GatewaySections. */}
+      {/* Top slot — headline first, then product showcase carousel (home) /
+          banner (catalog). Swapped with the hero banner (now in GatewaySections). */}
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px] pt-5 sm:pt-7">
+        {viewMode === 'home' && (
+          <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-6 sm:mb-8">
+            <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
+            <span className="text-zinc-500">za velkoobchodní ceny</span>
+          </p>
+        )}
         {viewMode === 'home' ? <BrandShowcaseCarousel /> : <HeroBanner compact />}
       </div>
 

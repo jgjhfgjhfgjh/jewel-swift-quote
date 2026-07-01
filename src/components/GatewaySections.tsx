@@ -668,12 +668,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
       <section className="relative border-b border-border pt-1 sm:pt-[18px] lg:pt-5 pb-14 sm:pb-20">
-        {/* ── Small heading above the hero banner (swapped in from the top) ── */}
-        <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-6 sm:mb-8">
-          <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
-          <span className="text-zinc-500">za velkoobchodní ceny</span>
-        </p>
-
         {/* ── Hero banner — swapped down here from the top of the page ── */}
         <HeroBanner />
 
