@@ -87,110 +87,108 @@ function LightboxInner({ products, index, product, onIndexChange, onClose }: {
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[20000] flex flex-col bg-white animate-in fade-in duration-150">
+    <div
+      className="fixed inset-0 z-[20000] flex items-center justify-center bg-white animate-in fade-in duration-150"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* ── Product photo — maximised (full-bleed); controls float over the white ── */}
+      <img
+        src={images[imgIdx] ?? product.img}
+        alt={product.name}
+        draggable={false}
+        className="max-h-full max-w-full select-none object-contain p-3 sm:p-6"
+      />
+
       {/* Close */}
       <button
         type="button"
         aria-label="Zavřít"
         onClick={onClose}
-        className="absolute right-3 top-3 z-[20010] flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition hover:bg-zinc-100 hover:text-foreground"
+        className="absolute right-3 top-3 z-[20010] flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-zinc-100 hover:text-foreground"
       >
-        <X className="h-6 w-6" />
+        <X className="h-5 w-5" />
       </button>
 
-      {/* ── Margin — prominent number, top ── */}
+      {/* Margin — compact, top-left */}
       {c.canSeePrices && (
-        <div className="shrink-0 pt-14 pb-1 text-center sm:pt-16">
-          <p className={`font-display text-5xl font-black tracking-tighter tabular-nums sm:text-6xl ${c.isOverridden ? 'text-blue-600' : 'text-foreground'}`}>
+        <div className="absolute left-4 top-4 z-[20005]">
+          <p className={`font-display text-xl font-black leading-none tracking-tighter tabular-nums sm:text-2xl ${c.isOverridden ? 'text-blue-600' : 'text-foreground'}`}>
             €{c.totalMargin.toFixed(2)}
           </p>
-          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            {t.margin}{c.qty > 1 ? ` · €${c.unitMargin.toFixed(2)} / ${t.pcs}` : ''}
+          <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+            {t.margin}{c.qty > 1 ? ` · €${c.unitMargin.toFixed(2)}/${t.pcs}` : ''}
           </p>
         </div>
       )}
 
-      {/* ── Product photo — never shrinks; arrows + swipe navigate products ── */}
-      <div
-        className="relative flex min-h-0 flex-1 items-center justify-center"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        <img
-          src={images[imgIdx] ?? product.img}
-          alt={product.name}
-          draggable={false}
-          className="max-h-full max-w-full select-none object-contain px-16 py-4 sm:px-24 sm:py-8"
-        />
+      {/* Thumbnails — vertical, side (only when several photos); click maximises */}
+      {hasMultiple && (
+        <div className="absolute right-2 top-1/2 z-[20005] flex max-h-[80%] -translate-y-1/2 flex-col gap-2 overflow-y-auto">
+          {images.map((src, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setImgIdx(i)}
+              aria-label={`Foto ${i + 1}`}
+              className={`h-11 w-11 shrink-0 overflow-hidden rounded-lg border bg-white p-1 transition ${
+                i === imgIdx ? 'border-foreground' : 'border-border hover:border-foreground/40'
+              }`}
+            >
+              <img src={src} alt="" className="h-full w-full object-contain" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
 
-        {/* prev / next PRODUCT */}
+      {/* Bottom controls — prev · CTA · next (compact) */}
+      <div className="absolute bottom-4 left-1/2 z-[20006] flex -translate-x-1/2 items-center gap-2 sm:bottom-6 sm:gap-3">
         <button
           type="button"
           aria-label="Předchozí produkt"
           onClick={prevProduct}
-          className="absolute left-2 top-1/2 z-[20006] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-foreground transition hover:bg-zinc-100 sm:left-6"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-zinc-100"
         >
-          <ChevronLeft className="h-7 w-7" />
-        </button>
-        <button
-          type="button"
-          aria-label="Další produkt"
-          onClick={nextProduct}
-          className="absolute right-2 top-1/2 z-[20006] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-foreground transition hover:bg-zinc-100 sm:right-6"
-        >
-          <ChevronRight className="h-7 w-7" />
+          <ChevronLeft className="h-5 w-5" />
         </button>
 
-        {/* thumbnails — only when the product has several photos; click maximises */}
-        {hasMultiple && (
-          <div className="absolute inset-x-0 bottom-2 z-[20005] flex flex-wrap justify-center gap-2 px-16">
-            {images.map((src, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setImgIdx(i)}
-                aria-label={`Foto ${i + 1}`}
-                className={`h-12 w-12 shrink-0 overflow-hidden rounded-lg border bg-white p-1 transition ${
-                  i === imgIdx ? 'border-foreground' : 'border-border hover:border-foreground/40'
-                }`}
-              >
-                <img src={src} alt="" className="h-full w-full object-contain" loading="lazy" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ── CTA — directly below the product ── */}
-      <div className="flex shrink-0 justify-center px-6 pb-10 pt-2 sm:pb-12">
         {c.canSeePrices ? (
           c.qty === 0 ? (
             <Button
               onClick={c.add}
               disabled={c.isOutOfStock}
-              className="h-12 gap-2 rounded-full bg-foreground px-10 text-sm font-semibold text-background hover:bg-foreground/90"
+              className="h-10 gap-1.5 rounded-full bg-foreground px-6 text-xs font-semibold text-background shadow-sm hover:bg-foreground/90"
             >
-              <ShoppingCart className="h-4 w-4" />
+              <ShoppingCart className="h-3.5 w-3.5" />
               {c.isOutOfStock ? t.soldOut : t.addToCart}
             </Button>
           ) : (
-            <div className="flex items-center gap-6 rounded-full border border-border px-4 py-2">
-              <button onClick={c.dec} aria-label="Ubrat" className="flex h-9 w-9 items-center justify-center rounded-full text-foreground transition hover:bg-zinc-100">
-                <Minus className="h-5 w-5" />
+            <div className="flex items-center gap-3 rounded-full border border-border bg-white px-2 py-1 shadow-sm">
+              <button onClick={c.dec} aria-label="Ubrat" className="flex h-8 w-8 items-center justify-center rounded-full text-foreground transition hover:bg-zinc-100">
+                <Minus className="h-4 w-4" />
               </button>
-              <span className="min-w-[2.5rem] text-center text-xl font-bold tabular-nums">{c.qty}</span>
-              <button onClick={c.inc} disabled={c.atMax} aria-label="Přidat" className={`flex h-9 w-9 items-center justify-center rounded-full transition ${c.atMax ? 'text-muted-foreground' : 'text-foreground hover:bg-zinc-100'}`}>
-                <Plus className="h-5 w-5" />
+              <span className="min-w-[1.75rem] text-center text-sm font-bold tabular-nums">{c.qty}</span>
+              <button onClick={c.inc} disabled={c.atMax} aria-label="Přidat" className={`flex h-8 w-8 items-center justify-center rounded-full transition ${c.atMax ? 'text-muted-foreground' : 'text-foreground hover:bg-zinc-100'}`}>
+                <Plus className="h-4 w-4" />
               </button>
             </div>
           )
         ) : c.isLead ? (
           <LeadUpgradeBadge />
         ) : (
-          <Button onClick={() => openAuthModal('register')} className="h-12 gap-2 rounded-full px-10 text-sm font-semibold">
-            <Lock className="h-4 w-4" /> {t.getWholesalePrices}
+          <Button onClick={() => openAuthModal('register')} className="h-10 gap-1.5 rounded-full px-6 text-xs font-semibold shadow-sm">
+            <Lock className="h-3.5 w-3.5" /> {t.getWholesalePrices}
           </Button>
         )}
+
+        <button
+          type="button"
+          aria-label="Další produkt"
+          onClick={nextProduct}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-zinc-100"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
       </div>
     </div>,
     document.body,
