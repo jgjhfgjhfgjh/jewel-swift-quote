@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { ProductCard } from './ProductCard';
+import { CatalogLightbox } from './CatalogLightbox';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
@@ -19,6 +21,7 @@ export function ProductGrid({
   const { lang } = useStore();
   const t = translations[lang];
   const { products, totalCount, loading, loadingMore, hasMore, loadMore } = useProductSearch(filters);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const hasActiveFilters =
     filters.search.trim().length > 0 ||
@@ -57,12 +60,13 @@ export function ProductGrid({
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-            {products.map((p) => (
+            {products.map((p, i) => (
               <ProductCard
                 key={p.id}
                 product={p}
                 isWishlisted={wishlistIds?.has(p.id)}
                 onToggleWishlist={onToggleWishlist}
+                onOpenImage={() => setLightboxIndex(i)}
               />
             ))}
           </div>
@@ -75,6 +79,13 @@ export function ProductGrid({
           )}
         </>
       )}
+
+      <CatalogLightbox
+        products={products}
+        index={lightboxIndex}
+        onIndexChange={setLightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+      />
     </div>
   );
 }

@@ -13,7 +13,7 @@ import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 
-export function ProductCard({ product, isWishlisted, onToggleWishlist }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void }) {
+export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenImage }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void; onOpenImage?: () => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
     salesCustomer, salesBrandDiscounts, salesProductDiscounts, setSalesProductDiscount,
     setSelectedBrands, setViewMode, setGatewayOpen, openAuthModal,
@@ -122,7 +122,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist }: { produ
       <ProductImageGallery images={galleryImages} alt={product.name}>
         {({ onClick }) => (
           <div
-            onClick={onClick}
+            onClick={onOpenImage ?? onClick}
             className={`relative aspect-square overflow-hidden bg-muted cursor-pointer ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
           >
             {!imgError ? (
