@@ -37,7 +37,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; email?: string; company?: string; ico?: string }>({});
   const [contactMode, setContactMode] = useState<'saved' | 'manual'>('manual');
   const total = STEPS.length;
 
@@ -45,24 +45,35 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
   const savedContact = useMemo(() => {
     if (!user) return null;
-    const name = profile?.contact_name?.trim() || profile?.company_name?.trim() || '';
+    const name = profile?.contact_name?.trim() || '';
     const email = user.email || profile?.primary_contact_email || profile?.contact_emails?.[0] || '';
     const phone = profile?.phone || '';
-    if (!email && !name) return null;
-    return { name, email, phone };
+    const company = profile?.company_name?.trim() || '';
+    const ico = profile?.ico?.trim() || '';
+    if (!email && !name && !company) return null;
+    return { name: name || company, email, phone, company, ico };
   }, [user, profile]);
 
   const applied = useRef(false);
   useEffect(() => {
     if (savedContact && !applied.current) {
       applied.current = true;
-      patchForm({ name: savedContact.name, email: savedContact.email, phone: savedContact.phone });
+      // A profile with a company/IČO defaults to a company purchase, pre-filled.
+      const isCompany = !!(savedContact.company || savedContact.ico);
+      patchForm({
+        name: savedContact.name, email: savedContact.email, phone: savedContact.phone,
+        ...(isCompany ? { purchaseType: 'company', company: savedContact.company, ico: savedContact.ico } : {}),
+      });
       setContactMode('saved');
     }
   }, [savedContact, patchForm]);
 
   function buildMailto(): string {
+    const isCompany = form.purchaseType === 'company';
     const lines = [
+      `Typ nákupu: ${isCompany ? 'Na firmu (B2B)' : 'Osobní'}`,
+      isCompany && form.company ? `Firma: ${form.company}` : '',
+      isCompany && form.ico ? `IČO: ${form.ico}` : '',
       `Jméno: ${form.name}`, `E-mail: ${form.email}`,
       form.phone ? `Telefon: ${form.phone}` : '',
       form.budget ? `Rozpočet: ${form.budget}` : '', '',
@@ -76,6 +87,10 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
   function validateContact(): boolean {
     const e: typeof errors = {};
     const usingSaved = contactMode === 'saved' && !!savedContact;
+    if (form.purchaseType === 'company') {
+      if (!form.company.trim()) e.company = 'Zadejte název firmy';
+      if (!form.ico.trim()) e.ico = 'Zadejte IČO';
+    }
     if (!usingSaved && !form.name.trim()) e.name = 'Zadejte prosím jméno';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Zadejte platný e-mail';
     setErrors(e);
@@ -201,6 +216,42 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
         {step === 2 && (
           <div className="space-y-4">
+            {/* Purchase type — personal vs. company (B2B) */}
+            <div>
+              <label className="mb-2 block text-sm font-medium">Typ nákupu</label>
+              <div className="grid grid-cols-2 gap-1.5 rounded-xl bg-zinc-100 p-1">
+                {([['personal', 'Osobní nákup'], ['company', 'Nákup na firmu']] as const).map(([val, label]) => {
+                  const on = form.purchaseType === val;
+                  return (
+                    <button key={val} type="button" onClick={() => patchForm({ purchaseType: val })}
+                      className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${on ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-500 hover:text-zinc-800'}`}>
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Company fields */}
+            {form.purchaseType === 'company' && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-company">Název firmy</label>
+                  <input id="c-company" type="text" value={form.company} onChange={(e) => { patchForm({ company: e.target.value }); setErrors((p) => ({ ...p, company: undefined })); }}
+                    placeholder="Moje firma s.r.o." autoComplete="organization"
+                    className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.company ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
+                  {errors.company && <p className="mt-1 text-xs text-red-500">{errors.company}</p>}
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-ico">IČO</label>
+                  <input id="c-ico" type="text" inputMode="numeric" value={form.ico} onChange={(e) => { patchForm({ ico: e.target.value }); setErrors((p) => ({ ...p, ico: undefined })); }}
+                    placeholder="12345678"
+                    className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.ico ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
+                  {errors.ico && <p className="mt-1 text-xs text-red-500">{errors.ico}</p>}
+                </div>
+              </div>
+            )}
+
             {savedContact && contactMode === 'saved' ? (
               <div>
                 <div className="flex items-start gap-3 rounded-xl border border-zinc-900/15 bg-zinc-50 p-4 ring-1 ring-zinc-900/5">
@@ -283,6 +334,13 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                 <span className="text-sm text-zinc-700">{form.note}</span>
               </ReviewRow>
             )}
+            <ReviewRow label="Typ nákupu" onEdit={() => setStep(2)}>
+              <span className="text-sm text-zinc-700">
+                {form.purchaseType === 'company'
+                  ? <>Na firmu{form.company ? <> · <span className="font-medium">{form.company}</span></> : null}{form.ico ? ` · IČO ${form.ico}` : ''}</>
+                  : 'Osobní nákup'}
+              </span>
+            </ReviewRow>
             <ReviewRow label="Kontakt" onEdit={() => setStep(2)}>
               <span className="text-sm text-zinc-700">{form.name} · {form.email}{form.phone ? ` · ${form.phone}` : ''}</span>
             </ReviewRow>

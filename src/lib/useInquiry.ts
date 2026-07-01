@@ -2,7 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
+export type PurchaseType = 'personal' | 'company';
+
 export interface InquiryForm {
+  /** Personal purchase vs. purchase on a company (B2B). */
+  purchaseType: PurchaseType;
+  company: string;
+  ico: string;
   name: string;
   email: string;
   phone: string;
@@ -10,7 +16,10 @@ export interface InquiryForm {
   budget: string;
 }
 
-const EMPTY_FORM: InquiryForm = { name: '', email: '', phone: '', note: '', budget: '' };
+const EMPTY_FORM: InquiryForm = {
+  purchaseType: 'personal', company: '', ico: '',
+  name: '', email: '', phone: '', note: '', budget: '',
+};
 
 interface InquiryStore {
   /** The "cart" — watches the customer wants quoted. */

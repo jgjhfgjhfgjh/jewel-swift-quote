@@ -80,14 +80,15 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
           ))}
         </div>
 
-        {/* CTA — adds the currently shown model to the inquiry */}
+        {/* CTA — reflects the currently shown model so it's clear what gets added */}
         <div className="flex shrink-0 justify-center p-4">
           <button
             type="button"
             onClick={() => onPick(toWatch(house, idx))}
-            className="inline-flex min-w-[200px] items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-8 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+            className="inline-flex min-w-[200px] max-w-full items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
           >
-            <Plus className="h-3.5 w-3.5" /> Poptat {house.name}
+            <Plus className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Poptat {house.name} {house.models[idx].model}</span>
           </button>
         </div>
       </div>
