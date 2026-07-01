@@ -51,7 +51,7 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
           />
         </div>
 
-        {/* Crossfading model — clean typography (these houses have no product photos) */}
+        {/* Crossfading model — real cutout photo when available, else clean typography */}
         <div className="relative flex flex-1 items-center justify-center px-5 text-center">
           {house.models.map((m, i) => (
             <div
@@ -59,12 +59,23 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
               aria-hidden={i !== idx}
               className={`absolute inset-0 flex flex-col items-center justify-center px-5 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
-                {m.collection && m.collection !== m.model ? m.collection : 'Kolekce'}
-              </p>
-              <p className="mt-3 text-[1.9rem] leading-tight text-zinc-900 sm:text-4xl" style={display}>{m.model}</p>
-              <span className="mt-4 inline-block h-px w-10 bg-zinc-200" />
-              <p className="mt-4 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
+              {m.image ? (
+                <>
+                  <img src={m.image} alt={`${house.name} ${m.model}`} loading="lazy" draggable={false}
+                    className="mb-3 max-h-[55%] w-auto max-w-full object-contain" />
+                  <p className="text-base font-semibold text-zinc-900" style={display}>{m.model}</p>
+                  <p className="mt-0.5 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+                    {m.collection && m.collection !== m.model ? m.collection : 'Kolekce'}
+                  </p>
+                  <p className="mt-3 text-[1.9rem] leading-tight text-zinc-900 sm:text-4xl" style={display}>{m.model}</p>
+                  <span className="mt-4 inline-block h-px w-10 bg-zinc-200" />
+                  <p className="mt-4 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
+                </>
+              )}
             </div>
           ))}
         </div>

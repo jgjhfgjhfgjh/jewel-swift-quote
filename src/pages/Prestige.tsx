@@ -135,26 +135,15 @@ export default function Prestige() {
       <Navbar />
       <BackButton />
 
-      {/* ── Hero — eyebrow · big swelt wordmark (text, like navbar) ── */}
-      <section className="relative overflow-hidden pt-24 pb-8 sm:pt-32 sm:pb-10">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-[#fafaf8] to-[#fafaf8]" />
-        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+      {/* ── Prestige houses carousel — first on the page ── */}
+      <section className="bg-white pt-24 pb-12 sm:pt-28 sm:pb-16">
+        <div className="mx-auto mb-7 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiový segment</p>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="mb-6 flex select-none items-baseline justify-center gap-2">
-              <span className="font-spartan text-6xl font-extrabold leading-none tracking-tighter text-foreground sm:text-8xl" style={{ letterSpacing: '-0.05em' }}>swelt.</span>
-              <span className="font-sans text-lg font-extrabold leading-none tracking-tight text-foreground sm:text-2xl">PARTNER</span>
-            </div>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="mx-auto max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-              Zajistíme i nejprestižnější hodinářské domy — originál s dokumentací,
-              závazná cena a diskrétní doručení po celé Evropě.
-            </p>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiové domy</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
           </Reveal>
         </div>
+        <LuxuryShowcaseCarousel onPick={pickWatch} />
       </section>
 
       {/* ── Inquiry card — search + steps in one expanding card (no page change) ── */}
@@ -193,17 +182,6 @@ export default function Prestige() {
             })}
           </div>
         </div>
-      </section>
-
-      {/* ── Luxury houses carousel (frameless) ── */}
-      <section className="border-t border-zinc-200 bg-white py-12 sm:py-16">
-        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Prémiové domy</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
-          </Reveal>
-        </div>
-        <LuxuryShowcaseCarousel onPick={pickWatch} />
       </section>
 
       {/* ── All-brands showcase (homepage Netflix carousel) ── */}

@@ -128,8 +128,22 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
   return (
     <CardShell progress={((step + 1) / total) * 100}>
+      {/* Step 1: the search is the first thing on the card */}
+      {step === 0 && (
+        <div className="px-5 pt-5 sm:px-7 sm:pt-6">
+          <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
+            placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…" />
+          {watches.length === 0 && (
+            <button type="button" onClick={addConsult}
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline-offset-2 hover:text-zinc-900 hover:underline">
+              <MessageCircle className="h-4 w-4" /> Nevím přesně — chci poradit
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Header: step title + stepper dots */}
-      <div className="flex items-start justify-between gap-4 px-5 pt-5 sm:px-7 sm:pt-6">
+      <div className={`flex items-start justify-between gap-4 px-5 sm:px-7 ${step === 0 ? 'pt-5' : 'pt-5 sm:pt-6'}`}>
         <div className="min-w-0">
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-zinc-400">Krok {step + 1} ze {total}</p>
           <h3 className="mt-0.5 truncate text-xl font-medium tracking-tight sm:text-2xl" style={display}>{current.title}</h3>
@@ -158,21 +172,8 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
       <p className="px-5 pt-2 text-sm leading-relaxed text-zinc-500 sm:px-7">{current.help}</p>
 
-      {/* Body — changes per step */}
-      <div key={step} className="animate-fade-in px-5 pb-2 pt-4 sm:px-7">
-        {step === 0 && (
-          <div>
-            <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
-              placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…" />
-            {watches.length === 0 && (
-              <button type="button" onClick={addConsult}
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline-offset-2 hover:text-zinc-900 hover:underline">
-                <MessageCircle className="h-4 w-4" /> Nevím přesně — chci poradit
-              </button>
-            )}
-          </div>
-        )}
-
+      {/* Body — changes per step (step 1's search renders above the header) */}
+      <div key={step} className={`animate-fade-in px-5 pb-2 sm:px-7 ${step === 0 ? 'pt-0' : 'pt-4'}`}>
         {step === 1 && (
           <div className="space-y-6">
             <div>

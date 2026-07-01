@@ -32,8 +32,14 @@ export interface LuxuryHouse {
   domain: string;
   /** Indicative entry price for the house, in EUR. */
   from: number | null;
-  /** Signature collections / models used to seed the autocomplete. */
-  models: { model: string; collection?: string; from?: number | null }[];
+  /**
+   * Signature collections / models used to seed the autocomplete.
+   * `image` = optional cutout product photo URL (transparent/white bg) for the
+   * showcase carousel. We have no per-reference photos for the prestige houses,
+   * so this stays empty until a real source is wired (provided URLs, Supabase
+   * storage, …); the carousel falls back to the brand mark when absent.
+   */
+  models: { model: string; collection?: string; from?: number | null; image?: string }[];
 }
 
 export const LUXURY_HOUSES: LuxuryHouse[] = [
@@ -269,6 +275,8 @@ export interface LuxuryModel {
   model: string;
   collection?: string;
   from: number | null;
+  /** Optional cutout product photo (transparent/white bg). */
+  image?: string;
   /** Lowercase haystack for fuzzy matching. */
   search: string;
 }
@@ -287,6 +295,7 @@ export const LUXURY_MODELS: LuxuryModel[] = LUXURY_HOUSES.flatMap((house) =>
       model: m.model,
       collection: m.collection,
       from: m.from ?? house.from,
+      image: m.image,
       search: `${house.name} ${m.collection ?? ''} ${m.model}`.toLowerCase().replace(/\s+/g, ' ').trim(),
     };
   }),
