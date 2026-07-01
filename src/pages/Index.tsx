@@ -97,7 +97,7 @@ const Index = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <div className="flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       {/* Top slot — product showcase carousel (home) / banner (catalog).
           Swapped with the hero banner, which now sits lower in GatewaySections. */}
