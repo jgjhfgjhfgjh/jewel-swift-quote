@@ -85,6 +85,8 @@ export function ProductGrid({
         index={lightboxIndex}
         onIndexChange={setLightboxIndex}
         onClose={() => setLightboxIndex(null)}
+        wishlistIds={wishlistIds}
+        onToggleWishlist={onToggleWishlist}
       />
     </div>
   );

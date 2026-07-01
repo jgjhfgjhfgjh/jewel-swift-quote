@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Lock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Lock, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
 import { translations } from '@/lib/i18n';
@@ -13,6 +13,8 @@ interface Props {
   index: number | null;          // null = closed
   onIndexChange: (i: number) => void;
   onClose: () => void;
+  wishlistIds?: Set<string>;
+  onToggleWishlist?: (id: string) => void;
 }
 
 /**
@@ -22,7 +24,7 @@ interface Props {
  * homepage brand showcase. The centred product drives a live margin + add-to-cart
  * panel; products with several photos expose thumbnails to maximise a given shot.
  */
-export function CatalogLightbox({ products, index, onIndexChange, onClose }: Props) {
+export function CatalogLightbox({ products, index, onIndexChange, onClose, wishlistIds, onToggleWishlist }: Props) {
   const open = index !== null && products[index] != null;
   if (!open) return null;
   return (
@@ -31,12 +33,15 @@ export function CatalogLightbox({ products, index, onIndexChange, onClose }: Pro
       openIndex={index as number}
       onIndexChange={onIndexChange}
       onClose={onClose}
+      wishlistIds={wishlistIds}
+      onToggleWishlist={onToggleWishlist}
     />
   );
 }
 
-function LightboxInner({ products, openIndex, onIndexChange, onClose }: {
+function LightboxInner({ products, openIndex, onIndexChange, onClose, wishlistIds, onToggleWishlist }: {
   products: Product[]; openIndex: number; onIndexChange: (i: number) => void; onClose: () => void;
+  wishlistIds?: Set<string>; onToggleWishlist?: (id: string) => void;
 }) {
   const lang = useStore((s) => s.lang);
   const t = translations[lang];
@@ -165,6 +170,18 @@ function LightboxInner({ products, openIndex, onIndexChange, onClose }: {
 
   return createPortal(
     <div className="fixed inset-0 z-[20000] flex flex-col bg-white animate-in fade-in duration-150 lg:flex-row">
+      {/* Wishlist */}
+      {onToggleWishlist && (
+        <button
+          type="button"
+          aria-label="Přidat do oblíbených"
+          onClick={() => (c.isLoggedIn ? onToggleWishlist(product.id) : openAuthModal('login'))}
+          className="absolute right-14 top-3 z-[20010] flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-zinc-100 hover:text-foreground"
+        >
+          <Heart className={`h-5 w-5 ${wishlistIds?.has(product.id) ? 'fill-primary text-primary' : ''}`} />
+        </button>
+      )}
+
       {/* Close */}
       <button
         type="button"
@@ -176,10 +193,10 @@ function LightboxInner({ products, openIndex, onIndexChange, onClose }: {
       </button>
 
       {/* ── Image carousel — native horizontal snap track, one product per screen ── */}
-      <div className="relative flex min-h-0 flex-1">
+      <div className="relative flex min-h-0 min-w-0 flex-1">
         <div
           ref={trackRef}
-          className="flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden [-webkit-overflow-scrolling:touch] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex h-full w-full min-w-0 snap-x snap-mandatory overflow-x-auto overflow-y-hidden [-webkit-overflow-scrolling:touch] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {products.map((p, i) => {
             const imgs = getProductImages(p);
