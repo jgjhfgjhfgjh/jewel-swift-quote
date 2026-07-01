@@ -123,7 +123,7 @@ const Index = () => {
 
       {/* Admin/sales panels — only relevant in the catalog view */}
       {viewMode === 'catalog' && (
-        <div className="relative z-10 bg-background">
+        <div className="relative z-10 bg-white">
           <SalesModeBar />
           <CustomerSelectorPanel />
           <AdminBrandPanel manufacturers={manufacturers} />
@@ -141,7 +141,7 @@ const Index = () => {
       )}
 
       {viewMode === 'catalog' && (
-        <div className="relative z-10 bg-background flex flex-col flex-1 animate-fade-in">
+        <div className="relative z-10 bg-white flex flex-col flex-1 animate-fade-in">
           <FilterSidebar {...fp} desktopOnly />
           <ProductGrid
             filters={filters}

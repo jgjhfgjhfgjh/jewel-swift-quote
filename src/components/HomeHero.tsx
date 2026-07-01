@@ -58,19 +58,8 @@ export function HomeHero() {
 
   return (
     <div className="mt-6 sm:mt-10 mb-2 flex flex-col items-center px-6 text-center">
-      {/* Big swelt. logo */}
-      <div className="relative inline-flex items-baseline justify-center">
-        <h1
-          className="font-spartan font-extrabold tracking-tighter text-foreground text-5xl sm:text-8xl md:text-9xl leading-none select-none"
-          style={{ letterSpacing: '-0.05em' }}
-        >
-          swelt.
-        </h1>
-        <span className="ml-1 sm:ml-2 font-sans font-extrabold tracking-tight text-base sm:text-2xl md:text-3xl lg:text-4xl text-foreground">PARTNER</span>
-      </div>
-
       {/* CTAs */}
-      <div className="mt-10 sm:mt-12 flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
+      <div className="flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
         {/* B2B CTA — hidden for approved partners. A B2B lead (registration
             submitted) sees a live 24h countdown instead of a clickable CTA;
             other logged-in users get a "finish your registration" nudge. */}
