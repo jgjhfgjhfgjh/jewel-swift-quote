@@ -8,6 +8,8 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { translations } from '@/lib/i18n';
 import { getActiveDiscount, getFinalVoc } from '@/lib/discount';
 import { useState } from 'react';
+import { CheckoutDialog } from '@/components/checkout/CheckoutDialog';
+import { checkoutText } from '@/lib/i18n-checkout';
 
 export function CartDrawer() {
   const { user } = useAuthContext();
@@ -27,6 +29,7 @@ export function CartDrawer() {
 
   const [discountBrand, setDiscountBrand] = useState('');
   const [discountPercent, setDiscountPercent] = useState('');
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const cartBrands = [...new Set(cart.map((i) => i.product.manufacturer))].sort();
 
@@ -246,9 +249,13 @@ export function CartDrawer() {
                 <span className="text-sm text-muted-foreground">{t.margin}</span>
                 <span className="text-sm font-semibold tabular-nums text-primary">€{totalMargin.toFixed(2)}</span>
               </div>
-              <Button className="w-full bg-gold text-accent-foreground hover:bg-gold/90 font-semibold">
-                {t.generateQuote}
+              <Button
+                className="w-full bg-gold text-accent-foreground hover:bg-gold/90 font-semibold"
+                onClick={() => setCheckoutOpen(true)}
+              >
+                {checkoutText[lang].checkoutButton}
               </Button>
+              <CheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
             </div>
           </>
         )}
