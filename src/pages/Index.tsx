@@ -107,7 +107,7 @@ const Index = () => {
         {viewMode === 'home' ? (
           <>
             <section className="flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 text-center">
-              <h1 className="font-display font-black tracking-tight text-balance leading-[1.05] text-4xl sm:text-6xl lg:text-7xl max-w-5xl">
+              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-4xl sm:text-6xl lg:text-7xl max-w-5xl">
                 <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
                 <span className="text-zinc-400">za velkoobchodní ceny.</span>
               </h1>
