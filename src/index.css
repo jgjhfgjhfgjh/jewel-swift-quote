@@ -134,7 +134,10 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    /* White, Apple-like canvas — the gray token showed through under/between
+       sections (overscroll, announcement offset). Sections that want gray set
+       their own bg-background. */
+    @apply bg-white text-foreground;
     font-family: 'Inter', sans-serif;
   }
   h1, h2, h3, h4 {

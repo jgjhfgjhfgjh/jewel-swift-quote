@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -99,16 +100,25 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Top slot — headline first, then product showcase carousel (home) /
-          banner (catalog). Swapped with the hero banner (now in GatewaySections). */}
-      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px] pt-5 sm:pt-7">
-        {viewMode === 'home' && (
-          <p className="px-6 text-center font-sans text-sm sm:text-base md:text-lg font-semibold tracking-tight mb-6 sm:mb-8">
-            <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
-            <span className="text-zinc-500">za velkoobchodní ceny</span>
-          </p>
+      {/* Top slot — Apple-style first screen: big Montserrat headline fills the
+          viewport, the showcase carousel only appears after scrolling.
+          Catalog view keeps the compact banner. */}
+      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">
+        {viewMode === 'home' ? (
+          <>
+            <section className="flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 text-center">
+              <h1 className="font-display font-black tracking-tight text-balance leading-[1.05] text-4xl sm:text-6xl lg:text-7xl max-w-5xl">
+                <span className="text-foreground">Přístup k 70+ světovým brandům</span>{' '}
+                <span className="text-zinc-400">za velkoobchodní ceny.</span>
+              </h1>
+              {/* scroll cue */}
+              <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
+            </section>
+            <BrandShowcaseCarousel />
+          </>
+        ) : (
+          <div className="pt-5 sm:pt-7"><HeroBanner compact /></div>
         )}
-        {viewMode === 'home' ? <BrandShowcaseCarousel /> : <HeroBanner compact />}
       </div>
 
       {/* Hero — logo, tagline, CTAs, bullets — between the banner and the apps cards */}
