@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Search, X, Plus, Watch, Check } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
-import {
-  searchLuxuryModels, formatFrom, type LuxuryModel,
-} from '@/data/luxuryCatalog';
+import { searchLuxuryModels, type LuxuryModel } from '@/data/luxuryCatalog';
 
 /** A watch the customer has added to their inquiry. */
 export interface SelectedWatch {
@@ -134,9 +132,9 @@ export function LuxuryWatchSearch({
         />
       </div>
 
-      {/* Našeptávač dropdown */}
+      {/* Našeptávač dropdown — overlays everything below it */}
       {open && (results.length > 0 || showCustom) && (
-        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl">
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl">
           <ul className="max-h-80 overflow-y-auto py-1">
             {results.map((m, i) => {
               const added = has(m.id);
@@ -168,13 +166,8 @@ export function LuxuryWatchSearch({
                         {m.collection && m.collection !== m.model ? `${m.collection} ` : ''}{m.model}
                       </span>
                     </span>
-                    <span className="shrink-0 text-right">
-                      <span className="block text-xs font-semibold text-zinc-700">
-                        {formatFrom(m.from)}
-                      </span>
-                      <span className={`mt-0.5 inline-flex items-center gap-0.5 text-[11px] ${added ? 'text-emerald-600' : 'text-zinc-400'}`}>
-                        {added ? <><Check className="h-3 w-3" /> Přidáno</> : <><Plus className="h-3 w-3" /> Poptat</>}
-                      </span>
+                    <span className={`inline-flex shrink-0 items-center gap-0.5 text-[11px] ${added ? 'text-emerald-600' : 'text-zinc-400'}`}>
+                      {added ? <><Check className="h-3 w-3" /> Přidáno</> : <><Plus className="h-3 w-3" /> Poptat</>}
                     </span>
                   </button>
                 </li>
@@ -246,9 +239,6 @@ export function LuxuryWatchSearch({
                     {s.brand}
                   </span>
                   <span className="block truncate text-sm font-medium text-zinc-900">{s.model}</span>
-                </span>
-                <span className="shrink-0 text-xs font-semibold text-zinc-600">
-                  {s.custom ? 'Na poptávku' : formatFrom(s.from)}
                 </span>
                 <button
                   type="button"

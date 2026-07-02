@@ -39,9 +39,14 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; company?: string; ico?: string }>({});
   const [contactMode, setContactMode] = useState<'saved' | 'manual'>('manual');
+  /** Collapsed = just a search box; expands into the full form on interaction. */
+  const [expanded, setExpanded] = useState(false);
   const total = STEPS.length;
 
-  useImperativeHandle(ref, () => ({ focusModels: () => setStep(0) }));
+  useImperativeHandle(ref, () => ({ focusModels: () => { setExpanded(true); setStep(0); } }));
+
+  // Any watch in the cart (e.g. from the carousel) opens the full form.
+  useEffect(() => { if (watches.length > 0) setExpanded(true); }, [watches.length]);
 
   const savedContact = useMemo(() => {
     if (!user) return null;
@@ -142,21 +147,32 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
   const current = STEPS[step];
 
   return (
-    <CardShell progress={((step + 1) / total) * 100}>
-      {/* Step 1: the search is the first thing on the card */}
+    <CardShell progress={expanded ? ((step + 1) / total) * 100 : undefined}>
+      {/* Step 1: the search is the first — and, collapsed, the only — element */}
       {step === 0 && (
-        <div className="px-5 pt-5 sm:px-7 sm:pt-6">
+        <div
+          className="px-5 pt-5 sm:px-7 sm:pt-6"
+          onMouseEnter={() => setExpanded(true)}
+          onFocusCapture={() => setExpanded(true)}
+          onClick={() => setExpanded(true)}
+        >
           <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
             placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…" />
-          {watches.length === 0 && (
+          {!expanded ? (
+            <p className="mt-2.5 px-1 text-center text-xs text-zinc-400">
+              Zadejte model — otevře se nezávazná poptávka. Bez závazku, odpověď do 48 h.
+            </p>
+          ) : watches.length === 0 ? (
             <button type="button" onClick={addConsult}
               className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 underline-offset-2 hover:text-zinc-900 hover:underline">
               <MessageCircle className="h-4 w-4" /> Nevím přesně — chci poradit
             </button>
-          )}
+          ) : null}
         </div>
       )}
 
+      {expanded && (
+      <>
       {/* Header: step title + stepper dots */}
       <div className={`flex items-start justify-between gap-4 px-5 sm:px-7 ${step === 0 ? 'pt-5' : 'pt-5 sm:pt-6'}`}>
         <div className="min-w-0">
@@ -320,7 +336,6 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                   {watches.map((w) => (
                     <li key={w.id} className="text-sm text-zinc-700">
                       <span className="font-medium">{w.brand}</span> {w.model}
-                      {w.from ? <span className="text-zinc-400"> · od {w.from.toLocaleString('cs')} €</span> : null}
                     </li>
                   ))}
                 </ul>
@@ -366,6 +381,8 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           </Button>
         )}
       </div>
+      </>
+      )}
     </CardShell>
   );
 });

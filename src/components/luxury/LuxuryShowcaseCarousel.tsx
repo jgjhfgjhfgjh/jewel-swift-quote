@@ -2,15 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
-import { LUXURY_HOUSES, formatFrom, type LuxuryHouse } from '@/data/luxuryCatalog';
+import { LUXURY_HOUSES, type LuxuryHouse } from '@/data/luxuryCatalog';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
 /** Card sizing — matches the homepage BrandShowcaseCarousel cards. */
 const CARD_CLASS =
   'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[360px] sm:h-[400px] lg:h-[430px]';
 const ROTATE_MS = 2200;
-
-const display: React.CSSProperties = { fontFamily: "'Montserrat', sans-serif" };
 
 function toWatch(house: LuxuryHouse, modelIdx: number): SelectedWatch {
   const m = house.models[modelIdx];
@@ -42,41 +40,25 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
   return (
     <div ref={rootRef} data-card className={`group/card relative flex flex-col ${CARD_CLASS}`}>
       <div className="flex flex-1 flex-col transition-transform duration-500 ease-out group-data-[center]/card:scale-[1.04]">
-        {/* Logo */}
-        <div className="flex h-16 shrink-0 items-center justify-center px-6 pt-1">
+        {/* Big brand logo — the hero of the card */}
+        <div className="flex flex-1 items-center justify-center px-6 py-4">
           <HouseLogo
-            name={house.name} domain={house.domain} width={400} height={160}
-            className="max-h-8 max-w-[180px] object-contain [mix-blend-mode:multiply]"
-            textClassName="text-xl font-medium text-zinc-800"
+            name={house.name} domain={house.domain} width={520} height={220}
+            className="max-h-24 w-auto max-w-[240px] object-contain transition-transform duration-500 ease-out [mix-blend-mode:multiply] group-data-[center]/card:scale-105 sm:max-h-28"
+            textClassName="text-center text-3xl font-medium leading-tight text-zinc-800 sm:text-4xl"
           />
         </div>
 
-        {/* Crossfading model — real cutout photo when available, else clean typography */}
-        <div className="relative flex flex-1 items-center justify-center px-5 text-center">
+        {/* Model — just a small text line above the CTA (crossfading) */}
+        <div className="relative mx-4 h-6 shrink-0 text-center">
           {house.models.map((m, i) => (
-            <div
+            <p
               key={m.model}
               aria-hidden={i !== idx}
-              className={`absolute inset-0 flex flex-col items-center justify-center px-5 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute inset-x-0 truncate text-sm font-medium uppercase tracking-[0.15em] text-zinc-500 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
             >
-              {m.image ? (
-                <>
-                  <img src={m.image} alt={`${house.name} ${m.model}`} loading="lazy" draggable={false}
-                    className="mb-3 max-h-[55%] w-auto max-w-full object-contain" />
-                  <p className="text-base font-semibold text-zinc-900" style={display}>{m.model}</p>
-                  <p className="mt-0.5 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
-                    {m.collection && m.collection !== m.model ? m.collection : 'Kolekce'}
-                  </p>
-                  <p className="mt-3 text-[1.9rem] leading-tight text-zinc-900 sm:text-4xl" style={display}>{m.model}</p>
-                  <span className="mt-4 inline-block h-px w-10 bg-zinc-200" />
-                  <p className="mt-4 text-sm font-medium text-zinc-500">{formatFrom(m.from ?? house.from)}</p>
-                </>
-              )}
-            </div>
+              {m.model}
+            </p>
           ))}
         </div>
 
