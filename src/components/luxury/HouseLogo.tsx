@@ -19,7 +19,7 @@ interface Props {
 export function HouseLogo({ name, domain, width = 200, height = 100, className = '', textClassName = '' }: Props) {
   if (!domain || !houseHasLogo(domain)) {
     return (
-      <span className={textClassName} style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <span className={textClassName} style={{ fontFamily: "'Inter', sans-serif" }}>
         {name}
       </span>
     );

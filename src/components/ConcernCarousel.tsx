@@ -129,7 +129,7 @@ export function ConcernCarousel() {
   if (cards.length === 0) return null;
 
   return (
-    <div style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div style={{ fontFamily: "'Inter', sans-serif" }}>
       {/* Header — same look as the "Všechny značky" shelf header */}
       <div className="px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 mb-4">
         <h2 className="text-sm sm:text-base font-semibold text-foreground">

@@ -178,7 +178,7 @@ export function BrandShowcaseCarousel() {
   return (
     <div
       className="relative w-full group"
-      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div
         ref={trackRef}

@@ -116,7 +116,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
           <Percent className="h-4 w-4 text-primary" />
           {t.brandDiscountPanel}
           {activeBrandDiscounts.length > 0 && (
-            <span className="rounded-full bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+            <span className="rounded-full bg-zinc-500/15 px-1.5 py-0.5 text-[10px] font-bold text-zinc-900">
               {activeBrandDiscounts.length}
             </span>
           )}
@@ -151,7 +151,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                 <button
                   key={d.brand}
                   onClick={() => salesCustomer ? removeSalesBrandDiscount(d.brand) : removeBrandDiscount(d.brand)}
-                  className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-500/20 transition-colors"
+                  className="inline-flex items-center gap-1 rounded-full bg-zinc-500/10 px-2 py-0.5 text-[10px] font-semibold text-zinc-900 hover:bg-zinc-500/20 transition-colors"
                 >
                   {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
                 </button>
@@ -185,7 +185,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                     <span className="text-[10px] text-muted-foreground ml-1">({count})</span>
                   </span>
                   {existing !== undefined && (
-                    <span className="text-[10px] font-bold text-blue-600">-{existing}%</span>
+                    <span className="text-[10px] font-bold text-zinc-900">-{existing}%</span>
                   )}
                   <Input
                     ref={setInputRef(name)}
@@ -196,7 +196,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                     value={inputs[name] || ''}
                     onChange={(e) => setInputs((prev) => ({ ...prev, [name]: e.target.value }))}
                     onKeyDown={(e) => e.key === 'Enter' && handleSet(name)}
-                    className={`w-14 h-6 text-[10px] px-1 text-center transition-colors focus:border-primary focus:ring-primary ${existing !== undefined ? 'border-blue-500' : ''}`}
+                    className={`w-14 h-6 text-[10px] px-1 text-center transition-colors focus:border-primary focus:ring-primary ${existing !== undefined ? 'border-zinc-500' : ''}`}
                   />
                   <Button
                     size="sm"
@@ -213,7 +213,7 @@ export function AdminBrandPanel({ manufacturers }: Props) {
                           <Button
                             size="sm"
                             variant="outline"
-                            className={`h-6 w-6 p-0 transition-colors ${isPermanent ? 'border-green-500 text-green-600 bg-green-50 hover:bg-green-100' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
+                            className={`h-6 w-6 p-0 transition-colors ${isPermanent ? 'border-green-500 text-green-600 bg-green-50 hover:bg-green-100' : 'text-zinc-900 border-zinc-300 hover:bg-zinc-50'}`}
                             onClick={() => handleTogglePermanent(name)}
                           >
                             <Save className="h-3 w-3" />

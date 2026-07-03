@@ -1,14 +1,12 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 User-agent: *
 Allow: /
+# Interní a privátní sekce — mimo index
+Disallow: /admin/
+Disallow: /partner
+Disallow: /komunikace
+Disallow: /customers
+Disallow: /ucet
+Disallow: /orders
+Disallow: /auth/
+
+Sitemap: https://swelt.partner/sitemap.xml

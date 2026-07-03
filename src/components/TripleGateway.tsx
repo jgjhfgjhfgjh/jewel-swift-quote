@@ -142,7 +142,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             draggable={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/50 via-blue-900/65 to-blue-950/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-zinc-900/65 to-zinc-950/85" />
           <img
             src={logo}
             alt=""
@@ -208,7 +208,7 @@ export function TripleGateway({ onOpenCatalog }: Props) {
   return (
     <div
       className="relative w-full px-3 pt-5 pb-12 sm:px-6 sm:pt-8 sm:pb-20 lg:px-8 lg:pt-14 lg:pb-24 bg-slate-50 border-t border-slate-200 shadow-[0_-8px_32px_-12px_rgba(0,0,0,0.08)]"
-      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mx-auto items-stretch">
         {cards.map((card, index) => renderCard(card, `desktop-${index}-`))}

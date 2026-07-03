@@ -106,12 +106,12 @@ export default function PartnerAnalytics() {
             <AreaChart data={CHART_DATA} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="single" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%"   stopColor="#4F6EF7" stopOpacity={0.35}/>
-                  <stop offset="100%" stopColor="#4F6EF7" stopOpacity={0}/>
+                  <stop offset="0%"   stopColor="#F0F0F2" stopOpacity={0.35}/>
+                  <stop offset="100%" stopColor="#F0F0F2" stopOpacity={0}/>
                 </linearGradient>
                 <linearGradient id="bulk" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%"   stopColor="#A855F7" stopOpacity={0.35}/>
-                  <stop offset="100%" stopColor="#A855F7" stopOpacity={0}/>
+                  <stop offset="0%"   stopColor="#71717A" stopOpacity={0.35}/>
+                  <stop offset="100%" stopColor="#71717A" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)"/>
@@ -125,8 +125,8 @@ export default function PartnerAnalytics() {
                 }}
                 labelStyle={{ color: 'var(--p-t1)' }}
               />
-              <Area type="monotone" dataKey="single" stroke="#4F6EF7" strokeWidth={2} fill="url(#single)" name="Single"/>
-              <Area type="monotone" dataKey="bulk"   stroke="#A855F7" strokeWidth={2} fill="url(#bulk)"   name="Bulk"/>
+              <Area type="monotone" dataKey="single" stroke="#F0F0F2" strokeWidth={2} fill="url(#single)" name="Single"/>
+              <Area type="monotone" dataKey="bulk"   stroke="#71717A" strokeWidth={2} fill="url(#bulk)"   name="Bulk"/>
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -204,7 +204,7 @@ export default function PartnerAnalytics() {
               { value: 142, color: '#7F54B3' },
               { value: 84,  color: '#E84A23' },
               { value: 68,  color: '#6B7280' },
-              { value: 42,  color: '#A855F7' },
+              { value: 42,  color: '#71717A' },
             ]} size={140} thickness={20}/>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: '1 1 auto', minWidth: 120 }}>
               {[
@@ -212,7 +212,7 @@ export default function PartnerAnalytics() {
                 { l: 'Woo',       v: 142, c: '#7F54B3' },
                 { l: 'Shoptet',   v: 84,  c: '#E84A23' },
                 { l: 'Manual',    v: 68,  c: '#6B7280' },
-                { l: 'Bulk',      v: 42,  c: '#A855F7' },
+                { l: 'Bulk',      v: 42,  c: '#71717A' },
               ].map((l, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: l.c }}/>

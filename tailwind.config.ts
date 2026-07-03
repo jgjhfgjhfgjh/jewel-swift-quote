@@ -1,5 +1,15 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Swelt Design System — single source of truth.
+ *
+ * Typography: Inter only (Apple-like). Legacy aliases (display/spartan/grotesk)
+ * intentionally resolve to Inter so every historical `font-display` usage
+ * renders in the unified family without touching call sites.
+ *
+ * Geometry: sharp corners everywhere — the whole radius scale resolves to
+ * var(--radius) (0). `rounded-full` stays circular for avatars/dots/spinners.
+ */
 export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
@@ -12,10 +22,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Montserrat', 'sans-serif'],
-        sans: ['Inter', 'sans-serif'],
-        spartan: ['"League Spartan"', 'sans-serif'],
-        grotesk: ['"Space Grotesk"', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
+        spartan: ['Inter', 'system-ui', 'sans-serif'],
+        grotesk: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -25,6 +36,8 @@ export default {
         foreground: "hsl(var(--foreground))",
         gold: "hsl(var(--gold))",
         "gold-light": "hsl(var(--gold-light))",
+        success: { DEFAULT: "hsl(var(--success))", foreground: "hsl(var(--success-foreground))" },
+        warning: { DEFAULT: "hsl(var(--warning))", foreground: "hsl(var(--warning-foreground))" },
         primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
         secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
         destructive: { DEFAULT: "hsl(var(--destructive))", foreground: "hsl(var(--destructive-foreground))" },
@@ -44,9 +57,15 @@ export default {
         },
       },
       borderRadius: {
+        sm: "var(--radius)",
+        md: "var(--radius)",
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        xl: "var(--radius)",
+        "2xl": "var(--radius)",
+        "3xl": "var(--radius)",
+        // "vsechno hranate" — even pills, dots and avatars are square.
+        // Spinners that must stay circular use rounded-[50%] explicitly.
+        full: "var(--radius)",
       },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },

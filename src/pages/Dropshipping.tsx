@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight, PackageOpen, Truck, Tag, Zap, Users, ShieldCheck,
@@ -651,18 +651,18 @@ const Dropshipping = () => {
     <div
       className="drop-page relative flex min-h-screen flex-col pb-16 lg:pb-0 bg-background text-foreground"
       style={{
-        ['--background' as any]: '220 30% 98%',
-        ['--foreground' as any]: '220 20% 10%',
-        ['--card' as any]: '0 0% 100%',
-        ['--card-foreground' as any]: '220 20% 10%',
-        ['--muted' as any]: '220 20% 95%',
-        ['--muted-foreground' as any]: '220 10% 50%',
-        ['--border' as any]: '220 20% 88%',
-        ['--primary' as any]: '220 80% 50%',
-        ['--primary-foreground' as any]: '0 0% 100%',
-        ['--accent' as any]: '220 80% 50%',
-        ['--accent-foreground' as any]: '0 0% 100%',
-      }}
+        '--background': '220 30% 98%',
+        '--foreground': '220 20% 10%',
+        '--card': '0 0% 100%',
+        '--card-foreground': '220 20% 10%',
+        '--muted': '220 20% 95%',
+        '--muted-foreground': '220 10% 50%',
+        '--border': '220 20% 88%',
+        '--primary': '220 80% 50%',
+        '--primary-foreground': '0 0% 100%',
+        '--accent': '220 80% 50%',
+        '--accent-foreground': '0 0% 100%',
+      } as CSSProperties}
     >
       <SeoHead />
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
@@ -879,7 +879,7 @@ const Dropshipping = () => {
                     </div>
                     <div className="space-y-3 mb-5">
                       {signalProducts.map((p) => {
-                        const tc = p.actionTone === 'success' ? 'text-emerald-600' : p.actionTone === 'destructive' ? 'text-red-500' : 'text-blue-600';
+                        const tc = p.actionTone === 'success' ? 'text-emerald-600' : p.actionTone === 'destructive' ? 'text-red-500' : 'text-zinc-900';
                         const bc = p.actionTone === 'success' ? 'bg-emerald-500' : p.actionTone === 'destructive' ? 'bg-red-400' : 'bg-primary';
                         return (
                           <div key={p.sku} className="flex items-center gap-3">

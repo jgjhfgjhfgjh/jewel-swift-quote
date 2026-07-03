@@ -65,17 +65,17 @@ export function AccessTiersVisual({ compact = false }: AccessTiersVisualProps) {
         const Icon = tier.icon;
         const borderClass =
           tier.tone === 'blue'
-            ? 'border-blue-200 bg-blue-50/40'
+            ? 'border-zinc-200 bg-zinc-50/40'
             : tier.tone === 'emerald'
             ? 'border-emerald-200 bg-emerald-50/40'
             : 'border-zinc-200 bg-white';
         const iconColor =
-          tier.tone === 'blue' ? 'text-blue-600' : tier.tone === 'emerald' ? 'text-emerald-600' : 'text-zinc-400';
+          tier.tone === 'blue' ? 'text-zinc-900' : tier.tone === 'emerald' ? 'text-emerald-600' : 'text-zinc-400';
         const titleColor =
-          tier.tone === 'blue' ? 'text-blue-700' : tier.tone === 'emerald' ? 'text-emerald-700' : 'text-zinc-500';
+          tier.tone === 'blue' ? 'text-zinc-900' : tier.tone === 'emerald' ? 'text-emerald-700' : 'text-zinc-500';
         const badgeClass =
           tier.badgeTone === 'blue'
-            ? 'bg-blue-100 text-blue-700 border-blue-200'
+            ? 'bg-zinc-100 text-zinc-900 border-zinc-200'
             : 'bg-emerald-100 text-emerald-700 border-emerald-200';
 
         return (

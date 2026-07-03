@@ -183,7 +183,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
                 onChange={(e) => setDiscountInput(e.target.value)}
                 onBlur={handleDiscountSubmit}
                 onKeyDown={(e) => e.key === 'Enter' && handleDiscountSubmit()}
-                className="w-14 h-5 text-[10px] px-1 text-center border-blue-500 bg-white"
+                className="w-14 h-5 text-[10px] px-1 text-center border-zinc-500 bg-white"
               />
             ) : (
               <Badge
@@ -192,7 +192,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
                   isAdmin ? 'cursor-pointer hover:scale-110 transition-transform' : ''
                 } ${
                   isOverridden
-                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                    ? 'bg-zinc-500 text-white hover:bg-zinc-900'
                     : 'bg-primary text-destructive-foreground hover:bg-primary'
                 }`}
               >
@@ -233,7 +233,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
           {canSeePrices ? (
             <>
               <div>
-                <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
+                <p className={`text-lg font-bold tabular-nums ${isOverridden ? 'text-zinc-900' : 'text-primary'}`}>
                   {qty > 1 ? t.marginTotal : t.margin}: €{totalMargin.toFixed(2)}
                 </p>
                 {qty > 1 && (

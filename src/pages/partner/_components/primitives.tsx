@@ -414,7 +414,7 @@ export function SectionHeading({ title, subtitle, right }: { title: string; subt
 }
 
 // ============================================================
-// Avatar — colored circle with initials
+// Avatar — square tile with initials (unified sharp geometry)
 // ============================================================
 export function Avatar({ name, color, size = 32 }: { name: string; color: string; size?: number }) {
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
@@ -422,7 +422,7 @@ export function Avatar({ name, color, size = 32 }: { name: string; color: string
     <span
       aria-hidden
       style={{
-        width: size, height: size, borderRadius: size,
+        width: size, height: size, borderRadius: 0,
         background: color, color: 'white',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         fontSize: Math.max(10, Math.round(size * 0.4)),

@@ -105,7 +105,7 @@ export function BrandLogoRow() {
   }, []);
 
   return (
-    <div className="mt-12 sm:mt-16" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="mt-12 sm:mt-16" style={{ fontFamily: "'Inter', sans-serif" }}>
       {/* Header — title + "see more" inline (Amazon style) */}
       <div className="px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 mb-4">
         <h2 className="text-sm sm:text-base font-semibold text-foreground">

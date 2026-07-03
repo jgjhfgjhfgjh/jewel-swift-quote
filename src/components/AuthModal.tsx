@@ -376,15 +376,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
             ) : (
             <>
               {tip && (
-                <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 flex items-start gap-3">
-                  <Eye className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
-                  <div className="text-xs text-blue-800 leading-relaxed">
+                <div className="rounded-xl bg-zinc-50 border border-zinc-200 px-4 py-3 flex items-start gap-3">
+                  <Eye className="h-4 w-4 text-zinc-500 shrink-0 mt-0.5" />
+                  <div className="text-xs text-zinc-900 leading-relaxed">
                     <span>{tip}</span>
                     {' '}
                     <button
                       type="button"
                       onClick={() => setTab('register')}
-                      className="font-semibold underline underline-offset-2 hover:text-blue-900 transition-colors"
+                      className="font-semibold underline underline-offset-2 hover:text-zinc-900 transition-colors"
                     >
                       {a.registerLinkArrow}
                     </button>

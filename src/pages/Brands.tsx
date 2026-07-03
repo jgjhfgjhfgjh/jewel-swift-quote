@@ -4,6 +4,7 @@ import { Award, Search, ArrowRight, Package } from 'lucide-react';
 import { isBrandSegment, type BrandSegment } from '@/lib/brandSegment';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
+import { Seo } from '@/components/Seo';
 import { Button } from '@/components/ui/button';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -130,6 +131,11 @@ export default function Brands() {
 
   return (
     <>
+      <Seo
+        title="Katalog světových značek hodinek a šperků"
+        description="Prémiové hodinky, šperky a doplňky světových značek dostupné od 1 kusu za velkoobchodní ceny. Kompletní katalog značek pro B2B partnery."
+        path="/brands"
+      />
       <Navbar />
       <BackButton />
       <main className="min-h-screen bg-background pt-14 sm:pt-24">

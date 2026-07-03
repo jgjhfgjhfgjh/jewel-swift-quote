@@ -29,7 +29,7 @@ const badgeFor = (c: CustomerRow): { label: string; cls: string } => {
   if (c.role === 'lead') {
     return isB2bLead(c)
       ? { label: 'B2B LEAD — ke schválení', cls: 'bg-amber-500/10 text-amber-600' }
-      : { label: 'LEAD', cls: 'bg-sky-500/10 text-sky-600' };
+      : { label: 'LEAD', cls: 'bg-zinc-500/10 text-zinc-900' };
   }
   return ROLE_BADGE[c.role ?? 'customer'] ?? ROLE_BADGE.customer;
 };

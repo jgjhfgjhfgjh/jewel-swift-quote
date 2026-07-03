@@ -45,13 +45,13 @@ export function AdminProductOverridesPanel() {
       return;
     }
     let active = true;
-    (supabase as any)
+    supabase
       .from('produkty')
       .select('id, sku, ean, product_name, manufacturer, category_text, retail_price, wholesale_price, stock, image_url')
       .in('id', ids)
-      .then(({ data }: { data: any[] | null }) => {
+      .then(({ data }) => {
         if (!active || !data) return;
-        setProducts(data.map((row: any) => ({
+        setProducts(data.map((row) => ({
           id: row.id,
           name: row.product_name || row.sku,
           manufacturer: row.manufacturer || '',
@@ -136,7 +136,7 @@ export function AdminProductOverridesPanel() {
         >
           <Package className="h-4 w-4 text-primary" />
           Seznam upravených produktů
-          <span className="rounded-full bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+          <span className="rounded-full bg-zinc-500/15 px-1.5 py-0.5 text-[10px] font-bold text-zinc-900">
             {overriddenProducts.length}
           </span>
         </button>
@@ -183,7 +183,7 @@ export function AdminProductOverridesPanel() {
                     <p className="text-[11px] font-medium leading-tight truncate">{product.name}</p>
                     <p className="text-[9px] text-muted-foreground">{product.manufacturer} · {product.sku || product.id}</p>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      <span className="text-[10px] font-semibold text-blue-600">
+                      <span className="text-[10px] font-semibold text-zinc-900">
                         Sleva: -{Math.round(overridePercent)}%
                       </span>
                       <span className="text-[10px] text-muted-foreground">
@@ -192,7 +192,7 @@ export function AdminProductOverridesPanel() {
                       <span className="text-[10px] text-muted-foreground">
                         MOC: €{product.price.toFixed(2)}
                       </span>
-                      <span className={`font-bold text-sm text-justify mx-[10px] ${marginEur >= 0 ? 'text-blue-600' : 'text-destructive'}`}>
+                      <span className={`font-bold text-sm text-justify mx-[10px] ${marginEur >= 0 ? 'text-zinc-900' : 'text-destructive'}`}>
                         Marže/ks: €{marginEur.toFixed(2)}
                       </span>
                     </div>
@@ -205,7 +205,7 @@ export function AdminProductOverridesPanel() {
                             <Button
                               size="sm"
                               variant="outline"
-                              className={`h-6 w-6 p-0 transition-colors ${isPermanent ? 'border-green-500 text-green-600 bg-green-50 hover:bg-green-100' : 'text-blue-600 border-blue-300 hover:bg-blue-50'}`}
+                              className={`h-6 w-6 p-0 transition-colors ${isPermanent ? 'border-green-500 text-green-600 bg-green-50 hover:bg-green-100' : 'text-zinc-900 border-zinc-300 hover:bg-zinc-50'}`}
                               onClick={() => handleTogglePermanent(product.id)}
                             >
                               <Save className="h-2.5 w-2.5" />

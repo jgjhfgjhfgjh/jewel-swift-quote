@@ -159,7 +159,7 @@ function ProductSlide({ product, t, openAuthModal, isWishlisted, onToggleWishlis
       {/* Margin — anchored above the watch */}
       {c.canSeePrices && (
         <div className="shrink-0 text-center">
-          <p className={`font-display text-xl font-black leading-none tracking-tighter tabular-nums sm:text-2xl ${c.isOverridden ? 'text-blue-600' : 'text-foreground'}`}>
+          <p className={`font-display text-xl font-black leading-none tracking-tighter tabular-nums sm:text-2xl ${c.isOverridden ? 'text-zinc-900' : 'text-foreground'}`}>
             €{c.totalMargin.toFixed(2)}
           </p>
           <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">

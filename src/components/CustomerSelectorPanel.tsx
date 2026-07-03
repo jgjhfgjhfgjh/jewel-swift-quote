@@ -53,13 +53,13 @@ export function CustomerSelectorPanel() {
   if (salesCustomer) return null;
 
   return (
-    <div className="border-b bg-blue-50/50 dark:bg-blue-950/20">
+    <div className="border-b bg-zinc-50/50 dark:bg-zinc-950/20">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between px-4 py-2 text-sm font-semibold hover:bg-muted/50 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <UserCheck className="h-4 w-4 text-blue-600" />
+          <UserCheck className="h-4 w-4 text-zinc-900" />
           Výběr zákazníka – režim nabídky
         </div>
         {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -67,7 +67,7 @@ export function CustomerSelectorPanel() {
 
       {open && (
         <div className="px-4 pb-3 max-h-[50vh] overflow-y-auto">
-          <div className="sticky top-0 z-10 bg-blue-50/50 dark:bg-blue-950/20 pb-2">
+          <div className="sticky top-0 z-10 bg-zinc-50/50 dark:bg-zinc-950/20 pb-2">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
               <Input

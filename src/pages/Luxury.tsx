@@ -202,20 +202,9 @@ export default function Luxury() {
 
   const discount = (voc: number, moc: number) => Math.round((1 - voc / moc) * 100);
 
+  // Unified design system — page inherits the global monochrome tokens
   return (
-    <div
-      className="luxury-page min-h-screen bg-background text-foreground"
-      style={{
-        '--background': '220 30% 98%',
-        '--foreground': '220 25% 10%',
-        '--card': '0 0% 100%',
-        '--primary': '221 83% 53%', /* swelt brand blue #2563EB */
-        '--primary-foreground': '0 0% 100%',
-        '--muted': '220 20% 94%',
-        '--muted-foreground': '220 15% 45%',
-        '--border': '220 20% 88%',
-      } as React.CSSProperties}
-    >
+    <div className="luxury-page min-h-screen bg-background text-foreground">
       <Navbar />
       <BackButton />
 

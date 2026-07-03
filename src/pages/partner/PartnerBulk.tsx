@@ -779,8 +779,8 @@ function BulkProgress({ progress, feed, total, onCancel }: { progress: number; f
               />
               <defs>
                 <linearGradient id="prog-grad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#A855F7"/>
-                  <stop offset="100%" stopColor="#4F6EF7"/>
+                  <stop offset="0%" stopColor="#71717A"/>
+                  <stop offset="100%" stopColor="#F0F0F2"/>
                 </linearGradient>
               </defs>
             </svg>

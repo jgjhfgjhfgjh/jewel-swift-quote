@@ -170,9 +170,9 @@ function LangBar({ translated }: { translated: number }) {
 }
 
 const SOURCE_BADGE: Record<string, string> = {
-  i18n: 'bg-sky-50 text-sky-700 border-sky-200',
-  inline: 'bg-violet-50 text-violet-700 border-violet-200',
-  data: 'bg-teal-50 text-teal-700 border-teal-200',
+  i18n: 'bg-zinc-50 text-zinc-900 border-zinc-200',
+  inline: 'bg-zinc-50 text-zinc-900 border-zinc-200',
+  data: 'bg-zinc-50 text-zinc-900 border-zinc-200',
   dynamic: 'bg-zinc-50 text-zinc-500 border-zinc-200',
 };
 
@@ -570,7 +570,7 @@ function KpiCard({
   highlight?: boolean;
 }) {
   const pct = total > 0 ? Math.round((value / total) * 100) : 0;
-  const bar = tone === 'emerald' ? 'bg-emerald-500' : tone === 'sky' ? 'bg-sky-500' : 'bg-rose-500';
+  const bar = tone === 'emerald' ? 'bg-emerald-500' : tone === 'sky' ? 'bg-zinc-500' : 'bg-rose-500';
   return (
     <div className={`border p-3 ${highlight ? 'border-rose-300 bg-rose-50/50' : ''}`}>
       <div className="text-xs text-muted-foreground">{label}</div>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import { Seo } from '@/components/Seo';
 import { useStore } from '@/lib/store';
 import { shop } from '@/lib/i18n-shop';
 
@@ -204,9 +205,9 @@ const PLAN_PRICES = [
 ];
 const PLAN_FEATURED = [false, true, false];
 const ECO_META = [
-  { icon: Handshake,   href: '/velkoobchod',  color: 'text-blue-600 bg-blue-50' },
+  { icon: Handshake,   href: '/velkoobchod',  color: 'text-zinc-900 bg-zinc-50' },
   { icon: Rss,         href: '/feed',         color: 'text-emerald-600 bg-emerald-50' },
-  { icon: PackageOpen, href: '/dropshipping', color: 'text-blue-600 bg-blue-50' },
+  { icon: PackageOpen, href: '/dropshipping', color: 'text-zinc-900 bg-zinc-50' },
   { icon: HandCoins,   href: '/luxury',       color: 'text-amber-600 bg-amber-50' },
 ];
 const TRUST_STRIP_ICONS = [Rocket, RefreshCw, Globe, Shield, Truck];
@@ -222,30 +223,21 @@ const Shop = () => {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  // Unified design system — page inherits the global monochrome tokens
   return (
-    <div
-      className="shop-page min-h-screen font-sans"
-      style={{
-        '--background': '220 30% 98%',
-        '--foreground': '220 25% 10%',
-        '--card': '0 0% 100%',
-        '--card-foreground': '220 25% 10%',
-        '--primary': '220 60% 45%',
-        '--primary-foreground': '0 0% 100%',
-        '--muted': '220 20% 94%',
-        '--muted-foreground': '220 15% 45%',
-        '--border': '220 20% 88%',
-        backgroundColor: 'hsl(220, 30%, 98%)',
-        color: 'hsl(220, 25%, 10%)',
-      } as React.CSSProperties}
-    >
+    <div className="shop-page min-h-screen font-sans bg-background text-foreground">
+      <Seo
+        title="Shop v malém — nákup skladových kusů pro e-shopy"
+        description="Nakupujte prémiové hodinky a šperky po kusech za velkoobchodní ceny. Bez minimálních odběrů, sklad v EU, rychlé dodání pro váš e-shop."
+        path="/shop"
+      />
       <Navbar />
       <BackButton />
       <FloatingNotif />
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 border-b border-border">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,100,190,0.07),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(24,24,27,0.05),transparent)]" />
         <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <div>

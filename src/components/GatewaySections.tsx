@@ -283,12 +283,12 @@ function FeedVisual() {
           <>
             <div className="text-slate-500">{'<?xml version="1.0"?>'}</div>
             <div className="text-emerald-400">{'<SHOP>'}</div>
-            <div className="ml-3 text-blue-300">{'<SHOPITEM>'}</div>
+            <div className="ml-3 text-zinc-300">{'<SHOPITEM>'}</div>
             <div className="ml-6 text-yellow-300">{'<PRODUCTNAME>Tommy Hilfiger DECKER</PRODUCTNAME>'}</div>
             <div className="ml-6 text-yellow-300">{'<PRICE_VAT>4475</PRICE_VAT>'}</div>
             <div className="ml-6 text-yellow-300">{'<URL>https://vaseshop.cz/...</URL>'}</div>
             <div className="ml-6 text-yellow-300">{'<IMGURL>cdn.b2bzago.com/...</IMGURL>'}</div>
-            <div className="ml-3 text-blue-300">{'</SHOPITEM>'}</div>
+            <div className="ml-3 text-zinc-300">{'</SHOPITEM>'}</div>
             <div className="text-emerald-400">{'</SHOP>'}</div>
           </>
         )}

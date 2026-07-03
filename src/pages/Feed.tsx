@@ -213,14 +213,15 @@ function FloatingNotif({ visible, onClose }: { visible: boolean; onClose: () => 
 }
 
 /* ─── Data ─── */
+/* Unified monochrome — every format chip renders in ink; identity comes from the icon + label. */
 const FORMAT_LIST = [
-  { id: 'xml',      label: 'XML',             icon: FileText,     color: '#2563eb', desc: 'Funguje na každé platformě — univerzální volba' },
-  { id: 'csv',      label: 'CSV',             icon: Download,     color: '#0891b2', desc: 'Vhodný pro import tabulek a vlastní systémy' },
-  { id: 'json',     label: 'JSON / API',      icon: FileJson,     color: '#7c3aed', desc: 'Pro vývojáře — real-time API přístup' },
-  { id: 'heureka',  label: 'Heureka.cz',      icon: BarChart3,    color: '#ea580c', desc: 'Nativní formát dle specifikace Heureka.cz' },
-  { id: 'zbozi',    label: 'Zbozi.cz',        icon: ShoppingCart, color: '#16a34a', desc: 'Ceník kompatibilní se Zbozi.cz' },
-  { id: 'google',   label: 'Google Shopping', icon: Globe,        color: '#dc2626', desc: 'Google Merchant Center — spusťte CPC reklamy' },
-  { id: 'facebook', label: 'Facebook Catalog',icon: Rss,          color: '#1d4ed8', desc: 'Dynamické reklamy na Facebooku a Instagramu' },
+  { id: 'xml',      label: 'XML',             icon: FileText,     color: '#18181b', desc: 'Funguje na každé platformě — univerzální volba' },
+  { id: 'csv',      label: 'CSV',             icon: Download,     color: '#18181b', desc: 'Vhodný pro import tabulek a vlastní systémy' },
+  { id: 'json',     label: 'JSON / API',      icon: FileJson,     color: '#18181b', desc: 'Pro vývojáře — real-time API přístup' },
+  { id: 'heureka',  label: 'Heureka.cz',      icon: BarChart3,    color: '#18181b', desc: 'Nativní formát dle specifikace Heureka.cz' },
+  { id: 'zbozi',    label: 'Zbozi.cz',        icon: ShoppingCart, color: '#18181b', desc: 'Ceník kompatibilní se Zbozi.cz' },
+  { id: 'google',   label: 'Google Shopping', icon: Globe,        color: '#18181b', desc: 'Google Merchant Center — spusťte CPC reklamy' },
+  { id: 'facebook', label: 'Facebook Catalog',icon: Rss,          color: '#18181b', desc: 'Dynamické reklamy na Facebooku a Instagramu' },
 ] as const;
 
 type FormatId = typeof FORMAT_LIST[number]['id'];
@@ -571,8 +572,8 @@ export default function Feed() {
 
       {/* ─── 1. Hero ─── */}
       <section className="relative overflow-hidden pt-28 pb-20 px-4">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-zinc-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
         <div className="relative max-w-5xl mx-auto text-center">
           <Reveal>
@@ -644,7 +645,7 @@ export default function Feed() {
               <div className="text-3xl sm:text-4xl font-black mb-1">
                 <CountUp to={to} suffix={suffix} />
               </div>
-              <div className="text-sm text-blue-100 font-medium">{label}</div>
+              <div className="text-sm text-zinc-100 font-medium">{label}</div>
             </div>
           ))}
         </div>
@@ -689,7 +690,7 @@ export default function Feed() {
 
           {/* Upsell dropshipping */}
           <Reveal delay={200}>
-            <div className="rounded-2xl bg-gradient-to-r from-indigo-50 to-blue-50 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="rounded-2xl bg-gradient-to-r from-zinc-50 to-zinc-50 border border-primary/20 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               <div className="h-12 w-12 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
                 <Package className="h-6 w-6 text-primary" />
               </div>
@@ -791,7 +792,7 @@ export default function Feed() {
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 leading-relaxed">
+              <p className="text-sm text-muted-foreground bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 leading-relaxed">
                 <strong className="text-foreground">Tip:</strong> Chcete katalog bez starostí o sklad? Přejděte na{' '}
                 <button className="text-primary font-semibold hover:underline" onClick={() => navigate('/dropshipping')}>swelt.Dropshipping</button>{' '}
                 — zákazník objedná, my odešleme, vy jen inkasujete.
@@ -866,7 +867,7 @@ export default function Feed() {
       </section>
 
       {/* ─── 8. Dropshipping cross-sell ─── */}
-      <section className="py-16 px-4 bg-gradient-to-br from-indigo-600 to-blue-700">
+      <section className="py-16 px-4 bg-gradient-to-br from-zinc-900 to-zinc-900">
         <div className="max-w-4xl mx-auto">
           <Reveal>
             <div className="text-center mb-10">
@@ -874,7 +875,7 @@ export default function Feed() {
               <h2 className="font-display text-3xl sm:text-4xl font-black text-white mb-4">
                 swelt.Dropshipping: žádný sklad, žádná logistika
               </h2>
-              <p className="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">
+              <p className="text-zinc-100 text-lg max-w-2xl mx-auto leading-relaxed">
                 S feedem stále musíte zboží nakoupit a skladovat. Se swelt.Dropshipping to odpadá úplně. Zákazník objedná → vy přepošlete objednávku → my zboží zabalíme a odešleme přímo zákazníkovi pod vaším jménem.
               </p>
             </div>
@@ -891,7 +892,7 @@ export default function Feed() {
                     <Icon className="h-5 w-5 text-white" />
                   </div>
                   <h3 className="font-bold mb-2">{title}</h3>
-                  <p className="text-sm text-blue-100 leading-relaxed">{desc}</p>
+                  <p className="text-sm text-zinc-100 leading-relaxed">{desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -900,7 +901,7 @@ export default function Feed() {
             <div className="text-center">
               <Button
                 size="lg"
-                className="bg-white text-indigo-700 hover:bg-white/95 px-8 gap-2 font-bold text-base shadow-xl"
+                className="bg-white text-zinc-900 hover:bg-white/95 px-8 gap-2 font-bold text-base shadow-xl"
                 onClick={() => navigate('/dropshipping')}
               >
                 Zjistit víc o swelt.Dropshipping
@@ -999,8 +1000,8 @@ export default function Feed() {
           </div>
 
           <Reveal delay={300}>
-            <div className="mt-8 rounded-2xl bg-blue-50 border border-blue-200 p-5 text-center">
-              <p className="text-sm text-blue-800 leading-relaxed">
+            <div className="mt-8 rounded-2xl bg-zinc-50 border border-zinc-200 p-5 text-center">
+              <p className="text-sm text-zinc-900 leading-relaxed">
                 <strong>{f.pricing.bottomCardPre}</strong> {f.pricing.bottomCardMid}{' '}
                 <button className="font-bold underline hover:no-underline" onClick={() => navigate('/dropshipping')}>{f.pricing.bottomCardLink}</button>
               </p>
@@ -1051,10 +1052,10 @@ export default function Feed() {
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               {f.finalCta.heading1}<br />{f.finalCta.heading2}
             </h2>
-            <p className="text-blue-100 text-lg mb-3 max-w-xl mx-auto leading-relaxed">
+            <p className="text-zinc-100 text-lg mb-3 max-w-xl mx-auto leading-relaxed">
               {f.finalCta.sub1}
             </p>
-            <p className="text-blue-200 text-sm mb-8 max-w-lg mx-auto">
+            <p className="text-zinc-200 text-sm mb-8 max-w-lg mx-auto">
               {f.finalCta.sub2Pre}<strong className="text-white">{f.finalCta.sub2Mid}</strong>{f.finalCta.sub2Post}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

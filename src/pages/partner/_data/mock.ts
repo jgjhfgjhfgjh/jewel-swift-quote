@@ -95,25 +95,25 @@ export interface Integration {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: 'P-1042', name: 'Aroma Diffuser Lumina',        sku: 'ADL-200', img: '#A855F7', category: 'Home',        wholesale: 320,  retail: 690,  stock: 184, sales: 412 },
-  { id: 'P-1043', name: 'Bambusový stojan na telefon',  sku: 'BST-110', img: '#4F6EF7', category: 'Office',      wholesale: 89,   retail: 199,  stock: 612, sales: 287 },
+  { id: 'P-1042', name: 'Aroma Diffuser Lumina',        sku: 'ADL-200', img: '#71717A', category: 'Home',        wholesale: 320,  retail: 690,  stock: 184, sales: 412 },
+  { id: 'P-1043', name: 'Bambusový stojan na telefon',  sku: 'BST-110', img: '#52525B', category: 'Office',      wholesale: 89,   retail: 199,  stock: 612, sales: 287 },
   { id: 'P-1044', name: 'Skleněná lahev Fjord 750ml',   sku: 'FJD-750', img: '#00D2A0', category: 'Lifestyle',   wholesale: 145,  retail: 349,  stock: 28,  sales: 803 },
   { id: 'P-1045', name: 'Bezdrátová sluchátka Nordic',  sku: 'NRD-X1',  img: '#F5A623', category: 'Electronics', wholesale: 540,  retail: 1199, stock: 0,   sales: 156 },
   { id: 'P-1046', name: 'LED páska Aurora 5m',          sku: 'AUR-5M',  img: '#F74F4F', category: 'Home',        wholesale: 210,  retail: 449,  stock: 312, sales: 98  },
-  { id: 'P-1047', name: 'Cestovní kufr Voyager 55L',    sku: 'VOY-55',  img: '#6E8AFF', category: 'Travel',      wholesale: 1280, retail: 2490, stock: 47,  sales: 64  },
-  { id: 'P-1048', name: 'Keramický hrnek Terra',        sku: 'TER-300', img: '#C084FC', category: 'Lifestyle',   wholesale: 65,   retail: 199,  stock: 824, sales: 521 },
+  { id: 'P-1047', name: 'Cestovní kufr Voyager 55L',    sku: 'VOY-55',  img: '#3F3F46', category: 'Travel',      wholesale: 1280, retail: 2490, stock: 47,  sales: 64  },
+  { id: 'P-1048', name: 'Keramický hrnek Terra',        sku: 'TER-300', img: '#A1A1AA', category: 'Lifestyle',   wholesale: 65,   retail: 199,  stock: 824, sales: 521 },
   { id: 'P-1049', name: 'Dřevěné hodiny Helsinki',      sku: 'HEL-W30', img: '#2EE6B7', category: 'Home',        wholesale: 380,  retail: 890,  stock: 92,  sales: 142 },
 ];
 
 export const CUSTOMERS: Customer[] = [
-  { id: 'C-001', name: 'Jana Nováková',        email: 'jana.novakova@email.cz',  phone: '+420 602 145 887', company: null,              city: 'Praha 7',          address: 'Letenská 14, 170 00 Praha 7',                  initials: 'JN', color: '#A855F7', orders: 24, spend: 48720, lastOrder: '2 dny',  tag: 'VIP' },
-  { id: 'C-002', name: 'Petr Kovář',           email: 'petr.kovar@gmail.com',    phone: '+420 776 332 901', company: 'Kovář s.r.o.',     city: 'Brno',             address: 'Veveří 92, 602 00 Brno',                       initials: 'PK', color: '#4F6EF7', orders: 8,  spend: 12480, lastOrder: '5 dní',  tag: 'Newsletter' },
+  { id: 'C-001', name: 'Jana Nováková',        email: 'jana.novakova@email.cz',  phone: '+420 602 145 887', company: null,              city: 'Praha 7',          address: 'Letenská 14, 170 00 Praha 7',                  initials: 'JN', color: '#71717A', orders: 24, spend: 48720, lastOrder: '2 dny',  tag: 'VIP' },
+  { id: 'C-002', name: 'Petr Kovář',           email: 'petr.kovar@gmail.com',    phone: '+420 776 332 901', company: 'Kovář s.r.o.',     city: 'Brno',             address: 'Veveří 92, 602 00 Brno',                       initials: 'PK', color: '#52525B', orders: 8,  spend: 12480, lastOrder: '5 dní',  tag: 'Newsletter' },
   { id: 'C-003', name: 'Martin Svoboda',       email: 'm.svoboda@seznam.cz',     phone: '+420 603 887 221', company: null,              city: 'Ostrava',          address: 'Stodolní 18, 702 00 Ostrava',                  initials: 'MS', color: '#00D2A0', orders: 17, spend: 32190, lastOrder: '1 den',  tag: 'Region: Morava' },
   { id: 'C-004', name: 'Eva Horáčková',        email: 'eva.horackova@centrum.cz',phone: '+420 731 442 119', company: 'Horáček design',   city: 'Plzeň',            address: 'Klatovská 88, 301 00 Plzeň',                   initials: 'EH', color: '#F5A623', orders: 31, spend: 67930, lastOrder: '3 hod',  tag: 'VIP' },
   { id: 'C-005', name: 'Tomáš Dvořák',         email: 'tomas.dvorak@firma.cz',   phone: '+420 608 211 547', company: 'Dvořák Trading',   city: 'Praha 4',          address: 'Budějovická 27, 140 00 Praha 4',               initials: 'TD', color: '#F74F4F', orders: 12, spend: 18750, lastOrder: '7 dní',  tag: 'Wholesale' },
-  { id: 'C-006', name: 'Lucie Černá',          email: 'lucie.cerna@gmail.com',   phone: '+420 774 998 332', company: null,              city: 'Liberec',          address: 'Pražská 41, 460 01 Liberec',                   initials: 'LČ', color: '#C084FC', orders: 5,  spend: 6420,  lastOrder: '12 dní', tag: 'Newsletter' },
+  { id: 'C-006', name: 'Lucie Černá',          email: 'lucie.cerna@gmail.com',   phone: '+420 774 998 332', company: null,              city: 'Liberec',          address: 'Pražská 41, 460 01 Liberec',                   initials: 'LČ', color: '#A1A1AA', orders: 5,  spend: 6420,  lastOrder: '12 dní', tag: 'Newsletter' },
   { id: 'C-007', name: 'Jakub Beneš',          email: 'j.benes@email.cz',        phone: '+420 602 887 119', company: 'BeneShop',         city: 'Hradec Králové',   address: 'Gočárova 1234, 500 02 Hradec Králové',         initials: 'JB', color: '#2EE6B7', orders: 19, spend: 38740, lastOrder: '4 dny',  tag: 'Region: Východ' },
-  { id: 'C-008', name: 'Kateřina Procházková', email: 'katerina.p@seznam.cz',    phone: '+420 731 558 290', company: null,              city: 'Olomouc',          address: 'Masarykova třída 8, 779 00 Olomouc',           initials: 'KP', color: '#6E8AFF', orders: 14, spend: 22380, lastOrder: '6 dní',  tag: 'VIP' },
+  { id: 'C-008', name: 'Kateřina Procházková', email: 'katerina.p@seznam.cz',    phone: '+420 731 558 290', company: null,              city: 'Olomouc',          address: 'Masarykova třída 8, 779 00 Olomouc',           initials: 'KP', color: '#3F3F46', orders: 14, spend: 22380, lastOrder: '6 dní',  tag: 'VIP' },
   { id: 'C-009', name: 'David Marek',          email: 'david.marek@firma.com',   phone: '+420 608 311 442', company: 'Marek & Co',       city: 'České Budějovice', address: 'Lannova 5, 370 01 České Budějovice',           initials: 'DM', color: '#FBB54A', orders: 22, spend: 41200, lastOrder: '1 hod',  tag: 'Wholesale' },
   { id: 'C-010', name: 'Tereza Veselá',        email: 't.vesela@gmail.com',      phone: '+420 776 442 887', company: null,              city: 'Pardubice',        address: 'Třída Míru 92, 530 02 Pardubice',              initials: 'TV', color: '#FF7878', orders: 7,  spend: 9870,  lastOrder: '9 dní',  tag: 'Newsletter' },
 ];
@@ -150,8 +150,8 @@ export const CARRIERS: Carrier[] = [
 ];
 
 export const SEGMENTS: Segment[] = [
-  { id: 'vip',        name: 'VIP zákazníci',     count: 12,  color: '#A855F7' },
-  { id: 'newsletter', name: 'Newsletter',        count: 184, color: '#4F6EF7' },
+  { id: 'vip',        name: 'VIP zákazníci',     count: 12,  color: '#71717A' },
+  { id: 'newsletter', name: 'Newsletter',        count: 184, color: '#52525B' },
   { id: 'praha',      name: 'Region: Praha',     count: 67,  color: '#00D2A0' },
   { id: 'morava',     name: 'Region: Morava',    count: 41,  color: '#F5A623' },
   { id: 'wholesale',  name: 'Wholesale partneři',count: 23,  color: '#F74F4F' },
@@ -169,8 +169,8 @@ export const INTEGRATIONS: Integration[] = [
 
 export const STATUS_LABELS: Record<Status, { label: string; color: string; bg: string }> = {
   pending:    { label: 'Čeká',        color: '#F5A623', bg: 'rgba(245,166,35,0.12)' },
-  processing: { label: 'Zpracovává',  color: '#6E8AFF', bg: 'rgba(79,110,247,0.12)' },
-  shipped:    { label: 'Odesláno',    color: '#C084FC', bg: 'rgba(168,85,247,0.12)' },
+  processing: { label: 'Zpracovává',  color: '#3F3F46', bg: 'rgba(79,110,247,0.12)' },
+  shipped:    { label: 'Odesláno',    color: '#A1A1AA', bg: 'rgba(168,85,247,0.12)' },
   delivered:  { label: 'Doručeno',    color: '#00D2A0', bg: 'rgba(0,210,160,0.12)'  },
   cancelled:  { label: 'Zrušeno',     color: '#F74F4F', bg: 'rgba(247,79,79,0.12)'  },
   queued:     { label: 'Ve frontě',   color: '#9CA3AF', bg: 'rgba(156,163,175,0.12)'},

@@ -73,7 +73,7 @@ export function HeroBanner({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className="relative w-full group"
-      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* ── Scrollable track — 3 cards + a peek of the 4th ── */}
       <div

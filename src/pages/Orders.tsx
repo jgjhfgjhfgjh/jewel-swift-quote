@@ -16,9 +16,9 @@ import { toast } from 'sonner';
 
 const STATUS_VARIANT: Record<OrderStatus, string> = {
   awaiting_payment: 'bg-amber-500/15 text-amber-600',
-  queued: 'bg-blue-500/15 text-blue-600',
-  forwarded: 'bg-indigo-500/15 text-indigo-600',
-  confirmed: 'bg-violet-500/15 text-violet-600',
+  queued: 'bg-zinc-500/15 text-zinc-900',
+  forwarded: 'bg-zinc-500/15 text-zinc-900',
+  confirmed: 'bg-zinc-500/15 text-zinc-900',
   shipped: 'bg-emerald-500/15 text-emerald-600',
   delivered: 'bg-green-600/15 text-green-700',
   cancelled: 'bg-muted text-muted-foreground',

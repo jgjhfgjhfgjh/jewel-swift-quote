@@ -143,7 +143,7 @@ export default function PartnerCatalog() {
 
   const createCustomer = () => {
     if (!newCustForm.name) return;
-    const colors = ['#A855F7', '#4F6EF7', '#00D2A0', '#F5A623', '#F74F4F', '#C084FC'];
+    const colors = ['#71717A', '#52525B', '#00D2A0', '#F5A623', '#F74F4F', '#A1A1AA'];
     // TODO: persist new customer via Supabase insert
     const c: Customer = {
       id: 'C-N' + Math.random().toString(36).slice(2, 5).toUpperCase(),

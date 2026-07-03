@@ -25,8 +25,8 @@ const MOCK_ORDERS = [
 
 const STATUS: Record<string, { label: string; bg: string; color: string }> = {
   pending:    { label: 'Čeká',        bg: 'rgba(245,166,35,0.12)',   color: '#F5A623' },
-  processing: { label: 'Zpracovává',  bg: 'rgba(79,110,247,0.12)',   color: '#6E8AFF' },
-  shipped:    { label: 'Odesláno',    bg: 'rgba(168,85,247,0.12)',   color: '#C084FC' },
+  processing: { label: 'Zpracovává',  bg: 'rgba(79,110,247,0.12)',   color: '#FFFFFF' },
+  shipped:    { label: 'Odesláno',    bg: 'rgba(168,85,247,0.12)',   color: '#A1A1AA' },
   delivered:  { label: 'Doručeno',    bg: 'rgba(0,210,160,0.12)',    color: '#00D2A0' },
   cancelled:  { label: 'Zrušeno',     bg: 'rgba(247,79,79,0.12)',    color: '#F74F4F' },
 };
@@ -44,16 +44,16 @@ const REVENUE_DATA = [
 
 const TOP_PRODUCTS = [
   { label: 'Skleněná lahev Fjord 750ml',    value: 803, color: '#00D2A0' },
-  { label: 'Keramický hrnek Terra',          value: 521, color: '#C084FC' },
-  { label: 'Aroma Diffuser Lumina',          value: 412, color: '#A855F7' },
-  { label: 'Bambusový stojan',               value: 287, color: '#4F6EF7' },
+  { label: 'Keramický hrnek Terra',          value: 521, color: '#A1A1AA' },
+  { label: 'Aroma Diffuser Lumina',          value: 412, color: '#71717A' },
+  { label: 'Bambusový stojan',               value: 287, color: '#F0F0F2' },
   { label: 'Bezdrátová sluchátka Nordic',    value: 156, color: '#F5A623' },
 ];
 
 const DONUT_DATA = [
   { label: 'Doručeno',   value: 64, color: '#00D2A0' },
-  { label: 'Odesláno',   value: 32, color: '#A855F7' },
-  { label: 'Zpracovává', value: 18, color: '#4F6EF7' },
+  { label: 'Odesláno',   value: 32, color: '#71717A' },
+  { label: 'Zpracovává', value: 18, color: '#F0F0F2' },
   { label: 'Čeká',       value: 11, color: '#F5A623' },
   { label: 'Zrušeno',    value:  3, color: '#F74F4F' },
 ];
@@ -271,7 +271,15 @@ const GhostBtn = ({ children, onClick }: { children: React.ReactNode; onClick?: 
 
 // ── Custom chart tooltip ───────────────────────────────────────────
 
-const ChartTooltip = ({ active, payload, label }: any) => {
+interface TooltipItem {
+  name?: string;
+  value?: number | string;
+  stroke?: string;
+}
+
+const ChartTooltip = ({ active, payload, label }: {
+  active?: boolean; payload?: TooltipItem[]; label?: string | number;
+}) => {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
@@ -280,7 +288,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
       fontFamily: 'var(--p-font-mono)',
     }}>
       <div style={{ color: 'var(--p-t3)', marginBottom: 6 }}>{label}</div>
-      {payload.map((p: any) => (
+      {payload.map((p) => (
         <div key={p.name} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 3 }}>
           <span style={{ width: 8, height: 8, borderRadius: 2, background: p.stroke, flexShrink: 0 }} />
           <span style={{ color: 'var(--p-t2)' }}>{p.name === 'dropship' ? 'Dropship' : 'Wholesale'}</span>
@@ -359,7 +367,7 @@ export default function PartnerDashboard() {
         <KpiCard
           icon={Users} label="Aktivní zákazníci" value="1 247"
           delta="+47 nových" dir="up"
-          spark={[1180, 1195, 1208, 1220, 1228, 1240, 1247]} sparkColor="#C084FC"
+          spark={[1180, 1195, 1208, 1220, 1228, 1240, 1247]} sparkColor="#A1A1AA"
           accent="bulk"
         />
       </div>
@@ -506,8 +514,8 @@ export default function PartnerDashboard() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ display: 'flex', gap: 16 }}>
                 {[
-                  { label: 'Dropship', color: '#A855F7' },
-                  { label: 'Wholesale', color: '#4F6EF7' },
+                  { label: 'Dropship', color: '#71717A' },
+                  { label: 'Wholesale', color: '#F0F0F2' },
                 ].map(s => (
                   <span key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--p-t2)' }}>
                     <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color }} />
@@ -538,19 +546,19 @@ export default function PartnerDashboard() {
             <AreaChart data={REVENUE_DATA} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="gradDs" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#A855F7" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#A855F7" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#71717A" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#71717A" stopOpacity="0" />
                 </linearGradient>
                 <linearGradient id="gradWs" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#4F6EF7" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#4F6EF7" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#F0F0F2" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#F0F0F2" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <XAxis dataKey="date" tick={{ fill: '#6B7280', fontSize: 11, fontFamily: 'var(--p-font-mono)' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#6B7280', fontSize: 11, fontFamily: 'var(--p-font-mono)' }} axisLine={false} tickLine={false} tickFormatter={v => `${v}k`} />
               <Tooltip content={<ChartTooltip />} />
-              <Area type="monotone" dataKey="wholesale" stroke="#4F6EF7" strokeWidth={2} fill="url(#gradWs)" />
-              <Area type="monotone" dataKey="dropship"  stroke="#A855F7" strokeWidth={2} fill="url(#gradDs)" />
+              <Area type="monotone" dataKey="wholesale" stroke="#F0F0F2" strokeWidth={2} fill="url(#gradWs)" />
+              <Area type="monotone" dataKey="dropship"  stroke="#71717A" strokeWidth={2} fill="url(#gradDs)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

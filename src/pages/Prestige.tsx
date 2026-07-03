@@ -13,8 +13,8 @@ import { LuxuryInquiryCard, type LuxuryInquiryCardHandle } from '@/components/lu
 import { useInquiry } from '@/lib/useInquiry';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
-/* Display headings use Montserrat (matches the rest of swelt). */
-const display: React.CSSProperties = { fontFamily: "'Montserrat', sans-serif" };
+/* Display headings use Inter (matches the rest of swelt). */
+const display: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.15): [React.RefObject<HTMLDivElement>, boolean] {
@@ -135,8 +135,17 @@ export default function Prestige() {
       <Navbar />
       <BackButton />
 
-      {/* ── Prestige houses carousel — first on the page ── */}
-      <section className="bg-white pt-24 pb-12 sm:pt-28 sm:pb-16">
+      {/* ── Inquiry card — the very first thing on the page ── */}
+      <section ref={inquiryRef} id="poptavka" className="scroll-mt-24 pt-24 pb-12 sm:pt-28 sm:pb-14">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6">
+          <Reveal>
+            <LuxuryInquiryCard ref={cardRef} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Prestige houses carousel ── */}
+      <section className="bg-white py-12 sm:py-16">
         <div className="mx-auto mb-7 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiové domy</p>
@@ -144,15 +153,6 @@ export default function Prestige() {
           </Reveal>
         </div>
         <LuxuryShowcaseCarousel onPick={pickWatch} />
-      </section>
-
-      {/* ── Inquiry card — search + steps in one expanding card (no page change) ── */}
-      <section ref={inquiryRef} id="poptavka" className="scroll-mt-24 pb-12 sm:pb-16">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6">
-          <Reveal>
-            <LuxuryInquiryCard ref={cardRef} />
-          </Reveal>
-        </div>
       </section>
 
       {/* ── How it works (three steps) — right after the search ── */}

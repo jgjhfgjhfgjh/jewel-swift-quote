@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import { Seo } from '@/components/Seo';
 import { AuthModal } from '@/components/AuthModal';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -146,6 +147,11 @@ const Velkoobchod = () => {
 
   return (
     <div className="velo-page min-h-screen font-sans bg-background text-foreground">
+      <Seo
+        title="Velkoobchod — B2B nákup hodinek a šperků"
+        description="Velkoobchodní podmínky pro e-shopy a kamenné prodejny: 3 000+ prémiových hodinek a šperků, transparentní ceníky, sklad v EU a osobní account manager."
+        path="/velkoobchod"
+      />
       <Navbar />
       <BackButton />
       <FloatingNotif />

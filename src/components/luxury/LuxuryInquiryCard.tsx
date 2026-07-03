@@ -9,12 +9,12 @@ import { useInquiry } from '@/lib/useInquiry';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
 
-const display: React.CSSProperties = { fontFamily: "'Montserrat', sans-serif" };
+const display: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 
 const BUDGET_CHIPS = ['do 5 000 €', '5 000 – 15 000 €', '15 000 – 40 000 €', '40 000 € a více', 'Poradím se'];
 
 const STEPS = [
-  { label: 'Modely',    icon: Watch,             title: 'Zvolte model svých hodinek', help: 'Vyberte modely z katalogu prémiových domů, nebo napište jakoukoliv referenci — dohledáme cokoliv jako na Chrono24.' },
+  { label: 'Modely',    icon: Watch,             title: 'Zvolte model svých hodinek', help: 'Vyberte modely z katalogu prémiových domů, nebo napište jakoukoliv referenci — dohledáme prakticky cokoliv.' },
   { label: 'Upřesnění', icon: SlidersHorizontal, title: 'Upřesněte své přání',     help: 'Nepovinné — pomůže nám připravit přesnější nabídku.' },
   { label: 'Kontakt',   icon: User,              title: 'Kam pošleme nabídku?',    help: 'Ozveme se do 48 hodin se závaznou nabídkou. Žádný spam, žádný závazek.' },
   { label: 'Odeslání',  icon: ClipboardCheck,    title: 'Zkontrolujte a odešlete', help: 'Projděte si shrnutí. Cokoliv můžete ještě upravit.' },
@@ -41,12 +41,21 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
   const [contactMode, setContactMode] = useState<'saved' | 'manual'>('manual');
   /** Collapsed = just a search box; expands into the full form on interaction. */
   const [expanded, setExpanded] = useState(false);
+  /** True while the current expansion came purely from hover (no click/focus). */
+  const hoverOnly = useRef(false);
   const total = STEPS.length;
 
-  useImperativeHandle(ref, () => ({ focusModels: () => { setExpanded(true); setStep(0); } }));
+  function expandSticky() { hoverOnly.current = false; setExpanded(true); }
+  function expandOnHover() { if (!expanded) { hoverOnly.current = true; setExpanded(true); } }
+  function collapseIfHoverEmpty() {
+    // Re-collapse only if it opened purely on hover and nothing was entered.
+    if (hoverOnly.current && watches.length === 0) { setExpanded(false); hoverOnly.current = false; }
+  }
 
-  // Any watch in the cart (e.g. from the carousel) opens the full form.
-  useEffect(() => { if (watches.length > 0) setExpanded(true); }, [watches.length]);
+  useImperativeHandle(ref, () => ({ focusModels: () => { expandSticky(); setStep(0); } }));
+
+  // Any watch in the cart (e.g. from the carousel) opens the full form (and pins it).
+  useEffect(() => { if (watches.length > 0) { hoverOnly.current = false; setExpanded(true); } }, [watches.length]);
 
   const savedContact = useMemo(() => {
     if (!user) return null;
@@ -152,9 +161,10 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
       {step === 0 && (
         <div
           className="px-5 pt-5 sm:px-7 sm:pt-6"
-          onMouseEnter={() => setExpanded(true)}
-          onFocusCapture={() => setExpanded(true)}
-          onClick={() => setExpanded(true)}
+          onMouseEnter={expandOnHover}
+          onMouseLeave={collapseIfHoverEmpty}
+          onFocusCapture={expandSticky}
+          onClick={expandSticky}
         >
           <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
             placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…" />

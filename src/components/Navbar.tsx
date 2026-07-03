@@ -194,7 +194,7 @@ function FlagImg({ lang, className = '' }: { lang: string; className?: string })
       width={20}
       height={15}
       alt=""
-      className={`inline-block rounded-[2px] shrink-0 object-cover ${className}`}
+      className={`inline-block rounded-none shrink-0 object-cover ${className}`}
     />
   );
 }

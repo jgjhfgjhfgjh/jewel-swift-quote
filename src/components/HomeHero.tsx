@@ -103,17 +103,17 @@ export function HomeHero() {
       {/* Bullets — approved partners get next-step nudges instead of signup reassurances */}
       {isB2bApproved ? (
         <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Spusť e-shop do 48 h</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Využij DEAL nabídky</li>
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Napoj se na feed</li>
+          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Spusť e-shop do 48 h</li>
+          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Prodávej bez skladu</li>
         </ul>
       ) : (
         <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Registrace zdarma</li>
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Schválení do 24 hodin</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez kreditní karty</li>
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Registrace zdarma</li>
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Schválení do 24 hodin</li>
+          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Bez závazků</li>
+          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-zinc-900" strokeWidth={3} /> Bez kreditní karty</li>
         </ul>
       )}
     </div>

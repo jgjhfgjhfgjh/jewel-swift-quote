@@ -6,6 +6,7 @@ import {
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import { Seo } from '@/components/Seo';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
 import { dealsI18n } from '@/lib/i18n-deals';
@@ -40,6 +41,11 @@ export default function Deals() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title="DEAL nabídky — výprodejové katalogy za zvýhodněné ceny"
+        description="Časově omezené DEAL nabídky prémiových hodinek a šperků. Výprodejové katalogy s hlubokými slevami pro B2B partnery — dokud zásoby stačí."
+        path="/deals"
+      />
       <Navbar />
       <BackButton />
 

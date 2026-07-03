@@ -37,7 +37,7 @@ export function HomeFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[#00050d] text-white" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <footer className="relative bg-[#00050d] text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* ── Newsletter / DEAL alert + AI poradce ── */}
       <div className="border-b border-white/10">

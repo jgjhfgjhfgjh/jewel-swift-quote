@@ -104,7 +104,7 @@ export function CartDrawer() {
                             <div className="flex items-center gap-1">
                               <span className="text-[10px] text-muted-foreground line-through">€{item.product.wholesale.toFixed(2)}</span>
                               <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${
-                                source === 'manual' ? 'bg-blue-500/10 text-blue-600' : 'bg-blue-400/10 text-blue-500'
+                                source === 'manual' ? 'bg-zinc-500/10 text-zinc-900' : 'bg-zinc-400/10 text-zinc-500'
                               }`}>
                                 {source === 'manual' ? 'Manual' : 'Brand'} -{Math.round(activePercent)}%
                               </span>
@@ -118,7 +118,7 @@ export function CartDrawer() {
                               </span>
                             </div>
                           )}
-                          <p className={`text-xs font-bold tabular-nums ${isOverridden ? 'text-blue-600' : 'text-primary'}`}>
+                          <p className={`text-xs font-bold tabular-nums ${isOverridden ? 'text-zinc-900' : 'text-primary'}`}>
                             {item.quantity > 1 ? t.marginTotal : t.margin}: €{(effectiveMargin * item.quantity).toFixed(2)}
                           </p>
                           {item.quantity > 1 && (
@@ -147,7 +147,7 @@ export function CartDrawer() {
                                 setProductDiscount(item.product.id, val === '' ? undefined : Math.min(100, Math.max(0, Number(val))));
                               }
                             }}
-                            className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-blue-500 text-blue-600' : ''}`}
+                            className={`w-12 h-6 text-[10px] px-1 text-center ${source === 'manual' ? 'border-zinc-500 text-zinc-900' : ''}`}
                           />
                         )}
                       </div>
@@ -220,7 +220,7 @@ export function CartDrawer() {
                       <button
                         key={d.brand}
                         onClick={() => removeBrandDiscount(d.brand)}
-                        className="inline-flex items-center gap-1 rounded bg-blue-500/10 px-2 py-0.5 text-[10px] font-medium text-blue-600 hover:bg-blue-500/20 transition-colors"
+                        className="inline-flex items-center gap-1 rounded bg-zinc-500/10 px-2 py-0.5 text-[10px] font-medium text-zinc-900 hover:bg-zinc-500/20 transition-colors"
                       >
                         {d.brand} -{d.percent}% <X className="h-2.5 w-2.5" />
                       </button>
@@ -232,12 +232,12 @@ export function CartDrawer() {
 
             <div className="border-t p-4">
               {salesCustomer && (
-                <div className="mb-3 rounded-md bg-blue-50 dark:bg-blue-950/30 p-2 text-xs">
-                  <p className="font-semibold text-blue-700 dark:text-blue-300">
+                <div className="mb-3 rounded-md bg-zinc-50 dark:bg-zinc-950/30 p-2 text-xs">
+                  <p className="font-semibold text-zinc-900 dark:text-zinc-300">
                     Nabídka pro: {salesCustomer.company_name}
                   </p>
                   {salesCustomer.ico && (
-                    <p className="text-blue-600/70 dark:text-blue-400/70">IČO: {salesCustomer.ico}</p>
+                    <p className="text-zinc-900/70 dark:text-zinc-400/70">IČO: {salesCustomer.ico}</p>
                   )}
                 </div>
               )}

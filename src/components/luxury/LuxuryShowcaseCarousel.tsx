@@ -116,7 +116,7 @@ export function LuxuryShowcaseCarousel({ onPick }: { onPick: (w: SelectedWatch) 
   if (houses.length === 0) return null;
 
   return (
-    <div className="group relative w-full" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="group relative w-full" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div
         ref={trackRef}
         className="flex gap-3 overflow-x-auto overflow-y-hidden px-3 pb-4 pt-1 [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] scroll-pl-0 sm:gap-4 sm:scroll-pl-5 sm:px-5 lg:scroll-pl-8 lg:px-8 [&::-webkit-scrollbar]:hidden"

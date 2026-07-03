@@ -13,7 +13,7 @@ import {
 } from '@/lib/comm';
 
 const STATUS_STYLE: Record<TopicStatus, string> = {
-  open: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
+  open: 'bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-300',
   in_progress: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
   resolved: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',
 };
@@ -69,8 +69,8 @@ export default function ComOverview() {
       setShowNew(false);
       setForm({ title: '', description: '', category: 'general', priority: 'normal' });
       navigate(`/komunikace/t/${t.id}`);
-    } catch (e: any) {
-      toast.error(e?.message ?? 'Nepodařilo se vytvořit téma');
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Nepodařilo se vytvořit téma');
     }
   }
 
@@ -91,7 +91,7 @@ export default function ComOverview() {
 
       {/* KPI */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Kpi icon={Inbox} label="Otevřená témata" value={kpi.open} accent="text-blue-500" />
+        <Kpi icon={Inbox} label="Otevřená témata" value={kpi.open} accent="text-zinc-500" />
         <Kpi icon={Clock} label="Čeká na tvou reakci" value={kpi.awaiting} accent="text-amber-500" />
         <Kpi icon={CheckCircle2} label="Vyřešeno" value={kpi.resolved} accent="text-emerald-500" />
         <Kpi icon={MessageCircle} label="Témat celkem" value={kpi.total} accent="text-muted-foreground" />
@@ -161,11 +161,11 @@ export default function ComOverview() {
             className="w-full rounded-md border bg-background py-2 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
-        <select value={status} onChange={e => setStatus(e.target.value as any)} className="rounded-md border bg-background px-3 py-2 text-sm">
+        <select value={status} onChange={e => setStatus(e.target.value as TopicStatus | 'all')} className="rounded-md border bg-background px-3 py-2 text-sm">
           <option value="all">Všechny stavy</option>
           {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>
-        <select value={category} onChange={e => setCategory(e.target.value as any)} className="rounded-md border bg-background px-3 py-2 text-sm">
+        <select value={category} onChange={e => setCategory(e.target.value as TopicCategory | 'all')} className="rounded-md border bg-background px-3 py-2 text-sm">
           <option value="all">Všechny kategorie</option>
           {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>

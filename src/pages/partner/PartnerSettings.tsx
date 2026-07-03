@@ -276,8 +276,8 @@ function Billing() {
 // ─────────────────────────────────────────────────────────────────────────
 function Team() {
   const members = [
-    { name: 'Jana Novák',        email: 'jana@novak-trading.cz',  role: 'Owner',   last: 'právě teď',  color: '#A855F7' },
-    { name: 'Tomáš Novák',       email: 'tomas@novak-trading.cz', role: 'Manager', last: 'před 12 min', color: '#4F6EF7' },
+    { name: 'Jana Novák',        email: 'jana@novak-trading.cz',  role: 'Owner',   last: 'právě teď',  color: '#71717A' },
+    { name: 'Tomáš Novák',       email: 'tomas@novak-trading.cz', role: 'Manager', last: 'před 12 min', color: '#52525B' },
     { name: 'Petra Svobodová',   email: 'petra@novak-trading.cz', role: 'Manager', last: 'před 2 hod',  color: '#00D2A0' },
     { name: 'Karel Dvořák',      email: 'karel@novak-trading.cz', role: 'Viewer',  last: 'včera',       color: '#F5A623' },
   ];

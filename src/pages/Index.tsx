@@ -21,6 +21,7 @@ import { HomeHero } from '@/components/HomeHero';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { Seo } from '@/components/Seo';
 
 const Index = () => {
   const { user, loading: authLoading } = useAuthContext();
@@ -99,8 +100,13 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
+      <Seo
+        title="Velkoobchod hodinek a šperků pro e-shopy"
+        description="Přístup ke světovým brandům za velkoobchodní ceny. 3 000+ prémiových hodinek a šperků, dropshipping, produktové feedy a B2B podmínky pro e-shopy v ČR, SR a EU."
+        path="/"
+      />
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Top slot — Apple-style first screen: big Montserrat headline fills the
+      {/* Top slot — Apple-style first screen: big Inter headline fills the
           viewport, the showcase carousel only appears after scrolling.
           Catalog view keeps the compact banner. */}
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">

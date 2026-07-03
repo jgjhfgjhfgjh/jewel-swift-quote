@@ -171,7 +171,7 @@ export default function PartnerCustomerDetail() {
             display: 'flex', alignItems: 'center', gap: 10,
             padding: 12, background: 'var(--p-surface-2)', borderRadius: 8,
           }}>
-            <Avatar name="Jana Novák" color="#A855F7" size={28}/>
+            <Avatar name="Jana Novák" color="#71717A" size={28}/>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 12 }}>Preferuje křehké balení. Vždy posílat s fragile štítkem.</div>
               <div style={{ fontSize: 11, color: 'var(--p-t3)', marginTop: 2 }}>Jana Novák · před 5 dny</div>
