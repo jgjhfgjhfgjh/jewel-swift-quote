@@ -68,15 +68,9 @@ export function HomeHero() {
             <ApprovalCountdown requestedAt={profile!.created_at} />
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-1.5 w-full">
-            <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
-              {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
-            </Button>
-            {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
-            <span className="text-[11px] text-muted-foreground">
-              Schválení do <span className="tabular-nums">24 h</span>
-            </span>
-          </div>
+          <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
+            {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
+          </Button>
         ))}
         {isB2bApproved ? (
           /* Approved B2B partners (the only ones left with a standalone catalog
