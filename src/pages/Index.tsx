@@ -115,7 +115,7 @@ const Index = () => {
               <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl max-w-5xl text-foreground">
                 Sell Luxury with Enterprise Technology
               </h1>
-              <h2 className="mt-6 sm:mt-8 font-display font-semibold tracking-tight text-balance leading-tight text-xl sm:text-2xl lg:text-3xl max-w-3xl text-muted-foreground">
+              <h2 className="mt-6 sm:mt-8 font-display font-medium tracking-tight text-balance leading-tight text-base sm:text-lg lg:text-xl max-w-3xl text-black" style={{ wordSpacing: '0.3em' }}>
                 LAUNCH FASTER SELL MORE AUTOMATE SAVE HOURS
               </h2>
               {/* scroll cue */}
