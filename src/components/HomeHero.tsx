@@ -89,7 +89,7 @@ export function HomeHero() {
           </div>
         ) : (
           <Button variant="outline" className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
-            Prohlédnout katalog
+            Katalog bez registrace <ChevronRight className="h-4 w-4 text-blue-600" />
           </Button>
         )}
       </div>
