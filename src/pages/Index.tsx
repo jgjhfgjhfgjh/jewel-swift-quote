@@ -114,14 +114,21 @@ const Index = () => {
             <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 text-center">
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays huge on
                   tall displays but never overflows short / zoomed ones. */}
-              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-4xl sm:text-[clamp(2.75rem,7vh,5.5rem)] max-w-5xl text-foreground">
-                Sell Luxury with Enterprise Technology
+              <h1 className="font-display font-semibold tracking-tight leading-[1.08] text-4xl sm:text-[clamp(2.75rem,7vh,5.5rem)] max-w-5xl text-foreground">
+                Sell Luxury with<br />Enterprise Technology
               </h1>
-              <h2 className="mt-6 sm:mt-8 font-display font-medium tracking-tight text-balance leading-tight text-base sm:text-lg lg:text-xl max-w-3xl text-black" style={{ wordSpacing: '0.3em' }}>
-                LAUNCH FASTER SELL MORE AUTOMATE SAVE HOURS
+              {/* Tagline sits down by the scroll cue, grouped into phrases */}
+              <h2 className="absolute bottom-14 left-1/2 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:text-sm">
+                <span className="whitespace-nowrap">Launch Faster</span>
+                <span className="text-zinc-300">·</span>
+                <span className="whitespace-nowrap">Sell More</span>
+                <span className="text-zinc-300">·</span>
+                <span className="whitespace-nowrap">Automate</span>
+                <span className="text-zinc-300">·</span>
+                <span className="whitespace-nowrap">Save Hours</span>
               </h2>
               {/* scroll cue */}
-              <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
+              <ChevronDown className="absolute bottom-5 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
             {/* Second screen: brand carousel (logos + product previews) then CTAs */}
             <section className="flex flex-col items-center px-0 pt-12 pb-16 sm:pt-16 sm:pb-20 gap-10 sm:gap-14">

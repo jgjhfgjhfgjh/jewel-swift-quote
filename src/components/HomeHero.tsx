@@ -58,57 +58,57 @@ export function HomeHero() {
 
   return (
     <div className="mt-6 sm:mt-8 flex flex-col items-center px-6 text-center">
-      {/* CTAs — compact, light */}
-      <div className="flex flex-col gap-2.5 justify-center w-full max-w-[280px] mx-auto">
-        {/* B2B CTA — hidden for approved partners. A B2B lead (registration
-            submitted) sees a live 24h countdown instead of a clickable CTA;
-            other logged-in users get a "finish your registration" nudge. */}
-        {!isB2bApproved && (isB2bLead ? (
-          <div className="font-display w-full px-8 py-3 rounded-none bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm shadow-lg text-center cursor-default select-none tabular-nums">
-            <ApprovalCountdown requestedAt={profile!.created_at} />
-          </div>
-        ) : (
-          <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
-            {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
-          </Button>
-        ))}
-        {isB2bApproved ? (
-          /* Approved B2B partners (the only ones left with a standalone catalog
-             button) → same dark KATALOG CTA as the navbar, with the live
-             in-stock count label. */
-          <div className="flex flex-col items-center gap-1.5 w-full">
+      {isB2bApproved ? (
+        /* Approved B2B partners → KATALOG CTA + next-step nudges */
+        <>
+          <div className="flex w-full max-w-[280px] flex-col items-center gap-1.5">
             <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
               KATALOG 2026 <ArrowRight className="h-4 w-4" />
             </Button>
-            {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
             {stockCount != null && stockCount > 0 && (
               <span className="text-[11px] text-muted-foreground">
                 <span className="tabular-nums">{stockCount.toLocaleString('cs-CZ')}</span> skladem
               </span>
             )}
           </div>
-        ) : (
-          <Button variant="outline" className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
-            Katalog bez registrace <ChevronRight className="h-4 w-4 text-blue-600" />
-          </Button>
-        )}
-      </div>
-
-      {/* Bullets — approved partners get next-step nudges instead of signup reassurances */}
-      {isB2bApproved ? (
-        <ul className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Spusť e-shop do 48 h</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
-        </ul>
+          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
+            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Spusť e-shop do 48 h</li>
+            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
+          </ul>
+        </>
       ) : (
-        <ul className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Registrace zdarma</li>
-          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Schválení do 24 hodin</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>
-          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez kreditní karty</li>
-        </ul>
+        /* Guest / lead → B2B CTA, then bullets, then (bigger gap) the catalog CTA */
+        <>
+          {/* 1) B2B registrace (nebo živý odpočet u podané žádosti) */}
+          <div className="w-full max-w-[280px]">
+            {isB2bLead ? (
+              <div className="font-display w-full px-8 py-3 rounded-none bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm shadow-lg text-center cursor-default select-none tabular-nums">
+                <ApprovalCountdown requestedAt={profile!.created_at} />
+              </div>
+            ) : (
+              <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
+                {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+
+          {/* 2) Fajfky hned pod B2B CTA */}
+          <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Registrace zdarma</li>
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Schválení do 24 hodin</li>
+            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>
+            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez kreditní karty</li>
+          </ul>
+
+          {/* 3) Katalog bez registrace — větší mezera nad ním */}
+          <div className="mt-8 w-full max-w-[280px]">
+            <Button variant="outline" className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
+              Katalog bez registrace <ChevronRight className="h-4 w-4 text-blue-600" />
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
