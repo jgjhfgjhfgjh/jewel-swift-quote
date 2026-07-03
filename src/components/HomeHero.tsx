@@ -57,7 +57,7 @@ export function HomeHero() {
   };
 
   return (
-    <div className="mt-8 sm:mt-10 flex flex-col items-center px-6 text-center">
+    <div className="mt-6 sm:mt-8 flex flex-col items-center px-6 text-center">
       {/* CTAs — compact, light */}
       <div className="flex flex-col gap-2.5 justify-center w-full max-w-[280px] mx-auto">
         {/* B2B CTA — hidden for approved partners. A B2B lead (registration

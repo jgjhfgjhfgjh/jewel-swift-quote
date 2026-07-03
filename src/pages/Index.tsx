@@ -108,8 +108,10 @@ const Index = () => {
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">
         {viewMode === 'home' ? (
           <>
-            {/* pb lifts the content slightly above the optical centre */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 pb-[9vh] text-center">
+            {/* First screen: subtract the announcement-bar offset so nothing gets
+                pushed below the fold; pt guarantees breathing room on short
+                (zoomed) displays; pb lifts content slightly above the centre. */}
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pt-10 sm:pt-12 pb-[9vh] text-center">
               <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.12] text-3xl sm:text-4xl lg:text-5xl max-w-3xl text-foreground">
                 Přístup ke světovým brandům za velkoobchodní ceny.
               </h1>
