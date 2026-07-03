@@ -115,15 +115,19 @@ const Index = () => {
               <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl max-w-5xl text-foreground">
                 Sell Luxury with Enterprise Technology
               </h1>
+              <h2 className="mt-6 sm:mt-8 font-display font-medium tracking-tight text-balance leading-tight text-xl sm:text-2xl lg:text-3xl max-w-3xl text-muted-foreground">
+                Launch faster, sell more, automate, save hours
+              </h2>
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
-            {/* CTAs + bullets moved below the fold */}
-            <section className="flex flex-col items-center px-6 pt-12 pb-16 sm:pt-16 sm:pb-20">
-              <HomeHero />
+            {/* Second screen: brand carousel (logos + product previews) then CTAs */}
+            <section className="flex flex-col items-center px-0 pt-12 pb-16 sm:pt-16 sm:pb-20 gap-10 sm:gap-14">
+              <BrandShowcaseCarousel />
+              <div className="w-full px-6">
+                <HomeHero />
+              </div>
             </section>
-
-            <BrandShowcaseCarousel />
           </>
         ) : (
           <div className="pt-5 sm:pt-7"><HeroBanner compact /></div>
