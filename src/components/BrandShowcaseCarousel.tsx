@@ -97,16 +97,9 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
         ))}
       </div>
 
-      {/* CTA — free-floating, centered (no card frame to fill) */}
-      <div className="p-4 shrink-0 flex justify-center transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5">
-        <button
-          type="button"
-          onClick={() => navigate(`/brands/${brand.slug}`)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-8 py-2.5 text-sm font-semibold text-white hover:bg-zinc-800 transition-colors min-w-[200px]"
-        >
-          Zobrazit značku <ArrowRight className="h-3.5 w-3.5" />
-        </button>
-      </div>
+      {/* CTA removed — carousel shows only logo, product image, and name */}
+      <div className="p-4 shrink-0" />
+
     </div>
   );
 }
