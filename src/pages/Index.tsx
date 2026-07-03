@@ -115,8 +115,8 @@ const Index = () => {
               <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl max-w-5xl text-foreground">
                 Sell Luxury with Enterprise Technology
               </h1>
-              <h2 className="mt-6 sm:mt-8 font-display font-medium tracking-tight text-balance leading-tight text-xl sm:text-2xl lg:text-3xl max-w-3xl text-muted-foreground">
-                Launch faster, sell more, automate, save hours
+              <h2 className="mt-6 sm:mt-8 font-display font-semibold tracking-tight text-balance leading-tight text-xl sm:text-2xl lg:text-3xl max-w-3xl text-muted-foreground">
+                LAUNCH FASTER SELL MORE AUTOMATE SAVE HOURS
               </h2>
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
