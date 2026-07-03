@@ -111,15 +111,18 @@ const Index = () => {
             {/* First screen: subtract the announcement-bar offset so nothing gets
                 pushed below the fold; pt guarantees breathing room on short
                 (zoomed) displays; pb lifts content slightly above the centre. */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pt-10 sm:pt-12 pb-[9vh] text-center">
-              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.12] text-3xl sm:text-4xl lg:text-5xl max-w-3xl text-foreground">
-                Přístup ke světovým brandům za velkoobchodní ceny.
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 text-center">
+              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl max-w-5xl text-foreground">
+                Sell Luxury with Enterprise Technology
               </h1>
-              {/* CTAs + bullets right under the headline (Apple-style first screen) */}
-              <HomeHero />
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
+            {/* CTAs + bullets moved below the fold */}
+            <section className="flex flex-col items-center px-6 pt-12 pb-16 sm:pt-16 sm:pb-20">
+              <HomeHero />
+            </section>
+
             <BrandShowcaseCarousel />
           </>
         ) : (
