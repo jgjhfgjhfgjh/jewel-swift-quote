@@ -112,7 +112,9 @@ const Index = () => {
                 pushed below the fold; pt guarantees breathing room on short
                 (zoomed) displays; pb lifts content slightly above the centre. */}
             <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 text-center">
-              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl max-w-5xl text-foreground">
+              {/* Size follows viewport HEIGHT (clamp on vh) so it stays huge on
+                  tall displays but never overflows short / zoomed ones. */}
+              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-4xl sm:text-[clamp(2.75rem,7vh,5.5rem)] max-w-5xl text-foreground">
                 Sell Luxury with Enterprise Technology
               </h1>
               <h2 className="mt-6 sm:mt-8 font-display font-medium tracking-tight text-balance leading-tight text-base sm:text-lg lg:text-xl max-w-3xl text-black" style={{ wordSpacing: '0.3em' }}>
