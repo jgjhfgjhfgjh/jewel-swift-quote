@@ -106,10 +106,12 @@ const Index = () => {
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">
         {viewMode === 'home' ? (
           <>
-            <section className="flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 text-center">
-              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-4xl sm:text-6xl lg:text-7xl max-w-5xl text-foreground">
+            <section className="relative flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 text-center">
+              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-3xl sm:text-5xl lg:text-6xl max-w-4xl text-foreground">
                 Přístup ke světovým brandům za velkoobchodní ceny.
               </h1>
+              {/* CTAs + bullets right under the headline (Apple-style first screen) */}
+              <HomeHero />
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-6 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
@@ -119,9 +121,6 @@ const Index = () => {
           <div className="pt-5 sm:pt-7"><HeroBanner compact /></div>
         )}
       </div>
-
-      {/* Hero — logo, tagline, CTAs, bullets — between the banner and the apps cards */}
-      {viewMode === 'home' && <HomeHero />}
 
       {/* Apps/tools cards */}
       {viewMode === 'home' && (
