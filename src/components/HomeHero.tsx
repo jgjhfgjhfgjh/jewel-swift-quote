@@ -57,9 +57,9 @@ export function HomeHero() {
   };
 
   return (
-    <div className="mt-6 sm:mt-10 mb-2 flex flex-col items-center px-6 text-center">
-      {/* CTAs */}
-      <div className="flex flex-col gap-3 justify-center w-full max-w-sm mx-auto">
+    <div className="mt-8 sm:mt-10 flex flex-col items-center px-6 text-center">
+      {/* CTAs — compact, light */}
+      <div className="flex flex-col gap-2.5 justify-center w-full max-w-[280px] mx-auto">
         {/* B2B CTA — hidden for approved partners. A B2B lead (registration
             submitted) sees a live 24h countdown instead of a clickable CTA;
             other logged-in users get a "finish your registration" nudge. */}
@@ -69,7 +69,7 @@ export function HomeHero() {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-1.5 w-full">
-            <Button size="lg" className="w-full gap-2 px-8" onClick={handleB2BCta}>
+            <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
               {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
             </Button>
             {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
@@ -83,7 +83,7 @@ export function HomeHero() {
              button) → same dark KATALOG CTA as the navbar, with the live
              in-stock count label. */
           <div className="flex flex-col items-center gap-1.5 w-full">
-            <Button size="lg" className="w-full gap-2 px-8" onClick={openCatalog}>
+            <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
               KATALOG 2026 <ArrowRight className="h-4 w-4" />
             </Button>
             {/* Pure-information label — stejný font/velikost jako text pod CTA v brand detailu */}
@@ -94,7 +94,7 @@ export function HomeHero() {
             )}
           </div>
         ) : (
-          <Button size="lg" variant="outline" className="w-full gap-2 px-8" onClick={openCatalog}>
+          <Button variant="outline" className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
             Prohlédnout katalog
           </Button>
         )}
@@ -102,14 +102,14 @@ export function HomeHero() {
 
       {/* Bullets — approved partners get next-step nudges instead of signup reassurances */}
       {isB2bApproved ? (
-        <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
+        <ul className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
           <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
           <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
           <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Spusť e-shop do 48 h</li>
           <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
         </ul>
       ) : (
-        <ul className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/70">
+        <ul className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
           <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Registrace zdarma</li>
           <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Schválení do 24 hodin</li>
           <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>

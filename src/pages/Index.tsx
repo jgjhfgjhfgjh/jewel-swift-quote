@@ -77,7 +77,9 @@ const Index = () => {
   }, [needsAuthForCatalog, openAuthModal, setViewMode]);
   if (needsAuthForCatalog) return null;
 
-  if (loading) {
+  // Product data is only needed by the catalog view — the homepage renders
+  // instantly (no skeleton flash before the headline).
+  if (loading && viewMode === 'catalog') {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
@@ -106,8 +108,9 @@ const Index = () => {
       <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">
         {viewMode === 'home' ? (
           <>
-            <section className="relative flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 text-center">
-              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.08] text-3xl sm:text-5xl lg:text-6xl max-w-4xl text-foreground">
+            {/* pb lifts the content slightly above the optical centre */}
+            <section className="relative flex min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100svh-6rem)] lg:min-h-[calc(100svh-152px)] flex-col items-center justify-center px-6 pb-[9vh] text-center">
+              <h1 className="font-display font-semibold tracking-tight text-balance leading-[1.12] text-3xl sm:text-4xl lg:text-5xl max-w-3xl text-foreground">
                 Přístup ke světovým brandům za velkoobchodní ceny.
               </h1>
               {/* CTAs + bullets right under the headline (Apple-style first screen) */}
