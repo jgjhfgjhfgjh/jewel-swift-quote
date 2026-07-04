@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
@@ -11,7 +11,19 @@ interface BrandCardData {
   slug: string;
   domain?: string;
   count: number;
+  /** Raw manufacturer strings folded into this brand — used to drive the catalog filter */
+  rawManufacturers: string[];
   products: { id: string; name: string; img: string }[];
+}
+
+interface BrandShowcaseCarouselProps {
+  /** Filter mode (catalog): clicking a card toggles the brand as an active
+   *  filter (blue check) instead of navigating to the brand-detail page. */
+  selectable?: boolean;
+  /** Raw manufacturer strings currently active in the filter bar. */
+  selectedBrands?: string[];
+  /** Toggle handler — receives all raw manufacturer strings of the brand. */
+  onToggleBrand?: (rawManufacturers: string[]) => void;
 }
 
 /** Card sizing — identical to the hero banner cards */
@@ -21,7 +33,14 @@ const CARD_CLASS =
 const ROTATE_MS = 1800;
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
-function BrandCard({ brand }: { brand: BrandCardData }) {
+function BrandCard({
+  brand, selectable, active, onSelect,
+}: {
+  brand: BrandCardData;
+  selectable?: boolean;
+  active?: boolean;
+  onSelect?: () => void;
+}) {
   const navigate = useNavigate();
   const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
@@ -48,9 +67,19 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
     <div
       ref={rootRef}
       data-card
-      onClick={() => navigate(`/brands/${brand.slug}`)}
-      className={`group/card relative flex flex-col cursor-pointer ${CARD_CLASS}`}
+      onClick={() => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
+      aria-pressed={selectable ? active : undefined}
+      className={`group/card relative flex flex-col cursor-pointer transition-shadow ${CARD_CLASS} ${
+        selectable && active ? 'ring-2 ring-blue-500 ring-offset-2 rounded-sm' : ''
+      }`}
     >
+      {/* Active-filter check — same blue fajfka used on the homepage bullets */}
+      {selectable && active && (
+        <div className="absolute right-2 top-1 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
+          <Check className="h-4 w-4 text-blue-600" strokeWidth={3} />
+        </div>
+      )}
+
       {/* Brand logo */}
       <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
         {brand.domain ? (
@@ -105,7 +134,9 @@ function BrandCard({ brand }: { brand: BrandCardData }) {
 }
 
 /* ─── Carousel ─── */
-export function BrandShowcaseCarousel() {
+export function BrandShowcaseCarousel({
+  selectable, selectedBrands, onToggleBrand,
+}: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
 
   // Live brand catalog (bound to the feed) — all brands with product previews,
@@ -119,12 +150,18 @@ export function BrandShowcaseCarousel() {
         slug: e.slug,
         domain: e.domain,
         count: e.count,
+        rawManufacturers: e.rawManufacturers,
         products: e.products
           .filter((p) => p.img)
           .slice(0, 10)
           .map((p) => ({ id: p.id, name: p.name, img: p.img })),
       }));
   }, [catalog]);
+
+  // A brand is "active" when any of its raw manufacturer strings is selected
+  // in the filter bar. Toggling adds/removes all of them at once.
+  const selectedSet = useMemo(() => new Set(selectedBrands ?? []), [selectedBrands]);
+  const isActive = (b: BrandCardData) => b.rawManufacturers.some((m) => selectedSet.has(m));
 
   // Render the brand cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);
@@ -180,7 +217,13 @@ export function BrandShowcaseCarousel() {
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((brand, i) => (
-          <BrandCard key={`${brand.key}-${i}`} brand={brand} />
+          <BrandCard
+            key={`${brand.key}-${i}`}
+            brand={brand}
+            selectable={selectable}
+            active={selectable && isActive(brand)}
+            onSelect={() => onToggleBrand?.(brand.rawManufacturers)}
+          />
         ))}
       </div>
 

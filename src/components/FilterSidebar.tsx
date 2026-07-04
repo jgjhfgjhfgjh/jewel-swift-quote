@@ -403,16 +403,11 @@ export function FilterSidebar({
 
   // Group labels (Czech-first; could be moved to i18n later)
   const groupLabels = {
+    brands: t.brands,
     commerce: 'Obchod',
     commerceSub: 'Slevy a akce',
-    sortiment: 'Sortiment',
-    sortimentSub: 'Značka · kategorie · určení · původ · balení',
-    jewelry: 'Šperky',
-    jewelrySub: 'Kámen · ryzost · drahokovy',
-    watches: 'Hodinky',
-    watchesSub: 'Strojek · sklo · vodotěsnost · funkce',
-    common: 'Společné vlastnosti',
-    commonSub: 'Barva · velikost · design · materiál',
+    detail: 'Podrobné vyhledávání',
+    detailSub: 'Kategorie · určení · šperky · hodinky · vlastnosti',
   };
 
   const content = (
@@ -431,6 +426,39 @@ export function FilterSidebar({
       >
         <div className="px-3 pb-3 pt-1">
           <LanguagePicker />
+        </div>
+      </MobileMinimalGroup>
+
+      {/* === ZNAČKY — separate top-level group === */}
+      <MobileMinimalGroup
+        value="mob-brands"
+        label={groupLabels.brands}
+        activeCount={activeBrandsCount}
+        defaultOpen={activeBrandsCount > 0}
+      >
+        <div className="px-3 pb-3 pt-1">
+          {activeBrandsCount > 0 && (
+            <button
+              onClick={() => setSelectedBrands([])}
+              className="mb-2 text-sm text-primary hover:underline font-medium"
+            >
+              {t.allBrands}
+            </button>
+          )}
+          <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
+            {sortedManufacturers.map((m) => (
+              <label
+                key={m.name}
+                className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
+              >
+                <Checkbox
+                  checked={selectedBrands.includes(m.name)}
+                  onCheckedChange={() => toggleBrand(m.name)}
+                />
+                <span className="truncate">{m.name}</span>
+              </label>
+            ))}
+          </div>
         </div>
       </MobileMinimalGroup>
 
@@ -468,46 +496,17 @@ export function FilterSidebar({
         </MobileMinimalGroup>
       )}
 
-      {/* === SORTIMENT (brand / category / gender / origin / packaging) === */}
+      {/* === PODROBNÉ VYHLEDÁVÁNÍ — everything except brands === */}
       <MobileMinimalGroup
-        value="mob-sortiment"
-        label={groupLabels.sortiment}
-        activeCount={activeBrandsCount + activeCategoryCount + activeGendersCount + sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
+        value="mob-detail"
+        label={groupLabels.detail}
+        activeCount={
+          activeCategoryCount + activeGendersCount +
+          [...sortimentExtraParams, ...jewelryParams, ...watchParams, ...commonParams]
+            .reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)
+        }
       >
         <Accordion type="multiple" className="w-full">
-          <AccordionItem value="brands" className="border-b px-2">
-            <AccordionTrigger className="px-2 py-3 hover:no-underline">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t.brands}
-                <ActiveBadge count={activeBrandsCount} />
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="px-2 pb-3">
-              {activeBrandsCount > 0 && (
-                <button
-                  onClick={() => setSelectedBrands([])}
-                  className="mb-2 text-sm text-primary hover:underline font-medium"
-                >
-                  {t.allBrands}
-                </button>
-              )}
-              <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-muted">
-                {sortedManufacturers.map((m) => (
-                  <label
-                    key={m.name}
-                    className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-muted transition-colors"
-                  >
-                    <Checkbox
-                      checked={selectedBrands.includes(m.name)}
-                      onCheckedChange={() => toggleBrand(m.name)}
-                    />
-                    <span className="truncate">{m.name}</span>
-                  </label>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
           <AccordionItem value="categories" className="border-b px-2">
             <AccordionTrigger className="px-2 py-3 hover:no-underline">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -568,49 +567,13 @@ export function FilterSidebar({
             </AccordionItem>
           )}
 
-          {/* Země původu, balení (and similar) — assortment-level extras */}
+          {/* Assortment extras (původ, balení) → jewelry → watches → common */}
           {sortimentExtraParams.map(renderParamItem)}
+          {jewelryParams.map(renderParamItem)}
+          {watchParams.map(renderParamItem)}
+          {commonParams.map(renderParamItem)}
         </Accordion>
       </MobileMinimalGroup>
-
-      {/* === ŠPERKY — strict jewelry-only attributes === */}
-      {jewelryParams.length > 0 && (
-        <MobileMinimalGroup
-          value="mob-jewelry"
-          label={groupLabels.jewelry}
-          activeCount={jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-        >
-          <Accordion type="multiple" className="w-full">
-            {jewelryParams.map(renderParamItem)}
-          </Accordion>
-        </MobileMinimalGroup>
-      )}
-
-      {/* === HODINKY — strict watch-only attributes === */}
-      {watchParams.length > 0 && (
-        <MobileMinimalGroup
-          value="mob-watches"
-          label={groupLabels.watches}
-          activeCount={watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-        >
-          <Accordion type="multiple" className="w-full">
-            {watchParams.map(renderParamItem)}
-          </Accordion>
-        </MobileMinimalGroup>
-      )}
-
-      {/* === SPOLEČNÉ — attributes that apply to both families === */}
-      {commonParams.length > 0 && (
-        <MobileMinimalGroup
-          value="mob-common"
-          label={groupLabels.common}
-          activeCount={commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0)}
-        >
-          <Accordion type="multiple" className="w-full">
-            {commonParams.map(renderParamItem)}
-          </Accordion>
-        </MobileMinimalGroup>
-      )}
 
       {/* === FOOTER — reset + AI help card so the column doesn't end on a filter === */}
       <div className="filter-footer">
@@ -686,29 +649,8 @@ export function FilterSidebar({
     );
   };
 
-  // Panels for each bar tab — multi-column mega-menu layout
-  const langPanel = (
-    <div className="filter-mega-panel-inner">
-      <div className="filter-mega-col" style={{ maxWidth: 'none' }}>
-        <div className="filter-mega-col-title"><span>{t.language}</span></div>
-        <div className="grid grid-cols-3 gap-1.5" style={{ maxWidth: 540 }}>
-          {ALL_LANGS.map((l) => (
-            <button
-              key={l}
-              onClick={() => setLang(l as Lang)}
-              className={`flex items-center gap-2 rounded-md px-2.5 py-2 text-xs font-medium transition-colors ${
-                lang === l ? 'bg-zinc-900 text-white' : 'hover:bg-zinc-100 text-zinc-700'
-              }`}
-            >
-              <span className="text-base leading-none">{flags[l as Lang]}</span>
-              <span className="truncate">{langNames[l as Lang]}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
+  // Panels for each bar tab — multi-column mega-menu layout.
+  // Language lives in the navbar globe menu, so it is no longer a filter tab.
   const obchodPanel = (
     <div className="filter-mega-panel-inner">
       <div className="filter-mega-col">
@@ -731,7 +673,8 @@ export function FilterSidebar({
     </div>
   );
 
-  const sortimentPanel = (
+  // === ZNAČKY — brands only, its own bar tab ===
+  const brandsPanel = (
     <div className="filter-mega-panel-inner">
       <div className="filter-mega-col">
         <div className="filter-mega-col-title">
@@ -755,7 +698,12 @@ export function FilterSidebar({
           ))}
         </div>
       </div>
+    </div>
+  );
 
+  // === PODROBNÉ VYHLEDÁVÁNÍ — everything except brands, folded into one tab ===
+  const detailPanel = (
+    <div className="filter-mega-panel-inner">
       <div className="filter-mega-col">
         <div className="filter-mega-col-title">
           <span>{t.categories}</span>
@@ -795,42 +743,25 @@ export function FilterSidebar({
       )}
 
       {sortimentExtraParams.map(renderParamColumn)}
+      {jewelryParams.map(renderParamColumn)}
+      {watchParams.map(renderParamColumn)}
+      {commonParams.map(renderParamColumn)}
     </div>
   );
 
-  const jewelryPanel = (
-    <div className="filter-mega-panel-inner">{jewelryParams.map(renderParamColumn)}</div>
-  );
-  const watchesPanel = (
-    <div className="filter-mega-panel-inner">{watchParams.map(renderParamColumn)}</div>
-  );
-  const commonPanel = (
-    <div className="filter-mega-panel-inner">{commonParams.map(renderParamColumn)}</div>
-  );
+  const detailActiveCount =
+    activeCategoryCount + activeGendersCount +
+    [...sortimentExtraParams, ...jewelryParams, ...watchParams, ...commonParams]
+      .reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
 
-  const sortimentActiveCount =
-    activeBrandsCount + activeCategoryCount + activeGendersCount +
-    sortimentExtraParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
-  const jewelryActiveCount = jewelryParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
-  const watchesActiveCount = watchParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
-  const commonActiveCount = commonParams.reduce((n, p) => n + (selectedParams[p.nazev]?.length ?? 0), 0);
-
+  // Bar order requested: Značky · Obchod · Podrobné vyhledávání
   const barTabs: { id: string; label: string; count: number; panel: React.ReactNode }[] = [
-    { id: 'lang', label: t.language, count: 0, panel: langPanel },
+    { id: 'brands', label: groupLabels.brands, count: activeBrandsCount, panel: brandsPanel },
   ];
   if (user) {
     barTabs.push({ id: 'obchod', label: groupLabels.commerce, count: activeDiscountCount, panel: obchodPanel });
   }
-  barTabs.push({ id: 'sortiment', label: groupLabels.sortiment, count: sortimentActiveCount, panel: sortimentPanel });
-  if (jewelryParams.length > 0) {
-    barTabs.push({ id: 'jewelry', label: groupLabels.jewelry, count: jewelryActiveCount, panel: jewelryPanel });
-  }
-  if (watchParams.length > 0) {
-    barTabs.push({ id: 'watches', label: groupLabels.watches, count: watchesActiveCount, panel: watchesPanel });
-  }
-  if (commonParams.length > 0) {
-    barTabs.push({ id: 'common', label: groupLabels.common, count: commonActiveCount, panel: commonPanel });
-  }
+  barTabs.push({ id: 'detail', label: groupLabels.detail, count: detailActiveCount, panel: detailPanel });
   const activeBarTab = barTabs.find((tb) => tb.id === activeTab);
 
   const desktopBar = (
