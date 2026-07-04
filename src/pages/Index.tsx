@@ -111,22 +111,21 @@ const Index = () => {
             {/* First screen: subtract the announcement-bar offset so nothing gets
                 pushed below the fold; pt guarantees breathing room on short
                 (zoomed) displays; pb lifts content slightly above the centre. */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 text-center">
-              {/* Size follows viewport HEIGHT (clamp on vh) so it stays huge on
+            {/* pb lifts the headline slightly above the true viewport centre;
+                grows with the navbar offset so it stays above centre on desktop */}
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[10vh] sm:pb-[18vh] lg:pb-[26vh] text-center">
+              {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones. */}
-              <h1 className="font-display font-semibold tracking-tight leading-[1.08] text-4xl sm:text-[clamp(2.75rem,7vh,5.5rem)] max-w-5xl text-foreground">
-                Sell Luxury with<br />Enterprise Technology
+              <h1 className="font-display font-semibold tracking-tight leading-[1.05] text-[2.75rem] sm:text-[clamp(3rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
+                Sell Luxury with<br />Enterprise Technology.
               </h1>
-              {/* Tagline sits down by the scroll cue, grouped into phrases */}
-              <h2 className="absolute bottom-14 left-1/2 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:text-sm">
+              {/* Tagline sits down by the scroll cue, grouped into phrases (no dots) */}
+              <div className="absolute inset-x-0 bottom-14 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:gap-x-6 sm:text-sm">
                 <span className="whitespace-nowrap">Launch Faster</span>
-                <span className="text-zinc-300">·</span>
                 <span className="whitespace-nowrap">Sell More</span>
-                <span className="text-zinc-300">·</span>
                 <span className="whitespace-nowrap">Automate</span>
-                <span className="text-zinc-300">·</span>
                 <span className="whitespace-nowrap">Save Hours</span>
-              </h2>
+              </div>
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-5 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
@@ -172,6 +171,23 @@ const Index = () => {
       {viewMode === 'catalog' && (
         <div className="relative z-10 bg-white flex flex-col flex-1 animate-fade-in">
           <FilterSidebar {...fp} desktopOnly />
+          {/* Brand showcase — same carousel as the homepage, but here each card
+              is a brand filter: clicking checks it (blue fajfka) and writes the
+              brand into the filter bar instead of opening the brand-detail page. */}
+          <div className="border-b bg-white pt-3 pb-1">
+            <BrandShowcaseCarousel
+              selectable
+              selectedBrands={selectedBrands}
+              onToggleBrand={(raws) => {
+                const anyActive = raws.some((m) => selectedBrands.includes(m));
+                setSelectedBrands(
+                  anyActive
+                    ? selectedBrands.filter((m) => !raws.includes(m))
+                    : Array.from(new Set([...selectedBrands, ...raws])),
+                );
+              }}
+            />
+          </div>
           <ProductGrid
             filters={filters}
             wishlistIds={wishlistIds}
