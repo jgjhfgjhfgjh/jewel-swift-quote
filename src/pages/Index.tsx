@@ -113,14 +113,15 @@ const Index = () => {
                 (zoomed) displays; pb lifts content slightly above the centre. */}
             {/* pb lifts the headline slightly above the true viewport centre;
                 grows with the navbar offset so it stays above centre on desktop */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[10vh] sm:pb-[18vh] lg:pb-[26vh] text-center">
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[20vh] sm:pb-[18vh] lg:pb-[26vh] text-center">
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
-                  tall displays but never overflows short / zoomed ones. */}
-              <h1 className="font-display font-semibold tracking-tight leading-[1.05] text-[2.75rem] sm:text-[clamp(3rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
+                  tall displays but never overflows short / zoomed ones.
+                  Mobile: sized so "Sell Luxury with" fits on one line. */}
+              <h1 className="font-display font-semibold tracking-tight leading-[1.1] text-[2rem] sm:text-[clamp(3rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
                 Sell Luxury with<br />Enterprise Technology.
               </h1>
-              {/* Tagline sits down by the scroll cue, grouped into phrases (no dots) */}
-              <div className="absolute inset-x-0 bottom-14 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:gap-x-6 sm:text-sm">
+              {/* Tagline by the scroll cue — stacked on mobile, one row on desktop */}
+              <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center gap-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1 sm:bottom-14 sm:text-sm">
                 <span className="whitespace-nowrap">Launch Faster</span>
                 <span className="whitespace-nowrap">Sell More</span>
                 <span className="whitespace-nowrap">Automate</span>
