@@ -175,7 +175,20 @@ const Index = () => {
           {/* Brand showcase — same carousel as the homepage, but here each card
               is a brand filter: clicking checks it (blue fajfka) and writes the
               brand into the filter bar instead of opening the brand-detail page. */}
-          <div className="border-b bg-white pt-3 pb-1">
+          <div className="border-b bg-white pt-2 pb-1">
+            <div className="flex items-center justify-between px-3 sm:px-5 lg:px-8 mb-1.5">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Filtrovat podle značky
+              </p>
+              {selectedBrands.length > 0 && (
+                <button
+                  onClick={() => setSelectedBrands([])}
+                  className="text-[11px] font-medium text-blue-600 hover:underline"
+                >
+                  Zrušit ({selectedBrands.length})
+                </button>
+              )}
+            </div>
             <BrandShowcaseCarousel
               selectable
               selectedBrands={selectedBrands}

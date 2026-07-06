@@ -26,9 +26,12 @@ interface BrandShowcaseCarouselProps {
   onToggleBrand?: (rawManufacturers: string[]) => void;
 }
 
-/** Card sizing — identical to the hero banner cards */
+/** Showcase sizing (homepage) — identical to the hero banner cards */
 const CARD_CLASS =
   'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[390px] sm:h-[440px] lg:h-[480px]';
+/** Compact sizing (catalog filter) — mobile unchanged, desktop ~half height */
+const CARD_CLASS_COMPACT =
+  'shrink-0 w-[80%] sm:w-[190px] lg:w-[210px] h-[390px] sm:h-[230px] lg:h-[240px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
@@ -41,6 +44,12 @@ function BrandCard({
   active?: boolean;
   onSelect?: () => void;
 }) {
+  // In filter (selectable) mode the card is compact — tighter spacing and no
+  // centre-scale animation, so it reads as a control rather than a showcase.
+  const compact = !!selectable;
+  const cardClass = compact ? CARD_CLASS_COMPACT : CARD_CLASS;
+  const scale = compact ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110';
+  const imgGap = compact ? 'mt-4 sm:mt-3 lg:mt-3' : 'mt-[30px] sm:mt-10 lg:mt-[60px]';
   const navigate = useNavigate();
   const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
@@ -69,19 +78,19 @@ function BrandCard({
       data-card
       onClick={() => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
       aria-pressed={selectable ? active : undefined}
-      className={`group/card relative flex flex-col cursor-pointer transition-shadow ${CARD_CLASS} ${
+      className={`group/card relative flex flex-col cursor-pointer transition-shadow ${cardClass} ${
         selectable && active ? 'ring-2 ring-blue-500 ring-offset-2 rounded-sm' : ''
       }`}
     >
       {/* Active-filter check — same blue fajfka used on the homepage bullets */}
       {selectable && active && (
-        <div className="absolute right-2 top-1 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
+        <div className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
           <Check className="h-4 w-4 text-blue-600" strokeWidth={3} />
         </div>
       )}
 
       {/* Brand logo */}
-      <div className="h-14 sm:h-16 flex items-center justify-center px-6 pt-1 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
+      <div className={`${compact ? 'h-10 pt-2' : 'h-14 sm:h-16 pt-1'} flex items-center justify-center px-6 shrink-0 ${scale}`}>
         {brand.domain ? (
           <BrandLogo
             name={brand.name}
@@ -97,7 +106,7 @@ function BrandCard({
       </div>
 
       {/* Crossfading product image — bigger gap below the logo */}
-      <div className="relative flex-1 mx-4 mt-[30px] sm:mt-10 lg:mt-[60px] mb-2 origin-bottom transition-transform duration-500 ease-out group-data-[center]/card:scale-110">
+      <div className={`relative flex-1 mx-4 ${imgGap} mb-2 origin-bottom ${scale}`}>
         {brand.products.map((p, i) => (
           <div
             key={p.id}
@@ -112,7 +121,7 @@ function BrandCard({
       </div>
 
       {/* Crossfading product name */}
-      <div className="relative h-5 mx-4 shrink-0 transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5">
+      <div className={`relative h-5 mx-4 shrink-0 ${compact ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5'}`}>
         {brand.products.map((p, i) => (
           <p
             key={p.id}
@@ -127,7 +136,7 @@ function BrandCard({
       </div>
 
       {/* CTA removed — carousel shows only logo, product image, and name */}
-      <div className="p-4 shrink-0" />
+      <div className={`${compact ? 'p-1.5' : 'p-4'} shrink-0`} />
 
     </div>
   );
