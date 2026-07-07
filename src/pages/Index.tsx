@@ -132,16 +132,9 @@ const Index = () => {
                 Sell Luxury with<br />Enterprise Technology.
               </h1>
 
-              {/* Sub-headline — neon phosphorescent "Product Intelligence Platform" + verify note */}
+              {/* Sub-headline — "Product Intelligence Platform" in swelt primary blue + verify note */}
               <div className="mt-5 flex flex-col items-center gap-1 sm:mt-7">
-                <h2
-                  className="font-display text-sm font-extrabold uppercase tracking-[0.18em] bg-clip-text text-transparent animate-[neonShift_6s_linear_infinite] sm:text-xl"
-                  style={{
-                    backgroundImage: 'linear-gradient(90deg,#22d3ee,#8b5cf6,#ec4899,#39ff14,#22d3ee)',
-                    backgroundSize: '200% 100%',
-                    filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.35))',
-                  }}
-                >
+                <h2 className="font-display text-sm font-extrabold uppercase tracking-[0.18em] text-blue-600 sm:text-xl">
                   Product Intelligence Platform
                 </h2>
                 <span className="text-xs text-muted-foreground sm:text-sm">Verify Account in 24h</span>

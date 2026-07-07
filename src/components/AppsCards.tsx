@@ -15,6 +15,8 @@ interface Tool {
   to?: string;
   action?: 'ai';
   badge?: Badge;
+  /** swelt primary-blue accent (icon + title) — echoes the hero H2 */
+  accent?: boolean;
 }
 
 /* ── Badges ── */
@@ -65,7 +67,7 @@ export function AppsCards() {
     { icon: Tag, title: 'DEAL nabídky', desc: 'Closeout výprodeje za mimořádné ceny', to: '/deals' },
     // Bottom row
     { icon: HandCoins, title: 'Nákup bez registrace', desc: 'Velkoobchodní ceny, stačí IČO', to: '/luxury' },
-    { icon: BarChart3, title: 'Product Intelligence', desc: 'Feed, trendová data a AI doporučení pro váš sortiment', to: '/feed' },
+    { icon: BarChart3, title: 'Product Intelligence', desc: 'Feed, trendová data a AI doporučení pro váš sortiment', to: '/feed', accent: true },
     { icon: Server, title: 'MCP server', desc: 'Napojte AI agenty na náš katalog přes MCP.', to: '/feed', badge: 'new' },
   ];
 
@@ -125,14 +127,15 @@ export function AppsCards() {
               >
                 {t.badge === 'trending' && <TrendingBadge />}
                 <div className="flex w-full items-start justify-between">
-                  <Icon className="w-6 h-6 text-white/80" strokeWidth={1.75} />
+                  <Icon className={`w-6 h-6 ${t.accent ? 'text-blue-500' : 'text-white/80'}`} strokeWidth={1.75} />
                   {t.badge === 'new' && <NewBadge />}
                 </div>
                 <div className="min-w-0 w-full">
-                  <h3 className="text-base font-semibold leading-6 text-white tracking-[-0.16px] sm:truncate">
+                  <h3 className={`text-base font-semibold leading-6 tracking-[-0.16px] sm:truncate ${t.accent ? 'text-blue-500' : 'text-white'}`}>
                     {t.title}
                   </h3>
-                  <p className="text-xs font-normal leading-[18px] text-[#898a8b] sm:line-clamp-2">
+                  {/* Reserve two lines so single-line cards keep their titles aligned across the row */}
+                  <p className="text-xs font-normal leading-[18px] text-[#898a8b] sm:line-clamp-2 sm:min-h-[36px]">
                     {t.desc}
                   </p>
                 </div>
