@@ -29,6 +29,11 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
   50% { transform: translateX(2px); opacity: 1; }
 }
 
+/* Neon/phosphorescent gradient shimmer for the hero sub-headline */
+@keyframes neonShift {
+  to { background-position: 200% 0; }
+}
+
 
 @layer base {
   :root {

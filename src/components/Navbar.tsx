@@ -24,13 +24,15 @@ interface NavbarProps {
 }
 
 const HOME_NAV_ITEMS = [
-  { path: '/deals',        label: 'DEAL nabídky' },
-  { path: '/velkoobchod', label: 'Velkoobchod' },
-  { path: '/luxury',      label: 'Nákup bez registrace' },
-  { path: '/prestige',    label: 'Luxury' },
-  { path: '/feed',        label: 'Feed' },
-  { path: '/dropshipping',label: 'Dropshipping' },
-  { path: '/support',     label: 'Support' },
+  { path: '/deals',        label: 'Top Deals' },
+  { path: '/velkoobchod',  label: 'Velkoobchod' },
+  { path: '/dropshipping', label: 'Dropshipping' },
+  { path: '/prestige',     label: 'Luxury' },
+  { path: '/luxury',       label: 'Shop Without Registration' },
+  { path: '/feed',         label: 'Feed' },
+  // NEW — placeholder destination (/feed) until dedicated pages exist
+  { path: '/feed?to=product-intelligence', label: 'Product Intelligence' },
+  { path: '/feed?to=mcp',                   label: 'MCP Server' },
 ];
 
 type NavPanelCol = { title: string; links: { label: string; desc: string; path: string }[] };
@@ -38,7 +40,7 @@ type NavPanel = { heading: string; desc: string; cols: NavPanelCol[]; cta: { lab
 
 const NAV_PANELS: Record<string, NavPanel> = {
   '/deals': {
-    heading: 'DEAL nabídky',
+    heading: 'Top Deals',
     desc: 'Časově omezené akce na prémiové hodinky a šperky za výjimečné ceny.',
     cols: [
       { title: 'Kategorie', links: [
@@ -609,21 +611,27 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </div>
           ) : (
             <nav className="flex items-center gap-0.5">
-              {HOME_NAV_ITEMS.map(({ path, label }) => (
-                <button
-                  key={path}
-                  onMouseEnter={() => handleNavEnter(path)}
-                  onMouseLeave={handleNavLeave}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    activeNav === path
-                      ? 'text-zinc-900'
-                      : 'text-zinc-600 hover:text-zinc-900'
-                  }`}
-                >
-                  {label}
-                  <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === path ? 'rotate-180' : ''}`} />
-                </button>
-              ))}
+              {HOME_NAV_ITEMS.map(({ path, label }) => {
+                const hasPanel = !!NAV_PANELS[path];
+                return (
+                  <button
+                    key={path}
+                    onMouseEnter={() => hasPanel && handleNavEnter(path)}
+                    onMouseLeave={handleNavLeave}
+                    onClick={() => { if (!hasPanel) { setActiveNav(null); navigate(path); } }}
+                    className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
+                      activeNav === path
+                        ? 'text-zinc-900'
+                        : 'text-zinc-600 hover:text-zinc-900'
+                    }`}
+                  >
+                    {label}
+                    {hasPanel && (
+                      <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === path ? 'rotate-180' : ''}`} />
+                    )}
+                  </button>
+                );
+              })}
             </nav>
           )}
         </div>

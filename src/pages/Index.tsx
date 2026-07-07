@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, ExternalLink } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -23,6 +24,7 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 const Index = () => {
+  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuthContext();
   const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
@@ -114,19 +116,37 @@ const Index = () => {
             {/* pb lifts the headline slightly above the true viewport centre;
                 grows with the navbar offset so it stays above centre on desktop */}
             <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[20vh] sm:pb-[18vh] lg:pb-[26vh] text-center">
+              {/* MCP Server — mini pill top-right */}
+              <button
+                type="button"
+                onClick={() => navigate('/feed')}
+                className="absolute right-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#2e2833] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#17141b] sm:right-6 sm:top-6"
+              >
+                MCP Server <ExternalLink className="h-3.5 w-3.5" />
+              </button>
+
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones.
                   Mobile: sized so "Sell Luxury with" fits on one line. */}
               <h1 className="font-display font-semibold tracking-tight leading-[1.1] text-[2rem] sm:text-[clamp(3rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
                 Sell Luxury with<br />Enterprise Technology.
               </h1>
-              {/* Tagline by the scroll cue — stacked on mobile, one row on desktop */}
-              <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center gap-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1 sm:bottom-14 sm:text-sm">
-                <span className="whitespace-nowrap">Launch Faster</span>
-                <span className="whitespace-nowrap">Sell More</span>
-                <span className="whitespace-nowrap">Automate</span>
-                <span className="whitespace-nowrap">Save Hours</span>
+
+              {/* Sub-headline — neon phosphorescent "Product Intelligence Platform" + verify note */}
+              <div className="mt-5 flex flex-col items-center gap-1 sm:mt-7">
+                <h2
+                  className="font-display text-sm font-extrabold uppercase tracking-[0.18em] bg-clip-text text-transparent animate-[neonShift_6s_linear_infinite] sm:text-xl"
+                  style={{
+                    backgroundImage: 'linear-gradient(90deg,#22d3ee,#8b5cf6,#ec4899,#39ff14,#22d3ee)',
+                    backgroundSize: '200% 100%',
+                    filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.35))',
+                  }}
+                >
+                  Product Intelligence Platform
+                </h2>
+                <span className="text-xs text-muted-foreground sm:text-sm">Verify Account in 24h</span>
               </div>
+
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-5 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
