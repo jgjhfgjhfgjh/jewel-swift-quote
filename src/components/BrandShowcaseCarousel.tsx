@@ -107,6 +107,13 @@ function BrandCard({
 
       {/* Crossfading product image — bigger gap below the logo */}
       <div className={`relative flex-1 mx-4 ${imgGap} mb-2 origin-bottom ${scale}`}>
+        {n === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center p-2">
+            <span className="font-display text-xl font-black tracking-tight text-muted-foreground/30 text-center">
+              {brand.name}
+            </span>
+          </div>
+        )}
         {brand.products.map((p, i) => (
           <div
             key={p.id}
@@ -148,11 +155,12 @@ export function BrandShowcaseCarousel({
 }: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
 
-  // Live brand catalog (bound to the feed) — all brands with product previews,
-  // ordered by product count
+  // Live brand catalog (bound to the feed) — every brand, ordered by product
+  // count. Brands without preview images stay in (with a text placeholder):
+  // in selectable mode the card is a filter control, so a brand must never
+  // silently disappear from the carousel.
   const brands = useMemo<BrandCardData[]>(() => {
     return catalog
-      .filter((e) => e.products.length > 0)
       .map((e) => ({
         key: e.key,
         name: e.name,

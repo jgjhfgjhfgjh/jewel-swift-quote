@@ -674,9 +674,11 @@ export function FilterSidebar({
   );
 
   // === ZNAČKY — brands only, its own bar tab ===
+  // Full-width grid across the whole mega panel (no scroll column) so every
+  // brand is visible at once and easy to tick.
   const brandsPanel = (
     <div className="filter-mega-panel-inner">
-      <div className="filter-mega-col">
+      <div className="filter-mega-col filter-mega-col--full">
         <div className="filter-mega-col-title">
           <span>{t.brands}</span>
           {activeBrandsCount > 0 && <span className="filter-mega-dot">{activeBrandsCount}</span>}
@@ -686,7 +688,7 @@ export function FilterSidebar({
             {t.allBrands}
           </button>
         )}
-        <div className="filter-mega-scroll">
+        <div className="filter-mega-brands-grid">
           {sortedManufacturers.map((m) => (
             <label key={m.name} className="filter-mega-opt">
               <Checkbox

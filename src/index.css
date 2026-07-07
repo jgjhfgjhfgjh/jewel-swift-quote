@@ -810,6 +810,17 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
   min-width: 170px;
   max-width: 240px;
 }
+/* Značky tab — jediný „sloupec" roztažený přes celou šířku mega panelu */
+.filter-mega-col--full {
+  flex: 1 1 100%;
+  max-width: none;
+}
+/* Všechny značky viditelné naráz — responsivní grid místo scroll sloupce */
+.filter-mega-brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px 16px;
+}
 .filter-mega-col-title {
   display: flex;
   align-items: center;
