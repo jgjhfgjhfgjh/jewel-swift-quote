@@ -1371,4 +1371,95 @@ export const BRAND_STORIES: Record<string, StoryEra[]> = {
       ],
     },
   ],
+
+  'BULOVA': [
+    {
+      heading: '1875: Americká ikona s českými kořeny',
+      items: [
+        {
+          lead: '1875 – Joseph Bulova v New Yorku',
+          text: 'Přistěhovalec z českých Loun Joseph Bulova si otevřel klenotnictví na newyorské Maiden Lane — základ jedné z nejslavnějších amerických hodinářských značek.',
+        },
+        {
+          lead: '1941 – První TV reklama historie',
+          text: 'Vůbec prvním televizním reklamním spotem na světě byla 1. července 1941 desetivteřinová reklama Bulova před zápasem baseballové ligy.',
+        },
+      ],
+    },
+    {
+      heading: 'Accutron a cesta na Měsíc',
+      items: [
+        {
+          lead: '1960 – Ladičkový Accutron',
+          text: 'Elektronický strojek Accutron byl nejpřesnějším hodinkovým strojkem své doby — Bulova technologie létaly i na palubách misí NASA.',
+        },
+        {
+          lead: '1971 – Chronograf na Měsíci',
+          text: 'Astronaut David Scott nosil při misi Apollo 15 na Měsíci osobní chronograf Bulova; odkazuje na něj dnešní řada Lunar Pilot.',
+        },
+        {
+          lead: '2008 – Součást Citizen Group',
+          text: 'Bulova patří do japonské skupiny Citizen a dál rozvíjí vysokofrekvenční quartz Precisionist i archivní retro kolekce.',
+        },
+      ],
+    },
+  ],
+
+  'SWISS MILITARY HANOWA': [
+    {
+      heading: '1963: Hans Noll, Biel/Bienne',
+      items: [
+        {
+          lead: '1963 – Založení Hanowa',
+          text: 'Hans Noll založil firmu ve švýcarském hodinářském centru Biel/Bienne — jméno HANOWA vzniklo ze spojení HAns NOll WAtches.',
+        },
+        {
+          lead: 'Vojenská inspirace',
+          text: 'Řada Swiss Military Hanowa spojila armádní design s certifikací Swiss Made — odolné hodinky s červeným švýcarským křížem ve znaku.',
+        },
+      ],
+    },
+    {
+      heading: 'Swiss Made do terénu i do města',
+      items: [
+        {
+          lead: 'Postaveno na odolnosti',
+          text: 'Robustní ocelová pouzdra, výrazně čitelné ciferníky a vysoká voděodolnost — výbava inspirovaná vojenskými požadavky pro každodenní nošení.',
+        },
+        {
+          lead: 'Dostupné švýcarské hodinky',
+          text: 'Značka prodává v desítkách zemí světa poctivé Swiss Made hodinky za cenu módních značek.',
+        },
+      ],
+    },
+  ],
+
+  'FREDERIQUE CONSTANT': [
+    {
+      heading: '1988: Ženevská vize dostupného luxusu',
+      items: [
+        {
+          lead: '1988 – Peter a Aletta Stasovi',
+          text: 'Nizozemský manželský pár založil v Ženevě značku s misí „accessible luxury" — klasické švýcarské hodinářství za dosažitelnou cenu. První kolekce vyšla v roce 1992.',
+        },
+        {
+          lead: '2004 – Vlastní manufakturní strojek',
+          text: 'Kalibr Heart Beat Manufacture povýšil značku mezi výrobce s in-house strojky; manufaktura v ženevském Plan-les-Ouates jich od té doby vyvinula desítky.',
+        },
+      ],
+    },
+    {
+      heading: 'Klasika i inovace',
+      items: [
+        {
+          lead: '2015 – Horological Smartwatch',
+          text: 'První švýcarské „hodinářské chytré hodinky" spojily klasický analogový ciferník s fitness funkcemi — bez displeje, jen s ručičkami.',
+        },
+        {
+          lead: '2016 – Součást Citizen Group',
+          text: 'Značka se připojila k japonské skupině Citizen, věrná zůstává ženevské manufaktuře a řadám Classics, Slimline či Highlife.',
+        },
+      ],
+    },
+  ],
 };

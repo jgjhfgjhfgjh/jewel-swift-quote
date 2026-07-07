@@ -59,8 +59,16 @@ export const BRANDS: Brand[] = [
   { name: 'Swiss Alpine Military', domain: 'swissalpinemilitary.ch' },
   { name: 'BERING', domain: 'beringtime.com' },
   { name: 'Philipp Plein', domain: 'philipp-plein.com' },
-  // ZEPPELIN: Brandfetch nemá použitelné logo (všechny domény vrací prázdný
-  // bílý obrázek) — záměrně bez záznamu, UI použije textový fallback.
+  { name: 'Bulova', domain: 'bulova.com' },
+  // Swiss Military Hanowa: oficiální doména swissmilitary-hanowa.com vrací
+  // v Brandfetch prázdný obrázek — funkční logo má mateřská hanowa.ch.
+  { name: 'Swiss Military Hanowa', domain: 'hanowa.ch' },
+  // ZEPPELIN: Brandfetch nemá použitelné logo — záměrně bez záznamu, UI použije
+  // textový fallback. Ověřeno znovu 2026-07: zeppelinwatch.com / zeppelin-watch.de /
+  // zeppelinuhren.de vrací prázdný bílý obrázek, pointtec.de logo jiné značky
+  // (bauhaus), zeppelin-watches.com placeholder „Brandfetch"; search API značku
+  // hodinek neindexuje vůbec. Prázdný obrázek se načte bez chyby, takže by
+  // rozbil onError fallback v BrandLogo — proto radši žádný záznam.
 ];
 
 // Premium/luxury watch brands available on request (separate from standard catalog)

@@ -22,7 +22,12 @@ const FEED_URL =
   process.env.FEED_URL ??
   'https://b2bzago.com/exchange/B0AF3240-D6D6-45BA-877A-03609E6A1122/xml/feed.xml';
 
-/** Značky vědomě bez Brandfetch loga — UI používá textový fallback. */
+/**
+ * Značky vědomě bez Brandfetch loga — UI používá textový fallback.
+ * ZEPPELIN: ověřeno 2026-07 — žádná doména nevrací použitelné logo
+ * (prázdný bílý obrázek / logo jiné značky / placeholder), viz komentář
+ * v src/data/brands.ts.
+ */
 const NO_LOGO_OK = new Set(['ZEPPELIN']);
 /** Privátní/velkoobchodní labely bez doložitelné veřejné historie (viz brandStories.ts). */
 const NO_STORY_OK = new Set(['HACKER', 'LEVIEN', 'MANA']);
