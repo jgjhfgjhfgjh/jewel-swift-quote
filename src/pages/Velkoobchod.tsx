@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Handshake, Package, TrendingUp, ShieldCheck, ArrowRight, Check,
   Users, Star, Clock, Globe, Zap, Store, PackageOpen, Rss,
-  HandCoins, ShoppingCart, ChevronDown, Truck, BarChart3, Award,
+  HandCoins, ChevronDown, Truck, BarChart3, Award,
   ShoppingBag, Factory, Lock, BadgeCheck, UserPlus, Eye, CheckCircle, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -120,7 +120,6 @@ const ECOSYSTEM_META = [
   { icon: Rss,         href: '/feed',         color: 'text-primary bg-primary/10' },
   { icon: PackageOpen, href: '/dropshipping', color: 'text-primary bg-primary/10' },
   { icon: HandCoins,   href: '/luxury',       color: 'text-primary bg-primary/10' },
-  { icon: ShoppingCart,href: '/shop',         color: 'text-primary bg-primary/10' },
 ];
 const TRUST_STRIP_ICONS = [ShieldCheck, Truck, Globe, BadgeCheck, Lock];
 
@@ -582,7 +581,7 @@ const Velkoobchod = () => {
               </p>
             </div>
           </Reveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {v.ecosystemItems.map((svc, i) => {
               const Icon = ECOSYSTEM_META[i].icon;
               return (

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, ChevronRight } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
-import { useStockCount } from '@/hooks/useStockCount';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 /** Live countdown to the 24h approval deadline of a submitted B2B registration */
@@ -28,7 +27,6 @@ function ApprovalCountdown({ requestedAt }: { requestedAt: string }) {
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */
 export function HomeHero() {
   const openAuthModal = useStore((s) => s.openAuthModal);
-  const setViewMode = useStore((s) => s.setViewMode);
   const navigate = useNavigate();
   const { user, role, profile, isB2bApproved } = useAuthContext();
 
@@ -39,47 +37,26 @@ export function HomeHero() {
     if (user) navigate('/ucet');
     else openAuthModal('b2b');
   };
-  // Live in-stock product count for the KATALOG CTA badge (approved B2B partners only).
-  const stockCount = useStockCount(!!isB2bApproved);
 
   // B2B lead = submitted B2B registration (lead with IČO), waiting for approval.
   // A plain lead (quick account, no IČO) is not waiting for anything.
   const isB2bLead = !!user && role === 'lead' && !!profile?.ico?.trim();
 
-  // Logged in → straight into the catalog; logged out → create-account modal
-  const openCatalog = () => {
-    if (user) {
-      setViewMode('catalog');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      openAuthModal('register');
-    }
-  };
+  // Pozn.: CTA katalogu (KATALOG 2026 / Katalog bez registrace) bylo trvale
+  // přesunuto na hero kartu „Katalog 2026" v AppsCards — včetně chování ve
+  // všech režimech (host / přihlášený / schválený B2B).
 
   return (
     <div className="mt-6 sm:mt-8 flex flex-col items-center px-6 text-center">
       {isB2bApproved ? (
-        /* Approved B2B partners → KATALOG CTA + next-step nudges */
-        <>
-          <div className="flex w-full max-w-[280px] flex-col items-center gap-1.5">
-            <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
-              KATALOG 2026 <ArrowRight className="h-4 w-4" />
-            </Button>
-            {stockCount != null && stockCount > 0 && (
-              <span className="text-[11px] text-muted-foreground">
-                <span className="tabular-nums">{stockCount.toLocaleString('cs-CZ')}</span> skladem
-              </span>
-            )}
-          </div>
-          <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
-            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
-            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
-            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Spusť e-shop do 48 h</li>
-            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
-          </ul>
-        </>
+        /* Approved B2B partners → next-step nudges (catalog CTA lives in AppsCards) */
+        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Využij DEAL nabídky</li>
+          <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Napoj se na feed</li>
+          <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Prodávej bez skladu</li>
+        </ul>
       ) : (
-        /* Guest / lead → B2B CTA, then bullets, then (bigger gap) the catalog CTA */
+        /* Guest / lead → B2B CTA + bullets */
         <>
           {/* 1) B2B registrace (nebo živý odpočet u podané žádosti) */}
           <div className="w-full max-w-[280px]">
@@ -101,13 +78,6 @@ export function HomeHero() {
             <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>
             <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez kreditní karty</li>
           </ul>
-
-          {/* 3) Katalog bez registrace — větší mezera nad ním */}
-          <div className="mt-8 w-full max-w-[280px]">
-            <Button variant="outline" className="h-10 w-full gap-2 px-6 text-sm" onClick={openCatalog}>
-              Katalog bez registrace <ChevronRight className="h-4 w-4 text-blue-600" />
-            </Button>
-          </div>
         </>
       )}
     </div>

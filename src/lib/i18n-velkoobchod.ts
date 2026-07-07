@@ -117,13 +117,12 @@ const cs: VelkoobchodText = {
   ecosystem: {
     eyebrow: 'swelt.partner ekosystém',
     heading: 'Velkoobchod je jen začátek',
-    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, nákup bez registrace nebo hotový e-shop. Vše propojené, vše pod jednou střechou.',
+    sub: 'Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping nebo nákup bez registrace. Vše propojené, vše pod jednou střechou.',
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.' },
     { name: 'swelt.Dropshipping', desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my mu zboží zabalíme a odešleme přímo pod vaším jménem.' },
     { name: 'Nákup bez registrace', desc: 'Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.' },
-    { name: 'swelt.shop', desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.' },
   ],
   faq: { eyebrow: 'Časté otázky', heading: 'Nejčastější otázky', sub: 'Vše, co potřebujete vědět před registrací.' },
   faqItems: [
@@ -160,7 +159,7 @@ const cs: VelkoobchodText = {
   ],
   trustStrip: ['100% autentické produkty', 'FedEx / DHL / UPS expedice', 'Doručení po celé EU', 'Přímý distributor značek', 'Bezpečné B2B platby'],
   contactNote: 'Potřebujete přesnější kalkulaci? Napište nám — obchodní podmínky nastavíme na míru do 24 hodin.',
-  ecosystemSell: { eyebrow: 'Kompletní ekosystém', heading: 'Jedna platforma. Čtyři způsoby, jak vydělávat.', sub: 'Velkoobchod je základ. Ale naši nejúspěšnější partneři kombinují více služeb — a tím násobí svůj zisk bez nutnosti více dodavatelů.' },
+  ecosystemSell: { eyebrow: 'Kompletní ekosystém', heading: 'Jedna platforma. Tři způsoby, jak vydělávat.', sub: 'Velkoobchod je základ. Ale naši nejúspěšnější partneři kombinují více služeb — a tím násobí svůj zisk bez nutnosti více dodavatelů.' },
 };
 
 const en: VelkoobchodText = {
@@ -240,13 +239,12 @@ const en: VelkoobchodText = {
   ecosystem: {
     eyebrow: 'swelt.partner ecosystem',
     heading: 'Wholesale is only the beginning',
-    sub: 'Combine wholesale with other swelt services — feed, dropshipping, private purchases or a turnkey shop. All connected, all under one roof.',
+    sub: 'Combine wholesale with other swelt services — feed, dropshipping or private purchases. All connected, all under one roof.',
   },
   ecosystemItems: [
     { name: 'swelt.feed', desc: 'Automatic XML/CSV feed of 3,000+ products. Sync your shop with no manual work.' },
     { name: 'swelt.Dropshipping', desc: 'Sell without a warehouse. Customer orders from you — we pack and ship under your name.' },
     { name: 'Private purchases', desc: 'Premium products for individuals and corporate gifts. Discreet packaging, fast EU delivery.' },
-    { name: 'swelt.shop', desc: 'Turnkey e-shop preloaded with 3,000+ products. Live in 48 hours. With or without your own stock.' },
   ],
   faq: { eyebrow: 'Frequent questions', heading: 'Frequently asked questions', sub: 'Everything you need to know before signing up.' },
   faqItems: [
@@ -283,7 +281,7 @@ const en: VelkoobchodText = {
   ],
   trustStrip: ['100% authentic products', 'FedEx / DHL / UPS dispatch', 'EU-wide delivery', 'Direct brand distributor', 'Secure B2B payments'],
   contactNote: 'Need a more precise calculation? Write to us — we set up bespoke terms within 24 hours.',
-  ecosystemSell: { eyebrow: 'Complete ecosystem', heading: 'One platform. Four ways to earn.', sub: 'Wholesale is the foundation. But our most successful partners combine several services — multiplying profit without needing more suppliers.' },
+  ecosystemSell: { eyebrow: 'Complete ecosystem', heading: 'One platform. Three ways to earn.', sub: 'Wholesale is the foundation. But our most successful partners combine several services — multiplying profit without needing more suppliers.' },
 };
 
 // Other 16 languages reuse English copy (high-quality fallback).

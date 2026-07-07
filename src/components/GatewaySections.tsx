@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Handshake, PackageOpen, HandCoins, ShoppingCart, Rss,
+  Handshake, PackageOpen, HandCoins, Rss,
   Check, ArrowRight, Users, Star, Shield,
   Globe, Lock,
-  Rocket, Sparkles, Eye, Tag,
+  Sparkles, Eye, Tag,
   X,
 } from 'lucide-react';
 import { GatewayPanel } from './GatewayPanel';
@@ -396,70 +396,6 @@ function LuxuryVisual() {
   );
 }
 
-function ShopVisual() {
-  const [tab, setTab] = useState(0);
-  const tabs = ['Hodinky', 'Šperky'];
-  const products = [
-    { img: 'https://cdn.b2bzago.com/images/0/7afe1cca249d731c/100/hodinky-tommy-hilfiger-model-decker-1791349.jpg?hash=-2', name: 'Tommy Hilfiger', price: '4 475 Kč', badge: 'NOVÉ' },
-    { img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=200&q=70', name: 'Versace', price: '7 225 Kč' },
-    { img: 'https://images.unsplash.com/photo-1542496658-e33a6d0d3cde?auto=format&fit=crop&w=200&q=70', name: 'Police', price: '3 125 Kč', badge: '-15%' },
-    { img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=200&q=70', name: 'Seiko', price: '5 250 Kč' },
-  ];
-  return (
-    <div className="rounded-none border border-slate-200 bg-white shadow-lg overflow-hidden">
-      {/* Browser chrome */}
-      <div className="bg-slate-100 border-b border-slate-200 px-3 py-2 flex items-center gap-2">
-        <div className="flex gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-none bg-red-400" />
-          <div className="h-2.5 w-2.5 rounded-none bg-yellow-400" />
-          <div className="h-2.5 w-2.5 rounded-none bg-green-400" />
-        </div>
-        <div className="flex-1 bg-white rounded-none px-2 py-0.5 text-[10px] text-slate-400 border border-slate-200">
-          vaseshop.cz
-        </div>
-        <span className="h-2 w-2 rounded-none bg-emerald-400 animate-pulse" />
-      </div>
-      {/* Fake shop nav */}
-      <div className="border-b border-slate-100 px-4 py-2 flex items-center justify-between bg-white">
-        <div className="font-display font-semibold text-[11px] text-slate-800">WatchStore.cz</div>
-        <div className="flex gap-3">
-          {tabs.map((t, i) => (
-            <button key={t} onClick={() => setTab(i)}
-              className={`text-[10px] font-semibold pb-0.5 border-b transition-colors ${tab === i ? 'text-zinc-900 border-zinc-900' : 'text-slate-400 border-transparent'}`}>
-              {t}
-            </button>
-          ))}
-        </div>
-        <ShoppingCart className="h-3.5 w-3.5 text-zinc-700" />
-      </div>
-      {/* Product grid */}
-      <div className="p-3 grid grid-cols-2 gap-2 bg-zinc-50">
-        {products.map((p) => (
-          <div key={p.name} className="bg-white rounded-none overflow-hidden border border-slate-100">
-            <div className="relative">
-              <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" loading="lazy" />
-              {p.badge && <div className="absolute top-1 right-1 bg-zinc-900 text-white text-[7px] font-semibold px-1 py-0.5 rounded-none">{p.badge}</div>}
-            </div>
-            <div className="p-1.5">
-              <div className="text-[9px] text-slate-500 truncate">{p.name}</div>
-              <div className="text-[10px] font-semibold text-zinc-900">{p.price}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* Status */}
-      <div className="px-3 py-2 border-t border-slate-100 bg-white flex items-center gap-1.5">
-        <span className="h-1.5 w-1.5 rounded-none bg-emerald-400" />
-        <span className="text-[9px] text-emerald-600 font-semibold">Aktualizováno před 2 hod. · 3 000+ produktů</span>
-        <div className="ml-auto flex items-center gap-1">
-          <Rocket className="h-3 w-3 text-orange-400" />
-          <span className="text-[9px] text-orange-500 font-semibold">swelt.shop</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Trust section ── */
 function TrustSection() {
   const { lang } = useStore();
@@ -594,14 +530,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       </Button>),
       visual: <DropshippingVisual />, reverse: true,
     },
-    {
-      id: 'shop',
-      ...g.shop,
-      ctas: (<Button onClick={() => navigate('/shop')} className="gap-2">
-        {g.shop.ctaLabel} <ArrowRight className="h-4 w-4" />
-      </Button>),
-      visual: <ShopVisual />, reverse: false,
-    },
   ];
 
   const SERVICE_CARDS = [
@@ -628,12 +556,6 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme pod vaší značkou.',
       img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80',
       cta: 'Chci dropshipping',
-    },
-    {
-      id: 'shop', icon: ShoppingCart, label: 'E-shop do 48h', path: '/shop',
-      desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
-      img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80',
-      cta: 'Chci svůj e-shop',
     },
     {
       id: 'deals', icon: Tag, label: 'DEAL nabídky', path: '/deals',

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,7 +40,6 @@ const Dropshipping = lazy(() => import("./pages/Dropshipping.tsx"));
 const Feed = lazy(() => import("./pages/Feed.tsx"));
 const Luxury = lazy(() => import("./pages/Luxury.tsx"));
 const Prestige = lazy(() => import("./pages/Prestige.tsx"));
-const Shop = lazy(() => import("./pages/Shop.tsx"));
 const Brands = lazy(() => import("./pages/Brands.tsx"));
 const BrandDetail = lazy(() => import("./pages/BrandDetail.tsx"));
 const ConcernDetail = lazy(() => import("./pages/ConcernDetail.tsx"));
@@ -102,7 +101,8 @@ const App = () => (
                 <Route path="settings" element={<PartnerSettings />} />
               </Route>
               <Route path="/velkoobchod" element={<Velkoobchod />} />
-              <Route path="/shop" element={<Shop />} />
+              {/* Kategorie E-shop do 48 h je skrytá — starý odkaz vracíme na homepage */}
+              <Route path="/shop" element={<Navigate to="/" replace />} />
               <Route path="/dropshipping" element={<Dropshipping />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/luxury" element={<Luxury />} />

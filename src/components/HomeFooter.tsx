@@ -121,7 +121,6 @@ export function HomeFooter() {
           <FLink to="/velkoobchod">B2B Velkoobchod</FLink>
           <FLink to="/dropshipping">Dropshipping</FLink>
           <FLink to="/feed">Automatický feed</FLink>
-          <FLink to="/shop">E-shop do 48 h</FLink>
           <FLink to="/luxury">Nákup bez registrace</FLink>
         </FooterCol>
 

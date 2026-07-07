@@ -30,7 +30,6 @@ const HOME_NAV_ITEMS = [
   { path: '/prestige',    label: 'Luxury' },
   { path: '/feed',        label: 'Feed' },
   { path: '/dropshipping',label: 'Dropshipping' },
-  { path: '/shop',        label: 'E-shop do 48h' },
   { path: '/support',     label: 'Support' },
 ];
 
@@ -140,23 +139,6 @@ const NAV_PANELS: Record<string, NavPanel> = {
       ]},
     ],
     cta: { label: 'Chci dropshipping', path: '/dropshipping' },
-  },
-  '/shop': {
-    heading: 'E-shop do 48 hodin',
-    desc: 'Hotový e-shop naplněný 3 000+ produkty. Spuštění do 48 hodin, žádné zkušenosti nepotřebujete.',
-    cols: [
-      { title: 'Co dostanete', links: [
-        { label: 'Hotový e-shop', desc: 'Design, hosting, produkty — vše v jednom', path: '/shop' },
-        { label: 'Automatický feed', desc: 'Produkty se synchronizují samy', path: '/shop' },
-        { label: 'Platební brána', desc: 'Integrace s oblíbenými systémy', path: '/shop' },
-      ]},
-      { title: 'Technologie', links: [
-        { label: 'Shopify / WooCommerce', desc: 'Váš výběr platformy', path: '/shop' },
-        { label: 'SEO optimalizace', desc: 'Připraveno pro vyhledávače', path: '/shop' },
-        { label: 'Mobilní design', desc: 'Responzivní na všech zařízeních', path: '/shop' },
-      ]},
-    ],
-    cta: { label: 'Chci svůj e-shop', path: '/shop' },
   },
   '/support': {
     heading: 'Podpora & Kontakt',
