@@ -125,6 +125,40 @@ const NAV_PANELS: Record<string, NavPanel> = {
     ],
     cta: { label: 'Zjistit více o feedu', path: '/feed' },
   },
+  '/feed?to=product-intelligence': {
+    heading: 'Product Intelligence',
+    desc: 'Feed, trendová data a AI doporučení pro váš sortiment. Rozhodujte se podle reálné poptávky, ne odhadem.',
+    cols: [
+      { title: 'Data & insighty', links: [
+        { label: 'Trendová data', desc: 'Co se prodává právě teď', path: '/feed?to=product-intelligence' },
+        { label: 'AI doporučení', desc: 'Produkty na míru vašemu sortimentu', path: '/feed?to=product-intelligence' },
+        { label: 'Cenová analytika', desc: 'Marže a konkurenceschopnost', path: '/feed?to=product-intelligence' },
+      ]},
+      { title: 'Napojení', links: [
+        { label: 'Automatický feed', desc: 'XML/CSV se 3 000+ produkty', path: '/feed' },
+        { label: 'MCP server', desc: 'Napojení AI agentů na katalog', path: '/feed?to=mcp' },
+        { label: 'API přístup', desc: 'Přímé napojení na váš systém', path: '/feed?to=product-intelligence' },
+      ]},
+    ],
+    cta: { label: 'Prozkoumat Product Intelligence', path: '/feed?to=product-intelligence' },
+  },
+  '/feed?to=mcp': {
+    heading: 'MCP Server',
+    desc: 'Napojte AI agenty přímo na náš katalog přes Model Context Protocol. Vyhledávání, dostupnost a ceny v reálném čase.',
+    cols: [
+      { title: 'Možnosti', links: [
+        { label: 'Katalog přes MCP', desc: 'AI agent vidí 3 000+ produktů', path: '/feed?to=mcp' },
+        { label: 'Realtime dostupnost', desc: 'Skladové zásoby v reálném čase', path: '/feed?to=mcp' },
+        { label: 'Ceny & slevy', desc: 'Aktuální velkoobchodní ceny', path: '/feed?to=mcp' },
+      ]},
+      { title: 'Pro vývojáře', links: [
+        { label: 'Dokumentace', desc: 'Jak server zapojit', path: '/feed?to=mcp' },
+        { label: 'Product Intelligence', desc: 'Trendová data a AI doporučení', path: '/feed?to=product-intelligence' },
+        { label: 'API klíče', desc: 'Bezpečný přístup k datům', path: '/feed?to=mcp' },
+      ]},
+    ],
+    cta: { label: 'Zapojit MCP server', path: '/feed?to=mcp' },
+  },
   '/dropshipping': {
     heading: 'Dropshipping',
     desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme.',
@@ -618,7 +652,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     key={path}
                     onMouseEnter={() => hasPanel && handleNavEnter(path)}
                     onMouseLeave={handleNavLeave}
-                    onClick={() => { if (!hasPanel) { setActiveNav(null); navigate(path); } }}
+                    onClick={() => { setActiveNav(null); navigate(path); }}
                     className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
                       activeNav === path
                         ? 'text-zinc-900'
