@@ -80,8 +80,8 @@ function BrandCard({
       onClick={() => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
       aria-pressed={selectable ? active : undefined}
       className={`group/card relative flex flex-col cursor-pointer transition-shadow ${cardClass} ${
-        selectable && active ? 'ring-2 ring-blue-500 ring-offset-2 rounded-sm' : ''
-      }`}
+        compact ? 'overflow-hidden' : ''
+      } ${selectable && active ? 'ring-2 ring-blue-500 ring-offset-2 rounded-sm' : ''}`}
     >
       {/* Active-filter check — same blue fajfka used on the homepage bullets */}
       {selectable && active && (
@@ -91,18 +91,18 @@ function BrandCard({
       )}
 
       {/* Brand logo */}
-      <div className={`${compact ? 'h-10 pt-2' : 'h-14 sm:h-16 pt-1'} flex items-center justify-center px-6 shrink-0 ${scale}`}>
+      <div className={`${compact ? 'h-10 pt-2 px-3' : 'h-14 sm:h-16 pt-1 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
         {brand.domain ? (
           <BrandLogo
             name={brand.name}
             domain={brand.domain}
             width={400}
             height={160}
-            className="max-h-full max-w-[180px] object-contain [mix-blend-mode:multiply]"
-            fallbackClassName="font-display text-lg font-black tracking-tight text-foreground"
+            className={`max-h-full object-contain [mix-blend-mode:multiply] ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
+            fallbackClassName={`font-display font-black tracking-tight text-foreground truncate max-w-full ${compact ? 'text-sm' : 'text-lg'}`}
           />
         ) : (
-          <span className="font-display text-lg font-black tracking-tight text-foreground">{brand.name}</span>
+          <span className={`font-display font-black tracking-tight text-foreground truncate max-w-full ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
         )}
       </div>
 
