@@ -128,20 +128,21 @@ const Index = () => {
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones.
                   Mobile: sized so "Sell Luxury with" fits on one line. */}
-              <h1 className="font-display font-semibold tracking-tight leading-[1.1] text-[2rem] sm:text-[clamp(3rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
+              <h1 className="font-display font-semibold tracking-tight leading-[1.1] text-[2rem] sm:text-[clamp(3rem,9.5vh,7.25rem)] max-w-5xl text-foreground">
                 Sell Luxury with<br />Enterprise Technology.
               </h1>
 
               {/* Sub-headline — "Product Intelligence Platform" in swelt primary blue + verify note */}
               <div className="mt-5 flex flex-col items-center gap-1 sm:mt-7">
-                <h2 className="font-display text-sm font-extrabold uppercase tracking-[0.18em] text-blue-600 sm:text-xl">
+                <h2 className="font-display text-sm font-extrabold uppercase tracking-[0.18em] text-blue-600 sm:text-lg">
                   Product Intelligence Platform
                 </h2>
                 <span className="text-xs text-muted-foreground sm:text-sm">Verify Account in 24h</span>
               </div>
 
-              {/* Bottom tagline — stacked on mobile, one row on desktop */}
-              <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center gap-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1 sm:bottom-14 sm:text-sm">
+              {/* Bottom tagline — stacked on mobile, one row on desktop.
+                  Mobile sits higher (bottom-16) to leave clear space above the chevron. */}
+              <div className="absolute inset-x-0 bottom-16 flex flex-col items-center justify-center gap-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1 sm:bottom-14 sm:text-sm">
                 <span className="whitespace-nowrap">Launch Faster</span>
                 <span className="whitespace-nowrap">Sell More</span>
                 <span className="whitespace-nowrap">Automate</span>
