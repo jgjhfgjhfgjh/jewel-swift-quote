@@ -29,9 +29,10 @@ interface BrandShowcaseCarouselProps {
 /** Showcase sizing (homepage) — identical to the hero banner cards */
 const CARD_CLASS =
   'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[390px] sm:h-[440px] lg:h-[480px]';
-/** Compact sizing (catalog filter) — mobile unchanged, desktop ~half height */
+/** Compact sizing (catalog filter) — small fixed cards on every breakpoint,
+ *  so mobile matches the shrunk desktop instead of a full-width showcase card */
 const CARD_CLASS_COMPACT =
-  'shrink-0 w-[80%] sm:w-[190px] lg:w-[210px] h-[390px] sm:h-[230px] lg:h-[240px]';
+  'shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] h-[210px] sm:h-[230px] lg:h-[240px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
