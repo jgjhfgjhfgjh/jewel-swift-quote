@@ -92,7 +92,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
       form.phone ? `Telefon: ${form.phone}` : '',
       form.budget ? `Rozpočet: ${form.budget}` : '', '',
       'Poptávané modely:',
-      ...(watches.length ? watches.map((w) => `• ${w.brand} ${w.model}${w.from ? ` (od ${w.from.toLocaleString('cs')} €)` : ''}`) : ['(neuvedeno)']),
+      ...(watches.length ? watches.map((w) => `• ${w.brand} ${w.model}`) : ['(neuvedeno)']),
       '', form.note ? `Poznámka: ${form.note}` : '',
     ].filter(Boolean);
     return `mailto:info@swelt.cz?subject=${encodeURIComponent('Poptávka — prémiový segment')}&body=${encodeURIComponent(lines.join('\n'))}`;
@@ -167,7 +167,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           onClick={expandSticky}
         >
           <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
-            placeholder="Hledejte jakýkoliv model — Rolex Submariner, Patek Nautilus…" />
+            placeholder="Hledejte jakýkoliv model — Omega Speedmaster, Cartier Santos…" />
           {!expanded ? (
             <p className="mt-2.5 px-1 text-center text-xs text-zinc-400">
               Zadejte model — otevře se nezávazná poptávka. Bez závazku, odpověď do 48 h.
@@ -234,7 +234,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
             <div>
               <label className="mb-1.5 block text-sm font-medium" htmlFor="c-note">Poznámka <span className="text-zinc-400">(reference, barva, rok…)</span></label>
               <textarea id="c-note" rows={3} value={form.note} onChange={(e) => patchForm({ note: e.target.value })}
-                placeholder="Např. Rolex Submariner Date 126610LN, nepoužité, s dokumentací…"
+                placeholder="Např. Omega Speedmaster Moonwatch, safírové sklíčko, s dokumentací…"
                 className="w-full resize-none rounded-lg border border-zinc-300 px-3 py-2.5 text-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10" />
             </div>
           </div>

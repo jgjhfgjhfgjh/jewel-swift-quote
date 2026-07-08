@@ -95,9 +95,9 @@ const NAV_PANELS: Record<string, NavPanel> = {
     desc: 'Hodinky vyššího segmentu na poptávku. Originál s dokumentací, závazná cena, diskrétní doručení po EU.',
     cols: [
       { title: 'Prémiové domy', links: [
-        { label: 'Rolex, Omega, Cartier', desc: 'Ikonické modely na poptávku', path: '/prestige' },
-        { label: 'Patek Philippe, AP', desc: 'Vysoká horologie na míru', path: '/prestige' },
-        { label: 'Tudor, Longines, Oris', desc: 'Dostupný prémiový segment', path: '/prestige' },
+        { label: 'Omega, Cartier, IWC', desc: 'Ikonické modely na poptávku', path: '/prestige' },
+        { label: 'Jaeger-LeCoultre, Girard-Perregaux', desc: 'Vysoká horologie na míru', path: '/prestige' },
+        { label: 'Longines, Tissot, Mido', desc: 'Dostupný prémiový segment', path: '/prestige' },
       ]},
       { title: 'Jak to funguje', links: [
         { label: 'Sestavte poptávku', desc: 'Z katalogu nebo vlastní reference', path: '/prestige' },

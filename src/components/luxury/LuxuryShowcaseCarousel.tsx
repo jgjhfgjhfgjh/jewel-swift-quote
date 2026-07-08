@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
-import { LUXURY_HOUSES, type LuxuryHouse } from '@/data/luxuryCatalog';
+import { LUXURY_HOUSES, luxuryModelId, type LuxuryHouse } from '@/data/luxuryCatalog';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
 /** Card sizing — matches the homepage BrandShowcaseCarousel cards. */
@@ -12,8 +12,7 @@ const ROTATE_MS = 2200;
 
 function toWatch(house: LuxuryHouse, modelIdx: number): SelectedWatch {
   const m = house.models[modelIdx];
-  const id = `${house.name}-${m.model}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  return { id, brand: house.name, model: m.model, domain: house.domain, from: m.from ?? house.from, custom: false };
+  return { id: luxuryModelId(house.name, m.model), brand: house.name, model: m.model, domain: house.domain, from: null, custom: false };
 }
 
 /* ─── Single house card — logo + crossfading models + CTA ─── */

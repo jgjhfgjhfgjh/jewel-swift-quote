@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import {
   ArrowRight, ChevronDown, ShieldCheck, Lock, Gem,
   FileSearch, BadgeCheck, Truck,
@@ -10,6 +10,7 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { LuxuryShowcaseCarousel } from '@/components/luxury/LuxuryShowcaseCarousel';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { LuxuryInquiryCard, type LuxuryInquiryCardHandle } from '@/components/luxury/LuxuryInquiryCard';
+import { LuxuryCatalogGrid } from '@/components/luxury/LuxuryCatalogGrid';
 import { useInquiry } from '@/lib/useInquiry';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
@@ -87,9 +88,10 @@ const FAQS = [
 ];
 
 export default function Prestige() {
-  const { addWatch } = useInquiry();
+  const { addWatch, watches } = useInquiry();
   const cardRef = useRef<LuxuryInquiryCardHandle>(null);
   const inquiryRef = useRef<HTMLDivElement>(null);
+  const pickedIds = useMemo(() => new Set(watches.map((w) => w.id)), [watches]);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -99,7 +101,7 @@ export default function Prestige() {
       {
         '@context': 'https://schema.org', '@type': 'Service',
         name: 'swelt — Prémiový segment na poptávku',
-        description: 'Hodinky vyššího segmentu (Rolex, Omega, Patek Philippe, Audemars Piguet a další) zajištěné na poptávku. Originál s dokumentací, diskrétní doručení po EU.',
+        description: 'Hodinky vyššího segmentu (Omega, Cartier, IWC, Breitling, Jaeger-LeCoultre a další) zajištěné na poptávku. Originál s dokumentací, diskrétní doručení po EU.',
         provider: { '@type': 'Organization', name: 'swelt', url: 'https://swelt.partner' },
         areaServed: [{ '@type': 'Place', name: 'EU' }],
       },
@@ -153,6 +155,21 @@ export default function Prestige() {
           </Reveal>
         </div>
         <LuxuryShowcaseCarousel onPick={pickWatch} />
+      </section>
+
+      {/* ── On-demand product catalog — cards like the main catalog, CTA = Poptat ── */}
+      <section id="katalog" className="scroll-mt-24 border-t border-zinc-200 bg-[#fafaf8] py-12 sm:py-16">
+        <div className="mx-auto mb-8 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Katalog na poptávku</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Vyberte si model</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
+              Kurátorovaný výběr modelů, které zajistíme na poptávku. Ceny sdělujeme
+              individuálně v závazné nabídce.
+            </p>
+          </Reveal>
+        </div>
+        <LuxuryCatalogGrid onPick={pickWatch} pickedIds={pickedIds} />
       </section>
 
       {/* ── How it works (three steps) — right after the search ── */}

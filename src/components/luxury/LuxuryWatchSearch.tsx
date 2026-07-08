@@ -68,7 +68,7 @@ export function LuxuryWatchSearch({
   function addModel(m: LuxuryModel) {
     const w: SelectedWatch = {
       id: m.id, brand: m.brand, model: m.model,
-      domain: m.domain, from: m.from, custom: false,
+      domain: m.domain, from: null, custom: false,
     };
     if (!has(m.id)) onChange([...selected, w]);
     onAdd?.(w);
@@ -123,7 +123,7 @@ export function LuxuryWatchSearch({
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder={placeholder ?? 'Hledejte model — např. Rolex Submariner, Omega Speedmaster…'}
+          placeholder={placeholder ?? 'Hledejte model — např. Omega Speedmaster, TAG Heuer Carrera…'}
           className={
             hero
               ? 'w-full rounded-2xl border border-zinc-200 bg-white pl-12 pr-4 py-4 text-base shadow-sm outline-none transition focus:border-zinc-900 focus:ring-4 focus:ring-zinc-900/10 sm:text-lg'
