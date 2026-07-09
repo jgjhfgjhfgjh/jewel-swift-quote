@@ -157,17 +157,23 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
         desc: 'Pilotní legenda s kruhovým logaritmickým pravítkem a kalibrem B01.',
       },
       {
-        model: 'Chronomat B01 42', collection: 'Chronomat',
+        model: 'Chronomat B01 Chronograph 42', collection: 'Chronomat',
+        reference: 'AB0158101A1A1',
+        image: 'https://www-breitling.eu.saleor.cloud/media/thumbnails/products/ab0158101a1a1-soldier_f505bb57_thumbnail_1024.webp',
         params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní B01', 'Rezerva chodu': '70 hodin', 'Vodotěsnost': '200 m', 'Tah': 'Rouleaux ocelový' },
         desc: 'Sportovní all-rounder s ikonickým tahem Rouleaux.',
       },
       {
-        model: 'Superocean Automatic 42', collection: 'Superocean',
-        params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický', 'Vodotěsnost': '300 m', 'Luneta': 'Jednosměrná otočná', 'Sklíčko': 'Safírové' },
+        model: 'Superocean Automatic 44', collection: 'Superocean',
+        reference: 'A17376211B1A1',
+        image: 'https://www-breitling.eu.saleor.cloud/media/thumbnails/products/a17376211b1a1-soldier_8027a4ed_thumbnail_1024.webp',
+        params: { 'Průměr pouzdra': '44 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický', 'Vodotěsnost': '300 m', 'Luneta': 'Jednosměrná otočná', 'Sklíčko': 'Safírové' },
         desc: 'Moderní diver s výrazným barevným provedením.',
       },
       {
         model: 'Premier B01 Chronograph 42', collection: 'Premier',
+        reference: 'AB0145171C1P2',
+        image: 'https://www-breitling.eu.saleor.cloud/media/thumbnails/products/ab0145171c1p2-soldier_a4d2f949_thumbnail_1024.webp',
         params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní B01', 'Rezerva chodu': '70 hodin', 'Vodotěsnost': '100 m', 'Sklíčko': 'Safírové' },
         desc: 'Elegantní chronograf navazující na styl čtyřicátých let.',
       },
@@ -178,23 +184,21 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     models: [
       {
         model: 'Santos de Cartier', collection: 'Santos',
+        image: 'https://www.cartier.com/dam/rcq/car/20/59/11/8/2059118.jpeg.transform.carprodcard.png',
         params: { 'Rozměr pouzdra': 'Large, cca 39,8 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, kalibr 1847 MC', 'Vodotěsnost': '100 m', 'Charakteristika': 'Viditelné šrouby, QuickSwitch/SmartLink', 'Sklíčko': 'Safírové' },
         desc: 'První pánské náramkové hodinky světa v moderním provedení.',
       },
       {
         model: 'Tank Must', collection: 'Tank',
+        image: 'https://www.cartier.com/dam/rcq/car/21/82/25/8/2182258.jpeg.transform.carprodcard.jpeg',
         params: { 'Tvar pouzdra': 'Obdélníkové', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Quartz / SolarBeat dle verze', 'Vodotěsnost': '3 bar', 'Sklíčko': 'Safírové', 'Řemínek': 'Kůže' },
         desc: 'Nesmrtelný Tank v přístupné řadě Must.',
       },
       {
         model: 'Ballon Bleu de Cartier', collection: 'Ballon Bleu',
-        params: { 'Průměr pouzdra': '40 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický', 'Vodotěsnost': '3 bar', 'Charakteristika': 'Korunka s modrým kabošonem', 'Sklíčko': 'Safírové' },
+        image: 'https://www.cartier.com/dam/rcq/car/20/59/09/3/2059093.jpeg.transform.carprodcard.png',
+        params: { 'Průměr pouzdra': '36 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický', 'Vodotěsnost': '3 bar', 'Charakteristika': 'Korunka s modrým kabošonem', 'Sklíčko': 'Safírové' },
         desc: 'Oblé pouzdro s ikonickou plovoucí korunkou s kabošonem.',
-      },
-      {
-        model: 'Pasha de Cartier', collection: 'Pasha',
-        params: { 'Průměr pouzdra': '41 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, kalibr 1847 MC', 'Vodotěsnost': '10 bar', 'Charakteristika': 'Řetízkem jištěná korunka', 'Sklíčko': 'Safírové' },
-        desc: 'Extravagantní klasika s krytkou korunky na řetízku.',
       },
     ],
   },
@@ -203,6 +207,8 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     models: [
       {
         model: 'Laureato 42 mm', collection: 'Laureato',
+        reference: '81010-11-3153-1CM',
+        image: 'https://api.girard-perregaux.com/media/catalog/product/8/1/81010-11-3153-1CM-hero-5edf8c.png',
         params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní GP01800', 'Vodotěsnost': '100 m', 'Charakteristika': 'Osmiúhelníková luneta, integrovaný tah', 'Číselník': 'Clous de Paris' },
         desc: 'Integrovaná sportovní elegance z roku 1975 s číselníkem Clous de Paris.',
       },
@@ -213,12 +219,16 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
       },
       {
         model: 'Free Bridge', collection: 'Bridges',
+        reference: '82000-11-631-FA6A',
+        image: 'https://api.girard-perregaux.com/media/catalog/product/8/2/82000-11-631-FA6A-hero-v2-ae94e0.png',
         params: { 'Průměr pouzdra': '44 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní', 'Charakteristika': 'Ikonický „Neo Bridge" most', 'Sklíčko': 'Safírové' },
         desc: 'Moderní interpretace legendárních mostů Girard-Perregaux.',
       },
       {
         model: '1966', collection: '1966',
-        params: { 'Průměr pouzdra': '40 mm', 'Materiál pouzdra': 'Nerezová ocel / zlato dle verze', 'Strojek': 'Automatický, manufakturní', 'Vodotěsnost': '30 m', 'Sklíčko': 'Safírové' },
+        reference: '49523-11-171-11A',
+        image: 'https://api.girard-perregaux.com/media/catalog/product/4/9/49523-11-171-11A-hero-dc97f3.png',
+        params: { 'Průměr pouzdra': '36 mm', 'Materiál pouzdra': 'Nerezová ocel / zlato dle verze', 'Strojek': 'Automatický, manufakturní', 'Vodotěsnost': '30 m', 'Sklíčko': 'Safírové' },
         desc: 'Ryzí haute-horlogerie klasika s tenkým pouzdrem.',
       },
     ],
@@ -228,21 +238,29 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     models: [
       {
         model: 'Reverso Classic', collection: 'Reverso',
+        reference: 'Q3878520',
+        image: 'https://img.jaeger-lecoultre.com/open-graph-boxed-image-1/o-dpr-2/10e6fa240ddef91388ea13963c3e2c6c5f3ac4c5.jpg',
         params: { 'Tvar pouzdra': 'Obdélníkové, otočné', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Ruční nátah, manufakturní', 'Vodotěsnost': '3 bar', 'Charakteristika': 'Otočné pouzdro z roku 1931', 'Sklíčko': 'Safírové' },
         desc: 'Art-deco legenda s otočným pouzdrem původně pro hráče póla.',
       },
       {
         model: 'Master Control Date', collection: 'Master Control',
+        reference: 'Q4018421',
+        image: 'https://img.jaeger-lecoultre.com/open-graph-boxed-image-1/o-dpr-2/93f97ea46f4cac0440395806a0a4efaa121d7d57.jpg',
         params: { 'Průměr pouzdra': '40 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, kalibr 899', 'Rezerva chodu': '70 hodin', 'Vodotěsnost': '5 bar', 'Sklíčko': 'Safírové' },
         desc: 'Esence kulatých hodinek Velké manufaktury z Vallée de Joux.',
       },
       {
-        model: 'Polaris Automatic', collection: 'Polaris',
-        params: { 'Průměr pouzdra': '41 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní', 'Vodotěsnost': '100 m', 'Charakteristika': 'Vnitřní otočná luneta', 'Sklíčko': 'Safírové' },
+        model: 'Polaris Date', collection: 'Polaris',
+        reference: 'Q9068650',
+        image: 'https://img.jaeger-lecoultre.com/open-graph-boxed-image-1/o-dpr-2/384071de7fce41ebc37e5a18bd9500971d5f3adb.jpg',
+        params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní', 'Vodotěsnost': '200 m', 'Charakteristika': 'Vnitřní otočná luneta', 'Sklíčko': 'Safírové' },
         desc: 'Sportovní elegance inspirovaná potápěčskou Memovox Polaris 1968.',
       },
       {
         model: 'Master Ultra Thin Moon', collection: 'Master Ultra Thin',
+        reference: 'Q1368430',
+        image: 'https://img.jaeger-lecoultre.com/open-graph-boxed-image-1/o-dpr-2/4fc048262e530e298d820b3a006bafbb9c315bad.jpg',
         params: { 'Průměr pouzdra': '39 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, kalibr 925/1', 'Komplikace': 'Fáze měsíce, datum', 'Vodotěsnost': '5 bar' },
         desc: 'Ultratenká klasika s poetickou fází měsíce.',
       },
@@ -327,19 +345,22 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     name: 'Locman', domain: 'locman.it',
     models: [
       {
-        model: 'Montecristo Automatic', collection: 'Montecristo',
+        model: 'Montecristo', collection: 'Montecristo',
+        image: 'https://cdn.shopify.com/s/files/1/0960/2783/6749/files/510-nero-arancione-nero.png',
         params: { 'Průměr pouzdra': '44 mm', 'Materiál pouzdra': 'Ocel a titan', 'Strojek': 'Automatický', 'Vodotěsnost': '100 m', 'Sklíčko': 'Safírové', 'Původ': 'Vyrobeno v Itálii (Isola d’Elba)' },
         desc: 'Italská sportovní klasika z ostrova Elba v oceli a titanu.',
       },
       {
-        model: 'Stealth Automatic', collection: 'Stealth',
-        params: { 'Průměr pouzdra': 'cca 43 mm', 'Materiál pouzdra': 'Titan / ocel', 'Strojek': 'Automatický', 'Vodotěsnost': '100 m', 'Charakteristika': 'Odlehčený sportovní design' },
+        model: 'Stealth Titanio', collection: 'Stealth',
+        image: 'https://cdn.shopify.com/s/files/1/0960/2783/6749/files/stealth_titanio_green.webp',
+        params: { 'Průměr pouzdra': 'cca 43 mm', 'Materiál pouzdra': 'Titan', 'Strojek': 'Automatický / quartz dle verze', 'Vodotěsnost': '100 m', 'Charakteristika': 'Odlehčený sportovní design' },
         desc: 'Lehké sportovní hodinky s výrazným italským designem.',
       },
       {
-        model: 'Mare Chronograph', collection: 'Mare',
-        params: { 'Průměr pouzdra': 'cca 44 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Quartz chronograf', 'Vodotěsnost': '100 m', 'Sklíčko': 'Minerální / safírové dle verze' },
-        desc: 'Námořní chronograf inspirovaný Středomořím.',
+        model: 'Mare 300 MT', collection: 'Mare',
+        image: 'https://cdn.shopify.com/s/files/1/0960/2783/6749/files/mare300mt_verde.png',
+        params: { 'Průměr pouzdra': 'cca 44 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický / quartz dle verze', 'Vodotěsnost': '300 m', 'Sklíčko': 'Safírové' },
+        desc: 'Námořní potápěčský model inspirovaný Středomořím.',
       },
     ],
   },
@@ -373,21 +394,29 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     models: [
       {
         model: 'PRX Powermatic 80', collection: 'PRX',
+        reference: 'T137.407.11.041.00',
+        image: 'https://www.tissotwatches.com/on/demandware.static/-/Sites-Tissot-Catalogue/default/dw95c4331d/product-pictures/63f42767-a9f5-4cdd-b952-8ea7b82b7e0c_T137-407-11-041-00_shadow.png',
         params: { 'Průměr pouzdra': '40 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, Powermatic 80', 'Rezerva chodu': '80 hodin', 'Vodotěsnost': '100 m', 'Charakteristika': 'Integrovaný tah, waffle číselník' },
         desc: 'Retro-integrovaný bestseller sedmdesátých let s moderním strojkem.',
       },
       {
         model: 'Seastar 1000 Powermatic 80', collection: 'Seastar',
+        reference: 'T120.407.11.041.03',
+        image: 'https://www.tissotwatches.com/on/demandware.static/-/Sites-Tissot-Catalogue/default/dw4069bb6e/product-pictures/f058c2a6-662d-4797-8a9a-dc7e1c174907_T120-407-11-041-03_shadow.png',
         params: { 'Průměr pouzdra': '43 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, Powermatic 80', 'Rezerva chodu': '80 hodin', 'Vodotěsnost': '300 m', 'Luneta': 'Keramická otočná' },
         desc: 'Výkonný diver s keramickou lunetou.',
       },
       {
         model: 'Gentleman Powermatic 80 Silicium', collection: 'Gentleman',
+        reference: 'T127.407.11.041.01',
+        image: 'https://www.tissotwatches.com/on/demandware.static/-/Sites-Tissot-Catalogue/default/dwf9b2cb5f/product-pictures/d82c3b73-ffcb-4720-a219-ae68148eaadb_T127-407-11-041-01_shadow.png',
         params: { 'Průměr pouzdra': '40 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, Powermatic 80 se silikonovým vláskem', 'Rezerva chodu': '80 hodin', 'Vodotěsnost': '100 m', 'Sklíčko': 'Safírové' },
         desc: 'Univerzální elegance s antimagnetickým silikonovým vláskem.',
       },
       {
         model: 'Le Locle Powermatic 80', collection: 'Le Locle',
+        reference: 'T006.407.11.033.00',
+        image: 'https://www.tissotwatches.com/on/demandware.static/-/Sites-Tissot-Catalogue/default/dw1af9d0f4/product-pictures/8c99426a-3edc-4e15-ae24-ef8e49f73757_T006-407-11-033-00_shadow.png',
         params: { 'Průměr pouzdra': '39,3 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, Powermatic 80', 'Rezerva chodu': '80 hodin', 'Vodotěsnost': '3 bar', 'Číselník': 'Guilloché' },
         desc: 'Klasika pojmenovaná po rodném městě značky.',
       },
@@ -398,22 +427,58 @@ export const LUXURY_HOUSES: LuxuryHouse[] = [
     models: [
       {
         model: 'Marine Torpilleur', collection: 'Marine',
+        reference: '1182-310/40',
+        image: 'https://api.ulysse-nardin.com/media/catalog/product/1/1/1182-310-40-hero-b61c01.png',
         params: { 'Průměr pouzdra': '42 mm', 'Materiál pouzdra': 'Nerezová ocel', 'Strojek': 'Automatický, manufakturní UN-118', 'Rezerva chodu': '60 hodin', 'Certifikace': 'Chronometr (COSC)', 'Vodotěsnost': '50 m' },
         desc: 'Námořní chronometr navazující na palubní přístroje značky.',
       },
       {
         model: 'Diver 44', collection: 'Diver',
+        reference: '1183-170-3A/0A',
+        image: 'https://api.ulysse-nardin.com/media/catalog/product/1/1/1183-170-3A-0A-hero-cb9e38.png',
         params: { 'Průměr pouzdra': '44 mm', 'Materiál pouzdra': 'Nerezová ocel / titan dle verze', 'Strojek': 'Automatický, manufakturní', 'Vodotěsnost': '300 m', 'Luneta': 'Jednosměrná otočná', 'Sklíčko': 'Safírové' },
         desc: 'Profesionální diver s manufakturním strojkem.',
       },
       {
         model: 'Freak X', collection: 'Freak',
+        reference: '2303-270-4A/1A',
+        image: 'https://api.ulysse-nardin.com/media/catalog/product/2/3/2303-270-4A-1A-hero-813bfd.png',
         params: { 'Průměr pouzdra': '43 mm', 'Materiál pouzdra': 'Titan / carbonium dle verze', 'Strojek': 'Automatický, UN-230 „létající karusel"', 'Charakteristika': 'Bez číselníku a ručiček — čas ukazuje strojek', 'Rezerva chodu': '72 hodin' },
         desc: 'Avantgardní ikona, kde čas ukazuje samotný otáčející se strojek.',
       },
     ],
   },
 ];
+
+/* ── Merge in models harvested from the brands' official sites ──
+ * luxuryHarvest.json is generated from official collection pages / sitemaps
+ * (name, collection, reference, official product image). Hand-curated models
+ * above keep their spec tables; harvested entries extend the range. When a
+ * harvested name extends a hand-curated one (e.g. "1858 Geosphere 0 Oxygen"
+ * vs "1858 Geosphere"), it only fills the missing image/reference. */
+import harvestJson from './luxuryHarvest.json';
+
+interface HarvestEntry { brand: string; model: string; collection?: string; reference?: string; image: string }
+
+{
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const byName = new Map(LUXURY_HOUSES.map((h) => [h.name, h]));
+  for (const e of harvestJson as HarvestEntry[]) {
+    const house = byName.get(e.brand);
+    if (!house) continue;
+    const en = norm(e.model);
+    const match = house.models.find((m) => {
+      const mn = norm(m.model);
+      return mn === en || en.startsWith(mn + ' ') || mn.startsWith(en + ' ');
+    });
+    if (match) {
+      if (!match.image) match.image = e.image;
+      if (!match.reference && e.reference) match.reference = e.reference;
+    } else {
+      house.models.push({ model: e.model, collection: e.collection, reference: e.reference, image: e.image });
+    }
+  }
+}
 
 export interface LuxuryModel {
   /** Stable id, e.g. "omega-speedmaster-moonwatch-professional". */
