@@ -1,26 +1,29 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, X } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
-import { LUXURY_HOUSES, luxuryModelId, type LuxuryHouse } from '@/data/luxuryCatalog';
-import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
+import { LUXURY_HOUSES, type LuxuryHouse } from '@/data/luxuryCatalog';
 
 /** Card sizing — matches the homepage BrandShowcaseCarousel cards. */
 const CARD_CLASS =
   'shrink-0 w-[80%] sm:w-[45%] lg:w-[30%] h-[360px] sm:h-[400px] lg:h-[430px]';
-const ROTATE_MS = 2200;
+/** Product crossfade interval — same rhythm as the homepage brand showcase. */
+const ROTATE_MS = 1800;
 
-function toWatch(house: LuxuryHouse, modelIdx: number): SelectedWatch {
-  const m = house.models[modelIdx];
-  return { id: luxuryModelId(house.name, m.model), brand: house.name, model: m.model, domain: house.domain, from: null, custom: false };
-}
-
-/* ─── Single house card — logo + crossfading models + CTA ─── */
-function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: SelectedWatch) => void }) {
+/* ─── Single house card — logo on top, crossfading product photos below.
+ * Clicking it filters the catalog grid to this brand. Houses without any
+ * product photos yet show their brand mark large instead. ─── */
+function HouseCard({ house, active, onSelect }: {
+  house: LuxuryHouse;
+  active: boolean;
+  onSelect: (brand: string) => void;
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
   const [visible, setVisible] = useState(false);
-  const n = house.models.length;
+  // Crossfade only through models that actually have an official photo.
+  const models = useMemo(() => house.models.filter((m) => m.image), [house]);
+  const n = models.length;
 
   useEffect(() => {
     const el = rootRef.current;
@@ -39,37 +42,78 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
   return (
     <div ref={rootRef} data-card className={`group/card relative flex flex-col ${CARD_CLASS}`}>
       <div className="flex flex-1 flex-col transition-transform duration-500 ease-out group-data-[center]/card:scale-[1.04]">
-        {/* Big brand logo — the hero of the card */}
-        <div className="flex flex-1 items-center justify-center px-6 py-4">
+        {/* Brand logo on top */}
+        <div className="flex h-14 shrink-0 items-center justify-center px-6 pt-1 sm:h-16">
           <HouseLogo
-            name={house.name} domain={house.domain} width={520} height={220}
-            className="max-h-24 w-auto max-w-[240px] object-contain transition-transform duration-500 ease-out [mix-blend-mode:multiply] group-data-[center]/card:scale-105 sm:max-h-28"
-            textClassName="text-center text-3xl font-medium leading-tight text-zinc-800 sm:text-4xl"
+            name={house.name} domain={house.domain} width={400} height={160}
+            className="max-h-7 w-auto max-w-[170px] object-contain [mix-blend-mode:multiply]"
+            textClassName="text-lg font-medium text-zinc-800"
           />
         </div>
 
-        {/* Model — just a small text line above the CTA (crossfading) */}
-        <div className="relative mx-4 h-6 shrink-0 text-center">
-          {house.models.map((m, i) => (
-            <p
-              key={m.model}
-              aria-hidden={i !== idx}
-              className={`absolute inset-x-0 truncate text-sm font-medium uppercase tracking-[0.15em] text-zinc-500 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
-            >
-              {m.model}
-            </p>
-          ))}
-        </div>
+        {n > 0 ? (
+          <>
+            {/* Crossfading product photo */}
+            <div className="relative mx-4 mb-2 mt-4 flex-1">
+              {models.map((m, i) => (
+                <div
+                  key={m.model}
+                  aria-hidden={i !== idx}
+                  className={`absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
+                >
+                  <img
+                    src={m.image}
+                    alt={`${house.name} ${m.model}`}
+                    loading="lazy"
+                    draggable={false}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+            {/* Crossfading model name */}
+            <div className="relative mx-4 h-5 shrink-0">
+              {models.map((m, i) => (
+                <p
+                  key={m.model}
+                  aria-hidden={i !== idx}
+                  className={`absolute inset-x-0 truncate text-center text-[11px] text-zinc-500 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
+                >
+                  {m.model}
+                </p>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* No product photos yet — show the brand mark large */}
+            <div className="flex flex-1 items-center justify-center px-6">
+              <HouseLogo
+                name={house.name} domain={house.domain} width={520} height={220}
+                className="max-h-20 w-auto max-w-[220px] object-contain opacity-90 [mix-blend-mode:multiply] sm:max-h-24"
+                textClassName="text-center text-3xl font-medium leading-tight text-zinc-800"
+              />
+            </div>
+            <div className="relative mx-4 h-5 shrink-0">
+              <p className="absolute inset-x-0 truncate text-center text-[11px] text-zinc-400">
+                {house.models.length} modelů na poptávku
+              </p>
+            </div>
+          </>
+        )}
 
-        {/* CTA — reflects the currently shown model so it's clear what gets added */}
+        {/* CTA — filters the catalog below to this brand */}
         <div className="flex shrink-0 justify-center p-4">
           <button
             type="button"
-            onClick={() => onPick(toWatch(house, idx))}
-            className="inline-flex min-w-[200px] max-w-full items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+            onClick={() => onSelect(house.name)}
+            className={`inline-flex min-w-[200px] items-center justify-center gap-1.5 rounded-md px-8 py-2.5 text-sm font-semibold transition-colors ${
+              active
+                ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                : 'bg-zinc-900 text-white hover:bg-zinc-800'
+            }`}
           >
-            <Plus className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">Poptat {house.name} {house.models[idx].model}</span>
+            {active ? <><X className="h-3.5 w-3.5" /> Zrušit filtr</> : <>Zobrazit modely <ArrowRight className="h-3.5 w-3.5" /></>}
           </button>
         </div>
       </div>
@@ -77,8 +121,11 @@ function HouseCard({ house, onPick }: { house: LuxuryHouse; onPick: (w: Selected
   );
 }
 
-/* ─── Carousel ─── */
-export function LuxuryShowcaseCarousel({ onPick }: { onPick: (w: SelectedWatch) => void }) {
+/* ─── Carousel — brand filter for the on-demand catalog ─── */
+export function LuxuryShowcaseCarousel({ activeBrand, onSelectBrand }: {
+  activeBrand: string | null;
+  onSelectBrand: (brand: string) => void;
+}) {
   const houses = useMemo(() => LUXURY_HOUSES.filter((h) => h.models.length > 0), []);
   const loop = useMemo(() => [...houses, ...houses, ...houses], [houses]);
   const { trackRef, go } = useInfiniteCarousel(houses.length);
@@ -121,7 +168,12 @@ export function LuxuryShowcaseCarousel({ onPick }: { onPick: (w: SelectedWatch) 
         className="flex gap-3 overflow-x-auto overflow-y-hidden px-3 pb-4 pt-1 [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] scroll-pl-0 sm:gap-4 sm:scroll-pl-5 sm:px-5 lg:scroll-pl-8 lg:px-8 [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((house, i) => (
-          <HouseCard key={`${house.name}-${i}`} house={house} onPick={onPick} />
+          <HouseCard
+            key={`${house.name}-${i}`}
+            house={house}
+            active={activeBrand === house.name}
+            onSelect={onSelectBrand}
+          />
         ))}
       </div>
 

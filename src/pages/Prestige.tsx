@@ -92,6 +92,17 @@ export default function Prestige() {
   const cardRef = useRef<LuxuryInquiryCardHandle>(null);
   const inquiryRef = useRef<HTMLDivElement>(null);
   const pickedIds = useMemo(() => new Set(watches.map((w) => w.id)), [watches]);
+  /** Catalog brand filter — driven by the houses carousel. */
+  const [catalogBrand, setCatalogBrand] = useState<string | null>(null);
+
+  /** Carousel card click: toggle the brand filter; on select, scroll to the catalog. */
+  function selectBrand(brand: string) {
+    const next = catalogBrand === brand ? null : brand;
+    setCatalogBrand(next);
+    if (next) {
+      setTimeout(() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    }
+  }
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -146,34 +157,8 @@ export default function Prestige() {
         </div>
       </section>
 
-      {/* ── Prestige houses carousel ── */}
-      <section className="bg-white py-12 sm:py-16">
-        <div className="mx-auto mb-7 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiové domy</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
-          </Reveal>
-        </div>
-        <LuxuryShowcaseCarousel onPick={pickWatch} />
-      </section>
-
-      {/* ── On-demand product catalog — cards like the main catalog, CTA = Poptat ── */}
-      <section id="katalog" className="scroll-mt-24 border-t border-zinc-200 bg-[#fafaf8] py-12 sm:py-16">
-        <div className="mx-auto mb-8 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Katalog na poptávku</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Vyberte si model</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
-              Kurátorovaný výběr modelů, které zajistíme na poptávku. Ceny sdělujeme
-              individuálně v závazné nabídce.
-            </p>
-          </Reveal>
-        </div>
-        <LuxuryCatalogGrid onPick={pickWatch} pickedIds={pickedIds} />
-      </section>
-
-      {/* ── How it works (three steps) — right after the search ── */}
-      <section className="py-16 sm:py-24">
+      {/* ── How it works (three steps) — right under the form ── */}
+      <section className="py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-12 text-center">
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Jak to funguje</p>
@@ -201,19 +186,8 @@ export default function Prestige() {
         </div>
       </section>
 
-      {/* ── All-brands showcase (homepage Netflix carousel) ── */}
-      <section className="border-y border-zinc-200 bg-white py-12 sm:py-14">
-        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Celý katalog swelt</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Prozkoumejte naše značky</h2>
-          </Reveal>
-        </div>
-        <BrandShowcaseCarousel />
-      </section>
-
-      {/* ── Benefits ── */}
-      <section className="border-y border-zinc-200 bg-white py-16 sm:py-24">
+      {/* ── Benefits — why swelt ── */}
+      <section className="border-y border-zinc-200 bg-white py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-12 text-center">
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Proč přes swelt</p>
@@ -236,6 +210,46 @@ export default function Prestige() {
             })}
           </div>
         </div>
+      </section>
+
+      {/* ── Prestige houses carousel — filters the catalog below ── */}
+      <section className="bg-white py-12 sm:py-16">
+        <div className="mx-auto mb-7 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiové domy</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
+              Vyberte značku — katalog níže se přizpůsobí.
+            </p>
+          </Reveal>
+        </div>
+        <LuxuryShowcaseCarousel activeBrand={catalogBrand} onSelectBrand={selectBrand} />
+      </section>
+
+      {/* ── On-demand product catalog — cards like the main catalog, CTA = Poptat ── */}
+      <section id="katalog" className="scroll-mt-24 border-t border-zinc-200 bg-[#fafaf8] py-12 sm:py-16">
+        <div className="mx-auto mb-8 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Katalog na poptávku</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Vyberte si model</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
+              Kurátorovaný výběr modelů, které zajistíme na poptávku. Ceny sdělujeme
+              individuálně v závazné nabídce.
+            </p>
+          </Reveal>
+        </div>
+        <LuxuryCatalogGrid brand={catalogBrand} onClearBrand={() => setCatalogBrand(null)} onPick={pickWatch} pickedIds={pickedIds} />
+      </section>
+
+      {/* ── All-brands showcase (homepage Netflix carousel) ── */}
+      <section className="border-y border-zinc-200 bg-white py-12 sm:py-14">
+        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <Reveal>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">Celý katalog swelt</p>
+            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Prozkoumejte naše značky</h2>
+          </Reveal>
+        </div>
+        <BrandShowcaseCarousel />
       </section>
 
       {/* ── FAQ ── */}

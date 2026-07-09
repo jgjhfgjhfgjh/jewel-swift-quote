@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Plus, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
-import { LUXURY_HOUSES, LUXURY_MODELS, type LuxuryModel } from '@/data/luxuryCatalog';
+import { LUXURY_MODELS, type LuxuryModel } from '@/data/luxuryCatalog';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
 const display: React.CSSProperties = { fontFamily: "'Montserrat', sans-serif" };
@@ -166,9 +166,13 @@ function LuxuryProductCard({ m, onPick, picked }: { m: LuxuryModel; onPick: (w: 
   );
 }
 
-/* ── Catalog grid with brand filter chips ── */
-export function LuxuryCatalogGrid({ onPick, pickedIds }: { onPick: (w: SelectedWatch) => void; pickedIds: Set<string> }) {
-  const [brand, setBrand] = useState<string | null>(null);
+/* ── Catalog grid — filtered by the houses carousel above ── */
+export function LuxuryCatalogGrid({ brand, onClearBrand, onPick, pickedIds }: {
+  brand: string | null;
+  onClearBrand: () => void;
+  onPick: (w: SelectedWatch) => void;
+  pickedIds: Set<string>;
+}) {
   const models = useMemo(
     () => (brand ? LUXURY_MODELS.filter((m) => m.brand === brand) : LUXURY_MODELS),
     [brand],
@@ -176,26 +180,22 @@ export function LuxuryCatalogGrid({ onPick, pickedIds }: { onPick: (w: SelectedW
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      {/* Brand filter chips */}
-      <div className="mb-6 flex flex-wrap justify-center gap-2">
-        <button
-          type="button"
-          onClick={() => setBrand(null)}
-          className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${brand === null ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-300 bg-white text-zinc-600 hover:border-zinc-400'}`}
-        >
-          Všechny značky
-        </button>
-        {LUXURY_HOUSES.map((h) => (
-          <button
-            key={h.name}
-            type="button"
-            onClick={() => setBrand(brand === h.name ? null : h.name)}
-            className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${brand === h.name ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-300 bg-white text-zinc-600 hover:border-zinc-400'}`}
-          >
-            {h.name}
-          </button>
-        ))}
-      </div>
+      {/* Active brand filter indicator (set via the carousel) */}
+      {brand && (
+        <div className="mb-6 flex items-center justify-center gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white py-1.5 pl-4 pr-2 text-sm font-medium text-zinc-800">
+            {brand} · {models.length} modelů
+            <button
+              type="button"
+              onClick={onClearBrand}
+              aria-label="Zrušit filtr značky"
+              className="rounded-full p-1 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </span>
+        </div>
+      )}
 
       {/* Grid — same density as the main catalog */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
