@@ -92,16 +92,12 @@ export default function Prestige() {
   const cardRef = useRef<LuxuryInquiryCardHandle>(null);
   const inquiryRef = useRef<HTMLDivElement>(null);
   const pickedIds = useMemo(() => new Set(watches.map((w) => w.id)), [watches]);
-  /** Catalog brand filter — driven by the houses carousel. */
-  const [catalogBrand, setCatalogBrand] = useState<string | null>(null);
+  /** Catalog brand filter (multi-select) — driven by the houses carousel. */
+  const [catalogBrands, setCatalogBrands] = useState<string[]>([]);
 
-  /** Carousel card click: toggle the brand filter; on select, scroll to the catalog. */
-  function selectBrand(brand: string) {
-    const next = catalogBrand === brand ? null : brand;
-    setCatalogBrand(next);
-    if (next) {
-      setTimeout(() => document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
-    }
+  /** Carousel card click: toggle the brand in the filter set. */
+  function toggleBrand(brand: string) {
+    setCatalogBrands((prev) => prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]);
   }
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -212,23 +208,9 @@ export default function Prestige() {
         </div>
       </section>
 
-      {/* ── Prestige houses carousel — filters the catalog below ── */}
-      <section className="bg-white py-12 sm:py-16">
-        <div className="mx-auto mb-7 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Prémiové domy</p>
-            <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Domy zajišťované na poptávku</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-500">
-              Vyberte značku — katalog níže se přizpůsobí.
-            </p>
-          </Reveal>
-        </div>
-        <LuxuryShowcaseCarousel activeBrand={catalogBrand} onSelectBrand={selectBrand} />
-      </section>
-
-      {/* ── On-demand product catalog — cards like the main catalog, CTA = Poptat ── */}
+      {/* ── On-demand product catalog — header, brand-filter carousel, grid ── */}
       <section id="katalog" className="scroll-mt-24 border-t border-zinc-200 bg-[#fafaf8] py-12 sm:py-16">
-        <div className="mx-auto mb-8 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto mb-6 max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary sm:text-xs">Katalog na poptávku</p>
             <h2 className="text-2xl font-medium tracking-tight sm:text-3xl" style={display}>Vyberte si model</h2>
@@ -238,7 +220,13 @@ export default function Prestige() {
             </p>
           </Reveal>
         </div>
-        <LuxuryCatalogGrid brand={catalogBrand} onClearBrand={() => setCatalogBrand(null)} onPick={pickWatch} pickedIds={pickedIds} />
+
+        {/* Brand filter — compact showcase carousel (click cards to filter, multi-select) */}
+        <div className="mb-8">
+          <LuxuryShowcaseCarousel selectedBrands={catalogBrands} onToggleBrand={toggleBrand} />
+        </div>
+
+        <LuxuryCatalogGrid brands={catalogBrands} onToggleBrand={toggleBrand} onClearBrands={() => setCatalogBrands([])} onPick={pickWatch} pickedIds={pickedIds} />
       </section>
 
       {/* ── All-brands showcase (homepage Netflix carousel) ── */}

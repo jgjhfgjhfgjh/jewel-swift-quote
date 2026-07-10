@@ -167,7 +167,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           onClick={expandSticky}
         >
           <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
-            placeholder="Hledejte jakýkoliv model — Omega Speedmaster, Cartier Santos…" />
+            placeholder="Zadejte model pro poptávku, nebo vyberte z katalogu" />
           {!expanded ? (
             <p className="mt-2.5 px-1 text-center text-xs text-zinc-400">
               Zadejte model — otevře se nezávazná poptávka. Bez závazku, odpověď do 48 h.

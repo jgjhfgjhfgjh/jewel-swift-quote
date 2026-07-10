@@ -166,34 +166,47 @@ function LuxuryProductCard({ m, onPick, picked }: { m: LuxuryModel; onPick: (w: 
   );
 }
 
-/* ── Catalog grid — filtered by the houses carousel above ── */
-export function LuxuryCatalogGrid({ brand, onClearBrand, onPick, pickedIds }: {
-  brand: string | null;
-  onClearBrand: () => void;
+/* ── Catalog grid — filtered by the houses carousel above (multi-select) ── */
+export function LuxuryCatalogGrid({ brands, onToggleBrand, onClearBrands, onPick, pickedIds }: {
+  brands: string[];
+  onToggleBrand: (brand: string) => void;
+  onClearBrands: () => void;
   onPick: (w: SelectedWatch) => void;
   pickedIds: Set<string>;
 }) {
   const models = useMemo(
-    () => (brand ? LUXURY_MODELS.filter((m) => m.brand === brand) : LUXURY_MODELS),
-    [brand],
+    () => (brands.length > 0 ? LUXURY_MODELS.filter((m) => brands.includes(m.brand)) : LUXURY_MODELS),
+    [brands],
   );
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      {/* Active brand filter indicator (set via the carousel) */}
-      {brand && (
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white py-1.5 pl-4 pr-2 text-sm font-medium text-zinc-800">
-            {brand} · {models.length} modelů
+      {/* Active brand filters (set via the carousel) */}
+      {brands.length > 0 && (
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          {brands.map((b) => (
+            <span key={b} className="inline-flex items-center gap-1.5 rounded-full border border-zinc-300 bg-white py-1 pl-3.5 pr-1.5 text-sm font-medium text-zinc-800">
+              {b}
+              <button
+                type="button"
+                onClick={() => onToggleBrand(b)}
+                aria-label={`Odebrat filtr ${b}`}
+                className="rounded-full p-1 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </span>
+          ))}
+          <span className="text-xs text-zinc-400">{models.length} modelů</span>
+          {brands.length > 1 && (
             <button
               type="button"
-              onClick={onClearBrand}
-              aria-label="Zrušit filtr značky"
-              className="rounded-full p-1 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
+              onClick={onClearBrands}
+              className="text-xs font-medium text-zinc-500 underline-offset-2 hover:text-zinc-900 hover:underline"
             >
-              <X className="h-3.5 w-3.5" />
+              Zrušit vše
             </button>
-          </span>
+          )}
         </div>
       )}
 
