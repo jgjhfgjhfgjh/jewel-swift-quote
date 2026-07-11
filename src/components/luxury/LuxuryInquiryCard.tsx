@@ -16,7 +16,7 @@ const QTY_CHIPS = ['1 kus', '2–5 kusů', '6–20 kusů', '20+ kusů'];
 
 /** Trust tiles shown inside the form (mirrors the /luxury inquiry benefits). */
 const FORM_BENEFITS = [
-  { icon: HandCoins, title: 'Velkoobchodní ceny', text: 'Stejné ceny jako B2B partneři — úspora 40–60 % oproti maloobchodu.' },
+  { icon: HandCoins, title: 'Velkoobchodní ceny', text: 'Zajistíme nejlepší možnou velkoobchodní cenu i na jeden kus.' },
   { icon: Package, title: 'Dostupné od 1 kusu', text: 'Žádná minima. Jeden kus i desítky — pro osobní nákup i firemní dárky.' },
   { icon: Lock, title: 'Diskrétní služba', text: 'Neutrální balení, nenápadné doručení. Fakturace dle vašich potřeb.' },
 ] as const;
@@ -166,7 +166,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
   return (
     <CardShell progress={expanded ? ((step + 1) / total) * 100 : undefined}>
-      {/* Step 1: purchase type + search — visible even before the card expands */}
+      {/* Step 1: the search is the first — and, collapsed, the only — element */}
       {step === 0 && (
         <div
           className="px-5 pt-5 sm:px-7 sm:pt-6"
@@ -175,22 +175,6 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           onFocusCapture={expandSticky}
           onClick={expandSticky}
         >
-          {/* Personal vs. company purchase — the very first choice */}
-          <div className="mb-3 grid grid-cols-2 gap-1.5 rounded-xl bg-zinc-100 p-1">
-            {([['personal', 'Osobní nákup'], ['company', 'Nákup na firmu']] as const).map(([val, label]) => {
-              const on = form.purchaseType === val;
-              return (
-                <button
-                  key={val} type="button"
-                  onClick={() => patchForm({ purchaseType: val })}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${on ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-500 hover:text-zinc-800'}`}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-
           <LuxuryWatchSearch variant="hero" selected={watches} onChange={setWatches}
             placeholder="Zadejte model pro poptávku, nebo vyberte z katalogu" />
           {!expanded ? (
@@ -297,7 +281,30 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
         {step === 2 && (
           <div className="space-y-4">
-            {/* Company fields (purchase type is chosen at the top of the card) */}
+            {/* Purchase type — personal (retail) vs. company (wholesale price) */}
+            <div>
+              <label className="mb-2 block text-sm font-medium">Typ nákupu</label>
+              <div className="grid grid-cols-2 gap-1.5 rounded-xl bg-zinc-100 p-1">
+                {([
+                  ['personal', 'Osobní nákup', 'bez velkoobchodní ceny'],
+                  ['company', 'Nákup na firmu', 's velkoobchodní cenou'],
+                ] as const).map(([val, label, sub]) => {
+                  const on = form.purchaseType === val;
+                  return (
+                    <button
+                      key={val} type="button"
+                      onClick={() => patchForm({ purchaseType: val })}
+                      className={`flex flex-col items-center rounded-lg px-3 py-2 transition-colors ${on ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
+                    >
+                      <span className={`text-sm font-medium ${on ? 'text-zinc-900' : 'text-zinc-500'}`}>{label}</span>
+                      <span className={`text-[10px] ${on ? (val === 'company' ? 'text-emerald-600 font-medium' : 'text-zinc-400') : 'text-zinc-400'}`}>{sub}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Company fields */}
             {form.purchaseType === 'company' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -401,7 +408,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                 <span className="text-sm text-zinc-700">{form.note}</span>
               </ReviewRow>
             )}
-            <ReviewRow label="Typ nákupu" onEdit={() => setStep(0)}>
+            <ReviewRow label="Typ nákupu" onEdit={() => setStep(2)}>
               <span className="text-sm text-zinc-700">
                 {form.purchaseType === 'company'
                   ? <>Na firmu{form.company ? <> · <span className="font-medium">{form.company}</span></> : null}{form.ico ? ` · IČO ${form.ico}` : ''}</>
