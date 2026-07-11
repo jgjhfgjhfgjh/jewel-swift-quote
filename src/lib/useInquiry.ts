@@ -11,6 +11,8 @@ export interface InquiryForm {
   ico: string;
   name: string;
   email: string;
+  /** International dial-code prefix for the phone, e.g. "+420". */
+  phoneCode: string;
   phone: string;
   note: string;
   budget: string;
@@ -20,7 +22,7 @@ export interface InquiryForm {
 
 const EMPTY_FORM: InquiryForm = {
   purchaseType: 'personal', company: '', ico: '',
-  name: '', email: '', phone: '', note: '', budget: '', quantity: '1 kus',
+  name: '', email: '', phoneCode: '+420', phone: '', note: '', budget: '', quantity: '1 kus',
 };
 
 interface InquiryStore {

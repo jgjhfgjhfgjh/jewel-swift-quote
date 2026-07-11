@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LuxuryWatchSearch } from '@/components/luxury/LuxuryWatchSearch';
+import { EUROPE_DIAL_CODES, flagEmoji } from '@/data/europeDialCodes';
 import { useInquiry } from '@/lib/useInquiry';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
@@ -97,7 +98,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
       isCompany && form.company ? `Firma: ${form.company}` : '',
       isCompany && form.ico ? `IČO: ${form.ico}` : '',
       `Jméno: ${form.name}`, `E-mail: ${form.email}`,
-      form.phone ? `Telefon: ${form.phone}` : '',
+      form.phone ? `Telefon: ${form.phoneCode} ${form.phone}` : '',
       `Počet kusů: ${form.quantity || '1 kus'}`,
       form.budget ? `Rozpočet: ${form.budget}` : '', '',
       'Poptávané modely:',
@@ -146,15 +147,11 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
             <Check className="h-8 w-8 text-emerald-600" />
           </div>
-          <h3 className="text-2xl font-medium tracking-tight" style={display}>Poptávka je připravená</h3>
+          <h3 className="text-2xl font-medium tracking-tight" style={display}>Poptávka odeslána</h3>
           <p className="mx-auto mt-2 max-w-md text-sm text-zinc-500">
             Děkujeme{form.name ? `, ${form.name.split(' ')[0]}` : ''}. Ozveme se{form.email ? <> na <strong>{form.email}</strong></> : null} do 48 hodin se závaznou nabídkou.
-            Pro okamžité odeslání můžete poptávku poslat i e-mailem.
           </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href={buildMailto()}>
-              <Button className="gap-2 bg-zinc-900 text-white hover:bg-zinc-800"><Mail className="h-4 w-4" /> Otevřít v e-mailu</Button>
-            </a>
+          <div className="mt-6 flex justify-center">
             <Button variant="outline" onClick={startOver}>Nová poptávka</Button>
           </div>
         </div>
@@ -283,10 +280,10 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
           <div className="space-y-4">
             {/* Purchase type — personal (retail) vs. company (wholesale price) */}
             <div>
-              <label className="mb-2 block text-sm font-medium">Typ nákupu</label>
+              <label className="mb-2 block text-sm font-medium">Typ nákupu <span className="text-red-500">*</span></label>
               <div className="grid grid-cols-2 gap-1.5 rounded-xl bg-zinc-100 p-1">
                 {([
-                  ['personal', 'Osobní nákup', 'bez velkoobchodní ceny'],
+                  ['personal', 'Osobní nákup', ''],
                   ['company', 'Nákup na firmu', 's velkoobchodní cenou'],
                 ] as const).map(([val, label, sub]) => {
                   const on = form.purchaseType === val;
@@ -294,10 +291,10 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                     <button
                       key={val} type="button"
                       onClick={() => patchForm({ purchaseType: val })}
-                      className={`flex flex-col items-center rounded-lg px-3 py-2 transition-colors ${on ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
+                      className={`flex h-12 flex-col items-center justify-center rounded-lg px-3 transition-colors ${on ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
                     >
                       <span className={`text-sm font-medium ${on ? 'text-zinc-900' : 'text-zinc-500'}`}>{label}</span>
-                      <span className={`text-[10px] ${on ? (val === 'company' ? 'text-emerald-600 font-medium' : 'text-zinc-400') : 'text-zinc-400'}`}>{sub}</span>
+                      {sub && <span className={`text-[10px] ${on ? 'font-medium text-emerald-600' : 'text-zinc-400'}`}>{sub}</span>}
                     </button>
                   );
                 })}
@@ -308,14 +305,14 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
             {form.purchaseType === 'company' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-company">Název firmy</label>
+                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-company">Název firmy <span className="text-red-500">*</span></label>
                   <input id="c-company" type="text" value={form.company} onChange={(e) => { patchForm({ company: e.target.value }); setErrors((p) => ({ ...p, company: undefined })); }}
                     placeholder="Moje firma s.r.o." autoComplete="organization"
                     className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.company ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
                   {errors.company && <p className="mt-1 text-xs text-red-500">{errors.company}</p>}
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-ico">IČO</label>
+                  <label className="mb-1.5 block text-sm font-medium" htmlFor="c-ico">IČO <span className="text-red-500">*</span></label>
                   <input id="c-ico" type="text" inputMode="numeric" value={form.ico} onChange={(e) => { patchForm({ ico: e.target.value }); setErrors((p) => ({ ...p, ico: undefined })); }}
                     placeholder="12345678"
                     className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.ico ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
@@ -354,14 +351,14 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                 )}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium" htmlFor="c-name">Jméno a příjmení</label>
+                    <label className="mb-1.5 block text-sm font-medium" htmlFor="c-name">Jméno a příjmení <span className="text-red-500">*</span></label>
                     <input id="c-name" type="text" value={form.name} onChange={(e) => { patchForm({ name: e.target.value }); setErrors((p) => ({ ...p, name: undefined })); }}
                       placeholder="Jan Novák" autoComplete="name"
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.name ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
                     {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium" htmlFor="c-email">E-mail</label>
+                    <label className="mb-1.5 block text-sm font-medium" htmlFor="c-email">E-mail <span className="text-red-500">*</span></label>
                     <input id="c-email" type="email" value={form.email} onChange={(e) => { patchForm({ email: e.target.value }); setErrors((p) => ({ ...p, email: undefined })); }}
                       placeholder="jan@email.cz" autoComplete="email"
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-zinc-900/10 ${errors.email ? 'border-red-400' : 'border-zinc-300 focus:border-zinc-900'}`} />
@@ -370,10 +367,23 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium" htmlFor="c-phone">Telefon <span className="text-zinc-400">(nepovinné)</span></label>
-                  <input id="c-phone" type="tel" value={form.phone} onChange={(e) => patchForm({ phone: e.target.value })}
-                    placeholder="+420 …" autoComplete="tel"
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10" />
+                  <div className="flex gap-2">
+                    <select
+                      aria-label="Předvolba země"
+                      value={form.phoneCode}
+                      onChange={(e) => patchForm({ phoneCode: e.target.value })}
+                      className="w-[104px] shrink-0 rounded-lg border border-zinc-300 bg-white px-2 py-2.5 text-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10"
+                    >
+                      {EUROPE_DIAL_CODES.map((c) => (
+                        <option key={c.iso} value={c.dial}>{flagEmoji(c.iso)} {c.dial}</option>
+                      ))}
+                    </select>
+                    <input id="c-phone" type="tel" value={form.phone} onChange={(e) => patchForm({ phone: e.target.value })}
+                      placeholder="777 123 456" autoComplete="tel"
+                      className="w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10" />
+                  </div>
                 </div>
+                <p className="text-xs text-zinc-400"><span className="text-red-500">*</span> Povinné pole</p>
                 {savedContact && (
                   <button type="button" onClick={useSavedContact} className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 underline-offset-2 hover:text-zinc-900 hover:underline">
                     <UserCheck className="h-3.5 w-3.5" /> Použít uložený kontakt
@@ -416,7 +426,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
               </span>
             </ReviewRow>
             <ReviewRow label="Kontakt" onEdit={() => setStep(2)}>
-              <span className="text-sm text-zinc-700">{form.name} · {form.email}{form.phone ? ` · ${form.phone}` : ''}</span>
+              <span className="text-sm text-zinc-700">{form.name} · {form.email}{form.phone ? ` · ${form.phoneCode} ${form.phone}` : ''}</span>
             </ReviewRow>
           </div>
         )}
