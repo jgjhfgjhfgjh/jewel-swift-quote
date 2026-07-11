@@ -553,6 +553,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                           <DropdownMenuItem onClick={() => navigate('/admin/erp')} className="gap-2 text-xs">
                             <LayoutDashboard className="h-3.5 w-3.5" /> ERP přehled
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/admin/poptavky')} className="gap-2 text-xs">
+                            <Package className="h-3.5 w-3.5" /> Poptávky Luxury
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
                             <Users className="h-3.5 w-3.5" /> Správa zákazníků
                           </DropdownMenuItem>

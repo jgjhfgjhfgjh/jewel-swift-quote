@@ -1,11 +1,13 @@
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, forwardRef } from 'react';
 import {
-  ArrowRight, ArrowLeft, Check, Mail, Watch, SlidersHorizontal, User, ClipboardCheck,
-  Pencil, MessageCircle, UserCheck, LogIn, HandCoins, Package, Lock,
+  ArrowRight, ArrowLeft, Check, Watch, SlidersHorizontal, User, ClipboardCheck,
+  Pencil, MessageCircle, UserCheck, LogIn, HandCoins, Package, Lock, Loader2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { LuxuryWatchSearch } from '@/components/luxury/LuxuryWatchSearch';
 import { EUROPE_DIAL_CODES, flagEmoji } from '@/data/europeDialCodes';
+import { supabase } from '@/integrations/supabase/client';
 import { useInquiry } from '@/lib/useInquiry';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useStore } from '@/lib/store';
@@ -46,6 +48,7 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string; company?: string; ico?: string }>({});
   const [contactMode, setContactMode] = useState<'saved' | 'manual'>('manual');
   /** Collapsed = just a search box; expands into the full form on interaction. */
@@ -91,23 +94,6 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
     }
   }, [savedContact, patchForm]);
 
-  function buildMailto(): string {
-    const isCompany = form.purchaseType === 'company';
-    const lines = [
-      `Typ nákupu: ${isCompany ? 'Na firmu (B2B)' : 'Osobní'}`,
-      isCompany && form.company ? `Firma: ${form.company}` : '',
-      isCompany && form.ico ? `IČO: ${form.ico}` : '',
-      `Jméno: ${form.name}`, `E-mail: ${form.email}`,
-      form.phone ? `Telefon: ${form.phoneCode} ${form.phone}` : '',
-      `Počet kusů: ${form.quantity || '1 kus'}`,
-      form.budget ? `Rozpočet: ${form.budget}` : '', '',
-      'Poptávané modely:',
-      ...(watches.length ? watches.map((w) => `• ${w.brand} ${w.model}`) : ['(neuvedeno)']),
-      '', form.note ? `Poznámka: ${form.note}` : '',
-    ].filter(Boolean);
-    return `mailto:info@swelt.cz?subject=${encodeURIComponent('Poptávka — prémiový segment')}&body=${encodeURIComponent(lines.join('\n'))}`;
-  }
-
   function validateContact(): boolean {
     const e: typeof errors = {};
     const usingSaved = contactMode === 'saved' && !!savedContact;
@@ -127,7 +113,32 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
     setStep((s) => Math.min(total - 1, s + 1));
   }
   function back() { setStep((s) => Math.max(0, s - 1)); }
-  function submit() { if (!validateContact()) { setStep(2); return; } setSubmitted(true); }
+
+  async function submit() {
+    if (!validateContact()) { setStep(2); return; }
+    const isCompany = form.purchaseType === 'company';
+    setSubmitting(true);
+    const { error } = await supabase.from('prestige_inquiries').insert({
+      purchase_type: form.purchaseType,
+      company: isCompany ? form.company.trim() || null : null,
+      ico: isCompany ? form.ico.trim() || null : null,
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone_code: form.phone.trim() ? form.phoneCode : null,
+      phone: form.phone.trim() || null,
+      quantity: form.quantity || '1 kus',
+      budget: form.budget || null,
+      note: form.note.trim() || null,
+      watches: watches.map((w) => ({ id: w.id, brand: w.brand, model: w.model, custom: w.custom })),
+      user_id: user?.id ?? null,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error('Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
+      return;
+    }
+    setSubmitted(true);
+  }
   function startOver() { reset(); setSubmitted(false); setStep(0); setContactMode(savedContact ? 'saved' : 'manual'); }
 
   function addConsult() {
@@ -445,8 +456,10 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
             {step === 0 ? `Pokračovat k poptávce${watches.length ? ` (${watches.length})` : ''}` : 'Pokračovat'} <ArrowRight className="h-4 w-4" />
           </Button>
         ) : (
-          <Button onClick={submit} size="lg" className="gap-2 bg-zinc-900 text-white hover:bg-zinc-800">
-            Odeslat poptávku <ArrowRight className="h-4 w-4" />
+          <Button onClick={submit} disabled={submitting} size="lg" className="gap-2 bg-zinc-900 text-white hover:bg-zinc-800 disabled:opacity-60">
+            {submitting
+              ? <>Odesílám… <Loader2 className="h-4 w-4 animate-spin" /></>
+              : <>Odeslat poptávku <ArrowRight className="h-4 w-4" /></>}
           </Button>
         )}
       </div>

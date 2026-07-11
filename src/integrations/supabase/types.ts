@@ -811,6 +811,63 @@ export type Database = {
         }
         Relationships: []
       }
+      prestige_inquiries: {
+        Row: {
+          admin_note: string | null
+          budget: string | null
+          company: string | null
+          created_at: string
+          email: string
+          ico: string | null
+          id: string
+          name: string
+          note: string | null
+          phone: string | null
+          phone_code: string | null
+          purchase_type: string
+          quantity: string | null
+          status: string
+          user_id: string | null
+          watches: Json
+        }
+        Insert: {
+          admin_note?: string | null
+          budget?: string | null
+          company?: string | null
+          created_at?: string
+          email: string
+          ico?: string | null
+          id?: string
+          name: string
+          note?: string | null
+          phone?: string | null
+          phone_code?: string | null
+          purchase_type?: string
+          quantity?: string | null
+          status?: string
+          user_id?: string | null
+          watches?: Json
+        }
+        Update: {
+          admin_note?: string | null
+          budget?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string
+          ico?: string | null
+          id?: string
+          name?: string
+          note?: string | null
+          phone?: string | null
+          phone_code?: string | null
+          purchase_type?: string
+          quantity?: string | null
+          status?: string
+          user_id?: string | null
+          watches?: Json
+        }
+        Relationships: []
+      }
       produkty: {
         Row: {
           category_text: string | null
