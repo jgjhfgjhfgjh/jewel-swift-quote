@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
+import { WatchPhoto } from '@/components/luxury/WatchPhoto';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 import { LUXURY_HOUSES, type LuxuryHouse } from '@/data/luxuryCatalog';
 
@@ -78,15 +79,9 @@ function HouseCard({ house, selected, onToggle }: {
             <div
               key={m.model}
               aria-hidden={i !== idx}
-              className={`absolute inset-0 flex items-center justify-center p-1 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute inset-0 overflow-hidden p-1 transition-opacity duration-700 ease-in-out ${i === idx ? 'opacity-100' : 'opacity-0'}`}
             >
-              <img
-                src={m.image}
-                alt={m.model}
-                loading="lazy"
-                draggable={false}
-                className="max-h-full max-w-full object-contain"
-              />
+              <WatchPhoto src={m.image!} alt={m.model} />
             </div>
           ))
         ) : (

@@ -1,8 +1,9 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Plus, Check } from 'lucide-react';
+import { X, Plus, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HouseLogo } from '@/components/luxury/HouseLogo';
+import { WatchPhoto } from '@/components/luxury/WatchPhoto';
 import { LUXURY_MODELS, type LuxuryModel } from '@/data/luxuryCatalog';
 import type { SelectedWatch } from '@/components/luxury/LuxuryWatchSearch';
 
@@ -12,23 +13,20 @@ function toWatch(m: LuxuryModel): SelectedWatch {
   return { id: m.id, brand: m.brand, model: m.model, domain: m.domain, from: null, custom: false };
 }
 
-/* ── Product image with brand-mark fallback (no photo yet / broken URL) ── */
-function ProductImage({ m, className = '' }: { m: LuxuryModel; className?: string }) {
+/* ── Product image with brand-mark fallback (no photo yet / broken URL).
+ * Photos render on pure white via WatchPhoto, which normalises the very
+ * different official CDN crops to one look (watch large, no backdrop). ── */
+function ProductImage({ m, pad = 'p-3' }: { m: LuxuryModel; pad?: string }) {
   const [err, setErr] = useState(false);
   if (m.image && !err) {
     return (
-      <img
-        src={m.image}
-        alt={`${m.brand} ${m.model}`}
-        loading="lazy"
-        draggable={false}
-        onError={() => setErr(true)}
-        className={`h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105 ${className}`}
-      />
+      <div className={`h-full w-full overflow-hidden bg-white ${pad}`}>
+        <WatchPhoto src={m.image} alt={`${m.brand} ${m.model}`} onError={() => setErr(true)} />
+      </div>
     );
   }
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-white p-4">
       <HouseLogo
         name={m.brand} domain={m.domain} width={300} height={150}
         className="max-h-12 w-auto max-w-[70%] object-contain opacity-90 [mix-blend-mode:multiply]"
@@ -36,6 +34,130 @@ function ProductImage({ m, className = '' }: { m: LuxuryModel; className?: strin
       />
       <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-400">{m.collection ?? m.model}</span>
     </div>
+  );
+}
+
+/* ── Fullscreen photo lightbox — mirrors ProductImageGallery from the main
+ * catalog (white overlay, ESC/arrow keys, swipe, round controls), but since
+ * every model has one photo the arrows switch BETWEEN PRODUCTS of the
+ * currently filtered list. ── */
+const SWIPE_THRESHOLD = 50;
+
+function LuxuryLightbox({ models, index, onNavigate, onClose }: {
+  models: LuxuryModel[];
+  index: number;
+  onNavigate: (i: number) => void;
+  onClose: () => void;
+}) {
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const m = models[index];
+  const hasMultiple = models.length > 1;
+  const next = () => onNavigate((index + 1) % models.length);
+  const prev = () => onNavigate((index - 1 + models.length) % models.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      else if (hasMultiple && e.key === 'ArrowRight') next();
+      else if (hasMultiple && e.key === 'ArrowLeft') prev();
+    };
+    window.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, hasMultiple, models.length]);
+
+  if (!m) return null;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dy) > Math.abs(dx) && dy > SWIPE_THRESHOLD) onClose();
+    else if (hasMultiple && Math.abs(dx) > SWIPE_THRESHOLD) { if (dx < 0) next(); else prev(); }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${m.brand} ${m.model}`}
+      onClick={onClose}
+      className="fixed inset-0 z-[20000] flex items-center justify-center bg-white/95 backdrop-blur-sm animate-in fade-in duration-200"
+    >
+      {/* Close */}
+      <button
+        type="button"
+        aria-label="Zavřít galerii"
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        className="fixed right-4 top-4 z-[20002] flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10"
+      >
+        <X className="h-6 w-6" />
+      </button>
+
+      <div
+        className="relative z-[20001] flex h-full w-full max-w-5xl flex-col items-center justify-center px-4 py-16 md:px-16"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="h-[70vh] w-full max-w-2xl overflow-hidden">
+          {m.image ? (
+            <WatchPhoto src={m.image} alt={`${m.brand} ${m.model}`} eager />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <HouseLogo
+                name={m.brand} domain={m.domain} width={520} height={220}
+                className="max-h-24 w-auto max-w-[240px] object-contain [mix-blend-mode:multiply]"
+                textClassName="text-3xl font-medium text-zinc-700"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Caption + counter */}
+        <div className="mt-4 text-center" style={display}>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-gold">{m.brand}</p>
+          <p className="text-base font-semibold text-zinc-900">{m.model}</p>
+          {hasMultiple && (
+            <p className="mt-1 text-xs tabular-nums text-zinc-400">{index + 1} / {models.length}</p>
+          )}
+        </div>
+
+        {hasMultiple && (
+          <>
+            <button
+              type="button"
+              aria-label="Předchozí model"
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10 md:left-4"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button
+              type="button"
+              aria-label="Další model"
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/5 text-gray-900 shadow-md transition hover:bg-black/10 md:right-4"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          </>
+        )}
+      </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -68,7 +190,7 @@ function LuxuryProductModal({ m, open, onClose, onPick, picked }: {
 
         <div className="grid grid-cols-1 gap-0 md:grid-cols-2">
           {/* Image */}
-          <div className="group relative flex min-h-64 items-center justify-center rounded-tl-xl bg-gray-50 p-6 md:rounded-bl-xl">
+          <div className="group relative flex min-h-64 items-center justify-center rounded-tl-xl bg-white p-6 md:rounded-bl-xl">
             <div className="h-64 w-full">
               <ProductImage m={m} />
             </div>
@@ -120,8 +242,12 @@ function LuxuryProductModal({ m, open, onClose, onPick, picked }: {
   );
 }
 
-/* ── Single catalog card — same compact layout as the main catalog card ── */
-function LuxuryProductCard({ m, onPick, picked }: { m: LuxuryModel; onPick: (w: SelectedWatch) => void; picked: boolean }) {
+/* ── Single catalog card — same compact layout as the main catalog card.
+ * Photo click opens the fullscreen lightbox (like the main catalog); the
+ * name opens the detail modal with parameters. ── */
+function LuxuryProductCard({ m, onPick, picked, onOpenPhoto }: {
+  m: LuxuryModel; onPick: (w: SelectedWatch) => void; picked: boolean; onOpenPhoto: () => void;
+}) {
   const [detailOpen, setDetailOpen] = useState(false);
   // Two headline specs under the name, like the catalog's meta lines.
   const specs = Object.entries(m.params ?? {}).slice(0, 2);
@@ -130,10 +256,12 @@ function LuxuryProductCard({ m, onPick, picked }: { m: LuxuryModel; onPick: (w: 
     <>
       <div className="group relative flex flex-col overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-sm">
         <div
-          onClick={() => setDetailOpen(true)}
-          className="relative aspect-square cursor-pointer overflow-hidden bg-muted/40"
+          onClick={() => (m.image ? onOpenPhoto() : setDetailOpen(true))}
+          className="relative aspect-square cursor-pointer overflow-hidden bg-white"
         >
-          <ProductImage m={m} />
+          <div className="h-full w-full transition-transform duration-300 group-hover:scale-105">
+            <ProductImage m={m} />
+          </div>
         </div>
         <div className="flex flex-1 flex-col p-3">
           <span className="self-start text-[10px] font-medium uppercase tracking-wider text-gold">{m.brand}</span>
@@ -178,6 +306,11 @@ export function LuxuryCatalogGrid({ brands, onToggleBrand, onClearBrands, onPick
     () => (brands.length > 0 ? LUXURY_MODELS.filter((m) => brands.includes(m.brand)) : LUXURY_MODELS),
     [brands],
   );
+  /** Index (within the filtered list) of the model open in the photo lightbox. */
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Filter change invalidates lightbox indices.
+  useEffect(() => { setLightboxIndex(null); }, [brands]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -212,10 +345,26 @@ export function LuxuryCatalogGrid({ brands, onToggleBrand, onClearBrands, onPick
 
       {/* Grid — same density as the main catalog */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {models.map((m) => (
-          <LuxuryProductCard key={m.id} m={m} onPick={onPick} picked={pickedIds.has(m.id)} />
+        {models.map((m, i) => (
+          <LuxuryProductCard
+            key={m.id}
+            m={m}
+            onPick={onPick}
+            picked={pickedIds.has(m.id)}
+            onOpenPhoto={() => setLightboxIndex(i)}
+          />
         ))}
       </div>
+
+      {/* Fullscreen photo lightbox — arrows switch between models */}
+      {lightboxIndex !== null && (
+        <LuxuryLightbox
+          models={models}
+          index={lightboxIndex}
+          onNavigate={setLightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   );
 }
