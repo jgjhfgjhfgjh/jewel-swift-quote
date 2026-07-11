@@ -14,11 +14,13 @@ export interface InquiryForm {
   phone: string;
   note: string;
   budget: string;
+  /** Requested quantity bracket (1 kus, 2–5 kusů, …). */
+  quantity: string;
 }
 
 const EMPTY_FORM: InquiryForm = {
   purchaseType: 'personal', company: '', ico: '',
-  name: '', email: '', phone: '', note: '', budget: '',
+  name: '', email: '', phone: '', note: '', budget: '', quantity: '1 kus',
 };
 
 interface InquiryStore {
