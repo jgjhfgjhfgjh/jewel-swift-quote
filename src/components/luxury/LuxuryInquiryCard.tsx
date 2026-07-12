@@ -137,6 +137,9 @@ export const LuxuryInquiryCard = forwardRef<LuxuryInquiryCardHandle>((_props, re
       toast.error('Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
       return;
     }
+    // Fire-and-forget: kick the e-mail automation (confirmation + mini-course).
+    // The hourly cron sweep retries anything this call doesn't reach.
+    try { void fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* non-critical */ }
     setSubmitted(true);
   }
   function startOver() { reset(); setSubmitted(false); setStep(0); setContactMode(savedContact ? 'saved' : 'manual'); }

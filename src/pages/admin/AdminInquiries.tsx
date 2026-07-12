@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Loader2, RefreshCw, Inbox, Sparkles, CalendarDays, CheckCircle2, ChevronDown,
-  Building2, User as UserIcon, Mail, Phone, Package, Coins,
+  Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,37 @@ interface Inquiry {
   note: string | null;
   watches: InquiryWatch[];
   admin_note: string | null;
+  ai_draft: string | null;
 }
+
+interface EmailRow {
+  id: string;
+  kind: string;
+  recipient: string;
+  status: string;
+  scheduled_at: string;
+  sent_at: string | null;
+  last_error: string | null;
+}
+
+const KIND_LABELS: Record<string, string> = {
+  confirmation: 'Potvrzení přijetí',
+  admin_notification: 'Notifikace adminovi',
+  advisory_draft_ready: 'AI draft připraven (admin)',
+  advisory_reply: 'Poradenská odpověď',
+  course_1: 'Akademie 1/5 — Pravost',
+  course_2: 'Akademie 2/5 — Investice',
+  course_3: 'Akademie 3/5 — Velikost',
+  course_4: 'Akademie 4/5 — Údržba',
+  course_5: 'Akademie 5/5 — Ikony',
+};
+
+const EMAIL_STATUS_CLS: Record<string, string> = {
+  sent: 'bg-emerald-500/15 text-emerald-600',
+  pending: 'bg-amber-500/15 text-amber-600',
+  error: 'bg-destructive/15 text-destructive',
+  cancelled: 'bg-muted text-muted-foreground',
+};
 
 const STATUS: { key: Status; label: string; cls: string }[] = [
   { key: 'new', label: 'Nová', cls: 'bg-blue-500/15 text-blue-600' },
@@ -58,6 +88,12 @@ export default function AdminInquiries() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | 'all'>('all');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [emails, setEmails] = useState<EmailRow[]>([]);
+  const [emailsLoading, setEmailsLoading] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -95,6 +131,75 @@ export default function AdminInquiries() {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
     const { error } = await supabase.from('prestige_inquiries').update({ status }).eq('id', id);
     if (error) { toast.error('Změna stavu selhala'); void load(); }
+  }
+
+  async function loadEmails(inquiryId: string) {
+    const { data } = await supabase
+      .from('inquiry_emails')
+      .select('id, kind, recipient, status, scheduled_at, sent_at, last_error')
+      .eq('inquiry_id', inquiryId)
+      .order('scheduled_at', { ascending: true });
+    setEmails((data ?? []) as EmailRow[]);
+  }
+
+  async function toggleOpen(inq: Inquiry) {
+    if (openId === inq.id) { setOpenId(null); return; }
+    setOpenId(inq.id);
+    setDraft(inq.ai_draft ?? '');
+    setEmails([]);
+    setEmailsLoading(true);
+    await loadEmails(inq.id);
+    setEmailsLoading(false);
+  }
+
+  async function saveDraft(id: string) {
+    setSavingDraft(true);
+    const { error } = await supabase.from('prestige_inquiries').update({ ai_draft: draft }).eq('id', id);
+    setSavingDraft(false);
+    if (error) { toast.error('Uložení návrhu selhalo'); return; }
+    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ai_draft: draft } : r)));
+    toast.success('Návrh uložen');
+  }
+
+  async function regenerate(id: string) {
+    setRegenerating(true);
+    // Clear the draft + its "ready" marker so the processor drafts it again.
+    await supabase.from('prestige_inquiries').update({ ai_draft: null }).eq('id', id);
+    await supabase.from('inquiry_emails').delete().eq('inquiry_id', id).eq('kind', 'advisory_draft_ready');
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron picks it up */ }
+    setDraft('');
+    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ai_draft: null } : r)));
+    setRegenerating(false);
+    toast.message('Přegenerování spuštěno — obnovte za okamžik tlačítkem ↻.');
+  }
+
+  async function sendReply(inq: Inquiry) {
+    if (!draft.trim()) { toast.error('Návrh odpovědi je prázdný'); return; }
+    setSending(true);
+    await supabase.from('prestige_inquiries').update({ ai_draft: draft }).eq('id', inq.id);
+    // Upsert lets an edited reply be re-queued (unique on inquiry_id + kind).
+    const { error } = await supabase.from('inquiry_emails').upsert({
+      inquiry_id: inq.id,
+      kind: 'advisory_reply',
+      recipient: inq.email,
+      status: 'pending',
+      scheduled_at: new Date().toISOString(),
+      sent_at: null,
+      attempts: 0,
+      last_error: null,
+      payload: { text: draft },
+    }, { onConflict: 'inquiry_id,kind' });
+    if (error) { setSending(false); toast.error('Zařazení odpovědi selhalo'); return; }
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron will send */ }
+    if (inq.status === 'new') {
+      await supabase.from('prestige_inquiries').update({ status: 'in_progress' }).eq('id', inq.id);
+      setRows((prev) => prev.map((r) => (r.id === inq.id ? { ...r, status: 'in_progress', ai_draft: draft } : r)));
+    } else {
+      setRows((prev) => prev.map((r) => (r.id === inq.id ? { ...r, ai_draft: draft } : r)));
+    }
+    await loadEmails(inq.id);
+    setSending(false);
+    toast.success('Odpověď zařazena k odeslání zákazníkovi');
   }
 
   return (
@@ -150,7 +255,7 @@ export default function AdminInquiries() {
                         {/* Row header */}
                         <button
                           type="button"
-                          onClick={() => setOpenId(open ? null : r.id)}
+                          onClick={() => void toggleOpen(r)}
                           className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40"
                         >
                           <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold ${meta.cls}`}>{meta.label}</span>
@@ -171,7 +276,8 @@ export default function AdminInquiries() {
 
                         {/* Detail */}
                         {open && (
-                          <div className="grid gap-4 border-t bg-muted/20 px-4 py-4 md:grid-cols-2">
+                          <div className="space-y-4 border-t bg-muted/20 px-4 py-4">
+                          <div className="grid gap-4 md:grid-cols-2">
                             <div className="space-y-2 text-sm">
                               <p className="flex items-center gap-2"><UserIcon className="h-3.5 w-3.5 text-muted-foreground" /> {r.name}</p>
                               <p className="flex items-center gap-2"><Mail className="h-3.5 w-3.5 text-muted-foreground" /> <a href={`mailto:${r.email}`} className="text-primary hover:underline">{r.email}</a></p>
@@ -212,6 +318,59 @@ export default function AdminInquiries() {
                                   ))}
                                 </div>
                               </div>
+                            </div>
+                          </div>
+
+                            {/* AI reply / advisory draft */}
+                            <div>
+                              <p className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                <Bot className="h-3.5 w-3.5" /> AI návrh odpovědi zákazníkovi
+                              </p>
+                              <textarea
+                                value={draft}
+                                onChange={(e) => setDraft(e.target.value)}
+                                rows={8}
+                                placeholder="U poptávek s poradenstvím se návrh vygeneruje automaticky. Můžete jej upravit nebo napsat vlastní odpověď zákazníkovi…"
+                                className="w-full resize-y rounded-md border bg-card p-3 text-sm outline-none focus:ring-1 focus:ring-zinc-400"
+                              />
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                <Button size="sm" variant="secondary" disabled={savingDraft} onClick={() => void saveDraft(r.id)} className="gap-1.5">
+                                  {savingDraft && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Uložit
+                                </Button>
+                                <Button size="sm" variant="outline" disabled={regenerating} onClick={() => void regenerate(r.id)} className="gap-1.5">
+                                  {regenerating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />} Přegenerovat AI návrh
+                                </Button>
+                                <Button size="sm" disabled={sending || !draft.trim()} onClick={() => void sendReply(r)} className="gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800">
+                                  {sending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Odeslat zákazníkovi
+                                </Button>
+                              </div>
+                            </div>
+
+                            {/* E-mail timeline */}
+                            <div>
+                              <p className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                <MailCheck className="h-3.5 w-3.5" /> Odeslané a naplánované e-maily
+                              </p>
+                              {emailsLoading ? (
+                                <div className="py-3"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>
+                              ) : emails.length === 0 ? (
+                                <p className="text-xs text-muted-foreground">Zatím nic — automatika se spustí po zpracování fronty (do 1 hodiny).</p>
+                              ) : (
+                                <ul className="divide-y rounded-md border bg-card">
+                                  {emails.map((e) => (
+                                    <li key={e.id} className="flex items-center gap-2 px-3 py-2 text-xs">
+                                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold ${EMAIL_STATUS_CLS[e.status] ?? 'bg-muted text-muted-foreground'}`}>
+                                        {e.status === 'sent' ? 'Odesláno' : e.status === 'pending' ? 'Čeká' : e.status === 'error' ? 'Chyba' : 'Zrušeno'}
+                                      </span>
+                                      <span className="min-w-0 flex-1 truncate">{KIND_LABELS[e.kind] ?? e.kind}</span>
+                                      {e.last_error && <span className="hidden shrink-0 truncate text-destructive sm:block" title={e.last_error}>{e.last_error.slice(0, 40)}</span>}
+                                      <span className="shrink-0 tabular-nums text-muted-foreground">
+                                        {new Date(e.sent_at ?? e.scheduled_at).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
+                                      </span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
                             </div>
                           </div>
                         )}

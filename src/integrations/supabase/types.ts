@@ -540,6 +540,56 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiry_emails: {
+        Row: {
+          attempts: number
+          created_at: string
+          id: string
+          inquiry_id: string
+          kind: string
+          last_error: string | null
+          payload: Json
+          recipient: string
+          scheduled_at: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          inquiry_id: string
+          kind: string
+          last_error?: string | null
+          payload?: Json
+          recipient?: string
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          inquiry_id?: string
+          kind?: string
+          last_error?: string | null
+          payload?: Json
+          recipient?: string
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inquiry_emails_inquiry_id_fkey"
+            columns: ["inquiry_id"]
+            isOneToOne: false
+            referencedRelation: "prestige_inquiries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_emails: {
         Row: {
           created_at: string
@@ -814,6 +864,7 @@ export type Database = {
       prestige_inquiries: {
         Row: {
           admin_note: string | null
+          ai_draft: string | null
           budget: string | null
           company: string | null
           created_at: string
@@ -832,6 +883,7 @@ export type Database = {
         }
         Insert: {
           admin_note?: string | null
+          ai_draft?: string | null
           budget?: string | null
           company?: string | null
           created_at?: string
@@ -850,6 +902,7 @@ export type Database = {
         }
         Update: {
           admin_note?: string | null
+          ai_draft?: string | null
           budget?: string | null
           company?: string | null
           created_at?: string

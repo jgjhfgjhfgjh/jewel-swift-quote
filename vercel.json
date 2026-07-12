@@ -3,6 +3,10 @@
     {
       "path": "/api/process-supplier-orders",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/process-inquiries",
+      "schedule": "0 * * * *"
     }
   ],
   "rewrites": [
