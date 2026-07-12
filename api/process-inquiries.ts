@@ -10,6 +10,9 @@
 // Auth: x-cron-secret / Bearer CRON_SECRET, a valid Supabase JWT, or anonymous.
 // Anonymous calls are safe: the endpoint takes NO parameters — it only drains
 // the queue, which the cron does anyway.
+//
+// Requires (Vercel env): RESEND_API_KEY, EMAIL_FROM, SUPABASE_SERVICE_KEY,
+// ANTHROPIC_API_KEY, optional ADMIN_NOTIFY_EMAIL (defaults to info@swelt.cz).
 
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
