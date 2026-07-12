@@ -865,6 +865,9 @@ export type Database = {
         Row: {
           admin_note: string | null
           ai_draft: string | null
+          offer_price: string | null
+          offer_draft: string | null
+          offer_currency: string | null
           budget: string | null
           company: string | null
           created_at: string
@@ -884,6 +887,9 @@ export type Database = {
         Insert: {
           admin_note?: string | null
           ai_draft?: string | null
+          offer_price?: string | null
+          offer_draft?: string | null
+          offer_currency?: string | null
           budget?: string | null
           company?: string | null
           created_at?: string
@@ -903,6 +909,9 @@ export type Database = {
         Update: {
           admin_note?: string | null
           ai_draft?: string | null
+          offer_price?: string | null
+          offer_draft?: string | null
+          offer_currency?: string | null
           budget?: string | null
           company?: string | null
           created_at?: string

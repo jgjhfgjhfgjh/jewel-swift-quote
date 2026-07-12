@@ -25,6 +25,7 @@ import {
   confirmationEmail, adminNotificationEmail, courseEmail, advisoryReplySubject,
   isAdvisory, COURSE_SCHEDULE_DAYS, type InquiryLike,
 } from './_lib/inquiryEmails.js';
+import { buildOfferEmail } from './_lib/offerEmail.js';
 
 const MAX_ATTEMPTS = 5;
 const BATCH_SIZE = 20;
@@ -44,6 +45,9 @@ interface InquiryRow extends InquiryLike {
   created_at: string;
   status: string;
   ai_draft: string | null;
+  offer_price: string | null;
+  offer_currency: string | null;
+  offer_draft: string | null;
 }
 
 /* ── 1) Schedule outbox rows for inquiries that don't have them yet ── */
@@ -227,14 +231,20 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
 
   for (const row of rows) {
     const inq = byId.get(row.inquiry_id);
-    let content: { subject: string; text: string } | null = null;
+    let content: { subject: string; text: string; html?: string } | null = null;
 
     if (row.kind === 'advisory_reply' && row.payload?.text) {
       content = { subject: row.payload.subject || advisoryReplySubject(), text: row.payload.text };
     } else if (inq) {
       if (row.kind === 'confirmation') content = confirmationEmail(inq);
       else if (row.kind === 'admin_notification') content = adminNotificationEmail(inq);
-      else if (row.kind === 'advisory_draft_ready') {
+      else if (row.kind === 'offer' && inq.offer_draft && inq.offer_price) {
+        content = await buildOfferEmail(inq, {
+          price: inq.offer_price,
+          currency: inq.offer_currency ?? 'CZK',
+          body: inq.offer_draft,
+        });
+      } else if (row.kind === 'advisory_draft_ready') {
         content = {
           subject: `AI návrh odpovědi připraven — ${inq.name}`,
           text: `Pro poptávku od ${inq.name} (${inq.email}) je v ERP připraven AI návrh poradenské odpovědi.\n\nNáhled:\n${row.payload?.preview ?? ''}\n\nZkontrolovat a odeslat: https://swelt.partner/admin/poptavky`,
@@ -252,7 +262,7 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
       continue;
     }
 
-    const result = await sendEmail(row.recipient, content.subject, content.text);
+    const result = await sendEmail(row.recipient, content.subject, content.text, undefined, content.html);
     if (result.ok) {
       await supabase.from('inquiry_emails').update({
         status: 'sent', sent_at: new Date().toISOString(), attempts: row.attempts + 1, last_error: null,

@@ -16,7 +16,8 @@ export async function sendEmail(
   to: string,
   subject: string,
   text: string,
-  attachments?: EmailAttachment[]
+  attachments?: EmailAttachment[],
+  html?: string
 ): Promise<EmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
@@ -36,6 +37,7 @@ export async function sendEmail(
         to: [to],
         subject,
         text,
+        ...(html ? { html } : {}),
         attachments: attachments?.map((a) => ({
           filename: a.filename,
           content: Buffer.from(a.content, 'utf8').toString('base64'),

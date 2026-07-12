@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Loader2, RefreshCw, Inbox, Sparkles, CalendarDays, CheckCircle2, ChevronDown,
-  Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck,
+  Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck, Tag, Wand2,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,9 @@ interface Inquiry {
   watches: InquiryWatch[];
   admin_note: string | null;
   ai_draft: string | null;
+  offer_price: string | null;
+  offer_currency: string | null;
+  offer_draft: string | null;
 }
 
 interface EmailRow {
@@ -48,6 +51,7 @@ const KIND_LABELS: Record<string, string> = {
   admin_notification: 'Notifikace adminovi',
   advisory_draft_ready: 'AI draft připraven (admin)',
   advisory_reply: 'Poradenská odpověď',
+  offer: 'Cenová nabídka',
   course_1: 'Akademie 1/5 — Pravost',
   course_2: 'Akademie 2/5 — Investice',
   course_3: 'Akademie 3/5 — Velikost',
@@ -94,6 +98,11 @@ export default function AdminInquiries() {
   const [savingDraft, setSavingDraft] = useState(false);
   const [sending, setSending] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
+  const [offerPrice, setOfferPrice] = useState('');
+  const [offerCurrency, setOfferCurrency] = useState('CZK');
+  const [offerDraft, setOfferDraft] = useState('');
+  const [generatingOffer, setGeneratingOffer] = useState(false);
+  const [sendingOffer, setSendingOffer] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -146,10 +155,62 @@ export default function AdminInquiries() {
     if (openId === inq.id) { setOpenId(null); return; }
     setOpenId(inq.id);
     setDraft(inq.ai_draft ?? '');
+    setOfferPrice(inq.offer_price ?? '');
+    setOfferCurrency(inq.offer_currency ?? 'CZK');
+    setOfferDraft(inq.offer_draft ?? '');
     setEmails([]);
     setEmailsLoading(true);
     await loadEmails(inq.id);
     setEmailsLoading(false);
+  }
+
+  async function generateOffer(id: string) {
+    if (!offerPrice.trim()) { toast.error('Zadejte cenu'); return; }
+    setGeneratingOffer(true);
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) { setGeneratingOffer(false); toast.error('Nejste přihlášeni'); return; }
+    try {
+      const res = await fetch('/api/generate-offer', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inquiryId: id, price: offerPrice.trim(), currency: offerCurrency }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.draft) { toast.error(json.error || 'Generování nabídky selhalo'); return; }
+      setOfferDraft(json.draft);
+      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, offer_draft: json.draft, offer_price: offerPrice.trim(), offer_currency: offerCurrency } : r)));
+      toast.success('Nabídka vygenerována — zkontrolujte a odešlete');
+    } catch {
+      toast.error('Generování nabídky selhalo');
+    } finally {
+      setGeneratingOffer(false);
+    }
+  }
+
+  async function sendOffer(inq: Inquiry) {
+    if (!offerPrice.trim() || !offerDraft.trim()) { toast.error('Vyplňte cenu i text nabídky'); return; }
+    setSendingOffer(true);
+    await supabase.from('prestige_inquiries')
+      .update({ offer_price: offerPrice.trim(), offer_currency: offerCurrency, offer_draft: offerDraft, status: 'quoted' })
+      .eq('id', inq.id);
+    const { error } = await supabase.from('inquiry_emails').upsert({
+      inquiry_id: inq.id,
+      kind: 'offer',
+      recipient: inq.email,
+      status: 'pending',
+      scheduled_at: new Date().toISOString(),
+      sent_at: null,
+      attempts: 0,
+      last_error: null,
+      payload: {},
+    }, { onConflict: 'inquiry_id,kind' });
+    if (error) { setSendingOffer(false); toast.error('Zařazení nabídky selhalo'); return; }
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron will send */ }
+    setRows((prev) => prev.map((r) => (r.id === inq.id ? { ...r, status: 'quoted' as Status, offer_price: offerPrice.trim(), offer_currency: offerCurrency, offer_draft: offerDraft } : r)));
+    await loadEmails(inq.id);
+    setSendingOffer(false);
+    toast.success('Nabídka zařazena k odeslání zákazníkovi');
   }
 
   async function saveDraft(id: string) {
@@ -205,7 +266,7 @@ export default function AdminInquiries() {
   return (
     <div className="min-h-screen bg-background pb-16 md:pb-0">
       <Navbar />
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:pt-32">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h1 className="font-display text-2xl font-bold">Poptávky — prémiový segment</h1>
@@ -343,6 +404,47 @@ export default function AdminInquiries() {
                                 <Button size="sm" disabled={sending || !draft.trim()} onClick={() => void sendReply(r)} className="gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800">
                                   {sending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Odeslat zákazníkovi
                                 </Button>
+                              </div>
+                            </div>
+
+                            {/* Priced offer generator */}
+                            <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
+                              <p className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-500">
+                                <Tag className="h-3.5 w-3.5" /> Cenová nabídka — nacenění + AI copy
+                              </p>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <input
+                                  value={offerPrice}
+                                  onChange={(e) => setOfferPrice(e.target.value)}
+                                  inputMode="numeric"
+                                  placeholder="Cena na klíč"
+                                  className="w-36 rounded-md border bg-card px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-amber-400"
+                                />
+                                <select
+                                  value={offerCurrency}
+                                  onChange={(e) => setOfferCurrency(e.target.value)}
+                                  aria-label="Měna"
+                                  className="rounded-md border bg-card px-2 py-1.5 text-sm outline-none"
+                                >
+                                  <option value="CZK">CZK</option>
+                                  <option value="EUR">EUR</option>
+                                </select>
+                                <Button size="sm" variant="outline" disabled={generatingOffer || !offerPrice.trim()} onClick={() => void generateOffer(r.id)} className="gap-1.5">
+                                  {generatingOffer ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />} Vygenerovat nabídku
+                                </Button>
+                              </div>
+                              <textarea
+                                value={offerDraft}
+                                onChange={(e) => setOfferDraft(e.target.value)}
+                                rows={8}
+                                placeholder="Zadejte cenu a nechte AI vygenerovat nabídku — napíše luxusní copy (historie modelů, investiční hodnota, údržba, proč u nás). Text můžete upravit. E-mail se sestaví včetně fotek hodinek, ceny, průvodce dalšími kroky a napojení na akademii."
+                                className="mt-2 w-full resize-y rounded-md border bg-card p-3 text-sm outline-none focus:ring-1 focus:ring-amber-400"
+                              />
+                              <div className="mt-2 flex flex-wrap items-center gap-2">
+                                <Button size="sm" disabled={sendingOffer || !offerDraft.trim() || !offerPrice.trim()} onClick={() => void sendOffer(r)} className="gap-1.5 bg-amber-600 text-white hover:bg-amber-700">
+                                  {sendingOffer ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Odeslat nabídku zákazníkovi
+                                </Button>
+                                <span className="text-[11px] text-muted-foreground">Odesláním se poptávka označí jako „Naceněno". E-mail obsahuje fotky, ujištění a průvodce objednávkou.</span>
                               </div>
                             </div>
 
