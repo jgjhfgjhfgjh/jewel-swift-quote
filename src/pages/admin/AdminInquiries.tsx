@@ -354,7 +354,7 @@ export default function AdminInquiries() {
                               {emailsLoading ? (
                                 <div className="py-3"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>
                               ) : emails.length === 0 ? (
-                                <p className="text-xs text-muted-foreground">Zatím nic — automatika se spustí po zpracování fronty (do 1 hodiny).</p>
+                                <p className="text-xs text-muted-foreground">Zatím nic — potvrzení a notifikace se posílají ihned po odeslání, díly minikurzu pak denní automatikou.</p>
                               ) : (
                                 <ul className="divide-y rounded-md border bg-card">
                                   {emails.map((e) => (

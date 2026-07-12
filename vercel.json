@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/process-inquiries",
-      "schedule": "0 * * * *"
+      "schedule": "0 7 * * *"
     }
   ],
   "rewrites": [

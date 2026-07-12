@@ -3,9 +3,11 @@
 // AI advisory drafts for the admin ERP.
 //
 // Triggered (a) fire-and-forget from the frontend right after an inquiry is
-// submitted, (b) by Vercel cron as an hourly sweep (also delivers the
-// scheduled mini-course parts). Idempotent — the outbox has a unique
+// submitted (sends the confirmation + admin notification and generates the AI
+// advisory draft immediately), (b) by a daily Vercel cron that delivers the
+// scheduled mini-course parts. Idempotent — the outbox has a unique
 // (inquiry_id, kind) constraint, so repeated calls never duplicate e-mails.
+// NOTE: the Hobby plan only allows once-per-day crons, hence the daily sweep.
 //
 // Auth: x-cron-secret / Bearer CRON_SECRET, a valid Supabase JWT, or anonymous.
 // Anonymous calls are safe: the endpoint takes NO parameters — it only drains
