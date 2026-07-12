@@ -13,6 +13,7 @@
 //
 // Requires (Vercel env): RESEND_API_KEY, EMAIL_FROM, SUPABASE_SERVICE_KEY,
 // ANTHROPIC_API_KEY, optional ADMIN_NOTIFY_EMAIL (defaults to info@swelt.cz).
+// See vercel.json for the hourly cron schedule that also drains the queue.
 
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
