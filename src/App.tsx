@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AdminGuard } from "@/components/admin/AdminGuard";
+import { PreviewBridge } from "@/lib/admin/previewBridge";
 import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 
@@ -146,6 +147,8 @@ const App = () => (
           </Suspense>
           {/* Admin-only: preview the site as each customer level */}
           <ViewAsSwitcher />
+          {/* Workspace preview iframe: boot ?viewAs= + živé přepínání vrstvy */}
+          <PreviewBridge />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

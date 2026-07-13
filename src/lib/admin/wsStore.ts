@@ -18,12 +18,15 @@ export const DEFAULT_MODELS: Record<ChatProvider, string> = {
 interface WsState {
   surface: SurfaceMode;
   splitRatio: number;
+  /** levý panel ve split módu — ovládání hlasem, nebo chatem */
+  splitLeft: 'chat' | 'voice';
   provider: ChatProvider;
   model: string;
   previewPage: string;
   previewAudience: AdminViewAs;
   setSurface: (m: SurfaceMode) => void;
   setSplitRatio: (r: number) => void;
+  setSplitLeft: (s: 'chat' | 'voice') => void;
   setProvider: (p: ChatProvider) => void;
   setModel: (m: string) => void;
   setPreview: (audience: AdminViewAs, page?: string) => void;
@@ -35,12 +38,14 @@ export const useWsStore = create<WsState>()(
     (set) => ({
       surface: 'chat',
       splitRatio: 50,
+      splitLeft: 'chat',
       provider: 'anthropic',
       model: DEFAULT_MODELS.anthropic,
       previewPage: '/',
       previewAudience: 'real',
       setSurface: (surface) => set({ surface }),
       setSplitRatio: (splitRatio) => set({ splitRatio }),
+      setSplitLeft: (splitLeft) => set({ splitLeft }),
       setProvider: (provider) => set({ provider, model: DEFAULT_MODELS[provider] }),
       setModel: (model) => set({ model }),
       setPreview: (previewAudience, page) =>

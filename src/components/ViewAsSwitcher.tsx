@@ -1,5 +1,6 @@
 import { Eye } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { IS_WS_PREVIEW } from '@/lib/admin/previewBridge';
 import { useStore, type AdminViewAs } from '@/lib/store';
 
 const LEVELS: { value: AdminViewAs; label: string }[] = [
@@ -20,7 +21,8 @@ export function ViewAsSwitcher() {
   const viewAs = useStore((s) => s.adminViewAs);
   const setAdminViewAs = useStore((s) => s.setAdminViewAs);
 
-  if (!realIsAdmin) return null;
+  // V preview iframu workspace vrstvu ovládá PreviewSurface — pill by překážel.
+  if (!realIsAdmin || IS_WS_PREVIEW) return null;
 
   return (
     <div
