@@ -64,7 +64,7 @@ export function ChatWidget({ partnerContext }: ChatWidgetProps) {
             const { text } = JSON.parse(data);
             accumulated += text;
             setStreamingContent(accumulated);
-          } catch {}
+          } catch { /* nekompletní SSE chunk — přeskočit */ }
         }
       }
 

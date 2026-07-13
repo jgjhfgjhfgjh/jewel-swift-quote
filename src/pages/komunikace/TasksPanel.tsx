@@ -71,8 +71,8 @@ export function TasksPanel({ topicId }: { topicId: string }) {
     try {
       await create.mutateAsync({ title: title.trim(), assigneeLabel: assignee || null, dueDate: due || null });
       setTitle(''); setAssignee(''); setDue('');
-    } catch (e: any) {
-      toast.error(e?.message ?? 'Úkol se nepodařilo přidat');
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Úkol se nepodařilo přidat');
     }
   }
 

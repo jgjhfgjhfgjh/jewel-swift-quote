@@ -24,9 +24,9 @@ export function useProducts() {
 
     const loadAggregations = async () => {
       try {
-        const { data, error } = await (supabase as any).rpc('get_aggregations');
+        const { data, error } = await supabase.rpc('get_aggregations');
         if (!active || error || !data) return;
-        const payload = data as AggregationsPayload;
+        const payload = data as unknown as AggregationsPayload;
         setManufacturers(payload.manufacturers ?? []);
         setCategories(payload.categories ?? []);
       } catch {
@@ -36,9 +36,9 @@ export function useProducts() {
 
     const loadParamOptions = async () => {
       try {
-        const { data, error } = await (supabase as any).rpc('get_param_options');
+        const { data, error } = await supabase.rpc('get_param_options');
         if (!active || error || !data) return;
-        const mapped: AvailableParam[] = (data as Array<{ nazev: string; moznosti: string[] }>)
+        const mapped: AvailableParam[] = data
           .map((row) => ({
             nazev: row.nazev,
             values: (row.moznosti ?? []).slice().sort((a, b) => a.localeCompare(b, 'cs')),

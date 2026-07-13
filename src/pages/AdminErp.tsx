@@ -274,7 +274,7 @@ export default function AdminErp() {
           </div>
         )}
       </main>
-      <BottomNav />
+      <BottomNav onOpenWishlist={() => {}} />
     </div>
   );
 }

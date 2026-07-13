@@ -10,6 +10,7 @@ import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 import {
   dealsTable, dealProductsTable, slugify, DEFAULT_TIERS,
   type Deal, type DealTier, type DealCategory, type DealStatus,
@@ -243,7 +244,8 @@ export default function AdminDeals() {
         subtitle: form.subtitle.trim(),
         supplier: form.supplier.trim(),
         category: form.category,
-        tiers: form.tiers,
+        // sloupec deals.tiers je v DB typech Json
+        tiers: form.tiers as unknown as Json,
         deposit_percent: form.deposit,
         delivery_weeks_min: form.weeksMin,
         delivery_weeks_max: form.weeksMax,

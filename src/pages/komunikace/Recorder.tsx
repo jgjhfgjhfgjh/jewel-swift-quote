@@ -8,7 +8,7 @@ function pickMime(kind: RecKind): string | undefined {
   const cands = kind === 'video'
     ? ['video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4']
     : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
-  const MR: any = (window as any).MediaRecorder;
+  const MR = window.MediaRecorder;
   if (MR && MR.isTypeSupported) {
     for (const c of cands) if (MR.isTypeSupported(c)) return c;
   }
@@ -48,7 +48,7 @@ export function Recorder({ onComplete, disabled }: {
   }
 
   async function start(k: RecKind) {
-    if (!navigator.mediaDevices?.getUserMedia || !(window as any).MediaRecorder) {
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
       toast.error('Nahrávání tento prohlížeč nepodporuje');
       return;
     }

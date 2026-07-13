@@ -23,8 +23,8 @@ export default function ComParticipants() {
       await addParticipant.mutateAsync({ email: email.trim(), label, displayName: displayName.trim() });
       toast.success('Účastník přidán');
       setEmail(''); setDisplayName('');
-    } catch (e: any) {
-      toast.error(e?.message ?? 'Přidání selhalo');
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Přidání selhalo');
     }
   }
 
@@ -33,8 +33,8 @@ export default function ComParticipants() {
     try {
       await removeParticipant.mutateAsync(userId);
       toast.success('Účastník odebrán');
-    } catch (e: any) {
-      toast.error(e?.message ?? 'Odebrání selhalo');
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Odebrání selhalo');
     }
   }
 

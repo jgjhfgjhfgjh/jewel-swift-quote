@@ -128,16 +128,18 @@ Role uživatelů (enum `app_role`): `admin`, `customer`, `lead`, `b2b_approved` 
 
 **Klient:** [src/integrations/supabase/client.ts](src/integrations/supabase/client.ts) — auto-generovaný, PKCE flow, persist session v `localStorage`. Importuje se vždy jako `import { supabase } from "@/integrations/supabase/client"`.
 
-**DB types:** [src/integrations/supabase/types.ts](src/integrations/supabase/types.ts) — auto-generovaný typed schema. Hlavní tabulky:
-- `profiles` (company_name, ico, base_discount)
-- `user_roles` (admin/customer/lead/b2b_approved) + RLS helper `has_role()`
-- `products` (synchronizované z XML feedu, chráněná pole jako `custom_margin`, `manual_price_isk`, `admin_manual_override` — viz `PROTECTED_FIELDS` v `sync-product-feed`)
-- `customer_discounts`, `customer_services`
-- `feed_config`, `feed_sync_logs`, `translation_cache` (Anthropic překlady popisů produktů)
-- `wishlist`
-- `deals`, `deal_products` (z migrace `20260515120000_deals.sql` — POZOR: nejsou v `types.ts`, takže se v kódu volají přes `(supabase as any)`)
+**DB types:** [src/integrations/supabase/types.ts](src/integrations/supabase/types.ts) — auto-generovaný typed schema. **Regenerováno 2026-06-13 ze živé DB přes Supabase MCP (`generate_typescript_types`)** — odpovídá živému schématu a `(supabase as any)` casty byly odstraněny. Hlavní tabulky:
+- `profiles` (company_name/base_discount/user_id jsou **nullable**, navíc country, credit_limit, payment_terms, vat_id, brand_name, customer_user_id)
+- `user_roles` (`role` je TEXT — admin/customer/lead/b2b_approved; žádný enum `app_role` na živé DB neexistuje)
+- `produkty` + `produkty_obrazky`, `produkty_parametry`, `produkty_preklady`, `preklad_slovnik`, `dodavatele` (živý katalog z XML feedu)
+- `customer_discounts`, `customer_services`, `wishlist`
+- `deals`, `deal_products` (closeout nabídky)
+- `orders`, `order_items`, `supplier_orders`, `order_emails`, `shipping_methods` (order pipeline, migrace `20260612090000_orders_phase0.sql`)
+- `comm_*` (topics, messages, attachments, participants, tasks — komunikační modul)
 
-**RPC funkce volané z FE:** `get_aggregations`, `get_param_options` ([src/hooks/useProducts.ts](src/hooks/useProducts.ts)), `search_products` ([src/hooks/useProductSearch.ts](src/hooks/useProductSearch.ts)), `get_brand_catalog` ([src/hooks/useBrandCatalog.ts](src/hooks/useBrandCatalog.ts)).
+Tabulky `products`, `feed_config`, `feed_sync_logs`, `translation_cache` na živé DB **neexistují** (zmínky níže v historii ber jako kontext doby).
+
+**RPC funkce volané z FE:** `get_aggregations`, `get_param_options` ([src/hooks/useProducts.ts](src/hooks/useProducts.ts)), `search_products` ([src/hooks/useProductSearch.ts](src/hooks/useProductSearch.ts)), `get_brand_catalog` ([src/hooks/useBrandCatalog.ts](src/hooks/useBrandCatalog.ts)), `place_order` / `mark_order_paid` / `cancel_order` ([src/lib/orders.ts](src/lib/orders.ts)), `comm_*` ([src/lib/comm.ts](src/lib/comm.ts)).
 
 **POZOR (2026-06-10): živá tabulka produktů je `produkty`** (+ `produkty_obrazky`, `produkty_parametry`), ne `products` — starší část dokumentace je v tomhle ohledu zastaralá. **Živý sync JE v repu:** GitHub Action [.github/workflows/sync-feed.yml](.github/workflows/sync-feed.yml) → [sync/sync-feed.js](sync/sync-feed.js) (noční, ~1 h; upsert `produkty` po SKU + přepis `produkty_parametry`, detekce změn přes `content_hash`). Mrtvé jsou naopak: edge function `sync-product-feed` (píše do neexistující tabulky `products` a na projektu není ani nasazená) a admin stránka `/admin/feeds` (čte neexistující `feed_config`/`feed_sync_logs`). Překladový workflow [translate-feed.yml](.github/workflows/translate-feed.yml) běží každou noc, ale fakticky nic nepřekládá (0 řádků v `produkty_preklady`, 14k produktů pending; skript chyby per-produkt polyká a končí zeleně) — rozdělaná budoucí funkce. RLS na `produkty` pouští jen `authenticated`, veřejné stránky proto čtou přes SECURITY DEFINER RPC.
 
@@ -170,7 +172,7 @@ Role uživatelů (enum `app_role`): `admin`, `customer`, `lead`, `b2b_approved` 
 - **Filter/cart/discount state je v [src/lib/store.ts](src/lib/store.ts)** (Zustand + persist). Před přidáváním nového Context Provider zvaž, jestli to nemá být ve store.
 - **Server data → TanStack Query** (1 globální `QueryClient`). Nepoužívej `useEffect` + `fetch`, pokud to není absolutně jednorázový side effect.
 - **Slevová logika** je centralizovaná v `src/lib/discount.ts` + admin overrides v store (`brandDiscounts`, `productDiscounts`). Jakákoliv změna cenotvorby musí projít přes ně.
-- **Deals tabulky nejsou v `types.ts`** — kód je volá `(supabase as any).from('deals')`. Po případné regeneraci typů odstranit casty.
+- **`types.ts` je od 2026-06-13 regenerovaný ze živé DB** (Supabase MCP `generate_typescript_types`) a kód je bez `(supabase as any)` castů — ESLint `no-explicit-any` prochází. Nové casty na `any` nepřidávat; při změně DB schématu typy znovu regenerovat.
 - **`api/chat.ts` je Vercel funkce**, ne Vite endpoint — lokálně přes `vercel dev`.
 - **Dev port je 8080**, ne 3000/5173 (Lovable preview konvence).
 - **Po větším refaktoru:** `bun run lint && bun run build && bun run test`. Pro UI změny otevři `http://localhost:8080` a klikni feature ručně, neopírej se jen o testy.
@@ -220,9 +222,9 @@ Z git logu (pro orientaci, neopakovat):
 
 **Lekce:** XML feed dodavatele není stabilní kontrakt. Když produkt po syncu vypadá divně (chybí cena, obrázky, parametry), **nejdřív se podívej na jeden surový `<product>` ve feed.xml**, ne hned do FE. URL feedu: `https://b2bzago.com/exchange/B0AF3240-D6D6-45BA-877A-03609E6A1122/xml/feed.xml`.
 
-### 4. `deals` tabulky chybí v `types.ts`
+### 4. `deals` tabulky chybí v `types.ts` — VYŘEŠENO 2026-06-13
 
-Migrace `20260515120000_deals.sql` přidala `deals` a `deal_products`, ale auto-generovaný [src/integrations/supabase/types.ts](src/integrations/supabase/types.ts) je neobsahuje. Důsledek: v kódu se volá `(supabase as any).from('deals')`. Po regeneraci typů (Supabase CLI nebo Lovable) odstranit casty — TypeScript chyby tě navedou.
+Migrace `20260515120000_deals.sql` přidala `deals` a `deal_products`, ale auto-generovaný [src/integrations/supabase/types.ts](src/integrations/supabase/types.ts) je dlouho neobsahoval — kód je volal přes `(supabase as any).from('deals')`. **Vyřešeno regenerací typů ze živé DB (Supabase MCP) a odstraněním všech castů.** Pozn.: `tiers` je v DB typech `Json`; `DealTier` v [src/lib/deals.ts](src/lib/deals.ts) je záměrně `type` (ne `interface`), aby byl přiřaditelný do `Json` — neměnit zpět na interface.
 
 ### 5. `supabase/config.toml` má jiné `project_id` než `.env`
 

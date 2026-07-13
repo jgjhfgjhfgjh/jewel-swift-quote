@@ -206,7 +206,7 @@ function kindFromMime(mime: string): AttachmentKind {
 export async function uploadAttachment(topicId: string, file: File, messageId?: string): Promise<CommAttachment> {
   const { data: { user } } = await supabase.auth.getUser();
   const label = await getMyLabel();
-  const safeName = file.name.replace(/[^\w.\-]+/g, '_');
+  const safeName = file.name.replace(/[^\w.-]+/g, '_');
   const path = `${topicId}/${Date.now()}_${safeName}`;
 
   const up = await supabase.storage.from(STORAGE_BUCKET).upload(path, file, {

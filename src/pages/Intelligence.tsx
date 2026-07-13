@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Eye, TrendingUp, BarChart3, Target, Database, Brain, Gauge, Bell,
@@ -176,21 +176,21 @@ const Intelligence = () => {
       className="dark relative flex min-h-screen flex-col pb-16 lg:pb-0 text-foreground"
       style={{
         // Scoped tmavě modrá paleta jen pro tuto stránku
-        ['--background' as any]: '220 50% 8%',
-        ['--foreground' as any]: '220 15% 92%',
-        ['--card' as any]: '220 45% 12%',
-        ['--card-foreground' as any]: '220 15% 95%',
-        ['--popover' as any]: '220 45% 12%',
-        ['--popover-foreground' as any]: '220 15% 95%',
-        ['--muted' as any]: '220 35% 18%',
-        ['--muted-foreground' as any]: '220 15% 70%',
-        ['--border' as any]: '220 30% 22%',
-        ['--input' as any]: '220 30% 22%',
-        ['--accent' as any]: '215 90% 65%',
-        ['--accent-foreground' as any]: '220 50% 8%',
-        ['--primary' as any]: '215 90% 60%',
-        ['--primary-foreground' as any]: '0 0% 100%',
-      }}
+        '--background': '220 50% 8%',
+        '--foreground': '220 15% 92%',
+        '--card': '220 45% 12%',
+        '--card-foreground': '220 15% 95%',
+        '--popover': '220 45% 12%',
+        '--popover-foreground': '220 15% 95%',
+        '--muted': '220 35% 18%',
+        '--muted-foreground': '220 15% 70%',
+        '--border': '220 30% 22%',
+        '--input': '220 30% 22%',
+        '--accent': '215 90% 65%',
+        '--accent-foreground': '220 50% 8%',
+        '--primary': '215 90% 60%',
+        '--primary-foreground': '0 0% 100%',
+      } as CSSProperties}
     >
       {/* Globální tmavě modré pozadí s neuronovou sítí */}
       <div className="fixed inset-0 -z-10 pointer-events-none">

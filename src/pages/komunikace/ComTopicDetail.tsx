@@ -89,7 +89,7 @@ export default function ComTopicDetail() {
 
   async function setResolved(messageId: string, resolved: boolean) {
     try { await resolve.mutateAsync({ messageId, resolved }); }
-    catch (e: any) { toast.error(e?.message ?? 'Akce se nezdařila'); }
+    catch (e) { toast.error(e instanceof Error ? e.message : 'Akce se nezdařila'); }
   }
 
   if (isLoading) return <div className="py-16 text-center text-sm text-muted-foreground">Načítám…</div>;

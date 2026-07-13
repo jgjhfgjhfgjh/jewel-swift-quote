@@ -90,7 +90,7 @@ export function SweltGateway({ onClose, partnerContext }: SweltGatewayProps) {
             const { text } = JSON.parse(data);
             accumulated += text;
             setStreamingContent(accumulated);
-          } catch {}
+          } catch { /* nekompletní SSE chunk — přeskočit */ }
         }
       }
 

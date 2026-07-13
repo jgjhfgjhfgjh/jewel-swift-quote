@@ -4,10 +4,10 @@
  */
 import { supabase } from '@/integrations/supabase/client';
 
-export interface DealTier {
+export type DealTier = {
   min_qty: number;
   discount_percent: number;
-}
+};
 
 export type DealCategory = 'watches' | 'jewelry' | 'general';
 export type DealStatus = 'draft' | 'active' | 'ended';
@@ -56,13 +56,10 @@ export interface DealProduct {
   sort_order: number;
 }
 
-/** Loosely-typed table accessors — the generated Database type does not yet
- *  include the new deal tables, so we bypass its table-name checking here.
- *  Callers cast `.data` to the Deal / DealProduct interfaces above. */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const dealsTable = () => supabase.from('deals' as never) as any;
-export const dealProductsTable = () => supabase.from('deal_products' as never) as any;
-/* eslint-enable @typescript-eslint/no-explicit-any */
+/** Typed table accessors. `tiers` is Json in the generated DB types — callers
+ *  normalize rows into the Deal / DealProduct interfaces above. */
+export const dealsTable = () => supabase.from('deals');
+export const dealProductsTable = () => supabase.from('deal_products');
 
 export const DEFAULT_TIERS: DealTier[] = [
   { min_qty: 50, discount_percent: 66 },

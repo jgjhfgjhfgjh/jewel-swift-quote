@@ -88,8 +88,8 @@ export function MessageComposer({ topicId, replyTo, onClearReply }: {
       await send.mutateAsync({ body: body.trim(), requiresReply, staged, replyToId: replyTo?.id ?? null });
       setBody(''); setRequiresReply(false); setStaged([]); setShowTypes(false); resetForm();
       onClearReply?.();
-    } catch (e: any) {
-      toast.error(e?.message ?? 'Zprávu se nepodařilo odeslat');
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Zprávu se nepodařilo odeslat');
     }
   }
 

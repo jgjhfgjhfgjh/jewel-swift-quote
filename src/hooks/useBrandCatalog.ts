@@ -168,11 +168,10 @@ function foldSnapshot(products: SnapshotProduct[]): BrandCatalogEntry[] {
 
 async function fetchBrandCatalog(): Promise<BrandCatalogEntry[]> {
   try {
-    // get_brand_catalog není v auto-generovaných DB typech (types.ts)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase as any).rpc('get_brand_catalog');
+    const { data, error } = await supabase.rpc('get_brand_catalog');
     if (!error && Array.isArray(data) && data.length > 0) {
-      return foldRows(data as BrandCatalogRow[]);
+      // top_products je v DB typech Json — interface BrandCatalogRow ho upřesňuje
+      return foldRows(data as unknown as BrandCatalogRow[]);
     }
   } catch {
     /* fall through to snapshot */

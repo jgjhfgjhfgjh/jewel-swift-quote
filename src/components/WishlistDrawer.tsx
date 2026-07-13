@@ -26,13 +26,13 @@ export function WishlistDrawer({ open, onOpenChange }: Props) {
       return;
     }
     let active = true;
-    (supabase as any)
+    supabase
       .from('produkty')
       .select('id, sku, product_name, manufacturer, image_url')
       .in('id', ids)
-      .then(({ data }: { data: any[] | null }) => {
+      .then(({ data }) => {
         if (!active || !data) return;
-        setWishlistProducts(data.map((row: any) => ({
+        setWishlistProducts(data.map((row) => ({
           id: row.id,
           name: row.product_name || row.sku,
           manufacturer: row.manufacturer || '',

@@ -114,9 +114,9 @@ export function useProductSearch(filters: SearchFilters) {
     setLoading(true);
     offsetRef.current = 0;
 
-    (supabase as any)
+    supabase
       .rpc('search_products', buildArgs(filters, 0, PAGE_SIZE))
-      .then(({ data, error }: { data: SearchRow[] | null; error: unknown }) => {
+      .then(({ data, error }) => {
         if (myReq !== reqIdRef.current) return; // stale
         if (error || !data) {
           setProducts([]);
@@ -137,9 +137,8 @@ export function useProductSearch(filters: SearchFilters) {
     if (products.length >= totalCount) return;
     const myReq = reqIdRef.current;
     setLoadingMore(true);
-    const { data, error } = await (supabase as any)
-      .rpc('search_products', buildArgs(filters, offsetRef.current, PAGE_SIZE)) as
-      { data: SearchRow[] | null; error: unknown };
+    const { data, error } = await supabase
+      .rpc('search_products', buildArgs(filters, offsetRef.current, PAGE_SIZE));
     if (myReq !== reqIdRef.current) return; // stale
     if (!error && data) {
       setProducts((prev) => [...prev, ...data.map(rowToProduct)]);

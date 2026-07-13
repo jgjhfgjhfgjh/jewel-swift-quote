@@ -41,7 +41,6 @@ interface ServiceRow {
   monthly_price: number | null;
   started_at: string;
   ended_at: string | null;
-  admin_note: string | null;
 }
 
 interface BrandDiscount { brand: string; percent: number; }
@@ -162,10 +161,10 @@ export default function CustomerDetail() {
     let nameMap = new Map<string, string>();
     if (productIds.size > 0) {
       const { data: prods } = await supabase
-        .from('products')
-        .select('id, sku, original_name_cz, product_name_is')
+        .from('produkty')
+        .select('id, sku, product_name')
         .in('id', Array.from(productIds));
-      nameMap = new Map((prods ?? []).map(p => [p.id, p.original_name_cz || p.product_name_is || p.sku]));
+      nameMap = new Map((prods ?? []).map(p => [p.id, p.product_name || p.sku]));
     }
 
     setWishlist((wishRes.data ?? []).map(w => ({ ...w, product_name: nameMap.get(w.product_id) })));

@@ -48,24 +48,11 @@ export default function FeedManagement() {
 
   const loadAll = useCallback(async () => {
     setLoading(true);
-    const [{ data: cfg }, { data: logRows }] = await Promise.all([
-      supabase
-        .from('feed_config')
-        .select('id, feed_url, last_sync')
-        .order('created_at', { ascending: true })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('feed_sync_logs')
-        .select('id, timestamp, status, message, items_processed_count')
-        .order('timestamp', { ascending: false })
-        .limit(20),
-    ]);
-    if (cfg) {
-      setConfig(cfg as FeedConfig);
-      setFeedUrl(cfg.feed_url ?? '');
-    }
-    setLogs((logRows ?? []) as SyncLog[]);
+    // feed_config / feed_sync_logs na živé DB neexistují (mrtvá stránka, viz
+    // CLAUDE.md) — dotazy by vždy selhaly, proto se nic nenačítá. UI zůstává
+    // pro případné oživení nad jinou tabulkou (dodavatele.feed_url).
+    setConfig(null);
+    setLogs([]);
     setLoading(false);
   }, []);
 
@@ -74,18 +61,10 @@ export default function FeedManagement() {
   }, [isAdmin, loadAll]);
 
   const handleSaveUrl = async () => {
+    // feed_config na živé DB neexistuje — config je vždy null a tlačítko
+    // Uložit je disabled; handler zůstává jen kvůli UI struktuře.
     if (!config) return;
-    setSaving(true);
-    const { error } = await supabase
-      .from('feed_config')
-      .update({ feed_url: feedUrl })
-      .eq('id', config.id);
-    setSaving(false);
-    if (error) toast.error(error.message);
-    else {
-      toast.success('Feed URL uloženo');
-      loadAll();
-    }
+    toast.error('Konfigurace feedu není na živé DB dostupná');
   };
 
   const handleManualSync = async () => {
