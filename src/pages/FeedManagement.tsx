@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,7 +32,6 @@ interface SyncLog {
 }
 
 export default function FeedManagement() {
-  const { isAdmin, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
   const [config, setConfig] = useState<FeedConfig | null>(null);
   const [feedUrl, setFeedUrl] = useState('');
@@ -42,10 +40,7 @@ export default function FeedManagement() {
   const [saving, setSaving] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-  useEffect(() => {
-    if (!authLoading && !isAdmin) navigate('/');
-  }, [authLoading, isAdmin, navigate]);
-
+  // Přístup hlídá AdminGuard v routingu — tady už jen data.
   const loadAll = useCallback(async () => {
     setLoading(true);
     // feed_config / feed_sync_logs na živé DB neexistují (mrtvá stránka, viz
@@ -57,8 +52,8 @@ export default function FeedManagement() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) loadAll();
-  }, [isAdmin, loadAll]);
+    loadAll();
+  }, [loadAll]);
 
   const handleSaveUrl = async () => {
     // feed_config na živé DB neexistuje — config je vždy null a tlačítko
@@ -108,8 +103,6 @@ export default function FeedManagement() {
   const lastSyncLabel = config?.last_sync
     ? new Date(config.last_sync).toLocaleString('cs-CZ')
     : 'Zatím nesynchronizováno';
-
-  if (authLoading || !isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-background">

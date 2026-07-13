@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AdminGuard } from "@/components/admin/AdminGuard";
 import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 
@@ -50,6 +51,8 @@ const AdminInquiries = lazy(() => import("./pages/admin/AdminInquiries.tsx"));
 const PrestigeOrderStatus = lazy(() => import("./pages/PrestigeOrderStatus.tsx"));
 const PrestigeCareGuide = lazy(() => import("./pages/PrestigeCareGuide.tsx"));
 const AuditCockpit = lazy(() => import("./pages/admin/AuditCockpit.tsx"));
+const AdminLayout = lazy(() => import("./components/admin/AdminLayout.tsx"));
+const AdminHome = lazy(() => import("./pages/admin/AdminHome.tsx"));
 const ComLayout = lazy(() => import("./pages/komunikace/ComLayout.tsx"));
 const ComOverview = lazy(() => import("./pages/komunikace/ComOverview.tsx"));
 const ComTopicDetail = lazy(() => import("./pages/komunikace/ComTopicDetail.tsx"));
@@ -81,13 +84,9 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/auth/reset-password" element={<ResetPassword />} />
-              <Route path="/customers" element={<CustomerManagement />} />
-              <Route path="/customers/:id" element={<CustomerDetail />} />
-              <Route path="/admin/feeds" element={<FeedManagement />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/ucet" element={<AccountSettings />} />
               <Route path="/orders" element={<Orders />} />
-              <Route path="/admin/erp" element={<AdminErp />} />
               {/* Partner Hub — dropshipping dashboard */}
               <Route path="/partner" element={<PartnerLayout />}>
                 <Route index element={<PartnerDashboard />} />
@@ -117,12 +116,20 @@ const App = () => (
               {/* DEAL offers — closeout catalogs */}
               <Route path="/deals" element={<Deals />} />
               <Route path="/deals/:slug" element={<DealDetail />} />
-              <Route path="/admin/deals" element={<AdminDeals />} />
-              <Route path="/admin/poptavky" element={<AdminInquiries />} />
               <Route path="/objednavka/:token" element={<PrestigeOrderStatus />} />
               <Route path="/pruvodce-peci" element={<PrestigeCareGuide />} />
-              {/* Swelt Web Cockpit — audit copy + struktury */}
-              <Route path="/admin/audit" element={<AuditCockpit />} />
+              {/* Admin shell — jeden guard + layout (sidebar) pro všechny admin routy */}
+              <Route element={<AdminGuard><AdminLayout /></AdminGuard>}>
+                <Route path="/admin" element={<AdminHome />} />
+                <Route path="/admin/erp" element={<AdminErp />} />
+                <Route path="/admin/deals" element={<AdminDeals />} />
+                <Route path="/admin/poptavky" element={<AdminInquiries />} />
+                {/* Swelt Web Cockpit — audit copy + struktury */}
+                <Route path="/admin/audit" element={<AuditCockpit />} />
+                <Route path="/admin/feeds" element={<FeedManagement />} />
+                <Route path="/customers" element={<CustomerManagement />} />
+                <Route path="/customers/:id" element={<CustomerDetail />} />
+              </Route>
               {/* Komunikace swelt × zago — interní kolaborační workspace */}
               <Route path="/komunikace" element={<ComLayout />}>
                 <Route index element={<ComOverview />} />

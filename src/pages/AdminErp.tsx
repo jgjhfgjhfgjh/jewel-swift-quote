@@ -10,7 +10,6 @@ import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { triggerOutboxProcessing, ORDER_STATUS_LABELS_CS, type OrderStatus } from '@/lib/orders';
 import { toast } from 'sonner';
 
@@ -52,7 +51,6 @@ function KpiCard({ icon, label, value, sub }: {
 
 export default function AdminErp() {
   const navigate = useNavigate();
-  const { isAdmin, loading: authLoading } = useAuthContext();
   const [orders, setOrders] = useState<ErpOrder[]>([]);
   const [outbox, setOutbox] = useState<OutboxRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,13 +75,10 @@ export default function AdminErp() {
     setLoading(false);
   }, []);
 
+  // Přístup hlídá AdminGuard v routingu — tady už jen data.
   useEffect(() => {
-    if (!authLoading && !isAdmin) {
-      navigate('/');
-      return;
-    }
-    if (isAdmin) void load();
-  }, [isAdmin, authLoading, navigate, load]);
+    void load();
+  }, [load]);
 
   const kpi = useMemo(() => {
     const active = orders.filter((o) => o.status !== 'cancelled' && o.status !== 'failed');

@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
 import { Navbar } from '@/components/Navbar';
 import { DeleteCustomerDialog } from '@/components/DeleteCustomerDialog';
@@ -57,7 +56,6 @@ function fmtDate(d?: string | null) {
 
 export default function CustomerDetail() {
   const { id: userId } = useParams<{ id: string }>();
-  const { isAdmin, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -122,10 +120,7 @@ export default function CustomerDetail() {
     }
   };
 
-  useEffect(() => {
-    if (!authLoading && !isAdmin) navigate('/');
-  }, [authLoading, isAdmin, navigate]);
-
+  // Přístup hlídá AdminGuard v routingu — tady už jen data.
   const loadAll = async () => {
     if (!userId) return;
     setLoading(true);
@@ -178,9 +173,9 @@ export default function CustomerDetail() {
   };
 
   useEffect(() => {
-    if (isAdmin && userId) loadAll();
+    if (userId) loadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, userId]);
+  }, [userId]);
 
   const handleSaveProfile = async () => {
     if (!userId) return;
@@ -266,7 +261,7 @@ export default function CustomerDetail() {
     activeServices: services.filter(s => s.status === 'active').length,
   }), [wishlist, brandDiscounts, productDiscounts, services]);
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />

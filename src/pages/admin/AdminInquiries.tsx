@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Loader2, RefreshCw, Inbox, Sparkles, CalendarDays, CheckCircle2, ChevronDown,
   Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck, Tag, Wand2,
@@ -9,7 +8,6 @@ import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import type { Json } from '@/integrations/supabase/types';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 type Status = 'new' | 'in_progress' | 'quoted' | 'closed';
@@ -132,8 +130,6 @@ function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; val
 }
 
 export default function AdminInquiries() {
-  const navigate = useNavigate();
-  const { isAdmin, loading: authLoading } = useAuthContext();
   const [rows, setRows] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | 'all'>('all');
@@ -174,10 +170,10 @@ export default function AdminInquiries() {
     setLoading(false);
   }, []);
 
+  // Přístup hlídá AdminGuard v routingu — tady už jen data.
   useEffect(() => {
-    if (!authLoading && !isAdmin) { navigate('/'); return; }
-    if (isAdmin) void load();
-  }, [isAdmin, authLoading, navigate, load]);
+    void load();
+  }, [load]);
 
   const kpi = useMemo(() => {
     const weekAgo = Date.now() - 7 * 864e5;

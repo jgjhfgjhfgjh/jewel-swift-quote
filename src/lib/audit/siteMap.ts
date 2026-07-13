@@ -234,14 +234,18 @@ export const SITE_MAP: SiteCluster[] = [
     label: 'Admin',
     description: 'Interní admin nástroje (jen role admin).',
     pages: [
+      { id: 'admin-home', label: 'Dashboard', route: '/admin', sourceFile: 'src/pages/admin/AdminHome.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-home', 'tiles', 'Dlaždice sektorů')] },
+      { id: 'admin-erp', label: 'ERP & Objednávky', route: '/admin/erp', sourceFile: 'src/pages/AdminErp.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-erp', 'kpi', 'KPI přehled'), inlineSection('admin-erp', 'orders', 'Seznam objednávek'), inlineSection('admin-erp', 'outbox', 'Outbox dodavatelských objednávek')] },
+      { id: 'admin-inquiries', label: 'Poptávky Prestige', route: '/admin/poptavky', sourceFile: 'src/pages/admin/AdminInquiries.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-inquiries', 'queue', 'Fronta poptávek'), inlineSection('admin-inquiries', 'detail', 'Detail & nabídka')] },
       { id: 'customers', label: 'Správa zákazníků', route: '/customers', sourceFile: 'src/pages/CustomerManagement.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('customers', 'list', 'Seznam zákazníků'), inlineSection('customers', 'search', 'Hledání / filtry')] },
       { id: 'customer-detail', label: 'Detail zákazníka', route: '/customers/:id', dynamic: true, sourceFile: 'src/pages/CustomerDetail.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('customer-detail', 'profile', 'Profil & slevy'), inlineSection('customer-detail', 'credentials', 'Přihlašovací údaje')] },
+      { id: 'admin-deals', label: 'Schvalování DEALů', route: '/admin/deals', sourceFile: 'src/pages/admin/AdminDeals.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-deals', 'queue', 'Fronta ke schválení')] },
+      { id: 'audit-cockpit', label: 'Web Cockpit (audit)', route: '/admin/audit', sourceFile: 'src/pages/admin/AuditCockpit.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('audit-cockpit', 'tool', 'Audit copy & struktury')] },
       {
         id: 'feed-management', label: 'Správa feedu', route: '/admin/feeds', sourceFile: 'src/pages/FeedManagement.tsx', copySource: 'inline', audience: ['admin'],
         isLive: false, note: 'Dle CLAUDE.md čte neexistující tabulky feed_config/feed_sync_logs — mrtvá stránka.',
         sections: [inlineSection('feed-management', 'controls', 'Ovládání sync')],
       },
-      { id: 'admin-deals', label: 'Schvalování DEALů', route: '/admin/deals', sourceFile: 'src/pages/admin/AdminDeals.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-deals', 'queue', 'Fronta ke schválení')] },
     ],
   },
   {

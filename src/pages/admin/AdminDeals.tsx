@@ -96,7 +96,7 @@ async function runPool<T>(
 
 export default function AdminDeals() {
   const navigate = useNavigate();
-  const { isAdmin, loading: authLoading, user } = useAuthContext();
+  const { user } = useAuthContext();
   const { deals, productCounts, loading: dealsLoading, reload } = useDeals();
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -109,18 +109,8 @@ export default function AdminDeals() {
     stage: '', current: 0, total: 0,
   });
 
-  if (authLoading) return null;
-  if (!user || !isAdmin) {
-    return (
-      <div className="min-h-screen bg-slate-50">
-        <Navbar />
-        <div className="mx-auto max-w-md px-6 py-40 text-center text-slate-500">
-          Tato stránka je dostupná pouze administrátorům.
-          <div className="mt-6"><Button onClick={() => navigate('/')}>Zpět</Button></div>
-        </div>
-      </div>
-    );
-  }
+  // Přístup hlídá AdminGuard v routingu; user je null jen při náhledu „jako host".
+  if (!user) return null;
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));

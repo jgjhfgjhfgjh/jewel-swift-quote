@@ -6,7 +6,6 @@
  * Zdroj stavu:     tabulka content_audit (hook useContentAudit).
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -178,8 +177,8 @@ const SOURCE_BADGE: Record<string, string> = {
 
 // ── hlavní stránka ───────────────────────────────────────────────────────────
 export default function AuditCockpit() {
-  const { isAdmin, loading: authLoading, profile, user } = useAuthContext();
-  const navigate = useNavigate();
+  // Přístup hlídá AdminGuard v routingu.
+  const { profile, user } = useAuthContext();
   const { data: rows, isLoading, refetch, isFetching } = useContentAudit();
   const upsert = useUpsertAuditNode();
   const reviewer = profile?.company_name || user?.email || 'admin';
@@ -190,10 +189,6 @@ export default function AuditCockpit() {
   const [onlyRisk, setOnlyRisk] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [openNodeId, setOpenNodeId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!authLoading && !isAdmin) navigate('/', { replace: true });
-  }, [authLoading, isAdmin, navigate]);
 
   const get = (id: string): AuditRow | undefined => rows?.[id];
   const isRisk = (n: FlatNode): boolean => {
@@ -253,14 +248,13 @@ export default function AuditCockpit() {
   const openNode = openNodeId ? FLAT_NODES.find((n) => n.id === openNodeId) ?? null : null;
   const openRow = openNodeId ? get(openNodeId) : undefined;
 
-  if (authLoading || (isLoading && !rows)) {
+  if (isLoading && !rows) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
-  if (!isAdmin) return null;
 
   return (
     <TooltipProvider delayDuration={200}>

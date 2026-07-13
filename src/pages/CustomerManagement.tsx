@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Navbar } from '@/components/Navbar';
@@ -35,7 +34,6 @@ const badgeFor = (c: CustomerRow): { label: string; cls: string } => {
 };
 
 export default function CustomerManagement() {
-  const { isAdmin, loading: authLoading } = useAuthContext();
   const navigate = useNavigate();
   const [customers, setCustomers] = useState<CustomerRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,16 +41,10 @@ export default function CustomerManagement() {
   const [deleteTarget, setDeleteTarget] = useState<CustomerRow | null>(null);
   const [query, setQuery] = useState('');
 
+  // Přístup hlídá AdminGuard v routingu — tady už jen data.
   useEffect(() => {
-    if (!authLoading && !isAdmin) {
-      navigate('/');
-    }
-  }, [authLoading, isAdmin, navigate]);
-
-  useEffect(() => {
-    if (!isAdmin) return;
     fetchCustomers();
-  }, [isAdmin]);
+  }, []);
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -117,7 +109,7 @@ export default function CustomerManagement() {
     }
   };
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="flex min-h-screen flex-col">
         <Navbar />
