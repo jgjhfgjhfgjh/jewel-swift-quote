@@ -55,12 +55,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const body = (typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body) ?? {};
   const inquiryId: string = body.inquiryId;
-  const price: string = String(body.price ?? '').trim();
   const currency: string = String(body.currency ?? 'CZK').trim() || 'CZK';
-  if (!inquiryId || !price) {
-    res.status(400).json({ error: 'inquiryId and price are required' });
+  // Per-model prices: [{brand, model, price}]. Legacy single `price` still accepted.
+  const rawItems: { brand?: string; model?: string; price?: unknown }[] = Array.isArray(body.items) ? body.items : [];
+  const items = rawItems
+    .map((i) => ({ brand: String(i.brand ?? '').trim(), model: String(i.model ?? '').trim(), price: Number(i.price) }))
+    .filter((i) => i.model && Number.isFinite(i.price) && i.price > 0);
+  const singlePrice: string = String(body.price ?? '').trim();
+  if (!inquiryId || (items.length === 0 && !singlePrice)) {
+    res.status(400).json({ error: 'inquiryId and item prices are required' });
     return;
   }
+  const total = items.length ? items.reduce((s, i) => s + i.price, 0) : null;
+  const price = total !== null ? total.toLocaleString('cs-CZ') : singlePrice;
 
   const supabase = serviceClient();
   const { data: inquiry, error } = await supabase
@@ -73,7 +80,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const watches = await enrichWatches(inquiry.watches);
+  // The offer copy covers the PRICED items (what the admin is offering), not
+  // necessarily everything the customer originally listed.
+  const source = items.length ? items : inquiry.watches;
+  const watches = await enrichWatches(source);
   const modelsCtx = watches.length
     ? watches
         .map((w) => `- ${w.brand} ${w.model}${w.collection ? ` (kolekce ${w.collection})` : ''}${w.desc ? `: ${w.desc}` : ''}`)
@@ -91,13 +101,14 @@ Poznámka klienta: ${inquiry.note ?? '(žádná)'}
 NABÍZENÉ MODELY
 ${modelsCtx}
 
-CENA (nepiš ji do textu — doplní ji šablona): ${price} ${currency}
+CENY (nepiš je do textu — u každého modelu je doplní šablona; celkem ${price} ${currency}):
+${items.length ? items.map((i) => `- ${i.brand} ${i.model}: ${i.price.toLocaleString('cs-CZ')} ${currency}`).join('\n') : `- celkem ${price} ${currency}`}
 
-STRUKTURA (3–5 odstavců, oddělené prázdným řádkem, BEZ nadpisů, BEZ ceny, BEZ pozdravu a podpisu):
+STRUKTURA (3–5 odstavců, oddělené prázdným řádkem, BEZ nadpisů, BEZ konkrétních cen, BEZ pozdravu a podpisu):
 1. Osobní úvod — poděkuj za zájem a naznač, že jsi pro klienta nabídku připravil na míru.
-2. Pro každý model 2–3 věty: proč je to skvělá volba — dědictví/příběh značky, nadčasovost, a jemně investiční hodnota (drží cenu).
+2. Pro každý model 2–3 věty: proč je to skvělá volba — dědictví/příběh značky, nadčasovost, a jemně investiční hodnota (drží cenu).${items.length > 1 ? '\n   Zmiň, že klient si může vybrat i jen některé z nabízených modelů — nemusí brát vše.' : ''}
 3. Krátce ujisti o pravosti a plné dokumentaci a o tom, že se postaráme i po nákupu (servis, údržba).
-4. Zakonči vřelou pobídkou k dalšímu kroku (potvrzení nabídky), bez tlaku.
+4. Zakonči vřelou pobídkou k dalšímu kroku (potvrzení, které modely si přeje závazně objednat), bez tlaku.
 
 Piš plynulý text, žádné odrážky. Maximálně ~320 slov.`;
 
@@ -125,8 +136,13 @@ Piš plynulý text, žádné odrážky. Maximálně ~320 slov.`;
 
   await supabase
     .from('prestige_inquiries')
-    .update({ offer_price: price, offer_currency: currency, offer_draft: draft })
+    .update({
+      offer_price: price,
+      offer_currency: currency,
+      offer_draft: draft,
+      offer_items: items.length ? items : null,
+    })
     .eq('id', inquiryId);
 
-  res.status(200).json({ ok: true, draft });
+  res.status(200).json({ ok: true, draft, items, total: price });
 }

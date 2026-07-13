@@ -28,6 +28,15 @@ export interface OfferWatch {
   reference?: string;
   params?: Record<string, string>;
   desc?: string;
+  /** Per-item price (admin-entered); rendered on the card when set. */
+  price?: number;
+}
+
+/** One admin-priced line of the offer. */
+export interface OfferItem {
+  brand: string;
+  model: string;
+  price: number;
 }
 
 /** Enrich the inquiry's watches with photos/specs from the curated catalog. */
@@ -80,7 +89,11 @@ function bodyToHtml(body: string): string {
     .join('');
 }
 
-function watchCard(w: OfferWatch): string {
+function fmtMoney(n: number, currency: string): string {
+  return `${n.toLocaleString('cs-CZ')} ${currency}`;
+}
+
+function watchCard(w: OfferWatch, currency?: string): string {
   const specRows = Object.entries(w.params ?? {})
     .slice(0, 4)
     .map(
@@ -102,6 +115,7 @@ function watchCard(w: OfferWatch): string {
           ${w.collection ? `<div style="font-size:12px;color:#a1a1aa;margin-bottom:8px">Kolekce ${esc(w.collection)}${w.reference ? ` · ref. ${esc(w.reference)}` : ''}</div>` : ''}
           ${w.desc ? `<div style="font-size:13px;color:#52525b;line-height:1.5;margin-bottom:8px">${esc(w.desc)}</div>` : ''}
           <table role="presentation" cellpadding="0" cellspacing="0">${specRows}</table>
+          ${typeof w.price === 'number' && currency ? `<div style="margin-top:10px;padding-top:8px;border-top:1px solid #f0ede7;font-size:15px;font-weight:800;color:${ACCENT}">${fmtMoney(w.price, currency)} <span style="font-size:11px;font-weight:600;color:#a1a1aa">na klíč</span></div>` : ''}
         </td>
       </tr></table>
     </td></tr>
@@ -137,15 +151,26 @@ export interface OfferOptions {
   price: string;
   currency: string;
   body: string;
+  /** Per-model prices; when set they drive the cards and the summed total. */
+  items?: OfferItem[];
 }
 
 export async function buildOfferEmail(
   inquiry: InquiryLike,
   opts: OfferOptions,
 ): Promise<{ subject: string; text: string; html: string }> {
-  const watches = await enrichWatches(inquiry.watches);
+  let watches: OfferWatch[];
+  let priceLabel: string;
+  if (opts.items?.length) {
+    const enriched = await enrichWatches(opts.items.map((i) => ({ brand: i.brand, model: i.model })));
+    watches = opts.items.map((it, idx) => ({ ...(enriched[idx] ?? { brand: it.brand, model: it.model }), price: it.price }));
+    priceLabel = fmtMoney(opts.items.reduce((s, i) => s + i.price, 0), opts.currency);
+  } else {
+    watches = await enrichWatches(inquiry.watches);
+    priceLabel = `${esc(opts.price)}${opts.currency ? ` ${esc(opts.currency)}` : ''}`;
+  }
+  const multi = watches.length > 1;
   const hi = firstName(inquiry.name);
-  const priceLabel = `${esc(opts.price)}${opts.currency ? ` ${esc(opts.currency)}` : ''}`;
 
   const html = `<!-- offer -->
 <div style="margin:0;padding:0;background:#f4f2ee">
@@ -164,15 +189,15 @@ export async function buildOfferEmail(
 
     <tr><td style="padding:8px 32px 4px">
       <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a1a1aa;font-weight:700;margin-bottom:12px">Vybrané modely</div>
-      ${watches.length ? watches.map(watchCard).join('') : '<p style="font-size:14px;color:#52525b">Modely upřesníme dle konzultace.</p>'}
+      ${watches.length ? watches.map((w) => watchCard(w, opts.currency)).join('') : '<p style="font-size:14px;color:#52525b">Modely upřesníme dle konzultace.</p>'}
     </td></tr>
 
     <tr><td style="padding:8px 32px">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#faf8f4;border:1px solid #ece7df;border-radius:12px">
         <tr><td style="padding:20px 24px">
-          <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${GOLD};font-weight:700">Cena na klíč</div>
+          <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${GOLD};font-weight:700">${multi ? 'Cena celkem na klíč' : 'Cena na klíč'}</div>
           <div style="font-size:30px;font-weight:800;color:${ACCENT};margin-top:4px">${priceLabel}</div>
-          <div style="font-size:12px;color:#71717a;margin-top:4px">Vč. ověření pravosti, plné dokumentace a pojištěného doručení. Nezávazné do Vašeho potvrzení.</div>
+          <div style="font-size:12px;color:#71717a;margin-top:4px">Vč. ověření pravosti, plné dokumentace a pojištěného doručení. Nezávazné do Vašeho potvrzení${multi ? ' — vybrat si můžete i jen některé modely' : ''}.</div>
         </td></tr>
       </table>
     </td></tr>
@@ -218,10 +243,12 @@ export async function buildOfferEmail(
     opts.body,
     '',
     'VYBRANÉ MODELY:',
-    ...(watches.length ? watches.map((w) => `• ${w.brand} ${w.model}`) : ['(upřesníme dle konzultace)']),
+    ...(watches.length
+      ? watches.map((w) => `• ${w.brand} ${w.model}${typeof w.price === 'number' ? ` — ${fmtMoney(w.price, opts.currency)}` : ''}`)
+      : ['(upřesníme dle konzultace)']),
     '',
-    `CENA NA KLÍČ: ${opts.price}${opts.currency ? ` ${opts.currency}` : ''}`,
-    'Vč. ověření pravosti, plné dokumentace a pojištěného doručení. Nezávazné do Vašeho potvrzení.',
+    `${multi ? 'CENA CELKEM NA KLÍČ' : 'CENA NA KLÍČ'}: ${priceLabel.replace(/<[^>]+>/g, '')}`,
+    `Vč. ověření pravosti, plné dokumentace a pojištěného doručení. Nezávazné do Vašeho potvrzení${multi ? ' — vybrat si můžete i jen některé modely' : ''}.`,
     '',
     'PROČ U NÁS: garance pravosti · nejlepší možná cena i na 1 kus · diskrétní služba na klíč.',
     '',

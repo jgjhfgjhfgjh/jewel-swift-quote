@@ -865,6 +865,7 @@ export type Database = {
         Row: {
           admin_note: string | null
           ai_draft: string | null
+          offer_items: Json | null
           offer_price: string | null
           offer_draft: string | null
           offer_currency: string | null
@@ -887,6 +888,7 @@ export type Database = {
         Insert: {
           admin_note?: string | null
           ai_draft?: string | null
+          offer_items?: Json | null
           offer_price?: string | null
           offer_draft?: string | null
           offer_currency?: string | null
@@ -909,6 +911,7 @@ export type Database = {
         Update: {
           admin_note?: string | null
           ai_draft?: string | null
+          offer_items?: Json | null
           offer_price?: string | null
           offer_draft?: string | null
           offer_currency?: string | null
@@ -929,6 +932,137 @@ export type Database = {
           watches?: Json
         }
         Relationships: []
+      }
+      prestige_orders: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          bill_city: string | null
+          bill_company: string | null
+          bill_country: string | null
+          bill_dic: string | null
+          bill_ico: string | null
+          bill_name: string | null
+          bill_street: string | null
+          bill_zip: string | null
+          carrier: string | null
+          created_at: string
+          currency: string
+          delivered_at: string | null
+          id: string
+          inquiry_id: string
+          invoice_issued_at: string | null
+          invoice_number: string | null
+          items: Json
+          order_number: string | null
+          paid_at: string | null
+          public_token: string
+          satisfaction_note: string | null
+          satisfaction_rating: number | null
+          ship_to_city: string | null
+          ship_to_country: string | null
+          ship_to_name: string | null
+          ship_to_phone: string | null
+          ship_to_street: string | null
+          ship_to_zip: string | null
+          shipped_at: string | null
+          status: string
+          tracking_number: string | null
+          tracking_url: string | null
+          updated_at: string
+          vat_amount: number
+          vat_base: number
+          vat_rate: number
+        }
+        Insert: {
+          admin_note?: string | null
+          amount?: number
+          bill_city?: string | null
+          bill_company?: string | null
+          bill_country?: string | null
+          bill_dic?: string | null
+          bill_ico?: string | null
+          bill_name?: string | null
+          bill_street?: string | null
+          bill_zip?: string | null
+          carrier?: string | null
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          id?: string
+          inquiry_id: string
+          invoice_issued_at?: string | null
+          invoice_number?: string | null
+          items?: Json
+          order_number?: string | null
+          paid_at?: string | null
+          public_token?: string
+          satisfaction_note?: string | null
+          satisfaction_rating?: number | null
+          ship_to_city?: string | null
+          ship_to_country?: string | null
+          ship_to_name?: string | null
+          ship_to_phone?: string | null
+          ship_to_street?: string | null
+          ship_to_zip?: string | null
+          shipped_at?: string | null
+          status?: string
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          vat_amount?: number
+          vat_base?: number
+          vat_rate?: number
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          bill_city?: string | null
+          bill_company?: string | null
+          bill_country?: string | null
+          bill_dic?: string | null
+          bill_ico?: string | null
+          bill_name?: string | null
+          bill_street?: string | null
+          bill_zip?: string | null
+          carrier?: string | null
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          id?: string
+          inquiry_id?: string
+          invoice_issued_at?: string | null
+          invoice_number?: string | null
+          items?: Json
+          order_number?: string | null
+          paid_at?: string | null
+          public_token?: string
+          satisfaction_note?: string | null
+          satisfaction_rating?: number | null
+          ship_to_city?: string | null
+          ship_to_country?: string | null
+          ship_to_name?: string | null
+          ship_to_phone?: string | null
+          ship_to_street?: string | null
+          ship_to_zip?: string | null
+          shipped_at?: string | null
+          status?: string
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          vat_amount?: number
+          vat_base?: number
+          vat_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prestige_orders_inquiry_id_fkey"
+            columns: ["inquiry_id"]
+            isOneToOne: true
+            referencedRelation: "prestige_inquiries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       produkty: {
         Row: {
@@ -1399,6 +1533,9 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      create_prestige_order: { Args: { p_inquiry_id: string; p_items: Json }; Returns: Json }
+      issue_prestige_invoice: { Args: { p_inquiry_id: string; p_vat_rate?: number }; Returns: Json }
+      mark_prestige_paid: { Args: { p_inquiry_id: string }; Returns: Json }
       mark_order_paid: { Args: { p_order_id: string }; Returns: Json }
       next_order_number: { Args: never; Returns: string }
       orders_is_admin: { Args: never; Returns: boolean }

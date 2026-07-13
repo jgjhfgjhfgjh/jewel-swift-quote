@@ -26,6 +26,10 @@ import {
   isAdvisory, COURSE_SCHEDULE_DAYS, type InquiryLike,
 } from './_lib/inquiryEmails.js';
 import { buildOfferEmail } from './_lib/offerEmail.js';
+import {
+  buildInvoiceEmail, buildInvoicePohodaXml, paymentReceivedEmail, orderConfirmationEmail,
+  type PrestigeOrderRow,
+} from './_lib/invoiceEmail.js';
 
 const MAX_ATTEMPTS = 5;
 const BATCH_SIZE = 20;
@@ -48,6 +52,7 @@ interface InquiryRow extends InquiryLike {
   offer_price: string | null;
   offer_currency: string | null;
   offer_draft: string | null;
+  offer_items: { brand: string; model: string; price: number }[] | null;
 }
 
 /* ── 1) Schedule outbox rows for inquiries that don't have them yet ── */
@@ -217,7 +222,7 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
   if (error) throw new Error(`outbox select failed: ${error.message}`);
   if (!rows?.length) return { sent: 0, failed: 0 };
 
-  // Load the referenced inquiries in one query.
+  // Load the referenced inquiries (and their orders, for invoice kinds) in one go.
   const ids = [...new Set(rows.map((r) => r.inquiry_id))];
   const { data: inquiries } = await supabase
     .from('prestige_inquiries')
@@ -226,12 +231,23 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
     .returns<InquiryRow[]>();
   const byId = new Map((inquiries ?? []).map((i) => [i.id, i]));
 
+  const orderKinds = new Set(['order_confirmation', 'proforma_invoice', 'invoice_admin_copy', 'payment_received']);
+  const orderIds = [...new Set(rows.filter((r) => orderKinds.has(r.kind)).map((r) => r.inquiry_id))];
+  const { data: orders } = orderIds.length
+    ? await supabase.from('prestige_orders').select('*').in('inquiry_id', orderIds).returns<PrestigeOrderRow[]>()
+    : { data: [] as PrestigeOrderRow[] };
+  const orderByInquiry = new Map((orders ?? []).map((o) => [o.inquiry_id, o]));
+
   let sent = 0;
   let failed = 0;
 
   for (const row of rows) {
     const inq = byId.get(row.inquiry_id);
-    let content: { subject: string; text: string; html?: string } | null = null;
+    const order = orderByInquiry.get(row.inquiry_id);
+    let content: {
+      subject: string; text: string; html?: string;
+      attachments?: { filename: string; content: string }[];
+    } | null = null;
 
     if (row.kind === 'advisory_reply' && row.payload?.text) {
       content = { subject: row.payload.subject || advisoryReplySubject(), text: row.payload.text };
@@ -243,7 +259,25 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
           price: inq.offer_price,
           currency: inq.offer_currency ?? 'CZK',
           body: inq.offer_draft,
+          items: inq.offer_items ?? undefined,
         });
+      } else if (row.kind === 'order_confirmation' && order?.order_number) {
+        content = orderConfirmationEmail(inq, order);
+      } else if (row.kind === 'proforma_invoice' && order?.invoice_number) {
+        content = buildInvoiceEmail(inq, order);
+      } else if (row.kind === 'invoice_admin_copy' && order?.invoice_number) {
+        const inv = buildInvoiceEmail(inq, order);
+        content = {
+          subject: `[kopie + POHODA XML] ${inv.subject}`,
+          text: `Kopie zálohové faktury pro účetnictví.\n\n${inv.text}`,
+          html: inv.html,
+          attachments: [{
+            filename: `${order.invoice_number}.xml`,
+            content: buildInvoicePohodaXml(inq, order),
+          }],
+        };
+      } else if (row.kind === 'payment_received' && order) {
+        content = paymentReceivedEmail(inq, order);
       } else if (row.kind === 'advisory_draft_ready') {
         content = {
           subject: `AI návrh odpovědi připraven — ${inq.name}`,
@@ -262,7 +296,10 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
       continue;
     }
 
-    const result = await sendEmail(row.recipient, content.subject, content.text, undefined, content.html);
+    // Admin-targeted rows may be queued from the ERP client, which doesn't know
+    // ADMIN_NOTIFY_EMAIL — resolve it here.
+    const to = row.kind === 'invoice_admin_copy' ? adminEmail() : row.recipient;
+    const result = await sendEmail(to, content.subject, content.text, content.attachments, content.html);
     if (result.ok) {
       await supabase.from('inquiry_emails').update({
         status: 'sent', sent_at: new Date().toISOString(), attempts: row.attempts + 1, last_error: null,

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   Loader2, RefreshCw, Inbox, Sparkles, CalendarDays, CheckCircle2, ChevronDown,
   Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck, Tag, Wand2,
+  Receipt, Banknote, ClipboardCheck,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
@@ -34,7 +36,10 @@ interface Inquiry {
   offer_price: string | null;
   offer_currency: string | null;
   offer_draft: string | null;
+  offer_items: OfferItem[] | null;
 }
+
+interface OfferItem { brand: string; model: string; price: number }
 
 interface EmailRow {
   id: string;
@@ -52,11 +57,41 @@ const KIND_LABELS: Record<string, string> = {
   advisory_draft_ready: 'AI draft připraven (admin)',
   advisory_reply: 'Poradenská odpověď',
   offer: 'Cenová nabídka',
+  order_confirmation: 'Potvrzení závazné objednávky',
+  proforma_invoice: 'Zálohová faktura',
+  invoice_admin_copy: 'Faktura — kopie pro účetní (XML)',
+  payment_received: 'Potvrzení platby',
   course_1: 'Akademie 1/5 — Pravost',
   course_2: 'Akademie 2/5 — Investice',
   course_3: 'Akademie 3/5 — Velikost',
   course_4: 'Akademie 4/5 — Údržba',
   course_5: 'Akademie 5/5 — Ikony',
+};
+
+interface PrestigeOrder {
+  id: string;
+  inquiry_id: string;
+  items: OfferItem[] | null;
+  order_number: string | null;
+  invoice_number: string | null;
+  invoice_issued_at: string | null;
+  status: string;
+  currency: string;
+  amount: number;
+  vat_rate: number;
+  vat_base: number;
+  vat_amount: number;
+  paid_at: string | null;
+}
+
+const ORDER_STATUS_CS: Record<string, string> = {
+  draft: 'Návrh',
+  awaiting_payment: 'Čeká na platbu',
+  paid: 'Zaplaceno',
+  sourcing: 'Zajišťujeme',
+  shipped: 'Odesláno',
+  delivered: 'Doručeno',
+  cancelled: 'Stornováno',
 };
 
 const EMAIL_STATUS_CLS: Record<string, string> = {
@@ -103,6 +138,13 @@ export default function AdminInquiries() {
   const [offerDraft, setOfferDraft] = useState('');
   const [generatingOffer, setGeneratingOffer] = useState(false);
   const [sendingOffer, setSendingOffer] = useState(false);
+  const [itemPrices, setItemPrices] = useState<Record<number, string>>({});
+  const [orderSelection, setOrderSelection] = useState<Record<number, boolean>>({});
+  const [creatingOrder, setCreatingOrder] = useState(false);
+  const [order, setOrder] = useState<PrestigeOrder | null>(null);
+  const [vatRate, setVatRate] = useState('21');
+  const [issuing, setIssuing] = useState(false);
+  const [markingPaid, setMarkingPaid] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -151,6 +193,20 @@ export default function AdminInquiries() {
     setEmails((data ?? []) as EmailRow[]);
   }
 
+  async function loadOrder(inquiryId: string) {
+    const { data } = await supabase
+      .from('prestige_orders')
+      .select('id, inquiry_id, items, order_number, invoice_number, invoice_issued_at, status, currency, amount, vat_rate, vat_base, vat_amount, paid_at')
+      .eq('inquiry_id', inquiryId)
+      .maybeSingle();
+    setOrder((data as unknown as PrestigeOrder | null) ?? null);
+  }
+
+  /** Watches the admin can price (the advisory chip is not a product). */
+  function priceable(inq: Inquiry): InquiryWatch[] {
+    return (inq.watches ?? []).filter((w) => w.brand !== 'Konzultace');
+  }
+
   async function toggleOpen(inq: Inquiry) {
     if (openId === inq.id) { setOpenId(null); return; }
     setOpenId(inq.id);
@@ -158,14 +214,102 @@ export default function AdminInquiries() {
     setOfferPrice(inq.offer_price ?? '');
     setOfferCurrency(inq.offer_currency ?? 'CZK');
     setOfferDraft(inq.offer_draft ?? '');
+    // Prefill per-model prices from a previously generated offer.
+    const prices: Record<number, string> = {};
+    priceable(inq).forEach((w, i) => {
+      const match = (inq.offer_items ?? []).find((it) => it.brand === w.brand && it.model === w.model);
+      if (match) prices[i] = String(match.price);
+    });
+    setItemPrices(prices);
+    setOrderSelection({});
     setEmails([]);
+    setOrder(null);
     setEmailsLoading(true);
-    await loadEmails(inq.id);
+    await Promise.all([loadEmails(inq.id), loadOrder(inq.id)]);
     setEmailsLoading(false);
   }
 
-  async function generateOffer(id: string) {
-    if (!offerPrice.trim()) { toast.error('Zadejte cenu'); return; }
+  /** Valid priced items from the current inputs. */
+  function pricedItems(inq: Inquiry): OfferItem[] {
+    return priceable(inq)
+      .map((w, i) => ({ brand: w.brand, model: w.model, price: Number((itemPrices[i] ?? '').replace(/\s/g, '')) }))
+      .filter((it) => Number.isFinite(it.price) && it.price > 0);
+  }
+
+  /** Convert the offer into a binding order — only the items the customer confirmed. */
+  async function createOrder(inq: Inquiry) {
+    // Single-price offers (advisory, no itemization) convert as one line.
+    const offerItems = inq.offer_items ?? (inq.offer_price
+      ? [{ brand: '', model: 'Luxusní hodinky dle dohodnuté specifikace', price: Number(inq.offer_price.replace(/[^\d,.]/g, '').replace(',', '.')) }]
+      : []);
+    const selected = offerItems.filter((_, i) => orderSelection[i] !== false);
+    if (selected.length === 0) { toast.error('Vyberte alespoň jeden model'); return; }
+    setCreatingOrder(true);
+    const { data, error } = await supabase.rpc('create_prestige_order', {
+      p_inquiry_id: inq.id,
+      p_items: selected as unknown as Json,
+    });
+    if (error || !data) {
+      setCreatingOrder(false);
+      toast.error(`Vytvoření objednávky selhalo: ${error?.message ?? ''}`);
+      return;
+    }
+    const ord = data as unknown as PrestigeOrder;
+    setOrder(ord);
+    const { error: qErr } = await supabase.from('inquiry_emails').upsert([
+      { inquiry_id: inq.id, kind: 'order_confirmation', recipient: inq.email, status: 'pending', scheduled_at: new Date().toISOString(), sent_at: null, attempts: 0, last_error: null, payload: {} },
+    ], { onConflict: 'inquiry_id,kind' });
+    if (!qErr) { try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron */ } }
+    await loadEmails(inq.id);
+    setCreatingOrder(false);
+    toast.success(`Závazná objednávka ${ord.order_number} vytvořena — zákazník dostal potvrzení`);
+  }
+
+  async function issueInvoice(inq: Inquiry) {
+    setIssuing(true);
+    const { data, error } = await supabase.rpc('issue_prestige_invoice', {
+      p_inquiry_id: inq.id,
+      p_vat_rate: Number(vatRate),
+    });
+    if (error || !data) {
+      setIssuing(false);
+      toast.error(error?.message?.includes('order not found') ? 'Nejdřív vytvořte závaznou objednávku' : `Vystavení faktury selhalo: ${error?.message ?? ''}`);
+      return;
+    }
+    const ord = data as unknown as PrestigeOrder;
+    setOrder(ord);
+    // Queue the invoice for the customer + an XML copy for the accountant.
+    const now = new Date().toISOString();
+    const { error: qErr } = await supabase.from('inquiry_emails').upsert([
+      { inquiry_id: inq.id, kind: 'proforma_invoice', recipient: inq.email, status: 'pending', scheduled_at: now, sent_at: null, attempts: 0, last_error: null, payload: {} },
+      { inquiry_id: inq.id, kind: 'invoice_admin_copy', recipient: 'admin', status: 'pending', scheduled_at: now, sent_at: null, attempts: 0, last_error: null, payload: {} },
+    ], { onConflict: 'inquiry_id,kind' });
+    if (qErr) { setIssuing(false); toast.error('Fakturu se nepodařilo zařadit k odeslání'); return; }
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron will send */ }
+    await loadEmails(inq.id);
+    setIssuing(false);
+    toast.success(`Zálohová faktura ${ord.invoice_number} vystavena a odeslána`);
+  }
+
+  async function markPaid(inq: Inquiry) {
+    setMarkingPaid(true);
+    const { data, error } = await supabase.rpc('mark_prestige_paid', { p_inquiry_id: inq.id });
+    if (error || !data) { setMarkingPaid(false); toast.error(`Označení platby selhalo: ${error?.message ?? ''}`); return; }
+    setOrder(data as unknown as PrestigeOrder);
+    const { error: qErr } = await supabase.from('inquiry_emails').upsert([
+      { inquiry_id: inq.id, kind: 'payment_received', recipient: inq.email, status: 'pending', scheduled_at: new Date().toISOString(), sent_at: null, attempts: 0, last_error: null, payload: {} },
+    ], { onConflict: 'inquiry_id,kind' });
+    if (!qErr) { try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron */ } }
+    await loadEmails(inq.id);
+    setMarkingPaid(false);
+    toast.success('Platba zaznamenána — zákazník dostal potvrzení');
+  }
+
+  async function generateOffer(inq: Inquiry) {
+    const items = pricedItems(inq);
+    const hasModels = priceable(inq).length > 0;
+    if (hasModels && items.length === 0) { toast.error('Naceňte alespoň jeden model'); return; }
+    if (!hasModels && !offerPrice.trim()) { toast.error('Zadejte cenu'); return; }
     setGeneratingOffer(true);
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
@@ -174,12 +318,18 @@ export default function AdminInquiries() {
       const res = await fetch('/api/generate-offer', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inquiryId: id, price: offerPrice.trim(), currency: offerCurrency }),
+        body: JSON.stringify(hasModels
+          ? { inquiryId: inq.id, items, currency: offerCurrency }
+          : { inquiryId: inq.id, price: offerPrice.trim(), currency: offerCurrency }),
       });
       const json = await res.json();
       if (!res.ok || !json.draft) { toast.error(json.error || 'Generování nabídky selhalo'); return; }
       setOfferDraft(json.draft);
-      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, offer_draft: json.draft, offer_price: offerPrice.trim(), offer_currency: offerCurrency } : r)));
+      const total = hasModels ? String(json.total ?? '') : offerPrice.trim();
+      setOfferPrice(total);
+      setRows((prev) => prev.map((r) => (r.id === inq.id
+        ? { ...r, offer_draft: json.draft, offer_price: total, offer_currency: offerCurrency, offer_items: hasModels ? items : null }
+        : r)));
       toast.success('Nabídka vygenerována — zkontrolujte a odešlete');
     } catch {
       toast.error('Generování nabídky selhalo');
@@ -189,10 +339,21 @@ export default function AdminInquiries() {
   }
 
   async function sendOffer(inq: Inquiry) {
-    if (!offerPrice.trim() || !offerDraft.trim()) { toast.error('Vyplňte cenu i text nabídky'); return; }
+    const items = pricedItems(inq);
+    const hasModels = priceable(inq).length > 0;
+    const total = hasModels
+      ? items.reduce((s, i) => s + i.price, 0).toLocaleString('cs-CZ')
+      : offerPrice.trim();
+    if ((hasModels && items.length === 0) || !total || !offerDraft.trim()) { toast.error('Vyplňte ceny i text nabídky'); return; }
     setSendingOffer(true);
     await supabase.from('prestige_inquiries')
-      .update({ offer_price: offerPrice.trim(), offer_currency: offerCurrency, offer_draft: offerDraft, status: 'quoted' })
+      .update({
+        offer_price: total,
+        offer_currency: offerCurrency,
+        offer_draft: offerDraft,
+        offer_items: hasModels ? (items as unknown as Json) : null,
+        status: 'quoted',
+      })
       .eq('id', inq.id);
     const { error } = await supabase.from('inquiry_emails').upsert({
       inquiry_id: inq.id,
@@ -207,7 +368,10 @@ export default function AdminInquiries() {
     }, { onConflict: 'inquiry_id,kind' });
     if (error) { setSendingOffer(false); toast.error('Zařazení nabídky selhalo'); return; }
     try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron will send */ }
-    setRows((prev) => prev.map((r) => (r.id === inq.id ? { ...r, status: 'quoted' as Status, offer_price: offerPrice.trim(), offer_currency: offerCurrency, offer_draft: offerDraft } : r)));
+    setOfferPrice(total);
+    setRows((prev) => prev.map((r) => (r.id === inq.id
+      ? { ...r, status: 'quoted' as Status, offer_price: total, offer_currency: offerCurrency, offer_draft: offerDraft, offer_items: hasModels ? items : null }
+      : r)));
     await loadEmails(inq.id);
     setSendingOffer(false);
     toast.success('Nabídka zařazena k odeslání zákazníkovi');
@@ -412,14 +576,34 @@ export default function AdminInquiries() {
                               <p className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-500">
                                 <Tag className="h-3.5 w-3.5" /> Cenová nabídka — nacenění + AI copy
                               </p>
-                              <div className="flex flex-wrap items-center gap-2">
+                              {priceable(r).length > 0 ? (
+                                <div className="space-y-1.5">
+                                  {priceable(r).map((w, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                      <span className="min-w-0 flex-1 truncate text-sm"><span className="font-medium">{w.brand}</span> {w.model}</span>
+                                      <input
+                                        value={itemPrices[i] ?? ''}
+                                        onChange={(e) => setItemPrices((p) => ({ ...p, [i]: e.target.value }))}
+                                        inputMode="numeric"
+                                        placeholder="Cena"
+                                        aria-label={`Cena — ${w.brand} ${w.model}`}
+                                        className="w-28 rounded-md border bg-card px-2.5 py-1.5 text-right text-sm outline-none focus:ring-1 focus:ring-amber-400"
+                                      />
+                                      <span className="w-9 shrink-0 text-xs text-muted-foreground">{offerCurrency}</span>
+                                    </div>
+                                  ))}
+                                  <p className="text-[11px] text-muted-foreground">Model bez ceny se do nabídky nezahrne.</p>
+                                </div>
+                              ) : (
                                 <input
                                   value={offerPrice}
                                   onChange={(e) => setOfferPrice(e.target.value)}
                                   inputMode="numeric"
-                                  placeholder="Cena na klíč"
-                                  className="w-36 rounded-md border bg-card px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-amber-400"
+                                  placeholder="Celková cena na klíč"
+                                  className="w-40 rounded-md border bg-card px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-amber-400"
                                 />
+                              )}
+                              <div className="mt-2 flex flex-wrap items-center gap-2">
                                 <select
                                   value={offerCurrency}
                                   onChange={(e) => setOfferCurrency(e.target.value)}
@@ -429,9 +613,14 @@ export default function AdminInquiries() {
                                   <option value="CZK">CZK</option>
                                   <option value="EUR">EUR</option>
                                 </select>
-                                <Button size="sm" variant="outline" disabled={generatingOffer || !offerPrice.trim()} onClick={() => void generateOffer(r.id)} className="gap-1.5">
+                                <Button size="sm" variant="outline" disabled={generatingOffer || (priceable(r).length > 0 ? pricedItems(r).length === 0 : !offerPrice.trim())} onClick={() => void generateOffer(r)} className="gap-1.5">
                                   {generatingOffer ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />} Vygenerovat nabídku
                                 </Button>
+                                {pricedItems(r).length > 0 && (
+                                  <span className="text-sm font-semibold tabular-nums">
+                                    Celkem: {pricedItems(r).reduce((s, i) => s + i.price, 0).toLocaleString('cs-CZ')} {offerCurrency}
+                                  </span>
+                                )}
                               </div>
                               <textarea
                                 value={offerDraft}
@@ -446,6 +635,95 @@ export default function AdminInquiries() {
                                 </Button>
                                 <span className="text-[11px] text-muted-foreground">Odesláním se poptávka označí jako „Naceněno". E-mail obsahuje fotky, ujištění a průvodce objednávkou.</span>
                               </div>
+                            </div>
+
+                            {/* Invoicing */}
+                            <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+                              <p className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-500">
+                                <Receipt className="h-3.5 w-3.5" /> Závazná objednávka a zálohová faktura
+                              </p>
+                              {!order?.invoice_number ? (
+                                <div className="space-y-2">
+                                  {(r.offer_items ?? []).length > 0 || r.offer_price ? (
+                                    <>
+                                      {(r.offer_items ?? []).length > 0 && (
+                                        <div className="space-y-1">
+                                          {(r.offer_items ?? []).map((it, i) => (
+                                            <label key={i} className="flex cursor-pointer items-center gap-2 text-sm">
+                                              <input
+                                                type="checkbox"
+                                                checked={orderSelection[i] !== false}
+                                                onChange={(e) => setOrderSelection((p) => ({ ...p, [i]: e.target.checked }))}
+                                                className="h-3.5 w-3.5 accent-emerald-700"
+                                              />
+                                              <span className="min-w-0 flex-1 truncate"><span className="font-medium">{it.brand}</span> {it.model}</span>
+                                              <span className="tabular-nums text-muted-foreground">{it.price.toLocaleString('cs-CZ')} {r.offer_currency ?? 'CZK'}</span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      )}
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <Button size="sm" variant={order ? 'outline' : 'default'} disabled={creatingOrder} onClick={() => void createOrder(r)} className={`gap-1.5 ${order ? '' : 'bg-emerald-700 text-white hover:bg-emerald-800'}`}>
+                                          {creatingOrder ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ClipboardCheck className="h-3.5 w-3.5" />} {order ? 'Aktualizovat závaznou objednávku' : 'Vytvořit závaznou objednávku'}
+                                        </Button>
+                                        <span className="text-[11px] text-muted-foreground">Zaškrtnuté = modely, které zákazník závazně potvrdil. Odešle se potvrzení objednávky.</span>
+                                      </div>
+                                      {order && (
+                                        <div className="flex flex-wrap items-center gap-2 border-t border-emerald-500/20 pt-2">
+                                          <span className="text-sm font-semibold">{order.order_number}</span>
+                                          <span className="text-sm font-semibold tabular-nums">{order.amount.toLocaleString('cs-CZ')} {order.currency}</span>
+                                          <span className="text-xs text-muted-foreground">{(order.items ?? []).length} pol.</span>
+                                          <select
+                                            value={vatRate}
+                                            onChange={(e) => setVatRate(e.target.value)}
+                                            aria-label="Sazba DPH"
+                                            className="rounded-md border bg-card px-2 py-1.5 text-sm outline-none"
+                                          >
+                                            <option value="21">DPH 21 %</option>
+                                            <option value="12">DPH 12 %</option>
+                                            <option value="0">Bez DPH (0 %)</option>
+                                          </select>
+                                          <Button size="sm" disabled={issuing} onClick={() => void issueInvoice(r)} className="gap-1.5 bg-emerald-700 text-white hover:bg-emerald-800">
+                                            {issuing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Receipt className="h-3.5 w-3.5" />} Vystavit zálohovou fakturu
+                                          </Button>
+                                        </div>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <span className="text-[11px] text-muted-foreground">Nejdřív odešlete cenovou nabídku (výše) — objednávka se skládá z naceněných modelů.</span>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="space-y-2">
+                                  {(order.items ?? []).length > 0 && (
+                                    <ul className="space-y-0.5 text-sm">
+                                      {(order.items ?? []).map((it, i) => (
+                                        <li key={i} className="flex items-center gap-2">
+                                          <span className="min-w-0 flex-1 truncate"><span className="font-medium">{it.brand}</span> {it.model}</span>
+                                          <span className="tabular-nums text-muted-foreground">{it.price.toLocaleString('cs-CZ')} {order.currency}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                                    <span className="font-semibold">{order.order_number}</span>
+                                    <span className="text-muted-foreground">Faktura <span className="font-medium text-foreground">{order.invoice_number}</span></span>
+                                    <span className="font-semibold tabular-nums">{order.amount.toLocaleString('cs-CZ')} {order.currency}</span>
+                                    {order.vat_rate > 0 && <span className="text-xs text-muted-foreground">(základ {order.vat_base.toLocaleString('cs-CZ')} + DPH {order.vat_rate}% {order.vat_amount.toLocaleString('cs-CZ')})</span>}
+                                    <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${order.status === 'paid' ? 'bg-emerald-500/15 text-emerald-600' : order.status === 'awaiting_payment' ? 'bg-amber-500/15 text-amber-600' : 'bg-muted text-muted-foreground'}`}>
+                                      {ORDER_STATUS_CS[order.status] ?? order.status}
+                                    </span>
+                                  </div>
+                                  {order.status === 'awaiting_payment' && (
+                                    <Button size="sm" disabled={markingPaid} onClick={() => void markPaid(r)} className="gap-1.5 bg-emerald-700 text-white hover:bg-emerald-800">
+                                      {markingPaid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Banknote className="h-3.5 w-3.5" />} Označit jako zaplaceno
+                                    </Button>
+                                  )}
+                                  {order.paid_at && (
+                                    <p className="text-xs text-muted-foreground">Zaplaceno {new Date(order.paid_at).toLocaleString('cs-CZ')} — zákazník dostal potvrzení a zahájili jsme zajištění.</p>
+                                  )}
+                                </div>
+                              )}
                             </div>
 
                             {/* E-mail timeline */}
