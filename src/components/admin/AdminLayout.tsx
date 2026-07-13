@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
-  BadgePercent, BarChart3, Bot, Boxes, ClipboardCheck, Globe, Inbox, LayoutDashboard,
-  MessagesSquare, Rss, Users, type LucideIcon,
+  BadgePercent, BarChart3, Bot, Boxes, Cable, ClipboardCheck, Globe, Inbox,
+  LayoutDashboard, MessagesSquare, Rss, Users, type LucideIcon,
 } from 'lucide-react';
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -15,6 +15,7 @@ const NAV_ICONS: Record<string, LucideIcon> = {
   'admin-home': LayoutDashboard,
   'admin-ws': Bot,
   'admin-context': Boxes,
+  'admin-integrations': Cable,
   'admin-erp': BarChart3,
   'admin-inquiries': Inbox,
   customers: Users,

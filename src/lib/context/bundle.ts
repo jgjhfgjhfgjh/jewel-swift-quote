@@ -102,6 +102,8 @@ const TECH = {
     { path: '/api/process-inquiries', auth: 'cron', desc: 'Denní zpracování prestige poptávek + e-maily' },
     { path: '/api/process-supplier-orders', auth: 'cron', desc: 'Denní outbox dodavatelských objednávek (EDI/e-mail)' },
     { path: '/api/context', auth: 'admin (Bearer + is_admin)', desc: 'Context Hub bundle (JSON/MD) se živými KPI' },
+    { path: '/api/ai/chat', auth: 'admin (Bearer + is_admin)', desc: 'Centrální admin chat — context bundle + tools (command bus, query_data)' },
+    { path: '/api/mcp', auth: 'Bearer MCP_TOKEN', desc: 'MCP server (streamable HTTP) — context bundle + datové dotazy pro externí AI' },
   ],
   crons: [
     { path: '/api/process-supplier-orders', schedule: '0 6 * * *', desc: 'odeslání dodavatelských objednávek' },
