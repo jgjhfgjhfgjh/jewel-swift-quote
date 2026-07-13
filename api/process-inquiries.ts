@@ -20,7 +20,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { sendEmail } from './_lib/email.js';
+import { sendEmail, siteUrl } from './_lib/email.js';
 import {
   confirmationEmail, adminNotificationEmail, courseEmail, advisoryReplySubject,
   isAdvisory, COURSE_SCHEDULE_DAYS, type InquiryLike,
@@ -30,6 +30,7 @@ import {
   buildInvoiceEmail, buildInvoicePohodaXml, paymentReceivedEmail, orderConfirmationEmail,
   type PrestigeOrderRow,
 } from './_lib/invoiceEmail.js';
+import { orderShippedEmail, satisfactionSurveyEmail, aftercareGiftEmail } from './_lib/aftercareEmails.js';
 
 const MAX_ATTEMPTS = 5;
 const BATCH_SIZE = 20;
@@ -42,6 +43,10 @@ function getServiceClient(): SupabaseClient {
 
 function adminEmail(): string {
   return process.env.ADMIN_NOTIFY_EMAIL ?? 'info@swelt.cz';
+}
+
+function adminErpUrl(): string {
+  return `${siteUrl()}/admin/poptavky`;
 }
 
 interface InquiryRow extends InquiryLike {
@@ -182,6 +187,43 @@ Bez předmětu, bez podpisu — jen tělo e-mailu. Střízlivý, profesionální
   return generated;
 }
 
+/* ── 2b) After-sales sweep: shipped notice, satisfaction survey, gift ── */
+async function scheduleAftercare(supabase: SupabaseClient): Promise<number> {
+  const { data: orders } = await supabase
+    .from('prestige_orders')
+    .select('id, inquiry_id, shipped_at, delivered_at')
+    .not('shipped_at', 'is', null)
+    .gte('updated_at', new Date(Date.now() - 90 * 864e5).toISOString())
+    .limit(100)
+    .returns<{ id: string; inquiry_id: string; shipped_at: string; delivered_at: string | null }[]>();
+  if (!orders?.length) return 0;
+
+  const inquiryIds = orders.map((o) => o.inquiry_id);
+  const { data: inquiries } = await supabase
+    .from('prestige_inquiries')
+    .select('id, email')
+    .in('id', inquiryIds);
+  const emailById = new Map((inquiries ?? []).map((i) => [i.id, i.email]));
+
+  const rows: { inquiry_id: string; kind: string; recipient: string; scheduled_at: string }[] = [];
+  for (const o of orders) {
+    const recipient = emailById.get(o.inquiry_id);
+    if (!recipient) continue;
+    rows.push({ inquiry_id: o.inquiry_id, kind: 'order_shipped', recipient, scheduled_at: o.shipped_at });
+    if (o.delivered_at) {
+      const t = new Date(o.delivered_at).getTime();
+      rows.push({ inquiry_id: o.inquiry_id, kind: 'satisfaction_survey', recipient, scheduled_at: new Date(t + 1 * 864e5).toISOString() });
+      rows.push({ inquiry_id: o.inquiry_id, kind: 'aftercare_gift', recipient, scheduled_at: new Date(t + 2 * 864e5).toISOString() });
+    }
+  }
+  if (!rows.length) return 0;
+  // Unique (inquiry_id, kind) keeps this idempotent across sweeps.
+  const { error } = await supabase
+    .from('inquiry_emails')
+    .upsert(rows, { onConflict: 'inquiry_id,kind', ignoreDuplicates: true });
+  return error ? 0 : rows.length;
+}
+
 /* ── 3) Cancel pending course parts for closed inquiries ── */
 async function cancelClosed(supabase: SupabaseClient): Promise<void> {
   const { data: closed } = await supabase
@@ -231,7 +273,10 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
     .returns<InquiryRow[]>();
   const byId = new Map((inquiries ?? []).map((i) => [i.id, i]));
 
-  const orderKinds = new Set(['order_confirmation', 'proforma_invoice', 'invoice_admin_copy', 'payment_received']);
+  const orderKinds = new Set([
+    'order_confirmation', 'proforma_invoice', 'invoice_admin_copy', 'payment_received',
+    'order_shipped', 'satisfaction_survey', 'aftercare_gift',
+  ]);
   const orderIds = [...new Set(rows.filter((r) => orderKinds.has(r.kind)).map((r) => r.inquiry_id))];
   const { data: orders } = orderIds.length
     ? await supabase.from('prestige_orders').select('*').in('inquiry_id', orderIds).returns<PrestigeOrderRow[]>()
@@ -278,10 +323,16 @@ async function sendDue(supabase: SupabaseClient): Promise<{ sent: number; failed
         };
       } else if (row.kind === 'payment_received' && order) {
         content = paymentReceivedEmail(inq, order);
+      } else if (row.kind === 'order_shipped' && order) {
+        content = orderShippedEmail(inq, order);
+      } else if (row.kind === 'satisfaction_survey' && order) {
+        content = satisfactionSurveyEmail(inq, order);
+      } else if (row.kind === 'aftercare_gift' && order) {
+        content = aftercareGiftEmail(inq, order);
       } else if (row.kind === 'advisory_draft_ready') {
         content = {
           subject: `AI návrh odpovědi připraven — ${inq.name}`,
-          text: `Pro poptávku od ${inq.name} (${inq.email}) je v ERP připraven AI návrh poradenské odpovědi.\n\nNáhled:\n${row.payload?.preview ?? ''}\n\nZkontrolovat a odeslat: https://swelt.partner/admin/poptavky`,
+          text: `Pro poptávku od ${inq.name} (${inq.email}) je v ERP připraven AI návrh poradenské odpovědi.\n\nNáhled:\n${row.payload?.preview ?? ''}\n\nZkontrolovat a odeslat: ${adminErpUrl()}`,
         };
       } else if (/^course_[1-5]$/.test(row.kind)) {
         content = courseEmail(Number(row.kind.split('_')[1]), inq);
@@ -324,9 +375,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const scheduled = await scheduleNew(supabase);
     const drafts = await generateAdvisoryDrafts(supabase);
+    const aftercare = await scheduleAftercare(supabase);
     await cancelClosed(supabase);
     const { sent, failed } = await sendDue(supabase);
-    res.status(200).json({ ok: true, scheduled, drafts, sent, failed });
+    res.status(200).json({ ok: true, scheduled, drafts, aftercare, sent, failed });
   } catch (e) {
     res.status(500).json({ ok: false, error: e instanceof Error ? e.message : String(e) });
   }

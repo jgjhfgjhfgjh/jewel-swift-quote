@@ -9,7 +9,9 @@
 
 import type { InquiryLike } from './inquiryEmails.js';
 
-const SITE = 'https://swelt.partner';
+import { siteUrl } from './email.js';
+
+const SITE = siteUrl();
 const ACCENT = '#0f172a';
 const GOLD = '#9a7b4f';
 
@@ -61,6 +63,11 @@ function czDate(iso: string | null): string {
 
 export function variableSymbol(invoiceNumber: string | null): string {
   return (invoiceNumber ?? '').replace(/\D/g, '');
+}
+
+/** Customer status page — the token is the credential. */
+export function statusPageUrl(order: PrestigeOrderRow): string {
+  return `${SITE}/objednavka/${order.public_token}`;
 }
 
 function supplierIdentity() {
@@ -220,8 +227,12 @@ export function buildInvoiceEmail(
       <div style="font-size:12px;color:#71717a;line-height:1.6;background:#faf8f4;border-radius:10px;padding:12px 16px">Toto je zálohová faktura (výzva k platbě) — není daňovým dokladem. Daňový doklad Vám vystavíme po přijetí platby.</div>
     </td></tr>
 
+    <tr><td align="center" style="padding:10px 32px 4px">
+      <a href="${statusPageUrl(order)}" style="display:inline-block;border:1px solid ${ACCENT};color:${ACCENT};text-decoration:none;font-size:13px;font-weight:700;padding:10px 20px;border-radius:9px">Sledovat objednávku online</a>
+    </td></tr>
+
     <tr><td style="padding:16px 32px 28px;border-top:1px solid #f0ede7">
-      <div style="font-size:12px;color:#a1a1aa;line-height:1.6">Jakýkoliv dotaz? Stačí odpovědět na tento e-mail.<br>S pozdravem, ${esc(sup.company)} — prémiový segment<br><a href="${SITE}/prestige" style="color:${GOLD};text-decoration:none">swelt.partner/prestige</a></div>
+      <div style="font-size:12px;color:#a1a1aa;line-height:1.6">Jakýkoliv dotaz? Stačí odpovědět na tento e-mail.<br>S pozdravem, ${esc(sup.company)} — prémiový segment<br><a href="${SITE}/prestige" style="color:${GOLD};text-decoration:none">${SITE.replace('https://', '')}/prestige</a></div>
     </td></tr>
   </table>
 </td></tr>
@@ -246,6 +257,8 @@ export function buildInvoiceEmail(
     ...(due ? [`Splatnost: ${due}`] : []),
     '',
     'Po připsání platby ihned zahajujeme zajištění kusu; poté obdržíte sledovací číslo pojištěné přepravy. Součástí dodání je plná dokumentace a garance pravosti.',
+    '',
+    `Stav objednávky online: ${statusPageUrl(order)}`,
     '',
     'Zálohová faktura není daňovým dokladem — ten vystavíme po přijetí platby.',
     '',
@@ -327,6 +340,11 @@ ${lines.map((l) => `• ${`${l.brand} ${l.model}`.trim()} — ${money(l.price, o
 
 Celkem: ${money(order.amount, order.currency)}
 
+SLEDUJTE SVOU OBJEDNÁVKU ONLINE
+${statusPageUrl(order)}
+Na této stránce vidíte v každém okamžiku přesný stav objednávky — a prosíme,
+doplňte si tam fakturační údaje (adresu, u firmy IČO/DIČ) pro zálohovou fakturu.
+
 CO BUDE NÁSLEDOVAT
 1. Během chvíle Vám zašleme zálohovou fakturu s platebními údaji.
 2. Po připsání platby ihned zahájíme zajištění z prověřeného distribučního kanálu.
@@ -336,7 +354,7 @@ V každém kroku přesně víte, co se s Vaší objednávkou děje — a kdykoli
 
 S pozdravem
 swelt.partner — prémiový segment
-https://swelt.partner/prestige`,
+${SITE}/prestige`,
   };
 }
 
@@ -360,10 +378,12 @@ Co bude následovat:
 2. Jakmile bude zásilka na cestě, pošleme Vám sledovací číslo pojištěné přepravy.
 3. Po doručení zůstáváme k dispozici — servis, údržba i budoucí akvizice.
 
+Stav objednávky sledujte kdykoliv online: ${statusPageUrl(order)}
+
 Děkujeme za důvěru — je nám ctí.
 
 S pozdravem
 swelt.partner — prémiový segment
-https://swelt.partner/prestige`,
+${SITE}/prestige`,
   };
 }

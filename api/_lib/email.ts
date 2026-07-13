@@ -6,6 +6,12 @@ export interface EmailResult {
   error?: string;
 }
 
+/** Public site base for links in e-mails. Set PUBLIC_SITE_URL when the final
+ * domain (swelt.eu) goes live; defaults to the current production URL. */
+export function siteUrl(): string {
+  return (process.env.PUBLIC_SITE_URL ?? 'https://jewel-swift-quote.vercel.app').replace(/\/$/, '');
+}
+
 export interface EmailAttachment {
   filename: string;
   /** Plain string content — Resend base64-encodes it on our side. */

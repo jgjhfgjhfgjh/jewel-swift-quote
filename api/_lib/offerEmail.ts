@@ -5,7 +5,9 @@
 
 import type { InquiryLike } from './inquiryEmails.js';
 
-const SITE = 'https://swelt.partner';
+import { siteUrl } from './email.js';
+
+const SITE = siteUrl();
 const PRESTIGE_URL = `${SITE}/prestige`;
 const ACCENT = '#0f172a'; // zinc-900
 const GOLD = '#9a7b4f';

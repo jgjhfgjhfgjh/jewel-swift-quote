@@ -16,7 +16,9 @@ export interface InquiryLike {
   watches: { brand: string; model: string; custom?: boolean }[];
 }
 
-const SITE = 'https://swelt.partner';
+import { siteUrl } from './email.js';
+
+const SITE = siteUrl();
 const PRESTIGE_URL = `${SITE}/prestige`;
 
 const SIGNATURE = `S pozdravem

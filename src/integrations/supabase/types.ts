@@ -1534,6 +1534,22 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       create_prestige_order: { Args: { p_inquiry_id: string; p_items: Json }; Returns: Json }
+      get_prestige_order_by_token: { Args: { p_token: string }; Returns: Json }
+      update_prestige_billing: {
+        Args: {
+          p_token: string
+          p_name?: string
+          p_company?: string
+          p_ico?: string
+          p_dic?: string
+          p_street?: string
+          p_city?: string
+          p_zip?: string
+          p_country?: string
+        }
+        Returns: boolean
+      }
+      submit_prestige_rating: { Args: { p_token: string; p_rating: number; p_note?: string }; Returns: boolean }
       issue_prestige_invoice: { Args: { p_inquiry_id: string; p_vat_rate?: number }; Returns: Json }
       mark_prestige_paid: { Args: { p_inquiry_id: string }; Returns: Json }
       mark_order_paid: { Args: { p_order_id: string }; Returns: Json }

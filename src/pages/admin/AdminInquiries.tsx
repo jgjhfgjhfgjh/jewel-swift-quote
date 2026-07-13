@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Loader2, RefreshCw, Inbox, Sparkles, CalendarDays, CheckCircle2, ChevronDown,
   Building2, User as UserIcon, Mail, Phone, Package, Coins, Send, Bot, MailCheck, Tag, Wand2,
-  Receipt, Banknote, ClipboardCheck,
+  Receipt, Banknote, ClipboardCheck, Truck, Home, Star, ExternalLink,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
@@ -61,6 +61,9 @@ const KIND_LABELS: Record<string, string> = {
   proforma_invoice: 'Zálohová faktura',
   invoice_admin_copy: 'Faktura — kopie pro účetní (XML)',
   payment_received: 'Potvrzení platby',
+  order_shipped: 'Odesláno — sledovací údaje',
+  satisfaction_survey: 'Dotazník spokojenosti',
+  aftercare_gift: 'Dárek — průvodce + voucher',
   course_1: 'Akademie 1/5 — Pravost',
   course_2: 'Akademie 2/5 — Investice',
   course_3: 'Akademie 3/5 — Velikost',
@@ -82,6 +85,14 @@ interface PrestigeOrder {
   vat_base: number;
   vat_amount: number;
   paid_at: string | null;
+  carrier: string | null;
+  tracking_number: string | null;
+  tracking_url: string | null;
+  shipped_at: string | null;
+  delivered_at: string | null;
+  satisfaction_rating: number | null;
+  satisfaction_note: string | null;
+  public_token: string;
 }
 
 const ORDER_STATUS_CS: Record<string, string> = {
@@ -145,6 +156,11 @@ export default function AdminInquiries() {
   const [vatRate, setVatRate] = useState('21');
   const [issuing, setIssuing] = useState(false);
   const [markingPaid, setMarkingPaid] = useState(false);
+  const [carrier, setCarrier] = useState('');
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [trackingUrl, setTrackingUrl] = useState('');
+  const [markingShipped, setMarkingShipped] = useState(false);
+  const [markingDelivered, setMarkingDelivered] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -196,10 +212,14 @@ export default function AdminInquiries() {
   async function loadOrder(inquiryId: string) {
     const { data } = await supabase
       .from('prestige_orders')
-      .select('id, inquiry_id, items, order_number, invoice_number, invoice_issued_at, status, currency, amount, vat_rate, vat_base, vat_amount, paid_at')
+      .select('id, inquiry_id, items, order_number, invoice_number, invoice_issued_at, status, currency, amount, vat_rate, vat_base, vat_amount, paid_at, carrier, tracking_number, tracking_url, shipped_at, delivered_at, satisfaction_rating, satisfaction_note, public_token')
       .eq('inquiry_id', inquiryId)
       .maybeSingle();
-    setOrder((data as unknown as PrestigeOrder | null) ?? null);
+    const ord = (data as unknown as PrestigeOrder | null) ?? null;
+    setOrder(ord);
+    setCarrier(ord?.carrier ?? '');
+    setTrackingNumber(ord?.tracking_number ?? '');
+    setTrackingUrl(ord?.tracking_url ?? '');
   }
 
   /** Watches the admin can price (the advisory chip is not a product). */
@@ -289,6 +309,41 @@ export default function AdminInquiries() {
     await loadEmails(inq.id);
     setIssuing(false);
     toast.success(`Zálohová faktura ${ord.invoice_number} vystavena a odeslána`);
+  }
+
+  async function markShipped(inq: Inquiry) {
+    setMarkingShipped(true);
+    const { error } = await supabase.from('prestige_orders')
+      .update({
+        carrier: carrier.trim() || null,
+        tracking_number: trackingNumber.trim() || null,
+        tracking_url: trackingUrl.trim() || null,
+        shipped_at: new Date().toISOString(),
+        status: 'shipped',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('inquiry_id', inq.id);
+    if (error) { setMarkingShipped(false); toast.error('Označení odeslání selhalo'); return; }
+    await supabase.from('inquiry_emails').upsert([
+      { inquiry_id: inq.id, kind: 'order_shipped', recipient: inq.email, status: 'pending', scheduled_at: new Date().toISOString(), attempts: 0, payload: {} },
+    ], { onConflict: 'inquiry_id,kind', ignoreDuplicates: true });
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron */ }
+    await Promise.all([loadOrder(inq.id), loadEmails(inq.id)]);
+    setMarkingShipped(false);
+    toast.success('Označeno jako odesláno — zákazník dostal sledovací údaje');
+  }
+
+  async function markDelivered(inq: Inquiry) {
+    setMarkingDelivered(true);
+    const { error } = await supabase.from('prestige_orders')
+      .update({ delivered_at: new Date().toISOString(), status: 'delivered', updated_at: new Date().toISOString() })
+      .eq('inquiry_id', inq.id);
+    if (error) { setMarkingDelivered(false); toast.error('Označení doručení selhalo'); return; }
+    // The processor sweep schedules the satisfaction survey (D+1) and gift (D+2).
+    try { await fetch('/api/process-inquiries', { method: 'POST' }); } catch { /* cron */ }
+    await Promise.all([loadOrder(inq.id), loadEmails(inq.id)]);
+    setMarkingDelivered(false);
+    toast.success('Doručeno — dotazník spokojenosti a dárek jsou naplánované');
   }
 
   async function markPaid(inq: Inquiry) {
@@ -722,6 +777,50 @@ export default function AdminInquiries() {
                                   {order.paid_at && (
                                     <p className="text-xs text-muted-foreground">Zaplaceno {new Date(order.paid_at).toLocaleString('cs-CZ')} — zákazník dostal potvrzení a zahájili jsme zajištění.</p>
                                   )}
+
+                                  {/* Shipping */}
+                                  {order.paid_at && !order.shipped_at && (
+                                    <div className="flex flex-wrap items-center gap-2 border-t border-emerald-500/20 pt-2">
+                                      <input value={carrier} onChange={(e) => setCarrier(e.target.value)} placeholder="Přepravce" className="w-28 rounded-md border bg-card px-2.5 py-1.5 text-sm outline-none focus:ring-1 focus:ring-emerald-400" />
+                                      <input value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} placeholder="Sledovací číslo" className="w-40 rounded-md border bg-card px-2.5 py-1.5 text-sm outline-none focus:ring-1 focus:ring-emerald-400" />
+                                      <input value={trackingUrl} onChange={(e) => setTrackingUrl(e.target.value)} placeholder="Odkaz na sledování (URL)" className="min-w-[180px] flex-1 rounded-md border bg-card px-2.5 py-1.5 text-sm outline-none focus:ring-1 focus:ring-emerald-400" />
+                                      <Button size="sm" disabled={markingShipped} onClick={() => void markShipped(r)} className="gap-1.5 bg-emerald-700 text-white hover:bg-emerald-800">
+                                        {markingShipped ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Truck className="h-3.5 w-3.5" />} Označit jako odesláno
+                                      </Button>
+                                    </div>
+                                  )}
+                                  {order.shipped_at && (
+                                    <p className="text-xs text-muted-foreground">
+                                      Odesláno {new Date(order.shipped_at).toLocaleDateString('cs-CZ')}
+                                      {order.carrier ? ` · ${order.carrier}` : ''}
+                                      {order.tracking_url
+                                        ? <> · <a href={order.tracking_url} target="_blank" rel="noreferrer" className="text-primary underline">{order.tracking_number ?? 'sledování'}</a></>
+                                        : order.tracking_number ? ` · ${order.tracking_number}` : ''}
+                                    </p>
+                                  )}
+                                  {order.shipped_at && !order.delivered_at && (
+                                    <Button size="sm" variant="outline" disabled={markingDelivered} onClick={() => void markDelivered(r)} className="gap-1.5">
+                                      {markingDelivered ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Home className="h-3.5 w-3.5" />} Označit jako doručeno
+                                    </Button>
+                                  )}
+                                  {order.delivered_at && (
+                                    <p className="text-xs text-muted-foreground">Doručeno {new Date(order.delivered_at).toLocaleDateString('cs-CZ')} — dotazník (D+1) a dárek (D+2) odejdou automaticky.</p>
+                                  )}
+                                  {order.satisfaction_rating && (
+                                    <p className="flex items-center gap-1 text-xs">
+                                      Hodnocení zákazníka:
+                                      {[1, 2, 3, 4, 5].map((n) => (
+                                        <Star key={n} className={`h-3.5 w-3.5 ${n <= (order.satisfaction_rating ?? 0) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'}`} />
+                                      ))}
+                                      {order.satisfaction_note && <span className="ml-1 text-muted-foreground">„{order.satisfaction_note}"</span>}
+                                    </p>
+                                  )}
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Stavová stránka zákazníka:{' '}
+                                    <a href={`/objednavka/${order.public_token}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-primary underline">
+                                      otevřít <ExternalLink className="h-3 w-3" />
+                                    </a>
+                                  </p>
                                 </div>
                               )}
                             </div>
