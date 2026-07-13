@@ -18,6 +18,7 @@ const SECTORS: SectorTile[] = [
   { title: 'AI Workspace', description: 'Centrální chat s kontextem webu; Jarvis a preview přibudou.', icon: Bot, route: '/admin/ws' },
   { title: 'Context Hub', description: 'Kontext celého webu — export MD/JSON pro AI nástroje.', icon: Boxes, route: '/admin/context' },
   { title: 'Integrace & MCP', description: 'Registr napojených nástrojů; MCP server pro externí AI.', icon: Workflow, route: '/admin/integrations' },
+  { title: 'Automatizace', description: 'Stav front, crony a ruční spouštění automatizací.', icon: Workflow, route: '/admin/automations' },
   { title: 'ERP & Objednávky', description: 'KPI, objednávky, outbox dodavatelských objednávek.', icon: BarChart3, route: '/admin/erp' },
   { title: 'Poptávky Prestige', description: 'Fronta poptávek luxusního segmentu + nabídky.', icon: Inbox, route: '/admin/poptavky' },
   { title: 'Zákazníci', description: 'Správa účtů, rolí, slev a služeb.', icon: Users, route: '/customers' },
@@ -28,7 +29,6 @@ const SECTORS: SectorTile[] = [
 ];
 
 const ROADMAP: SectorTile[] = [
-  { title: 'Automatizace', description: 'Přehled a spouštění všech automatizací.', icon: Workflow, soon: 'Fáze 7' },
   { title: 'Finance', description: 'Tržby, marže a náklady v čase.', icon: LineChart, soon: 'Fáze 8' },
   { title: 'Marketing', description: 'Výkon kampaní a kanálů.', icon: Megaphone, soon: 'Fáze 8' },
 ];
