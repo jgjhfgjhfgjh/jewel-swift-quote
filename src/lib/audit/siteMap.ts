@@ -235,6 +235,7 @@ export const SITE_MAP: SiteCluster[] = [
     description: 'Interní admin nástroje (jen role admin).',
     pages: [
       { id: 'admin-home', label: 'Dashboard', route: '/admin', sourceFile: 'src/pages/admin/AdminHome.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-home', 'tiles', 'Dlaždice sektorů')] },
+      { id: 'admin-context', label: 'Context Hub', route: '/admin/context', sourceFile: 'src/pages/admin/AdminContext.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-context', 'export', 'Bundle & exporty')] },
       { id: 'admin-erp', label: 'ERP & Objednávky', route: '/admin/erp', sourceFile: 'src/pages/AdminErp.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-erp', 'kpi', 'KPI přehled'), inlineSection('admin-erp', 'orders', 'Seznam objednávek'), inlineSection('admin-erp', 'outbox', 'Outbox dodavatelských objednávek')] },
       { id: 'admin-inquiries', label: 'Poptávky Prestige', route: '/admin/poptavky', sourceFile: 'src/pages/admin/AdminInquiries.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('admin-inquiries', 'queue', 'Fronta poptávek'), inlineSection('admin-inquiries', 'detail', 'Detail & nabídka')] },
       { id: 'customers', label: 'Správa zákazníků', route: '/customers', sourceFile: 'src/pages/CustomerManagement.tsx', copySource: 'inline', audience: ['admin'], sections: [inlineSection('customers', 'list', 'Seznam zákazníků'), inlineSection('customers', 'search', 'Hledání / filtry')] },

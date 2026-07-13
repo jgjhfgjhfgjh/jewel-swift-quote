@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
-  BadgePercent, BarChart3, ClipboardCheck, Globe, Inbox, LayoutDashboard,
+  BadgePercent, BarChart3, Boxes, ClipboardCheck, Globe, Inbox, LayoutDashboard,
   MessagesSquare, Rss, Users, type LucideIcon,
 } from 'lucide-react';
 import {
@@ -13,6 +13,7 @@ import { SITE_MAP } from '@/lib/audit/siteMap';
 /** Ikony k položkám admin clusteru ze siteMap (pageId → ikona). */
 const NAV_ICONS: Record<string, LucideIcon> = {
   'admin-home': LayoutDashboard,
+  'admin-context': Boxes,
   'admin-erp': BarChart3,
   'admin-inquiries': Inbox,
   customers: Users,

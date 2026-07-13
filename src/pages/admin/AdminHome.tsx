@@ -15,6 +15,7 @@ interface SectorTile {
 }
 
 const SECTORS: SectorTile[] = [
+  { title: 'Context Hub', description: 'Kontext celého webu — export MD/JSON pro AI nástroje.', icon: Boxes, route: '/admin/context' },
   { title: 'ERP & Objednávky', description: 'KPI, objednávky, outbox dodavatelských objednávek.', icon: BarChart3, route: '/admin/erp' },
   { title: 'Poptávky Prestige', description: 'Fronta poptávek luxusního segmentu + nabídky.', icon: Inbox, route: '/admin/poptavky' },
   { title: 'Zákazníci', description: 'Správa účtů, rolí, slev a služeb.', icon: Users, route: '/customers' },
@@ -25,7 +26,6 @@ const SECTORS: SectorTile[] = [
 ];
 
 const ROADMAP: SectorTile[] = [
-  { title: 'Context Hub', description: 'Tool-agnostic kontext celého webu, export MD/JSON.', icon: Boxes, soon: 'Fáze 1' },
   { title: 'AI Workspace', description: 'Chat, Jarvis (voice) a multi-audience preview.', icon: Bot, soon: 'Fáze 2–5' },
   { title: 'Integrace & MCP', description: 'Registr napojených nástrojů, MCP server.', icon: Workflow, soon: 'Fáze 6' },
   { title: 'Automatizace', description: 'Přehled a spouštění všech automatizací.', icon: Workflow, soon: 'Fáze 7' },
