@@ -54,6 +54,7 @@ const AuditCockpit = lazy(() => import("./pages/admin/AuditCockpit.tsx"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout.tsx"));
 const AdminHome = lazy(() => import("./pages/admin/AdminHome.tsx"));
 const AdminContext = lazy(() => import("./pages/admin/AdminContext.tsx"));
+const AdminWorkspace = lazy(() => import("./pages/admin/AdminWorkspace.tsx"));
 const ComLayout = lazy(() => import("./pages/komunikace/ComLayout.tsx"));
 const ComOverview = lazy(() => import("./pages/komunikace/ComOverview.tsx"));
 const ComTopicDetail = lazy(() => import("./pages/komunikace/ComTopicDetail.tsx"));
@@ -122,6 +123,7 @@ const App = () => (
               {/* Admin shell — jeden guard + layout (sidebar) pro všechny admin routy */}
               <Route element={<AdminGuard><AdminLayout /></AdminGuard>}>
                 <Route path="/admin" element={<AdminHome />} />
+                <Route path="/admin/ws" element={<AdminWorkspace />} />
                 <Route path="/admin/context" element={<AdminContext />} />
                 <Route path="/admin/erp" element={<AdminErp />} />
                 <Route path="/admin/deals" element={<AdminDeals />} />

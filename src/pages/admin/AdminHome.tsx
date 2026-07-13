@@ -15,6 +15,7 @@ interface SectorTile {
 }
 
 const SECTORS: SectorTile[] = [
+  { title: 'AI Workspace', description: 'Centrální chat s kontextem webu; Jarvis a preview přibudou.', icon: Bot, route: '/admin/ws' },
   { title: 'Context Hub', description: 'Kontext celého webu — export MD/JSON pro AI nástroje.', icon: Boxes, route: '/admin/context' },
   { title: 'ERP & Objednávky', description: 'KPI, objednávky, outbox dodavatelských objednávek.', icon: BarChart3, route: '/admin/erp' },
   { title: 'Poptávky Prestige', description: 'Fronta poptávek luxusního segmentu + nabídky.', icon: Inbox, route: '/admin/poptavky' },
@@ -26,7 +27,7 @@ const SECTORS: SectorTile[] = [
 ];
 
 const ROADMAP: SectorTile[] = [
-  { title: 'AI Workspace', description: 'Chat, Jarvis (voice) a multi-audience preview.', icon: Bot, soon: 'Fáze 2–5' },
+  { title: 'Jarvis & Preview', description: 'Voice ovládání a multi-audience náhled ve Workspace.', icon: Bot, soon: 'Fáze 3–5' },
   { title: 'Integrace & MCP', description: 'Registr napojených nástrojů, MCP server.', icon: Workflow, soon: 'Fáze 6' },
   { title: 'Automatizace', description: 'Přehled a spouštění všech automatizací.', icon: Workflow, soon: 'Fáze 7' },
   { title: 'Finance', description: 'Tržby, marže a náklady v čase.', icon: LineChart, soon: 'Fáze 8' },
