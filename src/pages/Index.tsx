@@ -19,6 +19,7 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
+import { HeroRotatingText } from '@/components/HeroRotatingText';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -104,18 +105,16 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
-      {/* Top slot — Apple-style first screen: big Montserrat headline fills the
+      {/* Top slot — Apple-style first screen: big light headline fills the
           viewport, the showcase carousel only appears after scrolling.
           Catalog view keeps the compact banner. */}
-      <div className="relative z-0 mt-14 sm:mt-24 lg:mt-[152px]">
+      <div className="relative z-0 mt-14">
         {viewMode === 'home' ? (
           <>
             {/* First screen: subtract the announcement-bar offset so nothing gets
-                pushed below the fold; pt guarantees breathing room on short
-                (zoomed) displays; pb lifts content slightly above the centre. */}
-            {/* pb lifts the headline slightly above the true viewport centre;
-                grows with the navbar offset so it stays above centre on desktop */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] sm:min-h-[calc(100svh-6rem-var(--ann-offset,0px))] lg:min-h-[calc(100svh-152px-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[20vh] sm:pb-[18vh] lg:pb-[26vh] text-center">
+                pushed below the fold; pb lifts the headline slightly above the
+                true viewport centre. Navbar is a single compact h-14 row now. */}
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[18vh] sm:pb-[16vh] text-center">
               {/* MCP Server — mini pill top-right */}
               <button
                 type="button"
@@ -127,26 +126,13 @@ const Index = () => {
 
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones.
-                  Mobile: sized so "Sell Luxury with" fits on one line. */}
-              <h1 className="font-display font-semibold tracking-tight leading-[1.1] text-[2rem] sm:text-[clamp(3rem,9.5vh,7.25rem)] max-w-5xl text-foreground">
-                Sell Luxury with<br />Enterprise Technology.
+                  Inter Extra Light (200) — mock „Sell Luxury with Enterprise
+                  Technology" + gradientní psaný řádek pod ním. */}
+              <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[2rem] sm:text-[clamp(2.75rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
+                Sell Luxury with<br />Enterprise Technology
               </h1>
-
-              {/* Sub-headline — "Product Intelligence Platform" in swelt primary blue + verify note */}
-              <div className="mt-5 flex flex-col items-center gap-1 sm:mt-7">
-                <h2 className="font-display text-sm font-extrabold uppercase tracking-[0.18em] text-blue-600 sm:text-lg">
-                  Product Intelligence Platform
-                </h2>
-                <span className="text-xs text-muted-foreground sm:text-sm">Verify Account in 24h</span>
-              </div>
-
-              {/* Bottom tagline — stacked on mobile, one row on desktop.
-                  Mobile sits higher (bottom-16) to leave clear space above the chevron. */}
-              <div className="absolute inset-x-0 bottom-16 flex flex-col items-center justify-center gap-1 px-6 font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1 sm:bottom-14 sm:text-sm">
-                <span className="whitespace-nowrap">Launch Faster</span>
-                <span className="whitespace-nowrap">Sell More</span>
-                <span className="whitespace-nowrap">Automate</span>
-                <span className="whitespace-nowrap">Save Hours</span>
+              <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[2rem] sm:text-[clamp(2.75rem,8.5vh,6.5rem)] max-w-5xl">
+                <HeroRotatingText />
               </div>
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-5 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />

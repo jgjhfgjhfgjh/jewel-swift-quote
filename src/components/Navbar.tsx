@@ -5,7 +5,6 @@ import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
-import { useStockCount } from '@/hooks/useStockCount';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { translations, flags, langNames, ALL_LANGS, type Lang } from '@/lib/i18n';
 import {
@@ -23,6 +22,18 @@ interface NavbarProps {
   whiteLogo?: boolean;
 }
 
+/* Desktop nav — 5 položek s chevronem, každá otevírá mega menu.
+   path = přímá navigace klikem; bez path klik jen přepíná panel.
+   Speciální "cesty" v panelech: auth:login / auth:b2b / catalog:open. */
+const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
+  { id: 'why-swelt',    label: 'Why Swelt' },
+  { id: 'products',     label: 'Products' },
+  { id: 'top-deals',    label: 'Top Deals',    path: '/deals' },
+  { id: 'luxury-deals', label: 'Luxury Deals', path: '/prestige' },
+  { id: 'katalog',      label: 'Katalog' },
+];
+
+/* Mobile sheet — mega menu je desktop-only, mobil si nechává plochý seznam. */
 const HOME_NAV_ITEMS = [
   { path: '/deals',        label: 'Top Deals' },
   { path: '/velkoobchod',  label: 'Velkoobchod' },
@@ -39,7 +50,41 @@ type NavPanelCol = { title: string; links: { label: string; desc: string; path: 
 type NavPanel = { heading: string; desc: string; cols: NavPanelCol[]; cta: { label: string; path: string } };
 
 const NAV_PANELS: Record<string, NavPanel> = {
-  '/deals': {
+  'why-swelt': {
+    heading: 'Why Swelt',
+    desc: 'Prodávejte luxusní hodinky a šperky s enterprise technologií — bez skladu, bez rizika, s doručením po celé EU.',
+    cols: [
+      { title: 'Platforma', links: [
+        { label: 'B2B Velkoobchod', desc: '3 000+ produktů za velkoobchodní ceny', path: '/velkoobchod' },
+        { label: 'Dropshipping', desc: 'Bez skladu — balíme a odesíláme my', path: '/dropshipping' },
+        { label: 'Produktový feed', desc: 'XML/CSV, aktualizace 4× denně', path: '/feed' },
+      ]},
+      { title: 'Technologie', links: [
+        { label: 'Product Intelligence', desc: 'Trendová data a AI doporučení', path: '/feed?to=product-intelligence' },
+        { label: 'MCP Server', desc: 'Napojení AI agentů na katalog', path: '/feed?to=mcp' },
+        { label: 'Podpora & kontakt', desc: 'Odpověď do 24 h, AI chat 24/7', path: '/support' },
+      ]},
+    ],
+    cta: { label: 'B2B registrace zdarma', path: 'auth:b2b' },
+  },
+  'products': {
+    heading: 'Products',
+    desc: '3 000+ produktů od 70+ prémiových značek skladem v EU. Velkoobchodní ceny od 1 kusu.',
+    cols: [
+      { title: 'Sortiment', links: [
+        { label: 'Hodinky', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/brands' },
+        { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/brands' },
+        { label: 'Dárkové sady', desc: 'Kompletní sety za speciální cenu', path: '/deals' },
+      ]},
+      { title: 'Jak nakoupit', links: [
+        { label: 'Velkoobchod', desc: 'Slevy 40–65 % z MOC', path: '/velkoobchod' },
+        { label: 'Bez registrace', desc: 'Velkoobchodní ceny bez B2B účtu', path: '/luxury' },
+        { label: 'Luxury na poptávku', desc: 'Omega, Cartier, IWC…', path: '/prestige' },
+      ]},
+    ],
+    cta: { label: 'Prohlédnout značky', path: '/brands' },
+  },
+  'top-deals': {
     heading: 'Top Deals',
     desc: 'Časově omezené akce na prémiové hodinky a šperky za výjimečné ceny.',
     cols: [
@@ -56,42 +101,8 @@ const NAV_PANELS: Record<string, NavPanel> = {
     ],
     cta: { label: 'Zobrazit všechny DEAL nabídky', path: '/deals' },
   },
-  '/velkoobchod': {
-    heading: 'B2B Velkoobchod',
-    desc: '3 000+ produktů prémiových značek za velkoobchodní ceny. Přístup po schválení.',
-    cols: [
-      { title: 'Katalog', links: [
-        { label: 'Hodinky 70+ značek', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/velkoobchod' },
-        { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/velkoobchod' },
-        { label: 'Slevy 40–65 %', desc: 'Velkoobchodní ceny od 1 kusu', path: '/velkoobchod' },
-      ]},
-      { title: 'Pro firmy', links: [
-        { label: 'B2B registrace', desc: 'Schválení do 24 hodin, zdarma', path: '/register' },
-        { label: 'Firemní dárky', desc: 'Zakázkové sestavy pro celé týmy', path: '/luxury' },
-        { label: 'Individuální ceny', desc: 'Pro větší odběry kontaktujte nás', path: '/support' },
-      ]},
-    ],
-    cta: { label: 'Vstoupit do velkoobchodu', path: '/velkoobchod' },
-  },
-  '/luxury': {
-    heading: 'Nákup bez registrace',
-    desc: 'Velkoobchodní ceny pro soukromé osoby i firmy. Bez B2B účtu, od 1 kusu.',
-    cols: [
-      { title: 'Výhody', links: [
-        { label: 'Bez registrace', desc: 'Stačí IČO nebo soukromá osoba', path: '/luxury' },
-        { label: 'Diskrétní balení', desc: 'Zásilka bez označení odesílatele', path: '/luxury' },
-        { label: 'EU doručení', desc: 'Doručení do 15+ zemí Evropy', path: '/luxury' },
-      ]},
-      { title: 'Oblíbené značky', links: [
-        { label: 'Tommy Hilfiger', desc: 'od 1 790 Kč', path: '/luxury' },
-        { label: 'Versace', desc: 'od 2 890 Kč', path: '/luxury' },
-        { label: 'Swarovski', desc: 'od 990 Kč', path: '/luxury' },
-      ]},
-    ],
-    cta: { label: 'Prohlédnout nabídku', path: '/luxury' },
-  },
-  '/prestige': {
-    heading: 'Luxury — prémiový segment',
+  'luxury-deals': {
+    heading: 'Luxury Deals',
     desc: 'Hodinky vyššího segmentu na poptávku. Originál s dokumentací, závazná cena, diskrétní doručení po EU.',
     cols: [
       { title: 'Prémiové domy', links: [
@@ -107,91 +118,22 @@ const NAV_PANELS: Record<string, NavPanel> = {
     ],
     cta: { label: 'Sestavit poptávku', path: '/prestige' },
   },
-  '/feed': {
-    heading: 'Produktový Feed',
-    desc: 'Automatický XML/CSV feed s 3 000+ produkty. 4× denně aktualizace cen a dostupnosti.',
+  'katalog': {
+    heading: 'KATALOG 2026',
+    desc: 'Kompletní B2B katalog s živými cenami a skladovou dostupností. Přístup po přihlášení.',
     cols: [
-      { title: 'Formáty', links: [
-        { label: 'XML / Heureka', desc: 'Přímá integrace s Heureka.cz', path: '/feed' },
-        { label: 'Zbozi.cz', desc: 'Kompatibilní formát pro Zbozi.cz', path: '/feed' },
-        { label: 'Google Shopping', desc: 'Google Merchant Center feed', path: '/feed' },
-        { label: 'CSV / vlastní', desc: 'Flexibilní formát na míru', path: '/feed' },
+      { title: 'Co je uvnitř', links: [
+        { label: 'Hodinky 70+ značek', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/velkoobchod' },
+        { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/velkoobchod' },
+        { label: 'Slevy 40–65 %', desc: 'Velkoobchodní ceny od 1 kusu', path: '/velkoobchod' },
       ]},
-      { title: 'Vlastnosti', links: [
-        { label: '4× denně aktualizace', desc: 'Ceny a dostupnost v reálném čase', path: '/feed' },
-        { label: 'Automatická sync', desc: 'Bez manuálního zásahu', path: '/feed' },
-        { label: 'API přístup', desc: 'Přímé napojení na váš systém', path: '/feed' },
+      { title: 'Přístup', links: [
+        { label: 'Přihlásit se', desc: 'Pro schválené B2B partnery', path: 'auth:login' },
+        { label: 'B2B registrace', desc: 'Zdarma, schválení do 24 hodin', path: 'auth:b2b' },
+        { label: 'Nákup bez registrace', desc: 'Vybrané produkty bez B2B účtu', path: '/luxury' },
       ]},
     ],
-    cta: { label: 'Zjistit více o feedu', path: '/feed' },
-  },
-  '/feed?to=product-intelligence': {
-    heading: 'Product Intelligence',
-    desc: 'Feed, trendová data a AI doporučení pro váš sortiment. Rozhodujte se podle reálné poptávky, ne odhadem.',
-    cols: [
-      { title: 'Data & insighty', links: [
-        { label: 'Trendová data', desc: 'Co se prodává právě teď', path: '/feed?to=product-intelligence' },
-        { label: 'AI doporučení', desc: 'Produkty na míru vašemu sortimentu', path: '/feed?to=product-intelligence' },
-        { label: 'Cenová analytika', desc: 'Marže a konkurenceschopnost', path: '/feed?to=product-intelligence' },
-      ]},
-      { title: 'Napojení', links: [
-        { label: 'Automatický feed', desc: 'XML/CSV se 3 000+ produkty', path: '/feed' },
-        { label: 'MCP server', desc: 'Napojení AI agentů na katalog', path: '/feed?to=mcp' },
-        { label: 'API přístup', desc: 'Přímé napojení na váš systém', path: '/feed?to=product-intelligence' },
-      ]},
-    ],
-    cta: { label: 'Prozkoumat Product Intelligence', path: '/feed?to=product-intelligence' },
-  },
-  '/feed?to=mcp': {
-    heading: 'MCP Server',
-    desc: 'Napojte AI agenty přímo na náš katalog přes Model Context Protocol. Vyhledávání, dostupnost a ceny v reálném čase.',
-    cols: [
-      { title: 'Možnosti', links: [
-        { label: 'Katalog přes MCP', desc: 'AI agent vidí 3 000+ produktů', path: '/feed?to=mcp' },
-        { label: 'Realtime dostupnost', desc: 'Skladové zásoby v reálném čase', path: '/feed?to=mcp' },
-        { label: 'Ceny & slevy', desc: 'Aktuální velkoobchodní ceny', path: '/feed?to=mcp' },
-      ]},
-      { title: 'Pro vývojáře', links: [
-        { label: 'Dokumentace', desc: 'Jak server zapojit', path: '/feed?to=mcp' },
-        { label: 'Product Intelligence', desc: 'Trendová data a AI doporučení', path: '/feed?to=product-intelligence' },
-        { label: 'API klíče', desc: 'Bezpečný přístup k datům', path: '/feed?to=mcp' },
-      ]},
-    ],
-    cta: { label: 'Zapojit MCP server', path: '/feed?to=mcp' },
-  },
-  '/dropshipping': {
-    heading: 'Dropshipping',
-    desc: 'Prodávejte bez skladu. Zákazník objedná u vás — my zabalíme a odešleme.',
-    cols: [
-      { title: 'Jak to funguje', links: [
-        { label: 'Zákazník objedná', desc: 'Na vašem e-shopu nebo platformě', path: '/dropshipping' },
-        { label: 'Swelt zabalí', desc: 'Pod vaší značkou, s vaší fakturou', path: '/dropshipping' },
-        { label: 'Doručení 24–48 h', desc: 'Do celé EU, bez výjimky', path: '/dropshipping' },
-      ]},
-      { title: 'Výhody', links: [
-        { label: '0 Kč do skladu', desc: 'Platíte až po prodeji', path: '/dropshipping' },
-        { label: '60 % průměrná marže', desc: 'Přímé velkoobchodní ceny', path: '/dropshipping' },
-        { label: 'EU expanze', desc: 'Prodávejte do 15+ zemí bez poboček', path: '/dropshipping' },
-      ]},
-    ],
-    cta: { label: 'Chci dropshipping', path: '/dropshipping' },
-  },
-  '/support': {
-    heading: 'Podpora & Kontakt',
-    desc: 'Jsme tu pro vás. Odpovíme do 24 hodin v pracovní dny. AI asistent dostupný 24/7.',
-    cols: [
-      { title: 'Kontakt', links: [
-        { label: 'E-mail podpora', desc: 'info@swelt.cz', path: '/support' },
-        { label: 'Živý AI chat', desc: 'Odpověď do 5 vteřin, 24/7', path: '/support' },
-        { label: 'Account manager', desc: 'Osobní péče, telefonická konzultace', path: '/support' },
-      ]},
-      { title: 'Zdroje', links: [
-        { label: 'Časté dotazy (FAQ)', desc: 'Odpovědi na nejčastější otázky', path: '/support' },
-        { label: 'Technická dokumentace', desc: 'Feed API a integrace', path: '/support' },
-        { label: 'Obchodní podmínky', desc: 'GDPR a podmínky spolupráce', path: '/support' },
-      ]},
-    ],
-    cta: { label: 'Kontaktovat podporu', path: '/support' },
+    cta: { label: 'Otevřít katalog', path: 'catalog:open' },
   },
 };
 
@@ -222,8 +164,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
   const t = translations[lang];
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-  // Live in-stock product count for the KATALOG CTA badge (logged-in users only).
-  const stockCount = useStockCount(!!user);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -247,6 +187,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     }
   };
 
+  // Mega-menu link resolver — panely můžou vedle rout používat i akce
+  // (auth:login / auth:b2b / catalog:open).
+  const go = (path: string) => {
+    setActiveNav(null);
+    if (path === 'auth:login') return openAuth('login');
+    if (path === 'auth:b2b') return openAuth('b2b');
+    if (path === 'catalog:open') return handleCatalogCta();
+    navigate(path);
+  };
+
   const lastScrollY = useRef(0);
   const navCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -255,7 +205,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   // Actual rendered navbar height — drives where the menu drawer starts.
   const [headerHeight, setHeaderHeight] = useState(0);
   const isHome = viewMode === 'home';
-  const isOnHomePage = location.pathname === '/';
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -342,52 +291,81 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 28px rgba(0,0,0,0.07)',
       }}
     >
-      {/* ── Row 1: mobile = h-14, hamburger + small left logo; desktop = h-24, hamburger + centered big logo ── */}
-      <div className="relative h-14 sm:h-24 pl-2 pr-1 sm:px-4 flex items-center justify-between gap-1 sm:gap-2">
+      {/* ── Single compact row: logo → desktop nav (chevrony) → pravý cluster ── */}
+      <div className="relative h-14 pl-3 pr-2 sm:pl-5 sm:pr-3 flex items-center gap-1 sm:gap-2">
 
-        {/* Desktop logo — absolute centered, bottom-aligned with space above */}
+        {/* Logo — vlevo, bez sufixu PARTNER */}
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="hidden sm:flex absolute left-1/2 bottom-3 -translate-x-1/2 items-baseline gap-1.5 select-none pointer-events-auto"
-          aria-label="swelt.PARTNER — domů"
+          className="flex items-baseline select-none shrink-0 relative z-10"
+          aria-label="swelt — domů"
         >
           <span
-            className={`font-spartan font-extrabold text-5xl sm:text-6xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            className={`font-spartan font-extrabold text-2xl sm:text-3xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
-          <span className={`font-sans font-extrabold text-base sm:text-lg leading-none tracking-tight ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
         </Link>
 
-        {/* Left: hamburger + (mobile-only inline logo) */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 min-w-0 relative z-10">
-          <Button
-            ref={desktopMenuButtonRef}
-            variant="ghost"
-            size="icon"
-            className="shrink-0 relative z-[110] cursor-pointer pointer-events-auto"
-            onPointerDown={(e) => {
-              e.preventDefault();
-              setMenuOpen((v) => !v);
-            }}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+        {/* Desktop nav — položky s chevronem otevírají mega menu; v katalogu je nahrazuje vyhledávání */}
+        {!showSearch && (
+          <nav className="hidden lg:flex items-center gap-0.5 ml-3 relative z-10">
+            {NAV_ITEMS.map((item) => {
+              const active = activeNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onMouseEnter={() => handleNavEnter(item.id)}
+                  onMouseLeave={handleNavLeave}
+                  onClick={() => {
+                    if (item.path) { setActiveNav(null); navigate(item.path); }
+                    else setActiveNav(active ? null : item.id);
+                  }}
+                  className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
+                    active ? 'text-zinc-900' : 'text-zinc-600 hover:text-zinc-900'
+                  }`}
+                >
+                  {item.label}
+                  <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`} />
+                </button>
+              );
+            })}
+          </nav>
+        )}
 
-          {/* Globe / Language switcher — desktop only, next to hamburger */}
+        {/* Catalog search — desktop, inline v jediném řádku */}
+        {showSearch && (
+          <div className="relative hidden lg:block flex-1 max-w-[480px] ml-4 z-10">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder={t.search}
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); }}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+          </div>
+        )}
+
+        <div className="flex-1" />
+
+        {/* Right: icons + CTA — always visible */}
+        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
+
+          {/* Globe / Language switcher — desktop only */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 h-9 px-2.5 rounded-lg border border-border bg-card hover:bg-muted text-xs font-semibold uppercase tracking-wide"
+                className="hidden lg:inline-flex shrink-0 items-center gap-1.5 h-8 px-2 rounded-lg hover:bg-muted text-xs font-semibold uppercase tracking-wide text-zinc-600"
                 title="Jazyk"
               >
                 <Globe className="h-4 w-4" />
                 <span>{lang}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" sideOffset={8} className="w-44 max-h-[60vh] overflow-y-auto z-[105]">
+            <DropdownMenuContent align="end" sideOffset={8} className="w-44 max-h-[60vh] overflow-y-auto z-[105]">
               {ALL_LANGS.map((l) => (
                 <DropdownMenuItem
                   key={l}
@@ -401,47 +379,17 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobile logo — small, inline left, hidden on sm+ */}
-          <Link
-            to="/"
-            onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="sm:hidden flex items-baseline select-none ml-0.5"
-            aria-label="swelt.PARTNER — domů"
-          >
-            <span
-              className={`font-spartan font-extrabold text-2xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
-              style={{ letterSpacing: '-0.05em' }}
-            >swelt.</span>
-            {/* Suffix — static "PARTNER" */}
-            <span className={`font-sans font-extrabold text-[8px] tracking-tight ml-0.5 ${whiteLogo ? 'text-white' : 'text-foreground'}`}>PARTNER</span>
-          </Link>
-
-          {/* Partner Hub — for dropshipping partners and admins */}
-          {!loading && user && (isB2bApproved || isAdmin) && (
-            <button
-              onClick={() => navigate('/partner')}
-              title="Partner Hub"
-              className="dropshipping-hub-btn group hidden sm:inline-flex shrink-0 items-center gap-2 ml-2 h-9 px-3.5 rounded-lg text-xs font-semibold border transition-all duration-200"
-            >
-              <LayoutDashboard className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-              <span className="hidden md:inline">Partner Hub</span>
-            </button>
-          )}
-        </div>
-
-        {/* Right: icons + CTA — always visible */}
-        <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
-
           {!loading && user ? (
             <>
-              {/* Partner Hub icon — mobile only (left-side button is hidden below sm) */}
+              {/* Partner Hub — for dropshipping partners and admins */}
               {(isB2bApproved || isAdmin) && (
                 <button
                   onClick={() => navigate('/partner')}
                   title="Partner Hub"
-                  className="dropshipping-hub-btn sm:hidden inline-flex shrink-0 items-center justify-center h-9 w-9 rounded-lg border transition-all duration-200"
+                  className="dropshipping-hub-btn group inline-flex shrink-0 items-center gap-2 h-8 px-2.5 sm:px-3 rounded-lg text-xs font-semibold border transition-all duration-200"
                 >
-                  <LayoutDashboard className="h-4 w-4" />
+                  <LayoutDashboard className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                  <span className="hidden md:inline">Partner Hub</span>
                 </button>
               )}
 
@@ -556,6 +504,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                           <DropdownMenuItem onClick={() => navigate('/admin/poptavky')} className="gap-2 text-xs">
                             <Package className="h-3.5 w-3.5" /> Poptávky Luxury
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate('/admin/deals')} className="gap-2 text-xs">
+                            <Flame className="h-3.5 w-3.5" /> Správa DEAL nabídek
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => navigate('/customers')} className="gap-2 text-xs">
                             <Users className="h-3.5 w-3.5" /> Správa zákazníků
                           </DropdownMenuItem>
@@ -595,84 +546,45 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : !loading ? (
             <>
-              {/* White CTA — Přihlásit (guests) */}
+              {/* Guest CTAs — jen Přihlásit + B2B registrace (s "Verify Account in 24h" pod CTA) */}
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => openAuth('login')}
-                className="h-8 sm:h-9 px-2 sm:px-4 rounded-none font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
+                className="h-8 px-2 sm:px-4 rounded-none font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
               >
                 Přihlásit
               </Button>
+              <div className="flex flex-col items-center shrink-0 ml-1">
+                <Button
+                  size="sm"
+                  onClick={() => openAuth('b2b')}
+                  className="h-8 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
+                >
+                  B2B registrace
+                </Button>
+                <span className="hidden sm:block mt-0.5 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
+                  Verify Account in 24h
+                </span>
+              </div>
             </>
           ) : null}
 
-          {/* CTA — KATALOG 2026 (logged in) / Vytvořit účet (guests) — always far right.
-              Skryjeme když už uživatel je v katalogu (na homepage v catalog módu). */}
-          {!(user && viewMode === 'catalog' && isOnHomePage) && (
-            <div className="flex items-center gap-2 shrink-0">
-              {/* Pure-information label next to the CTA — countdown-style typography (font jako odpočet v proužku) */}
-              {!user && (
-                <span className="hidden sm:inline font-display text-[11px] tabular-nums tracking-wide text-muted-foreground whitespace-nowrap">24h</span>
-              )}
-              {user && stockCount != null && stockCount > 0 && (
-                <span className="hidden sm:inline font-display text-[11px] tracking-wide text-muted-foreground whitespace-nowrap">
-                  <span className="tabular-nums">{stockCount.toLocaleString('cs-CZ')}</span> skladem
-                </span>
-              )}
-              <Button
-                size="sm"
-                onClick={user ? handleCatalogCta : () => openAuth('b2b')}
-                className="h-8 sm:h-9 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
-              >
-                {user ? 'KATALOG 2026' : 'B2B registrace'}
-              </Button>
-            </div>
-          )}
+          {/* Hamburger — mobil/tablet only; desktop má vše v mega menu / pod panáčkem */}
+          <Button
+            ref={desktopMenuButtonRef}
+            variant="ghost"
+            size="icon"
+            className="lg:hidden shrink-0 relative z-[110] cursor-pointer pointer-events-auto"
+            onPointerDown={(e) => {
+              e.preventDefault();
+              setMenuOpen((v) => !v);
+            }}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
         </div>
       </div>
-
-      {/* ── Row 2: nav links (home) OR search (catalog) — desktop only ── */}
-      {(showSearch || (isOnHomePage && isHome)) && (
-        <div className="hidden lg:flex h-10 px-4 mt-4 items-center justify-center">
-          {showSearch ? (
-            <div className="relative w-full max-w-[500px] lg:max-w-[600px]">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder={t.search}
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); }}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              />
-            </div>
-          ) : (
-            <nav className="flex items-center gap-0.5">
-              {HOME_NAV_ITEMS.map(({ path, label }) => {
-                const hasPanel = !!NAV_PANELS[path];
-                return (
-                  <button
-                    key={path}
-                    onMouseEnter={() => hasPanel && handleNavEnter(path)}
-                    onMouseLeave={handleNavLeave}
-                    onClick={() => { setActiveNav(null); navigate(path); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                      activeNav === path
-                        ? 'text-zinc-900'
-                        : 'text-zinc-600 hover:text-zinc-900'
-                    }`}
-                  >
-                    {label}
-                    {hasPanel && (
-                      <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${activeNav === path ? 'rotate-180' : ''}`} />
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-          )}
-        </div>
-      )}
 
       {/* Mobile search expansion — catalog mode only */}
       {showSearch && mobileSearchOpen && (
@@ -708,11 +620,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
                 {/* Left: heading + desc + CTA */}
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.PARTNER</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.</p>
                   <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">{panel.heading}</h3>
                   <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">{panel.desc}</p>
                   <button
-                    onClick={() => { setActiveNav(null); navigate(panel.cta.path); }}
+                    onClick={() => go(panel.cta.path)}
                     className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
                   >
                     {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
@@ -720,7 +632,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 </div>
 
                 {/* Right: DEAL carousel for the deals category, link columns otherwise */}
-                {activeNav === '/deals' ? (
+                {activeNav === 'top-deals' ? (
                   <div className="w-[600px] max-w-[58vw]">
                     <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
                   </div>
@@ -733,7 +645,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                         {col.links.map((link) => (
                           <li key={link.label}>
                             <button
-                              onClick={() => { setActiveNav(null); navigate(link.path); }}
+                              onClick={() => go(link.path)}
                               className="group flex flex-col text-left w-full rounded-lg px-2 py-2 hover:bg-zinc-50 transition-colors"
                             >
                               <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900">{link.label}</span>
