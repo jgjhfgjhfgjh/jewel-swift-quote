@@ -3,6 +3,30 @@
 > Nahrazuje první draft roadmapy. Verze 2 je ověřená proti skutečnému stavu repa
 > (commit `ffac795`, 2026-07-13) — opravuje nepřesnosti draftu a zpřesňuje pořadí fází.
 
+## ✅ STAV REALIZACE (2026-07-14): všech 9 fází postaveno
+
+| Fáze | Commit | Poznámka |
+|---|---|---|
+| 0 — Admin shell | `79e6088` | guard z realIsAdmin, sidebar ze siteMap, nested routy |
+| 1 — Context Hub | `0e29080` | bundle + /admin/context + api/context.ts |
+| 2 — Chat + command bus | `5f567da` | api/ai/chat.ts, provideři Anthropic/OpenAI, /admin/ws |
+| 3–5 — Preview, Jarvis, split | `e06d268` | previewBridge, Web Speech, ResizablePanelGroup |
+| 6 — Integrace + MCP | `35c1651` | /admin/integrations, api/mcp.ts (MCP_TOKEN) |
+| 7 — Automation hub | `33acab0` | /admin/automations, stav front, ruční spuštění |
+| 8 — Finance + marketing | `642f2ad` | /admin/finance (recharts), /admin/marketing |
+
+**Odchylky od plánu (zdůvodněné):**
+- Fáze 6: `app_settings` na živé DB NEEXISTUJE (čerstvě generované typy ji nemají,
+  migrace zjevně neaplikována) a Supabase MCP nemá oprávnění → stav integrací se
+  persistuje v localStorage, MCP auth přes Vercel env `MCP_TOKEN`. Tabulka
+  `admin_integrations` čeká na zprovoznění přístupu k živé DB.
+- OpenAI provider implementován přes fetch+SSE (bez `openai` závislosti).
+
+**Po deployi zbývá ověřit na Vercelu (lokální vite dev serverless neumí):**
+`/api/context` živá KPI, `/api/ai/chat` end-to-end (tools + oba provideři),
+`/api/mcp` handshake z Claude Code, chat/Jarvis příkazy nad reálným API.
+Nutné env: `ANTHROPIC_API_KEY` (je), volitelně `OPENAI_API_KEY`, `MCP_TOKEN`.
+
 ## Co se oproti draftu změnilo (ověřeno v kódu)
 
 1. **`api/chat.ts` NEMÁ tool-calling.** Je to prostý stream (Haiku) s keyword pre-fetchem
