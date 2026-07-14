@@ -19,6 +19,8 @@ const SECTORS: SectorTile[] = [
   { title: 'Context Hub', description: 'Kontext celého webu — export MD/JSON pro AI nástroje.', icon: Boxes, route: '/admin/context' },
   { title: 'Integrace & MCP', description: 'Registr napojených nástrojů; MCP server pro externí AI.', icon: Workflow, route: '/admin/integrations' },
   { title: 'Automatizace', description: 'Stav front, crony a ruční spouštění automatizací.', icon: Workflow, route: '/admin/automations' },
+  { title: 'Finance', description: 'GMV, marže a top produkty z objednávek.', icon: LineChart, route: '/admin/finance' },
+  { title: 'Marketing', description: 'DEAL kampaně; výkonová data po napojení zdroje.', icon: Megaphone, route: '/admin/marketing' },
   { title: 'ERP & Objednávky', description: 'KPI, objednávky, outbox dodavatelských objednávek.', icon: BarChart3, route: '/admin/erp' },
   { title: 'Poptávky Prestige', description: 'Fronta poptávek luxusního segmentu + nabídky.', icon: Inbox, route: '/admin/poptavky' },
   { title: 'Zákazníci', description: 'Správa účtů, rolí, slev a služeb.', icon: Users, route: '/customers' },
@@ -28,10 +30,8 @@ const SECTORS: SectorTile[] = [
   { title: 'Správa feedu', description: 'Mimo provoz — čeká na napojení nad živou tabulku.', icon: Rss, route: '/admin/feeds', muted: true },
 ];
 
-const ROADMAP: SectorTile[] = [
-  { title: 'Finance', description: 'Tržby, marže a náklady v čase.', icon: LineChart, soon: 'Fáze 8' },
-  { title: 'Marketing', description: 'Výkon kampaní a kanálů.', icon: Megaphone, soon: 'Fáze 8' },
-];
+/** Dlaždice budoucích rozšíření — plán je hotový, sem patří až další vlna. */
+const ROADMAP: SectorTile[] = [];
 
 function Tile({ tile }: { tile: SectorTile }) {
   const Icon = tile.icon;
@@ -90,14 +90,16 @@ export default function AdminHome() {
           </div>
         </section>
 
-        <section className="mt-10">
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-            Na roadmapě
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {ROADMAP.map((t) => <Tile key={t.title} tile={t} />)}
-          </div>
-        </section>
+        {ROADMAP.length > 0 && (
+          <section className="mt-10">
+            <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Na roadmapě
+            </h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {ROADMAP.map((t) => <Tile key={t.title} tile={t} />)}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

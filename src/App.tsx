@@ -58,6 +58,8 @@ const AdminContext = lazy(() => import("./pages/admin/AdminContext.tsx"));
 const AdminWorkspace = lazy(() => import("./pages/admin/AdminWorkspace.tsx"));
 const AdminIntegrations = lazy(() => import("./pages/admin/AdminIntegrations.tsx"));
 const AdminAutomations = lazy(() => import("./pages/admin/AdminAutomations.tsx"));
+const AdminFinance = lazy(() => import("./pages/admin/AdminFinance.tsx"));
+const AdminMarketing = lazy(() => import("./pages/admin/AdminMarketing.tsx"));
 const ComLayout = lazy(() => import("./pages/komunikace/ComLayout.tsx"));
 const ComOverview = lazy(() => import("./pages/komunikace/ComOverview.tsx"));
 const ComTopicDetail = lazy(() => import("./pages/komunikace/ComTopicDetail.tsx"));
@@ -130,6 +132,8 @@ const App = () => (
                 <Route path="/admin/context" element={<AdminContext />} />
                 <Route path="/admin/integrations" element={<AdminIntegrations />} />
                 <Route path="/admin/automations" element={<AdminAutomations />} />
+                <Route path="/admin/finance" element={<AdminFinance />} />
+                <Route path="/admin/marketing" element={<AdminMarketing />} />
                 <Route path="/admin/erp" element={<AdminErp />} />
                 <Route path="/admin/deals" element={<AdminDeals />} />
                 <Route path="/admin/poptavky" element={<AdminInquiries />} />
