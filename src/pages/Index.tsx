@@ -150,7 +150,7 @@ const Index = () => {
                     </h2>
                   </div>
                 </div>
-                <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-14 sm:pt-20">
+                <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-24 sm:pt-36">
                   <BrandShowcaseCarousel />
                 </div>
               </div>
