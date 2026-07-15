@@ -135,24 +135,23 @@ const Index = () => {
                 samostatný fade pás s plynulou easing křivkou do bílé stránky.
                 Karty značek začínají až pod fadem — loga na čistě bílé. */}
             <section className="relative mt-20 sm:mt-28 lg:mt-32">
-              {/* bílá karta s výrazným měkkým stínem (iOS look) — texty černé,
-                  karusel v defaultní světlé variantě */}
-              <div className="px-4 sm:px-6 lg:px-8 pb-14 sm:pb-20">
-                <div className="mx-auto max-w-[1400px] rounded-[1.75rem] bg-white pt-16 pb-10 sm:rounded-[2.5rem] sm:pt-24 sm:pb-14 ring-1 ring-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_16px_32px_rgba(0,0,0,0.12),0_48px_96px_-16px_rgba(0,0,0,0.28)]">
-                  <div className="px-5 sm:px-10 lg:px-14">
-                    {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
-                        velikost zvolena tak, aby se headline vešla na jeden řádek */}
-                    <div className="mx-auto w-fit max-w-full text-left">
-                      {/* velikost = (šířka viewportu − padding stránky a karty) / šířka
-                          textu v em — drží jeden řádek na sm+ i uvnitř karty */}
-                      <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-170px)/19),4.25rem)] text-foreground">
-                        Sell the brands people already want.
-                      </h2>
-                    </div>
+              {/* bílá karta od kraje do kraje — zaoblený jen horní okraj, stín
+                  nahoře (zvednutý horní okraj proti bílému hero); dole žádné
+                  ukončení ani stín → bílá splyne s bílou stránkou (do ztracena) */}
+              <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-10 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-14 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
+                <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
+                  {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
+                      velikost zvolena tak, aby se headline vešla na jeden řádek */}
+                  <div className="mx-auto w-fit max-w-full text-left">
+                    {/* velikost = (šířka viewportu − padding stránky) / šířka textu
+                        v em — drží jeden řádek na sm+ */}
+                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
+                      Sell the brands people already want.
+                    </h2>
                   </div>
-                  <div className="px-1 sm:px-3 lg:px-5 pt-14 sm:pt-20">
-                    <BrandShowcaseCarousel />
-                  </div>
+                </div>
+                <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-14 sm:pt-20">
+                  <BrandShowcaseCarousel />
                 </div>
               </div>
             </section>
