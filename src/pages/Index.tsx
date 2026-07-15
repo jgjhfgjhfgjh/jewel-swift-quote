@@ -114,7 +114,7 @@ const Index = () => {
             {/* First screen: subtract the announcement-bar offset so nothing gets
                 pushed below the fold; pb lifts the headline slightly above the
                 true viewport centre. Navbar is a single compact h-14 row now. */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] flex-col items-center justify-center px-6 pb-[18vh] sm:pb-[16vh] text-center">
+            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] flex-col justify-center px-6 pb-[18vh] sm:pb-[16vh]">
               {/* MCP Server — mini pill top-right */}
               <button
                 type="button"
@@ -125,17 +125,19 @@ const Index = () => {
               </button>
 
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
-                  tall displays but never overflows short / zoomed ones.
-                  Inter Extra Light (200) — mock „Sell Luxury with Enterprise
-                  Technology" + gradientní psaný řádek pod ním. */}
-              <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[2rem] sm:text-[clamp(2.75rem,8.5vh,6.5rem)] max-w-5xl text-foreground">
-                Sell Luxury with<br />Enterprise Technology
-              </h1>
-              <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[2rem] sm:text-[clamp(2.75rem,8.5vh,6.5rem)] max-w-5xl">
-                <HeroRotatingText />
+                  tall displays but never overflows short / zoomed ones; mobile
+                  clamps on vw so "Enterprise Technology" fits on one line.
+                  Inter Extra Light (200), zarovnáno doleva jako v mocku. */}
+              <div className="w-full max-w-7xl mx-auto text-left">
+                <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] text-foreground">
+                  Sell Luxury with<br />Enterprise Technology
+                </h1>
+                <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)]">
+                  <HeroRotatingText />
+                </div>
               </div>
               {/* scroll cue */}
-              <ChevronDown className="absolute bottom-5 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
+              <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
             {/* Second screen: brand carousel (logos + product previews) then CTAs */}
             <section className="flex flex-col items-center px-0 pt-12 pb-16 sm:pt-16 sm:pb-20 gap-10 sm:gap-14">
