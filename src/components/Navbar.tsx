@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
 import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
+import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -631,10 +632,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   </button>
                 </div>
 
-                {/* Right: DEAL carousel for the deals category, link columns otherwise */}
+                {/* Right: DEAL carousel for the deals category, showcase cards
+                    for Why Swelt, link columns otherwise */}
                 {activeNav === 'top-deals' ? (
                   <div className="w-[600px] max-w-[58vw]">
                     <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
+                  </div>
+                ) : activeNav === 'why-swelt' ? (
+                  <div className="w-[620px] max-w-[58vw]">
+                    <NavShowcaseCarousel onNavigate={go} />
                   </div>
                 ) : (
                 <div className="flex gap-10">
