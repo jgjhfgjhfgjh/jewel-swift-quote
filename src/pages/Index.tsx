@@ -120,10 +120,10 @@ const Index = () => {
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               <div className="w-full sm:w-fit mx-auto text-left">
-                <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] text-foreground">
+                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-foreground">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>
-                <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] sm:w-0 sm:whitespace-nowrap">
+                <div className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap">
                   <HeroRotatingText />
                 </div>
               </div>
