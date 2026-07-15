@@ -40,9 +40,10 @@ export function NavShowcaseCarousel() {
           <div
             key={i}
             data-card
-            className="shrink-0 rounded-lg border border-zinc-200 bg-zinc-100
-                       w-[200px] h-[200px] transition-[width] duration-500 ease-out
-                       [@media(hover:hover)]:hover:w-[300px]"
+            className="shrink-0 rounded-xl border border-zinc-200 bg-zinc-100
+                       w-[clamp(360px,38vw,520px)] h-[clamp(260px,26vw,360px)]
+                       transition-[width] duration-500 ease-out
+                       [@media(hover:hover)]:hover:w-[clamp(460px,48vw,660px)]"
           />
         ))}
       </div>
