@@ -137,20 +137,20 @@ const Index = () => {
             <section className="relative mt-20 sm:mt-28 lg:mt-32">
               {/* bílá karta s výrazným měkkým stínem (iOS look) — texty černé,
                   karusel v defaultní světlé variantě */}
-              <div className="px-4 sm:px-6 lg:px-8 pb-10 sm:pb-14">
-                <div className="mx-auto max-w-[1400px] rounded-[1.75rem] bg-white pt-12 pb-6 sm:rounded-[2.5rem] sm:pt-16 sm:pb-8 ring-1 ring-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_16px_32px_rgba(0,0,0,0.12),0_48px_96px_-16px_rgba(0,0,0,0.28)]">
-                  <div className="px-4 sm:px-8 lg:px-10">
+              <div className="px-4 sm:px-6 lg:px-8 pb-14 sm:pb-20">
+                <div className="mx-auto max-w-[1400px] rounded-[1.75rem] bg-white pt-16 pb-10 sm:rounded-[2.5rem] sm:pt-24 sm:pb-14 ring-1 ring-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.06),0_16px_32px_rgba(0,0,0,0.12),0_48px_96px_-16px_rgba(0,0,0,0.28)]">
+                  <div className="px-5 sm:px-10 lg:px-14">
                     {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
                         velikost zvolena tak, aby se headline vešla na jeden řádek */}
                     <div className="mx-auto w-fit max-w-full text-left">
                       {/* velikost = (šířka viewportu − padding stránky a karty) / šířka
                           textu v em — drží jeden řádek na sm+ i uvnitř karty */}
-                      <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.9rem,calc((100vw-170px)/16.2),5rem)] text-foreground">
+                      <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-170px)/19),4.25rem)] text-foreground">
                         Sell the brands people already want.
                       </h2>
                     </div>
                   </div>
-                  <div className="px-1 sm:px-3 lg:px-5 pt-8 sm:pt-12">
+                  <div className="px-1 sm:px-3 lg:px-5 pt-14 sm:pt-20">
                     <BrandShowcaseCarousel />
                   </div>
                 </div>
