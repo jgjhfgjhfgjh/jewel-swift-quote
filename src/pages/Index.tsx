@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ExternalLink } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -25,7 +24,6 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 const Index = () => {
-  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuthContext();
   const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
@@ -115,15 +113,6 @@ const Index = () => {
                 pushed below the fold; pb lifts the headline slightly above the
                 true viewport centre. Navbar is a single compact h-14 row now. */}
             <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] flex-col justify-center px-6 pb-[18vh] sm:pb-[16vh]">
-              {/* MCP Server — mini pill top-right */}
-              <button
-                type="button"
-                onClick={() => navigate('/feed')}
-                className="absolute right-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#2e2833] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#17141b] sm:right-6 sm:top-6"
-              >
-                MCP Server <ExternalLink className="h-3.5 w-3.5" />
-              </button>
-
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones; mobile
                   clamps on vw so "Enterprise Technology" fits on one line.

@@ -301,14 +301,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           aria-label="swelt — domů"
         >
           <span
-            className={`font-spartan font-extrabold text-2xl sm:text-3xl leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
         </Link>
 
         {/* Desktop nav — položky s chevronem otevírají mega menu; v katalogu je nahrazuje vyhledávání */}
         {!showSearch && (
-          <nav className="hidden lg:flex items-center gap-0.5 ml-3 relative z-10">
+          <nav className="hidden lg:flex items-center gap-1 ml-5 relative z-10">
             {NAV_ITEMS.map((item) => {
               const active = activeNav === item.id;
               return (
@@ -320,12 +320,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     if (item.path) { setActiveNav(null); navigate(item.path); }
                     else setActiveNav(active ? null : item.id);
                   }}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    active ? 'text-zinc-900' : 'text-zinc-600 hover:text-zinc-900'
+                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] font-medium transition-colors ${
+                    active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
                   }`}
                 >
                   {item.label}
-                  <ChevronDown className={`h-3 w-3 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`} />
                 </button>
               );
             })}
@@ -545,12 +545,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             </>
           ) : !loading ? (
             <>
-              {/* Guest CTAs — jen Přihlásit + B2B registrace (s "Verify Account in 24h" pod CTA) */}
+              {/* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace (černá) */}
               <Button
                 size="sm"
-                variant="outline"
                 onClick={() => openAuth('login')}
-                className="h-8 px-2 sm:px-4 rounded-none font-bold tracking-wide text-[11px] sm:text-sm text-foreground bg-white/70 backdrop-blur-md hover:bg-white/85 border border-white/60 transition-all hover:-translate-y-0.5 shrink-0"
+                className="h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm text-zinc-900 bg-transparent hover:bg-zinc-900/5 transition-all shrink-0 shadow-none"
               >
                 Přihlásit
               </Button>
@@ -558,11 +557,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}
-                  className="h-8 px-2 sm:px-4 rounded-none font-semibold tracking-wide text-[11px] sm:text-sm text-white bg-[#17191c]/80 backdrop-blur-md hover:bg-[#0e0f11]/90 transition-all hover:-translate-y-0.5 shrink-0"
+                  className="h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all shrink-0"
                 >
                   B2B registrace
                 </Button>
-                <span className="hidden sm:block mt-0.5 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
+                <span className="hidden sm:block mt-1 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
                   Verify Account in 24h
                 </span>
               </div>
