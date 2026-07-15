@@ -624,13 +624,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <NavShowcaseCarousel />
               </div>
             ) : (
-            <div className="mx-auto max-w-5xl px-6 py-8">
-              <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
+            <div className="px-6 py-8">
+              <div className="grid grid-cols-[minmax(260px,1fr)_2fr] gap-10 items-start">
                 {/* Left: heading + desc + CTA */}
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.</p>
-                  <h3 className="text-xl font-semibold text-zinc-900 mb-1.5">{panel.heading}</h3>
-                  <p className="text-sm text-zinc-500 mb-5 max-w-xs leading-relaxed">{panel.desc}</p>
+                  <h3 className="text-2xl font-semibold text-zinc-900 mb-2">{panel.heading}</h3>
+                  <p className="text-sm text-zinc-500 mb-6 max-w-sm leading-relaxed">{panel.desc}</p>
                   <button
                     onClick={() => go(panel.cta.path)}
                     className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
@@ -641,20 +641,20 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
                 {/* Right: DEAL carousel for the deals category, link columns otherwise */}
                 {activeNav === 'top-deals' ? (
-                  <div className="w-[600px] max-w-[58vw]">
+                  <div className="w-full">
                     <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
                   </div>
                 ) : (
-                <div className="flex gap-10">
+                <div className="grid grid-cols-2 gap-12">
                   {panel.cols.map((col) => (
-                    <div key={col.title} className="min-w-[180px]">
+                    <div key={col.title}>
                       <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">{col.title}</p>
                       <ul className="space-y-1">
                         {col.links.map((link) => (
                           <li key={link.label}>
                             <button
                               onClick={() => go(link.path)}
-                              className="group flex flex-col text-left w-full rounded-lg px-2 py-2 hover:bg-zinc-50 transition-colors"
+                              className="group flex flex-col text-left w-full rounded-lg px-2 py-2.5 hover:bg-zinc-50 transition-colors"
                             >
                               <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900">{link.label}</span>
                               <span className="text-[11px] text-zinc-400 leading-tight">{link.desc}</span>
