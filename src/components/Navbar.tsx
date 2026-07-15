@@ -617,6 +617,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
           >
+            {activeNav === 'why-swelt' ? (
+              /* Why Swelt — jen full-width kolotoč prázdných placeholder karet,
+                 bez levého sloupce (heading/desc/CTA) */
+              <div className="px-6 py-6">
+                <NavShowcaseCarousel />
+              </div>
+            ) : (
             <div className="mx-auto max-w-5xl px-6 py-8">
               <div className="grid grid-cols-[1fr_auto] gap-8 items-start">
                 {/* Left: heading + desc + CTA */}
@@ -632,15 +639,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   </button>
                 </div>
 
-                {/* Right: DEAL carousel for the deals category, showcase cards
-                    for Why Swelt, link columns otherwise */}
+                {/* Right: DEAL carousel for the deals category, link columns otherwise */}
                 {activeNav === 'top-deals' ? (
                   <div className="w-[600px] max-w-[58vw]">
                     <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
-                  </div>
-                ) : activeNav === 'why-swelt' ? (
-                  <div className="w-[620px] max-w-[58vw]">
-                    <NavShowcaseCarousel onNavigate={go} />
                   </div>
                 ) : (
                 <div className="flex gap-10">
@@ -666,6 +668,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 )}
               </div>
             </div>
+            )}
           </div>
         </>
       );
