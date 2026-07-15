@@ -284,13 +284,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       ref={headerRef}
       className={`absolute top-0 left-0 right-0 z-[100]
         border-b border-white/25
+        bg-[linear-gradient(135deg,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.38)_50%,rgba(255,255,255,0.46)_100%)]
+        backdrop-blur-[32px] backdrop-saturate-[190%]
+        shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_4px_28px_rgba(0,0,0,0.07)]
+        lg:border-transparent lg:bg-none lg:shadow-none lg:backdrop-blur-none lg:backdrop-saturate-100
       `}
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0.46) 100%)',
-        backdropFilter: 'blur(32px) saturate(190%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(190%)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 28px rgba(0,0,0,0.07)',
-      }}
     >
       {/* ── Single compact row: logo → desktop nav (chevrony) → pravý cluster ── */}
       <div className="relative h-14 pl-3 pr-2 sm:pl-5 sm:pr-3 flex items-center gap-1 sm:gap-2">
