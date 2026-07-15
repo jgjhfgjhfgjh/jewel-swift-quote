@@ -63,6 +63,13 @@ export const BRANDS: Brand[] = [
   // Swiss Military Hanowa: oficiální doména swissmilitary-hanowa.com vrací
   // v Brandfetch prázdný obrázek — funkční logo má mateřská hanowa.ch.
   { name: 'Swiss Military Hanowa', domain: 'hanowa.ch' },
+  { name: 'Alpina', domain: 'alpinawatches.com' },
+  { name: 'AVI-8', domain: 'avi-8.com' },
+  { name: 'Edox', domain: 'edox.ch' },
+  { name: 'Ingersoll', domain: 'ingersollwatches.com' },
+  { name: 'Luminox', domain: 'luminox.com' },
+  { name: 'Timberland', domain: 'timberland.com' },
+  { name: 'Victorinox', domain: 'victorinox.com' },
   // ZEPPELIN: Brandfetch nemá použitelné logo — záměrně bez záznamu, UI použije
   // textový fallback. Ověřeno znovu 2026-07: zeppelinwatch.com / zeppelin-watch.de /
   // zeppelinuhren.de vrací prázdný bílý obrázek, pointtec.de logo jiné značky

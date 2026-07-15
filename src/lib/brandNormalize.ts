@@ -67,6 +67,7 @@ export const DISPLAY_NAMES: Record<string, string> = {
   'DANIEL WELLINGTON': 'Daniel Wellington',
   'GANT': 'GANT',
   'BERING': 'BERING',
+  'AVI-8': 'AVI-8',
 };
 
 /** Raw feed manufacturer string → canonical UPPERCASE brand key. */

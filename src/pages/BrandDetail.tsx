@@ -85,8 +85,11 @@ export default function BrandDetail() {
 
   const brandData = useMemo<BrandData | null>(() => {
     if (!slug) return null;
-    const targetKey = brandSlugToKey(slug);
-    const entry = catalog.find((e) => e.key === targetKey);
+    // Match on the entry's own slug — round-tripping through brandSlugToKey
+    // corrupts keys that themselves contain hyphens (e.g. AVI-8 → "AVI 8").
+    const entry =
+      catalog.find((e) => e.slug === slug) ??
+      catalog.find((e) => e.key === brandSlugToKey(slug));
     if (!entry) return null;
 
     // Preview products (in-stock first, by discount — sorted in the hook).

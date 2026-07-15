@@ -1351,6 +1351,189 @@ export const BRAND_STORIES: Record<string, StoryEra[]> = {
     },
   ],
 
+  'ALPINA': [
+    {
+      heading: 'Průkopník sportovních hodinek',
+      items: [
+        {
+          lead: '1883 – Unie švýcarských hodinářů',
+          text: 'Gottlieb Hauser založil Alpina Union Horlogère — sdružení švýcarských hodinářů, které společně vyvíjelo a vyrábělo kvalitní strojky.',
+        },
+        {
+          lead: '1938 – Alpina 4',
+          text: 'Legendární model definoval čtyři principy sportovních hodinek: antimagnetismus, odolnost proti nárazu, voděodolnost a nerezovou ocel.',
+        },
+      ],
+    },
+    {
+      heading: 'Novodobá éra',
+      items: [
+        {
+          lead: '2002 – Znovuzrození v Ženevě',
+          text: 'Značku oživili Peter a Aletta Stasovi, zakladatelé Frederique Constant; od roku 2016 patří obě značky do skupiny Citizen.',
+        },
+        {
+          lead: 'Hory a nebe',
+          text: 'Kolekce Startimer (letectví), Seastrong (potápění) a Alpiner (hory) pokračují v odkazu švýcarských sportovních hodinek.',
+        },
+      ],
+    },
+  ],
+
+  'AVI-8': [
+    {
+      heading: '2012: Pocta britskému letectví',
+      items: [
+        {
+          lead: 'Zrod v Londýně',
+          text: 'AVI-8 vznikla v roce 2012 jako značka hodinek inspirovaných legendárními letouny britského Královského letectva (RAF).',
+        },
+        {
+          lead: 'Kolekce se jmény legend',
+          text: 'Hawker Hurricane, Spitfire či Lancaster Bomber — každá řada odkazuje na konkrétní letoun a příběhy jeho posádek.',
+        },
+      ],
+    },
+    {
+      heading: 'Přístrojový design',
+      items: [
+        {
+          lead: 'Kokpit na zápěstí',
+          text: 'Vrstvené ciferníky, výrazné číslice a detaily převzaté z palubních přístrojů dělají z AVI-8 výrazné pilotní hodinky za dostupnou cenu.',
+        },
+      ],
+    },
+  ],
+
+  'EDOX': [
+    {
+      heading: '1884: Hodinky jako dar',
+      items: [
+        {
+          lead: 'Christian Ruefli-Flury, Biel',
+          text: 'Podle firemní legendy stálo u zrodu značky věnování kapesních hodinek manželce; jméno Edox pochází z řeckého výrazu pro „hodinu" a logem jsou přesýpací hodiny.',
+        },
+        {
+          lead: '60. léta – Král hlubin',
+          text: 'Modely Delfin (1961) a Hydro-Sub (1965) s voděodolností až 500 metrů zapsaly Edox mezi průkopníky potápěčských hodinek.',
+        },
+      ],
+    },
+    {
+      heading: 'Časomíra extrémních závodů',
+      items: [
+        {
+          lead: 'Moře i poušť',
+          text: 'Edox se stal oficiální časomírou mistrovství světa motorových člunů Class-1 i legendární Rallye Dakar — švýcarská preciznost v extrémních podmínkách.',
+        },
+      ],
+    },
+  ],
+
+  'INGERSOLL': [
+    {
+      heading: '1892: Dolarové hodinky',
+      items: [
+        {
+          lead: 'Bratři Ingersollovi, New York',
+          text: 'Robert a Charles Ingersollovi zpřístupnili hodinky masám: model Yankee za jediný dolar proslul jako „hodinky, které proslavily dolar" a prodal se v milionech kusů.',
+        },
+        {
+          lead: '1933 – Mickey Mouse',
+          text: 'Hodinky s Mickey Mousem od Ingersollu se staly prodejním fenoménem velké hospodářské krize.',
+        },
+      ],
+    },
+    {
+      heading: 'Návrat legendy',
+      items: [
+        {
+          lead: 'Dostupné automaty',
+          text: 'Dnešní Ingersoll navazuje na americké dědictví retro-designovými automatickými hodinkami s viditelným strojkem.',
+        },
+      ],
+    },
+  ],
+
+  'LUMINOX': [
+    {
+      heading: '1989: Světlo ve tmě',
+      items: [
+        {
+          lead: 'Barry Cohen, USA',
+          text: 'Značka vznikla kolem unikátní iluminace: borosilikátové kapsle s tritiem svítí nepřetržitě ~25 let bez nabíjení světlem či stisknutí tlačítka.',
+        },
+      ],
+    },
+    {
+      heading: 'Hodinky Navy SEALs',
+      items: [
+        {
+          lead: '90. léta – Zakázka pro elitu',
+          text: 'Na žádost amerických Navy SEALs vyvinul Luminox odolné potápěčské hodinky, které se staly výbavou elitních jednotek.',
+        },
+        {
+          lead: 'Swiss Made nástroj',
+          text: 'Dnes Luminox nosí armády, piloti i záchranáři po celém světě — maximální čitelnost a odolnost v každé situaci.',
+        },
+      ],
+    },
+  ],
+
+  'TIMBERLAND': [
+    {
+      heading: '1973: Žlutá bota',
+      items: [
+        {
+          lead: 'Rodina Swartzových, Nová Anglie',
+          text: 'Z obuvnické dílny Abington Shoe Company vzešla v roce 1973 revoluční voděodolná žlutá bota — ikona, podle níž se firma v roce 1978 přejmenovala na Timberland.',
+        },
+        {
+          lead: 'Od bot k lifestylu',
+          text: 'Timberland vyrostl v globální outdoorovou značku oblečení a doplňků se závazkem k udržitelnosti.',
+        },
+      ],
+    },
+    {
+      heading: 'Outdoor na zápěstí',
+      items: [
+        {
+          lead: 'Hodinky s DNA přírody',
+          text: 'Licencované hodinky Timberland přenášejí outdoorovou estetiku do odolných pouzder, přírodních tónů a terénního designu.',
+        },
+      ],
+    },
+  ],
+
+  'VICTORINOX': [
+    {
+      heading: '1884: Nůž, který dobyl svět',
+      items: [
+        {
+          lead: 'Karl Elsener, Ibach',
+          text: 'Ve švýcarském Ibachu vznikla nožířská dílna, která v roce 1897 patentovala důstojnický nůž — legendární Swiss Army Knife.',
+        },
+        {
+          lead: 'Jméno Victorinox',
+          text: 'Spojení jména zakladatelovy matky Victorie a „inox" (nerezová ocel) dalo vzniknout názvu rodinné firmy, která funguje dodnes.',
+        },
+      ],
+    },
+    {
+      heading: 'Od nože k hodinkám',
+      items: [
+        {
+          lead: '1989 – Victorinox Swiss Army',
+          text: 'Značka vstoupila do hodinářství; hodinky přebírají DNA kapesního nože — funkčnost, odolnost a švýcarskou preciznost.',
+        },
+        {
+          lead: 'Nástroj na zápěstí',
+          text: 'Řady I.N.O.X. či Maverick snesou extrémní zacházení a potvrzují pověst nejuniverzálnějšího „nástroje" mezi hodinkami.',
+        },
+      ],
+    },
+  ],
+
   'MILLNER': [
     {
       heading: '2017: Barcelona',

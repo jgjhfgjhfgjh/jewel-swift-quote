@@ -226,7 +226,7 @@ export const CONCERNS: Concern[] = [
     founded: '1918',
     shortDesc:
       'Japonský koncern proslulý technologií Eco‑Drive. Vedle Citizenu zahrnuje dostupné Q&Q, americkou Bulovu i švýcarské Frederique Constant a Alpina.',
-    brandKeys: ['CITIZEN', 'Q&Q'],
+    brandKeys: ['CITIZEN', 'Q&Q', 'ALPINA'],
     story: [
       {
         heading: 'Japonská technologie',
