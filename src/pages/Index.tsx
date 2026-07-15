@@ -135,8 +135,8 @@ const Index = () => {
                 samostatný fade pás s plynulou easing křivkou do bílé stránky.
                 Karty značek začínají až pod fadem — loga na čistě bílé. */}
             <section className="relative mt-20 sm:mt-28 lg:mt-32">
-              {/* plný černý panel — text sedí garantovaně na plné černé */}
-              <div className="w-full rounded-t-[1.75rem] bg-[#08080a] px-4 pt-16 pb-12 sm:rounded-t-[2.75rem] sm:px-6 sm:pt-24 sm:pb-16 lg:px-8">
+              {/* plný černý panel — headline sedí garantovaně na plné černé */}
+              <div className="w-full rounded-t-[1.75rem] bg-[#08080a] px-4 pt-14 pb-6 sm:rounded-t-[2.75rem] sm:px-6 sm:pt-20 sm:pb-8 lg:px-8">
                 <div className="mx-auto max-w-[1400px]">
                   {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
                       velikost zvolena tak, aby se headline vešla na jeden řádek */}
@@ -144,25 +144,20 @@ const Index = () => {
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.6rem,3.8vw,3.5rem)] text-white">
                       Sell the brands people already want.
                     </h2>
-                    <p className="mt-5 max-w-2xl text-base font-light leading-relaxed text-white/70 sm:mt-6 sm:text-lg">
-                      Premium watches and jewellery at wholesale prices — 40–80% below
-                      retail. We pack and dispatch across the EU in 24–48 hours, with
-                      new DEAL offers every week.
-                    </p>
                   </div>
                 </div>
               </div>
-              {/* fade pás — smoothstep easing (11 stop), žádné viditelné zlomy */}
+              {/* krátký fade hned pod textem — smoothstep easing (11 stop) */}
               <div
                 aria-hidden
-                className="h-36 w-full sm:h-52"
+                className="h-16 w-full sm:h-24"
                 style={{
                   background:
                     'linear-gradient(to bottom, #08080a 0%, rgba(8,8,10,0.972) 10%, rgba(8,8,10,0.896) 20%, rgba(8,8,10,0.784) 30%, rgba(8,8,10,0.648) 40%, rgba(8,8,10,0.5) 50%, rgba(8,8,10,0.352) 60%, rgba(8,8,10,0.216) 70%, rgba(8,8,10,0.104) 80%, rgba(8,8,10,0.028) 90%, rgba(8,8,10,0) 100%)',
                 }}
               />
-              {/* karusel na bílé, pod fadem (žádné tmavé zabarvení log) */}
-              <div className="mx-auto max-w-[1400px] px-0 sm:px-2 lg:px-4 pt-2 sm:pt-4">
+              {/* karusel na bílé, hned pod fadem (žádné tmavé zabarvení log) */}
+              <div className="mx-auto max-w-[1400px] px-0 sm:px-2 lg:px-4">
                 <BrandShowcaseCarousel />
               </div>
             </section>
