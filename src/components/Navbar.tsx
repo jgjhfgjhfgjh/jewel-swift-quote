@@ -610,9 +610,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
       const panel = NAV_PANELS[activeNav];
       return (
         <>
-          {/* Panel */}
+          {/* Panel — jednotná min. výška, aby se každé menu otevřelo do stejné
+              vertikální velikosti jako Why Swelt (jehož výšku určuje karusel karet:
+              clamp(260,26vw,360) + padding). */}
           <div
-            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block"
+            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block min-h-[clamp(320px,30vw,412px)]"
             style={{ top: headerHeight }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
