@@ -553,7 +553,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               >
                 Přihlásit
               </Button>
-              <div className="flex flex-col items-center shrink-0 ml-1">
+              {/* relative + caption absolutně pod tlačítkem → černá CTA se svisle
+                  zarovná s Přihlásit (caption ji nesune nahoru) */}
+              <div className="relative flex items-center shrink-0 ml-1">
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}
@@ -561,7 +563,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 >
                   B2B registrace
                 </Button>
-                <span className="hidden sm:block mt-1 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
+                <span className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
                   Verify Account in 24h
                 </span>
               </div>
