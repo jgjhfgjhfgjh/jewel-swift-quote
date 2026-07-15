@@ -134,7 +134,7 @@ const Index = () => {
                 panel se zaoblenými rohy (bílý text na plné černé), pod ním
                 samostatný fade pás s plynulou easing křivkou do bílé stránky.
                 Karty značek začínají až pod fadem — loga na čistě bílé. */}
-            <section className="relative">
+            <section className="relative mt-20 sm:mt-28 lg:mt-32">
               {/* plný černý panel — text sedí garantovaně na plné černé */}
               <div className="w-full rounded-t-[1.75rem] bg-[#08080a] px-4 pt-16 pb-12 sm:rounded-t-[2.75rem] sm:px-6 sm:pt-24 sm:pb-16 lg:px-8">
                 <div className="mx-auto max-w-[1400px]">
