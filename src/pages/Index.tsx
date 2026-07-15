@@ -148,6 +148,9 @@ const Index = () => {
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
+                    <p className="mt-4 font-sans text-base font-light text-muted-foreground sm:mt-5 sm:text-xl">
+                      Ship across all of Europe — without holding stock.
+                    </p>
                   </div>
                 </div>
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-24 sm:pt-36">
