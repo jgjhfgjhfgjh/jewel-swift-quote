@@ -128,14 +128,13 @@ const Index = () => {
                   tall displays but never overflows short / zoomed ones; mobile
                   clamps on vw so "Enterprise Technology" fits on one line.
                   Inter Extra Light (200). Blok je vycentrovaný (w-fit podle H1),
-                  řádky uvnitř zarovnané doleva. Psaný řádek má plnou velikost
-                  fontu — delší věta se zalomí; min-h drží rezervu 2 řádků, aby
-                  se blok při zalomení/mazání nehýbal. */}
+                  řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
+                  šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               <div className="w-full sm:w-fit mx-auto text-left">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] text-foreground">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>
-                <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] sm:w-0 sm:min-w-full min-h-[2.24em]">
+                <div className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.25rem,10.5vh,7.5rem)] sm:w-0 sm:whitespace-nowrap">
                   <HeroRotatingText />
                 </div>
               </div>

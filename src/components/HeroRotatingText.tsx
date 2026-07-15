@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 const PHRASES = [
   'Launch Faster',
   'Sell More',
-  'Everywhere your customers scroll.',
+  'Everywhere',
   'Grow Around Europe',
   'Automate and Save Hours',
 ];
@@ -17,8 +17,6 @@ const GAP_MS = 300;
 /**
  * Gradient typewriter line under the hero headline (blue → cyan → green,
  * jako v předloze). Rendered aria-hidden — the static H1 carries the meaning.
- * Font zůstává v plné velikosti H1 — delší fráze se zalomí na další řádek
- * (rezervu dvou řádků drží min-h na kontejneru v Index.tsx, aby blok neskákal).
  */
 export function HeroRotatingText({ className = '' }: { className?: string }) {
   const [idx, setIdx] = useState(0);
@@ -44,9 +42,9 @@ export function HeroRotatingText({ className = '' }: { className?: string }) {
   }, [len, deleting, idx]);
 
   return (
-    <span aria-hidden className={className}>
+    <span aria-hidden className={`inline-flex min-h-[1.15em] items-baseline ${className}`}>
       <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-        {PHRASES[idx].slice(0, len) || ' '}
+        {PHRASES[idx].slice(0, len) || ' '}
       </span>
       <span className="ml-0.5 animate-pulse font-thin text-zinc-300">|</span>
     </span>
