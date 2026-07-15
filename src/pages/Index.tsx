@@ -141,7 +141,7 @@ const Index = () => {
                   {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
                       velikost zvolena tak, aby se headline vešla na jeden řádek */}
                   <div className="mx-auto w-fit max-w-full text-left">
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.6rem,3.8vw,3.5rem)] text-white">
+                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.9rem,5.6vw,5.25rem)] text-white">
                       Sell the brands people already want.
                     </h2>
                   </div>
