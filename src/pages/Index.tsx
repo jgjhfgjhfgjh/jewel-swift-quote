@@ -138,17 +138,15 @@ const Index = () => {
               {/* full-width tmavý blok; spodních ~96px přechází do ztracena k bílé */}
               <div className="w-full px-4 pt-16 pb-28 sm:px-6 sm:pt-24 lg:px-8 bg-[linear-gradient(to_top,transparent_0,#08080a_96px)]">
                 <div className="mx-auto max-w-[1400px]">
-                  <div className="max-w-4xl">
-                    <p className="mb-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55 sm:mb-5 sm:text-xs">
-                      70+ premium brands · wholesale prices
-                    </p>
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.08] text-[clamp(1.9rem,4.6vw,4rem)] text-white">
+                  {/* centrovaný blok, text zarovnaný doleva — jako hero H1 */}
+                  <div className="mx-auto w-fit max-w-full text-left">
+                    <h2 className="font-sans font-extralight tracking-tight leading-[1.08] text-[clamp(2.25rem,5.5vw,5rem)] text-white">
                       Sell the brands<br className="hidden sm:block" /> people already want.
                     </h2>
-                    <p className="mt-4 max-w-2xl text-base font-light leading-relaxed text-white/70 sm:mt-5 sm:text-lg">
-                      Premium watches and jewellery at wholesale prices — 40–60% below
-                      retail. Stock nothing; we pack and dispatch across the EU in
-                      24–48 hours.
+                    <p className="mt-5 max-w-2xl text-base font-light leading-relaxed text-white/70 sm:mt-6 sm:text-lg">
+                      Premium watches and jewellery at wholesale prices — 40–80% below
+                      retail. We pack and dispatch across the EU in 24–48 hours, with
+                      new DEAL offers every week.
                     </p>
                   </div>
                 </div>
