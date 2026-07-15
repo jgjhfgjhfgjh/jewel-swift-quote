@@ -130,10 +130,31 @@ const Index = () => {
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
-            {/* Second screen: brand carousel (logos + product previews) then CTAs */}
-            <section className="flex flex-col items-center px-0 pt-12 pb-16 sm:pt-16 sm:pb-20 gap-10 sm:gap-14">
-              <BrandShowcaseCarousel />
-              <div className="w-full px-6">
+            {/* Second screen: brand showcase — white elevated panel (jako modrá
+                Shopify sekce, ale bílá + stín, aby karusel zůstal na bílém).
+                Headline ve stejném fontu jako H1 uvádí, na co se zákazník dívá. */}
+            <section className="px-4 pt-10 pb-4 sm:px-6 sm:pt-14 lg:px-8">
+              <div className="mx-auto max-w-[1400px] rounded-3xl bg-white px-5 pt-10 pb-6 shadow-[0_24px_70px_-28px_rgba(0,0,0,0.22)] ring-1 ring-zinc-200/70 sm:rounded-[2.5rem] sm:px-9 sm:pt-14 sm:pb-8 lg:px-14 lg:pt-16">
+                <div className="max-w-4xl">
+                  <p className="mb-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-400 sm:mb-5 sm:text-xs">
+                    70+ premium brands · wholesale
+                  </p>
+                  <h2 className="font-sans font-extralight tracking-tight leading-[1.08] text-[clamp(1.9rem,4.6vw,4rem)] text-foreground">
+                    Every brand here is<br className="hidden sm:block" /> money you can make.
+                  </h2>
+                  <p className="mt-4 max-w-2xl text-base font-light leading-relaxed text-zinc-500 sm:mt-5 sm:text-lg">
+                    Watches and jewellery people already search for — at wholesale
+                    prices, ready to sell everywhere your customers scroll.
+                  </p>
+                </div>
+                <div className="mt-8 -mx-2 sm:mt-12 sm:-mx-4 lg:-mx-8">
+                  <BrandShowcaseCarousel />
+                </div>
+              </div>
+            </section>
+            {/* CTAs */}
+            <section className="flex flex-col items-center px-6 pt-8 pb-16 sm:pt-12 sm:pb-20">
+              <div className="w-full">
                 <HomeHero />
               </div>
             </section>
