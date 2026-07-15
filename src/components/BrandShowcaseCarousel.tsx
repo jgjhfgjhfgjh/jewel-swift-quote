@@ -24,6 +24,9 @@ interface BrandShowcaseCarouselProps {
   selectedBrands?: string[];
   /** Toggle handler — receives all raw manufacturer strings of the brand. */
   onToggleBrand?: (rawManufacturers: string[]) => void;
+  /** Dark variant (homepage černý panel): černá loga a texty bílé (invert+screen),
+   *  produktové fotky s feather maskou, aby bílé JPG pozadí nesvítilo na černé. */
+  dark?: boolean;
 }
 
 /** Showcase sizing (homepage) — identical to the hero banner cards */
@@ -38,12 +41,13 @@ const ROTATE_MS = 1800;
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({
-  brand, selectable, active, onSelect,
+  brand, selectable, active, onSelect, dark,
 }: {
   brand: BrandCardData;
   selectable?: boolean;
   active?: boolean;
   onSelect?: () => void;
+  dark?: boolean;
 }) {
   // In filter (selectable) mode the card is compact — tighter spacing and no
   // centre-scale animation, so it reads as a control rather than a showcase.
@@ -98,11 +102,13 @@ function BrandCard({
             domain={brand.domain}
             width={400}
             height={160}
-            className={`max-h-full object-contain [mix-blend-mode:multiply] ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
-            fallbackClassName={`font-display font-black tracking-tight text-foreground truncate max-w-full ${compact ? 'text-sm' : 'text-lg'}`}
+            className={`max-h-full object-contain ${
+              dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
+            } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
+            fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
           />
         ) : (
-          <span className={`font-display font-black tracking-tight text-foreground truncate max-w-full ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
+          <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
         )}
       </div>
 
@@ -110,7 +116,7 @@ function BrandCard({
       <div className={`relative flex-1 mx-4 ${imgGap} mb-2 origin-bottom ${scale}`}>
         {n === 0 && (
           <div className="absolute inset-0 flex items-center justify-center p-2">
-            <span className="font-display text-xl font-black tracking-tight text-muted-foreground/30 text-center">
+            <span className={`font-display text-xl font-black tracking-tight text-center ${dark ? 'text-white/25' : 'text-muted-foreground/30'}`}>
               {brand.name}
             </span>
           </div>
@@ -123,7 +129,20 @@ function BrandCard({
               i === idx ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <img src={p.img} alt={p.name} loading="lazy" draggable={false} className="max-h-full max-w-full object-contain" />
+            <img
+              src={p.img}
+              alt={p.name}
+              loading="lazy"
+              draggable={false}
+              className="max-h-full max-w-full object-contain"
+              // Feather maska: bílé JPG pozadí (CDN bez CORS → nelze vyříznout
+              // pixelově) se na černé rozpustí do měkkého oválu místo tvrdého
+              // obdélníku; barvy produktu zůstávají beze změny.
+              style={dark ? {
+                maskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
+              } : undefined}
+            />
           </div>
         ))}
       </div>
@@ -134,9 +153,9 @@ function BrandCard({
           <p
             key={p.id}
             aria-hidden={i !== idx}
-            className={`absolute inset-x-0 text-center text-[11px] text-muted-foreground truncate transition-opacity duration-700 ease-in-out ${
-              i === idx ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute inset-x-0 text-center text-[11px] truncate transition-opacity duration-700 ease-in-out ${
+              dark ? 'text-white/70' : 'text-muted-foreground'
+            } ${i === idx ? 'opacity-100' : 'opacity-0'}`}
           >
             {p.name}
           </p>
@@ -152,7 +171,7 @@ function BrandCard({
 
 /* ─── Carousel ─── */
 export function BrandShowcaseCarousel({
-  selectable, selectedBrands, onToggleBrand,
+  selectable, selectedBrands, onToggleBrand, dark,
 }: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
 
@@ -241,6 +260,7 @@ export function BrandShowcaseCarousel({
             selectable={selectable}
             active={selectable && isActive(brand)}
             onSelect={() => onToggleBrand?.(brand.rawManufacturers)}
+            dark={dark}
           />
         ))}
       </div>

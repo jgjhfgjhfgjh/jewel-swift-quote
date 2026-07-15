@@ -135,31 +135,32 @@ const Index = () => {
                 samostatný fade pás s plynulou easing křivkou do bílé stránky.
                 Karty značek začínají až pod fadem — loga na čistě bílé. */}
             <section className="relative mt-20 sm:mt-28 lg:mt-32">
-              {/* plný černý panel — headline sedí garantovaně na plné černé */}
-              <div className="w-full rounded-t-[1.75rem] bg-[#08080a] px-4 pt-14 pb-6 sm:rounded-t-[2.75rem] sm:px-6 sm:pt-20 sm:pb-8 lg:px-8">
-                <div className="mx-auto max-w-[1400px]">
-                  {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
-                      velikost zvolena tak, aby se headline vešla na jeden řádek */}
-                  <div className="mx-auto w-fit max-w-full text-left">
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.9rem,5.6vw,5.25rem)] text-white">
-                      Sell the brands people already want.
-                    </h2>
+              {/* plný černý panel — headline i karusel na černé (dark varianta) */}
+              <div className="w-full rounded-t-[1.75rem] bg-[#08080a] pt-14 sm:rounded-t-[2.75rem] sm:pt-20">
+                <div className="px-4 sm:px-6 lg:px-8">
+                  <div className="mx-auto max-w-[1400px]">
+                    {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
+                        velikost zvolena tak, aby se headline vešla na jeden řádek */}
+                    <div className="mx-auto w-fit max-w-full text-left">
+                      <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.9rem,5.6vw,5.25rem)] text-white">
+                        Sell the brands people already want.
+                      </h2>
+                    </div>
                   </div>
                 </div>
+                <div className="mx-auto max-w-[1400px] px-0 sm:px-2 lg:px-4 pt-8 sm:pt-12">
+                  <BrandShowcaseCarousel dark />
+                </div>
               </div>
-              {/* krátký fade hned pod textem — smoothstep easing (11 stop) */}
+              {/* fade až pod carouselem — černá do bílé, smoothstep easing (11 stop) */}
               <div
                 aria-hidden
-                className="h-16 w-full sm:h-24"
+                className="h-24 w-full sm:h-36"
                 style={{
                   background:
                     'linear-gradient(to bottom, #08080a 0%, rgba(8,8,10,0.972) 10%, rgba(8,8,10,0.896) 20%, rgba(8,8,10,0.784) 30%, rgba(8,8,10,0.648) 40%, rgba(8,8,10,0.5) 50%, rgba(8,8,10,0.352) 60%, rgba(8,8,10,0.216) 70%, rgba(8,8,10,0.104) 80%, rgba(8,8,10,0.028) 90%, rgba(8,8,10,0) 100%)',
                 }}
               />
-              {/* karusel na bílé, hned pod fadem (žádné tmavé zabarvení log) */}
-              <div className="mx-auto max-w-[1400px] px-0 sm:px-2 lg:px-4">
-                <BrandShowcaseCarousel />
-              </div>
             </section>
             {/* CTAs */}
             <section className="flex flex-col items-center px-6 pt-8 pb-16 sm:pt-12 sm:pb-20">
