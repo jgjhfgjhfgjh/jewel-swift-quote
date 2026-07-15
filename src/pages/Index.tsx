@@ -135,8 +135,9 @@ const Index = () => {
                 spodním paddingu pod textem, takže skončí nad kartami značek a
                 nezastíní loga. Dole žádný okraj — splyne s bílou stránkou. */}
             <section className="relative">
-              {/* full-width tmavý blok; spodních ~96px přechází do ztracena k bílé */}
-              <div className="w-full px-4 pt-16 pb-28 sm:px-6 sm:pt-24 lg:px-8 bg-[linear-gradient(to_top,transparent_0,#08080a_96px)]">
+              {/* full-width tmavý panel se zaoblenými horními rohy; spodní ~200px
+                  plynule (jemně) přechází do ztracena k bílé stránce */}
+              <div className="w-full rounded-t-[1.75rem] px-4 pt-16 pb-48 sm:rounded-t-[2.75rem] sm:px-6 sm:pt-24 sm:pb-60 lg:px-8 bg-[linear-gradient(to_top,transparent_0%,rgba(8,8,10,0.55)_90px,#08080a_210px)]">
                 <div className="mx-auto max-w-[1400px]">
                   {/* centrovaný blok, text zarovnaný doleva — jako hero H1 */}
                   <div className="mx-auto w-fit max-w-full text-left">
