@@ -148,13 +148,18 @@ const Index = () => {
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
-                    <p className="mt-4 font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-muted-foreground sm:mt-6">
-                      Ship across all of Europe without holding stock.
-                    </p>
                   </div>
                 </div>
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-24 sm:pt-36">
                   <BrandShowcaseCarousel />
+                </div>
+                {/* druhý headline pod carouselem — černý, stejná velikost jako nadpis */}
+                <div className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-10 sm:pt-28 lg:px-14">
+                  <div className="mx-auto w-fit max-w-full text-left">
+                    <p className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
+                      Ship across all of Europe without holding stock.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
