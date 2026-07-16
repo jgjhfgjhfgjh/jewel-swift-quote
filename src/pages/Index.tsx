@@ -130,22 +130,20 @@ const Index = () => {
               {/* scroll cue */}
               <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
             </section>
-            {/* Second screen: brand showcase — full-bleed sekce. Nahoře černý
-                panel se zaoblenými rohy (bílý text na plné černé), pod ním
-                samostatný fade pás s plynulou easing křivkou do bílé stránky.
-                Karty značek začínají až pod fadem — loga na čistě bílé. */}
+            {/* Second screen: brand showcase — bílá karta (headline, karusel,
+                B2B CTA), pod ní černá karta se „Ship" headline a budoucí
+                prezentací dropshippingu, dole do ztracena (smoothstep fade). */}
             <section className="relative mt-20 sm:mt-28 lg:mt-32">
               {/* bílá karta od kraje do kraje — zaoblený jen horní okraj, stín
-                  nahoře (zvednutý horní okraj proti bílému hero); dole žádné
-                  ukončení ani stín → bílá splyne s bílou stránkou (do ztracena) */}
-              <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-10 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-14 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
+                  nahoře (zvednutý horní okraj proti bílému hero) */}
+              <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-16 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-24 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
                       velikost zvolena tak, aby se headline vešla na jeden řádek */}
                   <div className="mx-auto w-fit max-w-full text-left">
                     {/* velikost = (šířka viewportu − padding stránky) / šířka textu
                         v em — drží jeden řádek na sm+ */}
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
+                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
                   </div>
@@ -153,21 +151,31 @@ const Index = () => {
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-24 sm:pt-36">
                   <BrandShowcaseCarousel />
                 </div>
-                {/* druhý headline pod carouselem — černý, stejná velikost jako nadpis */}
-                <div className="mx-auto max-w-[1400px] px-5 pt-20 sm:px-10 sm:pt-28 lg:px-14">
+                {/* B2B registrace CTA (iOS pilulka) + trust texty */}
+                <div className="pt-12 sm:pt-16">
+                  <HomeHero />
+                </div>
+              </div>
+              {/* černá karta — bílý „Ship" headline; sem přijde prezentace
+                  dropshippingu (doplníme později) */}
+              <div className="w-full rounded-t-[1.75rem] bg-[#08080a] pt-16 pb-24 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-32">
+                <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto w-fit max-w-full text-left">
-                    <p className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.7rem,calc((100vw-120px)/18),4.5rem)] text-foreground">
-                      Ship across all of Europe without holding stock.
+                    <p className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-white">
+                      Ship across all of Europe<br />without holding stock.
                     </p>
                   </div>
                 </div>
               </div>
-            </section>
-            {/* CTAs */}
-            <section className="flex flex-col items-center px-6 pt-8 pb-16 sm:pt-12 sm:pb-20">
-              <div className="w-full">
-                <HomeHero />
-              </div>
+              {/* fade pod černou kartou — smoothstep easing do bílé stránky */}
+              <div
+                aria-hidden
+                className="h-24 w-full sm:h-36"
+                style={{
+                  background:
+                    'linear-gradient(to bottom, #08080a 0%, rgba(8,8,10,0.972) 10%, rgba(8,8,10,0.896) 20%, rgba(8,8,10,0.784) 30%, rgba(8,8,10,0.648) 40%, rgba(8,8,10,0.5) 50%, rgba(8,8,10,0.352) 60%, rgba(8,8,10,0.216) 70%, rgba(8,8,10,0.104) 80%, rgba(8,8,10,0.028) 90%, rgba(8,8,10,0) 100%)',
+                }}
+              />
             </section>
           </>
         ) : (

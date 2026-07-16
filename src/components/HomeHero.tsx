@@ -58,25 +58,27 @@ export function HomeHero() {
       ) : (
         /* Guest / lead → B2B CTA + bullets */
         <>
-          {/* 1) B2B registrace (nebo živý odpočet u podané žádosti) */}
-          <div className="w-full max-w-[280px]">
+          {/* 1) B2B registrace (nebo živý odpočet u podané žádosti) — iOS pilulka */}
+          <div className="w-full max-w-[300px]">
             {isB2bLead ? (
-              <div className="font-display w-full px-8 py-3 rounded-none bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm shadow-lg text-center cursor-default select-none tabular-nums">
+              <div className="font-display w-full px-8 py-3.5 rounded-full bg-[#17191c]/80 backdrop-blur-md text-white font-semibold text-sm shadow-lg text-center cursor-default select-none tabular-nums">
                 <ApprovalCountdown requestedAt={profile!.created_at} />
               </div>
             ) : (
-              <Button className="h-10 w-full gap-2 px-6 text-sm" onClick={handleB2BCta}>
+              <Button
+                className="h-12 w-full gap-2 rounded-full bg-black px-8 text-[15px] font-semibold text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.45)] transition-all hover:bg-zinc-800"
+                onClick={handleB2BCta}
+              >
                 {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
               </Button>
             )}
           </div>
 
-          {/* 2) Fajfky hned pod B2B CTA */}
+          {/* 2) Trust texty hned pod CTA (anglicky) */}
           <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
-            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Registrace zdarma</li>
-            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Schválení do 24 hodin</li>
-            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez závazků</li>
-            <li className="hidden sm:flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Bez kreditní karty</li>
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Free registration</li>
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Approval within 24 hours</li>
+            <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> No commitment</li>
           </ul>
         </>
       )}
