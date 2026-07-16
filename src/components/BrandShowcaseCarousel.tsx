@@ -39,6 +39,10 @@ const CARD_CLASS_COMPACT =
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
+/** Showcase (homepage) výchozí pořadí prvních značek — canonical UPPERCASE
+ *  klíče (viz toBrandKey). Zbytek značek následuje v pořadí podle počtu. */
+const PRIORITY_KEYS = ['SWAROVSKI', 'TOMMY HILFIGER', 'PANDORA', 'GUESS', 'TISSOT'];
+
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({
   brand, selectable, active, onSelect, dark,
@@ -180,20 +184,28 @@ export function BrandShowcaseCarousel({
   // in selectable mode the card is a filter control, so a brand must never
   // silently disappear from the carousel.
   const brands = useMemo<BrandCardData[]>(() => {
-    return catalog
-      .map((e) => ({
-        key: e.key,
-        name: e.name,
-        slug: e.slug,
-        domain: e.domain,
-        count: e.count,
-        rawManufacturers: e.rawManufacturers,
-        products: e.products
-          .filter((p) => p.img)
-          .slice(0, 10)
-          .map((p) => ({ id: p.id, name: p.name, img: p.img })),
-      }));
-  }, [catalog]);
+    const mapped = catalog.map((e) => ({
+      key: e.key,
+      name: e.name,
+      slug: e.slug,
+      domain: e.domain,
+      count: e.count,
+      rawManufacturers: e.rawManufacturers,
+      products: e.products
+        .filter((p) => p.img)
+        .slice(0, 10)
+        .map((p) => ({ id: p.id, name: p.name, img: p.img })),
+    }));
+
+    // Showcase (homepage): pevné výchozí pořadí prvních značek; zbytek si
+    // drží řazení podle počtu produktů (stabilní sort). Katalogový filtr
+    // (selectable) zůstává čistě podle počtu.
+    if (selectable) return mapped;
+    const rank = new Map(PRIORITY_KEYS.map((k, i) => [k, i]));
+    return [...mapped].sort(
+      (a, b) => (rank.get(a.key) ?? Infinity) - (rank.get(b.key) ?? Infinity),
+    );
+  }, [catalog, selectable]);
 
   // A brand is "active" when any of its raw manufacturer strings is selected
   // in the filter bar. Toggling adds/removes all of them at once.
