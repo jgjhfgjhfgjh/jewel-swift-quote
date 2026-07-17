@@ -58,7 +58,6 @@ function BrandCard({
   const compact = !!selectable;
   const cardClass = compact ? CARD_CLASS_COMPACT : CARD_CLASS;
   const scale = compact ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110';
-  const imgGap = compact ? 'mt-4 sm:mt-3 lg:mt-3' : 'mt-[30px] sm:mt-10 lg:mt-[60px]';
   const navigate = useNavigate();
   const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
@@ -98,26 +97,8 @@ function BrandCard({
         </div>
       )}
 
-      {/* Brand logo */}
-      <div className={`${compact ? 'h-10 pt-2 px-3' : 'h-14 sm:h-16 pt-1 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
-        {brand.domain ? (
-          <BrandLogo
-            name={brand.name}
-            domain={brand.domain}
-            width={400}
-            height={160}
-            className={`max-h-full object-contain ${
-              dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
-            } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
-            fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
-          />
-        ) : (
-          <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
-        )}
-      </div>
-
-      {/* Crossfading product image — bigger gap below the logo */}
-      <div className={`relative flex-1 mx-4 ${imgGap} mb-2 origin-bottom ${scale}`}>
+      {/* Crossfading product image — hlavní plocha nahoře */}
+      <div className={`relative flex-1 mx-4 mb-4 origin-bottom ${compact ? 'mt-3' : 'mt-6 sm:mt-8'} ${scale}`}>
         {n === 0 && (
           <div className="absolute inset-0 flex items-center justify-center p-2">
             <span className={`font-display text-xl font-black tracking-tight text-center ${dark ? 'text-white/25' : 'text-muted-foreground/30'}`}>
@@ -151,22 +132,25 @@ function BrandCard({
         ))}
       </div>
 
-      {/* Crossfading product name */}
-      <div className={`relative h-5 mx-4 shrink-0 ${compact ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110 group-data-[center]/card:translate-y-2.5'}`}>
-        {brand.products.map((p, i) => (
-          <p
-            key={p.id}
-            aria-hidden={i !== idx}
-            className={`absolute inset-x-0 text-center text-[11px] truncate transition-opacity duration-700 ease-in-out ${
-              dark ? 'text-white/70' : 'text-muted-foreground'
-            } ${i === idx ? 'opacity-100' : 'opacity-0'}`}
-          >
-            {p.name}
-          </p>
-        ))}
+      {/* Brand logo — pod produkty (popisky modelů odstraněny) */}
+      <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
+        {brand.domain ? (
+          <BrandLogo
+            name={brand.name}
+            domain={brand.domain}
+            width={400}
+            height={160}
+            className={`max-h-full object-contain ${
+              dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
+            } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
+            fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
+          />
+        ) : (
+          <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
+        )}
       </div>
 
-      {/* CTA removed — carousel shows only logo, product image, and name */}
+      {/* bottom spacer */}
       <div className={`${compact ? 'p-1.5' : 'p-4'} shrink-0`} />
 
     </div>
