@@ -708,6 +708,57 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
   color: #71717a;
 }
 
+/* Inline search box — sits right after the filter tabs */
+.filter-mega-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  min-width: 200px;
+  flex: 1 1 200px;
+  max-width: 360px;
+  padding: 0 10px 0 12px;
+  background: #fff;
+  border: 1px solid #e4e4e7;
+  border-radius: 9px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+.filter-mega-search:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.filter-mega-search svg {
+  color: #a1a1aa;
+  flex-shrink: 0;
+}
+.filter-mega-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #18181b;
+}
+.filter-mega-search input::placeholder {
+  color: #a1a1aa;
+}
+.filter-mega-search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #a1a1aa;
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.filter-mega-search-clear:hover {
+  color: #18181b;
+}
+
 /* Tab buttons */
 .filter-mega-tab {
   display: inline-flex;

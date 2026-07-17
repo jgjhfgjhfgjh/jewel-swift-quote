@@ -140,7 +140,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
             )}
             {product.inStock && !isOutOfStock && (
               <div className="absolute left-2 top-2 flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse [animation-duration:1.2s]" />
+                <span className="h-3 w-3 rounded-full bg-blue-500 animate-pulse [animation-duration:1.2s]" />
                 <span className="text-[11px] font-semibold text-foreground drop-shadow-sm">
                   {t.inStock}
                 </span>
@@ -204,7 +204,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
         )}
         <button
           type="button"
-          className="self-start text-[10px] font-medium uppercase tracking-wider text-gold cursor-pointer hover:underline focus:outline-none"
+          className="self-start text-[10px] font-medium uppercase tracking-wider text-blue-600 cursor-pointer hover:underline focus:outline-none"
           title={`Zobrazit jen ${product.manufacturer}`}
           onClick={(e) => {
             e.stopPropagation();
@@ -222,7 +222,7 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
         >{product.name}</h3>
 
         {canSeePrices && (
-          <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-destructive'}`}>
+          <p className={`mt-1 text-[10px] font-semibold ${product.stock > 0 ? 'text-blue-600' : 'text-destructive'}`}>
             {product.stock > 0
               ? `${t.stockCount}: ${product.stock >= 20 ? '20+' : product.stock} ${t.pcs}`
               : t.outOfStock}

@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useRef } from 'react';
-import { X, Sliders, RotateCcw, ChevronDown } from 'lucide-react';
+import { X, Sliders, RotateCcw, ChevronDown, Search } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -51,6 +51,7 @@ function ActiveBadge({ count }: { count: number }) {
 export function FilterSidebar({
   manufacturers, categories, selectedBrands, setSelectedBrands,
   selectedCategory, setSelectedCategory,
+  search, setSearch,
   stockOnly, setStockOnly, minDiscount, setMinDiscount,
   selectedGenders, setSelectedGenders,
   selectedParams, setSelectedParams,
@@ -791,6 +792,23 @@ export function FilterSidebar({
             <ChevronDown className="filter-mega-tab-chevron h-3.5 w-3.5" />
           </button>
         ))}
+
+        {/* Vyhledávání — hned vedle „Podrobné vyhledávání", ať je to u sebe */}
+        <div className="filter-mega-search">
+          <Search className="h-3.5 w-3.5" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t.search}
+            aria-label={t.search}
+          />
+          {search && (
+            <button type="button" onClick={() => setSearch('')} aria-label="Vymazat" className="filter-mega-search-clear">
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
 
         <button
           type="button"

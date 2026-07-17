@@ -332,19 +332,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           </nav>
         )}
 
-        {/* Catalog search — desktop, inline v jediném řádku */}
-        {showSearch && (
-          <div className="relative hidden lg:block flex-1 max-w-[480px] ml-4 z-10">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder={t.search}
-              value={search}
-              onChange={(e) => { setSearch(e.target.value); }}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
-          </div>
-        )}
+        {/* Catalog search moved to the filter bar (next to „Podrobné vyhledávání").
+            Desktop search box now lives in FilterSidebar's mega-bar. */}
 
         <div className="flex-1" />
 
