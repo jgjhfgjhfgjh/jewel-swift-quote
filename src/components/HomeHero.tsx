@@ -47,7 +47,7 @@ export function HomeHero() {
   // všech režimech (host / přihlášený / schválený B2B).
 
   return (
-    <div className="mt-6 sm:mt-8 flex flex-col items-center px-6 text-center">
+    <div className="flex flex-col items-center px-6 text-center">
       {isB2bApproved ? (
         /* Approved B2B partners → next-step nudges (catalog CTA lives in AppsCards) */
         <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
@@ -74,8 +74,9 @@ export function HomeHero() {
             )}
           </div>
 
-          {/* 2) Trust texty hned pod CTA (anglicky) */}
-          <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60">
+          {/* 2) Trust texty pod CTA (anglicky) — stejná mezera jako nad CTA,
+              takže pilulka je na svislém středu mezi karuselem a fajfkami */}
+          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-foreground/60 sm:mt-14">
             <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Free registration</li>
             <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> Approval within 24 hours</li>
             <li className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} /> No commitment</li>

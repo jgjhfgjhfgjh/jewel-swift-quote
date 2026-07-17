@@ -151,8 +151,9 @@ const Index = () => {
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-16 sm:pt-24">
                   <BrandShowcaseCarousel />
                 </div>
-                {/* B2B registrace CTA (iOS pilulka) + trust texty */}
-                <div className="pt-12 sm:pt-16">
+                {/* B2B registrace CTA (iOS pilulka) + trust texty; CTA je na
+                    svislém středu mezi karuselem a fajfkami (stejné mezery) */}
+                <div className="pt-10 sm:pt-14">
                   <HomeHero />
                 </div>
               </div>
