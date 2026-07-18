@@ -16,6 +16,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
 import { HeroRotatingText } from '@/components/HeroRotatingText';
@@ -163,14 +164,9 @@ const Index = () => {
               <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-24 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-32 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto max-w-[1000px] text-left">
-                    {/* světle šedý text; hoverem zbělá a barevná část se rozsvítí
-                        do stejného gradientu jako H1 na homepage */}
-                    <p className="group font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-zinc-300 transition-colors duration-300 hover:text-white">
-                      Build your online business and create your freedom{' '}
-                      <span className="bg-clip-text transition-colors duration-300 group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:via-cyan-400 group-hover:to-emerald-400 group-hover:text-transparent">
-                        without spending money on products.
-                      </span>
-                    </p>
+                    {/* spotlight nadpis: tmavě šedý text, kurzor rozsvěcí ~2 slova
+                        v okruhu; barevná věta se rozsvítí celá (viz komponenta) */}
+                    <DropshipHeadline />
                   </div>
                 </div>
               </div>
