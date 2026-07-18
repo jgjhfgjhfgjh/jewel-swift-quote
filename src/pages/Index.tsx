@@ -162,9 +162,12 @@ const Index = () => {
                   dropshippingu (doplníme později) */}
               <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-24 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-32 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
-                  <div className="mx-auto w-fit max-w-full text-left">
-                    <p className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-white">
-                      Ship across all of Europe<br />without holding stock.
+                  <div className="mx-auto max-w-[1000px] text-left">
+                    <p className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-white">
+                      You can build your online business and create your freedom{' '}
+                      <span className="bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">
+                        without spending money on products.
+                      </span>
                     </p>
                   </div>
                 </div>
