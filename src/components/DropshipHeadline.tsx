@@ -99,7 +99,7 @@ export function DropshipHeadline() {
       ref={pRef}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]"
+      className="cursor-pointer select-none font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]"
     >
       {LEAD_WORDS.map((w, i) => (
         <span
