@@ -16,6 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
+import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -612,6 +613,26 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                  bez levého sloupce (heading/desc/CTA) */
               <div className="px-6 py-6">
                 <NavShowcaseCarousel />
+              </div>
+            ) : activeNav === 'katalog' ? (
+              /* Katalog — nahoře jen CTA (cesta do katalogu), textové sloupce
+                 odstraněny; full-size brand carousel u spodního okraje panelu */
+              <div className="px-6 pt-5 pb-4">
+                <button
+                  onClick={() => go(panel.cta.path)}
+                  className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                >
+                  {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+                {/* klik na kartu značky zavře mega menu (ne na šipky karuselu) */}
+                <div
+                  className="mt-5"
+                  onClickCapture={(e) => {
+                    if (!(e.target as HTMLElement).closest('button[aria-label]')) setActiveNav(null);
+                  }}
+                >
+                  <BrandShowcaseCarousel />
+                </div>
               </div>
             ) : (
             <div className="px-6 py-8">
