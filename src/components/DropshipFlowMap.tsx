@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Music2, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Music2, ShoppingCart } from 'lucide-react';
 import { MAP_COUNTRIES, MAP_W, MAP_H, type MapCity } from '@/data/europeMapPaths';
 import { COUNTRY_DOTS } from '@/data/europeDots';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -76,7 +77,7 @@ const SWELT = { x: 70, y: MAP_H - 52 };
 const SPLIT_LIFT = 34;
 
 /* Kroky legendy — pořadí je sám prodejní argument */
-const STEPS = ['Customer orders', 'You get paid', 'We ship', 'You pay us'];
+const STEPS = ['Customer orders', 'You get paid', 'We ship with your brand', 'You pay us'];
 
 /* Assety (Higgsfield): push notifikace kanálů + poster/loop videa partnera */
 const IMG = {
@@ -151,6 +152,7 @@ function GlassAmount({ amount, tone, big, sub }: {
 }
 
 export function DropshipFlowMap() {
+  const navigate = useNavigate();
   const reduced = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     [],
@@ -532,6 +534,14 @@ export function DropshipFlowMap() {
         <p className="mt-5 text-center text-sm text-white/60">
           Customers order and pay you first. swelt ships under your brand — you pay wholesale only from money you already received.
         </p>
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={() => navigate('/dropshipping')}
+            className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-8 text-[15px] font-semibold text-black shadow-lg transition-all hover:bg-zinc-200"
+          >
+            I want to sell without stock <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     );
   }
@@ -733,6 +743,16 @@ export function DropshipFlowMap() {
 
           {stepsList}
         </div>
+      </div>
+
+      {/* CTA pod celou sekcí */}
+      <div className="mt-14 flex justify-center sm:mt-20">
+        <button
+          onClick={() => navigate('/dropshipping')}
+          className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-8 text-[15px] font-semibold text-black shadow-[0_8px_24px_-8px_rgba(255,255,255,0.35)] transition-all hover:bg-zinc-200"
+        >
+          I want to sell without stock <ArrowRight className="h-4 w-4" />
+        </button>
       </div>
 
       <p className="sr-only">
