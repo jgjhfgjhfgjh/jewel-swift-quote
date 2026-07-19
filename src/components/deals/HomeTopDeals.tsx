@@ -67,29 +67,33 @@ export function HomeTopDeals() {
   while (lockedSlots.length < 2) lockedSlots.push(null);
 
   return (
-    // Bílá karta na černé zóně — zaoblené rohy odkrývají černý wrapper
-    // v Index.tsx; hranu kreslí samotný kontrast, stín není potřeba.
-    <section className="relative w-full rounded-t-[1.75rem] bg-white pt-16 pb-16 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-24">
+    // Světle šedá karta na černé zóně — bílé karty uvnitř na ní vyniknou;
+    // zaoblené rohy odkrývají černý wrapper v Index.tsx.
+    <section className="relative w-full rounded-t-[1.75rem] bg-slate-100 pt-16 pb-16 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-24">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
+          {/* šedá slova musí být tmavší než slate-100 pozadí → zinc-500;
+              Insider paywall s cenou je součástí headline (stejný font) */}
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-zinc-900">Catch your deal of the year. </span>
-            <span className="text-zinc-400">
-              Closeout collections straight from the concerns you already know —{' '}
+            <span className="text-zinc-900">Catch your deal of the year and earn more. </span>
+            <span className="text-zinc-500">
+              Closeout collections straight from the concerns you already know{' '}
             </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               reserved in the order received.
             </span>
+            <span className="text-zinc-500"> Insiders see every deal 48 hours early </span>
+            <span className="text-zinc-900">for €18.</span>
           </h2>
         </div>
 
         {/* hero deal + locked karty */}
         <div className="mx-auto mt-10 grid max-w-[1000px] gap-4 sm:mt-14 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
           {loading ? (
-            <div className="min-h-[320px] animate-pulse rounded-2xl bg-slate-100" />
+            <div className="min-h-[320px] animate-pulse rounded-2xl bg-slate-200" />
           ) : hero ? (
             <HeroDealCard deal={hero} count={productCounts[hero.id] ?? 0} />
           ) : (
@@ -115,7 +119,7 @@ export function HomeTopDeals() {
             <button
               type="button"
               onClick={() => openAuthModal('register')}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:border-slate-400 hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:border-slate-400 hover:bg-white"
             >
               <Lock className="h-3.5 w-3.5" />
               {t.home.earlyAccessCta}
@@ -220,7 +224,7 @@ function HeroDealCard({ deal, count }: { deal: Deal; count: number }) {
 /** Fallback hero, když zrovna neběží žádný deal — sekce žije dál. */
 function EmptyHeroCard() {
   return (
-    <div className="flex min-h-[280px] flex-col justify-center rounded-2xl border border-slate-200 bg-slate-50 p-8">
+    <div className="flex min-h-[280px] flex-col justify-center rounded-2xl border border-slate-200 bg-white p-8">
       <h3 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
         {t.home.emptyHeroTitle}
       </h3>
@@ -240,7 +244,7 @@ function EmptyHeroCard() {
 function LockedDealCard({ deal }: { deal: Deal }) {
   const concern = getConcernForDeal(deal);
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-5">
+    <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
           <Lock className="h-3 w-3" />
@@ -275,7 +279,7 @@ function LockedDealCard({ deal }: { deal: Deal }) {
 /** Placeholder locked slot — žádný naplánovaný drop, ale FOMO zůstává. */
 function LockedPlaceholderCard() {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-slate-50/60 p-5">
+    <div className="flex flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white/70 p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
           <Lock className="h-3 w-3" />
