@@ -162,7 +162,7 @@ const Index = () => {
               {/* tmavá karta — spotlight headline + interaktivní schéma
                   dropshippingu (DropshipFlowMap): bílo-šedá mapa Evropy,
                   gradientové pohyby objednávek, expanze trhů a kasička zisku */}
-              <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-24 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-32 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
+              <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-32 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-44 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto max-w-[1000px] text-left">
                     {/* spotlight nadpis: tmavě šedý text, kurzor rozsvěcí ~2 slova
