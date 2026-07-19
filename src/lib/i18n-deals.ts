@@ -78,6 +78,7 @@ export interface DealsText {
     heroCta: string;
     browseCta: string;
     earlyAccessCta: string;
+    earlyAccessOwned: string;
     lockedTitle: string;
     lockedNote: string;
     unlocksIn: string;
@@ -198,11 +199,12 @@ const cs: DealsText = {
   home: {
     badge: 'Top DEAL nabídky',
     sub: 'Closeout kolekce přímo od koncernů, které už znáte — Swatch Group, Fossil Group a další. Slevy až 68 %, kusy se rezervují dle pořadí objednávek.',
-    insiderLine: 'Deal Insider vidí každou nabídku o 48 hodin dříve. Registrovaní partneři v den startu — registrace je zdarma.',
+    insiderLine: 'Insider vidí každý deal o 48 hodin dříve za 18 €.',
     liveLabel: 'Právě běží',
     heroCta: 'Otevřít deal',
     browseCta: 'Prozkoumat dealy',
     earlyAccessCta: 'Chci přístup o 48 h dříve za 18 €',
+    earlyAccessOwned: 'Máte přístup o 48 h dříve',
     lockedTitle: 'Připravujeme další deal',
     lockedNote: 'Insider ho uvidí o 48 hodin dříve.',
     unlocksIn: 'Odemkne se za',
@@ -323,11 +325,12 @@ const en: DealsText = {
   home: {
     badge: 'Top DEAL offers',
     sub: 'Closeout collections straight from the concerns you already know — Swatch Group, Fossil Group and more. Up to 68% off, reserved in the order received.',
-    insiderLine: 'Deal Insiders see every offer 48 hours early. Registered partners on launch day — registration is free.',
+    insiderLine: 'Insiders see every deal 48 hours early for €18.',
     liveLabel: 'Live now',
     heroCta: 'Open the deal',
     browseCta: 'Explore deals',
     earlyAccessCta: 'Get 48h early access for €18',
+    earlyAccessOwned: 'You have 48h early access',
     lockedTitle: 'Next deal in the works',
     lockedNote: 'Insiders see it 48 hours early.',
     unlocksIn: 'Unlocks in',

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, Check, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { dealsI18n } from '@/lib/i18n-deals';
@@ -39,7 +39,12 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
 
 export function HomeTopDeals() {
   const openAuthModal = useStore((s) => s.openAuthModal);
+  const navigate = useNavigate();
   const { user } = useAuthContext();
+  // Insider stav — platební backend zatím neexistuje, takže ho nikdo nemá.
+  // Až vznikne (např. profiles.insider_until), napojí se sem; UI obou stavů
+  // je hotové: bez Insideru nákupní CTA, s Insiderem potvrzení přístupu.
+  const isInsider = false;
   const { deals, productCounts, loading } = useDeals();
 
   // Hero = běžící deal s nejbližší uzávěrkou (největší tlak na rozhodnutí).
@@ -80,13 +85,12 @@ export function HomeTopDeals() {
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
             <span className="text-zinc-900">Catch your deal of the year and earn more. </span>
             <span className="text-zinc-500">
-              Closeout collections straight from the concerns you already know{' '}
+              Closeout collections straight from the concerns. Buy goods at an even bigger
+              wholesale discount{' '}
             </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               reserved in the order received.
             </span>
-            <span className="text-zinc-500"> Insiders see every deal 48 hours early </span>
-            <span className="text-zinc-900">for €18.</span>
           </h2>
         </div>
 
@@ -106,8 +110,16 @@ export function HomeTopDeals() {
           </div>
         </div>
 
-        {/* CTA řada */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:mt-12">
+        {/* Insider paywall — věta s cenou těsně nad CTA, stejná typografie
+            jako headline, jen menší */}
+        <p className="mt-10 text-center font-sans font-extralight tracking-tight text-xl sm:mt-14 sm:text-2xl">
+          <span className="text-zinc-500">Insiders see every deal 48 hours early </span>
+          <span className="text-zinc-900">for €18.</span>
+        </p>
+        {/* CTA řada — early access je viditelný pro všechny; nepřihlášeného
+            pošle do registrace, přihlášeného zatím na /deals (Insider
+            platební flow ještě neexistuje) */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-3 sm:mt-6">
           <Link
             to="/deals"
             className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-zinc-800"
@@ -115,10 +127,15 @@ export function HomeTopDeals() {
             {t.home.browseCta}
             <ArrowRight className="h-4 w-4" />
           </Link>
-          {!user && (
+          {isInsider ? (
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-700">
+              <Check className="h-4 w-4" />
+              {t.home.earlyAccessOwned}
+            </span>
+          ) : (
             <button
               type="button"
-              onClick={() => openAuthModal('register')}
+              onClick={() => (user ? navigate('/deals') : openAuthModal('register'))}
               className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:border-slate-400 hover:bg-white"
             >
               <Lock className="h-3.5 w-3.5" />
