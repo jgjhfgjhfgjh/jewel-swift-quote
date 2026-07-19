@@ -69,7 +69,7 @@ export function HomeHero() {
                 className="h-12 w-full gap-2 rounded-full bg-black px-8 text-[15px] font-semibold text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.45)] transition-all hover:bg-zinc-800"
                 onClick={handleB2BCta}
               >
-                {user ? 'Dokonči B2B registraci' : 'B2B registrace'} <ArrowRight className="h-4 w-4" />
+                {user ? 'Complete B2B registration' : 'B2B registration'} <ArrowRight className="h-4 w-4" />
               </Button>
             )}
           </div>
