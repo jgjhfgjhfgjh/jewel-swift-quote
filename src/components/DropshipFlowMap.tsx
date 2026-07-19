@@ -8,11 +8,11 @@ import { BrandLogo } from '@/components/BrandLogo';
    Hlavní prodejní logika = pořadí peněz: partner NIKDY neplatí dřív,
    než sám dostane zaplaceno („without spending money on products").
 
-   Rozmístění: na mapě je jen bod „Your shop" + objednávky; účetnictví
-   partnera žije v KLONU „Your shop" mimo pevninu vlevo nahoře (Profit,
-   poslední marže, Stock invested: €0) a chip swelt je vlevo dole.
-   Legenda kroků je NAD mapou — mapa díky tomu může být větší a celé
-   schéma se vejde na jednu obrazovku.
+   Rozmístění: na mapě je jen bod „Your shop" + objednávky; chip swelt
+   stojí VLEVO vedle mapy a KLON „Your shop" (účetnictví partnera:
+   Profit, poslední marže, Stock invested: €0) VPRAVO vedle mapy, obě
+   na vertikálním středu. Legenda kroků je NAD mapou — mapa díky tomu
+   může být větší a celé schéma se vejde na jednu obrazovku.
 
    Cyklus objednávky (~12 s; lety pomalé, přechody svižné):
    1. Customer orders — point „New order" + gradientový oblouk do shopu.
@@ -29,9 +29,9 @@ import { BrandLogo } from '@/components/BrandLogo';
    countries", zvýrazněná „First order from …"). Po celé mapě se schéma
    ztlumí, Your shop se přesune (nový partner), Profit se vynuluje.
 
-   Engine: virtuální hodiny krokované přes rAF — hover zpomalí na 0.15×
-   (a ukáže popisky), mimo viewport se nehýbe. Mobil bez letu brand
-   loga (platby zůstávají — jsou jádrem argumentu).
+   Engine: virtuální hodiny krokované přes rAF; mimo viewport se nehýbe.
+   Mobil bez letu brand loga (platby zůstávají — jsou jádrem argumentu).
+   Hover interakce zrušena na přání zadavatele.
 
    POZOR na layout: SVG a HTML overlay MUSÍ být ve společném relative
    wrapperu bez dalšího IN-FLOW obsahu — % souřadnice overlay se
@@ -77,10 +77,14 @@ const NEIGHBORS: Record<string, string[]> = {
   GR: ['BG'],
 };
 
-/* Stanice mimo pevninu (SVG souřadnice): klon Your shop vlevo nahoře
-   (účetnictví partnera), chip swelt vlevo dole */
-const SHOP_HQ = { x: 82, y: 96 };
-const SWELT = { x: 70, y: MAP_H - 52 };
+/* Stanice (SVG souřadnice; smí přesahovat plátno — overlay je HTML):
+   desktop = chip swelt VLEVO vedle mapy a klon Your shop VPRAVO vedle
+   mapy, obě na vertikálním středu. Mobil je má uvnitř plátna nad/pod
+   pevninou, aby nepřetekly displej (root má na sm+ boční rezervu). */
+const SWELT_DESKTOP = { x: -52, y: MAP_H / 2 };
+const SHOP_HQ_DESKTOP = { x: MAP_W + 52, y: MAP_H / 2 };
+const SWELT_MOBILE = { x: 70, y: MAP_H - 52 };
+const SHOP_HQ_MOBILE = { x: 82, y: 96 };
 /* Parkovací pozice bankovky nad bodem Your shop (SVG jednotky) */
 const SPLIT_LIFT = 34;
 
@@ -136,10 +140,9 @@ export function DropshipFlowMap() {
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches,
     [],
   );
-  const canHover = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches,
-    [],
-  );
+  /* stanice po stranách mapy (desktop) / uvnitř plátna (mobil) */
+  const SWELT = mobile ? SWELT_MOBILE : SWELT_DESKTOP;
+  const SHOP_HQ = mobile ? SHOP_HQ_MOBILE : SHOP_HQ_DESKTOP;
 
   /* ── stav vykreslování ── */
   const [, setFrame] = useState(0);
@@ -152,12 +155,9 @@ export function DropshipFlowMap() {
   const [profitCents, setProfitCents] = useState(0);
   const [drops, setDrops] = useState<{ id: number; text: string }[]>([]);
   const [dimmed, setDimmed] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   /* ── engine: virtuální hodiny + letové objekty (refs, ne state) ── */
   const vtRef = useRef(0);
-  /* 1 = plné tempo; hover zpomalí na 0.15 (ne úplný freeze — působil rozbitě) */
-  const speedRef = useRef(1);
   const visibleRef = useRef(true);
   const aliveRef = useRef(true);
   const flightsRef = useRef<Flight[]>([]);
@@ -185,7 +185,7 @@ export function DropshipFlowMap() {
       const dt = Math.min(now - last, 100);
       last = now;
       if (visibleRef.current) {
-        vtRef.current += dt * speedRef.current;
+        vtRef.current += dt;
         const vt = vtRef.current;
         const ready = waitersRef.current.filter((w) => w.t <= vt);
         if (ready.length) {
@@ -354,11 +354,8 @@ export function DropshipFlowMap() {
       waitersRef.current = [];
       pending.forEach((w) => w.res(false));
     };
-  }, [reduced, mobile]);
-
-  /* hover = výrazné zpomalení + popisky kroků (jen zařízení s hoverem) */
-  const onEnter = () => { if (canHover) { speedRef.current = 0.15; setHovered(true); } };
-  const onLeave = () => { if (canHover) { speedRef.current = 1; setHovered(false); } };
+    /* SWELT/SHOP_HQ jsou stabilní modulové konstanty vybrané podle mobile */
+  }, [reduced, mobile, SWELT, SHOP_HQ]);
 
   const px = (x: number) => `${(x / MAP_W) * 100}%`;
   const py = (y: number) => `${(y / MAP_H) * 100}%`;
@@ -451,10 +448,9 @@ export function DropshipFlowMap() {
   return (
     <div
       ref={rootRef}
-      /* šířka omezená i výškou viewportu, ať se schéma vejde na jednu obrazovku */
-      className="relative mx-auto w-[min(100%,880px,88vh)] select-none"
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
+      /* šířka omezená i výškou viewportu (jedna obrazovka); na sm+ boční
+         rezerva ~110 px na každé straně pro stanice vedle mapy */
+      className="relative mx-auto w-[min(100%,880px,88vh)] select-none sm:w-[min(100%_-_220px,880px,88vh)]"
       style={{ opacity: dimmed ? 0.12 : 1, transition: 'opacity 0.9s ease' }}
     >
       <style>{`
@@ -513,13 +509,14 @@ export function DropshipFlowMap() {
         {/* ── HTML overlay: kotva každého bodu = jeho TEČKA; popisky visí
               pod ní a kotvu neposouvají ── */}
         <div className="pointer-events-none absolute inset-0 text-[11px] sm:text-xs">
-          {/* klon Your shop — účetnictví partnera mimo pevninu vlevo nahoře */}
+          {/* klon Your shop — účetnictví partnera vedle mapy; kotva letů
+              = pilulka, zbytek stacku visí pod ní (dropy s ní nehýbou) */}
           <div className="absolute" style={{ left: px(SHOP_HQ.x), top: py(SHOP_HQ.y) }}>
-            <div className="absolute -translate-x-1/2 -translate-y-1/2">
+            <span className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 font-bold tracking-tight text-zinc-900 shadow-lg">
+              Your shop
+            </span>
+            <div className="absolute top-4 -translate-x-1/2">
               <div className="flex flex-col items-center gap-1">
-                <span className="whitespace-nowrap rounded-full bg-white px-3 py-1 font-bold tracking-tight text-zinc-900 shadow-lg">
-                  Your shop
-                </span>
                 <span className="whitespace-nowrap rounded-full bg-zinc-900/85 px-2.5 py-0.5 font-bold text-white shadow-lg">
                   Profit{' '}
                   <span key={profitCents} className="ds-bounce tabular-nums text-emerald-400">{eur(profitCents)}</span>
@@ -532,11 +529,6 @@ export function DropshipFlowMap() {
                 <span className="whitespace-nowrap rounded-full bg-zinc-900/75 px-2 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur-sm">
                   Stock invested: €0
                 </span>
-                {hovered && (
-                  <span className="whitespace-nowrap rounded-md bg-zinc-900/90 px-2 py-0.5 text-[10px] font-medium text-white/85">
-                    You keep the margin
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -546,11 +538,6 @@ export function DropshipFlowMap() {
             <span className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 font-bold tracking-tight text-zinc-900 shadow-lg">
               swelt
             </span>
-            {hovered && (
-              <span className="absolute top-4 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900/90 px-2 py-0.5 text-[10px] font-medium text-white/85">
-                We pack &amp; ship under your brand
-              </span>
-            )}
           </div>
 
           {/* bod Your shop na mapě — tečka na souřadnici, label pod ní */}
@@ -586,11 +573,6 @@ export function DropshipFlowMap() {
                   }`}>
                     {order.first ? `First order from ${order.countryName}` : 'New order'}
                   </span>
-                  {hovered && (
-                    <span className="whitespace-nowrap rounded-md bg-zinc-900/90 px-2 py-0.5 text-[10px] font-medium text-white/85">
-                      Customer orders — {order.product.brand} €{order.product.price}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
