@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
+import { sortByBrandPriority } from '@/lib/brandOrder';
 
 interface BrandCardData {
   key: string;
@@ -39,9 +40,6 @@ const CARD_CLASS_COMPACT =
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
-/** Showcase (homepage) výchozí pořadí prvních značek — canonical UPPERCASE
- *  klíče (viz toBrandKey). Zbytek značek následuje v pořadí podle počtu. */
-const PRIORITY_KEYS = ['SWAROVSKI', 'TOMMY HILFIGER', 'PANDORA', 'GUESS', 'TISSOT'];
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({
@@ -184,11 +182,7 @@ export function BrandShowcaseCarousel({
     // Showcase (homepage): pevné výchozí pořadí prvních značek; zbytek si
     // drží řazení podle počtu produktů (stabilní sort). Katalogový filtr
     // (selectable) zůstává čistě podle počtu.
-    if (selectable) return mapped;
-    const rank = new Map(PRIORITY_KEYS.map((k, i) => [k, i]));
-    return [...mapped].sort(
-      (a, b) => (rank.get(a.key) ?? Infinity) - (rank.get(b.key) ?? Infinity),
-    );
+    return selectable ? mapped : sortByBrandPriority(mapped);
   }, [catalog, selectable]);
 
   // A brand is "active" when any of its raw manufacturer strings is selected

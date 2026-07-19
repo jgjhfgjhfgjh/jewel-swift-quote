@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
+import { sortByBrandPriority } from '@/lib/brandOrder';
 
 type Brand = { name: string; domain?: string; slug: string };
 type Preview = { brand: Brand; left: number; top: number; width: number };
@@ -19,8 +20,11 @@ export function BrandLogoRow() {
 
   // Live brand catalog (bound to the feed) — every brand in the catalog shows
   // up here automatically; brands without a logo domain render as text.
+  // Pořadí je stejné jako u showcase karuselu (prioritní značky první).
   const { data: catalog = [] } = useBrandCatalog();
-  const brands: Brand[] = catalog.map((e) => ({ name: e.name, domain: e.domain, slug: e.slug }));
+  const brands: Brand[] = sortByBrandPriority(catalog).map((e) => ({
+    name: e.name, domain: e.domain, slug: e.slug,
+  }));
 
   const [preview, setPreview] = useState<Preview | null>(null);
   const dwellRef = useRef<ReturnType<typeof setTimeout> | null>(null);

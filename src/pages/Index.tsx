@@ -162,7 +162,7 @@ const Index = () => {
               {/* tmavá karta — spotlight headline + interaktivní schéma
                   dropshippingu (DropshipFlowMap): bílo-šedá mapa Evropy,
                   gradientové pohyby objednávek, expanze trhů a kasička zisku */}
-              <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-32 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-44 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
+              <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-16 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-24 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto max-w-[1000px] text-left">
                     {/* spotlight nadpis: tmavě šedý text, kurzor rozsvěcí ~2 slova
@@ -178,7 +178,7 @@ const Index = () => {
                   gradient se ze šedé (#4b4b57, navazuje na spodek dropship karty)
                   postupně obrací zpět do černé. Na tomto podkladu „pluje" bílá
                   karta na velikost obrazovky se stínem (zatím placeholder). */}
-              <div className="w-full py-16 sm:py-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]">
+              <div className="w-full pt-8 pb-16 sm:pt-12 sm:pb-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="relative overflow-hidden rounded-[1.75rem] bg-white shadow-[0_40px_120px_-24px_rgba(0,0,0,0.75)] ring-1 ring-white/10 min-h-[82svh] sm:min-h-[85svh] sm:rounded-[2.5rem]">
                     <div className="grid h-full min-h-[inherit] grid-cols-1 gap-10 p-8 sm:p-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-20">
@@ -194,9 +194,9 @@ const Index = () => {
                           ))}
                         </div>
                         <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
-                          Nadpis této karty
+                          Connect swelt to
                           <br />
-                          doplníme později
+                          your AI workflow
                         </h2>
                         <div className="mt-6 max-w-md space-y-3">
                           <div className="h-3 w-full rounded-full bg-zinc-100" />
