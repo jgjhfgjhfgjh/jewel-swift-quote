@@ -143,10 +143,10 @@ function GlassAmount({ amount, tone, big, sub }: {
     >
       {/* horní odlesk skla */}
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/25 to-transparent" />
-      <span className={`relative font-bold tabular-nums ${big ? 'text-sm' : 'text-xs'} ${tone === 'emerald' ? 'text-emerald-100' : 'text-white'}`}>
+      <span className={`relative whitespace-nowrap font-bold tabular-nums ${big ? 'text-sm' : 'text-xs'} ${tone === 'emerald' ? 'text-emerald-100' : 'text-white'}`}>
         {amount}
       </span>
-      {sub && <span className="relative text-[8px] font-medium leading-tight text-white/60">{sub}</span>}
+      {sub && <span className="relative whitespace-nowrap text-[8px] font-medium leading-tight text-white/60">{sub}</span>}
     </span>
   );
 }
