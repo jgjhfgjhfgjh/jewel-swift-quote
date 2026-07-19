@@ -16,7 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
-import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { BrandLogoRow } from '@/components/BrandLogoRow';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -616,22 +616,30 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               </div>
             ) : activeNav === 'katalog' ? (
               /* Katalog — nahoře jen CTA (cesta do katalogu), textové sloupce
-                 odstraněny; full-size brand carousel u spodního okraje panelu */
-              <div className="px-6 pt-5 pb-4">
+                 odstraněny; shelf „Všechny značky" v plné velikosti u spodního
+                 okraje panelu */
+              <div className="px-6 pt-5 pb-6 flex flex-col min-h-[clamp(320px,30vw,412px)]">
                 <button
                   onClick={() => go(panel.cta.path)}
-                  className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                  className="self-start inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
                 >
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
-                {/* klik na kartu značky zavře mega menu (ne na šipky karuselu) */}
+                {/* shelf u spodního okraje: -mx-6 vyruší padding panelu (shelf má
+                    vlastní), vnitřní -mt vyruší jeho vestavěný horní margin; klik
+                    na kartu / „Vidět víc" zavře mega menu (ne na scroll šipky) */}
                 <div
-                  className="mt-5"
+                  className="mt-auto -mx-6"
                   onClickCapture={(e) => {
-                    if (!(e.target as HTMLElement).closest('button[aria-label]')) setActiveNav(null);
+                    const t = e.target as HTMLElement;
+                    if (!t.closest('button[aria-label="Předchozí"], button[aria-label="Další"]')) {
+                      setActiveNav(null);
+                    }
                   }}
                 >
-                  <BrandShowcaseCarousel />
+                  <div className="-mt-12 sm:-mt-16">
+                    <BrandLogoRow />
+                  </div>
                 </div>
               </div>
             ) : (
