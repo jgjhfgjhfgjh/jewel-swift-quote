@@ -174,13 +174,61 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-              {/* fade pod tmavou kartou — smoothstep easing z koncové šedé do bílé */}
+              {/* pokračování tmavé zóny — černé pozadí se rozšiřuje dolů a
+                  gradient se ze šedé (#4b4b57, navazuje na spodek dropship karty)
+                  postupně obrací zpět do černé. Na tomto podkladu „pluje" bílá
+                  karta na velikost obrazovky se stínem (zatím placeholder). */}
+              <div className="w-full py-16 sm:py-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]">
+                <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
+                  <div className="relative overflow-hidden rounded-[1.75rem] bg-white shadow-[0_40px_120px_-24px_rgba(0,0,0,0.75)] ring-1 ring-white/10 min-h-[82svh] sm:min-h-[85svh] sm:rounded-[2.5rem]">
+                    <div className="grid h-full min-h-[inherit] grid-cols-1 gap-10 p-8 sm:p-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-20">
+                      {/* levý sloupec — copy (placeholder) */}
+                      <div className="flex flex-col justify-center">
+                        {/* trojice kruhových placeholderů (jako loga platforem) */}
+                        <div className="mb-8 flex items-center -space-x-3">
+                          {[0, 1, 2].map((i) => (
+                            <div
+                              key={i}
+                              className="h-11 w-11 rounded-full bg-zinc-100 ring-4 ring-white"
+                            />
+                          ))}
+                        </div>
+                        <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
+                          Nadpis této karty
+                          <br />
+                          doplníme později
+                        </h2>
+                        <div className="mt-6 max-w-md space-y-3">
+                          <div className="h-3 w-full rounded-full bg-zinc-100" />
+                          <div className="h-3 w-[85%] rounded-full bg-zinc-100" />
+                          <div className="h-3 w-[70%] rounded-full bg-zinc-100" />
+                        </div>
+                        <span className="mt-8 inline-block w-fit text-sm font-medium text-zinc-400 underline underline-offset-4">
+                          Odkaz (placeholder)
+                        </span>
+                      </div>
+                      {/* pravý sloupec — vizuál (placeholder) */}
+                      <div className="relative min-h-[280px] overflow-hidden rounded-[1.25rem] bg-zinc-50 ring-1 ring-zinc-100 sm:rounded-[1.75rem]">
+                        {/* rozházené dlaždice — náznak budoucí kompozice */}
+                        <div className="absolute left-[8%] top-[12%] h-24 w-24 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-28" />
+                        <div className="absolute right-[14%] top-[8%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
+                        <div className="absolute bottom-[14%] left-[16%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
+                        <div className="absolute bottom-[10%] right-[10%] h-24 w-32 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-40" />
+                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium uppercase tracking-wider text-zinc-300">
+                          Vizuál
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* fade pod tmavou zónou — smoothstep easing z černé do bílé */}
               <div
                 aria-hidden
                 className="h-24 w-full sm:h-36"
                 style={{
                   background:
-                    'linear-gradient(to bottom, #4b4b57 0%, rgba(75,75,87,0.972) 10%, rgba(75,75,87,0.896) 20%, rgba(75,75,87,0.784) 30%, rgba(75,75,87,0.648) 40%, rgba(75,75,87,0.5) 50%, rgba(75,75,87,0.352) 60%, rgba(75,75,87,0.216) 70%, rgba(75,75,87,0.104) 80%, rgba(75,75,87,0.028) 90%, rgba(75,75,87,0) 100%)',
+                    'linear-gradient(to bottom, #0d0d10 0%, rgba(13,13,16,0.972) 10%, rgba(13,13,16,0.896) 20%, rgba(13,13,16,0.784) 30%, rgba(13,13,16,0.648) 40%, rgba(13,13,16,0.5) 50%, rgba(13,13,16,0.352) 60%, rgba(13,13,16,0.216) 70%, rgba(13,13,16,0.104) 80%, rgba(13,13,16,0.028) 90%, rgba(13,13,16,0) 100%)',
                 }}
               />
             </section>
