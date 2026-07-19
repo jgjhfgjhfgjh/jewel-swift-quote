@@ -113,8 +113,8 @@ export function HomeTopDeals() {
         {/* Insider paywall — věta s cenou těsně nad CTA, stejná typografie
             jako headline, jen menší */}
         <p className="mt-10 text-center font-sans font-extralight tracking-tight text-xl sm:mt-14 sm:text-2xl">
-          <span className="text-zinc-500">Insiders see every deal 48 hours early </span>
-          <span className="text-zinc-900">for €18.</span>
+          <span className="text-zinc-500">Insiders see every deal </span>
+          <span className="text-zinc-900">48 hours early.</span>
         </p>
         {/* CTA řada — early access je viditelný pro všechny; nepřihlášeného
             pošle do registrace, přihlášeného zatím na /deals (Insider

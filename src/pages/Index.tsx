@@ -197,7 +197,7 @@ const Index = () => {
                         <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
                           Connect swelt to
                           <br />
-                          your AI workflow
+                          your AI agents
                         </h2>
                         <div className="mt-6 max-w-md space-y-3">
                           <div className="h-3 w-full rounded-full bg-zinc-100" />
