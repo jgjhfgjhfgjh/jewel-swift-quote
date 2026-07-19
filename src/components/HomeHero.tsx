@@ -16,12 +16,12 @@ function ApprovalCountdown({ requestedAt }: { requestedAt: string }) {
   }, []);
 
   const left = Math.max(0, deadline - now);
-  if (left === 0) return <>Schvalování probíhá…</>;
+  if (left === 0) return <>Approval in progress…</>;
   const pad = (n: number) => String(n).padStart(2, '0');
   const h = Math.floor(left / 3_600_000);
   const m = Math.floor(left / 60_000) % 60;
   const s = Math.floor(left / 1_000) % 60;
-  return <>Schválení za <span className="tabular-nums">{pad(h)}:{pad(m)}:{pad(s)}</span></>;
+  return <>Approval in <span className="tabular-nums">{pad(h)}:{pad(m)}:{pad(s)}</span></>;
 }
 
 /** Full homepage hero — logo, tagline, CTAs, bullets. Sits between the banner and the apps cards. */

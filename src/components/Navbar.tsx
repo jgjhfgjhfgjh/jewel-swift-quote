@@ -255,6 +255,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
   useEffect(() => { if (hidden) setActiveNav(null); }, [hidden]);
 
+  // Zavři mega menu po jakékoli navigaci — pokrývá i odkazy uvnitř panelu
+  // (karty značek / „Vidět víc"), které si routují samy.
+  useEffect(() => { setActiveNav(null); }, [location.pathname]);
+
   const handleNavEnter = (path: string) => {
     if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
     setActiveNav(path);
@@ -551,7 +555,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   onClick={() => openAuth('b2b')}
                   className="h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all shrink-0"
                 >
-                  B2B registrace
+                  B2B registration
                 </Button>
                 <span className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
                   Verify Account in 24h
@@ -626,17 +630,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
                 {/* shelf u spodního okraje: -mx-6 vyruší padding panelu (shelf má
-                    vlastní), vnitřní -mt vyruší jeho vestavěný horní margin; klik
-                    na kartu / „Vidět víc" zavře mega menu (ne na scroll šipky) */}
-                <div
-                  className="mt-auto -mx-6"
-                  onClickCapture={(e) => {
-                    const t = e.target as HTMLElement;
-                    if (!t.closest('button[aria-label="Předchozí"], button[aria-label="Další"]')) {
-                      setActiveNav(null);
-                    }
-                  }}
-                >
+                    vlastní), vnitřní -mt vyruší jeho vestavěný horní margin.
+                    Menu se zavírá efektem na změnu routy (viz výše) — ne klikem,
+                    aby se nepřebila navigace odkazů uvnitř shelfu. */}
+                <div className="mt-auto -mx-6">
                   <div className="-mt-12 sm:-mt-16">
                     <BrandLogoRow />
                   </div>
