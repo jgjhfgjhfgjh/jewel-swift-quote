@@ -441,29 +441,31 @@ export function DropshipFlowMap() {
     [activeKey, launching, dotPaths],
   );
 
-  /* Legenda kroků — nad celou sekcí */
+  /* Seznam kroků — vpravo pod headline (font nadpisu, zelené číslo,
+     bílý text, linky mezi řádky); aktivní krok svítí gradientem stejně
+     jako dřív. Zarovnaný do sloupce videa přes stejný grid. */
+  const gradText = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
   const legend = (
-    <div className="mb-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:mb-7 sm:text-xs">
-      {STEPS.map((label, i) => {
-        const on = step === i + 1;
-        return (
-          <span key={label} className="flex items-center gap-1.5 transition-opacity duration-300"
-            style={{ opacity: on ? 1 : 0.4 }}>
-            <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold sm:h-[18px] sm:w-[18px] sm:text-[10px] ${
-              on
-                ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 text-zinc-950'
-                : 'bg-white/15 text-white/70'
-            }`}>
-              {i + 1}
-            </span>
-            <span className={on
-              ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text font-semibold text-transparent'
-              : 'font-medium text-white/60'}>
-              {label}
-            </span>
-          </span>
-        );
-      })}
+    <div className="grid sm:grid-cols-[1.12fr_1fr] sm:gap-8">
+      <div className="hidden sm:block" />
+      <div>
+        {STEPS.map((label, i) => {
+          const on = step === i + 1;
+          return (
+            <div key={label}>
+              <div className="flex items-baseline gap-4 py-2 sm:gap-6 sm:py-2.5">
+                <span className={`text-xs font-semibold tabular-nums sm:text-sm ${on ? gradText : 'text-emerald-400'}`}>
+                  0{i + 1}
+                </span>
+                <span className={`font-sans text-xl font-extralight leading-tight tracking-tight transition-colors duration-300 sm:text-2xl lg:text-[1.75rem] ${on ? gradText : 'text-white'}`}>
+                  {label}
+                </span>
+              </div>
+              {i < STEPS.length - 1 && <div aria-hidden className="h-px w-full bg-white/15" />}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 
@@ -473,7 +475,7 @@ export function DropshipFlowMap() {
   const earningsCard = (
     <div
       ref={cardRef}
-      className="absolute -top-8 right-0 z-10 w-52 rounded-2xl bg-white p-3.5 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.65)] sm:-right-7 sm:-top-10 sm:w-60 sm:p-4"
+      className="absolute -top-12 right-0 z-10 w-52 rounded-2xl bg-white p-3.5 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.65)] sm:-right-7 sm:-top-16 sm:w-60 sm:p-4"
     >
       <div className="text-[13px] font-bold tracking-tight text-zinc-900 sm:text-sm">Daily earnings</div>
       <div className="text-[10px] text-zinc-400">All platforms · updated live</div>
@@ -569,7 +571,8 @@ export function DropshipFlowMap() {
 
       {legend}
 
-      <div className="grid items-center gap-12 sm:grid-cols-[1.12fr_1fr] sm:gap-8">
+      {/* posunuto níž — nahoře vzniká prostor pro seznam kroků */}
+      <div className="mt-12 grid items-center gap-12 sm:mt-20 sm:grid-cols-[1.12fr_1fr] sm:gap-8">
         {/* ── VLEVO: noční mapa (SVG + overlay sdílí čistý wrapper) ── */}
         <div className="relative">
           <div className="pointer-events-none absolute right-0 top-0 z-10 rounded-full bg-zinc-900/70 px-3 py-1 text-[11px] font-semibold text-white/85 backdrop-blur-sm sm:text-xs">

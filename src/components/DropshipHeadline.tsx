@@ -17,6 +17,13 @@ const DIM = 'text-zinc-600';
 const GRADIENT =
   'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
 
+/* Auto-cyklus (i bez hoveru, po 2 s) rozsvěcí fráze ze šedé do BÍLÉ:
+   0 = „online business" → 1 = barevná věta → 2 = „create your freedom".
+   Do gradientu se text barví výhradně hoverem. */
+const AUTO_ONLINE_BUSINESS = [2, 3];
+const AUTO_CREATE_FREEDOM = [5, 6, 7];
+const AUTO_INTERVAL_MS = 2000;
+
 export function DropshipHeadline() {
   const pRef = useRef<HTMLParagraphElement | null>(null);
   const wordRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -33,6 +40,17 @@ export function DropshipHeadline() {
 
   const [litWords, setLitWords] = useState<Set<number>>(() => new Set());
   const [coloredOn, setColoredOn] = useState(false);
+  /* 0 = „online business" · 1 = barevná věta · 2 = „create your freedom" */
+  const [autoPhase, setAutoPhase] = useState(0);
+
+  /* Auto-cyklus frází (jen desktop se spotlightem; dotyk má plnou verzi
+     a uživatelé s vypnutými animacemi klidný text) */
+  useEffect(() => {
+    if (!interactive) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setAutoPhase((p) => (p + 1) % 3), AUTO_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [interactive]);
 
   // Vodorovný radius ≈ 3,3× velikost fontu → slovo pod kurzorem + jedno sousední.
   useEffect(() => {
@@ -88,10 +106,15 @@ export function DropshipHeadline() {
     setColoredOn(false);
   };
 
+  const autoLit = (i: number) =>
+    (autoPhase === 0 && AUTO_ONLINE_BUSINESS.includes(i)) ||
+    (autoPhase === 2 && AUTO_CREATE_FREEDOM.includes(i));
+
   const wordClass = (i: number) =>
-    `transition-colors duration-200 ${!interactive || litWords.has(i) ? 'text-white' : DIM}`;
-  const coloredClass = `transition-colors duration-200 ${
-    !interactive || coloredOn ? GRADIENT : DIM
+    `transition-colors duration-500 ${!interactive || litWords.has(i) || autoLit(i) ? 'text-white' : DIM}`;
+  /* hover = gradient; auto-cyklus rozsvěcí větu jen do bílé */
+  const coloredClass = `transition-colors duration-500 ${
+    !interactive || coloredOn ? GRADIENT : autoPhase === 1 ? 'text-white' : DIM
   }`;
 
   return (
