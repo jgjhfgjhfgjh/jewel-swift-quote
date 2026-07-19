@@ -18,6 +18,7 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
+import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
 import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
 import { HeroRotatingText } from '@/components/HeroRotatingText';
@@ -222,15 +223,14 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-              {/* fade pod tmavou zónou — smoothstep easing z černé do bílé */}
-              <div
-                aria-hidden
-                className="h-24 w-full sm:h-36"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, #0d0d10 0%, rgba(13,13,16,0.972) 10%, rgba(13,13,16,0.896) 20%, rgba(13,13,16,0.784) 30%, rgba(13,13,16,0.648) 40%, rgba(13,13,16,0.5) 50%, rgba(13,13,16,0.352) 60%, rgba(13,13,16,0.216) 70%, rgba(13,13,16,0.104) 80%, rgba(13,13,16,0.028) 90%, rgba(13,13,16,0) 100%)',
-                }}
-              />
+              {/* Top DEAL nabídky — bílá full-width karta (hero deal + locked
+                  karty s Insider paywallem 48 h + countdown „next drop" +
+                  carousel koncernů). Černá zóna výše je protažená pod kartu,
+                  aby zaoblené rohy odkrývaly černou; bílá sekce pak plynule
+                  navazuje na bílý obsah níže (dřívější fade už není potřeba). */}
+              <div className="bg-[#0d0d10]">
+                <HomeTopDeals />
+              </div>
             </section>
           </>
         ) : (

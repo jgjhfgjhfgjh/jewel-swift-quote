@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T22:11:18.581Z",
+  "generatedAt": "2026-07-19T22:43:25.631Z",
   "langs": [
     "cs",
     "sk",
@@ -20,79 +20,79 @@
     "el",
     "is"
   ],
-  "totalStrings": 1388,
+  "totalStrings": 1402,
   "langCoverage": {
     "cs": {
-      "present": 1268,
-      "total": 1388
+      "present": 1282,
+      "total": 1402
     },
     "sk": {
       "present": 216,
-      "total": 1388
+      "total": 1402
     },
     "pl": {
       "present": 117,
-      "total": 1388
+      "total": 1402
     },
     "de": {
       "present": 215,
-      "total": 1388
+      "total": 1402
     },
     "en": {
-      "present": 1382,
-      "total": 1388
+      "present": 1395,
+      "total": 1402
     },
     "fr": {
       "present": 115,
-      "total": 1388
+      "total": 1402
     },
     "es": {
       "present": 116,
-      "total": 1388
+      "total": 1402
     },
     "it": {
       "present": 114,
-      "total": 1388
+      "total": 1402
     },
     "nl": {
       "present": 116,
-      "total": 1388
+      "total": 1402
     },
     "pt": {
       "present": 116,
-      "total": 1388
+      "total": 1402
     },
     "hu": {
       "present": 117,
-      "total": 1388
+      "total": 1402
     },
     "ro": {
       "present": 115,
-      "total": 1388
+      "total": 1402
     },
     "sv": {
       "present": 119,
-      "total": 1388
+      "total": 1402
     },
     "da": {
       "present": 116,
-      "total": 1388
+      "total": 1402
     },
     "fi": {
       "present": 119,
-      "total": 1388
+      "total": 1402
     },
     "no": {
       "present": 118,
-      "total": 1388
+      "total": 1402
     },
     "el": {
       "present": 117,
-      "total": 1388
+      "total": 1402
     },
     "is": {
       "present": 119,
-      "total": 1388
+      "total": 1402
     }
   },
   "groups": [
@@ -9753,8 +9753,8 @@
             },
             {
               "keyPath": "ecosystem.sub",
-              "cs": "Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping, nákup bez registrace nebo hotový e-shop. Vše propojené, vše pod jednou střechou.",
-              "en": "Combine wholesale with other swelt services — feed, dropshipping, private purchases or a turnkey shop. All connected, all under one roof.",
+              "cs": "Kombinujte velkoobchod s dalšími službami swelt — feed, dropshipping nebo nákup bez registrace. Vše propojené, vše pod jednou střechou.",
+              "en": "Combine wholesale with other swelt services — feed, dropshipping or private purchases. All connected, all under one roof.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -9784,7 +9784,7 @@
           "key": "ecosystemItems",
           "label": "Ecosystem Items",
           "nodeId": "velkoobchod::velkoobchod.ecosystemItems",
-          "stringCount": 8,
+          "stringCount": 6,
           "strings": [
             {
               "keyPath": "ecosystemItems[0].name",
@@ -9925,60 +9925,6 @@
               "keyPath": "ecosystemItems[2].desc",
               "cs": "Prémiové produkty pro soukromé osoby a firemní dárky. Diskrétní balení, rychlé EU doručení.",
               "en": "Premium products for individuals and corporate gifts. Discreet packaging, fast EU delivery.",
-              "langsPresent": [
-                "cs",
-                "en"
-              ],
-              "langsMissing": [
-                "sk",
-                "pl",
-                "de",
-                "fr",
-                "es",
-                "it",
-                "nl",
-                "pt",
-                "hu",
-                "ro",
-                "sv",
-                "da",
-                "fi",
-                "no",
-                "el",
-                "is"
-              ]
-            },
-            {
-              "keyPath": "ecosystemItems[3].name",
-              "cs": "swelt.shop",
-              "en": "swelt.shop",
-              "langsPresent": [
-                "en"
-              ],
-              "langsMissing": [
-                "cs",
-                "sk",
-                "pl",
-                "de",
-                "fr",
-                "es",
-                "it",
-                "nl",
-                "pt",
-                "hu",
-                "ro",
-                "sv",
-                "da",
-                "fi",
-                "no",
-                "el",
-                "is"
-              ]
-            },
-            {
-              "keyPath": "ecosystemItems[3].desc",
-              "cs": "Hotový e-shop naplněný 3 000+ produkty. Spuštěný do 48 hodin. S nebo bez vlastního skladu.",
-              "en": "Turnkey e-shop preloaded with 3,000+ products. Live in 48 hours. With or without your own stock.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -11569,8 +11515,8 @@
             },
             {
               "keyPath": "ecosystemSell.heading",
-              "cs": "Jedna platforma. Čtyři způsoby, jak vydělávat.",
-              "en": "One platform. Four ways to earn.",
+              "cs": "Jedna platforma. Tři způsoby, jak vydělávat.",
+              "en": "One platform. Three ways to earn.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -11624,7 +11570,7 @@
           ]
         }
       ],
-      "stringCount": 188
+      "stringCount": 186
     },
     {
       "file": "i18n-dropshipping.ts",
@@ -12744,8 +12690,8 @@
             },
             {
               "keyPath": "shopUpsell.h1",
-              "cs": "Chceš rovnou hotový e-shop?",
-              "en": "Want a turnkey shop?",
+              "cs": "Věz, co se bude prodávat.",
+              "en": "Know what will sell.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12771,8 +12717,8 @@
             },
             {
               "keyPath": "shopUpsell.h1Highlight",
-              "cs": "swelt.shop ti ho postaví za 48 hodin.",
-              "en": "swelt.shop builds you one in 48 hours.",
+              "cs": "swelt.signal ti to řekne předem.",
+              "en": "swelt.signal tells you ahead of time.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12798,8 +12744,8 @@
             },
             {
               "keyPath": "shopUpsell.sub",
-              "cs": "swelt.shop je kompletní e-shop naplněný 3 000+ prémiovými produkty — připravený k prodeji. Kombinuj ho s dropshippingem a nepotřebuješ ani sklad, ani logistiku. Stačí spustit a prodávat.",
-              "en": "swelt.shop is a complete e-shop preloaded with 3,000+ premium products — ready to sell. Combine it with dropshipping and you need neither warehouse nor logistics. Just launch and sell.",
+              "cs": "swelt.signal je product intelligence pro tvůj sortiment — týdenní digest trendů z celého katalogu 3 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást dropshipping plánů Silver a Gold.",
+              "en": "swelt.signal is product intelligence for your assortment — a weekly trend digest across the whole 3,000+ product catalog with AI recommendations on what to add, what to drop and when. Included in the Silver and Gold dropshipping plans.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12825,8 +12771,8 @@
             },
             {
               "keyPath": "shopUpsell.features[0].title",
-              "cs": "E-shop setup do 48 hodin",
-              "en": "Shop setup in 48 hours",
+              "cs": "Trendová data každý týden",
+              "en": "Trend data every week",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12852,8 +12798,8 @@
             },
             {
               "keyPath": "shopUpsell.features[0].text",
-              "cs": "Shoptet, WooCommerce nebo Upgates — nastavíme vše za tebe.",
-              "en": "Shoptet, WooCommerce or Upgates — we set everything up for you.",
+              "cs": "Vidíš, co roste a co klesá napříč celým katalogem.",
+              "en": "See what is rising and falling across the entire catalog.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12879,8 +12825,8 @@
             },
             {
               "keyPath": "shopUpsell.features[1].title",
-              "cs": "3 000+ produktů hned od startu",
-              "en": "3,000+ products from day one",
+              "cs": "Signály z celé EU",
+              "en": "Signals from all over the EU",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12906,8 +12852,8 @@
             },
             {
               "keyPath": "shopUpsell.features[1].text",
-              "cs": "Katalog naplněný a synchronizovaný. Nic neimportuješ ručně.",
-              "en": "Catalog filled and synced. You import nothing manually.",
+              "cs": "Prodejní data z 15+ evropských trhů, ne jen z toho tvého.",
+              "en": "Sales data from 15+ European markets, not just yours.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12933,8 +12879,8 @@
             },
             {
               "keyPath": "shopUpsell.features[2].title",
-              "cs": "Dropshipping integrace v ceně",
-              "en": "Dropshipping integration included",
+              "cs": "AI doporučení sortimentu",
+              "en": "AI assortment recommendations",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12960,8 +12906,8 @@
             },
             {
               "keyPath": "shopUpsell.features[2].text",
-              "cs": "Business plán obsahuje plnou dropshipping integraci — nulový sklad.",
-              "en": "The Business plan includes full dropshipping integration — zero stock.",
+              "cs": "Konkrétní tipy: co přidat, co stáhnout a kdy — bez hádání.",
+              "en": "Concrete tips: what to add, what to drop and when — no guessing.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -12987,8 +12933,8 @@
             },
             {
               "keyPath": "shopUpsell.features[3].title",
-              "cs": "Automatická aktualizace cen a zásob",
-              "en": "Automatic price and stock updates",
+              "cs": "Upozornění na příležitosti",
+              "en": "Opportunity alerts",
               "langsPresent": [
                 "cs",
                 "en"
@@ -13014,8 +12960,8 @@
             },
             {
               "keyPath": "shopUpsell.features[3].text",
-              "cs": "Feed se synchronizuje 1–4× denně. Vždy aktuální.",
-              "en": "Feed syncs 1–4× daily. Always current.",
+              "cs": "Cenové poklesy, closeouty a nové kolekce se dozvíš první.",
+              "en": "Price drops, closeouts and new collections — you hear it first.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -13041,8 +12987,8 @@
             },
             {
               "keyPath": "shopUpsell.cta1",
-              "cs": "Chci svůj e-shop",
-              "en": "I want my shop",
+              "cs": "Vyzkoušet dropshipping",
+              "en": "Try dropshipping",
               "langsPresent": [
                 "cs",
                 "en"
@@ -13068,16 +13014,15 @@
             },
             {
               "keyPath": "shopUpsell.cta2",
-              "cs": "Vyzkoušet dropshipping",
-              "en": "Try dropshipping",
-              "langsPresent": [
-                "cs",
-                "en"
-              ],
+              "cs": "",
+              "en": "",
+              "langsPresent": [],
               "langsMissing": [
+                "cs",
                 "sk",
                 "pl",
                 "de",
+                "en",
                 "fr",
                 "es",
                 "it",
@@ -33222,9 +33167,449 @@
               ]
             }
           ]
+        },
+        {
+          "key": "home",
+          "label": "Home",
+          "nodeId": "deals::dealsI18n.home",
+          "stringCount": 16,
+          "strings": [
+            {
+              "keyPath": "home.badge",
+              "cs": "Top DEAL nabídky",
+              "en": "Top DEAL offers",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.sub",
+              "cs": "Closeout kolekce přímo od koncernů, které už znáte — Swatch Group, Fossil Group a další. Slevy až 68 %, kusy se rezervují dle pořadí objednávek.",
+              "en": "Closeout collections straight from the concerns you already know — Swatch Group, Fossil Group and more. Up to 68% off, reserved in the order received.",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.insiderLine",
+              "cs": "Deal Insider vidí každou nabídku o 48 hodin dříve. Registrovaní partneři v den startu — registrace je zdarma.",
+              "en": "Deal Insiders see every offer 48 hours early. Registered partners on launch day — registration is free.",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.liveLabel",
+              "cs": "Právě běží",
+              "en": "Live now",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.heroCta",
+              "cs": "Otevřít deal",
+              "en": "Open the deal",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.browseCta",
+              "cs": "Prozkoumat dealy",
+              "en": "Explore deals",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.earlyAccessCta",
+              "cs": "Chci přístup o 48 h dříve",
+              "en": "Get 48h early access",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.lockedTitle",
+              "cs": "Připravujeme další deal",
+              "en": "Next deal in the works",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.lockedNote",
+              "cs": "Insider ho uvidí o 48 hodin dříve.",
+              "en": "Insiders see it 48 hours early.",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.unlocksIn",
+              "cs": "Odemkne se za",
+              "en": "Unlocks in",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.comingSoon",
+              "cs": "Už brzy",
+              "en": "Coming soon",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.concernsLabel",
+              "cs": "Dealy přímo od koncernů",
+              "en": "Deals straight from the concerns",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.concernStoryCta",
+              "cs": "Příběh koncernu",
+              "en": "Concern story",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.concernFallback",
+              "cs": "Přední světový hodinářský koncern.",
+              "en": "One of the world’s leading watch concerns.",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.emptyHeroTitle",
+              "cs": "Deal roku se právě připravuje",
+              "en": "The deal of the year is in the works",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "home.emptyHeroSub",
+              "cs": "Projděte si, jak DEAL nabídky fungují, a buďte připraveni — kdo objedná dříve, bude dříve obsloužen.",
+              "en": "See how DEAL offers work and be ready — orders are served first come, first served.",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            }
+          ]
         }
       ],
-      "stringCount": 110
+      "stringCount": 126
     },
     {
       "file": "i18n-checkout.ts",

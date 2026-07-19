@@ -67,6 +67,27 @@ export interface DealsText {
   product: { rrp: string; yourPrice: string; inStock: string; soldOut: string; margin: string; marginTotal: string; add: string; perPc: string; voc: string; moc: string; detail: string };
   cart: { title: string; empty: string; clear: string; remove: string; total: string; submit: string };
   modal: { availability: string; sku: string; ean: string; priceTiers: string; tier: string; close: string };
+  // homepage sekce „Top Deals" — celá sekce se záměrně renderuje VŽDY anglicky
+  // (jako ostatní tmavé homepage sekce); komponenta čte napřímo dealsI18n.en.
+  // CS překlady tu zůstávají pro případnou budoucí lokalizaci sekce.
+  home: {
+    badge: string;
+    sub: string;
+    insiderLine: string;
+    liveLabel: string;
+    heroCta: string;
+    browseCta: string;
+    earlyAccessCta: string;
+    lockedTitle: string;
+    lockedNote: string;
+    unlocksIn: string;
+    comingSoon: string;
+    concernsLabel: string;
+    concernStoryCta: string;
+    concernFallback: string;
+    emptyHeroTitle: string;
+    emptyHeroSub: string;
+  };
 }
 
 const cs: DealsText = {
@@ -174,6 +195,24 @@ const cs: DealsText = {
     availability: 'Dostupnost', sku: 'SKU', ean: 'EAN',
     priceTiers: 'Ceny dle množství', tier: 'od {qty} ks', close: 'Zavřít',
   },
+  home: {
+    badge: 'Top DEAL nabídky',
+    sub: 'Closeout kolekce přímo od koncernů, které už znáte — Swatch Group, Fossil Group a další. Slevy až 68 %, kusy se rezervují dle pořadí objednávek.',
+    insiderLine: 'Deal Insider vidí každou nabídku o 48 hodin dříve. Registrovaní partneři v den startu — registrace je zdarma.',
+    liveLabel: 'Právě běží',
+    heroCta: 'Otevřít deal',
+    browseCta: 'Prozkoumat dealy',
+    earlyAccessCta: 'Chci přístup o 48 h dříve',
+    lockedTitle: 'Připravujeme další deal',
+    lockedNote: 'Insider ho uvidí o 48 hodin dříve.',
+    unlocksIn: 'Odemkne se za',
+    comingSoon: 'Už brzy',
+    concernsLabel: 'Dealy přímo od koncernů',
+    concernStoryCta: 'Příběh koncernu',
+    concernFallback: 'Přední světový hodinářský koncern.',
+    emptyHeroTitle: 'Deal roku se právě připravuje',
+    emptyHeroSub: 'Projděte si, jak DEAL nabídky fungují, a buďte připraveni — kdo objedná dříve, bude dříve obsloužen.',
+  },
 };
 
 const en: DealsText = {
@@ -280,6 +319,24 @@ const en: DealsText = {
   modal: {
     availability: 'Availability', sku: 'SKU', ean: 'EAN',
     priceTiers: 'Prices by quantity', tier: 'from {qty} pcs', close: 'Close',
+  },
+  home: {
+    badge: 'Top DEAL offers',
+    sub: 'Closeout collections straight from the concerns you already know — Swatch Group, Fossil Group and more. Up to 68% off, reserved in the order received.',
+    insiderLine: 'Deal Insiders see every offer 48 hours early. Registered partners on launch day — registration is free.',
+    liveLabel: 'Live now',
+    heroCta: 'Open the deal',
+    browseCta: 'Explore deals',
+    earlyAccessCta: 'Get 48h early access',
+    lockedTitle: 'Next deal in the works',
+    lockedNote: 'Insiders see it 48 hours early.',
+    unlocksIn: 'Unlocks in',
+    comingSoon: 'Coming soon',
+    concernsLabel: 'Deals straight from the concerns',
+    concernStoryCta: 'Concern story',
+    concernFallback: 'One of the world’s leading watch concerns.',
+    emptyHeroTitle: 'The deal of the year is in the works',
+    emptyHeroSub: 'See how DEAL offers work and be ready — orders are served first come, first served.',
   },
 };
 

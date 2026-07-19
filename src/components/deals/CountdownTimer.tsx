@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Clock, AlarmClock } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { dealsI18n } from '@/lib/i18n-deals';
+import { type Lang } from '@/lib/i18n';
 
 interface Remaining { total: number; days: number; hours: number; minutes: number; seconds: number }
 
@@ -24,11 +25,15 @@ function diff(target: number): Remaining {
 export function CountdownTimer({
   deadline,
   variant = 'full',
+  lang: langOverride,
 }: {
   deadline: string | number | Date;
   variant?: 'full' | 'compact';
+  /** Vynucený jazyk popisků — homepage sekce Top Deals je celá anglicky. */
+  lang?: Lang;
 }) {
-  const lang = useStore((s) => s.lang);
+  const storeLang = useStore((s) => s.lang);
+  const lang = langOverride ?? storeLang;
   const t = dealsI18n[lang].countdown;
   const target = useMemo(() => new Date(deadline).getTime(), [deadline]);
   const [remaining, setRemaining] = useState<Remaining>(() => diff(target));
