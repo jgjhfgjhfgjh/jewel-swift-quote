@@ -8,30 +8,34 @@ import { BrandLogo } from '@/components/BrandLogo';
    Hlavní prodejní logika = pořadí peněz: partner NIKDY neplatí dřív,
    než sám dostane zaplaceno („without spending money on products").
 
-   Cyklus objednávky (~10 s; lety pomalé, přechody mezi kroky svižné):
-   1. Customer orders — point „New order" + gradientový oblouk do My shop.
+   Rozmístění: na mapě je jen bod „Your shop" + objednávky; účetnictví
+   partnera žije v KLONU „Your shop" mimo pevninu vlevo nahoře (Profit,
+   poslední marže, Stock invested: €0) a chip swelt je vlevo dole.
+   Legenda kroků je NAD mapou — mapa díky tomu může být větší a celé
+   schéma se vejde na jednu obrazovku.
+
+   Cyklus objednávky (~12 s; lety pomalé, přechody svižné):
+   1. Customer orders — point „New order" + gradientový oblouk do shopu.
    2. You get paid — bankovka s cenou letí od zákazníka a PARKUJE nad
-      My shop (peníze v ruce dřív, než se cokoli platí).
+      bodem Your shop (peníze v ruce dřív, než se cokoli platí).
    3. We ship — z chipu swelt letí mini logo brandu k zákazníkovi.
-   4. You pay us — bankovka se ROZLOMÍ na dvě poloviny: smaragdová
-      (marže) padá do kasičky, šedá (velkoobchod) letí do swelt
-      s popiskem „from customer's money".
-   Kroky ukazuje číslovaná legenda pod mapou; u My shop trvale svítí
-   „Stock invested: €0" jako kontrast k rostoucímu Profit.
+   4. You pay us — bankovka se ROZLOMÍ na dvě poloviny a rozlomená
+      zůstane 2 s stát (ať si ji divák prohlédne); pak smaragdová
+      marže letí do klonu Your shop (Profit poskočí) a šedá
+      velkoobchodní část do swelt („from customer's money").
 
    Expanzní flow: jedna epocha = jeden partner. Start 2–3 země, nové
    trhy se rozsvěcují přes sousedy (počítadlo „Live in X of 15
    countries", zvýrazněná „First order from …"). Po celé mapě se schéma
-   ztlumí, My shop se přesune (nový partner), Profit se vynuluje.
+   ztlumí, Your shop se přesune (nový partner), Profit se vynuluje.
 
    Engine: virtuální hodiny krokované přes rAF — hover zpomalí na 0.15×
    (a ukáže popisky), mimo viewport se nehýbe. Mobil bez letu brand
    loga (platby zůstávají — jsou jádrem argumentu).
 
    POZOR na layout: SVG a HTML overlay MUSÍ být ve společném relative
-   wrapperu bez dalšího obsahu — % souřadnice overlay se počítají
-   z jeho boxu. Legenda je až POD wrapperem (dřívější bug: legenda
-   uvnitř zvětšila box a všechny body ujely vůči mapě).
+   wrapperu bez dalšího IN-FLOW obsahu — % souřadnice overlay se
+   počítají z jeho boxu (legenda uvnitř by box zvětšila a body ujedou).
    ──────────────────────────────────────────────────────────────── */
 
 /* Gradient z DropshipHeadline: blue-500 → cyan-400 → emerald-400 */
@@ -73,9 +77,11 @@ const NEIGHBORS: Record<string, string[]> = {
   GR: ['BG'],
 };
 
-/* Chip swelt — vlevo dole v Atlantiku/Středomoří, mimo pevninu */
+/* Stanice mimo pevninu (SVG souřadnice): klon Your shop vlevo nahoře
+   (účetnictví partnera), chip swelt vlevo dole */
+const SHOP_HQ = { x: 82, y: 96 };
 const SWELT = { x: 70, y: MAP_H - 52 };
-/* Parkovací pozice bankovky nad My shop (SVG jednotky) */
+/* Parkovací pozice bankovky nad bodem Your shop (SVG jednotky) */
 const SPLIT_LIFT = 34;
 
 /* Kroky legendy — pořadí je sám prodejní argument */
@@ -84,7 +90,7 @@ const STEPS = ['Customer orders', 'You get paid', 'We ship', 'You pay us'];
 interface Pt { x: number; y: number }
 interface Flight {
   id: number;
-  kind: 'arc' | 'brand' | 'note' | 'wholesale';
+  kind: 'arc' | 'brand' | 'note' | 'wholesale' | 'profit';
   from: Pt;
   to: Pt;
   start: number;
@@ -95,9 +101,9 @@ interface Flight {
 }
 interface OrderState { pt: Pt; countryName: string; first: boolean; product: Product }
 interface ShopState { iso: string; city: MapCity }
-/* hold = zaparkovaná bankovka · break = rozlomená na dvě poloviny ·
-   fall = zelená polovina padá, šedou převzal let do swelt */
-interface SplitState { phase: 'hold' | 'break' | 'fall'; total: string; profit: string; wholesale: string }
+/* hold = zaparkovaná bankovka · break = rozlomená na dvě poloviny
+   (drží 2 s, pak obě půlky převezmou lety do klonu a do swelt) */
+interface SplitState { phase: 'hold' | 'break'; total: string; profit: string; wholesale: string }
 
 const byIso = Object.fromEntries(MAP_COUNTRIES.map((c) => [c.iso, c]));
 const eur = (cents: number) => `€${(cents / 100).toFixed(2)}`;
@@ -237,7 +243,7 @@ export function DropshipFlowMap() {
       staticArcRef.current = { from: orderPt, to: shopPt, highlight: first };
       await wait(400);
 
-      /* 2) You get paid — bankovka parkuje nad My shop */
+      /* 2) You get paid — bankovka parkuje nad bodem Your shop */
       setStep(2);
       await fly({ kind: 'note', from: orderPt, to: splitPt, dur: 1800, amount: splitState.total });
       setSplit({ phase: 'hold', ...splitState });
@@ -252,15 +258,19 @@ export function DropshipFlowMap() {
         await wait(500);
       }
 
-      /* 4) You pay us — bankovka se rozlomí na dvě poloviny */
+      /* 4) You pay us — rozlomení: 2 s na prohlédnutí, pak marže letí
+         do klonu Your shop a velkoobchodní část do swelt */
       setStep(4);
       setSplit({ phase: 'break', ...splitState });
-      await wait(400);
-      setSplit({ phase: 'fall', ...splitState });
-      setProfitCents((p) => p + profitPart);
-      setDrops((d) => [{ id: ++idRef.current, text: `+${eur(profitPart)}` }, ...d].slice(0, 2));
-      await fly({ kind: 'wholesale', from: splitPt, to: SWELT, dur: 1800, amount: splitState.wholesale });
+      await wait(2000);
       setSplit(null);
+      await Promise.all([
+        fly({ kind: 'profit', from: splitPt, to: SHOP_HQ, dur: 1600, amount: splitState.profit }).then(() => {
+          setProfitCents((p) => p + profitPart);
+          setDrops((d) => [{ id: ++idRef.current, text: splitState.profit }, ...d].slice(0, 2));
+        }),
+        fly({ kind: 'wholesale', from: splitPt, to: SWELT, dur: 1800, amount: splitState.wholesale }),
+      ]);
       await wait(250);
 
       /* úklid */
@@ -381,12 +391,38 @@ export function DropshipFlowMap() {
     [activeKey, launching],
   );
 
+  /* Legenda kroků — nad mapou (desktop i mobil), NIKDY uvnitř map boxu */
+  const legend = (
+    <div className="mb-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:mb-5 sm:text-xs">
+      {STEPS.map((label, i) => {
+        const on = step === i + 1;
+        return (
+          <span key={label} className="flex items-center gap-1.5 transition-opacity duration-300"
+            style={{ opacity: on ? 1 : 0.4 }}>
+            <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold sm:h-[18px] sm:w-[18px] sm:text-[10px] ${
+              on
+                ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 text-zinc-950'
+                : 'bg-white/15 text-white/70'
+            }`}>
+              {i + 1}
+            </span>
+            <span className={on
+              ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text font-semibold text-transparent'
+              : 'font-medium text-white/60'}>
+              {label}
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+
   /* Statická verze pro prefers-reduced-motion: rozsvícená mapa + legenda */
   if (reduced) {
     const de = byIso.DE.cities[0];
     const it = byIso.IT.cities[0];
     return (
-      <div className="relative mx-auto w-full max-w-[760px]">
+      <div className="relative mx-auto w-full max-w-[800px]">
         <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} className="h-auto w-full" role="img"
           aria-label="Dropshipping across 15 European countries: customers order and pay you first, swelt ships under your brand, and you pay wholesale only from money you already received.">
           <defs>
@@ -411,14 +447,12 @@ export function DropshipFlowMap() {
   const flights = flightsRef.current;
   const staticArc = staticArcRef.current;
   const shopPt = shop?.city ?? null;
-  /* kasička na stranu, kde je na mapě místo */
-  const stackLeft = shopPt ? shopPt.x > MAP_W * 0.62 : false;
 
   return (
     <div
       ref={rootRef}
-      /* šířka omezená i výškou viewportu, ať se schéma vejde na menší displeje */
-      className="relative mx-auto w-[min(100%,760px,80vh)] select-none"
+      /* šířka omezená i výškou viewportu, ať se schéma vejde na jednu obrazovku */
+      className="relative mx-auto w-[min(100%,880px,88vh)] select-none"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       style={{ opacity: dimmed ? 0.12 : 1, transition: 'opacity 0.9s ease' }}
@@ -432,15 +466,13 @@ export function DropshipFlowMap() {
         .ds-drop { animation: dsDrop 0.45s ease-out both }
         @keyframes dsPark { 0% { transform: translate(-50%,-50%) scale(0.9) } 55% { transform: translate(-50%,-50%) scale(1.18) } 100% { transform: translate(-50%,-50%) scale(1.08) } }
         .ds-park { animation: dsPark 0.5s ease-out both }
-        @keyframes dsCrack { 0%, 100% { transform: translate(-50%,-50%) rotate(0) } 30% { transform: translate(-51%,-50%) rotate(-2deg) } 65% { transform: translate(-49%,-50%) rotate(2deg) } }
+        @keyframes dsCrack { 0% { transform: translate(-50%,-50%) rotate(0) } 30% { transform: translate(-51%,-50%) rotate(-2deg) } 65% { transform: translate(-49%,-50%) rotate(2deg) } 100% { transform: translate(-50%,-50%) rotate(0) } }
         .ds-crack { animation: dsCrack 0.4s ease-in-out both }
-        @keyframes dsFallR { from { opacity: 1; transform: rotate(0) } to { opacity: 0; transform: translate(22px, 30px) rotate(-14deg) scale(0.8) } }
-        @keyframes dsFallL { from { opacity: 1; transform: rotate(0) } to { opacity: 0; transform: translate(-22px, 30px) rotate(14deg) scale(0.8) } }
-        .ds-fall-r { animation: dsFallR 0.8s ease-in both }
-        .ds-fall-l { animation: dsFallL 0.8s ease-in both }
         @keyframes dsBounce { 0% { transform: scale(1) } 40% { transform: scale(1.22) } 100% { transform: scale(1) } }
         .ds-bounce { display: inline-block; animation: dsBounce 0.7s ease-out both; transform-origin: left center }
       `}</style>
+
+      {legend}
 
       {/* ── Mapový box: SVG + overlay sdílí PŘESNĚ stejný box (viz hlavička) ── */}
       <div className="relative">
@@ -479,10 +511,37 @@ export function DropshipFlowMap() {
         </svg>
 
         {/* ── HTML overlay: kotva každého bodu = jeho TEČKA; popisky visí
-              pod ní a kotvu neposouvají. Kasička je stranou NAD tečkou,
-              aby se nekřížila s labely pod ní. ── */}
+              pod ní a kotvu neposouvají ── */}
         <div className="pointer-events-none absolute inset-0 text-[11px] sm:text-xs">
-          {/* swelt chip — samotný chip je bod (kotva = jeho střed) */}
+          {/* klon Your shop — účetnictví partnera mimo pevninu vlevo nahoře */}
+          <div className="absolute" style={{ left: px(SHOP_HQ.x), top: py(SHOP_HQ.y) }}>
+            <div className="absolute -translate-x-1/2 -translate-y-1/2">
+              <div className="flex flex-col items-center gap-1">
+                <span className="whitespace-nowrap rounded-full bg-white px-3 py-1 font-bold tracking-tight text-zinc-900 shadow-lg">
+                  Your shop
+                </span>
+                <span className="whitespace-nowrap rounded-full bg-zinc-900/85 px-2.5 py-0.5 font-bold text-white shadow-lg">
+                  Profit{' '}
+                  <span key={profitCents} className="ds-bounce tabular-nums text-emerald-400">{eur(profitCents)}</span>
+                </span>
+                {!mobile && drops.map((d, i) => (
+                  <span key={d.id} className={`ds-drop whitespace-nowrap rounded-full bg-zinc-900/70 px-2 py-px text-[10px] font-semibold tabular-nums text-emerald-300 ${i > 0 ? 'opacity-45' : ''}`}>
+                    {d.text}
+                  </span>
+                ))}
+                <span className="whitespace-nowrap rounded-full bg-zinc-900/75 px-2 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur-sm">
+                  Stock invested: €0
+                </span>
+                {hovered && (
+                  <span className="whitespace-nowrap rounded-md bg-zinc-900/90 px-2 py-0.5 text-[10px] font-medium text-white/85">
+                    You keep the margin
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* chip swelt — samotný chip je bod (kotva = jeho střed) */}
           <div className="absolute" style={{ left: px(SWELT.x), top: py(SWELT.y) }}>
             <span className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 font-bold tracking-tight text-zinc-900 shadow-lg">
               swelt
@@ -494,40 +553,19 @@ export function DropshipFlowMap() {
             )}
           </div>
 
-          {/* My shop — tečka na souřadnici; labely POD tečkou, kasička
-              stranou nad ní (nikdy se nepřekrývají) */}
+          {/* bod Your shop na mapě — tečka na souřadnici, label pod ní */}
           {shopPt && shop && (
             <div className="absolute" style={{ left: px(shopPt.x), top: py(shopPt.y) }}>
               <span className="absolute flex h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/50" />
                 <span className="relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-zinc-900 bg-white shadow" />
               </span>
-              {/* labely pod tečkou (animace na vnitřním divu — na pozicovaném
+              {/* label pod tečkou (animace na vnitřním divu — na pozicovaném
                   elementu by CSS animation přepsala -translate-x-1/2) */}
               <div className="absolute top-2.5 -translate-x-1/2">
-                <div className="ds-pop flex flex-col items-center gap-1">
-                  <span className="whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 font-bold text-zinc-900 shadow-lg">My shop</span>
-                  <span className="whitespace-nowrap rounded-full bg-zinc-900/75 px-2 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur-sm">
-                    Stock invested: €0
-                  </span>
-                  {hovered && (
-                    <span className="whitespace-nowrap rounded-md bg-zinc-900/90 px-2 py-0.5 text-[10px] font-medium text-white/85">
-                      You keep the margin
-                    </span>
-                  )}
+                <div className="ds-pop">
+                  <span className="whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 font-bold text-zinc-900 shadow-lg">Your shop</span>
                 </div>
-              </div>
-              {/* kasička: stranou od tečky, roste NAHORU od úrovně tečky */}
-              <div className={`absolute bottom-[-2px] flex flex-col-reverse gap-0.5 ${stackLeft ? 'right-4 items-end' : 'left-4 items-start'}`}>
-                <span className="whitespace-nowrap rounded-full bg-zinc-900/85 px-2.5 py-0.5 font-bold text-white shadow-lg">
-                  Profit{' '}
-                  <span key={profitCents} className="ds-bounce tabular-nums text-emerald-400">{eur(profitCents)}</span>
-                </span>
-                {!mobile && drops.map((d, i) => (
-                  <span key={d.id} className={`ds-drop whitespace-nowrap rounded-full bg-zinc-900/70 px-2 py-px text-[10px] font-semibold tabular-nums text-emerald-300 ${i > 0 ? 'opacity-45' : ''}`}>
-                    {d.text}
-                  </span>
-                ))}
               </div>
             </div>
           )}
@@ -558,9 +596,9 @@ export function DropshipFlowMap() {
             </div>
           )}
 
-          {/* Split nad My shop: hold = zaparkovaná bankovka → break =
-              rozlomení na dvě poloviny → fall = zelená marže padá do
-              kasičky (šedou polovinu převzal let do swelt) */}
+          {/* Split nad bodem Your shop: hold = zaparkovaná bankovka →
+              break = rozlomená na dvě poloviny (drží 2 s na prohlédnutí);
+              pak obě půlky odlétají jako samostatné lety */}
           {split && shopPt && (
             <div className="absolute" style={{ left: px(shopPt.x), top: py(shopPt.y - SPLIT_LIFT) }}>
               {split.phase === 'hold' ? (
@@ -568,17 +606,15 @@ export function DropshipFlowMap() {
                   {split.total}
                 </span>
               ) : (
-                <div className={`${split.phase === 'break' ? 'ds-crack' : ''} absolute flex -translate-x-1/2 -translate-y-1/2`}>
-                  {/* levá (smaragdová) polovina = marže — při fall padá do kasičky */}
-                  <span className={`${split.phase === 'fall' ? (stackLeft ? 'ds-fall-l' : 'ds-fall-r') : ''} whitespace-nowrap rounded-l-md border-r border-dashed border-emerald-700/50 bg-emerald-400 px-2 py-1 text-xs font-bold tabular-nums text-zinc-950 shadow-xl`}>
+                <div className="ds-crack absolute flex -translate-x-1/2 -translate-y-1/2">
+                  {/* levá (smaragdová) polovina = marže → poletí do klonu */}
+                  <span className="whitespace-nowrap rounded-l-md border-r border-dashed border-emerald-700/50 bg-emerald-400 px-2 py-1 text-xs font-bold tabular-nums text-zinc-950 shadow-xl">
                     {split.profit}
                   </span>
-                  {/* pravá (šedá) polovina = velkoobchod — při fall ji převezme letící chip */}
-                  {split.phase === 'break' && (
-                    <span className="whitespace-nowrap rounded-r-md bg-white px-2 py-1 text-xs font-semibold tabular-nums text-zinc-600 shadow-xl">
-                      {split.wholesale}
-                    </span>
-                  )}
+                  {/* pravá (šedá) polovina = velkoobchod → poletí do swelt */}
+                  <span className="whitespace-nowrap rounded-r-md bg-white px-2 py-1 text-xs font-semibold tabular-nums text-zinc-600 shadow-xl">
+                    {split.wholesale}
+                  </span>
                 </div>
               )}
             </div>
@@ -603,6 +639,11 @@ export function DropshipFlowMap() {
                     {f.amount}
                   </span>
                 )}
+                {f.kind === 'profit' && (
+                  <span className="whitespace-nowrap rounded-l-md rounded-r-sm border-r border-dashed border-emerald-700/50 bg-emerald-400 px-2 py-0.5 text-xs font-bold tabular-nums text-zinc-950 shadow-lg">
+                    {f.amount}
+                  </span>
+                )}
                 {f.kind === 'wholesale' && (
                   <span className="flex flex-col items-center rounded-r-md rounded-l-sm border-l border-dashed border-zinc-400 bg-white px-2 py-0.5 shadow-lg">
                     <span className="text-[10px] font-semibold tabular-nums text-zinc-700">{f.amount}</span>
@@ -613,30 +654,6 @@ export function DropshipFlowMap() {
             );
           })}
         </div>
-      </div>
-
-      {/* číslovaná legenda kroků — MIMO mapový box (jinak rozbije % souřadnice) */}
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:mt-5 sm:text-xs">
-        {STEPS.map((label, i) => {
-          const on = step === i + 1;
-          return (
-            <span key={label} className="flex items-center gap-1.5 transition-opacity duration-300"
-              style={{ opacity: on ? 1 : 0.4 }}>
-              <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold sm:h-[18px] sm:w-[18px] sm:text-[10px] ${
-                on
-                  ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 text-zinc-950'
-                  : 'bg-white/15 text-white/70'
-              }`}>
-                {i + 1}
-              </span>
-              <span className={on
-                ? 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text font-semibold text-transparent'
-                : 'font-medium text-white/60'}>
-                {label}
-              </span>
-            </span>
-          );
-        })}
       </div>
 
       <p className="sr-only">
