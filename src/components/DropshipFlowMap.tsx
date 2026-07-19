@@ -95,6 +95,16 @@ const SPLIT_LIFT = 34;
 /* Kroky legendy — pořadí je sám prodejní argument */
 const STEPS = ['Customer orders', 'You get paid', 'We ship', 'You pay us'];
 
+/* Higgsfield assety (transparentní PNG): stylizovaná „swelt note"
+   (záměrně žádná napodobenina eura, částky jsou HTML overlay),
+   její roztržené poloviny a trezor u klonu Your shop */
+const IMG = {
+  note: '/images/dropship-flow/note.png',
+  noteLeft: '/images/dropship-flow/note-left.png',
+  noteRight: '/images/dropship-flow/note-right.png',
+  vault: '/images/dropship-flow/vault.png',
+};
+
 interface Pt { x: number; y: number }
 interface Flight {
   id: number;
@@ -474,7 +484,14 @@ export function DropshipFlowMap() {
         .ds-crack { animation: dsCrack 0.4s ease-in-out both }
         @keyframes dsBounce { 0% { transform: scale(1) } 40% { transform: scale(1.22) } 100% { transform: scale(1) } }
         .ds-bounce { display: inline-block; animation: dsBounce 0.7s ease-out both; transform-origin: left center }
+        @keyframes dsPulse { 0% { transform: scale(1) } 40% { transform: scale(1.14) } 100% { transform: scale(1) } }
+        .ds-pulse { animation: dsPulse 0.6s ease-out both; transform-origin: center }
       `}</style>
+
+      {/* preload assetů, ať první let nebliká (display:none obrázky se stahují) */}
+      <div className="hidden" aria-hidden>
+        {Object.values(IMG).map((src) => <img key={src} src={src} alt="" />)}
+      </div>
 
       {legend}
 
@@ -517,17 +534,31 @@ export function DropshipFlowMap() {
         {/* ── HTML overlay: kotva každého bodu = jeho TEČKA; popisky visí
               pod ní a kotvu neposouvají ── */}
         <div className="pointer-events-none absolute inset-0 text-[11px] sm:text-xs">
-          {/* klon Your shop — účetnictví partnera vedle mapy: jen Profit
-              (kotva letů marže = tato pilulka) a Stock invested: €0 */}
+          {/* klon Your shop — účetnictví partnera vedle mapy: trezor
+              (kotva letu marže — peníze do něj zapadají, při doletu
+              pulzne), pod ním Profit a Stock invested: €0 */}
           <div className="absolute" style={{ left: px(SHOP_HQ.x), top: py(SHOP_HQ.y) }}>
-            <div className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
-              <span className="whitespace-nowrap rounded-full bg-zinc-900/85 px-3 py-1 font-bold text-white shadow-lg">
-                Profit{' '}
-                <span key={profitCents} className="ds-bounce tabular-nums text-emerald-400">{eur(profitCents)}</span>
-              </span>
-              <span className="whitespace-nowrap rounded-full bg-zinc-900/75 px-2.5 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur-sm sm:text-[11px]">
-                Stock invested: €0
-              </span>
+            {/* pozicování na wrapperu, ds-pulse na img — CSS animace by
+                jinak přepsala Tailwind -translate (fill: both) */}
+            <div className="absolute -translate-x-1/2 -translate-y-1/2">
+              <img
+                key={profitCents}
+                src={IMG.vault}
+                alt=""
+                draggable={false}
+                className="ds-pulse h-12 w-auto max-w-none drop-shadow-[0_10px_18px_rgba(0,0,0,0.55)] sm:h-14"
+              />
+            </div>
+            <div className="absolute top-7 -translate-x-1/2 sm:top-8">
+              <div className="flex flex-col items-center gap-1">
+                <span className="whitespace-nowrap rounded-full bg-zinc-900/85 px-3 py-1 font-bold text-white shadow-lg">
+                  Profit{' '}
+                  <span key={profitCents} className="ds-bounce tabular-nums text-emerald-400">{eur(profitCents)}</span>
+                </span>
+                <span className="whitespace-nowrap rounded-full bg-zinc-900/75 px-2.5 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur-sm sm:text-[11px]">
+                  Stock invested: €0
+                </span>
+              </div>
             </div>
           </div>
 
@@ -582,18 +613,24 @@ export function DropshipFlowMap() {
           {split && shopPt && (
             <div className="absolute" style={{ left: px(shopPt.x), top: py(shopPt.y - SPLIT_LIFT) }}>
               {split.phase === 'hold' ? (
-                <span className="ds-park absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-md border border-emerald-300/70 bg-white px-3 py-1 text-xs font-bold tabular-nums text-zinc-900 shadow-xl sm:text-sm">
-                  {split.total}
+                <span className="ds-park absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                  <img src={IMG.note} alt="" draggable={false}
+                    className="h-11 w-auto max-w-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] sm:h-12" />
+                  <span className="absolute pb-0.5 text-xs font-bold tabular-nums text-zinc-900 sm:text-sm">{split.total}</span>
                 </span>
               ) : (
-                <div className="ds-crack absolute flex -translate-x-1/2 -translate-y-1/2">
+                <div className="ds-crack absolute flex -translate-x-1/2 -translate-y-1/2 gap-[3px]">
                   {/* levá (smaragdová) polovina = marže → poletí do klonu */}
-                  <span className="whitespace-nowrap rounded-l-md border-r border-dashed border-emerald-700/50 bg-emerald-400 px-2 py-1 text-xs font-bold tabular-nums text-zinc-950 shadow-xl">
-                    {split.profit}
+                  <span className="relative flex items-center justify-center">
+                    <img src={IMG.noteLeft} alt="" draggable={false}
+                      className="h-12 w-auto max-w-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] sm:h-14" />
+                    <span className="absolute text-[10px] font-bold tabular-nums text-emerald-950 sm:text-[11px]">{split.profit}</span>
                   </span>
                   {/* pravá (šedá) polovina = velkoobchod → poletí do swelt */}
-                  <span className="whitespace-nowrap rounded-r-md bg-white px-2 py-1 text-xs font-semibold tabular-nums text-zinc-600 shadow-xl">
-                    {split.wholesale}
+                  <span className="relative flex items-center justify-center">
+                    <img src={IMG.noteRight} alt="" draggable={false}
+                      className="h-12 w-auto max-w-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] sm:h-14" />
+                    <span className="absolute text-[10px] font-bold tabular-nums text-zinc-700 sm:text-[11px]">{split.wholesale}</span>
                   </span>
                 </div>
               )}
@@ -615,19 +652,29 @@ export function DropshipFlowMap() {
                   </span>
                 )}
                 {f.kind === 'note' && (
-                  <span className="rounded-md border border-emerald-300/60 bg-white px-2 py-0.5 font-bold tabular-nums text-zinc-900 shadow-lg">
-                    {f.amount}
+                  <span className="relative flex items-center justify-center">
+                    <img src={IMG.note} alt="" draggable={false}
+                      className="h-8 w-auto max-w-none drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]" />
+                    <span className="absolute pb-px text-[10px] font-bold tabular-nums text-zinc-900">{f.amount}</span>
                   </span>
                 )}
                 {f.kind === 'profit' && (
-                  <span className="whitespace-nowrap rounded-l-md rounded-r-sm border-r border-dashed border-emerald-700/50 bg-emerald-400 px-2 py-0.5 text-xs font-bold tabular-nums text-zinc-950 shadow-lg">
-                    {f.amount}
+                  <span className="flex flex-col items-center gap-0.5">
+                    <img src={IMG.noteLeft} alt="" draggable={false}
+                      className="h-9 w-auto max-w-none drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]" />
+                    <span className="whitespace-nowrap rounded-full bg-zinc-900/80 px-1.5 py-px text-[9px] font-bold tabular-nums text-emerald-300 shadow">
+                      {f.amount}
+                    </span>
                   </span>
                 )}
                 {f.kind === 'wholesale' && (
-                  <span className="flex flex-col items-center rounded-r-md rounded-l-sm border-l border-dashed border-zinc-400 bg-white px-2 py-0.5 shadow-lg">
-                    <span className="text-[10px] font-semibold tabular-nums text-zinc-700">{f.amount}</span>
-                    <span className="text-[8px] font-medium leading-tight text-zinc-500">from customer's money</span>
+                  <span className="flex flex-col items-center gap-0.5">
+                    <img src={IMG.noteRight} alt="" draggable={false}
+                      className="h-9 w-auto max-w-none drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]" />
+                    <span className="flex flex-col items-center whitespace-nowrap rounded-md bg-zinc-900/80 px-1.5 py-px shadow">
+                      <span className="text-[9px] font-semibold tabular-nums text-white/90">{f.amount}</span>
+                      <span className="text-[8px] font-medium leading-tight text-white/60">from customer's money</span>
+                    </span>
                   </span>
                 )}
               </div>
