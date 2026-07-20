@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { LeadUpgradeBadge } from '@/components/LeadUpgradeBadge';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
+import { ProductAlertBell } from '@/components/deals/ProductAlertBell';
 
 export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenImage }: { product: Product & { images?: string[]; image_url?: string | null; image_urls?: string[] }; isWishlisted?: boolean; onToggleWishlist?: (id: string) => void; onOpenImage?: () => void }) {
   const { lang, cart, brandDiscounts, productDiscounts, addToCart, updateQuantity, removeFromCart, setProductDiscount,
@@ -166,6 +167,13 @@ export function ProductCard({ product, isWishlisted, onToggleWishlist, onOpenIma
                 />
               </button>
             )}
+            {/* Model watchdog — early access odběratel zapne hlídání modelu,
+                ostatním klik otevře upsell „Nemáte early access" */}
+            <ProductAlertBell
+              sku={product.sku}
+              label={[product.manufacturer, product.name].filter(Boolean).join(' · ')}
+              className={`absolute right-2 z-10 ${onToggleWishlist ? 'top-10' : 'top-2'}`}
+            />
           </div>
         )}
       </ProductImageGallery>

@@ -13,6 +13,7 @@ import { getBrandByName } from '@/data/brands';
 import { getConcernBySlug } from '@/data/concerns';
 import { toDisplayName } from '@/lib/brandNormalize';
 import { useBrandCatalog, type BrandPreviewProduct } from '@/hooks/useBrandCatalog';
+import { TopDealAlertButton } from '@/components/deals/TopDealAlertButton';
 
 /* ─── Reveal on scroll (same pattern as BrandDetail) ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -177,10 +178,12 @@ export default function ConcernDetail() {
             </Reveal>
             {data && data.productCount > 0 && (
               <Reveal delay={260}>
-                <div className="mt-8 flex justify-center">
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <Button size="lg" onClick={handleOpenInCatalog} className="gap-2 px-8 font-semibold">
                     <Search className="h-4 w-4" /> Otevřít v katalogu
                   </Button>
+                  {/* concern-level watchdog — early access toggle / upsell */}
+                  <TopDealAlertButton level="concern" target={concern.slug} label={concern.name} />
                 </div>
                 {!user && (
                   <p className="text-center text-[11px] text-muted-foreground mt-3">

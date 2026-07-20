@@ -40,7 +40,7 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
   heading: null,
   groupLabel: 'Concern',
   brandsLabel: 'Concern brands',
-  cta: 'Set a watchdog',
+  cta: 'Set a Top Deal alert',
   brandWord: (n) => (n === 1 ? 'brand' : 'brands'),
   modelsWord: 'models',
   prevAria: 'Previous',
@@ -50,7 +50,8 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
 interface Tier {
   id: 'explore' | 'insider' | 'flex' | 'enterprise';
   name: string;
-  price: string;
+  /** Enterprise cenu nemá — jen note a features */
+  price?: string;
   period?: string;
   /** přeškrtnutá kotva vedle ceny */
   was?: string;
@@ -67,7 +68,11 @@ const TIERS: Tier[] = [
     name: 'Explore',
     price: 'Free',
     note: 'no card needed',
-    features: ['Browse all DEAL offers', 'New deal drop alerts', 'Order at wholesale prices'],
+    features: [
+      'Browse and shop all top deals when they drop',
+      'New top deal drop alerts',
+      'Order at better wholesale prices',
+    ],
     cta: 'Explore deals free',
   },
   {
@@ -78,11 +83,7 @@ const TIERS: Tier[] = [
     was: '€99',
     note: 'billed annually',
     badge: 'Most popular · 50% off',
-    features: [
-      'Everything in Explore',
-      '48h early access to every deal',
-      'Concern, brand & model alerts',
-    ],
+    features: ['48h early access to every deal', 'Concern alerts', 'Brand alerts', 'Model alerts'],
     cta: 'Get Insider',
   },
   {
@@ -91,24 +92,14 @@ const TIERS: Tier[] = [
     price: '€99',
     period: '/month',
     note: 'cancel anytime',
-    features: [
-      'Everything in Explore',
-      '48h early access to every deal',
-      'Concern, brand & model alerts',
-    ],
+    features: ['48h early access to every deal', 'Concern alerts', 'Brand alerts', 'Model alerts'],
     cta: 'Get Flex',
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 'Custom',
     note: 'for high-volume buyers',
-    features: [
-      'Everything in Insider',
-      'Higher quantities',
-      'Tailored deals & terms',
-      'Dedicated account manager',
-    ],
+    features: ['Higher quantities', 'Tailored deals & terms', 'Dedicated account manager'],
     cta: 'Contact us',
   },
 ];
@@ -161,18 +152,17 @@ export function HomeTopDeals() {
   };
 
   return (
-    // Světle šedá karta na černé zóně — bílé karty uvnitř na ní vyniknou;
-    // zaoblené rohy odkrývají černý wrapper v Index.tsx.
-    <section className="relative w-full rounded-t-[1.75rem] bg-slate-100 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
+    // Šedá karta na černé zóně (neutrální zinc, žádný modrý nádech) — bílé
+    // karty uvnitř na ní vyniknou; zaoblené rohy odkrývají černý wrapper.
+    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-200 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
-          {/* šedá slova musí být tmavší než slate-100 pozadí → zinc-500 */}
+          {/* šedá slova musí být tmavší než zinc-200 pozadí → zinc-600 */}
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-zinc-900">Catch your deal of the year and earn more. </span>
-            <span className="text-zinc-500">
+            <span className="text-zinc-600">
               Buy goods at an even bigger wholesale discount{' '}
             </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
@@ -197,10 +187,13 @@ export function HomeTopDeals() {
           </div>
         </div>
 
-        {/* pricing — čtyřúrovňový paywall místo dřívějších dvou CTA */}
+        {/* pricing — čtyřúrovňový paywall; lead věta přesunuta z headline sem */}
         <div className="mx-auto mt-12 max-w-[1160px] sm:mt-16">
-          <p className="text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
-            <span className="text-zinc-500">Insiders see every deal </span>
+          <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-zinc-900">
+            Catch your deal of the year earlier and earn more.
+          </h3>
+          <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
+            <span className="text-zinc-600">Insiders see every deal </span>
             <span className="text-zinc-900">48 hours early.</span>
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -213,9 +206,9 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
       <div className="mt-12 sm:mt-16">
-        <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
           {t.home.concernsLabel}
-        </p>
+        </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <ConcernCarousel texts={CONCERN_TEXTS} appearance="ios" />
         </div>
@@ -223,9 +216,9 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
       <div className="mt-12 sm:mt-16">
-        <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
           Set a Top Deal alert on your brands
-        </p>
+        </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <BrandAlertCarousel alertsApi={alertsApi} onRequireAuth={requireAuth} />
         </div>
@@ -233,9 +226,9 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
       <div className="mx-auto mt-12 max-w-[640px] px-5 sm:mt-16 sm:px-0">
-        <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-          Watch individual models
-        </p>
+        <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
+          Set alerts on individual models
+        </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
       </div>
 
@@ -253,28 +246,31 @@ export function HomeTopDeals() {
   );
 }
 
-/** Jedna pricing karta — Insider je zvýrazněný (Most popular). */
+/** Jedna pricing karta — Insider je zvýrazněný modrým rámečkem (Most popular).
+ *  Hierarchie: největší je NÁZEV tarifu, cena je menší pod ním. */
 function PricingCard({ tier, onSelect }: { tier: Tier; onSelect: () => void }) {
   const featured = tier.id === 'insider';
   return (
     <div
       className={`relative flex flex-col rounded-2xl border bg-white p-5 ${
-        featured ? 'border-zinc-900 ring-1 ring-zinc-900 shadow-lg' : 'border-slate-200 shadow-sm'
+        featured ? 'border-blue-600 ring-1 ring-blue-600 shadow-lg' : 'border-slate-200 shadow-sm'
       }`}
     >
       {tier.badge && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-900 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-blue-600 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
           {tier.badge}
         </span>
       )}
-      <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">{tier.name}</p>
-      <p className="mt-3 flex items-baseline gap-1.5">
-        {tier.was && (
-          <span className="text-base font-medium text-slate-400 line-through">{tier.was}</span>
-        )}
-        <span className="text-3xl font-semibold tracking-tight text-zinc-900">{tier.price}</span>
-        {tier.period && <span className="text-sm text-slate-500">{tier.period}</span>}
-      </p>
+      <p className="text-2xl font-semibold tracking-tight text-zinc-900">{tier.name}</p>
+      {tier.price && (
+        <p className="mt-2 flex items-baseline gap-1.5">
+          {tier.was && (
+            <span className="text-sm font-medium text-slate-400 line-through">{tier.was}</span>
+          )}
+          <span className="text-lg font-semibold tracking-tight text-zinc-900">{tier.price}</span>
+          {tier.period && <span className="text-sm text-slate-500">{tier.period}</span>}
+        </p>
+      )}
       {tier.note && <p className="mt-1 text-xs text-slate-500">{tier.note}</p>}
       <ul className="mt-4 flex-1 space-y-2">
         {tier.features.map((f) => (

@@ -89,6 +89,17 @@ export interface DealsText {
     emptyHeroTitle: string;
     emptyHeroSub: string;
   };
+  // watchdog alerty mimo homepage sekci (katalog, detail značky/koncernu)
+  alertsUi: {
+    watch: string;
+    watching: string;
+    setAlert: string;
+    alertOn: string;
+    upsellTitle: string;
+    upsellText: string;
+    upsellCta: string;
+    upsellClose: string;
+  };
 }
 
 const cs: DealsText = {
@@ -215,6 +226,16 @@ const cs: DealsText = {
     emptyHeroTitle: 'Deal roku se právě připravuje',
     emptyHeroSub: 'Projděte si, jak DEAL nabídky fungují, a buďte připraveni — kdo objedná dříve, bude dříve obsloužen.',
   },
+  alertsUi: {
+    watch: 'Hlídat model',
+    watching: 'Hlídáno',
+    setAlert: 'Nastavit Top Deal alert',
+    alertOn: 'Alert aktivní',
+    upsellTitle: 'Nemáte early access',
+    upsellText: 'Insider vidí každý deal o 48 hodin dříve a dostává alerty na koncerny, značky i jednotlivé modely. Nejlepší kusy mohou být pryč dřív, než je vůbec uvidíte.',
+    upsellCta: 'Chci Insider za 49 €/měsíc',
+    upsellClose: 'Teď ne',
+  },
 };
 
 const en: DealsText = {
@@ -340,6 +361,16 @@ const en: DealsText = {
     concernFallback: 'One of the world’s leading watch concerns.',
     emptyHeroTitle: 'The deal of the year is in the works',
     emptyHeroSub: 'See how DEAL offers work and be ready — orders are served first come, first served.',
+  },
+  alertsUi: {
+    watch: 'Watch model',
+    watching: 'Watching',
+    setAlert: 'Set a Top Deal alert',
+    alertOn: 'Alert on',
+    upsellTitle: 'You don’t have early access',
+    upsellText: 'Insiders see every deal 48 hours early and get concern, brand and model alerts. The best pieces may be gone before you even see them.',
+    upsellCta: 'Get Insider for €49/month',
+    upsellClose: 'Not now',
   },
 };
 

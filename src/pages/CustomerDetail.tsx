@@ -46,7 +46,7 @@ interface BrandDiscount { brand: string; percent: number; }
 interface ProductDiscountRow { product_id: string; percent: number; product_name?: string; }
 
 const ROLES: AppRole[] = ['admin', 'b2b_approved', 'customer', 'lead'];
-const SERVICE_TYPES = ['intelligence', 'dropshipping', 'velkoobchod', 'partner', 'jine'];
+const SERVICE_TYPES = ['intelligence', 'dropshipping', 'velkoobchod', 'partner', 'early_access', 'jine'];
 const SERVICE_STATUSES = ['active', 'paused', 'cancelled'];
 
 function fmtDate(d?: string | null) {

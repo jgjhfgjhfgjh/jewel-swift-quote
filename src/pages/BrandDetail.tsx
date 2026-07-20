@@ -14,6 +14,7 @@ import {
   useBrandCatalog, brandKeyToSlug, brandSlugToKey, type BrandPreviewProduct,
 } from '@/hooks/useBrandCatalog';
 import { BRAND_STORIES } from '@/data/brandStories';
+import { TopDealAlertButton } from '@/components/deals/TopDealAlertButton';
 
 /* ─── Reveal on scroll ─── */
 function useReveal(threshold = 0.1): [React.RefObject<HTMLDivElement>, boolean] {
@@ -330,9 +331,9 @@ export default function BrandDetail() {
               </div>
             </Reveal>
 
-            {/* Primary CTA — open brand in catalog */}
+            {/* Primary CTA — open brand in catalog + brand-level watchdog */}
             <Reveal delay={260}>
-              <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Button
                   size="lg"
                   onClick={handleOpenInCatalog}
@@ -340,6 +341,7 @@ export default function BrandDetail() {
                 >
                   <Search className="h-4 w-4" /> Otevřít {brandData.name} v katalogu
                 </Button>
+                <TopDealAlertButton level="brand" target={brandData.key} label={brandData.name} />
               </div>
               {!user && (
                 <p className="text-center text-[11px] text-muted-foreground mt-3">

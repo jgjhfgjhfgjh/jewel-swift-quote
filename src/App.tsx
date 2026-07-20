@@ -9,6 +9,7 @@ import { AdminGuard } from "@/components/admin/AdminGuard";
 import { PreviewBridge } from "@/lib/admin/previewBridge";
 import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
+import { EarlyAccessUpsellDialog } from "@/components/deals/EarlyAccessUpsell";
 
 // Route-level code splitting — each page ships as its own lazy-loaded chunk.
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -84,6 +85,9 @@ const App = () => (
         <AuthProvider>
           {/* Conversion strip above the navbar — soonest-ending DEAL countdown */}
           <AnnouncementBar />
+          {/* Globální upsell „Nemáte early access" — otevírají ho zvonečky
+              v katalogu a alert tlačítka v detailech značek/koncernů */}
+          <EarlyAccessUpsellDialog />
           <Suspense fallback={<PageFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
