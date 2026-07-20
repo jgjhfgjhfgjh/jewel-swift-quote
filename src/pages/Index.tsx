@@ -121,7 +121,10 @@ const Index = () => {
                 true viewport centre. Navbar is a single compact h-14 row now. */}
             {/* -mt-14 + pt-14: sekce (a video) sahá až k hornímu okraji stránky
                 pod průhledný navbar; obsah zůstává pod ním. */}
-            <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col justify-center overflow-hidden px-6 pb-[13vh] pt-14 sm:pb-[11vh]">
+            {/* min-h drží i poměr videa (1928×1076 → 55.9vw): na širokých
+                monitorech je sekce vyšší než obrazovka a video je vidět CELÉ
+                (nic se neořezává nahoře ani dole), obsah stránky se posune níž */}
+            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden px-6 pb-[13vh] pt-14 sm:pb-[11vh]">
               {/* fullscreen video přes celou první sekci + tmavý overlay,
                   aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
               <video
