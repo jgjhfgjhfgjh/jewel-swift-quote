@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 /**
  * Řada kruhových badge s logy AI agentů pro kartu „Connect swelt to your AI
- * agents" na homepage. Loga jsou vektorová (simple-icons), kruhy se překrývají
- * jako avatary — bílý ring odděluje sousední badge, stín je zvedá z karty.
+ * agents" na homepage. Loga jsou vektorová (simple-icons), kruhy stojí vedle
+ * sebe s mezerou a výrazným měkkým stínem — čtou se jako zvednuté bílé placky.
  *
  * Hermes a OpenClaw oficiální ikonu nemají: Hermes má stylizované křídlo
  * (posel bohů), OpenClaw svého lobster maskota.
@@ -90,14 +90,14 @@ const AGENTS: Agent[] = [
 
 export function AgentLogoRow() {
   return (
-    <div className="flex items-center -space-x-3">
+    <div className="flex flex-wrap items-center gap-2.5">
       {AGENTS.map((a) => (
         <div
           key={a.name}
           title={a.name}
           role="img"
           aria-label={a.name}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-white ring-4 ring-white shadow-[0_2px_10px_rgba(0,0,0,0.14)]"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-white ring-1 ring-zinc-900/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.08),0_6px_18px_rgba(0,0,0,0.16)]"
         >
           {a.icon}
         </div>
