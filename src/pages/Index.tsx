@@ -121,7 +121,7 @@ const Index = () => {
                 true viewport centre. Navbar is a single compact h-14 row now. */}
             {/* -mt-14 + pt-14: sekce (a video) sahá až k hornímu okraji stránky
                 pod průhledný navbar; obsah zůstává pod ním. */}
-            <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col justify-center overflow-hidden px-6 pb-[18vh] pt-14 sm:pb-[16vh]">
+            <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col justify-center overflow-hidden px-6 pb-[13vh] pt-14 sm:pb-[11vh]">
               {/* fullscreen video přes celou první sekci + tmavý overlay,
                   aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
               <video
@@ -130,7 +130,7 @@ const Index = () => {
                 loop
                 playsInline
                 preload="auto"
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-top"
                 src="/hero-video.mp4"
               />
               <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
@@ -140,7 +140,8 @@ const Index = () => {
                   Inter Extra Light (200). Blok je vycentrovaný (w-fit podle H1),
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left">
+              {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[3vw]">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>
@@ -148,13 +149,15 @@ const Index = () => {
                   <HeroRotatingText />
                 </div>
               </div>
-              {/* scroll cue */}
-              <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
+              {/* scroll cue — výš, aby ho nepřekryla následující sekce */}
+              <ChevronDown className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
             </section>
             {/* Second screen: brand showcase — bílá karta (headline, karusel,
                 B2B CTA), pod ní černá karta se „Ship" headline a budoucí
                 prezentací dropshippingu, dole do ztracena (smoothstep fade). */}
-            <section className="relative mt-20 sm:mt-28 lg:mt-32">
+            {/* sekce začíná lehce PŘES hero video (negativní margin, z-10) —
+                žádný bílý pruh, stejný překryv jako u dalších přechodů */}
+            <section className="relative z-10 -mt-8 sm:-mt-12">
               {/* bílá karta od kraje do kraje — zaoblený jen horní okraj, stín
                   nahoře (zvednutý horní okraj proti bílému hero) */}
               <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-16 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-24 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
