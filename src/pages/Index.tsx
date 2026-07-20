@@ -134,7 +134,7 @@ const Index = () => {
                 playsInline
                 preload="auto"
                 className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
-                src="/hero-video.mp4"
+                src="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-video.mp4"
               />
               <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
