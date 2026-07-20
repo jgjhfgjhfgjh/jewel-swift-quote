@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useCustomerDiscounts } from '@/hooks/useCustomerDiscounts';
+import { invalidateEarlyAccessCache } from '@/hooks/useEarlyAccess';
 import { Navbar } from '@/components/Navbar';
 import { DeleteCustomerDialog } from '@/components/DeleteCustomerDialog';
 import { Button } from '@/components/ui/button';
@@ -236,6 +237,7 @@ export default function CustomerDetail() {
     else {
       toast.success('Služba přidána');
       setNewService({ service_type: 'intelligence', plan: '', monthly_price: '' });
+      invalidateEarlyAccessCache();
       loadAll();
     }
   };
@@ -245,13 +247,13 @@ export default function CustomerDetail() {
       status, ended_at: status === 'cancelled' ? new Date().toISOString() : null,
     }).eq('id', id);
     if (error) toast.error('Chyba: ' + error.message);
-    else { toast.success('Status aktualizován'); loadAll(); }
+    else { toast.success('Status aktualizován'); invalidateEarlyAccessCache(); loadAll(); }
   };
 
   const handleDeleteService = async (id: string) => {
     const { error } = await supabase.from('customer_services').delete().eq('id', id);
     if (error) toast.error('Chyba: ' + error.message);
-    else { toast.success('Služba smazána'); loadAll(); }
+    else { toast.success('Služba smazána'); invalidateEarlyAccessCache(); loadAll(); }
   };
 
   const stats = useMemo(() => ({
