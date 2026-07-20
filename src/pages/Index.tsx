@@ -130,7 +130,7 @@ const Index = () => {
                 loop
                 playsInline
                 preload="auto"
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-top"
+                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
                 src="/hero-video.mp4"
               />
               <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
@@ -155,9 +155,9 @@ const Index = () => {
             {/* Second screen: brand showcase — bílá karta (headline, karusel,
                 B2B CTA), pod ní černá karta se „Ship" headline a budoucí
                 prezentací dropshippingu, dole do ztracena (smoothstep fade). */}
-            {/* sekce začíná lehce PŘES hero video (negativní margin, z-10) —
-                žádný bílý pruh, stejný překryv jako u dalších přechodů */}
-            <section className="relative z-10 -mt-8 sm:-mt-12">
+            {/* sekce začíná jen lehce PŘES úplný spodek hero videa (negativní
+                margin, z-10) — žádný bílý pruh, ale video zůstává celé vidět */}
+            <section className="relative z-10 -mt-4 sm:-mt-6">
               {/* bílá karta od kraje do kraje — zaoblený jen horní okraj, stín
                   nahoře (zvednutý horní okraj proti bílému hero) */}
               <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-16 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-24 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
