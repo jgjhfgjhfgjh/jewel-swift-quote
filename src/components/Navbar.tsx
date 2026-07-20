@@ -207,6 +207,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   // Actual rendered navbar height — drives where the menu drawer starts.
   const [headerHeight, setHeaderHeight] = useState(0);
   const isHome = viewMode === 'home';
+  // Homepage nahoře = navbar leží na hero videu → inverzní (bílá) varianta
+  // loga, položek menu i CTA; po odscrollování se vrací standardní tmavé texty.
+  const overVideo = isHome && isAtTop;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -288,10 +291,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <header
       ref={headerRef}
       className={`absolute top-0 left-0 right-0 z-[100]
-        border-b border-white/25
-        bg-[linear-gradient(135deg,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.38)_50%,rgba(255,255,255,0.46)_100%)]
-        backdrop-blur-[32px] backdrop-saturate-[190%]
-        shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_4px_28px_rgba(0,0,0,0.07)]
+        border-b backdrop-blur-[32px] backdrop-saturate-[190%]
+        ${overVideo
+          ? 'border-white/15 bg-[linear-gradient(135deg,rgba(10,10,12,0.5)_0%,rgba(10,10,12,0.32)_50%,rgba(10,10,12,0.42)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_4px_28px_rgba(0,0,0,0.25)]'
+          : 'border-white/25 bg-[linear-gradient(135deg,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.38)_50%,rgba(255,255,255,0.46)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_4px_28px_rgba(0,0,0,0.07)]'}
         lg:border-transparent lg:bg-none lg:shadow-none lg:backdrop-blur-none lg:backdrop-saturate-100
       `}
     >
@@ -306,7 +309,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           aria-label="swelt — domů"
         >
           <span
-            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${whiteLogo ? 'text-white' : 'text-foreground'}`}
+            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${whiteLogo || overVideo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
         </Link>
@@ -326,7 +329,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     else setActiveNav(active ? null : item.id);
                   }}
                   className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] font-medium transition-colors ${
-                    active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
+                    overVideo
+                      ? active ? 'text-white' : 'text-white/80 hover:text-white'
+                      : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
                   }`}
                 >
                   {item.label}
@@ -351,7 +356,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden lg:inline-flex shrink-0 items-center gap-1.5 h-8 px-2 rounded-lg hover:bg-muted text-xs font-semibold uppercase tracking-wide text-zinc-600"
+                className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 h-8 px-2 rounded-lg text-xs font-semibold uppercase tracking-wide ${
+                  overVideo ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-zinc-600 hover:bg-muted'
+                }`}
                 title="Jazyk"
               >
                 <Globe className="h-4 w-4" />
@@ -401,11 +408,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hidden lg:inline-flex"
+                className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`}
                 onClick={() => navigate('/favorites')}
                 title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
               >
-                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? 'fill-zinc-900 text-zinc-900' : ''}`} />
+                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? (overVideo ? 'fill-white text-white' : 'fill-zinc-900 text-zinc-900') : ''}`} />
                 {wishlistCount > 0 && (
                   <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
                     {wishlistCount}
@@ -413,7 +420,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 )}
               </Button>
 
-              <Button variant="ghost" size="icon" className="relative hidden lg:inline-flex" onClick={() => setCartOpen(true)}>
+              <Button variant="ghost" size="icon" className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`} onClick={() => setCartOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
                   <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
@@ -427,7 +434,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`gap-1 sm:gap-1.5 text-xs px-1.5 sm:px-2 ${isAdmin && salesCustomer ? 'border border-zinc-300 bg-zinc-50' : ''}`}
+                    className={`gap-1 sm:gap-1.5 text-xs px-1.5 sm:px-2 ${isAdmin && salesCustomer ? 'border border-zinc-300 bg-zinc-50' : ''} ${
+                      overVideo && !(isAdmin && salesCustomer) ? 'text-white hover:bg-white/10 hover:text-white' : ''
+                    }`}
                   >
                     <User className="h-4 w-4" />
                     <span className="hidden xl:inline max-w-[120px] truncate">
@@ -543,21 +552,28 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
-                className="h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm text-zinc-900 bg-transparent hover:bg-zinc-900/5 transition-all shrink-0 shadow-none"
+                className={`h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm bg-transparent transition-all shrink-0 shadow-none ${
+                  overVideo ? 'text-white hover:bg-white/10' : 'text-zinc-900 hover:bg-zinc-900/5'
+                }`}
               >
                 Přihlásit
               </Button>
               {/* relative + caption absolutně pod tlačítkem → černá CTA se svisle
-                  zarovná s Přihlásit (caption ji nesune nahoru) */}
+                  zarovná s Přihlásit (caption ji nesune nahoru); nad videem se
+                  pilulka invertuje (bílá s tmavým textem) */}
               <div className="relative flex items-center shrink-0 ml-1">
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}
-                  className="h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm text-white bg-black hover:bg-zinc-800 transition-all shrink-0"
+                  className={`h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm transition-all shrink-0 ${
+                    overVideo ? 'text-zinc-900 bg-white hover:bg-zinc-200' : 'text-white bg-black hover:bg-zinc-800'
+                  }`}
                 >
                   B2B registration
                 </Button>
-                <span className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1 text-[9px] leading-none tracking-wide text-muted-foreground whitespace-nowrap">
+                <span className={`hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1 text-[9px] leading-none tracking-wide whitespace-nowrap ${
+                  overVideo ? 'text-white/70' : 'text-muted-foreground'
+                }`}>
                   Verify Account in 24h
                 </span>
               </div>
@@ -569,7 +585,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ref={desktopMenuButtonRef}
             variant="ghost"
             size="icon"
-            className="lg:hidden shrink-0 relative z-[110] cursor-pointer pointer-events-auto"
+            className={`lg:hidden shrink-0 relative z-[110] cursor-pointer pointer-events-auto ${
+              overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''
+            }`}
             onPointerDown={(e) => {
               e.preventDefault();
               setMenuOpen((v) => !v);

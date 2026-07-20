@@ -119,23 +119,37 @@ const Index = () => {
             {/* First screen: subtract the announcement-bar offset so nothing gets
                 pushed below the fold; pb lifts the headline slightly above the
                 true viewport centre. Navbar is a single compact h-14 row now. */}
-            <section className="relative flex min-h-[calc(100svh-3.5rem-var(--ann-offset,0px))] flex-col justify-center px-6 pb-[18vh] sm:pb-[16vh]">
+            {/* -mt-14 + pt-14: sekce (a video) sahá až k hornímu okraji stránky
+                pod průhledný navbar; obsah zůstává pod ním. */}
+            <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col justify-center overflow-hidden px-6 pb-[18vh] pt-14 sm:pb-[16vh]">
+              {/* fullscreen video přes celou první sekci + tmavý overlay,
+                  aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+                src="/hero-video.mp4"
+              />
+              <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones; mobile
                   clamps on vw so "Enterprise Technology" fits on one line.
                   Inter Extra Light (200). Blok je vycentrovaný (w-fit podle H1),
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
-              <div className="w-full sm:w-fit mx-auto text-left">
-                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-foreground">
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left">
+                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>
-                <div className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap">
+                <div className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
                 </div>
               </div>
               {/* scroll cue */}
-              <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 h-6 w-6 animate-bounce text-zinc-300" aria-hidden />
+              <ChevronDown className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
             </section>
             {/* Second screen: brand showcase — bílá karta (headline, karusel,
                 B2B CTA), pod ní černá karta se „Ship" headline a budoucí
