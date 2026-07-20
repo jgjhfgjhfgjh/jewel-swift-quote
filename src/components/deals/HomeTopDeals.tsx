@@ -85,8 +85,7 @@ export function HomeTopDeals() {
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
             <span className="text-zinc-900">Catch your deal of the year and earn more. </span>
             <span className="text-zinc-500">
-              Closeout collections straight from the concerns. Buy goods at an even bigger
-              wholesale discount{' '}
+              Buy goods at an even bigger wholesale discount{' '}
             </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               reserved in the order received.
