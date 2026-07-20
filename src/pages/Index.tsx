@@ -18,6 +18,7 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
+import { AgentLogoRow } from '@/components/AgentLogoRow';
 import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
 import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
@@ -185,14 +186,9 @@ const Index = () => {
                     <div className="grid h-full min-h-[inherit] grid-cols-1 gap-10 p-8 sm:p-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-20">
                       {/* levý sloupec — copy (placeholder) */}
                       <div className="flex flex-col justify-center">
-                        {/* trojice kruhových placeholderů (jako loga platforem) */}
-                        <div className="mb-8 flex items-center -space-x-3">
-                          {[0, 1, 2].map((i) => (
-                            <div
-                              key={i}
-                              className="h-11 w-11 rounded-full bg-zinc-100 ring-4 ring-white"
-                            />
-                          ))}
+                        {/* loga AI agentů, na které se swelt napojí */}
+                        <div className="mb-8">
+                          <AgentLogoRow />
                         </div>
                         <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
                           Connect swelt to
