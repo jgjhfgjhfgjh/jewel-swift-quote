@@ -100,6 +100,8 @@ interface Flight {
   product?: Product;
   amount?: string;
   highlight?: boolean;
+  /* rovná dráha místo oblouku (krátké „zapadnutí" chipu do cíle) */
+  straight?: boolean;
 }
 interface OrderState { pt: Pt; countryName: string; first: boolean; product: Product; channel: Channel }
 interface ShopState { iso: string; city: MapCity }
@@ -169,6 +171,8 @@ export function DropshipFlowMap() {
   const [launching, setLaunching] = useState<string | null>(null);
   const [order, setOrder] = useState<OrderState | null>(null);
   const [split, setSplit] = useState<SplitState | null>(null);
+  /* velkoobchodní chip zaparkovaný nad swelt (čitelný popisek) */
+  const [wholesaleHold, setWholesaleHold] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [eshopCents, setEshopCents] = useState(0);
   const [tiktokCents, setTiktokCents] = useState(0);
@@ -304,12 +308,20 @@ export function DropshipFlowMap() {
       await wait(2000);
       setSplit(null);
       const target = cardTargetRef.current();
+      /* velkoobchodní část: normální let nad swelt, tam 2,5 s zaparkuje
+         (čitelné „from customer's money") a pak zapadne dovnitř */
+      const swHover = { x: SWELT.x, y: SWELT.y - 26 };
       await Promise.all([
         fly({ kind: 'profit', from: splitPt, to: target, dur: 1700, amount: splitState.profit }).then(() => {
           (channel === 'eshop' ? setEshopCents : setTiktokCents)((p) => p + profitPart);
         }),
-        /* pomalejší let do swelt, ať se stihne přečíst „from customer's money" */
-        fly({ kind: 'wholesale', from: splitPt, to: SWELT, dur: 3000, amount: splitState.wholesale }),
+        (async () => {
+          await fly({ kind: 'wholesale', from: splitPt, to: swHover, dur: 1800, amount: splitState.wholesale });
+          setWholesaleHold(splitState.wholesale);
+          await wait(2500);
+          setWholesaleHold(null);
+          await fly({ kind: 'wholesale', from: swHover, to: SWELT, dur: 450, amount: splitState.wholesale, straight: true });
+        })(),
       ]);
       await wait(250);
 
@@ -364,6 +376,7 @@ export function DropshipFlowMap() {
       setShop(null);
       setOrder(null);
       setSplit(null);
+      setWholesaleHold(null);
       setStep(0);
       setActive(new Set());
       staticArcRef.current = null;
@@ -677,10 +690,20 @@ export function DropshipFlowMap() {
               </div>
             )}
 
+            {/* velkoobchodní chip zaparkovaný nad swelt */}
+            {wholesaleHold && (
+              <div className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: px(SWELT.x), top: py(SWELT.y - 26) }}>
+                <GlassAmount amount={wholesaleHold} tone="neutral" sub="from customer's money" />
+              </div>
+            )}
+
             {/* letící chipy */}
             {flights.filter((f) => f.kind !== 'arc').map((f) => {
               const t = easeInOut(Math.min(1, (vtRef.current - f.start) / f.dur));
-              const p = bez(f.from, ctrl(f.from, f.to), f.to, t);
+              const p = f.straight
+                ? { x: f.from.x + (f.to.x - f.from.x) * t, y: f.from.y + (f.to.y - f.from.y) * t }
+                : bez(f.from, ctrl(f.from, f.to), f.to, t);
               return (
                 <div key={f.id} className="absolute -translate-x-1/2 -translate-y-1/2"
                   style={{ left: px(p.x), top: py(p.y) }}>
