@@ -206,8 +206,9 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
       <div className="mt-12 sm:mt-16">
+        {/* jednotný vzor nadpisů — mění se jen koncovka (concerns/brands/models) */}
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          {t.home.concernsLabel}
+          Set Top Deal alerts on concerns
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <ConcernCarousel texts={CONCERN_TEXTS} appearance="ios" />
@@ -217,7 +218,7 @@ export function HomeTopDeals() {
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
       <div className="mt-12 sm:mt-16">
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          Set a Top Deal alert on your brands
+          Set Top Deal alerts on brands
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <BrandAlertCarousel alertsApi={alertsApi} onRequireAuth={requireAuth} />
@@ -227,7 +228,7 @@ export function HomeTopDeals() {
       {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
       <div className="mx-auto mt-12 max-w-[640px] px-5 sm:mt-16 sm:px-0">
         <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          Set alerts on individual models
+          Set Top Deal alerts on individual models
         </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
       </div>
