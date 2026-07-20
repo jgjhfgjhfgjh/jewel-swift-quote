@@ -267,18 +267,20 @@ const Index = () => {
       {viewMode === 'catalog' && (
         <div className="relative z-10 bg-white flex flex-col flex-1 animate-fade-in">
           <FilterSidebar {...fp} desktopOnly />
-          {/* Brand showcase — same carousel as the homepage, but here each card
-              is a brand filter: clicking checks it (blue fajfka) and writes the
-              brand into the filter bar instead of opening the brand-detail page. */}
-          <div className="border-b bg-white pt-2 pb-1">
-            <div className="flex items-center justify-between px-3 sm:px-5 lg:px-8 mb-1.5">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Filtrovat podle značky
-              </p>
+          {/* Filtr značek — stejný carousel jako na homepage, ale karta = filtr
+              (klik zaškrtne modrou fajfku a propíše značku do filter baru).
+              Šedý pruh (zinc-200 jako homepage pod Top Deals) + bílé iOS karty
+              + homepage-style nadpis, aby bylo jasné, že jde o filtr, ne o
+              položky katalogu. */}
+          <div className="bg-zinc-200 pt-6 pb-5 sm:pt-8 sm:pb-6">
+            <div className="flex items-baseline justify-between gap-4 px-3 sm:px-5 lg:px-8 mb-4 sm:mb-5">
+              <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-2xl sm:text-3xl text-foreground">
+                Filter the catalog by brand.
+              </h2>
               {selectedBrands.length > 0 && (
                 <button
                   onClick={() => setSelectedBrands([])}
-                  className="text-[11px] font-medium text-blue-600 hover:underline"
+                  className="shrink-0 text-xs font-medium text-blue-600 hover:underline"
                 >
                   Zrušit ({selectedBrands.length})
                 </button>

@@ -85,8 +85,8 @@ function BrandCard({
       onClick={() => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
       aria-pressed={selectable ? active : undefined}
       className={`group/card relative flex flex-col cursor-pointer transition-shadow ${cardClass} ${
-        compact ? 'overflow-hidden' : ''
-      } ${selectable && active ? 'ring-2 ring-blue-500 ring-offset-2 rounded-sm' : ''}`}
+        compact ? 'overflow-hidden rounded-2xl bg-white shadow-sm' : ''
+      } ${selectable && active ? 'ring-2 ring-blue-500' : ''}`}
     >
       {/* Active-filter check — same blue fajfka used on the homepage bullets */}
       {selectable && active && (
