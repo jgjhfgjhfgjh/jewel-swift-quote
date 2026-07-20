@@ -77,7 +77,7 @@ const SWELT = { x: 70, y: MAP_H - 52 };
 const SPLIT_LIFT = 34;
 
 /* Kroky legendy — pořadí je sám prodejní argument */
-const STEPS = ['Customer orders', 'You get paid', 'We ship with your brand', 'You pay us'];
+const STEPS = ['Customer orders', 'You get paid', 'We ship with your brand', "You pay us from customer's money"];
 
 /* Assety (Higgsfield): push notifikace kanálů + poster/loop videa partnera */
 const IMG = {
@@ -308,7 +308,8 @@ export function DropshipFlowMap() {
         fly({ kind: 'profit', from: splitPt, to: target, dur: 1700, amount: splitState.profit }).then(() => {
           (channel === 'eshop' ? setEshopCents : setTiktokCents)((p) => p + profitPart);
         }),
-        fly({ kind: 'wholesale', from: splitPt, to: SWELT, dur: 1800, amount: splitState.wholesale }),
+        /* pomalejší let do swelt, ať se stihne přečíst „from customer's money" */
+        fly({ kind: 'wholesale', from: splitPt, to: SWELT, dur: 3000, amount: splitState.wholesale }),
       ]);
       await wait(250);
 
