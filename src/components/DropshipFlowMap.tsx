@@ -489,37 +489,37 @@ export function DropshipFlowMap() {
   const earningsCard = (
     <div
       ref={cardRef}
-      className="absolute -top-12 right-0 z-10 w-52 rounded-2xl bg-white p-3.5 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.65)] sm:-right-7 sm:-top-16 sm:w-60 sm:p-4"
+      className="absolute -top-16 right-0 z-10 w-36 rounded-xl bg-white p-2.5 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.65)] sm:-right-5 sm:-top-20 sm:w-40 sm:p-3"
     >
-      <div className="text-[13px] font-bold tracking-tight text-zinc-900 sm:text-sm">Daily earnings</div>
-      <div className="text-[10px] text-zinc-400">All platforms · updated live</div>
-      <div className="mt-3 space-y-2">
+      <div className="text-[11px] font-bold tracking-tight text-zinc-900 sm:text-xs">Daily earnings</div>
+      <div className="text-[8px] text-zinc-400 sm:text-[9px]">All platforms · updated live</div>
+      <div className="mt-2 space-y-1.5">
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1.5">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-blue-500 to-cyan-400">
-              <ShoppingCart className="h-3 w-3 text-white" strokeWidth={2.5} />
+          <span className="flex items-center gap-1">
+            <span className="flex h-4 w-4 items-center justify-center rounded bg-gradient-to-br from-blue-500 to-cyan-400">
+              <ShoppingCart className="h-2.5 w-2.5 text-white" strokeWidth={2.5} />
             </span>
-            <span className="text-[11px] font-semibold text-zinc-700">E-shop</span>
+            <span className="text-[9px] font-semibold text-zinc-700 sm:text-[10px]">E-shop</span>
           </span>
-          <span className="text-[11px] font-bold tabular-nums text-zinc-900">{eur(eshopCents)}</span>
+          <span className="text-[9px] font-bold tabular-nums text-zinc-900 sm:text-[10px]">{eur(eshopCents)}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1.5">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-zinc-900">
-              <Music2 className="h-3 w-3 text-white" strokeWidth={2.5} />
+          <span className="flex items-center gap-1">
+            <span className="flex h-4 w-4 items-center justify-center rounded bg-zinc-900">
+              <Music2 className="h-2.5 w-2.5 text-white" strokeWidth={2.5} />
             </span>
-            <span className="text-[11px] font-semibold text-zinc-700">TikTok Shop</span>
+            <span className="text-[9px] font-semibold text-zinc-700 sm:text-[10px]">TikTok Shop</span>
           </span>
-          <span className="text-[11px] font-bold tabular-nums text-zinc-900">{eur(tiktokCents)}</span>
+          <span className="text-[9px] font-bold tabular-nums text-zinc-900 sm:text-[10px]">{eur(tiktokCents)}</span>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-2.5">
-        <span className="text-[11px] font-semibold text-zinc-500">Total today</span>
-        <span key={totalCents} className="ds-bounce text-base font-extrabold tabular-nums text-zinc-900">
+      <div className="mt-2 flex items-center justify-between border-t border-zinc-100 pt-1.5">
+        <span className="text-[9px] font-semibold text-zinc-500 sm:text-[10px]">Total today</span>
+        <span key={totalCents} className="ds-bounce text-xs font-extrabold tabular-nums text-zinc-900 sm:text-sm">
           {eur(totalCents)}
         </span>
       </div>
-      <div className="mt-2 rounded-lg bg-emerald-50 px-2 py-1 text-center text-[10px] font-bold text-emerald-600">
+      <div className="mt-1.5 rounded-md bg-emerald-50 px-1.5 py-0.5 text-center text-[8px] font-bold text-emerald-600 sm:text-[9px]">
         Stock invested: €0
       </div>
     </div>
@@ -595,7 +595,7 @@ export function DropshipFlowMap() {
       </div>
 
       {/* horní odsazení = prostor pro kartu vysunutou nad rám videa */}
-      <div className="mt-14 grid items-center gap-12 sm:mt-[4.5rem] sm:grid-cols-[1.12fr_1fr] sm:gap-8">
+      <div className="mt-16 grid items-center gap-12 sm:mt-[5rem] sm:grid-cols-[1.12fr_1fr] sm:gap-8">
         {/* ── VLEVO: noční mapa (SVG + overlay sdílí čistý wrapper) ── */}
         <div className="relative">
           <div className="pointer-events-none absolute right-0 top-0 z-10 rounded-full bg-zinc-900/70 px-3 py-1 text-[11px] font-semibold text-white/85 backdrop-blur-sm sm:text-xs">
