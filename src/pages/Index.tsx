@@ -124,7 +124,7 @@ const Index = () => {
             {/* min-h drží i poměr videa (1928×1076 → 55.9vw): na širokých
                 monitorech je sekce vyšší než obrazovka a video je vidět CELÉ
                 (nic se neořezává nahoře ani dole), obsah stránky se posune níž */}
-            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden px-6 pb-[13vh] pt-14 sm:pb-[11vh]">
+            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden px-6 pb-[10vh] pt-14 sm:pb-[8vh]">
               {/* fullscreen video přes celou první sekci + tmavý overlay,
                   aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
               <video
@@ -144,7 +144,7 @@ const Index = () => {
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[3vw]">
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[6vw]">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>

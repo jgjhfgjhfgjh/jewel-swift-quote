@@ -113,10 +113,24 @@ function FloatingNotif() {
   ];
   const [idx, setIdx] = useState(0);
   const [visible, setVisible] = useState(false);
+  // Notifikace se ukazují až od poloviny stránky — nahoře (hero video,
+  // showcase) nechávají čistou scénu.
+  const [pastHalf, setPastHalf] = useState(false);
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
     return sessionStorage.getItem('floatingNotifDismissed') === '1';
   });
+
+  useEffect(() => {
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const half = (doc.scrollHeight - window.innerHeight) / 2;
+      setPastHalf(window.scrollY > half);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (dismissed) return;
@@ -135,7 +149,7 @@ function FloatingNotif() {
     try { sessionStorage.setItem('floatingNotifDismissed', '1'); } catch { /* private mode — ignorovat */ }
   };
 
-  if (dismissed) return null;
+  if (dismissed || !pastHalf) return null;
 
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
