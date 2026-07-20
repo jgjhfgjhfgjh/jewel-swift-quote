@@ -13,6 +13,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { supabase } from '@/integrations/supabase/client';
 import type { TablesUpdate } from '@/integrations/supabase/types';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { useStore } from '@/lib/store';
 import { ALL_LANGS, langNames, type Lang } from '@/lib/i18n';
 import { siteUrl } from '@/lib/siteUrl';
@@ -89,6 +90,59 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 const PAYMENT_LABEL: Record<string, string> = { prepaid: 'Platba předem', credit: 'Na fakturu (kredit)' };
+
+/* ── Deal watchdogy (alerty z homepage sekce Top Deals) ── */
+const ALERT_LEVEL_LABEL: Record<string, string> = {
+  deals: 'Všechny dealy',
+  concern: 'Koncern',
+  brand: 'Značka',
+  product: 'Model',
+};
+
+function AlertsCard() {
+  const { alerts, loading, remove } = useDealAlerts();
+  return (
+    <Card
+      icon={Bell}
+      eyebrow="Alerty"
+      title="Deal watchdogy"
+      desc="Hlídače deal dropů — koncerny, značky i jednotlivé modely. E-mailová upozornění napojíme v další fázi."
+    >
+      {loading ? (
+        <p className="text-sm text-muted-foreground">Načítám…</p>
+      ) : alerts.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Zatím žádné watchdogy. Nastavíte je na úvodní stránce v sekci Top Deals.
+        </p>
+      ) : (
+        <ul className="space-y-2">
+          {alerts.map((a) => (
+            <li
+              key={a.id}
+              className="flex items-center justify-between gap-3 rounded-xl border border-border bg-slate-50/60 px-4 py-2.5"
+            >
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-medium text-foreground">
+                  {a.label || a.target || 'Všechny dealy'}
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  {ALERT_LEVEL_LABEL[a.level] ?? a.level}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => remove(a.level, a.target)}
+                className="shrink-0 text-xs font-semibold text-muted-foreground transition-colors hover:text-destructive"
+              >
+                Zrušit
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Card>
+  );
+}
 
 export default function AccountSettings() {
   const navigate = useNavigate();
@@ -486,6 +540,9 @@ export default function AccountSettings() {
             </label>
           </div>
         </Card>
+
+        {/* ════ DEAL WATCHDOGY ════ */}
+        <AlertsCard />
 
         {/* ════ LANGUAGE ════ */}
         <Card icon={Globe} eyebrow="Jazyk" title="Jazyk rozhraní">

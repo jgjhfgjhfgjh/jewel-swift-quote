@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, Lock } from 'lucide-react';
+import { ArrowRight, Bell, Check, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
+import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
@@ -10,18 +11,27 @@ import { CountdownTimer } from './CountdownTimer';
 import { BrandLogo } from '@/components/BrandLogo';
 import { ConcernCarousel, type ConcernCarouselTexts } from '@/components/ConcernCarousel';
 import { getConcernForDeal } from '@/data/concerns';
+import { BrandAlertCarousel } from './BrandAlertCarousel';
+import { ModelAlertSearch } from './ModelAlertSearch';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 /**
- * Homepage sekce „Top Deals" — bílá full-width karta se zaobleným horním
- * okrajem, řazena pod kartu „Connect swelt to your AI workflow" (zaoblené
- * rohy odkrývají černý wrapper v Index.tsx).
- * Celá sekce je záměrně anglicky (jako ostatní tmavé homepage sekce),
- * proto vždy čte EN slovník a countdownům vnucuje lang="en".
+ * Homepage sekce „Top Deals" — světle šedá full-width karta se zaobleným
+ * horním okrajem, řazena pod kartu „Connect swelt to your AI agents"
+ * (zaoblené rohy odkrývají černý wrapper v Index.tsx). Celá sekce je
+ * záměrně anglicky, proto čte EN slovník a countdownům vnucuje lang="en".
  *
- * Skladba (schválený návrh): hero deal s nejbližší uzávěrkou + locked/blur
- * karty nadcházejících dealů (Insider vidí každý deal o 48 h dříve — hybridní
- * paywall: registrace zdarma = den startu, Insider = 48 h náskok) + countdown
- * „next drop" + carousel koncernů s watchdog CTA (klik vede na koncern).
+ * Logika sekce (schváleno): hero deal + locked karty → čtyřúrovňový pricing
+ * (Explore free · Insider €49/měs ročně, 50 % z kotvy · Flex €99/měs kotva ·
+ * Enterprise na míru) → watchdog alerty na třech úrovních: koncerny
+ * (ConcernCarousel), značky (BrandAlertCarousel) a jednotlivé modely
+ * (ModelAlertSearch). Alerty zapisují do deal_alerts; notifikace později.
  */
 const t = dealsI18n.en;
 
@@ -37,15 +47,81 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
   nextAria: 'Next',
 };
 
+interface Tier {
+  id: 'explore' | 'insider' | 'flex' | 'enterprise';
+  name: string;
+  price: string;
+  period?: string;
+  /** přeškrtnutá kotva vedle ceny */
+  was?: string;
+  note?: string;
+  badge?: string;
+  features: string[];
+  cta: string;
+}
+
+/** Čtyřúrovňový paywall — Flex 99 €/měs je záměrná cenová kotva pro Insider. */
+const TIERS: Tier[] = [
+  {
+    id: 'explore',
+    name: 'Explore',
+    price: 'Free',
+    note: 'no card needed',
+    features: ['Browse all DEAL offers', 'New deal drop alerts', 'Order at wholesale prices'],
+    cta: 'Explore deals free',
+  },
+  {
+    id: 'insider',
+    name: 'Insider',
+    price: '€49',
+    period: '/month',
+    was: '€99',
+    note: 'billed annually',
+    badge: 'Most popular · 50% off',
+    features: [
+      'Everything in Explore',
+      '48h early access to every deal',
+      'Concern, brand & model alerts',
+    ],
+    cta: 'Get Insider',
+  },
+  {
+    id: 'flex',
+    name: 'Flex',
+    price: '€99',
+    period: '/month',
+    note: 'cancel anytime',
+    features: [
+      'Everything in Explore',
+      '48h early access to every deal',
+      'Concern, brand & model alerts',
+    ],
+    cta: 'Get Flex',
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 'Custom',
+    note: 'for high-volume buyers',
+    features: [
+      'Everything in Insider',
+      'Higher quantities',
+      'Tailored deals & terms',
+      'Dedicated account manager',
+    ],
+    cta: 'Contact us',
+  },
+];
+
 export function HomeTopDeals() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  // Insider stav — platební backend zatím neexistuje, takže ho nikdo nemá.
-  // Až vznikne (např. profiles.insider_until), napojí se sem; UI obou stavů
-  // je hotové: bez Insideru nákupní CTA, s Insiderem potvrzení přístupu.
-  const isInsider = false;
   const { deals, productCounts, loading } = useDeals();
+  const alertsApi = useDealAlerts();
+  const [exploreOpen, setExploreOpen] = useState(false);
+
+  const requireAuth = () => openAuthModal('register');
 
   // Hero = běžící deal s nejbližší uzávěrkou (největší tlak na rozhodnutí).
   const hero = useMemo(() => {
@@ -71,6 +147,19 @@ export function HomeTopDeals() {
   const lockedSlots: (Deal | null)[] = [...upcoming];
   while (lockedSlots.length < 2) lockedSlots.push(null);
 
+  // Placené tarify zatím nemají platební flow — nepřihlášený jde do
+  // registrace, přihlášený na /deals; Enterprise píše obchodu.
+  const handleTier = (id: Tier['id']) => {
+    if (id === 'explore') {
+      setExploreOpen(true);
+    } else if (id === 'enterprise') {
+      window.location.href = 'mailto:obchod@swelt.cz';
+    } else {
+      if (user) navigate('/deals');
+      else requireAuth();
+    }
+  };
+
   return (
     // Světle šedá karta na černé zóně — bílé karty uvnitř na ní vyniknou;
     // zaoblené rohy odkrývají černý wrapper v Index.tsx.
@@ -80,8 +169,7 @@ export function HomeTopDeals() {
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
-          {/* šedá slova musí být tmavší než slate-100 pozadí → zinc-500;
-              Insider paywall s cenou je součástí headline (stejný font) */}
+          {/* šedá slova musí být tmavší než slate-100 pozadí → zinc-500 */}
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
             <span className="text-zinc-900">Catch your deal of the year and earn more. </span>
             <span className="text-zinc-500">
@@ -109,43 +197,21 @@ export function HomeTopDeals() {
           </div>
         </div>
 
-        {/* Insider paywall — věta s cenou těsně nad CTA, stejná typografie
-            jako headline, jen menší */}
-        <p className="mt-10 text-center font-sans font-extralight tracking-tight text-xl sm:mt-14 sm:text-2xl">
-          <span className="text-zinc-500">Insiders see every deal </span>
-          <span className="text-zinc-900">48 hours early.</span>
-        </p>
-        {/* CTA řada — early access je viditelný pro všechny; nepřihlášeného
-            pošle do registrace, přihlášeného zatím na /deals (Insider
-            platební flow ještě neexistuje) */}
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-3 sm:mt-6">
-          <Link
-            to="/deals"
-            className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-zinc-800"
-          >
-            {t.home.browseCta}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          {isInsider ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-700">
-              <Check className="h-4 w-4" />
-              {t.home.earlyAccessOwned}
-            </span>
-          ) : (
-            <button
-              type="button"
-              onClick={() => (user ? navigate('/deals') : openAuthModal('register'))}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition-colors hover:border-slate-400 hover:bg-white"
-            >
-              <Lock className="h-3.5 w-3.5" />
-              {t.home.earlyAccessCta}
-            </button>
-          )}
+        {/* pricing — čtyřúrovňový paywall místo dřívějších dvou CTA */}
+        <div className="mx-auto mt-12 max-w-[1160px] sm:mt-16">
+          <p className="text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
+            <span className="text-zinc-500">Insiders see every deal </span>
+            <span className="text-zinc-900">48 hours early.</span>
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
+            {TIERS.map((tier) => (
+              <PricingCard key={tier.id} tier={tier} onSelect={() => handleTier(tier.id)} />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* carousel koncernů — watchdog CTA, klik vede na /koncerny/:slug;
-          full-bleed jako BrandShowcaseCarousel na bílé kartě výše */}
+      {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
       <div className="mt-12 sm:mt-16">
         <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           {t.home.concernsLabel}
@@ -154,7 +220,163 @@ export function HomeTopDeals() {
           <ConcernCarousel texts={CONCERN_TEXTS} appearance="ios" />
         </div>
       </div>
+
+      {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
+      <div className="mt-12 sm:mt-16">
+        <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          Set a Top Deal alert on your brands
+        </p>
+        <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
+          <BrandAlertCarousel alertsApi={alertsApi} onRequireAuth={requireAuth} />
+        </div>
+      </div>
+
+      {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
+      <div className="mx-auto mt-12 max-w-[640px] px-5 sm:mt-16 sm:px-0">
+        <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          Watch individual models
+        </p>
+        <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
+      </div>
+
+      <ExploreDialog
+        open={exploreOpen}
+        onOpenChange={setExploreOpen}
+        alertsApi={alertsApi}
+        onRequireAuth={requireAuth}
+        onInsider={() => {
+          setExploreOpen(false);
+          handleTier('insider');
+        }}
+      />
     </section>
+  );
+}
+
+/** Jedna pricing karta — Insider je zvýrazněný (Most popular). */
+function PricingCard({ tier, onSelect }: { tier: Tier; onSelect: () => void }) {
+  const featured = tier.id === 'insider';
+  return (
+    <div
+      className={`relative flex flex-col rounded-2xl border bg-white p-5 ${
+        featured ? 'border-zinc-900 ring-1 ring-zinc-900 shadow-lg' : 'border-slate-200 shadow-sm'
+      }`}
+    >
+      {tier.badge && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-900 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+          {tier.badge}
+        </span>
+      )}
+      <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">{tier.name}</p>
+      <p className="mt-3 flex items-baseline gap-1.5">
+        {tier.was && (
+          <span className="text-base font-medium text-slate-400 line-through">{tier.was}</span>
+        )}
+        <span className="text-3xl font-semibold tracking-tight text-zinc-900">{tier.price}</span>
+        {tier.period && <span className="text-sm text-slate-500">{tier.period}</span>}
+      </p>
+      {tier.note && <p className="mt-1 text-xs text-slate-500">{tier.note}</p>}
+      <ul className="mt-4 flex-1 space-y-2">
+        {tier.features.map((f) => (
+          <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+            {f}
+          </li>
+        ))}
+      </ul>
+      <button
+        type="button"
+        onClick={onSelect}
+        className={`mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${
+          featured
+            ? 'bg-zinc-900 text-white hover:bg-zinc-800'
+            : 'border border-slate-300 text-slate-900 hover:border-slate-400 hover:bg-slate-50'
+        }`}
+      >
+        {tier.cta}
+        <ArrowRight className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
+/** Free tier dialog — zapnout drop alert, projít dealy + FOMO upsell. */
+function ExploreDialog({
+  open,
+  onOpenChange,
+  alertsApi,
+  onRequireAuth,
+  onInsider,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  alertsApi: DealAlertsApi;
+  onRequireAuth: () => void;
+  onInsider: () => void;
+}) {
+  const dropOn = alertsApi.has('deals');
+
+  const handleDrop = async () => {
+    const ok = await alertsApi.toggle('deals', '', 'All deal drops');
+    if (!ok) {
+      onOpenChange(false);
+      onRequireAuth();
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Start exploring deals</DialogTitle>
+          <DialogDescription>
+            Free forever. Turn on drop alerts so no deal slips past you.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-2.5">
+          <button
+            type="button"
+            onClick={handleDrop}
+            className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+              dropOn
+                ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                : 'border border-slate-300 text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            {dropOn ? (
+              <>
+                <Check className="h-4 w-4" /> Deal drop alerts on
+              </>
+            ) : (
+              <>
+                <Bell className="h-4 w-4" /> Turn on deal drop alerts
+              </>
+            )}
+          </button>
+          <Link
+            to="/deals"
+            onClick={() => onOpenChange(false)}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+          >
+            Browse deals <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        {/* FOMO upsell na Insider */}
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm leading-relaxed text-amber-900">
+            You don&rsquo;t have early access. Other buyers see top deals 48 hours before you
+            &mdash; the best pieces may be gone.
+          </p>
+          <button
+            type="button"
+            onClick={onInsider}
+            className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-amber-900 underline underline-offset-2 transition-colors hover:text-amber-950"
+          >
+            Get Insider &mdash; &euro;49/month <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
