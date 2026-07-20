@@ -308,9 +308,10 @@ export function DropshipFlowMap() {
       await wait(2000);
       setSplit(null);
       const target = cardTargetRef.current();
-      /* velkoobchodní část: normální let nad swelt, tam 2,5 s zaparkuje
-         (čitelné „from customer's money") a pak zapadne dovnitř */
-      const swHover = { x: SWELT.x, y: SWELT.y - 26 };
+      /* velkoobchodní část: normální let, zastaví KUS NAD swelt (bez
+         překryvu pilulky), zvětší se na 2,5 s kvůli čitelnosti popisku
+         a pak zapadne dovnitř */
+      const swHover = { x: SWELT.x, y: SWELT.y - 55 };
       await Promise.all([
         fly({ kind: 'profit', from: splitPt, to: target, dur: 1700, amount: splitState.profit }).then(() => {
           (channel === 'eshop' ? setEshopCents : setTiktokCents)((p) => p + profitPart);
@@ -583,6 +584,9 @@ export function DropshipFlowMap() {
         .ds-crack { animation: dsCrack 0.4s ease-in-out both }
         @keyframes dsBounce { 0% { transform: scale(1) } 40% { transform: scale(1.22) } 100% { transform: scale(1) } }
         .ds-bounce { display: inline-block; animation: dsBounce 0.7s ease-out both; transform-origin: right center }
+        @keyframes dsGrow { from { transform: scale(1) } to { transform: scale(1.3) } }
+        /* origin dole — chip roste nahoru, mezera ke swelt pilulce zůstává */
+        .ds-grow { animation: dsGrow 0.45s ease-out both; transform-origin: center bottom }
       `}</style>
 
       {/* preload notifikací, ať první objednávka nebliká */}
@@ -690,11 +694,14 @@ export function DropshipFlowMap() {
               </div>
             )}
 
-            {/* velkoobchodní chip zaparkovaný nad swelt */}
+            {/* velkoobchodní chip zaparkovaný nad swelt — zvětší se,
+                ať jde popisek přečíst (animace na vnitřním divu) */}
             {wholesaleHold && (
               <div className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: px(SWELT.x), top: py(SWELT.y - 26) }}>
-                <GlassAmount amount={wholesaleHold} tone="neutral" sub="from customer's money" />
+                style={{ left: px(SWELT.x), top: py(SWELT.y - 55) }}>
+                <div className="ds-grow">
+                  <GlassAmount amount={wholesaleHold} tone="neutral" big sub="from customer's money" />
+                </div>
               </div>
             )}
 
