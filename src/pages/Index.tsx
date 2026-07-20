@@ -109,8 +109,10 @@ const Index = () => {
       <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       {/* Top slot — Apple-style first screen: big light headline fills the
           viewport, the showcase carousel only appears after scrolling.
-          Catalog view keeps the compact banner. */}
-      <div className="relative z-0 mt-14">
+          Catalog view keeps the compact banner. z-10 (dřív z-0): overlay
+          prvky uvnitř (dropdown našeptávače v Top Deals) se musí kreslit
+          nad AppsCards (z-0); navbar i pozdější z-10 sekce zůstávají výš. */}
+      <div className="relative z-10 mt-14">
         {viewMode === 'home' ? (
           <>
             {/* First screen: subtract the announcement-bar offset so nothing gets
@@ -224,7 +226,9 @@ const Index = () => {
                   carousel koncernů). Černá zóna výše je protažená pod kartu,
                   aby zaoblené rohy odkrývaly černou; bílá sekce pak plynule
                   navazuje na bílý obsah níže (dřívější fade už není potřeba). */}
-              <div className="bg-[#0d0d10]">
+              {/* z-10: dropdown našeptávače modelů se musí kreslit NAD
+                  následující sekce (AppsCards má vlastní z-0 kontext) */}
+              <div className="relative z-10 bg-[#0d0d10]">
                 <HomeTopDeals />
               </div>
             </section>

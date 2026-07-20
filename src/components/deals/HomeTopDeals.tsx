@@ -163,7 +163,7 @@ export function HomeTopDeals() {
   return (
     // Světle šedá karta na černé zóně — bílé karty uvnitř na ní vyniknou;
     // zaoblené rohy odkrývají černý wrapper v Index.tsx.
-    <section className="relative w-full rounded-t-[1.75rem] bg-slate-100 pt-16 pb-16 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-24">
+    <section className="relative w-full rounded-t-[1.75rem] bg-slate-100 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
