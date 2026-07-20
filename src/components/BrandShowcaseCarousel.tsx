@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
+import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
+import { CardAlertBell } from '@/components/deals/CardAlertBell';
 import { sortByBrandPriority } from '@/lib/brandOrder';
 
 interface BrandCardData {
@@ -43,13 +45,15 @@ const ROTATE_MS = 1800;
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({
-  brand, selectable, active, onSelect, dark,
+  brand, selectable, active, onSelect, dark, alertsApi,
 }: {
   brand: BrandCardData;
   selectable?: boolean;
   active?: boolean;
   onSelect?: () => void;
   dark?: boolean;
+  /** Sdílená instance deal alertů — zvoneček jen ve filter (selectable) módu */
+  alertsApi?: DealAlertsApi;
 }) {
   // In filter (selectable) mode the card is compact — tighter spacing and no
   // centre-scale animation, so it reads as a control rather than a showcase.
@@ -93,6 +97,18 @@ function BrandCard({
         <div className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
           <Check className="h-4 w-4 text-blue-600" strokeWidth={3} />
         </div>
+      )}
+
+      {/* Brand watchdog — early access odběratel zapne hlídání značky,
+          ostatním klik otevře upsell (stejné chování jako jinde) */}
+      {selectable && alertsApi && (
+        <CardAlertBell
+          level="brand"
+          target={brand.key}
+          label={brand.name}
+          api={alertsApi}
+          className="absolute left-2 top-2 z-20"
+        />
       )}
 
       {/* Crossfading product image — hlavní plocha nahoře */}
@@ -160,6 +176,8 @@ export function BrandShowcaseCarousel({
   selectable, selectedBrands, onToggleBrand, dark,
 }: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
+  // Jedna sdílená instance alertů pro všechny karty (zvonečky jen ve filtru)
+  const alertsApi = useDealAlerts();
 
   // Live brand catalog (bound to the feed) — every brand, ordered by product
   // count. Brands without preview images stay in (with a text placeholder):
@@ -251,6 +269,7 @@ export function BrandShowcaseCarousel({
             active={selectable && isActive(brand)}
             onSelect={() => onToggleBrand?.(brand.rawManufacturers)}
             dark={dark}
+            alertsApi={selectable ? alertsApi : undefined}
           />
         ))}
       </div>

@@ -4,6 +4,8 @@ import { BrandLogo } from '@/components/BrandLogo';
 import { CONCERNS } from '@/data/concerns';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
+import { useDealAlerts } from '@/hooks/useDealAlerts';
+import { CardAlertBell } from '@/components/deals/CardAlertBell';
 
 interface ConcernFilterCardData {
   slug: string;
@@ -31,6 +33,8 @@ export function ConcernFilterCarousel({
   onToggleConcern?: (rawManufacturers: string[]) => void;
 }) {
   const { data: catalog = [] } = useBrandCatalog();
+  // Jedna sdílená instance alertů pro všechny karty
+  const alertsApi = useDealAlerts();
 
   // Koncern → raw výrobci jeho značek přítomných ve feedu (jen s produkty).
   const cards = useMemo<ConcernFilterCardData[]>(() => {
@@ -72,10 +76,10 @@ export function ConcernFilterCarousel({
         {loop.map((card, i) => {
           const active = isActive(card);
           return (
-            <button
+            <div
               key={`${card.slug}-${i}`}
-              type="button"
               data-card
+              role="button"
               aria-pressed={active}
               onClick={() => onToggleConcern?.(card.rawManufacturers)}
               className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm p-3 sm:p-4 cursor-pointer transition-shadow ${CARD_CLASS} ${
@@ -87,6 +91,16 @@ export function ConcernFilterCarousel({
                   <Check className="h-3.5 w-3.5 text-blue-600" strokeWidth={3} />
                 </div>
               )}
+
+              {/* Koncern watchdog — early access zapne alert, jinak upsell */}
+              <CardAlertBell
+                level="concern"
+                target={card.slug}
+                label={card.name}
+                api={alertsApi}
+                size="sm"
+                className="absolute left-1.5 top-1.5 z-20"
+              />
               <BrandLogo
                 name={card.name}
                 domain={card.domain}
@@ -95,7 +109,7 @@ export function ConcernFilterCarousel({
                 className="max-h-full max-w-[85%] object-contain [mix-blend-mode:multiply]"
                 fallbackClassName="font-display font-black tracking-tight text-foreground text-xs text-center"
               />
-            </button>
+            </div>
           );
         })}
       </div>
