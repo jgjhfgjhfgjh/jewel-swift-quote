@@ -16,6 +16,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
 import { AgentLogoRow } from '@/components/AgentLogoRow';
@@ -273,7 +274,25 @@ const Index = () => {
               + homepage-style nadpis, aby bylo jasné, že jde o filtr, ne o
               položky katalogu. */}
           <div className="bg-zinc-200 pt-6 pb-5 sm:pt-8 sm:pb-6">
-            <div className="flex items-baseline justify-between gap-4 px-3 sm:px-5 lg:px-8 mb-4 sm:mb-5">
+            {/* Koncernový filtr — logo-only karty, toggle všech značek koncernu */}
+            <div className="px-3 sm:px-5 lg:px-8 mb-3 sm:mb-4">
+              <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-2xl sm:text-3xl text-foreground">
+                Filter the catalog by concern.
+              </h2>
+            </div>
+            <ConcernFilterCarousel
+              selectedBrands={selectedBrands}
+              onToggleConcern={(raws) => {
+                const allActive = raws.length > 0 && raws.every((m) => selectedBrands.includes(m));
+                setSelectedBrands(
+                  allActive
+                    ? selectedBrands.filter((m) => !raws.includes(m))
+                    : Array.from(new Set([...selectedBrands, ...raws])),
+                );
+              }}
+            />
+
+            <div className="flex items-baseline justify-between gap-4 px-3 sm:px-5 lg:px-8 mb-4 sm:mb-5 mt-5 sm:mt-6">
               <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-2xl sm:text-3xl text-foreground">
                 Filter the catalog by brand.
               </h2>
