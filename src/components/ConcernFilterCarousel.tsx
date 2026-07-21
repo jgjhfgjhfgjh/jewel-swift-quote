@@ -83,7 +83,7 @@ export function ConcernFilterCarousel({
               aria-pressed={active}
               onClick={() => onToggleConcern?.(card.rawManufacturers)}
               className={`relative flex items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm p-3 sm:p-4 cursor-pointer transition-shadow ${CARD_CLASS} ${
-                active ? 'ring-2 ring-blue-500' : ''
+                active ? 'ring-2 ring-blue-500' : 'ring-1 ring-zinc-200/60'
               }`}
             >
               {active && (

@@ -90,7 +90,7 @@ function BrandCard({
       aria-pressed={selectable ? active : undefined}
       className={`group/card relative flex flex-col cursor-pointer transition-shadow ${cardClass} ${
         compact ? 'overflow-hidden rounded-2xl bg-white shadow-sm' : ''
-      } ${selectable && active ? 'ring-2 ring-blue-500' : ''}`}
+      } ${selectable && active ? 'ring-2 ring-blue-500' : compact ? 'ring-1 ring-zinc-200/60' : ''}`}
     >
       {/* Active-filter check — same blue fajfka used on the homepage bullets */}
       {selectable && active && (
