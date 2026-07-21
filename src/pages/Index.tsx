@@ -16,6 +16,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
+import { BrandsSpotlightLine } from '@/components/BrandsSpotlightLine';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
@@ -178,10 +179,9 @@ const Index = () => {
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
-                    <p className="mt-4 font-sans text-base font-light leading-relaxed text-muted-foreground sm:mt-5 sm:text-xl">
-                      Swarovski, Pandora, Tommy Hilfiger, Guess, Versace, Armani
-                      and more than 60 other luxury brands.
-                    </p>
+                    {/* spotlight výčet značek — kurzor rozsvěcí slova do gradientu
+                        (stejný mechanismus jako DropshipHeadline níže) */}
+                    <BrandsSpotlightLine />
                   </div>
                 </div>
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-16 sm:pt-24">
