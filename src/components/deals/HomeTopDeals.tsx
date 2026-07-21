@@ -203,22 +203,6 @@ export function HomeTopDeals() {
             )}
           </div>
         </div>
-
-        {/* pricing — čtyřúrovňový paywall; lead věta přesunuta z headline sem */}
-        <div className="mx-auto mt-12 max-w-[1160px] sm:mt-16">
-          <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-zinc-900">
-            Catch your deal of the year earlier and earn more.
-          </h3>
-          <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
-            <span className="text-zinc-600">Insiders see every deal </span>
-            <span className="text-zinc-900">48 hours early.</span>
-          </p>
-          <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
-            {TIERS.map((tier) => (
-              <PricingCard key={tier.id} tier={tier} onSelect={() => handleTier(tier.id)} />
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
@@ -257,6 +241,23 @@ export function HomeTopDeals() {
           Set Top Deal alerts on individual models
         </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
+      </div>
+
+      {/* pricing — čtyřúrovňový paywall na konci sekce, pod alerty; lead věta
+          nad ceníkem (přesunuto z headline i z pozice pod hero kartami) */}
+      <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
+        <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-zinc-900">
+          Catch your deal of the year earlier and earn more.
+        </h3>
+        <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
+          <span className="text-zinc-600">Insiders see every deal </span>
+          <span className="text-zinc-900">48 hours early.</span>
+        </p>
+        <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
+          {TIERS.map((tier) => (
+            <PricingCard key={tier.id} tier={tier} onSelect={() => handleTier(tier.id)} />
+          ))}
+        </div>
       </div>
 
       <ExploreDialog
