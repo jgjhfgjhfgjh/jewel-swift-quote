@@ -178,7 +178,9 @@ const Index = () => {
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
-                    <p className="mt-4 font-sans text-base font-light leading-relaxed text-muted-foreground sm:mt-5 sm:text-xl">
+                    {/* stejný font a velikost jako nadpis — jako v dropshipping
+                        sekci; šedou se odliší od černého nadpisu */}
+                    <p className="mt-2 font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-muted-foreground sm:mt-3">
                       Swarovski, Pandora, Tommy Hilfiger, Guess, Versace, Armani
                       and more than 60 other luxury brands.
                     </p>
