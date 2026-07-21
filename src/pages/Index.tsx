@@ -124,7 +124,9 @@ const Index = () => {
             {/* min-h drží i poměr videa (1928×1076 → 55.9vw): na širokých
                 monitorech je sekce vyšší než obrazovka a video je vidět CELÉ
                 (nic se neořezává nahoře ani dole), obsah stránky se posune níž */}
-            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden px-6 pb-[10vh] pt-14 sm:pb-[8vh]">
+            {/* bg tmavé — než video/poster nakreslí první pixel, je pod
+                overlayem tma místo šedé (overlay na bílé = šedý záblesk) */}
+            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden bg-[#0b0d10] px-6 pb-[10vh] pt-14 sm:pb-[8vh]">
               {/* fullscreen video přes celou první sekci + tmavý overlay,
                   aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
               <video
@@ -133,6 +135,9 @@ const Index = () => {
                 loop
                 playsInline
                 preload="auto"
+                // poster = první snímek videa (66 kB) — zobrazí se okamžitě,
+                // než se donačte 12MB video; žádný šedý placeholder
+                poster="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-poster.jpg"
                 className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
                 src="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-video.mp4"
               />
