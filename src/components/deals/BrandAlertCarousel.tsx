@@ -1,16 +1,20 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bell, BellRing, ChevronLeft, ChevronRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
+import { useEarlyAccess } from '@/hooks/useEarlyAccess';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { sortByBrandPriority } from '@/lib/brandOrder';
+import { dealsI18n } from '@/lib/i18n-deals';
 import type { DealAlertsApi } from '@/hooks/useDealAlerts';
+import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 
 /**
  * Carousel všech značek z katalogu pro sekci Top Deals — každá karta má
- * toggle „Set a Top Deal alert" (brand-level watchdog). Klik na kartu vede
- * na detail značky, tlačítko přepíná alert (nepřihlášený → registrace).
- * iOS vzhled (zakulacené karty, pill CTA), texty anglicky jako celá sekce.
+ * zvoneček (brand-level watchdog). Klik na kartu vede na detail značky,
+ * zvoneček přepíná alert: bez early accessu otevře upsell, nepřihlášený
+ * jde do registrace. iOS vzhled, texty anglicky jako celá sekce.
  */
 export function BrandAlertCarousel({
   alertsApi,
@@ -20,18 +24,28 @@ export function BrandAlertCarousel({
   onRequireAuth: () => void;
 }) {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const { hasEarlyAccess } = useEarlyAccess();
   const { data: catalog = [] } = useBrandCatalog();
   const brands = sortByBrandPriority(catalog);
   const trackRef = useRef<HTMLDivElement>(null);
+  const t = dealsI18n.en.alertsUi;
 
   const scrollByPage = (dir: 1 | -1) => {
     const el = trackRef.current;
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
   };
 
-  const handleToggle = async (key: string, name: string) => {
-    const ok = await alertsApi.toggle('brand', key, name);
-    if (!ok) onRequireAuth();
+  const handleToggle = (key: string, name: string) => {
+    if (!user) {
+      onRequireAuth();
+      return;
+    }
+    if (!hasEarlyAccess) {
+      openEarlyAccessUpsell();
+      return;
+    }
+    alertsApi.toggle('brand', key, name);
   };
 
   if (brands.length === 0) return null;
@@ -73,27 +87,22 @@ export function BrandAlertCarousel({
                   </span>
                 )}
               </div>
+              {/* CTA = jen zvoneček (alert toggle) */}
               <button
                 type="button"
+                aria-label={on ? t.alertOn : t.setAlert}
+                title={on ? t.alertOn : t.setAlert}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleToggle(b.key, b.name);
                 }}
-                className={`inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
                   on
-                    ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                    ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
                     : 'bg-zinc-900 text-white hover:bg-zinc-800'
                 }`}
               >
-                {on ? (
-                  <>
-                    <Check className="h-3.5 w-3.5" /> Alert on
-                  </>
-                ) : (
-                  <>
-                    <Bell className="h-3.5 w-3.5" /> Set a Top Deal alert
-                  </>
-                )}
+                {on ? <BellRing className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
               </button>
             </div>
           );

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Bell, BellRing } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { getBrandByName } from '@/data/brands';
 import { CONCERNS, type Concern } from '@/data/concerns';
@@ -40,6 +40,15 @@ const CS_TEXTS: ConcernCarouselTexts = {
   nextAria: 'Další',
 };
 
+/** Alert zvoneček místo textového CTA (homepage Top Deals) — klik na kartu
+ *  dál naviguje na koncern, zvoneček přepíná concern-level watchdog. */
+export interface ConcernAlertBell {
+  isOn: (slug: string) => boolean;
+  onToggle: (slug: string, name: string) => void;
+  onAria: string;
+  offAria: string;
+}
+
 /** Card sizing — same widths as the "Všechny značky" logo shelf cards */
 const CARD_CLASS =
   'shrink-0 w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px] h-[340px] sm:h-[360px]';
@@ -49,11 +58,14 @@ function ConcernCard({
   data,
   texts,
   appearance,
+  alertBell,
 }: {
   data: ConcernCardData;
   texts: ConcernCarouselTexts;
   /** 'sharp' = hranatá katalogová karta; 'ios' = zakulacená karta s pill CTA */
   appearance: 'sharp' | 'ios';
+  /** Když je předán, CTA nahradí samotný zvoneček (alert toggle) */
+  alertBell?: ConcernAlertBell;
 }) {
   const navigate = useNavigate();
   const { concern, productCount, brandKeys } = data;
@@ -128,9 +140,35 @@ function ConcernCard({
 
       {/* CTA */}
       <div className="p-4 shrink-0">
-        <span className={`w-full inline-flex items-center justify-center gap-1.5 ${appearance === 'ios' ? 'rounded-full' : 'rounded-md'} bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white group-hover/card:bg-zinc-800 transition-colors whitespace-nowrap`}>
-          {texts.cta} <ArrowRight className="h-3.5 w-3.5 shrink-0" />
-        </span>
+        {alertBell ? (
+          (() => {
+            const on = alertBell.isOn(concern.slug);
+            return (
+              <span className="flex justify-center">
+                <button
+                  type="button"
+                  aria-label={on ? alertBell.onAria : alertBell.offAria}
+                  title={on ? alertBell.onAria : alertBell.offAria}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alertBell.onToggle(concern.slug, concern.name);
+                  }}
+                  className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                    on
+                      ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
+                      : 'bg-zinc-900 text-white hover:bg-zinc-800'
+                  }`}
+                >
+                  {on ? <BellRing className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
+                </button>
+              </span>
+            );
+          })()
+        ) : (
+          <span className={`w-full inline-flex items-center justify-center gap-1.5 ${appearance === 'ios' ? 'rounded-full' : 'rounded-md'} bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white group-hover/card:bg-zinc-800 transition-colors whitespace-nowrap`}>
+            {texts.cta} <ArrowRight className="h-3.5 w-3.5 shrink-0" />
+          </span>
+        )}
       </div>
     </button>
   );
@@ -140,9 +178,11 @@ function ConcernCard({
 export function ConcernCarousel({
   texts = CS_TEXTS,
   appearance = 'sharp',
+  alertBell,
 }: {
   texts?: ConcernCarouselTexts;
   appearance?: 'sharp' | 'ios';
+  alertBell?: ConcernAlertBell;
 }) {
   // Live brand catalog (bound to the feed) — counts per koncern follow it
   const { data: catalog = [] } = useBrandCatalog();
@@ -189,7 +229,7 @@ export function ConcernCarousel({
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((data, i) => (
-          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} appearance={appearance} />
+          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} appearance={appearance} alertBell={alertBell} />
         ))}
       </div>
 

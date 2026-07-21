@@ -11,8 +11,10 @@ import { CountdownTimer } from './CountdownTimer';
 import { BrandLogo } from '@/components/BrandLogo';
 import { ConcernCarousel, type ConcernCarouselTexts } from '@/components/ConcernCarousel';
 import { getConcernForDeal } from '@/data/concerns';
+import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { BrandAlertCarousel } from './BrandAlertCarousel';
 import { ModelAlertSearch } from './ModelAlertSearch';
+import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 import {
   Dialog,
   DialogContent,
@@ -110,9 +112,24 @@ export function HomeTopDeals() {
   const { user } = useAuthContext();
   const { deals, productCounts, loading } = useDeals();
   const alertsApi = useDealAlerts();
+  const { hasEarlyAccess } = useEarlyAccess();
   const [exploreOpen, setExploreOpen] = useState(false);
 
   const requireAuth = () => openAuthModal('register');
+
+  // Zvoneček na kartě koncernu — stejné hradlo jako všechny alert vstupy:
+  // nepřihlášený → registrace, bez early accessu → upsell, jinak toggle.
+  const handleConcernBell = (slug: string, name: string) => {
+    if (!user) {
+      requireAuth();
+      return;
+    }
+    if (!hasEarlyAccess) {
+      openEarlyAccessUpsell();
+      return;
+    }
+    alertsApi.toggle('concern', slug, name);
+  };
 
   // Hero = běžící deal s nejbližší uzávěrkou (největší tlak na rozhodnutí).
   const hero = useMemo(() => {
@@ -154,7 +171,7 @@ export function HomeTopDeals() {
   return (
     // Šedá karta na černé zóně (neutrální zinc, žádný modrý nádech) — bílé
     // karty uvnitř na ní vyniknou; zaoblené rohy odkrývají černý wrapper.
-    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-200 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
+    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-100 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
@@ -211,7 +228,16 @@ export function HomeTopDeals() {
           Set Top Deal alerts on concerns
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
-          <ConcernCarousel texts={CONCERN_TEXTS} appearance="ios" />
+          <ConcernCarousel
+            texts={CONCERN_TEXTS}
+            appearance="ios"
+            alertBell={{
+              isOn: (slug) => alertsApi.has('concern', slug),
+              onToggle: handleConcernBell,
+              onAria: t.alertsUi.alertOn,
+              offAria: t.alertsUi.setAlert,
+            }}
+          />
         </div>
       </div>
 
@@ -514,7 +540,7 @@ function LockedDealCard({ deal }: { deal: Deal }) {
 /** Placeholder locked slot — žádný naplánovaný drop, ale FOMO zůstává. */
 function LockedPlaceholderCard() {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white/70 p-5">
+    <div className="flex flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
           <Lock className="h-3 w-3" />
