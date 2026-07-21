@@ -143,25 +143,24 @@ function ConcernCard({
         {alertBell ? (
           (() => {
             const on = alertBell.isOn(concern.slug);
+            // CTA v původní velikosti (full-width pill), uvnitř jen zvoneček
             return (
-              <span className="flex justify-center">
-                <button
-                  type="button"
-                  aria-label={on ? alertBell.onAria : alertBell.offAria}
-                  title={on ? alertBell.onAria : alertBell.offAria}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    alertBell.onToggle(concern.slug, concern.name);
-                  }}
-                  className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-                    on
-                      ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
-                      : 'bg-zinc-900 text-white hover:bg-zinc-800'
-                  }`}
-                >
-                  {on ? <BellRing className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
-                </button>
-              </span>
+              <button
+                type="button"
+                aria-label={on ? alertBell.onAria : alertBell.offAria}
+                title={on ? alertBell.onAria : alertBell.offAria}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  alertBell.onToggle(concern.slug, concern.name);
+                }}
+                className={`w-full inline-flex items-center justify-center ${appearance === 'ios' ? 'rounded-full' : 'rounded-md'} px-4 py-2.5 transition-colors ${
+                  on
+                    ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
+                    : 'bg-zinc-900 text-white group-hover/card:bg-zinc-800'
+                }`}
+              >
+                {on ? <BellRing className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
+              </button>
             );
           })()
         ) : (

@@ -171,7 +171,7 @@ export function HomeTopDeals() {
   return (
     // Šedá karta na černé zóně (neutrální zinc, žádný modrý nádech) — bílé
     // karty uvnitř na ní vyniknou; zaoblené rohy odkrývají černý wrapper.
-    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-100 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
+    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-50 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový

@@ -87,7 +87,7 @@ export function BrandAlertCarousel({
                   </span>
                 )}
               </div>
-              {/* CTA = jen zvoneček (alert toggle) */}
+              {/* CTA v původní velikosti (full-width pill), uvnitř jen zvoneček */}
               <button
                 type="button"
                 aria-label={on ? t.alertOn : t.setAlert}
@@ -96,7 +96,7 @@ export function BrandAlertCarousel({
                   e.stopPropagation();
                   handleToggle(b.key, b.name);
                 }}
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                className={`inline-flex w-full items-center justify-center rounded-full px-4 py-2 transition-colors ${
                   on
                     ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
                     : 'bg-zinc-900 text-white hover:bg-zinc-800'
