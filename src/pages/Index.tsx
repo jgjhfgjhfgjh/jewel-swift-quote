@@ -170,14 +170,18 @@ const Index = () => {
                   nahoře (zvednutý horní okraj proti bílému hero) */}
               <div className="w-full rounded-t-[1.75rem] bg-white pt-16 pb-16 sm:rounded-t-[2.5rem] sm:pt-24 sm:pb-24 shadow-[0_-20px_45px_-15px_rgba(0,0,0,0.16)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
-                  {/* centrovaný blok, text zarovnaný doleva — jako hero H1;
-                      velikost zvolena tak, aby se headline vešla na jeden řádek */}
-                  <div className="mx-auto w-fit max-w-full text-left">
+                  {/* stejné umístění jako nadpis dropshipping sekce níže —
+                      centrovaný sloupec max-w-[1000px], text vlevo */}
+                  <div className="mx-auto max-w-[1000px] text-left">
                     {/* velikost = (šířka viewportu − padding stránky) / šířka textu
                         v em — drží jeden řádek na sm+ */}
                     <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
                       Sell the brands people already want.
                     </h2>
+                    <p className="mt-4 font-sans text-base font-light leading-relaxed text-muted-foreground sm:mt-5 sm:text-xl">
+                      Swarovski, Pandora, Tommy Hilfiger, Guess, Versace, Armani
+                      and more than 60 other luxury brands.
+                    </p>
                   </div>
                 </div>
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-16 sm:pt-24">
