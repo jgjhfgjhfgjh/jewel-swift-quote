@@ -16,7 +16,7 @@ import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
-import { BrandsSpotlightLine } from '@/components/BrandsSpotlightLine';
+import { ShowcaseSpotlightHeading } from '@/components/ShowcaseSpotlightHeading';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
@@ -174,14 +174,9 @@ const Index = () => {
                   {/* stejné umístění jako nadpis dropshipping sekce níže —
                       centrovaný sloupec max-w-[1000px], text vlevo */}
                   <div className="mx-auto max-w-[1000px] text-left">
-                    {/* velikost = (šířka viewportu − padding stránky) / šířka textu
-                        v em — drží jeden řádek na sm+ */}
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
-                      Sell the brands people already want.
-                    </h2>
-                    {/* spotlight výčet značek — kurzor rozsvěcí slova do gradientu
-                        (stejný mechanismus jako DropshipHeadline níže) */}
-                    <BrandsSpotlightLine />
+                    {/* nadpis + výčet značek s jedním spotlight efektem (radius
+                        bere obojí; gradient jako v dropshipping sekci) */}
+                    <ShowcaseSpotlightHeading />
                   </div>
                 </div>
                 <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5 pt-16 sm:pt-24">
