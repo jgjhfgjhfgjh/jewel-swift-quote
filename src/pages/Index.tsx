@@ -298,7 +298,7 @@ const Index = () => {
               Šedý pruh (zinc-200 jako homepage pod Top Deals) + bílé iOS karty
               + homepage-style nadpis, aby bylo jasné, že jde o filtr, ne o
               položky katalogu. */}
-          <div className="bg-zinc-200 [background-image:radial-gradient(ellipse_90%_75%_at_50%_45%,#f4f4f5_0%,rgba(244,244,245,0)_72%)] pt-6 pb-5 sm:pt-8 sm:pb-6">
+          <div className="bg-zinc-50 [background-image:radial-gradient(ellipse_90%_75%_at_50%_45%,#ffffff_0%,rgba(255,255,255,0)_72%)] pt-6 pb-5 sm:pt-8 sm:pb-6">
             {/* Koncernový filtr — logo-only karty, toggle všech značek koncernu */}
             <div className="px-3 sm:px-5 lg:px-8 mb-3 sm:mb-4">
               <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-2xl sm:text-3xl text-foreground">
