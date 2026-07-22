@@ -209,7 +209,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const isHome = viewMode === 'home';
   // Homepage nahoře = navbar leží na hero videu → inverzní (bílá) varianta
   // loga, položek menu i CTA; po odscrollování se vrací standardní tmavé texty.
-  const overVideo = isHome && isAtTop;
+  // Otevřené mega menu má bílé pozadí (bílý panel od vrchu), takže prvky musí
+  // být tmavé → overVideo v tu chvíli vypínáme.
+  const overVideo = isHome && isAtTop && !activeNav;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -290,7 +292,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <>
     <header
       ref={headerRef}
-      className="absolute top-0 left-0 right-0 z-[100]"
+      className={`absolute top-0 left-0 right-0 z-[100] ${
+        activeNav ? 'bg-white' : ''
+      }`}
     >
       {/* ── Single compact row: logo → desktop nav (chevrony) → pravý cluster ── */}
       <div className="relative h-14 pl-3 pr-2 sm:pl-5 sm:pr-3 flex items-center gap-1 sm:gap-2">
@@ -303,7 +307,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           aria-label="swelt — domů"
         >
           <span
-            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${whiteLogo || overVideo ? 'text-white' : 'text-foreground'}`}
+            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
             style={{ letterSpacing: '-0.05em' }}
           >swelt.</span>
         </Link>
