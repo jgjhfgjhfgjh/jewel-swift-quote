@@ -290,13 +290,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
     <>
     <header
       ref={headerRef}
-      className={`absolute top-0 left-0 right-0 z-[100]
-        border-b backdrop-blur-[32px] backdrop-saturate-[190%]
-        ${overVideo
-          ? 'border-white/15 bg-[linear-gradient(135deg,rgba(10,10,12,0.5)_0%,rgba(10,10,12,0.32)_50%,rgba(10,10,12,0.42)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_4px_28px_rgba(0,0,0,0.25)]'
-          : 'border-white/25 bg-[linear-gradient(135deg,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.38)_50%,rgba(255,255,255,0.46)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_4px_28px_rgba(0,0,0,0.07)]'}
-        lg:border-transparent lg:bg-none lg:shadow-none lg:backdrop-blur-none lg:backdrop-saturate-100
-      `}
+      className="absolute top-0 left-0 right-0 z-[100]"
     >
       {/* ── Single compact row: logo → desktop nav (chevrony) → pravý cluster ── */}
       <div className="relative h-14 pl-3 pr-2 sm:pl-5 sm:pr-3 flex items-center gap-1 sm:gap-2">
