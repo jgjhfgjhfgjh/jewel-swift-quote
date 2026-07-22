@@ -7,6 +7,7 @@ const PHRASES = [
   'Everywhere',
   'Grow Around Europe',
   'Automate and Save Hours',
+  'Connect to AI Agents',
 ];
 
 const TYPE_MS = 65;
