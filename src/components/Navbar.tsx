@@ -207,11 +207,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   // Actual rendered navbar height — drives where the menu drawer starts.
   const [headerHeight, setHeaderHeight] = useState(0);
   const isHome = viewMode === 'home';
-  // Homepage nahoře = navbar leží na hero videu → inverzní (bílá) varianta
-  // loga, položek menu i CTA; po odscrollování se vrací standardní tmavé texty.
-  // Otevřené mega menu má bílé pozadí (bílý panel od vrchu), takže prvky musí
-  // být tmavé → overVideo v tu chvíli vypínáme.
-  const overVideo = isHome && isAtTop && !activeNav;
+  // Bílé (inverzní) prvky jen tam, kde navbar reálně leží na hero videu:
+  // pouze na routě '/' v home viewMode a nahoře. viewMode je globální store
+  // hodnota, která přetrvává i po přechodu na jiné stránky — proto MUSÍ být
+  // navázáno i na location.pathname, jinak by na bílých stránkách (/brands…)
+  // zůstal bílý text na bílém pozadí. Otevřené mega menu (bílý panel od vrchu)
+  // taky vypíná bílé prvky → tmavé, čitelné.
+  const overVideo = location.pathname === '/' && isHome && isAtTop && !activeNav;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {

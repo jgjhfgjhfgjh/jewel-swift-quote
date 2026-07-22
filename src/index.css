@@ -37,7 +37,10 @@ html.has-announcement #root { margin-top: 2.25rem; } /* h-9 = 36px */
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    /* čistě bílé pozadí stránek (dřív jemná slate-50 210 40% 98%, tvořila
+       světle šedý „pruh" nad bílým obsahem, hlavně v horním paddingu pod
+       průhledným navbarem) */
+    --background: 0 0% 100%;
     --foreground: 222 30% 8%;
 
     --card: 0 0% 100%;
