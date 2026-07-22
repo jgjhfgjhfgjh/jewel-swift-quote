@@ -153,7 +153,10 @@ const Index = () => {
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
                   Sell Luxury with<br />Enterprise Technology
                 </h1>
-                <div className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
+                {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
+                    předrezervovaného místa, blok nemění výšku a text neodskočí;
+                    na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
+                <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
                 </div>
               </div>
