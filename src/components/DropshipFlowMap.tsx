@@ -730,8 +730,11 @@ export function DropshipFlowMap() {
           </div>
         </div>
 
-        {/* ── VPRAVO: video partnera + přesahující karta a notifikace ── */}
-        <div className="relative">
+        {/* ── VPRAVO: video partnera + přesahující karta a notifikace ──
+            Na mobilu pt posune video (v toku) dolů, zatímco karty/notifikace
+            (absolutní) zůstanou nahoře → video se odkryje pod nimi místo aby ho
+            celé zakryly. Na sm+ (grid vedle mapy) je prostoru dost → pt-0. */}
+        <div className="relative pt-16 sm:pt-0">
           <div className="relative overflow-hidden rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]">
             {videoOn ? (
               <video
