@@ -208,7 +208,7 @@ const cs: DealsText = {
     priceTiers: 'Ceny dle množství', tier: 'od {qty} ks', close: 'Zavřít',
   },
   home: {
-    badge: 'Top DEAL nabídky',
+    badge: 'GoBigDeal nabídky',
     sub: 'Closeout kolekce přímo od koncernů, které už znáte — Swatch Group, Fossil Group a další. Slevy až 68 %, kusy se rezervují dle pořadí objednávek.',
     insiderLine: 'Insider vidí každý deal o 48 hodin dříve.',
     liveLabel: 'Právě běží',
@@ -220,7 +220,7 @@ const cs: DealsText = {
     lockedNote: 'Insider ho uvidí o 48 hodin dříve.',
     unlocksIn: 'Odemkne se za',
     comingSoon: 'Už brzy',
-    concernsLabel: 'Nastavte Top Deal alerty na koncerny',
+    concernsLabel: 'Nastavte GoBigDeal alerty na koncerny',
     concernStoryCta: 'Příběh koncernu',
     concernFallback: 'Přední světový hodinářský koncern.',
     emptyHeroTitle: 'Deal roku se právě připravuje',
@@ -229,7 +229,7 @@ const cs: DealsText = {
   alertsUi: {
     watch: 'Hlídat model',
     watching: 'Hlídáno',
-    setAlert: 'Nastavit Top Deal alert',
+    setAlert: 'Nastavit GoBigDeal alert',
     alertOn: 'Alert aktivní',
     upsellTitle: 'Nemáte early access',
     upsellText: 'Insider vidí každý deal o 48 hodin dříve a dostává alerty na koncerny, značky i jednotlivé modely. Nejlepší kusy mohou být pryč dřív, než je vůbec uvidíte.',
@@ -344,7 +344,7 @@ const en: DealsText = {
     priceTiers: 'Prices by quantity', tier: 'from {qty} pcs', close: 'Close',
   },
   home: {
-    badge: 'Top DEAL offers',
+    badge: 'GoBigDeal offers',
     sub: 'Closeout collections straight from the concerns you already know — Swatch Group, Fossil Group and more. Up to 68% off, reserved in the order received.',
     insiderLine: 'Insiders see every deal 48 hours early.',
     liveLabel: 'Live now',
@@ -356,7 +356,7 @@ const en: DealsText = {
     lockedNote: 'Insiders see it 48 hours early.',
     unlocksIn: 'Unlocks in',
     comingSoon: 'Coming soon',
-    concernsLabel: 'Set Top Deal alerts on concerns',
+    concernsLabel: 'Set GoBigDeal alerts on concerns',
     concernStoryCta: 'Concern story',
     concernFallback: 'One of the world’s leading watch concerns.',
     emptyHeroTitle: 'The deal of the year is in the works',
@@ -365,7 +365,7 @@ const en: DealsText = {
   alertsUi: {
     watch: 'Watch model',
     watching: 'Watching',
-    setAlert: 'Set a Top Deal alert',
+    setAlert: 'Set a GoBigDeal alert',
     alertOn: 'Alert on',
     upsellTitle: 'You don’t have early access',
     upsellText: 'Insiders see every deal 48 hours early and get concern, brand and model alerts. The best pieces may be gone before you even see them.',

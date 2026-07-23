@@ -30,14 +30,14 @@ interface NavbarProps {
 const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why Swelt' },
   { id: 'products',     label: 'Products' },
-  { id: 'top-deals',    label: 'Top Deals',    path: '/deals' },
+  { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'luxury-deals', label: 'Luxury Deals', path: '/prestige' },
   { id: 'katalog',      label: 'Katalog' },
 ];
 
 /* Mobile sheet — mega menu je desktop-only, mobil si nechává plochý seznam. */
 const HOME_NAV_ITEMS = [
-  { path: '/deals',        label: 'Top Deals' },
+  { path: '/deals',        label: 'GoBigDeal' },
   { path: '/velkoobchod',  label: 'Velkoobchod' },
   { path: '/dropshipping', label: 'Dropshipping' },
   { path: '/prestige',     label: 'Luxury' },
@@ -87,7 +87,7 @@ const NAV_PANELS: Record<string, NavPanel> = {
     cta: { label: 'Prohlédnout značky', path: '/brands' },
   },
   'top-deals': {
-    heading: 'Top Deals',
+    heading: 'GoBigDeal',
     desc: 'Časově omezené akce na prémiové hodinky a šperky za výjimečné ceny.',
     cols: [
       { title: 'Kategorie', links: [

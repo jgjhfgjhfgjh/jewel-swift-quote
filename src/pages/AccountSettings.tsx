@@ -112,7 +112,7 @@ function AlertsCard() {
         <p className="text-sm text-muted-foreground">Načítám…</p>
       ) : alerts.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Zatím žádné watchdogy. Nastavíte je na úvodní stránce v sekci Top Deals.
+          Zatím žádné watchdogy. Nastavíte je na úvodní stránce v sekci GoBigDeal.
         </p>
       ) : (
         <ul className="space-y-2">
