@@ -71,12 +71,23 @@ function ConcernCard({
   const { concern, productCount, brandKeys } = data;
   const logoBrands = brandKeys.slice(0, 6);
 
+  const openConcern = () => navigate(`/koncerny/${concern.slug}`);
+
   return (
-    <button
-      type="button"
+    // role=button místo <button>: karta s alert zvonečkem uvnitř by jinak
+    // vnořovala <button> do <button> (neplatné HTML)
+    <div
+      role="button"
+      tabIndex={0}
       data-card
-      onClick={() => navigate(`/koncerny/${concern.slug}`)}
-      className={`group/card relative flex flex-col overflow-hidden ${appearance === 'ios' ? 'rounded-[1.25rem]' : 'rounded-none'} border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
+      onClick={openConcern}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openConcern();
+        }
+      }}
+      className={`group/card relative flex cursor-pointer flex-col overflow-hidden ${appearance === 'ios' ? 'rounded-[1.25rem]' : 'rounded-none'} border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
     >
       {/* Koncern logo — labelled so it reads clearly as the parent group */}
       <div className="pt-4 shrink-0 flex flex-col items-center">
@@ -169,7 +180,7 @@ function ConcernCard({
           </span>
         )}
       </div>
-    </button>
+    </div>
   );
 }
 

@@ -217,30 +217,32 @@ export function HomeTopDeals() {
         <div className="mx-auto max-w-[1000px] text-left">
           {/* šedá slova musí být tmavší než zinc-200 pozadí → zinc-600 */}
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-zinc-600">
-              Buy goods at an even bigger wholesale discount{' '}
-            </span>
+            <span className="text-zinc-900">Go Big Deal </span>
+            <span className="text-zinc-600">with </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              reserved in the order received.
+              bigger wholesale discount
             </span>
           </h2>
         </div>
 
-        {/* gateway karta (copy, později video) + swipovatelný pás Big deals —
-            sloupce po dvou kartách, dvě řady i na mobilu */}
-        <div className="mx-auto mt-10 grid max-w-[1160px] gap-4 sm:mt-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-          {loading ? (
-            <div className="min-h-[360px] animate-pulse rounded-2xl bg-slate-200" />
-          ) : hero ? (
-            <HeroDealCard deal={hero} count={productCounts[hero.id] ?? 0} />
-          ) : (
-            <EmptyHeroCard />
-          )}
+        {/* swipovatelný pás GoBigDeal — gateway karta (copy, později video) je
+            prvním prvkem PÁSU, takže se posouvá spolu se zbytkem; za ní sloupce
+            po dvou kartách, dvě řady i na mobilu */}
+        <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
           <DealStrip
             cards={stripCards}
             realCount={realDealCount}
             hasEarlyAccess={hasEarlyAccess}
             onLockedClick={handleLockedClick}
+            gateway={
+              loading ? (
+                <div className="h-full min-h-[360px] animate-pulse rounded-2xl bg-slate-200" />
+              ) : hero ? (
+                <HeroDealCard deal={hero} count={productCounts[hero.id] ?? 0} />
+              ) : (
+                <EmptyHeroCard />
+              )
+            }
           />
         </div>
       </div>
@@ -549,11 +551,14 @@ function DealStrip({
   realCount,
   hasEarlyAccess,
   onLockedClick,
+  gateway,
 }: {
   cards: StripCard[];
   realCount: number;
   hasEarlyAccess: boolean;
   onLockedClick: (deal?: Deal) => void;
+  /** Velká gateway karta — první prvek pásu, posouvá se spolu se zbytkem. */
+  gateway: React.ReactNode;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const scrollByPage = (dir: 1 | -1) => {
@@ -569,9 +574,11 @@ function DealStrip({
       <div className="group relative">
         <div
           ref={trackRef}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]
+          className="flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]
                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
+          {/* gateway karta jede v pásu jako první — není ukotvená */}
+          <div className="flex w-[min(86vw,420px)] shrink-0 snap-start flex-col">{gateway}</div>
           {pairs.map((pair, i) => (
             <div key={i} className="flex w-[270px] shrink-0 snap-start flex-col gap-4 sm:w-[300px]">
               {pair.map((card, j) => {
@@ -636,7 +643,7 @@ function StripLiveCard({ deal, isNew }: { deal: Deal; isNew: boolean }) {
   return (
     <Link
       to={`/deals/${deal.slug}`}
-      className="relative flex h-[172px] flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      className="relative flex min-h-[172px] flex-1 flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
     >
       {isNew && (
         <span className="absolute -top-2.5 left-4 animate-pulse rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
@@ -695,7 +702,7 @@ function StripLockedCard({
     return (
       <Link
         to={`/deals/${deal.slug}`}
-        className="relative flex h-[172px] flex-col rounded-2xl border border-blue-600 bg-white p-4 shadow-sm ring-1 ring-blue-600 transition-shadow hover:shadow-md"
+        className="relative flex min-h-[172px] flex-1 flex-col rounded-2xl border border-blue-600 bg-white p-4 shadow-sm ring-1 ring-blue-600 transition-shadow hover:shadow-md"
       >
         <span className="absolute -top-2.5 left-4 inline-flex items-center gap-1 rounded-full bg-blue-600 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
           <Zap className="h-3 w-3" /> Early access
@@ -734,7 +741,7 @@ function StripLockedCard({
     <button
       type="button"
       onClick={onLockedClick}
-      className="flex h-[172px] w-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-shadow hover:shadow-md"
+      className="flex min-h-[172px] flex-1 w-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
@@ -772,7 +779,7 @@ function StripLockedPlaceholder({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-[172px] w-full flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-left transition-shadow hover:shadow-md"
+      className="flex min-h-[172px] flex-1 w-full flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-left transition-shadow hover:shadow-md"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
@@ -795,7 +802,7 @@ function StripLockedPlaceholder({ onClick }: { onClick: () => void }) {
 /** Výplňový placeholder na konci pásu — další Big deals na cestě. */
 function StripFillerCard() {
   return (
-    <div className="flex h-[172px] flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white/60 p-4">
+    <div className="flex min-h-[172px] flex-1 flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white/60 p-4">
       <span className="w-fit rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-500">
         {t.home.comingSoon}
       </span>
