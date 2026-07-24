@@ -74,10 +74,13 @@ function HeroVideo() {
       disablePictureInPicture
       controls={false}
       // poster = první snímek videa (66 kB) — zobrazí se okamžitě,
-      // než se donačte 12MB video; žádný šedý placeholder
-      poster="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-poster.jpg"
+      // než se donačte video; žádný šedý placeholder.
+      // Src i poster MUSÍ být same-origin (Vercel edge CDN): remote Supabase
+      // startoval na mobilu tak pomalu, že iOS autoplay vzdal a nechal play
+      // overlay (nebo se video nespustilo vůbec).
+      poster="/hero-poster.jpg"
       className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
-      src="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-video.mp4"
+      src="/hero-video.mp4"
     />
   );
 }
