@@ -7,6 +7,19 @@
  *
  * Typografie dle reference: „Go" a „deal" tenké (deal kurzívou), „Big" tučné.
  */
+/**
+ * Inline značka „GoBig<deal>" pro použití uvnitř běžného textu (nadpisy,
+ * tlačítka, odrážky). „deal" je vždy kurzívou — sjednocuje brand napříč webem.
+ * `suffix` pro množné číslo apod. („GoBigdeals").
+ */
+export function Gbd({ suffix = '' }: { suffix?: string }) {
+  return (
+    <>
+      GoBig<span className="italic">deal{suffix}</span>
+    </>
+  );
+}
+
 export function GoBigDealLogo({ className = '' }: { className?: string }) {
   return (
     <span

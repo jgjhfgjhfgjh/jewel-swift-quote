@@ -5,6 +5,7 @@ import {
   Rocket, Check, Clock, Loader2, LogOut, Store, Mail, Plus, Trash2,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
+import { Gbd } from '@/components/GoBigDealLogo';
 import { BackButton } from '@/components/BackButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -112,7 +113,7 @@ function AlertsCard() {
         <p className="text-sm text-muted-foreground">Načítám…</p>
       ) : alerts.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Zatím žádné watchdogy. Nastavíte je na úvodní stránce v sekci GoBigDeal.
+          Zatím žádné watchdogy. Nastavíte je na úvodní stránce v sekci <Gbd />.
         </p>
       ) : (
         <ul className="space-y-2">

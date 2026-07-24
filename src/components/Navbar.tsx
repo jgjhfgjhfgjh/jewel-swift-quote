@@ -16,7 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
-import { GoBigDealLogo } from '@/components/GoBigDealLogo';
+import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 
 interface NavbarProps {
@@ -342,7 +342,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                       : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
                   }`}
                 >
-                  {item.label}
+                  {item.id === 'top-deals' ? <Gbd /> : item.label}
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`}
                     strokeWidth={isFlagship && !overVideo ? 2.75 : 2}
@@ -744,7 +744,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               onClick={() => { setMenuOpen(false); navigate(path); }}
               className="flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-zinc-50 transition-colors"
             >
-              {label}
+              {label === 'GoBigDeal' ? <Gbd /> : label}
               <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
             </button>
           ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, Bell, Check } from 'lucide-react';
 import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
@@ -10,6 +10,7 @@ import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { BrandAlertCarousel } from './BrandAlertCarousel';
 import { ModelAlertSearch } from './ModelAlertSearch';
 import { GoBigDealStrip } from './GoBigDealStrip';
+import { Gbd } from '@/components/GoBigDealLogo';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 import {
   Dialog,
@@ -38,7 +39,7 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
   heading: null,
   groupLabel: 'Concern',
   brandsLabel: 'Concern brands',
-  cta: 'Set a GoBigDeal alert',
+  cta: 'Set a deal alert',
   brandWord: (n) => (n === 1 ? 'brand' : 'brands'),
   modelsWord: 'models',
   prevAria: 'Previous',
@@ -55,7 +56,7 @@ interface Tier {
   was?: string;
   note?: string;
   badge?: string;
-  features: string[];
+  features: ReactNode[];
   cta: string;
 }
 
@@ -67,8 +68,8 @@ const TIERS: Tier[] = [
     price: 'Free',
     note: 'no card needed',
     features: [
-      'Browse and shop all GoBigDeals when they drop',
-      'New GoBigDeal drop alerts',
+      <>Browse and shop all <Gbd suffix="s" /> when they drop</>,
+      <>New <Gbd /> drop alerts</>,
       'Order at better wholesale prices',
     ],
     cta: 'Explore deals free',
@@ -159,7 +160,7 @@ export function HomeTopDeals() {
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-zinc-900">Deals </span>
+            <span className="italic text-zinc-900">deals </span>
             <span className="text-zinc-600">with </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               bigger wholesale discount
@@ -268,8 +269,8 @@ function PricingCard({ tier, onSelect }: { tier: Tier; onSelect: () => void }) {
       )}
       {tier.note && <p className="mt-1 text-xs text-slate-500">{tier.note}</p>}
       <ul className="mt-4 flex-1 space-y-2">
-        {tier.features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+        {tier.features.map((f, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
             <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
             {f}
           </li>
@@ -355,7 +356,7 @@ function ExploreDialog({
         {/* FOMO upsell na Insider */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
           <p className="text-sm leading-relaxed text-amber-900">
-            You don&rsquo;t have early access. Other buyers see GoBigDeals 48 hours before you
+            You don&rsquo;t have early access. Other buyers see <Gbd suffix="s" /> 48 hours before you
             &mdash; the best pieces may be gone.
           </p>
           <button

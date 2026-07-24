@@ -10,6 +10,7 @@ import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 import { CountdownTimer } from './CountdownTimer';
 import { BrandLogo } from '@/components/BrandLogo';
+import { Gbd } from '@/components/GoBigDealLogo';
 import { getConcernForDeal } from '@/data/concerns';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 
@@ -187,7 +188,7 @@ export function GoBigDealStrip({
       {/* počítadlo — jen reálné dealy, ne placeholdery */}
       {realDealCount > 0 && (
         <p className="mt-3 text-xs font-semibold text-slate-500">
-          {realDealCount} GoBigDeal{realDealCount === 1 ? '' : 's'} · swipe for more
+          {realDealCount} <Gbd suffix={realDealCount === 1 ? '' : 's'} /> · swipe for more
         </p>
       )}
     </div>
@@ -215,7 +216,7 @@ export function GoBigDealAlertButton({ onNavigate }: { onNavigate?: () => void }
           onClick={() => setOpen((v) => !v)}
           className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
         >
-          <Sparkles className="h-4 w-4 text-violet-500" /> Set a GoBigDeal alert
+          <Sparkles className="h-4 w-4 text-violet-500" /> Set a <Gbd /> alert
           <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
         </button>
       </span>
@@ -510,7 +511,7 @@ function StripFillerCard() {
         <div className="h-2.5 w-4/5 rounded-full bg-slate-100" />
         <div className="mt-2 h-2.5 w-3/5 rounded-full bg-slate-100" />
       </div>
-      <p className="text-xs text-slate-400">More GoBigDeals on the way.</p>
+      <p className="text-xs text-slate-400">More <Gbd suffix="s" /> on the way.</p>
     </div>
   );
 }
