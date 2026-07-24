@@ -657,6 +657,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   </div>
                 </div>
               </div>
+            ) : activeNav === 'top-deals' ? (
+              /* GoBigDeal — full-width kopie pásu z homepage bez levého sloupce
+                 (heading/desc/CTA), pod ním tlačítko s nabídkou úrovní alertů
+                 (koncern/značka/model → kotvy #gbd-alerts-*) */
+              <div className="px-6 py-6">
+                <GoBigDealStrip fadeFrom="from-white" />
+                <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
+              </div>
             ) : (
             <div className="px-6 py-8">
               <div className="grid grid-cols-[minmax(260px,1fr)_2fr] gap-10 items-start">
@@ -673,15 +681,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   </button>
                 </div>
 
-                {/* Right: DEAL carousel for the deals category, link columns otherwise */}
-                {activeNav === 'top-deals' ? (
-                  /* kopie GoBigDeal pásu z homepage + tlačítko s nabídkou
-                     úrovní alertů (koncern/značka/model → kotvy #gbd-alerts-*) */
-                  <div className="w-full min-w-0">
-                    <GoBigDealStrip fadeFrom="from-white" />
-                    <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
-                  </div>
-                ) : (
+                {/* Right: link columns */}
                 <div className="grid grid-cols-2 gap-12">
                   {panel.cols.map((col) => (
                     <div key={col.title}>
@@ -702,7 +702,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     </div>
                   ))}
                 </div>
-                )}
               </div>
             </div>
             )}
