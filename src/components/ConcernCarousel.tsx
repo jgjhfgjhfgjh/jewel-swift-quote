@@ -56,8 +56,8 @@ export interface ConcernAlertBell {
 const CARD_CLASS =
   'shrink-0 w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]';
 
-/** Výška jednoho řádku se značkou (logo h-8 + mezera) */
-const BRAND_ROW_H = 34;
+/** Výška jednoho řádku se značkou (logo h-8 = 32 px + mezera gap-2 = 8 px) */
+const BRAND_ROW_H = 40;
 /** Strop počtu vypsaných značek — pojistka proti extrémně vysoké kartě */
 const MAX_LOGOS = 8;
 
@@ -162,7 +162,7 @@ function ConcernCard({
       {/* Značky koncernu — jedna pod druhou; min-height podle koncernu s
           nejvíce značkami → všechny karty mají stejnou výšku */}
       <div
-        className="px-5 sm:px-6 py-2 flex flex-col items-center justify-center gap-0.5"
+        className="px-5 sm:px-6 py-2 flex flex-col items-center justify-center gap-2"
         style={{ minHeight: maxBrands * BRAND_ROW_H }}
       >
         {logoBrands.map((key) => {
