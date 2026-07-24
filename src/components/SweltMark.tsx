@@ -1,10 +1,11 @@
 /**
  * Značka swelt — dvojitá šipka (výměna / obousměrný tok).
  *
- * Vektorová rekonstrukce z podkladu „swelt. (Web).png“: originál je rastr
- * pouhých 190×94 px, takže zvětšování by bylo rozmazané. Obrys byl vytrasován
- * z bitmapy (sledování hranice + RDP zjednodušení) a ověřen proti předloze —
- * 0 strukturálních rozdílů, odchylky jen na hranici (antialiasing).
+ * Vektorová rekonstrukce z podkladu „swelt. (Web) v2“ (higgsfield, 3840×2160):
+ * novější, čistší varianta s rovnými hranami. Obrys vytrasován z bitmapy
+ * (sledování hranice + RDP zjednodušení) při plném rozlišení (šipka ~864 px)
+ * a ověřen proti předloze — IoU 0.991, ~0,13 % odchylky (jen antialiasovaná
+ * hrana). Poměr stran 1.75 shodný s originálem.
  *
  * Barvu řídí `currentColor`, takže jedna komponenta pokrývá černou i bílou
  * variantu podle kontextu (text-white nad videem, text-foreground na bílé).
@@ -12,15 +13,15 @@
 export function SweltMark({ className = '' }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 190 94"
+      viewBox="0 0 192 110"
       role="img"
       aria-label="swelt"
       className={className}
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M52 0L56 0L60 5L60 23L61 24L104 24L99 31L99 32L96 35L96 36L94 38L94 39L92 41L88 48L85 51L84 54L82 56L82 57L80 59L80 60L78 62L74 69L72 71L61 71L60 72L60 89L59 90L59 92L57 94L51 94L49 93L34 79L33 79L20 67L19 67L11 59L10 59L5 54L4 54L1 51L1 49L0 48L1 44L7 38L8 38L15 31L16 31L22 25L23 25L45 5L46 5L50 1Z" />
-      <path d="M135 0L139 0L141 1L160 18L161 18L168 25L169 25L175 31L176 31L183 38L184 38L190 44L190 51L181 59L180 59L164 74L163 74L159 78L158 78L149 87L148 87L142 93L140 94L134 94L131 90L131 72L130 71L87 71L87 70L92 64L92 63L100 52L101 49L104 46L105 43L107 41L109 37L112 34L116 27L119 24L130 24L131 23L131 5Z" />
+      <path d="M53.86 0.66L54.08 30.68L102.65 30.68L100.22 34.88L83.89 59.82L73.29 77.04L54.3 77.04L53.86 77.48L53.86 108.39L44.81 98.45L0.66 54.3L51.21 3.75Z" />
+      <path d="M136.87 0.66L169.98 32.89L191.17 54.08L136.87 108.61L136.64 77.04L87.86 77.04L117.44 30.68L136.87 30.46Z" />
     </svg>
   );
 }
