@@ -18,6 +18,7 @@ export function LogoShelf({
   onSeeMore,
   onItemClick,
   topMargin = 'mt-12 sm:mt-16',
+  compact = false,
 }: {
   items: LogoShelfItem[];
   title: string;
@@ -26,6 +27,8 @@ export function LogoShelf({
   onSeeMore: () => void;
   onItemClick: (item: LogoShelfItem) => void;
   topMargin?: string;
+  /** menší karty i nadpis (mega menu) — víc obsahu na obrazovku */
+  compact?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -98,12 +101,12 @@ export function LogoShelf({
   return (
     <div className={topMargin} style={{ fontFamily: "'Montserrat', sans-serif" }}>
       {/* Header — title + „Vidět víc" inline (Amazon styl) */}
-      <div className="px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 mb-4">
-        <h2 className="text-sm sm:text-base font-semibold text-foreground">{title}</h2>
+      <div className={`px-4 min-[480px]:px-5 md:px-8 min-[1200px]:px-11 flex items-center gap-3 sm:gap-4 ${compact ? 'mb-2' : 'mb-4'}`}>
+        <h2 className={`font-semibold text-foreground ${compact ? 'text-xs' : 'text-sm sm:text-base'}`}>{title}</h2>
         <button
           type="button"
           onClick={onSeeMore}
-          className="group inline-flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          className={`group inline-flex items-center gap-0.5 font-semibold text-muted-foreground hover:text-foreground transition-colors ${compact ? 'text-[11px]' : 'text-xs sm:text-sm'}`}
         >
           Vidět víc
           <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-0.5" />
@@ -132,9 +135,11 @@ export function LogoShelf({
               onMouseEnter={(e) => handleEnter(item, e.currentTarget)}
               onMouseLeave={() => { clearDwell(); scheduleClose(); }}
               aria-label={item.name}
-              className="shrink-0 aspect-[16/9]
-                         w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]
-                         rounded-none border border-border bg-white shadow-sm flex items-center justify-center p-4 md:p-5"
+              className={`shrink-0 aspect-[16/9] rounded-none border border-border bg-white shadow-sm flex items-center justify-center ${
+                compact
+                  ? 'w-[150px] md:w-[168px] min-[1200px]:w-[186px] p-3'
+                  : 'w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px] p-4 md:p-5'
+              }`}
             >
               {item.domain ? (
                 <BrandLogo
@@ -142,11 +147,11 @@ export function LogoShelf({
                   domain={item.domain}
                   width={360}
                   height={160}
-                  className="max-h-[48px] md:max-h-[56px] max-w-[80%] object-contain [mix-blend-mode:multiply]"
-                  fallbackClassName="font-display font-black text-foreground text-base"
+                  className={`max-w-[80%] object-contain [mix-blend-mode:multiply] ${compact ? 'max-h-[34px] md:max-h-[40px]' : 'max-h-[48px] md:max-h-[56px]'}`}
+                  fallbackClassName={`font-display font-black text-foreground ${compact ? 'text-sm' : 'text-base'}`}
                 />
               ) : (
-                <span className="font-display font-black text-foreground text-base">{item.name}</span>
+                <span className={`font-display font-black text-foreground ${compact ? 'text-sm' : 'text-base'}`}>{item.name}</span>
               )}
             </button>
           ))}

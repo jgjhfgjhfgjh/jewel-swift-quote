@@ -7,7 +7,7 @@ import { LogoShelf, type LogoShelfItem } from '@/components/LogoShelf';
  * Police „Všechny značky" — loga značek z živého katalogu (prioritní pořadí).
  * Vizuál i chování dodává sdílený LogoShelf.
  */
-export function BrandLogoRow({ topMargin }: { topMargin?: string }) {
+export function BrandLogoRow({ topMargin, compact }: { topMargin?: string; compact?: boolean }) {
   const navigate = useNavigate();
   const { data: catalog = [] } = useBrandCatalog();
   const items: LogoShelfItem[] = sortByBrandPriority(catalog).map((e) => ({
@@ -22,6 +22,7 @@ export function BrandLogoRow({ topMargin }: { topMargin?: string }) {
       onSeeMore={() => navigate('/brands')}
       onItemClick={(it) => navigate(`/brands/${it.slug}`)}
       topMargin={topMargin}
+      compact={compact}
     />
   );
 }

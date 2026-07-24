@@ -10,7 +10,7 @@ import { LogoShelf, type LogoShelfItem } from '@/components/LogoShelf';
  * seřazené podle počtu produktů. „Vidět víc" míří na sekci koncernů na
  * homepage; klik na logo na detail koncernu.
  */
-export function ConcernLogoRow({ topMargin }: { topMargin?: string }) {
+export function ConcernLogoRow({ topMargin, compact }: { topMargin?: string; compact?: boolean }) {
   const navigate = useNavigate();
   const { data: catalog = [] } = useBrandCatalog();
 
@@ -36,6 +36,7 @@ export function ConcernLogoRow({ topMargin }: { topMargin?: string }) {
       onSeeMore={() => navigate('/#gbd-alerts-concerns')}
       onItemClick={(it) => navigate(`/koncerny/${it.slug}`)}
       topMargin={topMargin}
+      compact={compact}
     />
   );
 }

@@ -653,16 +653,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                  -mx-6 vyruší padding panelu (police mají vlastní). Menu se
                  zavírá efektem na změnu routy (ne klikem), aby se nepřebila
                  navigace odkazů uvnitř polic. */
-              <div className="px-6 pt-6 pb-6 flex flex-col">
+              <div className="px-6 pt-5 pb-5 flex flex-col">
                 <div className="-mx-6">
-                  <ConcernLogoRow topMargin="mt-0" />
+                  <ConcernLogoRow topMargin="mt-0" compact />
                 </div>
                 <div className="-mx-6">
-                  <BrandLogoRow topMargin="mt-8 sm:mt-10" />
+                  <BrandLogoRow topMargin="mt-5" compact />
                 </div>
                 <button
                   onClick={() => go(panel.cta.path)}
-                  className="mt-8 self-start inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                  className="mt-5 self-start inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
                 >
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>

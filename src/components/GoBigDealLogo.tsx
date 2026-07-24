@@ -13,10 +13,12 @@
  * `suffix` pro množné číslo apod. („GoBigdeals").
  */
 export function Gbd({ suffix = '' }: { suffix?: string }) {
+  // Obal do jednoho inline spanu → ve flex kontejnerech (nav položka s gap,
+  // tlačítka) se „GoBig" a „deal" neroztrhnou na dvě položky s mezerou mezi.
   return (
-    <>
+    <span className="whitespace-nowrap">
       GoBig<span className="italic">deal{suffix}</span>
-    </>
+    </span>
   );
 }
 
