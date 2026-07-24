@@ -27,6 +27,60 @@ import { HeroRotatingText } from '@/components/HeroRotatingText';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useRef } from 'react';
+
+/** Hero video s vynuceným autoplay pro mobily.
+ *  React nastavuje `muted` jen jako DOM property (ne HTML atribut) — některé
+ *  mobilní prohlížeče pak video nepovažují za ztlumené, autoplay zablokují
+ *  a zobrazí nativní play overlay. Tady atribut doplníme ručně a play()
+ *  zkoušíme při načtení dat, návratu na kartu i prvním dotyku. */
+function HeroVideo() {
+  const ref = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.setAttribute('muted', '');
+    const tryPlay = () => { v.play().catch(() => { /* zkusíme znovu při další události */ }); };
+    tryPlay();
+    v.addEventListener('loadeddata', tryPlay);
+    const onVis = () => { if (!document.hidden) tryPlay(); };
+    document.addEventListener('visibilitychange', onVis);
+    // poslední záchrana (Low Power Mode apod.): první dotyk/klik kdekoli
+    const onFirstInput = () => {
+      tryPlay();
+      window.removeEventListener('touchstart', onFirstInput);
+      window.removeEventListener('click', onFirstInput);
+    };
+    window.addEventListener('touchstart', onFirstInput, { passive: true });
+    window.addEventListener('click', onFirstInput);
+    return () => {
+      v.removeEventListener('loadeddata', tryPlay);
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('touchstart', onFirstInput);
+      window.removeEventListener('click', onFirstInput);
+    };
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      controls={false}
+      // poster = první snímek videa (66 kB) — zobrazí se okamžitě,
+      // než se donačte 12MB video; žádný šedý placeholder
+      poster="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-poster.jpg"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
+      src="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-video.mp4"
+    />
+  );
+}
 
 const Index = () => {
   const { user, loading: authLoading } = useAuthContext();
@@ -129,18 +183,7 @@ const Index = () => {
             <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden bg-[#0b0d10] px-6 pb-[10vh] pt-14 sm:pb-[8vh]">
               {/* fullscreen video přes celou první sekci + tmavý overlay,
                   aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                // poster = první snímek videa (66 kB) — zobrazí se okamžitě,
-                // než se donačte 12MB video; žádný šedý placeholder
-                poster="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-poster.jpg"
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
-                src="https://ijcfcjlfxktvedqrsvqz.supabase.co/storage/v1/object/public/media/hero-video.mp4"
-              />
+              <HeroVideo />
               <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones; mobile
