@@ -28,7 +28,7 @@ interface NavbarProps {
    path = přímá navigace klikem; bez path klik jen přepíná panel.
    Speciální "cesty" v panelech: auth:login / auth:b2b / catalog:open. */
 const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
-  { id: 'why-swelt',    label: 'Why Swelt' },
+  { id: 'why-swelt',    label: 'Why?' },
   { id: 'products',     label: 'Products' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'luxury-deals', label: 'Luxury Deals', path: '/prestige' },
