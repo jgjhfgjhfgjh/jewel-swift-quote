@@ -16,6 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
+import { SweltMark } from '@/components/SweltMark';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 
 interface NavbarProps {
@@ -305,13 +306,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         <Link
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="flex items-baseline select-none shrink-0 relative z-10"
+          className="flex items-center select-none shrink-0 relative z-10"
           aria-label="swelt — domů"
         >
-          <span
-            className={`font-spartan font-extrabold text-2xl sm:text-3xl lg:text-[2.15rem] leading-none tracking-tighter ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
-            style={{ letterSpacing: '-0.05em' }}
-          >swelt.</span>
+          {/* značka = dvojitá šipka (SVG, barva přes currentColor) */}
+          <SweltMark
+            className={`h-5 w-auto sm:h-6 lg:h-[1.65rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
+          />
         </Link>
 
         {/* Desktop nav — položky s chevronem otevírají mega menu; v katalogu je nahrazuje vyhledávání */}
@@ -319,6 +320,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           <nav className="hidden lg:flex items-center gap-1 ml-5 relative z-10">
             {NAV_ITEMS.map((item) => {
               const active = activeNav === item.id;
+              // GoBigDeal je vlajková položka → nad videem plně bílá (ostatní
+              // jsou přitlumené white/80), na bílé o stupeň tučnější
+              // (semibold vs medium). Chevron dědí barvu přes currentColor,
+              // v tučné variantě dostane i silnější tah.
+              const isFlagship = item.id === 'top-deals';
               return (
                 <button
                   key={item.id}
@@ -328,14 +334,19 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                     if (item.path) { setActiveNav(null); navigate(item.path); }
                     else setActiveNav(active ? null : item.id);
                   }}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
+                    isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
+                  } ${
                     overVideo
-                      ? active ? 'text-white' : 'text-white/80 hover:text-white'
+                      ? active || isFlagship ? 'text-white' : 'text-white/80 hover:text-white'
                       : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
                   }`}
                 >
                   {item.label}
-                  <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`}
+                    strokeWidth={isFlagship && !overVideo ? 2.75 : 2}
+                  />
                 </button>
               );
             })}

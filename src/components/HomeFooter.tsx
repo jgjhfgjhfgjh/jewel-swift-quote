@@ -4,6 +4,7 @@ import {
   Mail, ArrowRight, ChevronRight, Sparkles, ShieldCheck, Truck, Award, Package, Star, Check,
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
+import { SweltMark } from '@/components/SweltMark';
 
 /* Reusable footer link column */
 function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
@@ -96,8 +97,8 @@ export function HomeFooter() {
       <div className="mx-auto max-w-6xl px-6 py-12 sm:py-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
         {/* Brand block */}
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-          <button onClick={() => navigate('/')} className="font-spartan font-extrabold text-3xl tracking-tighter leading-none select-none" style={{ letterSpacing: '-0.05em' }}>
-            swelt.
+          <button onClick={() => navigate('/')} className="select-none" aria-label="swelt — domů">
+            <SweltMark className="h-7 w-auto text-white" />
           </button>
           <p className="text-[#999999] text-sm leading-relaxed mt-3 max-w-xs">
             Velkoobchod prémiových hodinek a šperků. 70+ značek, ceny od 1 kusu, doručení po celé EU.
