@@ -159,7 +159,7 @@ export function HomeTopDeals() {
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-zinc-900">Go Big Deal </span>
+            <span className="text-zinc-900">Deals </span>
             <span className="text-zinc-600">with </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               bigger wholesale discount
@@ -177,7 +177,7 @@ export function HomeTopDeals() {
       <div id="gbd-alerts-concerns" className="mt-12 scroll-mt-24 sm:mt-16">
         {/* jednotný vzor nadpisů — mění se jen koncovka (concerns/brands/models) */}
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          Set GoBigDeal alerts on concerns
+          Deal alerts on concerns
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <ConcernCarousel
@@ -196,7 +196,7 @@ export function HomeTopDeals() {
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
       <div id="gbd-alerts-brands" className="mt-12 scroll-mt-24 sm:mt-16">
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          Set GoBigDeal alerts on brands
+          Deal alerts on brands
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <BrandAlertCarousel alertsApi={alertsApi} onRequireAuth={requireAuth} />
@@ -206,7 +206,7 @@ export function HomeTopDeals() {
       {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
       <div id="gbd-alerts-models" className="mx-auto mt-12 max-w-[640px] scroll-mt-24 px-5 sm:mt-16 sm:px-0">
         <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
-          Set GoBigDeal alerts on individual models
+          Deal alerts on individual models
         </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
       </div>

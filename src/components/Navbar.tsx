@@ -311,8 +311,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         >
           {/* zkušební wordmark GoBigdeal (ikona + text, barva přes currentColor) */}
           <GoBigDealLogo
-            hideTextOnMobile
-            className={`text-lg sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
+            className={`text-[13px] sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
           />
         </Link>
 
