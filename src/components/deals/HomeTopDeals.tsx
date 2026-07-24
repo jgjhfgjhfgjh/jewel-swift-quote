@@ -1,19 +1,15 @@
-import { useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Check, ChevronLeft, ChevronRight, Lock, Zap } from 'lucide-react';
-import { useDeals } from '@/hooks/useDeals';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ArrowRight, Bell, Check } from 'lucide-react';
 import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
-import { dealIsLive, type Deal } from '@/lib/deals';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { CountdownTimer } from './CountdownTimer';
-import { BrandLogo } from '@/components/BrandLogo';
 import { ConcernCarousel, type ConcernCarouselTexts } from '@/components/ConcernCarousel';
-import { getConcernForDeal } from '@/data/concerns';
 import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { BrandAlertCarousel } from './BrandAlertCarousel';
 import { ModelAlertSearch } from './ModelAlertSearch';
+import { GoBigDealStrip } from './GoBigDealStrip';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 import {
   Dialog,
@@ -24,16 +20,16 @@ import {
 } from '@/components/ui/dialog';
 
 /**
- * Homepage sekce „Top Deals" — světle šedá full-width karta se zaobleným
+ * Homepage sekce „GoBigDeal" — světle šedá full-width karta se zaobleným
  * horním okrajem, řazena pod kartu „Connect swelt to your AI agents"
  * (zaoblené rohy odkrývají černý wrapper v Index.tsx). Celá sekce je
- * záměrně anglicky, proto čte EN slovník a countdownům vnucuje lang="en".
+ * záměrně anglicky, proto čte EN slovník.
  *
- * Logika sekce (schváleno): hero deal + locked karty → čtyřúrovňový pricing
- * (Explore free · Insider €49/měs ročně, 50 % z kotvy · Flex €99/měs kotva ·
- * Enterprise na míru) → watchdog alerty na třech úrovních: koncerny
- * (ConcernCarousel), značky (BrandAlertCarousel) a jednotlivé modely
- * (ModelAlertSearch). Alerty zapisují do deal_alerts; notifikace později.
+ * Skladba: headline → nekonečný pás GoBigDealStrip (gateway + dealy) →
+ * watchdog alerty na třech úrovních (koncerny/značky/modely, s kotvami
+ * #gbd-alerts-* pro proklik z mega menu) → čtyřúrovňový pricing (Explore
+ * free · Insider €49/měs ročně, 50 % z kotvy · Flex €99/měs kotva ·
+ * Enterprise na míru). Alerty zapisují do deal_alerts; notifikace později.
  */
 const t = dealsI18n.en;
 
@@ -106,26 +102,25 @@ const TIERS: Tier[] = [
   },
 ];
 
-/** Karta ve swipovatelném pásu Big deals (sloupce po dvou). */
-type StripCard =
-  | { kind: 'locked'; deal: Deal }
-  | { kind: 'locked-placeholder' }
-  | { kind: 'live'; deal: Deal; isNew: boolean }
-  | { kind: 'filler' };
-
-/** Celková délka pásu — reálné dealy doplní placeholdery, ať má swipe smysl. */
-const STRIP_TOTAL_CARDS = 12;
-
 export function HomeTopDeals() {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuthContext();
-  const { deals, productCounts, loading } = useDeals();
   const alertsApi = useDealAlerts();
   const { hasEarlyAccess } = useEarlyAccess();
   const [exploreOpen, setExploreOpen] = useState(false);
 
   const requireAuth = () => openAuthModal('register');
+
+  // Kotvy #gbd-alerts-* — proklik z tlačítka „Set a GoBigDeal alert"
+  // v mega menu doscrolluje na příslušnou úroveň alertů.
+  useEffect(() => {
+    const id = location.hash.replace('#', '');
+    if (id.startsWith('gbd-alerts')) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [location.hash]);
 
   // Zvoneček na kartě koncernu — stejné hradlo jako všechny alert vstupy:
   // nepřihlášený → registrace, bez early accessu → upsell, jinak toggle.
@@ -139,58 +134,6 @@ export function HomeTopDeals() {
       return;
     }
     alertsApi.toggle('concern', slug, name);
-  };
-
-  // Běžící dealy (odstartované, před uzávěrkou).
-  const liveDeals = useMemo(() => {
-    const now = Date.now();
-    return deals.filter((d) => dealIsLive(d) && new Date(d.starts_at).getTime() <= now);
-  }, [deals]);
-
-  // Hero = běžící deal s nejbližší uzávěrkou (největší tlak na rozhodnutí).
-  const hero = useMemo(
-    () =>
-      [...liveDeals].sort(
-        (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
-      )[0] ?? null,
-    [liveDeals],
-  );
-
-  // Nadcházející dealy (aktivní, ještě neodstartované) → locked karty (2 sloty).
-  const upcoming = useMemo(() => {
-    const now = Date.now();
-    return deals
-      .filter((d) => d.status === 'active' && new Date(d.starts_at).getTime() > now)
-      .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime())
-      .slice(0, 2);
-  }, [deals]);
-
-  // Swipovatelný pás Big deals: nejdřív nejnovější (locked pro ne-odběratele,
-  // odemčené s EARLY ACCESS odlišením pro odběratele), pak dropnuté od
-  // nejnovějšího, zbytek doplní „coming soon" placeholdery do 12 karet.
-  const stripCards = useMemo<StripCard[]>(() => {
-    const cards: StripCard[] = upcoming.map((d) => ({ kind: 'locked' as const, deal: d }));
-    while (cards.length < 2) cards.push({ kind: 'locked-placeholder' });
-    [...liveDeals]
-      .sort((a, b) => new Date(b.starts_at).getTime() - new Date(a.starts_at).getTime())
-      .forEach((d, i) => cards.push({ kind: 'live', deal: d, isNew: i === 0 }));
-    while (cards.length < STRIP_TOTAL_CARDS) cards.push({ kind: 'filler' });
-    return cards;
-  }, [upcoming, liveDeals]);
-  const realDealCount = upcoming.length + liveDeals.length;
-
-  // Klik na locked kartu = konverzní vstup: nepřihlášený → registrace,
-  // bez early accessu → upsell, odběratel → deal (nebo /deals u placeholderu).
-  const handleLockedClick = (deal?: Deal) => {
-    if (!user) {
-      requireAuth();
-      return;
-    }
-    if (!hasEarlyAccess) {
-      openEarlyAccessUpsell();
-      return;
-    }
-    navigate(deal ? `/deals/${deal.slug}` : '/deals');
   };
 
   // Placené tarify zatím nemají platební flow — nepřihlášený jde do
@@ -215,7 +158,6 @@ export function HomeTopDeals() {
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
-          {/* šedá slova musí být tmavší než zinc-200 pozadí → zinc-600 */}
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
             <span className="text-zinc-900">Go Big Deal </span>
             <span className="text-zinc-600">with </span>
@@ -225,30 +167,14 @@ export function HomeTopDeals() {
           </h2>
         </div>
 
-        {/* swipovatelný pás GoBigDeal — gateway karta (copy, později video) je
-            prvním prvkem PÁSU, takže se posouvá spolu se zbytkem; za ní sloupce
-            po dvou kartách, dvě řady i na mobilu */}
+        {/* nekonečný swipovatelný pás — gateway karta jede v pásu */}
         <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
-          <DealStrip
-            cards={stripCards}
-            realCount={realDealCount}
-            hasEarlyAccess={hasEarlyAccess}
-            onLockedClick={handleLockedClick}
-            gateway={
-              loading ? (
-                <div className="h-full min-h-[360px] animate-pulse rounded-2xl bg-slate-200" />
-              ) : hero ? (
-                <HeroDealCard deal={hero} count={productCounts[hero.id] ?? 0} />
-              ) : (
-                <EmptyHeroCard />
-              )
-            }
-          />
+          <GoBigDealStrip />
         </div>
       </div>
 
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
-      <div className="mt-12 sm:mt-16">
+      <div id="gbd-alerts-concerns" className="mt-12 scroll-mt-24 sm:mt-16">
         {/* jednotný vzor nadpisů — mění se jen koncovka (concerns/brands/models) */}
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
           Set GoBigDeal alerts on concerns
@@ -268,7 +194,7 @@ export function HomeTopDeals() {
       </div>
 
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
-      <div className="mt-12 sm:mt-16">
+      <div id="gbd-alerts-brands" className="mt-12 scroll-mt-24 sm:mt-16">
         <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
           Set GoBigDeal alerts on brands
         </h3>
@@ -278,15 +204,14 @@ export function HomeTopDeals() {
       </div>
 
       {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
-      <div className="mx-auto mt-12 max-w-[640px] px-5 sm:mt-16 sm:px-0">
+      <div id="gbd-alerts-models" className="mx-auto mt-12 max-w-[640px] scroll-mt-24 px-5 sm:mt-16 sm:px-0">
         <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
           Set GoBigDeal alerts on individual models
         </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
       </div>
 
-      {/* pricing — čtyřúrovňový paywall na konci sekce, pod alerty; lead věta
-          nad ceníkem (přesunuto z headline i z pozice pod hero kartami) */}
+      {/* pricing — čtyřúrovňový paywall na konci sekce, pod alerty */}
       <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
         <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-zinc-900">
           Catch your deal of the year earlier and earn more.
@@ -443,374 +368,5 @@ function ExploreDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
-}
-
-/** Velká bílá karta běžícího dealu — koncern, countdown, čísla, CTA. */
-function HeroDealCard({ deal, count }: { deal: Deal; count: number }) {
-  const concern = getConcernForDeal(deal);
-  const maxDiscount = deal.tiers.reduce((m, x) => Math.max(m, x.discount_percent), 0);
-
-  return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-3.5 sm:px-6">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-emerald-100">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-          {t.home.liveLabel}
-        </span>
-        <CountdownTimer deadline={deal.deadline} variant="compact" lang="en" />
-      </div>
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        {concern && (
-          <div className="mb-4 flex h-16 items-center">
-            <BrandLogo
-              name={concern.name}
-              domain={concern.domain}
-              width={360}
-              height={140}
-              className="max-h-12 max-w-[200px] object-contain [mix-blend-mode:multiply]"
-              fallbackClassName="font-display text-xl font-black tracking-tight text-foreground"
-            />
-          </div>
-        )}
-        <h3 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
-          {deal.title}
-        </h3>
-        {deal.subtitle && (
-          <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{deal.subtitle}</p>
-        )}
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          {count > 0 && (
-            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-              {count} {t.card.models}
-            </span>
-          )}
-          {deal.brands.length > 0 && (
-            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-              {deal.brands.length} {t.card.brands}
-            </span>
-          )}
-          {maxDiscount > 0 && (
-            <span className="rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-bold text-red-600 ring-1 ring-red-100">
-              {t.card.discountUpTo} {maxDiscount}%
-            </span>
-          )}
-        </div>
-        {/* propojení na obsah o koncernu (data z concerns.ts) */}
-        {concern && (
-          <div className="mt-4 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-100">
-            <p className="text-xs leading-relaxed text-slate-500 line-clamp-3">
-              {t.home.concernFallback}
-            </p>
-            <Link
-              to={`/koncerny/${concern.slug}`}
-              className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-sky-700 hover:underline"
-            >
-              {t.home.concernStoryCta}
-              <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-        )}
-        <div className="mt-auto pt-5">
-          <Link
-            to={`/deals/${deal.slug}`}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 sm:w-auto"
-          >
-            {t.home.heroCta}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/** Fallback hero, když zrovna neběží žádný deal — sekce žije dál. */
-function EmptyHeroCard() {
-  return (
-    <div className="flex min-h-[280px] flex-col justify-center rounded-2xl border border-slate-200 bg-white p-8">
-      <h3 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
-        {t.home.emptyHeroTitle}
-      </h3>
-      <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500">{t.home.emptyHeroSub}</p>
-      <Link
-        to="/deals"
-        className="mt-6 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-sky-700 hover:text-sky-600"
-      >
-        {t.home.browseCta}
-        <ArrowRight className="h-4 w-4" />
-      </Link>
-    </div>
-  );
-}
-
-/** Swipovatelný pás Big deals — sloupce po dvou kartách, scroll-snap,
- *  desktopové šipky na hoveru, fade na pravém okraji a počítadlo dealů. */
-function DealStrip({
-  cards,
-  realCount,
-  hasEarlyAccess,
-  onLockedClick,
-  gateway,
-}: {
-  cards: StripCard[];
-  realCount: number;
-  hasEarlyAccess: boolean;
-  onLockedClick: (deal?: Deal) => void;
-  /** Velká gateway karta — první prvek pásu, posouvá se spolu se zbytkem. */
-  gateway: React.ReactNode;
-}) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const scrollByPage = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
-  };
-
-  const pairs: StripCard[][] = [];
-  for (let i = 0; i < cards.length; i += 2) pairs.push(cards.slice(i, i + 2));
-
-  return (
-    <div className="min-w-0">
-      <div className="group relative">
-        <div
-          ref={trackRef}
-          className="flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]
-                     [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {/* gateway karta jede v pásu jako první — není ukotvená */}
-          <div className="flex w-[min(86vw,420px)] shrink-0 snap-start flex-col">{gateway}</div>
-          {pairs.map((pair, i) => (
-            <div key={i} className="flex w-[270px] shrink-0 snap-start flex-col gap-4 sm:w-[300px]">
-              {pair.map((card, j) => {
-                switch (card.kind) {
-                  case 'locked':
-                    return (
-                      <StripLockedCard
-                        key={`${card.deal.id}-${j}`}
-                        deal={card.deal}
-                        unlocked={hasEarlyAccess}
-                        onLockedClick={() => onLockedClick(card.deal)}
-                      />
-                    );
-                  case 'locked-placeholder':
-                    return <StripLockedPlaceholder key={`lp-${i}-${j}`} onClick={() => onLockedClick()} />;
-                  case 'live':
-                    return <StripLiveCard key={card.deal.id} deal={card.deal} isNew={card.isNew} />;
-                  default:
-                    return <StripFillerCard key={`f-${i}-${j}`} />;
-                }
-              })}
-            </div>
-          ))}
-        </div>
-        {/* fade na pravém okraji — signál, že pás pokračuje */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-zinc-50 to-transparent"
-        />
-        {/* šipky (desktop, na hover) */}
-        <button
-          type="button"
-          onClick={() => scrollByPage(-1)}
-          className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur border border-slate-200 text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
-          aria-label="Previous"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => scrollByPage(1)}
-          className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur border border-slate-200 text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
-          aria-label="Next"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
-      {/* počítadlo — jen reálné dealy, ne placeholdery */}
-      {realCount > 0 && (
-        <p className="mt-3 text-xs font-semibold text-slate-500">
-          {realCount} GoBigDeal{realCount === 1 ? '' : 's'} · swipe for more
-        </p>
-      )}
-    </div>
-  );
-}
-
-/** Malá karta dropnutého (živého) dealu — logo, název, countdown, sleva. */
-function StripLiveCard({ deal, isNew }: { deal: Deal; isNew: boolean }) {
-  const concern = getConcernForDeal(deal);
-  const maxDiscount = deal.tiers.reduce((m, x) => Math.max(m, x.discount_percent), 0);
-  return (
-    <Link
-      to={`/deals/${deal.slug}`}
-      className="relative flex min-h-[172px] flex-1 flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
-    >
-      {isNew && (
-        <span className="absolute -top-2.5 left-4 animate-pulse rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-          New
-        </span>
-      )}
-      <div className="flex items-center justify-between gap-2">
-        {concern ? (
-          <BrandLogo
-            name={concern.name}
-            domain={concern.domain}
-            width={200}
-            height={80}
-            className="max-h-6 max-w-[110px] object-contain [mix-blend-mode:multiply]"
-            fallbackClassName="truncate text-xs font-bold text-slate-700"
-          />
-        ) : (
-          <span className="truncate text-xs font-bold text-slate-700">
-            {deal.supplier || deal.title}
-          </span>
-        )}
-        <CountdownTimer deadline={deal.deadline} variant="compact" lang="en" />
-      </div>
-      <p className="mt-3 line-clamp-2 text-sm font-semibold leading-snug text-slate-900">
-        {deal.title}
-      </p>
-      <div className="mt-auto flex items-center justify-between gap-2">
-        {maxDiscount > 0 ? (
-          <span className="rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-bold text-red-600 ring-1 ring-red-100">
-            {t.card.discountUpTo} {maxDiscount}%
-          </span>
-        ) : (
-          <span />
-        )}
-        <ArrowRight className="h-4 w-4 text-slate-400" />
-      </div>
-    </Link>
-  );
-}
-
-/** Nejnovější (ještě neodstartovaný) deal: pro ne-odběratele zamčená karta
- *  s rozmazaným obsahem (klik = upsell), pro odběratele odemčená s výrazným
- *  EARLY ACCESS odlišením (modrý rámeček + badge) — „vidíš něco navíc". */
-function StripLockedCard({
-  deal,
-  unlocked,
-  onLockedClick,
-}: {
-  deal: Deal;
-  unlocked: boolean;
-  onLockedClick: () => void;
-}) {
-  const concern = getConcernForDeal(deal);
-
-  if (unlocked) {
-    return (
-      <Link
-        to={`/deals/${deal.slug}`}
-        className="relative flex min-h-[172px] flex-1 flex-col rounded-2xl border border-blue-600 bg-white p-4 shadow-sm ring-1 ring-blue-600 transition-shadow hover:shadow-md"
-      >
-        <span className="absolute -top-2.5 left-4 inline-flex items-center gap-1 rounded-full bg-blue-600 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-          <Zap className="h-3 w-3" /> Early access
-        </span>
-        <div className="flex items-center justify-between gap-2">
-          {concern ? (
-            <BrandLogo
-              name={concern.name}
-              domain={concern.domain}
-              width={200}
-              height={80}
-              className="max-h-6 max-w-[110px] object-contain [mix-blend-mode:multiply]"
-              fallbackClassName="truncate text-xs font-bold text-slate-700"
-            />
-          ) : (
-            <span className="truncate text-xs font-bold text-slate-700">
-              {deal.supplier || deal.title}
-            </span>
-          )}
-          <CountdownTimer deadline={deal.starts_at} variant="compact" lang="en" />
-        </div>
-        <p className="mt-3 line-clamp-2 text-sm font-semibold leading-snug text-slate-900">
-          {deal.title}
-        </p>
-        <div className="mt-auto flex items-center justify-between gap-2">
-          <span className="text-[11px] font-semibold text-blue-700">
-            Only Insiders see this now
-          </span>
-          <ArrowRight className="h-4 w-4 text-blue-600" />
-        </div>
-      </Link>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={onLockedClick}
-      className="flex min-h-[172px] flex-1 w-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-shadow hover:shadow-md"
-    >
-      <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
-          <Lock className="h-3 w-3" />
-          {t.home.unlocksIn}
-        </span>
-        <CountdownTimer deadline={deal.starts_at} variant="compact" lang="en" />
-      </div>
-      {/* rozmazaný teaser — koncern i název zůstávají skryté do odemčení */}
-      <div className="pointer-events-none select-none blur-[7px]" aria-hidden>
-        {concern ? (
-          <div className="flex h-10 w-fit items-center rounded-lg border border-slate-200 bg-white px-3">
-            <BrandLogo
-              name={concern.name}
-              domain={concern.domain}
-              width={200}
-              height={80}
-              className="max-h-5 max-w-[100px] object-contain"
-              fallbackClassName="text-sm font-bold text-slate-800"
-            />
-          </div>
-        ) : (
-          <p className="text-sm font-semibold text-slate-900">{deal.title}</p>
-        )}
-        <div className="mt-2 h-2.5 w-3/4 rounded-full bg-slate-300" />
-      </div>
-      <p className="text-xs text-slate-500">{t.home.lockedNote}</p>
-    </button>
-  );
-}
-
-/** Zamčený slot bez naplánovaného dropu — FOMO zůstává, klik = upsell. */
-function StripLockedPlaceholder({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex min-h-[172px] flex-1 w-full flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-left transition-shadow hover:shadow-md"
-    >
-      <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600">
-          <Lock className="h-3 w-3" />
-          {t.home.lockedTitle}
-        </span>
-        <span className="rounded-full bg-slate-200/80 px-2.5 py-1 text-[11px] font-bold text-slate-500">
-          {t.home.comingSoon}
-        </span>
-      </div>
-      <div aria-hidden>
-        <div className="h-2.5 w-4/5 rounded-full bg-slate-200" />
-        <div className="mt-2 h-2.5 w-3/5 rounded-full bg-slate-200" />
-      </div>
-      <p className="text-xs text-slate-500">{t.home.lockedNote}</p>
-    </button>
-  );
-}
-
-/** Výplňový placeholder na konci pásu — další Big deals na cestě. */
-function StripFillerCard() {
-  return (
-    <div className="flex min-h-[172px] flex-1 flex-col justify-between rounded-2xl border border-dashed border-slate-300 bg-white/60 p-4">
-      <span className="w-fit rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-500">
-        {t.home.comingSoon}
-      </span>
-      <div aria-hidden>
-        <div className="h-2.5 w-4/5 rounded-full bg-slate-100" />
-        <div className="mt-2 h-2.5 w-3/5 rounded-full bg-slate-100" />
-      </div>
-      <p className="text-xs text-slate-400">More GoBigDeals on the way.</p>
-    </div>
   );
 }

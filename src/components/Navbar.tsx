@@ -14,7 +14,7 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
-import { NavDealsCarousel } from '@/components/deals/NavDealsCarousel';
+import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 
@@ -675,8 +675,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
 
                 {/* Right: DEAL carousel for the deals category, link columns otherwise */}
                 {activeNav === 'top-deals' ? (
-                  <div className="w-full">
-                    <NavDealsCarousel onNavigate={() => setActiveNav(null)} />
+                  /* kopie GoBigDeal pásu z homepage + tlačítko s nabídkou
+                     úrovní alertů (koncern/značka/model → kotvy #gbd-alerts-*) */
+                  <div className="w-full min-w-0">
+                    <GoBigDealStrip fadeFrom="from-white" />
+                    <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
                   </div>
                 ) : (
                 <div className="grid grid-cols-2 gap-12">
