@@ -29,59 +29,76 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRef } from 'react';
 
-/** Hero video s vynuceným autoplay pro mobily.
- *  React nastavuje `muted` jen jako DOM property (ne HTML atribut) — některé
- *  mobilní prohlížeče pak video nepovažují za ztlumené, autoplay zablokují
- *  a zobrazí nativní play overlay. Tady atribut doplníme ručně a play()
- *  zkoušíme při načtení dat, návratu na kartu i prvním dotyku. */
+/** Hero video s vynuceným autoplay pro mobily — neprůstřelná varianta.
+ *
+ *  1) iOS rozhoduje o autoplay v okamžiku, kdy začne load. React ale nastavuje
+ *     `muted` jen jako DOM property, ne atribut → src proto nenastavujeme
+ *     v JSX, ale až v efektu PO ručním doplnění muted atributu.
+ *  2) play() se opakuje při loadeddata/canplaythrough, návratu na kartu
+ *     a při každém dotyku/kliku (Low Power Mode povolí play až po gestu).
+ *  3) Když je autoplay přesto zablokované, video PŘEKRYJEME čistým posterem —
+ *     nativní play ikona tak není nikdy vidět; po prvním dotyku se video
+ *     spustí a poster zmizí.
+ *
+ *  Src i poster musí zůstat same-origin (Vercel edge CDN): remote Supabase
+ *  startoval na mobilu tak pomalu, že iOS autoplay vzdal. */
 function HeroVideo() {
   const ref = useRef<HTMLVideoElement | null>(null);
+  const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
     v.muted = true;
     v.setAttribute('muted', '');
-    const tryPlay = () => { v.play().catch(() => { /* zkusíme znovu při další události */ }); };
-    tryPlay();
-    v.addEventListener('loadeddata', tryPlay);
-    const onVis = () => { if (!document.hidden) tryPlay(); };
-    document.addEventListener('visibilitychange', onVis);
-    // poslední záchrana (Low Power Mode apod.): první dotyk/klik kdekoli
-    const onFirstInput = () => {
-      tryPlay();
-      window.removeEventListener('touchstart', onFirstInput);
-      window.removeEventListener('click', onFirstInput);
+    // src až teď — při začátku loadu už muted atribut existuje
+    if (!v.src) {
+      v.src = '/hero-video.mp4';
+      v.load();
+    }
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => setBlocked(false)).catch(() => setBlocked(v.paused));
+      }
     };
-    window.addEventListener('touchstart', onFirstInput, { passive: true });
-    window.addEventListener('click', onFirstInput);
+    tryPlay();
+    const onReady = () => { if (v.paused) tryPlay(); };
+    v.addEventListener('loadeddata', onReady);
+    v.addEventListener('canplaythrough', onReady);
+    const onVis = () => { if (!document.hidden && v.paused) tryPlay(); };
+    document.addEventListener('visibilitychange', onVis);
+    const onInput = () => { if (v.paused) tryPlay(); };
+    window.addEventListener('touchstart', onInput, { passive: true });
+    window.addEventListener('click', onInput);
     return () => {
-      v.removeEventListener('loadeddata', tryPlay);
+      v.removeEventListener('loadeddata', onReady);
+      v.removeEventListener('canplaythrough', onReady);
       document.removeEventListener('visibilitychange', onVis);
-      window.removeEventListener('touchstart', onFirstInput);
-      window.removeEventListener('click', onFirstInput);
+      window.removeEventListener('touchstart', onInput);
+      window.removeEventListener('click', onInput);
     };
   }, []);
 
+  const mediaClass = 'pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom';
+
   return (
-    <video
-      ref={ref}
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      disablePictureInPicture
-      controls={false}
-      // poster = první snímek videa (66 kB) — zobrazí se okamžitě,
-      // než se donačte video; žádný šedý placeholder.
-      // Src i poster MUSÍ být same-origin (Vercel edge CDN): remote Supabase
-      // startoval na mobilu tak pomalu, že iOS autoplay vzdal a nechal play
-      // overlay (nebo se video nespustilo vůbec).
-      poster="/hero-poster.jpg"
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom"
-      src="/hero-video.mp4"
-    />
+    <>
+      <video
+        ref={ref}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        disablePictureInPicture
+        controls={false}
+        poster="/hero-poster.jpg"
+        className={mediaClass}
+      />
+      {/* autoplay zablokované → čistý poster překryje nativní play overlay */}
+      {blocked && <img src="/hero-poster.jpg" alt="" aria-hidden className={mediaClass} />}
+    </>
   );
 }
 
