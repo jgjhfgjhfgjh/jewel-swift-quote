@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
-import { Gbd } from '@/components/GoBigDealLogo';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { AdminBrandPanel } from '@/components/AdminBrandPanel';
@@ -215,7 +214,7 @@ const Index = () => {
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
               <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[6vw]">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
-                  <Gbd /> with<br />Enterprise Technology
+                  Sell with<br />Enterprise Technology
                 </h1>
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
