@@ -18,6 +18,7 @@ import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDe
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
+import { ConcernLogoRow } from '@/components/ConcernLogoRow';
 
 interface NavbarProps {
   wishlistCount?: number;
@@ -648,25 +649,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <NavShowcaseCarousel />
               </div>
             ) : activeNav === 'katalog' ? (
-              /* Katalog — nahoře jen CTA (cesta do katalogu), textové sloupce
-                 odstraněny; shelf „Všechny značky" v plné velikosti u spodního
-                 okraje panelu */
-              <div className="px-6 pt-5 pb-6 flex flex-col min-h-[clamp(320px,30vw,412px)]">
+              /* Katalog — dvě police (koncerny + značky), CTA až pod nimi.
+                 -mx-6 vyruší padding panelu (police mají vlastní). Menu se
+                 zavírá efektem na změnu routy (ne klikem), aby se nepřebila
+                 navigace odkazů uvnitř polic. */
+              <div className="px-6 pt-6 pb-6 flex flex-col">
+                <div className="-mx-6">
+                  <ConcernLogoRow topMargin="mt-0" />
+                </div>
+                <div className="-mx-6">
+                  <BrandLogoRow topMargin="mt-8 sm:mt-10" />
+                </div>
                 <button
                   onClick={() => go(panel.cta.path)}
-                  className="self-start inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                  className="mt-8 self-start inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
                 >
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
-                {/* shelf u spodního okraje: -mx-6 vyruší padding panelu (shelf má
-                    vlastní), vnitřní -mt vyruší jeho vestavěný horní margin.
-                    Menu se zavírá efektem na změnu routy (viz výše) — ne klikem,
-                    aby se nepřebila navigace odkazů uvnitř shelfu. */}
-                <div className="mt-auto -mx-6">
-                  <div className="-mt-12 sm:-mt-16">
-                    <BrandLogoRow />
-                  </div>
-                </div>
               </div>
             ) : activeNav === 'top-deals' ? (
               /* GoBigDeal — full-width kopie pásu z homepage bez levého sloupce

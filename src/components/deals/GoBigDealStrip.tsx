@@ -208,18 +208,16 @@ export function GoBigDealAlertButton({ onNavigate }: { onNavigate?: () => void }
 
   return (
     <div className="mt-4 flex flex-wrap items-center gap-2">
-      {/* Bílé CTA s tenkou duhovou linkou: gradient je na obalu, p-px ho nechá
-          vykouknout jen jako 1px obrys kolem bílé pilulky */}
-      <span className="inline-block rounded-full bg-[linear-gradient(90deg,#f97316,#eab308,#22c55e,#06b6d4,#6366f1,#d946ef)] p-px">
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
-        >
-          <Sparkles className="h-4 w-4 text-violet-500" /> Set a <Gbd /> alert
-          <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
-        </button>
-      </span>
+      {/* Černé hranaté CTA — stejný styl jako „Otevřít katalog" v katalog mega
+          menu (bg-zinc-900, rounded-lg); rozbaluje úrovně alertů */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+      >
+        <Sparkles className="h-4 w-4" /> Set a <Gbd /> alert
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
       {open &&
         [
           { label: 'On concerns', anchor: 'gbd-alerts-concerns' },
