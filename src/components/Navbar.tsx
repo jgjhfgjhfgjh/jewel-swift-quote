@@ -33,7 +33,7 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'products',     label: 'Products' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'luxury-deals', label: 'Luxury Deals', path: '/prestige' },
-  { id: 'katalog',      label: 'Katalog' },
+  { id: 'katalog',      label: 'Catalog' },
 ];
 
 /* Mobile sheet — mega menu je desktop-only, mobil si nechává plochý seznam. */

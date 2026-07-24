@@ -49,9 +49,17 @@ export interface ConcernAlertBell {
   offAria: string;
 }
 
-/** Card sizing — same widths as the "Všechny značky" logo shelf cards */
+/** Card sizing — same widths as the "Všechny značky" logo shelf cards.
+ *  Výšku neurčuje pevná hodnota: značky jsou pod sebou a jejich plocha má
+ *  min-height podle koncernu s NEJVÍCE značkami (viz MAX_LOGOS / brandRowsH),
+ *  takže všechny karty vyjdou stejně vysoké. */
 const CARD_CLASS =
-  'shrink-0 w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px] h-[340px] sm:h-[360px]';
+  'shrink-0 w-[clamp(200px,55vw,240px)] md:w-[240px] min-[1200px]:w-[280px]';
+
+/** Výška jednoho řádku se značkou (logo h-8 + mezera) */
+const BRAND_ROW_H = 34;
+/** Strop počtu vypsaných značek — pojistka proti extrémně vysoké kartě */
+const MAX_LOGOS = 8;
 
 /* ─── Single koncern card — logo + brand logos + stats + CTA (static) ─── */
 function ConcernCard({
@@ -59,6 +67,7 @@ function ConcernCard({
   texts,
   appearance,
   alertBell,
+  maxBrands,
 }: {
   data: ConcernCardData;
   texts: ConcernCarouselTexts;
@@ -66,10 +75,13 @@ function ConcernCard({
   appearance: 'sharp' | 'ios';
   /** Když je předán, CTA nahradí samotný zvoneček (alert toggle) */
   alertBell?: ConcernAlertBell;
+  /** Nejvyšší počet značek napříč koncerny — určuje výšku plochy se značkami
+   *  (a tím i jednotnou výšku všech karet) */
+  maxBrands: number;
 }) {
   const navigate = useNavigate();
   const { concern, productCount, brandKeys } = data;
-  const logoBrands = brandKeys.slice(0, 6);
+  const logoBrands = brandKeys.slice(0, MAX_LOGOS);
 
   const openConcern = () => navigate(`/koncerny/${concern.slug}`);
 
@@ -106,51 +118,8 @@ function ConcernCard({
         </div>
       </div>
 
-      {/* Divider — separates the group from its member brands */}
-      <div className="px-6 mt-2 shrink-0 flex items-center gap-3">
-        <span className="h-px flex-1 bg-border" />
-        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          {texts.brandsLabel}
-        </span>
-        <span className="h-px flex-1 bg-border" />
-      </div>
-
-      {/* Member brand logos — wrapped rows, always centred (1 brand = centred) */}
-      <div className="flex-1 px-5 sm:px-6 py-3 flex flex-wrap items-center justify-center content-center gap-x-3 gap-y-2">
-        {logoBrands.map((key) => {
-          const meta = getBrandByName(toDisplayName(key));
-          return (
-            <div key={key} className="flex h-10 w-[29%] items-center justify-center">
-              {meta ? (
-                <BrandLogo
-                  name={meta.name}
-                  domain={meta.domain}
-                  width={240}
-                  height={100}
-                  className="max-h-9 max-w-full object-contain opacity-80 [mix-blend-mode:multiply]"
-                  fallbackClassName="text-[11px] font-semibold text-muted-foreground text-center"
-                />
-              ) : (
-                <span className="text-[11px] font-semibold text-muted-foreground text-center">
-                  {toDisplayName(key)}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Stats */}
-      <div className="px-6 shrink-0">
-        <p className="text-center text-xs text-muted-foreground">
-          {brandKeys.length} {texts.brandWord(brandKeys.length)}
-          {' · '}
-          {productCount} {texts.modelsWord}
-        </p>
-      </div>
-
-      {/* CTA */}
-      <div className="p-4 shrink-0">
+      {/* CTA — hned pod logem koncernu, nad seznamem značek */}
+      <div className="px-4 pt-3 shrink-0">
         {alertBell ? (
           (() => {
             const on = alertBell.isOn(concern.slug);
@@ -179,6 +148,53 @@ function ConcernCard({
             {texts.cta} <ArrowRight className="h-3.5 w-3.5 shrink-0" />
           </span>
         )}
+      </div>
+
+      {/* Divider — odděluje koncern od jeho značek */}
+      <div className="px-6 mt-3 shrink-0 flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          {texts.brandsLabel}
+        </span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      {/* Značky koncernu — jedna pod druhou; min-height podle koncernu s
+          nejvíce značkami → všechny karty mají stejnou výšku */}
+      <div
+        className="px-5 sm:px-6 py-2 flex flex-col items-center justify-center gap-0.5"
+        style={{ minHeight: maxBrands * BRAND_ROW_H }}
+      >
+        {logoBrands.map((key) => {
+          const meta = getBrandByName(toDisplayName(key));
+          return (
+            <div key={key} className="flex h-8 w-full items-center justify-center">
+              {meta ? (
+                <BrandLogo
+                  name={meta.name}
+                  domain={meta.domain}
+                  width={240}
+                  height={100}
+                  className="max-h-7 max-w-[70%] object-contain opacity-80 [mix-blend-mode:multiply]"
+                  fallbackClassName="text-[11px] font-semibold text-muted-foreground text-center"
+                />
+              ) : (
+                <span className="text-[11px] font-semibold text-muted-foreground text-center">
+                  {toDisplayName(key)}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Stats */}
+      <div className="px-6 pb-4 pt-1 shrink-0 mt-auto">
+        <p className="text-center text-xs text-muted-foreground">
+          {brandKeys.length} {texts.brandWord(brandKeys.length)}
+          {' · '}
+          {productCount} {texts.modelsWord}
+        </p>
       </div>
     </div>
   );
@@ -212,6 +228,13 @@ export function ConcernCarousel({
       .sort((a, b) => b.productCount - a.productCount);
   }, [catalog]);
 
+  // Nejvíce značek napříč koncerny → podle toho se nastaví plocha se značkami
+  // na VŠECH kartách, takže vyjdou stejně vysoké (strop MAX_LOGOS).
+  const maxBrands = useMemo(
+    () => Math.min(MAX_LOGOS, Math.max(1, ...cards.map((c) => c.brandKeys.length))),
+    [cards],
+  );
+
   // Render the cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...cards, ...cards, ...cards], [cards]);
   const { trackRef, go } = useInfiniteCarousel(cards.length);
@@ -239,7 +262,7 @@ export function ConcernCarousel({
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((data, i) => (
-          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} appearance={appearance} alertBell={alertBell} />
+          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} appearance={appearance} alertBell={alertBell} maxBrands={maxBrands} />
         ))}
       </div>
 
