@@ -16,7 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
-import { SweltMark } from '@/components/SweltMark';
+import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 
 interface NavbarProps {
@@ -307,11 +307,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           className="flex items-center select-none shrink-0 relative z-10"
-          aria-label="swelt — domů"
+          aria-label="GoBigdeal — domů"
         >
-          {/* značka = dvojitá šipka (SVG, barva přes currentColor) */}
-          <SweltMark
-            className={`h-5 w-auto sm:h-6 lg:h-[1.65rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
+          {/* zkušební wordmark GoBigdeal (ikona + text, barva přes currentColor) */}
+          <GoBigDealLogo
+            hideTextOnMobile
+            className={`text-lg sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
           />
         </Link>
 
