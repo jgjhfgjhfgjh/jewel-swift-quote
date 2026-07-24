@@ -210,7 +210,7 @@ export function GoBigDealAlertButton({ onNavigate }: { onNavigate?: () => void }
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+        className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-600"
       >
         <Bell className="h-4 w-4" /> Set a GoBigDeal alert
         <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
