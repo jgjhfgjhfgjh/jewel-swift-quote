@@ -262,14 +262,19 @@ const Index = () => {
               {/* ── 2. DEALS (černá) — hned pod brand showcase ──
                   Sekce má vlastní rounded-t + černé pozadí, takže zaoblené rohy
                   odkrývají bílou sekci nad sebou. Obsah i funkčnost beze změny.
+                  Podklad wrapperu = barva PŘEDCHOZÍ sekce (bílá), aby zaoblené
+                  rohy černé sekce odkrývaly bílou.
                   z-10: dropdown našeptávače modelů se musí kreslit NAD
                   následující sekce (AppsCards má vlastní z-0 kontext). */}
-              <div className="relative z-10 bg-[#0d0d10]">
+              <div className="relative z-10 bg-white">
                 <HomeTopDeals />
               </div>
               {/* ── 3. CONNECT AI AGENTS (bílá) — přechodová sekce mezi černými ──
                   Dřívější plovoucí bílá karta roztažená do stran na celou sekci;
-                  obsah (loga agentů, headline, placeholdery) beze změny. */}
+                  obsah (loga agentů, headline, placeholdery) beze změny.
+                  Černý podklad = barva předchozí sekce → zaoblené rohy bílé
+                  sekce odkrývají černou. */}
+              <div className="bg-[#0d0d10]">
               <div className="w-full rounded-t-[1.75rem] bg-white pt-12 pb-16 sm:rounded-t-[2.5rem] sm:pt-16 sm:pb-24">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
@@ -307,10 +312,13 @@ const Index = () => {
                   </div>
                 </div>
               </div>
+              </div>
               {/* ── 4. DROPSHIPPING (černá) — beze změny, jen posunuto níž ──
                   tmavá karta: spotlight headline + interaktivní schéma
                   (DropshipFlowMap): bílo-šedá mapa Evropy, gradientové pohyby
-                  objednávek, expanze trhů a kasička zisku */}
+                  objednávek, expanze trhů a kasička zisku.
+                  Bílý podklad = barva předchozí sekce (Connect). */}
+              <div className="bg-white">
               <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-16 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-24 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto max-w-[1000px] text-left">
@@ -327,6 +335,7 @@ const Index = () => {
                   dropship karty) vrací do černé; bílý obsah níže (AppsCards) pak
                   začíná zaobleným okrajem stejně jako ostatní přechody */}
               <div className="w-full h-16 sm:h-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]" />
+              </div>
             </section>
           </>
         ) : (
@@ -337,7 +346,7 @@ const Index = () => {
       {/* Apps/tools cards — na homepage navazují na tmavou dropship zónu, proto
           bílý zaoblený start (stejný vzor přechodu jako mezi sekcemi výše) */}
       {viewMode === 'home' && (
-        <div className="relative z-0 -mt-8 rounded-t-[1.75rem] bg-white pt-8 sm:-mt-12 sm:rounded-t-[2.5rem] sm:pt-12">
+        <div className="relative z-10 -mt-8 rounded-t-[1.75rem] bg-white pt-8 sm:-mt-12 sm:rounded-t-[2.5rem] sm:pt-12">
           <AppsCards />
         </div>
       )}

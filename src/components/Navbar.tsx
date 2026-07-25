@@ -672,7 +672,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                  (heading/desc/CTA), pod ním tlačítko s nabídkou úrovní alertů
                  (koncern/značka/model → kotvy #gbd-alerts-*) */
               <div className="px-6 py-6">
-                <GoBigDealStrip fadeFrom="from-white" />
+                <GoBigDealStrip />
                 <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
               </div>
             ) : (

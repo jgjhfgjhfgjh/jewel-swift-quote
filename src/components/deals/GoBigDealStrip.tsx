@@ -37,12 +37,8 @@ type StripCard =
 const STRIP_TOTAL_CARDS = 12;
 
 export function GoBigDealStrip({
-  fadeFrom = 'from-zinc-50',
   onDark = false,
 }: {
-  /** Tailwind from-* třída okrajových fade přechodů — musí sedět na pozadí
-   *  rodiče (sekce zinc-50, mega menu bílá, homepage sekce černá). */
-  fadeFrom?: string;
   /** Pás leží na tmavém pozadí → texty mimo bílé karty se zesvětlí. */
   onDark?: boolean;
 }) {
@@ -161,15 +157,6 @@ export function GoBigDealStrip({
         >
           {[0, 1, 2].map(renderSet)}
         </div>
-        {/* fade na obou okrajích — kolotoč pokračuje oběma směry */}
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute inset-y-0 left-0 w-14 bg-gradient-to-r ${fadeFrom} to-transparent`}
-        />
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l ${fadeFrom} to-transparent`}
-        />
         {/* šipky (desktop, na hover) */}
         <button
           type="button"

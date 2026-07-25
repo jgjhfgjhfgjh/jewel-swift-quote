@@ -171,7 +171,7 @@ export function HomeTopDeals() {
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="italic text-white">deals </span>
+            <span className="text-white">Deals </span>
             <span className="text-zinc-400">with </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               bigger wholesale discount
@@ -181,8 +181,8 @@ export function HomeTopDeals() {
 
         {/* nekonečný swipovatelný pás — gateway karta jede v pásu */}
         <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
-          {/* sekce je černá → fade po stranách i počítadlo v tmavé variantě */}
-          <GoBigDealStrip fadeFrom="from-[#0d0d10]" onDark />
+          {/* sekce je černá → počítadlo v tmavé variantě */}
+          <GoBigDealStrip onDark />
         </div>
       </div>
 
