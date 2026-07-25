@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Check } from 'lucide-react';
+import { ArrowRight, Bell, Check, ChevronDown } from 'lucide-react';
 import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
@@ -111,15 +111,26 @@ export function HomeTopDeals() {
   const alertsApi = useDealAlerts();
   const { hasEarlyAccess } = useEarlyAccess();
   const [exploreOpen, setExploreOpen] = useState(false);
+  /** Alerty (koncerny/značky/modely) jsou složené pod tlačítkem — sekce tak
+   *  zůstává krátká; rozbalí je klik nebo proklik z mega menu (#gbd-alerts-*). */
+  const [alertsOpen, setAlertsOpen] = useState(false);
 
   const requireAuth = () => openAuthModal('register');
 
   // Kotvy #gbd-alerts-* — proklik z tlačítka „Set a GoBigDeal alert"
-  // v mega menu doscrolluje na příslušnou úroveň alertů.
+  // v mega menu alerty rozbalí a doscrolluje na příslušnou úroveň.
   useEffect(() => {
     const id = location.hash.replace('#', '');
     if (id.startsWith('gbd-alerts')) {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setAlertsOpen(true);
+      // Scroll až po rozbalení; opakujeme, protože karusely dorovnávají výšku
+      // po načtení log (jinak by scroll skončil vedle cíle).
+      const timers = [80, 400, 900].map((ms) =>
+        setTimeout(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, ms),
+      );
+      return () => timers.forEach(clearTimeout);
     }
   }, [location.hash]);
 
@@ -151,17 +162,17 @@ export function HomeTopDeals() {
   };
 
   return (
-    // Šedá karta na černé zóně (neutrální zinc, žádný modrý nádech) — bílé
-    // karty uvnitř na ní vyniknou; zaoblené rohy odkrývají černý wrapper.
-    <section className="relative w-full rounded-t-[1.75rem] bg-zinc-50 pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
+    // Černá sekce (stejný odstín jako dropshipping) — bílé karty uvnitř na ní
+    // vyniknou; zaoblené rohy odkrývají předchozí bílou sekci.
+    <section className="relative w-full rounded-t-[1.75rem] bg-[#0d0d10] pt-16 pb-28 sm:rounded-t-[2.75rem] sm:pt-24 sm:pb-40">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
         {/* headline blok — jediný velký odstavec ve stejné typografii jako
             DropshipHeadline (extralight clamp, tlumená slova + gradientový
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="italic text-zinc-900">deals </span>
-            <span className="text-zinc-600">with </span>
+            <span className="italic text-white">deals </span>
+            <span className="text-zinc-400">with </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
               bigger wholesale discount
             </span>
@@ -170,14 +181,31 @@ export function HomeTopDeals() {
 
         {/* nekonečný swipovatelný pás — gateway karta jede v pásu */}
         <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
-          <GoBigDealStrip />
+          {/* sekce je černá → fade po stranách i počítadlo v tmavé variantě */}
+          <GoBigDealStrip fadeFrom="from-[#0d0d10]" onDark />
         </div>
       </div>
 
+      {/* Alerty pod jedním tlačítkem — sekce zůstává krátká, obsah i funkčnost
+          beze změny (rozbalený stav je 1:1 jako dřív). */}
+      <div className="mt-12 flex justify-center px-5 sm:mt-16">
+        <button
+          type="button"
+          onClick={() => setAlertsOpen((v) => !v)}
+          aria-expanded={alertsOpen}
+          className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100"
+        >
+          <Bell className="h-4 w-4" /> Set deal alerts
+          <ChevronDown className={`h-4 w-4 transition-transform ${alertsOpen ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
+
+      {alertsOpen && (
+      <>
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
       <div id="gbd-alerts-concerns" className="mt-12 scroll-mt-24 sm:mt-16">
         {/* jednotný vzor nadpisů — mění se jen koncovka (concerns/brands/models) */}
-        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
+        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
           Deal alerts on concerns
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
@@ -196,7 +224,7 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
       <div id="gbd-alerts-brands" className="mt-12 scroll-mt-24 sm:mt-16">
-        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
+        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
           Deal alerts on brands
         </h3>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
@@ -206,20 +234,22 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 3: jednotlivé modely — našeptávač */}
       <div id="gbd-alerts-models" className="mx-auto mt-12 max-w-[640px] scroll-mt-24 px-5 sm:mt-16 sm:px-0">
-        <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-zinc-900">
+        <h3 className="mb-6 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
           Deal alerts on individual models
         </h3>
         <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
       </div>
+      </>
+      )}
 
       {/* pricing — čtyřúrovňový paywall na konci sekce, pod alerty */}
       <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
-        <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-zinc-900">
+        <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-white">
           Catch your deal of the year earlier and earn more.
         </h3>
         <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
-          <span className="text-zinc-600">Insiders see every deal </span>
-          <span className="text-zinc-900">48 hours early.</span>
+          <span className="text-zinc-400">Insiders see every deal </span>
+          <span className="text-white">48 hours early.</span>
         </p>
         <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
           {TIERS.map((tier) => (

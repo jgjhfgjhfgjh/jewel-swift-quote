@@ -259,9 +259,58 @@ const Index = () => {
                   <HomeHero />
                 </div>
               </div>
-              {/* tmavá karta — spotlight headline + interaktivní schéma
-                  dropshippingu (DropshipFlowMap): bílo-šedá mapa Evropy,
-                  gradientové pohyby objednávek, expanze trhů a kasička zisku */}
+              {/* ── 2. DEALS (černá) — hned pod brand showcase ──
+                  Sekce má vlastní rounded-t + černé pozadí, takže zaoblené rohy
+                  odkrývají bílou sekci nad sebou. Obsah i funkčnost beze změny.
+                  z-10: dropdown našeptávače modelů se musí kreslit NAD
+                  následující sekce (AppsCards má vlastní z-0 kontext). */}
+              <div className="relative z-10 bg-[#0d0d10]">
+                <HomeTopDeals />
+              </div>
+              {/* ── 3. CONNECT AI AGENTS (bílá) — přechodová sekce mezi černými ──
+                  Dřívější plovoucí bílá karta roztažená do stran na celou sekci;
+                  obsah (loga agentů, headline, placeholdery) beze změny. */}
+              <div className="w-full rounded-t-[1.75rem] bg-white pt-12 pb-16 sm:rounded-t-[2.5rem] sm:pt-16 sm:pb-24">
+                <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
+                  <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+                    {/* levý sloupec — copy (placeholder) */}
+                    <div className="flex flex-col justify-center">
+                      {/* loga AI agentů, na které se swelt napojí */}
+                      <div className="mb-8">
+                        <AgentLogoRow />
+                      </div>
+                      <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
+                        Connect swelt to
+                        <br />
+                        your AI agents
+                      </h2>
+                      <div className="mt-6 max-w-md space-y-3">
+                        <div className="h-3 w-full rounded-full bg-zinc-100" />
+                        <div className="h-3 w-[85%] rounded-full bg-zinc-100" />
+                        <div className="h-3 w-[70%] rounded-full bg-zinc-100" />
+                      </div>
+                      <span className="mt-8 inline-block w-fit text-sm font-medium text-zinc-400 underline underline-offset-4">
+                        Odkaz (placeholder)
+                      </span>
+                    </div>
+                    {/* pravý sloupec — vizuál (placeholder) */}
+                    <div className="relative min-h-[280px] overflow-hidden rounded-[1.25rem] bg-zinc-50 ring-1 ring-zinc-100 sm:min-h-[420px] sm:rounded-[1.75rem]">
+                      {/* rozházené dlaždice — náznak budoucí kompozice */}
+                      <div className="absolute left-[8%] top-[12%] h-24 w-24 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-28" />
+                      <div className="absolute right-[14%] top-[8%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
+                      <div className="absolute bottom-[14%] left-[16%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
+                      <div className="absolute bottom-[10%] right-[10%] h-24 w-32 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-40" />
+                      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium uppercase tracking-wider text-zinc-300">
+                        Vizuál
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* ── 4. DROPSHIPPING (černá) — beze změny, jen posunuto níž ──
+                  tmavá karta: spotlight headline + interaktivní schéma
+                  (DropshipFlowMap): bílo-šedá mapa Evropy, gradientové pohyby
+                  objednávek, expanze trhů a kasička zisku */}
               <div className="w-full rounded-t-[1.75rem] min-h-[640px] pt-16 pb-16 sm:rounded-t-[2.75rem] sm:min-h-[1020px] sm:pt-24 sm:pb-24 bg-[linear-gradient(to_bottom,#0d0d10_0%,#26262e_50%,#4b4b57_100%)]">
                 <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
                   <div className="mx-auto max-w-[1000px] text-left">
@@ -274,59 +323,10 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-              {/* pokračování tmavé zóny — černé pozadí se rozšiřuje dolů a
-                  gradient se ze šedé (#4b4b57, navazuje na spodek dropship karty)
-                  postupně obrací zpět do černé. Na tomto podkladu „pluje" bílá
-                  karta na velikost obrazovky se stínem (zatím placeholder). */}
-              <div className="w-full pt-8 pb-16 sm:pt-12 sm:pb-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]">
-                <div className="mx-auto max-w-[1400px] px-5 sm:px-10 lg:px-14">
-                  <div className="relative overflow-hidden rounded-[1.75rem] bg-white shadow-[0_40px_120px_-24px_rgba(0,0,0,0.75)] ring-1 ring-white/10 min-h-[82svh] sm:min-h-[85svh] sm:rounded-[2.5rem]">
-                    <div className="grid h-full min-h-[inherit] grid-cols-1 gap-10 p-8 sm:p-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-20">
-                      {/* levý sloupec — copy (placeholder) */}
-                      <div className="flex flex-col justify-center">
-                        {/* loga AI agentů, na které se swelt napojí */}
-                        <div className="mb-8">
-                          <AgentLogoRow />
-                        </div>
-                        <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.75rem,5vw,3.5rem)] text-zinc-900">
-                          Connect swelt to
-                          <br />
-                          your AI agents
-                        </h2>
-                        <div className="mt-6 max-w-md space-y-3">
-                          <div className="h-3 w-full rounded-full bg-zinc-100" />
-                          <div className="h-3 w-[85%] rounded-full bg-zinc-100" />
-                          <div className="h-3 w-[70%] rounded-full bg-zinc-100" />
-                        </div>
-                        <span className="mt-8 inline-block w-fit text-sm font-medium text-zinc-400 underline underline-offset-4">
-                          Odkaz (placeholder)
-                        </span>
-                      </div>
-                      {/* pravý sloupec — vizuál (placeholder) */}
-                      <div className="relative min-h-[280px] overflow-hidden rounded-[1.25rem] bg-zinc-50 ring-1 ring-zinc-100 sm:rounded-[1.75rem]">
-                        {/* rozházené dlaždice — náznak budoucí kompozice */}
-                        <div className="absolute left-[8%] top-[12%] h-24 w-24 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-28" />
-                        <div className="absolute right-[14%] top-[8%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
-                        <div className="absolute bottom-[14%] left-[16%] h-28 w-28 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-36 sm:w-36" />
-                        <div className="absolute bottom-[10%] right-[10%] h-24 w-32 rounded-xl bg-zinc-100 ring-1 ring-zinc-200/70 sm:h-28 sm:w-40" />
-                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium uppercase tracking-wider text-zinc-300">
-                          Vizuál
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Top DEAL nabídky — bílá full-width karta (hero deal + locked
-                  karty s Insider paywallem 48 h + countdown „next drop" +
-                  carousel koncernů). Černá zóna výše je protažená pod kartu,
-                  aby zaoblené rohy odkrývaly černou; bílá sekce pak plynule
-                  navazuje na bílý obsah níže (dřívější fade už není potřeba). */}
-              {/* z-10: dropdown našeptávače modelů se musí kreslit NAD
-                  následující sekce (AppsCards má vlastní z-0 kontext) */}
-              <div className="relative z-10 bg-[#0d0d10]">
-                <HomeTopDeals />
-              </div>
+              {/* dojezd tmavé zóny — gradient se ze šedé (navazuje na spodek
+                  dropship karty) vrací do černé; bílý obsah níže (AppsCards) pak
+                  začíná zaobleným okrajem stejně jako ostatní přechody */}
+              <div className="w-full h-16 sm:h-24 bg-[linear-gradient(to_bottom,#4b4b57_0%,#26262e_45%,#0d0d10_100%)]" />
             </section>
           </>
         ) : (
@@ -334,9 +334,10 @@ const Index = () => {
         )}
       </div>
 
-      {/* Apps/tools cards */}
+      {/* Apps/tools cards — na homepage navazují na tmavou dropship zónu, proto
+          bílý zaoblený start (stejný vzor přechodu jako mezi sekcemi výše) */}
       {viewMode === 'home' && (
-        <div className="relative z-0">
+        <div className="relative z-0 -mt-8 rounded-t-[1.75rem] bg-white pt-8 sm:-mt-12 sm:rounded-t-[2.5rem] sm:pt-12">
           <AppsCards />
         </div>
       )}

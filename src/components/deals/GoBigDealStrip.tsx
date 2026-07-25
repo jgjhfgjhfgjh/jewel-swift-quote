@@ -38,10 +38,13 @@ const STRIP_TOTAL_CARDS = 12;
 
 export function GoBigDealStrip({
   fadeFrom = 'from-zinc-50',
+  onDark = false,
 }: {
   /** Tailwind from-* třída okrajových fade přechodů — musí sedět na pozadí
-   *  rodiče (sekce zinc-50, mega menu bílá). */
+   *  rodiče (sekce zinc-50, mega menu bílá, homepage sekce černá). */
   fadeFrom?: string;
+  /** Pás leží na tmavém pozadí → texty mimo bílé karty se zesvětlí. */
+  onDark?: boolean;
 }) {
   const openAuthModal = useStore((s) => s.openAuthModal);
   const navigate = useNavigate();
@@ -187,7 +190,7 @@ export function GoBigDealStrip({
       </div>
       {/* počítadlo — jen reálné dealy, ne placeholdery */}
       {realDealCount > 0 && (
-        <p className="mt-3 text-xs font-semibold text-slate-500">
+        <p className={`mt-3 text-xs font-semibold ${onDark ? 'text-zinc-400' : 'text-slate-500'}`}>
           {realDealCount} <Gbd suffix={realDealCount === 1 ? '' : 's'} /> · swipe for more
         </p>
       )}
