@@ -20,7 +20,7 @@ export function Gbd({ suffix = '' }: { suffix?: string }) {
 export function GoBigDealLogo({ className = '' }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-baseline whitespace-nowrap font-sans font-bold tracking-tight leading-none ${className}`}
+      className={`inline-flex items-baseline whitespace-nowrap font-sans font-black tracking-tight leading-none ${className}`}
       aria-label="GoBigDeal"
     >
       GoBigDeal
