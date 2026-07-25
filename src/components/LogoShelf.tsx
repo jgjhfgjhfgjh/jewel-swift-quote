@@ -45,6 +45,8 @@ export function LogoShelf({
   const cancelClose = () => { if (closeRef.current) clearTimeout(closeRef.current); closeRef.current = null; };
   const scheduleClose = () => { cancelClose(); closeRef.current = setTimeout(() => setPreview(null), 90); };
   const canHover = () => typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches;
+  // náhled je vypnutý v compact (mega menu)
+  const previewOn = !compact;
 
   const openFor = (item: LogoShelfItem, el: HTMLElement) => {
     const r = el.getBoundingClientRect();
@@ -55,7 +57,7 @@ export function LogoShelf({
   };
 
   const handleEnter = (item: LogoShelfItem, el: HTMLElement) => {
-    if (!canHover()) return;
+    if (!previewOn || !canHover()) return;
     cancelClose();
     clearDwell();
     dwellRef.current = setTimeout(() => openFor(item, el), 100);
@@ -63,13 +65,15 @@ export function LogoShelf({
 
   const pointerRef = useRef<{ x: number; y: number } | null>(null);
   useEffect(() => {
+    if (!previewOn) return;
     const onMove = (e: MouseEvent) => { pointerRef.current = { x: e.clientX, y: e.clientY }; };
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => window.removeEventListener('mousemove', onMove);
-  }, []);
+  }, [previewOn]);
 
   // Po swipu znovu vyhodnotíme kartu pod (nehybným) kurzorem přes elementFromPoint
   useEffect(() => {
+    if (!previewOn) return;
     let idle: ReturnType<typeof setTimeout> | null = null;
     const onScroll = () => {
       clearDwell();
@@ -81,7 +85,9 @@ export function LogoShelf({
         if (!p) return;
         const hit = document.elementFromPoint(p.x, p.y) as HTMLElement | null;
         const card = hit?.closest('[data-shelf-card]') as HTMLElement | null;
-        if (!card) return;
+        // jen karta z TÉTO police — jinak by shelf značek otevřel náhled pro
+        // kartu koncernu (a zůstal viset)
+        if (!card || !trackRef.current || !trackRef.current.contains(card)) return;
         const name = card.getAttribute('data-name');
         const domain = card.getAttribute('data-domain') || undefined;
         const slug = card.getAttribute('data-slug');
@@ -96,7 +102,7 @@ export function LogoShelf({
       window.removeEventListener('resize', onResize);
       if (idle) clearTimeout(idle);
     };
-  }, []);
+  }, [previewOn]);
 
   return (
     <div className={topMargin} style={{ fontFamily: "'Montserrat', sans-serif" }}>
@@ -114,7 +120,7 @@ export function LogoShelf({
       </div>
 
       {/* Shelf */}
-      <div className="relative group">
+      <div className="relative group" onMouseLeave={() => { clearDwell(); setPreview(null); }}>
         <div
           ref={trackRef}
           className="flex flex-nowrap overflow-x-auto [-webkit-overflow-scrolling:touch] pb-2
@@ -176,8 +182,8 @@ export function LogoShelf({
         </button>
       </div>
 
-      {/* Hover-expand náhled (desktop only, fixed overlay) */}
-      {preview && (
+      {/* Hover-expand náhled (desktop only, fixed overlay; vypnutý v compact) */}
+      {previewOn && preview && (
         <div
           key={preview.item.name}
           aria-hidden
