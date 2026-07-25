@@ -308,9 +308,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
           to="/"
           onClick={() => { setViewMode('home'); setGatewayOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           className="flex items-center select-none shrink-0 relative z-10"
-          aria-label="GoBigdeal — domů"
+          aria-label="GoBigDeal — domů"
         >
-          {/* zkušební wordmark GoBigdeal (ikona + text, barva přes currentColor) */}
+          {/* wordmark GoBigDeal (barva přes currentColor) */}
           <GoBigDealLogo
             className={`text-[13px] sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
           />

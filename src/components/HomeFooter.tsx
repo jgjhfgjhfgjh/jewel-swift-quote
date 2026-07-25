@@ -97,7 +97,7 @@ export function HomeFooter() {
       <div className="mx-auto max-w-6xl px-6 py-12 sm:py-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
         {/* Brand block */}
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-          <button onClick={() => navigate('/')} className="select-none" aria-label="GoBigdeal — domů">
+          <button onClick={() => navigate('/')} className="select-none" aria-label="GoBigDeal — domů">
             <GoBigDealLogo className="text-2xl text-white" />
           </button>
           <p className="text-[#999999] text-sm leading-relaxed mt-3 max-w-xs">

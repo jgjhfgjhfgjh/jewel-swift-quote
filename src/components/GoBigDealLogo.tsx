@@ -13,24 +13,17 @@
  * `suffix` pro množné číslo apod. („GoBigdeals").
  */
 export function Gbd({ suffix = '' }: { suffix?: string }) {
-  // Obal do jednoho inline spanu → ve flex kontejnerech (nav položka s gap,
-  // tlačítka) se „GoBig" a „deal" neroztrhnou na dvě položky s mezerou mezi.
-  return (
-    <span className="whitespace-nowrap">
-      GoBig<span className="italic">deal{suffix}</span>
-    </span>
-  );
+  // Jeden inline span → ve flex kontejnerech se slovo neroztrhne s mezerou.
+  return <span className="whitespace-nowrap font-bold">GoBigDeal{suffix}</span>;
 }
 
 export function GoBigDealLogo({ className = '' }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-baseline whitespace-nowrap font-sans tracking-tight leading-none ${className}`}
-      aria-label="GoBigdeal"
+      className={`inline-flex items-baseline whitespace-nowrap font-sans font-bold tracking-tight leading-none ${className}`}
+      aria-label="GoBigDeal"
     >
-      <span className="font-light">Go</span>
-      <span className="font-extrabold">Big</span>
-      <span className="font-light italic">deal</span>
+      GoBigDeal
     </span>
   );
 }
