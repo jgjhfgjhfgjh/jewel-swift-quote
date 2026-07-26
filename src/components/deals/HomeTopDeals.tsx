@@ -108,6 +108,7 @@ const TIERS: Tier[] = [
       'Every deal open before it goes public',
       'Concern, brand and model alerts',
       'First pick while stock lasts',
+      'Dedicated account manager',
     ],
     cta: 'Go PRO',
   },
