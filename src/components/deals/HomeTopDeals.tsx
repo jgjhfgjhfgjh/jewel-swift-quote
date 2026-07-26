@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Check, ChevronDown } from 'lucide-react';
+import { ArrowRight, Bell, BellRing, Check, ChevronDown } from 'lucide-react';
 import { useDealAlerts, type DealAlertsApi } from '@/hooks/useDealAlerts';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
@@ -11,6 +11,9 @@ import { BrandAlertCarousel } from './BrandAlertCarousel';
 import { ModelAlertSearch } from './ModelAlertSearch';
 import { GoBigDealStrip } from './GoBigDealStrip';
 import { Gbd } from '@/components/GoBigDealLogo';
+import { CONCERNS } from '@/data/concerns';
+import { useBrandCatalog } from '@/hooks/useBrandCatalog';
+import { sortByBrandPriority } from '@/lib/brandOrder';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
 import {
   Dialog,
@@ -156,6 +159,44 @@ export function HomeTopDeals() {
     alertsApi.toggle('concern', slug, name);
   };
 
+  /* ── Hromadné alerty ──────────────────────────────────────────────────
+     Seznamy musí odpovídat kartám v karuselech: koncerny přítomné ve feedu
+     (ConcernCarousel je filtruje stejně) a všechny značky z katalogu.      */
+  const { data: catalog = [] } = useBrandCatalog();
+
+  const feedConcerns = useMemo(
+    () =>
+      CONCERNS.filter((c) =>
+        catalog.some((e) => c.brandKeys.includes(e.key) && e.count > 0),
+      ),
+    [catalog],
+  );
+  const feedBrands = useMemo(() => sortByBrandPriority(catalog), [catalog]);
+
+  const allConcernsOn = feedConcerns.length > 0 && feedConcerns.every((c) => alertsApi.has('concern', c.slug));
+  const allBrandsOn = feedBrands.length > 0 && feedBrands.every((b) => alertsApi.has('brand', b.key));
+
+  /** Zapne/vypne alert na celou úroveň jedním klikem (stejné hradlo jako zvoneček). */
+  const toggleAll = async (level: 'concern' | 'brand') => {
+    if (!user) {
+      requireAuth();
+      return;
+    }
+    if (!hasEarlyAccess) {
+      openEarlyAccessUpsell();
+      return;
+    }
+    const items =
+      level === 'concern'
+        ? feedConcerns.map((c) => ({ target: c.slug, label: c.name }))
+        : feedBrands.map((b) => ({ target: b.key, label: b.name }));
+    const turnOff = level === 'concern' ? allConcernsOn : allBrandsOn;
+    for (const it of items) {
+      if (turnOff) await alertsApi.remove(level, it.target);
+      else if (!alertsApi.has(level, it.target)) await alertsApi.add(level, it.target, it.label);
+    }
+  };
+
   // Placené tarify zatím nemají platební flow — nepřihlášený jde do
   // registrace, přihlášený na /deals; Enterprise píše obchodu.
   const handleTier = (id: Tier['id'] | 'enterprise') => {
@@ -213,9 +254,28 @@ export function HomeTopDeals() {
       {/* watchdog úroveň 1: koncerny — klik vede na /koncerny/:slug */}
       <div id="gbd-alerts-concerns" className="mt-12 scroll-mt-24 sm:mt-16">
         {/* jednotný vzor nadpisů — mění se jen koncovka (concerns/brands/models) */}
-        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
+        <h3 className="mb-3 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
           Deal alerts on concerns
         </h3>
+        {/* hromadné zapnutí + upozornění, že koncerny nepokrývají celý katalog */}
+        <div className="mb-6 flex flex-col items-center gap-2 px-5">
+          <button
+            type="button"
+            onClick={() => toggleAll('concern')}
+            aria-pressed={allConcernsOn}
+            className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
+              allConcernsOn
+                ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                : 'bg-white text-zinc-900 hover:bg-zinc-100'
+            }`}
+          >
+            {allConcernsOn ? <BellRing className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
+            {allConcernsOn ? 'Alerts on all concerns are on' : 'Alert me on all concerns'}
+          </button>
+          <p className="text-center text-xs text-zinc-500">
+            Concerns don&rsquo;t cover every brand — some brands stand alone. Add brand alerts below.
+          </p>
+        </div>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <ConcernCarousel
             texts={CONCERN_TEXTS}
@@ -232,9 +292,27 @@ export function HomeTopDeals() {
 
       {/* watchdog úroveň 2: značky — toggle alert na každé kartě */}
       <div id="gbd-alerts-brands" className="mt-12 scroll-mt-24 sm:mt-16">
-        <h3 className="mb-6 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
+        <h3 className="mb-3 px-5 text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)] text-white">
           Deal alerts on brands
         </h3>
+        {/* jedním klikem alert na všech {n} značek z katalogu */}
+        <div className="mb-6 flex justify-center px-5">
+          <button
+            type="button"
+            onClick={() => toggleAll('brand')}
+            aria-pressed={allBrandsOn}
+            className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
+              allBrandsOn
+                ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                : 'bg-white text-zinc-900 hover:bg-zinc-100'
+            }`}
+          >
+            {allBrandsOn ? <BellRing className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
+            {allBrandsOn
+              ? 'Alerts on all brands are on'
+              : `Alert me on all ${feedBrands.length} brands`}
+          </button>
+        </div>
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <BrandAlertCarousel alertsApi={alertsApi} onRequireAuth={requireAuth} />
         </div>
