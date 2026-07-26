@@ -130,12 +130,12 @@ export function HomeTopDeals() {
 
   const requireAuth = () => openAuthModal('register');
 
-  // Kotvy #gbd-alerts-* — proklik z tlačítka „Set a GoBigDeal alert"
-  // v mega menu alerty rozbalí a doscrolluje na příslušnou úroveň.
+  // Kotvy #gbd-* — proklik z mega menu (alerty) i z landingu /deals
+  // (#gbd-pricing). U alertů je navíc potřeba blok nejdřív rozbalit.
   useEffect(() => {
     const id = location.hash.replace('#', '');
-    if (id.startsWith('gbd-alerts')) {
-      setAlertsOpen(true);
+    if (id.startsWith('gbd-')) {
+      if (id.startsWith('gbd-alerts')) setAlertsOpen(true);
       // Scroll až po rozbalení; opakujeme, protože karusely dorovnávají výšku
       // po načtení log (jinak by scroll skončil vedle cíle).
       const timers = [80, 400, 900].map((ms) =>
@@ -335,7 +335,7 @@ export function HomeTopDeals() {
 
       {/* pricing — paywall na konci sekce, pod alerty. Prodává NÁSKOK:
           zdarma alert při spuštění, placené 48 h předem + odemčení. */}
-      <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
+      <div id="gbd-pricing" className="mx-auto mt-16 max-w-[1160px] scroll-mt-24 px-5 sm:mt-24 sm:px-10 lg:px-14">
         <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-white">
           Get early access and earn more.
         </h3>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Lock, Sparkles, Zap } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive, type Deal } from '@/lib/deals';
-import { dealsI18n } from '@/lib/i18n-deals';
+import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useEarlyAccess } from '@/hooks/useEarlyAccess';
@@ -263,12 +263,12 @@ function HeroDealCard({ deal, count }: { deal: Deal; count: number }) {
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {count > 0 && (
             <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-              {count} {t.card.models}
+              {countLabel('en', count, 'models')}
             </span>
           )}
           {deal.brands.length > 0 && (
             <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-              {deal.brands.length} {t.card.brands}
+              {countLabel('en', deal.brands.length, 'brands')}
             </span>
           )}
           {maxDiscount > 0 && (
