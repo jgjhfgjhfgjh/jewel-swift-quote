@@ -55,8 +55,6 @@ export interface DealsText {
     searchPlaceholder: string;
     concernsLabel: string;
     brandsLabel: string;
-    suppliersLabel: string;
-    suppliersSoon: string;
     allConcerns: string;
     clear: string;
     results: string;
@@ -259,12 +257,10 @@ const cs: DealsText = {
   catalog: {
     headingLead: 'Katalog dávek.',
     headingMuted: 'Vyberte koncern, značku a slevu.',
-    sub: 'Closeout dávky od koncernů, které už prodáváte. Filtrujte podle koncernu nebo značky — dodavatele přidáme, jakmile jich bude víc.',
+    sub: 'Nejlepší closeout dávky na jednom místě — jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů. Filtrujte podle koncernu nebo značky.',
     searchPlaceholder: 'Hledat koncern, značku nebo dávku…',
     concernsLabel: 'Koncerny',
     brandsLabel: 'Značky',
-    suppliersLabel: 'Dodavatelé',
-    suppliersSoon: 'Brzy',
     allConcerns: 'Vše',
     clear: 'Zrušit filtry',
     results: '{n} · odpovídá filtru',
@@ -476,12 +472,10 @@ const en: DealsText = {
   catalog: {
     headingLead: 'The batch catalog.',
     headingMuted: 'Pick a concern, a brand and your discount.',
-    sub: 'Closeout batches from the concerns you already sell. Filter by concern or brand — suppliers get their own filter once there are more of them.',
+    sub: 'The best closeout batches in one place — one order, one invoice, no signing up with dozens of wholesalers. Filter by concern or brand.',
     searchPlaceholder: 'Search a concern, brand or batch…',
     concernsLabel: 'Concerns',
     brandsLabel: 'Brands',
-    suppliersLabel: 'Suppliers',
-    suppliersSoon: 'Soon',
     allConcerns: 'All',
     clear: 'Clear filters',
     results: '{n} · match the filter',

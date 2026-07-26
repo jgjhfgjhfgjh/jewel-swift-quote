@@ -19,6 +19,7 @@ import {
   applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
   type CatalogFilters,
 } from '@/lib/dealCatalog';
+import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
 import { DealHeroCarousel } from '@/components/deals/catalog/DealHeroCarousel';
@@ -102,6 +103,17 @@ export default function Deals() {
       });
   }, [catalog]);
 
+  // Do lišty posíláme čitelné názvy, ne slugy a klíče.
+  const activeLabels = useMemo(() => {
+    const byConcern = new Map(concernTiles.map((t) => [t.key, t.name]));
+    const byBrand = new Map(brandTiles.map((t) => [t.key, t.name]));
+    return [
+      ...filters.concerns.map((s) => byConcern.get(s) ?? s),
+      ...filters.brands.map((k) => byBrand.get(k) ?? toDisplayName(k)),
+      ...(filters.search.trim() ? [`„${filters.search.trim()}"`] : []),
+    ];
+  }, [filters, concernTiles, brandTiles]);
+
   // Řada „Připravujeme" jde před velké karty, ostatní za ně.
   const upcomingRow = useMemo(() => rows.find((r) => r.id === 'upcoming'), [rows]);
   const restRows = useMemo(() => rows.filter((r) => r.id !== 'upcoming'), [rows]);
@@ -159,8 +171,16 @@ export default function Deals() {
         {d.catalog.headingLead} {d.catalog.headingMuted}
       </h1>
 
-      {/* ── 1. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      {/* ── 1. Hledání — první prvek katalogu, na střed nad karusely ── */}
       <div id="catalog" className="scroll-mt-16 pt-20 sm:pt-24">
+        <CatalogSearch
+          value={filters.search}
+          onChange={(search) => setFilters((f) => ({ ...f, search }))}
+        />
+      </div>
+
+      {/* ── 2. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      <div className="pt-8 sm:pt-10">
         <FilterTiles
           items={concernTiles}
           selected={filters.concerns}
@@ -171,7 +191,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 2. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
+      {/* ── 3. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
       <div className="pt-6 sm:pt-8">
         <FilterTiles
           items={brandTiles}
@@ -183,9 +203,14 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── Lepivá lišta: fulltext, počet výsledků, zamčení dodavatelé ── */}
+      {/* ── Lepivá stavová lišta: počet výsledků a běžící filtry ── */}
       <div className="mt-5">
-        <DealFilterBar filters={filters} onChange={setFilters} resultCount={filtered.length} />
+        <DealFilterBar
+          filters={filters}
+          onChange={setFilters}
+          resultCount={filtered.length}
+          activeLabels={activeLabels}
+        />
       </div>
 
       {/* ── Dealy: nejdřív Připravujeme, pak tři velké karty, pak zbytek ── */}
