@@ -1,37 +1,41 @@
-import { useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Bell, Check, MousePointerClick, Layers, TrendingUp, Clock,
-  Package, CreditCard, Banknote, FileText, ListOrdered,
+  Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
-import { dealIsLive, sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
-import { DealCard } from '@/components/deals/DealCard';
+import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
+import { toDisplayName } from '@/lib/brandNormalize';
+import {
+  applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
+  type CatalogFilters,
+} from '@/lib/dealCatalog';
+import { ConcernTiles } from '@/components/deals/catalog/ConcernTiles';
+import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
+import { DealHeroCarousel } from '@/components/deals/catalog/DealHeroCarousel';
+import { DealRow } from '@/components/deals/catalog/DealRow';
 
 const STEP_ICONS = [MousePointerClick, Layers, TrendingUp, Clock];
 const CONDITION_ICONS = [Package, CreditCard, Banknote, FileText, ListOrdered];
 
 /* ── Sdílené třídy s homepage ──────────────────────────────────────────────
-   Landing /deals staví na stejném vzoru jako homepage: full-width sekce se
-   zaobleným horním okrajem, které se střídají bílá ↔ černá (#0d0d10, stejný
-   odstín jako sekce GoBigDeal a dropshipping), extralight nadpisy v clampu
-   (tmavé slovo → tlumené slovo → gradientový závěr) a iOS pilulková CTA.
-   Wrapper každé sekce má barvu sekce PŘEDCHOZÍ — zaoblené rohy ji odkrývají. */
+   Vysvětlující část pod katalogem drží vzor homepage: full-width sekce se
+   zaobleným horním okrajem, střídání bílá ↔ černá (#0d0d10), extralight
+   nadpisy v clampu (lead → tlumené → gradient) a iOS pilulková CTA.
+   Wrapper každé sekce nese barvu sekce PŘEDCHOZÍ — rohy ji odkrývají. */
 const DARK = '#0d0d10';
 const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
 const SECTION = 'w-full rounded-t-[1.75rem] px-5 pt-16 pb-16 sm:rounded-t-[2.75rem] sm:px-10 sm:pt-24 sm:pb-24 lg:px-14';
 const H2 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,4.5vw,3rem)]';
 const H3 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)]';
-/** Tmavá pilulka na světlém pozadí (primární CTA homepage). */
-const PILL_DARK = 'inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800';
-/** Bílá pilulka na tmavém pozadí. */
 const PILL_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100';
-const PILL_OUTLINE = 'inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:border-zinc-400 hover:bg-zinc-50';
 const PILL_OUTLINE_DARK = 'inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10';
 
 const scrollTo = (id: string) =>
@@ -39,43 +43,86 @@ const scrollTo = (id: string) =>
 
 export default function Deals() {
   const lang = useStore((s) => s.lang);
+  const openAuthModal = useStore((s) => s.openAuthModal);
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
   const d = dealsI18n[lang];
   const { deals, productCounts, loading } = useDeals();
+  const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  const visible = useMemo(() => deals.filter((x) => x.status !== 'draft'), [deals]);
-  // Živé dealy řadíme podle nejbližší uzávěrky (největší tlak nahoře),
-  // uzavřené od naposledy skončeného.
-  const live = useMemo(
-    () => visible.filter(dealIsLive)
-      .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
-    [visible],
+  /* ── Katalog ─────────────────────────────────────────────────────────── */
+  const catalog = useMemo(
+    () => buildCatalog(deals, productCounts, (name) =>
+      fillTemplate(d.catalog.tile.teaserTitle, { concern: name })),
+    [deals, productCounts, d],
   );
-  const closed = useMemo(
-    () => visible.filter((x) => !dealIsLive(x))
-      .sort((a, b) => new Date(b.deadline).getTime() - new Date(a.deadline).getTime()),
-    [visible],
+  const filtered = useMemo(() => applyFilters(catalog, filters), [catalog, filters]);
+
+  const rows = useMemo(
+    () => buildRows(filtered, {
+      endingSoon: d.catalog.rows.endingSoon,
+      fresh: d.catalog.rows.fresh,
+      watches: d.catalog.rows.watches,
+      jewelry: d.catalog.rows.jewelry,
+      upcoming: d.catalog.rows.upcoming,
+      closed: d.catalog.rows.closed,
+      byConcern: (name) => fillTemplate(d.catalog.rows.byConcern, { name }),
+    }),
+    [filtered, d],
   );
 
-  const hasLive = live.length > 0;
+  // Počty u dlaždic koncernů — jen reálné dávky, teaser se nepočítá.
+  const countBySlug = useMemo(() => {
+    const acc: Record<string, number> = {};
+    catalog.forEach((t) => {
+      if (t.kind !== 'teaser' && t.concernSlug) acc[t.concernSlug] = (acc[t.concernSlug] ?? 0) + 1;
+    });
+    return acc;
+  }, [catalog]);
 
+  // Značky do lišty bereme z katalogu — každá pilulka tak něco skutečně filtruje.
+  const brandChips = useMemo(() => {
+    const acc = new Map<string, number>();
+    catalog.forEach((t) => t.brandKeys.forEach((k) => acc.set(k, (acc.get(k) ?? 0) + 1)));
+    return Array.from(acc.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 18)
+      .map(([key]) => ({ key, name: toDisplayName(key) }));
+  }, [catalog]);
+
+  // Do hero pásu jde nejnaléhavější dlaždice: běžící dávka, jinak nejbližší start.
+  const featured = useMemo(
+    () => filtered.find((t) => t.kind === 'live') ?? filtered.find((t) => t.kind === 'upcoming'),
+    [filtered],
+  );
+
+  /** Teaser i alert vstupy mají stejné hradlo: host → registrace, jinak alerty. */
+  const goToAlerts = () => {
+    if (!user) { openAuthModal('register'); return; }
+    navigate('/#gbd-alerts-concerns');
+  };
+
+  const toggleConcern = (slug: string) =>
+    setFilters((f) => ({
+      ...f,
+      concerns: f.concerns.includes(slug) ? f.concerns.filter((s) => s !== slug) : [...f.concerns, slug],
+    }));
+
+  /* ── Vysvětlující část pod katalogem ─────────────────────────────────── */
   const allBrands = new Set<string>();
-  visible.forEach((x) => x.brands.forEach((b) => allBrands.add(b)));
-  const maxDiscount = visible.reduce(
-    (m, x) => Math.max(m, ...x.tiers.map((t) => t.discount_percent)), 0,
-  );
+  catalog.forEach((t) => { if (t.kind !== 'teaser') t.brands.forEach((b) => allBrands.add(b)); });
+  const liveCount = catalog.filter((t) => t.kind === 'live').length;
+  const maxDiscount = catalog.reduce((m, t) => Math.max(m, t.maxDiscount), 0);
 
-  // Slevový žebřík v sekci „jak to funguje" bereme z reálného dealu (nejdřív
-  // živého), aby čísla odpovídala tomu, co partner uvidí v detailu; bez dealů
-  // padáme na výchozí hladiny.
   const ladder = useMemo(() => {
-    const source = live[0] ?? visible[0];
+    const source = deals.find((x) => x.tiers?.length);
     return sortedTiers(source?.tiers?.length ? source.tiers : DEFAULT_TIERS);
-  }, [live, visible]);
+  }, [deals]);
 
   const stats = [
-    { v: String(live.length), l: d.stats.deals },
+    { v: String(liveCount), l: d.stats.deals },
     { v: String(allBrands.size), l: d.stats.brands },
     { v: maxDiscount ? `${maxDiscount} %` : '—', l: d.stats.discount },
     { v: d.stats.earlyValue, l: d.stats.early },
@@ -86,107 +133,136 @@ export default function Deals() {
       <Navbar />
       <BackButton />
 
-      {/* ── 1. HERO (bílá) — typografie homepage: extralight clamp, tlumená
-             prostřední část, gradientový závěr věty ── */}
-      <section className="relative overflow-hidden bg-white px-5 pt-24 pb-14 sm:px-10 sm:pt-32 sm:pb-20 lg:px-14">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="mx-auto max-w-[1000px] text-left">
-            <h1 className="font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(2rem,5.5vw,4rem)]">
-              <span className="text-zinc-900">{d.hero.headingLead}</span>{' '}
-              <span className="text-zinc-500">{d.hero.headingMuted}</span>{' '}
-              <span className={GRADIENT}>{d.hero.headingAccent}</span>
-            </h1>
-            <p className="mt-6 max-w-2xl font-sans text-base font-light leading-relaxed text-muted-foreground sm:mt-7 sm:text-xl">
-              {d.hero.sub}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button type="button" onClick={() => scrollTo('live-deals')} className={PILL_DARK}>
-                {d.hero.cta} <ArrowRight className="h-4 w-4" />
-              </button>
-              <button type="button" onClick={() => scrollTo('how-it-works')} className={PILL_OUTLINE}>
-                {d.hero.ctaSecondary}
-              </button>
-            </div>
-            <p className="mt-4 text-sm text-zinc-500">{d.hero.note}</p>
+      {/* ── Hlavička katalogu ── */}
+      <header id="catalog" className="scroll-mt-16 px-5 pb-6 pt-20 sm:px-8 sm:pb-8 sm:pt-24 lg:px-12">
+        <h1 className="max-w-[22ch] font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(1.75rem,4.5vw,3rem)] sm:max-w-none">
+          <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
+          <span className="text-zinc-500">{d.catalog.headingMuted}</span>
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm font-light leading-relaxed text-zinc-500 sm:text-base">
+          {d.catalog.sub}
+        </p>
+      </header>
 
-            {/* stat strip — čísla ve stejné extralight typografii jako nadpisy */}
-            <div className="mt-12 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-8 border-t border-zinc-200 pt-8 sm:mt-16 sm:grid-cols-4 sm:gap-8">
-              {stats.map((s) => (
-                <div key={s.l}>
-                  <div className="font-sans font-extralight tracking-tight leading-none text-[clamp(1.75rem,4vw,2.75rem)] text-zinc-900">
-                    {s.v}
-                  </div>
-                  <div className="mt-2 text-xs text-zinc-500 sm:text-sm">{s.l}</div>
-                </div>
-              ))}
+      {/* ── Koncerny jako dlaždice (obrázek nahoře, popisek pod) ── */}
+      <ConcernTiles
+        selected={filters.concerns}
+        onToggle={toggleConcern}
+        countBySlug={countBySlug}
+        label={d.catalog.concernsLabel}
+        allLabel={d.catalog.allConcerns}
+        onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
+      />
+
+      {/* ── Lepivá lišta: fulltext, značky, zamčení dodavatelé ── */}
+      <div className="mt-4">
+        <DealFilterBar
+          filters={filters}
+          onChange={setFilters}
+          brands={brandChips}
+          resultCount={filtered.length}
+        />
+      </div>
+
+      {/* ── Hero pás bannerů ── */}
+      <div className="pt-4 sm:pt-6">
+        {loading ? (
+          <div className="px-5 sm:px-8 lg:px-12">
+            <div className="h-[240px] animate-pulse rounded-[24px] bg-zinc-100 sm:h-[300px]" />
+          </div>
+        ) : (
+          <DealHeroCarousel
+            featured={featured}
+            onAlerts={goToAlerts}
+            onHow={() => scrollTo('how-it-works')}
+          />
+        )}
+      </div>
+
+      {/* ── Řady dlaždic ── */}
+      <div className="pb-10 sm:pb-16">
+        {loading ? (
+          <div className="flex gap-4 overflow-hidden px-5 pt-8 sm:px-8 lg:px-12">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-zinc-100 sm:w-[276px]" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="mx-auto mt-10 max-w-xl px-5 text-center">
+            <SearchX className="mx-auto h-8 w-8 text-zinc-300" />
+            <p className="mt-4 text-lg font-semibold tracking-tight text-zinc-900">{d.catalog.noResults}</p>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-500">{d.catalog.noResultsSub}</p>
+            <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => setFilters(EMPTY_FILTERS)}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+              >
+                {d.catalog.clear}
+              </button>
+              <button
+                type="button"
+                onClick={goToAlerts}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
+              >
+                <Bell className="h-4 w-4" /> {d.active.emptyCta}
+              </button>
             </div>
           </div>
-        </div>
-      </section>
+        ) : (
+          rows.map((row) => (
+            <DealRow
+              key={row.id}
+              title={row.title}
+              items={row.items}
+              seeAllLabel={d.catalog.seeAll}
+              onTeaserClick={goToAlerts}
+            />
+          ))
+        )}
+      </div>
 
-      {/* ── 2. ŽIVÉ DEALY (černá) — bílé karty na černé, stejně jako sekce
-             GoBigDeal na homepage ── */}
+      {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
+
+      {/* ── Co je GoBigDeal (černá) ── */}
       <div className="bg-white">
-        <section id="live-deals" className={`${SECTION} scroll-mt-16`} style={{ backgroundColor: DARK }}>
+        <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
-            {/* Nadpis nelže: dokud nic neběží, sekce to řekne rovnou a hned
-                nabídne alert — uzavřené dávky pod tím slouží jako důkaz. */}
             <div className="mx-auto max-w-[1000px] text-left">
               <h2 className={H2}>
-                <span className="text-white">{hasLive ? d.active.headingLead : d.active.empty}</span>{' '}
-                <span className="text-zinc-400">
-                  {hasLive ? d.active.headingMuted : d.active.emptyHeadingMuted}
-                </span>
+                <span className="text-white">{d.hero.headingLead}</span>{' '}
+                <span className="text-zinc-400">{d.hero.headingMuted}</span>{' '}
+                <span className={GRADIENT}>{d.hero.headingAccent}</span>
               </h2>
-              <p className="mt-5 max-w-2xl font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-lg">
-                {hasLive ? d.active.sub : d.active.emptySub}
+              <p className="mt-6 max-w-2xl font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-xl">
+                {d.hero.sub}
               </p>
-              {!hasLive && !loading && (
-                <Link to="/#gbd-alerts-concerns" className={`${PILL_LIGHT} mt-7`}>
-                  <Bell className="h-4 w-4" /> {d.active.emptyCta}
-                </Link>
-              )}
-            </div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button type="button" onClick={() => scrollTo('catalog')} className={PILL_LIGHT}>
+                  {d.hero.cta} <ArrowRight className="h-4 w-4" />
+                </button>
+                <button type="button" onClick={() => scrollTo('how-it-works')} className={PILL_OUTLINE_DARK}>
+                  {d.hero.ctaSecondary}
+                </button>
+              </div>
+              <p className="mt-4 text-sm text-zinc-500">{d.hero.note}</p>
 
-            <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
-              {loading ? (
-                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {[0, 1, 2].map((i) => (
-                    <div key={i} className="h-80 animate-pulse rounded-2xl bg-white/10" />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {hasLive && (
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                      {live.map((deal) => (
-                        <DealCard key={deal.id} deal={deal} count={productCounts[deal.id] ?? 0} />
-                      ))}
+              <div className="mt-12 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-8 border-t border-white/10 pt-8 sm:mt-16 sm:grid-cols-4 sm:gap-8">
+                {stats.map((s) => (
+                  <div key={s.l}>
+                    <div className="font-sans font-extralight tracking-tight leading-none text-[clamp(1.75rem,4vw,2.75rem)] text-white">
+                      {s.v}
                     </div>
-                  )}
-                  {/* uzavřené dávky zůstávají viditelné jako důkaz, že žebřík
-                      funguje — a jako důvod zapnout si alert */}
-                  {closed.length > 0 && (
-                    <div className={hasLive ? 'mt-14 sm:mt-20' : ''}>
-                      <h3 className={`${H3} text-white`}>{d.active.closedLabel}</h3>
-                      <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-500">
-                        {d.active.closedSub}
-                      </p>
-                      <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        {closed.map((deal) => (
-                          <DealCard key={deal.id} deal={deal} count={productCounts[deal.id] ?? 0} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
+                    <div className="mt-2 text-xs text-zinc-400 sm:text-sm">{s.l}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       </div>
 
-      {/* ── 3. JAK TO FUNGUJE + SLEVOVÝ ŽEBŘÍK (bílá) ── */}
+      {/* ── Jak to funguje + slevový žebřík (bílá) ── */}
       <div style={{ backgroundColor: DARK }}>
         <section id="how-it-works" className={`${SECTION} scroll-mt-16 bg-white`}>
           <div className="mx-auto max-w-[1400px]">
@@ -215,8 +291,6 @@ export default function Deals() {
               })}
             </div>
 
-            {/* slevový žebřík — hladiny z reálného dealu; poslední je vrchol,
-                proto gradient (stejný jako závěr headlinů) */}
             <div className="mx-auto mt-16 max-w-[1160px] sm:mt-24">
               <div className="mx-auto max-w-[1000px] text-left">
                 <h3 className={H3}>
@@ -252,7 +326,7 @@ export default function Deals() {
         </section>
       </div>
 
-      {/* ── 4. NÁSKOK 48 H / PRO (černá) — landing verze homepage paywallu ── */}
+      {/* ── Náskok 48 h / PRO (černá) ── */}
       <div className="bg-white">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1160px]">
@@ -266,9 +340,9 @@ export default function Deals() {
                   {d.early.body}
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Link to="/#gbd-alerts-concerns" className={PILL_LIGHT}>
+                  <button type="button" onClick={goToAlerts} className={PILL_LIGHT}>
                     <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
-                  </Link>
+                  </button>
                   <Link to="/#gbd-pricing" className={PILL_OUTLINE_DARK}>
                     {d.early.ctaPro} <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -287,8 +361,7 @@ export default function Deals() {
         </section>
       </div>
 
-      {/* ── 5. OBCHODNÍ PODMÍNKY (bílá) — informace beze změny, jen v jazyce
-             homepage: klidné karty místo eyebrow labelů ── */}
+      {/* ── Obchodní podmínky (bílá) ── */}
       <div style={{ backgroundColor: DARK }}>
         <section className={`${SECTION} bg-white`}>
           <div className="mx-auto max-w-[1400px]">
@@ -318,7 +391,7 @@ export default function Deals() {
         </section>
       </div>
 
-      {/* ── 6. ZÁVĚREČNÉ CTA (černá) — poslední rozhodovací bod ── */}
+      {/* ── Závěrečné CTA (černá) ── */}
       <div className="bg-white">
         <section className={`${SECTION} pb-20 sm:pb-28`} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1000px] text-center">
@@ -327,12 +400,12 @@ export default function Deals() {
               <span className="text-zinc-400">{d.closing.headingMuted}</span>
             </h2>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <button type="button" onClick={() => scrollTo('live-deals')} className={PILL_LIGHT}>
+              <button type="button" onClick={() => scrollTo('catalog')} className={PILL_LIGHT}>
                 {d.closing.cta} <ArrowRight className="h-4 w-4" />
               </button>
-              <Link to="/#gbd-alerts-concerns" className={PILL_OUTLINE_DARK}>
+              <button type="button" onClick={goToAlerts} className={PILL_OUTLINE_DARK}>
                 <Bell className="h-4 w-4" /> {d.closing.ctaSecondary}
-              </Link>
+              </button>
             </div>
           </div>
         </section>

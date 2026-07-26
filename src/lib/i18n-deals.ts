@@ -47,6 +47,51 @@ export interface DealsText {
   /** `heading` + `items` sdílí i DealDetail a DealCartDrawer — neměnit tvar. */
   conditions: { heading: string; headingMuted: string; items: { title: string; desc: string }[] };
   closing: { headingLead: string; headingMuted: string; cta: string; ctaSecondary: string };
+  /** Katalogová část /deals — dlaždice koncernů, filtry, hero pás, řady karet. */
+  catalog: {
+    headingLead: string;
+    headingMuted: string;
+    sub: string;
+    searchPlaceholder: string;
+    concernsLabel: string;
+    brandsLabel: string;
+    suppliersLabel: string;
+    suppliersSoon: string;
+    allConcerns: string;
+    clear: string;
+    results: string;
+    noResults: string;
+    noResultsSub: string;
+    seeAll: string;
+    rows: {
+      endingSoon: string;
+      fresh: string;
+      watches: string;
+      jewelry: string;
+      upcoming: string;
+      closed: string;
+      byConcern: string;
+    };
+    tile: {
+      teaserTitle: string;
+      teaserNote: string;
+      upcoming: string;
+      unlocksIn: string;
+      closed: string;
+      models: string;
+    };
+    promo: {
+      proTitle: string;
+      proSub: string;
+      proCta: string;
+      alertTitle: string;
+      alertSub: string;
+      alertCta: string;
+      howTitle: string;
+      howSub: string;
+      howCta: string;
+    };
+  };
   // deal card
   card: { models: string; brands: string; view: string; endsIn: string; discountUpTo: string; ended: string; closed: string };
   // deal detail
@@ -210,6 +255,50 @@ const cs: DealsText = {
     headingMuted: 'Otázka je, jestli u toho budete první.',
     cta: 'Prohlédnout dealy',
     ctaSecondary: 'Nastavit alert',
+  },
+  catalog: {
+    headingLead: 'Katalog dávek.',
+    headingMuted: 'Vyberte koncern, značku a slevu.',
+    sub: 'Closeout dávky od koncernů, které už prodáváte. Filtrujte podle koncernu nebo značky — dodavatele přidáme, jakmile jich bude víc.',
+    searchPlaceholder: 'Hledat koncern, značku nebo dávku…',
+    concernsLabel: 'Koncerny',
+    brandsLabel: 'Značky',
+    suppliersLabel: 'Dodavatelé',
+    suppliersSoon: 'Brzy',
+    allConcerns: 'Vše',
+    clear: 'Zrušit filtry',
+    results: '{n} · odpovídá filtru',
+    noResults: 'Nic neodpovídá filtru.',
+    noResultsSub: 'Zkuste jiný koncern nebo značku — nebo si nechte poslat alert, až dávka spadne.',
+    seeAll: 'Zobrazit vše',
+    rows: {
+      endingSoon: 'Končí nejdřív',
+      fresh: 'Nově spuštěné',
+      watches: 'Hodinky',
+      jewelry: 'Šperky',
+      upcoming: 'Připravujeme',
+      closed: 'Uzavřené dávky',
+      byConcern: 'Dávky · {name}',
+    },
+    tile: {
+      teaserTitle: 'Closeout {concern}',
+      teaserNote: 'Dávku vyjednáváme',
+      upcoming: 'Připravujeme',
+      unlocksIn: 'Startuje za',
+      closed: 'Uzavřeno',
+      models: 'modelů',
+    },
+    promo: {
+      proTitle: 'Vidíte to samé co ostatní. Jen o 48 hodin dřív.',
+      proSub: 'PRO otevírá každou dávku dva dny před veřejným startem. Nejlepší reference mizí první.',
+      proCta: 'Zobrazit tarify PRO',
+      alertTitle: 'Nechte deal, ať si najde vás.',
+      alertSub: 'Alert na koncern, značku nebo konkrétní model. Přijde ve chvíli, kdy dávka spadne.',
+      alertCta: 'Nastavit alert',
+      howTitle: 'Čím víc kusů, tím nižší cena — na celé objednávce.',
+      howSub: 'Každá překročená hladina zlevní celou objednávku, ne jen kusy nad hranicí.',
+      howCta: 'Jak deal funguje',
+    },
   },
   card: {
     models: 'modelů', brands: 'značek', view: 'Zobrazit nabídku',
@@ -383,6 +472,50 @@ const en: DealsText = {
     headingMuted: 'The only question is whether you are first in line.',
     cta: 'Browse the deals',
     ctaSecondary: 'Set a deal alert',
+  },
+  catalog: {
+    headingLead: 'The batch catalog.',
+    headingMuted: 'Pick a concern, a brand and your discount.',
+    sub: 'Closeout batches from the concerns you already sell. Filter by concern or brand — suppliers get their own filter once there are more of them.',
+    searchPlaceholder: 'Search a concern, brand or batch…',
+    concernsLabel: 'Concerns',
+    brandsLabel: 'Brands',
+    suppliersLabel: 'Suppliers',
+    suppliersSoon: 'Soon',
+    allConcerns: 'All',
+    clear: 'Clear filters',
+    results: '{n} · match the filter',
+    noResults: 'Nothing matches the filter.',
+    noResultsSub: 'Try another concern or brand — or let an alert find the batch for you.',
+    seeAll: 'See all',
+    rows: {
+      endingSoon: 'Closing first',
+      fresh: 'Just launched',
+      watches: 'Watches',
+      jewelry: 'Jewelry',
+      upcoming: 'In the works',
+      closed: 'Closed batches',
+      byConcern: 'Batches · {name}',
+    },
+    tile: {
+      teaserTitle: '{concern} closeout',
+      teaserNote: 'Batch in negotiation',
+      upcoming: 'In the works',
+      unlocksIn: 'Starts in',
+      closed: 'Closed',
+      models: 'models',
+    },
+    promo: {
+      proTitle: 'You see the same batch as everyone. Just 48 hours earlier.',
+      proSub: 'PRO opens every batch two days before the public start. The best references go first.',
+      proCta: 'See PRO plans',
+      alertTitle: 'Let the deal find you.',
+      alertSub: 'An alert on a concern, a brand or one specific model. It fires the moment a batch drops.',
+      alertCta: 'Set a deal alert',
+      howTitle: 'More units, lower price — across the whole order.',
+      howSub: 'Every threshold you cross drops the price of the entire order, not just the units above it.',
+      howCta: 'How a deal works',
+    },
   },
   card: {
     models: 'models', brands: 'brands', view: 'View offer',
