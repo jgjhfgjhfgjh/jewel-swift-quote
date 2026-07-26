@@ -47,59 +47,65 @@ const CONCERN_TEXTS: ConcernCarouselTexts = {
 };
 
 interface Tier {
-  id: 'explore' | 'insider' | 'flex' | 'enterprise';
+  id: 'drop' | 'pro';
   name: string;
-  /** Enterprise cenu nemá — jen note a features */
+  /** Cena při měsíční platbě (u PRO se přepíná na roční sazbu) */
   price?: string;
   period?: string;
-  /** přeškrtnutá kotva vedle ceny */
-  was?: string;
+  /** Cena při roční platbě — účtuje se ročně, zobrazuje se za měsíc */
+  priceAnnual?: string;
+  /** poznámka pod cenou; u PRO se liší podle periody */
   note?: string;
+  noteAnnual?: string;
+  /** přeškrtnutá kotva vedle ceny (roční sazba proti měsíční) */
+  wasAnnual?: string;
   badge?: string;
   features: ReactNode[];
   cta: string;
 }
 
-/** Čtyřúrovňový paywall — Flex 99 €/měs je záměrná cenová kotva pro Insider. */
+/**
+ * Ceník staví na jedné myšlence: platíte za NÁSKOK, ne za přístup.
+ * Každý deal je před spuštěním zamčený a cena za jeho odemčení klesá, jak se
+ * blíží veřejné spuštění (viz lib/dealUnlock). Kdo chce první výběr kusů,
+ * odemyká dřív a dráž; kdo počká, platí méně, ale bere zbytky.
+ *
+ * Ekonomika (proč to drží pohromadě): odemčení stojí 129 €, takže
+ *  · 1 deal měsíčně → kredit se vyplatí (129 € < 209 €),
+ *  · od 2 dealů měsíčně → PRO ročně (209 €/měs < 258 €),
+ *  · od 4 dealů nebo bez závazku → PRO měsíčně (399 €).
+ * Díky tomu dává ceník smysl i v měsíci, kdy vyjdou jen dva dealy.
+ */
 const TIERS: Tier[] = [
   {
-    id: 'explore',
-    name: 'Explore',
+    id: 'drop',
+    name: 'Drop Free',
     price: 'Free',
     note: 'no card needed',
     features: [
-      <>Browse and shop all <Gbd suffix="s" /> when they drop</>,
-      <>New <Gbd /> drop alerts</>,
-      'Order at better wholesale prices',
+      'Drop alerts the moment a deal goes live',
+      <>Every <Gbd /> once it goes public</>,
+      'Wholesale prices from 1 unit',
     ],
-    cta: 'Explore deals free',
+    cta: 'Start free',
   },
   {
-    id: 'insider',
-    name: 'Insider',
-    price: '€49',
-    period: '/month',
-    was: '€99',
-    note: 'billed annually',
-    badge: 'Most popular · 50% off',
-    features: ['48h early access to every deal', 'Concern alerts', 'Brand alerts', 'Model alerts'],
-    cta: 'Get Insider',
-  },
-  {
-    id: 'flex',
-    name: 'Flex',
-    price: '€99',
+    id: 'pro',
+    name: 'PRO',
+    price: '€399',
     period: '/month',
     note: 'cancel anytime',
-    features: ['48h early access to every deal', 'Concern alerts', 'Brand alerts', 'Model alerts'],
-    cta: 'Get Flex',
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    note: 'for high-volume buyers',
-    features: ['Higher quantities', 'Tailored deals & terms', 'Dedicated account manager'],
-    cta: 'Contact us',
+    priceAnnual: '€209',
+    wasAnnual: '€399',
+    noteAnnual: 'billed yearly · €2 508',
+    badge: 'Most popular',
+    features: [
+      'The same alerts — 48 hours earlier',
+      'Every deal open before it goes public',
+      'Concern, brand and model alerts',
+      'First pick while stock lasts',
+    ],
+    cta: 'Go PRO',
   },
 ];
 
@@ -114,6 +120,8 @@ export function HomeTopDeals() {
   /** Alerty (koncerny/značky/modely) jsou složené pod tlačítkem — sekce tak
    *  zůstává krátká; rozbalí je klik nebo proklik z mega menu (#gbd-alerts-*). */
   const [alertsOpen, setAlertsOpen] = useState(false);
+  /** Ceník: roční sazba je výchozí (levnější, ukotvuje hodnotu) */
+  const [annual, setAnnual] = useState(true);
 
   const requireAuth = () => openAuthModal('register');
 
@@ -150,7 +158,7 @@ export function HomeTopDeals() {
 
   // Placené tarify zatím nemají platební flow — nepřihlášený jde do
   // registrace, přihlášený na /deals; Enterprise píše obchodu.
-  const handleTier = (id: Tier['id']) => {
+  const handleTier = (id: Tier['id'] | 'enterprise') => {
     if (id === 'explore') {
       setExploreOpen(true);
     } else if (id === 'enterprise') {
@@ -242,19 +250,59 @@ export function HomeTopDeals() {
       </>
       )}
 
-      {/* pricing — čtyřúrovňový paywall na konci sekce, pod alerty */}
+      {/* pricing — paywall na konci sekce, pod alerty. Prodává NÁSKOK:
+          zdarma alert při spuštění, placené 48 h předem + odemčení. */}
       <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
         <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-white">
           Catch your deal of the year earlier and earn more.
         </h3>
         <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
-          <span className="text-zinc-400">Insiders see every deal </span>
-          <span className="text-white">48 hours early.</span>
+          <span className="text-zinc-400">Everyone gets the alert. </span>
+          <span className="text-white">You get it 48 hours early.</span>
         </p>
-        <div className="mt-8 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
+
+        {/* přepínač periody — PRO má měsíční i roční sazbu */}
+        <div className="mt-8 flex justify-center">
+          <div className="inline-flex rounded-full bg-white/10 p-1 text-sm font-medium">
+            {([
+              ['monthly', 'Monthly'],
+              ['annual', 'Yearly · save 48%'],
+            ] as const).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setAnnual(key === 'annual')}
+                className={`rounded-full px-4 py-1.5 transition-colors ${
+                  (key === 'annual') === annual ? 'bg-white text-zinc-900' : 'text-zinc-300 hover:text-white'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mx-auto mt-6 grid max-w-[760px] grid-cols-1 gap-4 pt-3 sm:grid-cols-2">
           {TIERS.map((tier) => (
-            <PricingCard key={tier.id} tier={tier} onSelect={() => handleTier(tier.id)} />
+            <PricingCard key={tier.id} tier={tier} annual={annual} onSelect={() => handleTier(tier.id)} />
           ))}
+        </div>
+
+        {/* Enterprise — bez ceny, proto samostatný proužek pod kartami */}
+        <div className="mx-auto mt-4 flex max-w-[760px] flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center">
+          <div>
+            <p className="text-lg font-semibold tracking-tight text-white">Enterprise</p>
+            <p className="mt-1 text-sm text-zinc-400">
+              Higher quantities, tailored terms, dedicated account manager.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleTier('enterprise')}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/25 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+          >
+            Talk to us <ArrowRight className="h-3.5 w-3.5" />
+          </button>
         </div>
       </div>
 
@@ -265,7 +313,7 @@ export function HomeTopDeals() {
         onRequireAuth={requireAuth}
         onInsider={() => {
           setExploreOpen(false);
-          handleTier('insider');
+          handleTier('pro');
         }}
       />
     </section>
@@ -274,8 +322,13 @@ export function HomeTopDeals() {
 
 /** Jedna pricing karta — Insider je zvýrazněný modrým rámečkem (Most popular).
  *  Hierarchie: největší je NÁZEV tarifu, cena je menší pod ním. */
-function PricingCard({ tier, onSelect }: { tier: Tier; onSelect: () => void }) {
-  const featured = tier.id === 'insider';
+function PricingCard({ tier, onSelect, annual }: { tier: Tier; onSelect: () => void; annual: boolean }) {
+  const featured = tier.id === 'pro';
+  // U PRO se cena i poznámka mění podle zvolené periody
+  const useAnnual = annual && !!tier.priceAnnual;
+  const price = useAnnual ? tier.priceAnnual : tier.price;
+  const note = useAnnual ? tier.noteAnnual : tier.note;
+  const was = useAnnual ? tier.wasAnnual : undefined;
   return (
     <div
       className={`relative flex flex-col rounded-2xl border bg-white p-5 ${
@@ -288,16 +341,16 @@ function PricingCard({ tier, onSelect }: { tier: Tier; onSelect: () => void }) {
         </span>
       )}
       <p className="text-2xl font-semibold tracking-tight text-zinc-900">{tier.name}</p>
-      {tier.price && (
+      {price && (
         <p className="mt-2 flex items-baseline gap-1.5">
-          {tier.was && (
-            <span className="text-sm font-medium text-slate-400 line-through">{tier.was}</span>
+          {was && (
+            <span className="text-sm font-medium text-slate-400 line-through">{was}</span>
           )}
-          <span className="text-lg font-semibold tracking-tight text-zinc-900">{tier.price}</span>
+          <span className="text-lg font-semibold tracking-tight text-zinc-900">{price}</span>
           {tier.period && <span className="text-sm text-slate-500">{tier.period}</span>}
         </p>
       )}
-      {tier.note && <p className="mt-1 text-xs text-slate-500">{tier.note}</p>}
+      {note && <p className="mt-1 text-xs text-slate-500">{note}</p>}
       <ul className="mt-4 flex-1 space-y-2">
         {tier.features.map((f, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
