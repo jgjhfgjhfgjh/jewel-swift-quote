@@ -376,7 +376,7 @@ export function HomeTopDeals() {
           <div>
             <p className="text-lg font-semibold tracking-tight text-white">Enterprise</p>
             <p className="mt-1 text-sm text-zinc-400">
-              Deals on request. Higher quantities, tailored terms, dedicated account manager.
+              Deals on request. Higher quantities, tailored terms, priority support.
             </p>
           </div>
           <button
