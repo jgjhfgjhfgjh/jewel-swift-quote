@@ -1,53 +1,46 @@
 import { useRef } from 'react';
 import { Check, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { CONCERNS } from '@/data/concerns';
+import { tintForKey } from './tints';
+
+export interface FilterTileItem {
+  /** Hodnota do filtru — slug koncernu nebo kanonický klíč značky. */
+  key: string;
+  name: string;
+  /** Brandfetch doména loga; bez ní se vykreslí textový fallback. */
+  domain?: string;
+  /** Počet dlaždic katalogu, badge se zobrazí jen když > 0. */
+  count?: number;
+}
 
 /**
- * Pás koncernů ve stylu kategorií na Woltu: čtvercová dlaždice s logem na
- * jemném tónovaném podkladu, POPISEK POD dlaždicí (ne uvnitř), vodorovný
- * scroll a kulaté šipky vpravo nahoře.
- *
- * Tóny jsou záměrně tlumené a chladné (blue/cyan/emerald rodina gradientu
- * z homepage) — Wolt má pastelovou duhu, Swelt si drží luxusní klid.
+ * Vodorovný pás filtračních dlaždic ve stylu kategorií na Woltu: logo na
+ * tónovaném čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a kulaté
+ * šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky — mají
+ * být k nerozeznání, liší se jen daty.
  */
-const TINTS = [
-  '#F1F5F9', // slate-100
-  '#EFF6FF', // blue-50
-  '#ECFEFF', // cyan-50
-  '#ECFDF5', // emerald-50
-  '#F5F3FF', // violet-50
-  '#F4F4F5', // zinc-100
-  '#F0F9FF', // sky-50
-  '#F0FDFA', // teal-50
-  '#EEF2FF', // indigo-50
-  '#FAFAF9', // stone-50
-];
-
-export interface ConcernTilesProps {
-  /** Slugy vybraných koncernů. */
+export function FilterTiles({
+  items, selected, onToggle, label, allLabel, onClearAll,
+}: {
+  items: FilterTileItem[];
   selected: string[];
-  onToggle: (slug: string) => void;
-  /** Kolik dlaždic katalogu na koncern připadá (0 = jen teaser). */
-  countBySlug: Record<string, number>;
+  onToggle: (key: string) => void;
   label: string;
   allLabel: string;
   onClearAll: () => void;
-}
-
-export function ConcernTiles({
-  selected, onToggle, countBySlug, label, allLabel, onClearAll,
-}: ConcernTilesProps) {
+}) {
   const track = useRef<HTMLDivElement>(null);
   const scroll = (dir: 1 | -1) =>
     track.current?.scrollBy({ left: dir * Math.max(280, track.current.clientWidth * 0.8), behavior: 'smooth' });
+
+  if (items.length === 0) return null;
 
   return (
     <div className="min-w-0">
       <div className="mb-3 flex items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
         <h2 className="text-sm font-semibold tracking-tight text-zinc-900">{label}</h2>
         <div className="flex items-center gap-1.5">
-          {/* „Vše" = zrušení výběru koncernů, stejná role jako první dlaždice u Woltu */}
+          {/* „Vše" = zrušení výběru v této úrovni, jako první dlaždice u Woltu */}
           <button
             type="button"
             onClick={onClearAll}
@@ -80,17 +73,17 @@ export function ConcernTiles({
 
       <div
         ref={track}
-        className="flex snap-x gap-3 overflow-x-auto px-5 pb-2 sm:gap-4 sm:px-8 lg:px-12
+        className="flex snap-x gap-3 overflow-x-auto px-5 pb-2 pt-1 sm:gap-4 sm:px-8 lg:px-12
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {CONCERNS.map((c, i) => {
-          const active = selected.includes(c.slug);
-          const count = countBySlug[c.slug] ?? 0;
+        {items.map((item) => {
+          const active = selected.includes(item.key);
+          const count = item.count ?? 0;
           return (
             <button
-              key={c.slug}
+              key={item.key}
               type="button"
-              onClick={() => onToggle(c.slug)}
+              onClick={() => onToggle(item.key)}
               aria-pressed={active}
               className="group flex w-[104px] shrink-0 snap-start flex-col items-center gap-2 focus:outline-none sm:w-[124px]"
             >
@@ -100,16 +93,22 @@ export function ConcernTiles({
                             group-focus-visible:ring-2 group-focus-visible:ring-zinc-900 group-focus-visible:ring-offset-2 ${
                               active ? 'ring-2 ring-zinc-900 ring-offset-2' : ''
                             }`}
-                style={{ backgroundColor: TINTS[i % TINTS.length] }}
+                style={{ backgroundColor: tintForKey(item.key) }}
               >
-                <BrandLogo
-                  name={c.name}
-                  domain={c.domain}
-                  width={280}
-                  height={120}
-                  className="max-h-9 max-w-[78%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
-                  fallbackClassName="text-center text-xs font-semibold leading-tight text-zinc-700"
-                />
+                {item.domain ? (
+                  <BrandLogo
+                    name={item.name}
+                    domain={item.domain}
+                    width={280}
+                    height={120}
+                    className="max-h-9 max-w-[78%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
+                    fallbackClassName="line-clamp-2 text-center text-xs font-semibold leading-tight text-zinc-700"
+                  />
+                ) : (
+                  <span className="line-clamp-3 text-center text-xs font-semibold leading-tight text-zinc-700">
+                    {item.name}
+                  </span>
+                )}
                 {active && (
                   <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 text-white shadow">
                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
@@ -123,7 +122,7 @@ export function ConcernTiles({
                 )}
               </span>
               <span className="line-clamp-2 text-center text-[13px] font-medium leading-tight text-zinc-800">
-                {c.name}
+                {item.name}
               </span>
             </button>
           );

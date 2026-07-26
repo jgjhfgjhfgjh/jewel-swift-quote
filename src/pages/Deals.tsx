@@ -13,11 +13,13 @@ import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
 import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
 import { toDisplayName } from '@/lib/brandNormalize';
+import { getBrandByName } from '@/data/brands';
+import { CONCERNS } from '@/data/concerns';
 import {
   applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
   type CatalogFilters,
 } from '@/lib/dealCatalog';
-import { ConcernTiles } from '@/components/deals/catalog/ConcernTiles';
+import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
 import { DealHeroCarousel } from '@/components/deals/catalog/DealHeroCarousel';
 import { DealRow } from '@/components/deals/catalog/DealRow';
@@ -73,24 +75,36 @@ export default function Deals() {
     [filtered, d],
   );
 
-  // Počty u dlaždic koncernů — jen reálné dávky, teaser se nepočítá.
-  const countBySlug = useMemo(() => {
+  // Dlaždice koncernů — badge nese počet REÁLNÝCH dávek, teaser se nepočítá.
+  const concernTiles = useMemo(() => {
     const acc: Record<string, number> = {};
     catalog.forEach((t) => {
       if (t.kind !== 'teaser' && t.concernSlug) acc[t.concernSlug] = (acc[t.concernSlug] ?? 0) + 1;
     });
-    return acc;
+    return CONCERNS.map((c) => ({
+      key: c.slug, name: c.name, domain: c.domain, count: acc[c.slug] ?? 0,
+    }));
   }, [catalog]);
 
-  // Značky do lišty bereme z katalogu — každá pilulka tak něco skutečně filtruje.
-  const brandChips = useMemo(() => {
+  // Dlaždice značek stavíme z katalogu — každá tak něco skutečně filtruje;
+  // řadíme podle počtu dávek, doména loga přes statický rejstřík značek.
+  const brandTiles = useMemo(() => {
     const acc = new Map<string, number>();
     catalog.forEach((t) => t.brandKeys.forEach((k) => acc.set(k, (acc.get(k) ?? 0) + 1)));
     return Array.from(acc.entries())
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 18)
-      .map(([key]) => ({ key, name: toDisplayName(key) }));
+      .slice(0, 24)
+      .map(([key, count]) => {
+        const name = toDisplayName(key);
+        // Šperkové linky („Fossil Jewelry") mají logo mateřské značky.
+        const domain = (getBrandByName(name) ?? getBrandByName(name.replace(/\s+Jewelry$/i, '')))?.domain;
+        return { key, name, domain, count };
+      });
   }, [catalog]);
+
+  // Řada „Připravujeme" jde před velké karty, ostatní za ně.
+  const upcomingRow = useMemo(() => rows.find((r) => r.id === 'upcoming'), [rows]);
+  const restRows = useMemo(() => rows.filter((r) => r.id !== 'upcoming'), [rows]);
 
   // Do hero pásu jde nejnaléhavější dlaždice: běžící dávka, jinak nejbližší start.
   const featured = useMemo(
@@ -108,6 +122,12 @@ export default function Deals() {
     setFilters((f) => ({
       ...f,
       concerns: f.concerns.includes(slug) ? f.concerns.filter((s) => s !== slug) : [...f.concerns, slug],
+    }));
+
+  const toggleBrand = (key: string) =>
+    setFilters((f) => ({
+      ...f,
+      brands: f.brands.includes(key) ? f.brands.filter((b) => b !== key) : [...f.brands, key],
     }));
 
   /* ── Vysvětlující část pod katalogem ─────────────────────────────────── */
@@ -133,60 +153,54 @@ export default function Deals() {
       <Navbar />
       <BackButton />
 
-      {/* ── Hlavička katalogu ── */}
-      <header id="catalog" className="scroll-mt-16 px-5 pb-6 pt-20 sm:px-8 sm:pb-8 sm:pt-24 lg:px-12">
-        <h1 className="max-w-[22ch] font-sans font-extralight tracking-tight leading-[1.12] text-[clamp(1.75rem,4.5vw,3rem)] sm:max-w-none">
-          <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
-          <span className="text-zinc-500">{d.catalog.headingMuted}</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm font-light leading-relaxed text-zinc-500 sm:text-base">
-          {d.catalog.sub}
-        </p>
-      </header>
+      {/* Viditelný nadpis je pryč (katalog začíná rovnou dlaždicemi), ale
+          stránka nesmí zůstat bez H1 — čtečky a vyhledávače ho potřebují. */}
+      <h1 className="sr-only">
+        {d.catalog.headingLead} {d.catalog.headingMuted}
+      </h1>
 
-      {/* ── Koncerny jako dlaždice (obrázek nahoře, popisek pod) ── */}
-      <ConcernTiles
-        selected={filters.concerns}
-        onToggle={toggleConcern}
-        countBySlug={countBySlug}
-        label={d.catalog.concernsLabel}
-        allLabel={d.catalog.allConcerns}
-        onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
-      />
-
-      {/* ── Lepivá lišta: fulltext, značky, zamčení dodavatelé ── */}
-      <div className="mt-4">
-        <DealFilterBar
-          filters={filters}
-          onChange={setFilters}
-          brands={brandChips}
-          resultCount={filtered.length}
+      {/* ── 1. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      <div id="catalog" className="scroll-mt-16 pt-20 sm:pt-24">
+        <FilterTiles
+          items={concernTiles}
+          selected={filters.concerns}
+          onToggle={toggleConcern}
+          label={d.catalog.concernsLabel}
+          allLabel={d.catalog.allConcerns}
+          onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
         />
       </div>
 
-      {/* ── Hero pás bannerů ── */}
-      <div className="pt-4 sm:pt-6">
-        {loading ? (
-          <div className="px-5 sm:px-8 lg:px-12">
-            <div className="h-[240px] animate-pulse rounded-[24px] bg-zinc-100 sm:h-[300px]" />
-          </div>
-        ) : (
-          <DealHeroCarousel
-            featured={featured}
-            onAlerts={goToAlerts}
-            onHow={() => scrollTo('how-it-works')}
-          />
-        )}
+      {/* ── 2. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
+      <div className="pt-6 sm:pt-8">
+        <FilterTiles
+          items={brandTiles}
+          selected={filters.brands}
+          onToggle={toggleBrand}
+          label={d.catalog.brandsLabel}
+          allLabel={d.catalog.allConcerns}
+          onClearAll={() => setFilters((f) => ({ ...f, brands: [] }))}
+        />
       </div>
 
-      {/* ── Řady dlaždic ── */}
-      <div className="pb-10 sm:pb-16">
+      {/* ── Lepivá lišta: fulltext, počet výsledků, zamčení dodavatelé ── */}
+      <div className="mt-5">
+        <DealFilterBar filters={filters} onChange={setFilters} resultCount={filtered.length} />
+      </div>
+
+      {/* ── Dealy: nejdřív Připravujeme, pak tři velké karty, pak zbytek ── */}
+      <div className="pb-10 pt-2 sm:pb-16">
         {loading ? (
-          <div className="flex gap-4 overflow-hidden px-5 pt-8 sm:px-8 lg:px-12">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-zinc-100 sm:w-[276px]" />
-            ))}
-          </div>
+          <>
+            <div className="flex gap-4 overflow-hidden px-5 pt-6 sm:px-8 lg:px-12">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-zinc-100 sm:w-[276px]" />
+              ))}
+            </div>
+            <div className="px-5 pt-8 sm:px-8 lg:px-12">
+              <div className="h-[240px] animate-pulse rounded-[24px] bg-zinc-100 sm:h-[300px]" />
+            </div>
+          </>
         ) : filtered.length === 0 ? (
           <div className="mx-auto mt-10 max-w-xl px-5 text-center">
             <SearchX className="mx-auto h-8 w-8 text-zinc-300" />
@@ -210,15 +224,35 @@ export default function Deals() {
             </div>
           </div>
         ) : (
-          rows.map((row) => (
-            <DealRow
-              key={row.id}
-              title={row.title}
-              items={row.items}
-              seeAllLabel={d.catalog.seeAll}
-              onTeaserClick={goToAlerts}
-            />
-          ))
+          <>
+            {upcomingRow && (
+              <DealRow
+                title={upcomingRow.title}
+                items={upcomingRow.items}
+                seeAllLabel={d.catalog.seeAll}
+                onTeaserClick={goToAlerts}
+              />
+            )}
+
+            {/* tři velké karty — hero pás sedí mezi „Připravujeme" a zbytkem řad */}
+            <div className="py-4 sm:py-6">
+              <DealHeroCarousel
+                featured={featured}
+                onAlerts={goToAlerts}
+                onHow={() => scrollTo('how-it-works')}
+              />
+            </div>
+
+            {restRows.map((row) => (
+              <DealRow
+                key={row.id}
+                title={row.title}
+                items={row.items}
+                seeAllLabel={d.catalog.seeAll}
+                onTeaserClick={goToAlerts}
+              />
+            ))}
+          </>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
+import { tintForKey } from './tints';
 
 /**
  * Dlaždice dávky — obdoba karty podniku na Woltu: médium nahoře (logo
@@ -27,7 +28,12 @@ export function DealTile({
   const c = t.catalog.tile;
 
   const media = (
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-50 to-white p-6">
+    /* podklad = tón koncernu ze sdílené palety, takže karta dealu vizuálně
+       navazuje na dlaždici koncernu ve filtračním pásu nahoře */
+    <div
+      className="relative flex aspect-[16/10] items-center justify-center overflow-hidden p-6"
+      style={{ backgroundColor: tintForKey(item.concernSlug ?? item.supplier) }}
+    >
       {item.concernDomain ? (
         <BrandLogo
           name={item.concernName ?? item.supplier}

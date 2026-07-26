@@ -37,6 +37,12 @@ export const BRANDS: Brand[] = [
   { name: 'Chronostar', domain: 'chronostar.com' },
   { name: 'Citizen', domain: 'citizenwatch.com' },
   { name: 'Emporio Armani', domain: 'armani.com' },
+  // Značky, které do katalogu vstupují z DEAL dávek (Fossil Group licence) —
+  // bez nich zůstávaly dlaždice v /deals bez loga.
+  { name: 'Armani', domain: 'armani.com' },
+  { name: 'Armani Exchange', domain: 'armaniexchange.com' },
+  { name: 'Diesel', domain: 'diesel.com' },
+  { name: 'Skagen', domain: 'skagen.com' },
   { name: 'Q&Q', domain: 'qq-watches.com' },
   { name: 'Levien', domain: 'levien.cz' },
   { name: 'Swatch', domain: 'swatch.com' },
