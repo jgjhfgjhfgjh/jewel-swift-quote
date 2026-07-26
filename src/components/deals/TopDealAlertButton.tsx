@@ -27,7 +27,8 @@ export function TopDealAlertButton({
   const lang = useStore((s) => s.lang);
   const t = dealsI18n[lang].alertsUi;
   const alertsApi = useDealAlerts();
-  const on = alertsApi.has(level, target);
+  // hasAny: platí i hromadný („všechny značky/koncerny") alert
+  const on = alertsApi.hasAny(level, target);
 
   const handleClick = () => {
     if (!user) {

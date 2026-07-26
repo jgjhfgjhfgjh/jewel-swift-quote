@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { dealAlertsTable, type AlertLevel, type DealAlert } from '@/lib/alerts';
+import { dealAlertsTable, WILDCARD, type AlertLevel, type DealAlert } from '@/lib/alerts';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 /**
@@ -95,7 +95,35 @@ export function useDealAlerts() {
     [user, has, add, remove],
   );
 
-  return { alerts, loading, has, add, remove, toggle, reload };
+  /** Je na úrovni zapnutý hromadný (wildcard) alert — jeden řádek místo N? */
+  const hasWildcard = useCallback((level: AlertLevel) => has(level, WILDCARD), [has]);
+
+  /** Platí alert pro cíl? Buď vlastní řádek, nebo hromadný wildcard. */
+  const hasAny = useCallback(
+    (level: AlertLevel, target = '') => has(level, target) || has(level, WILDCARD),
+    [has],
+  );
+
+  /**
+   * Odebrání jedné položky z hromadného alertu: wildcard zrušíme a rozpadneme
+   * na jednotlivé alerty pro všechny ostatní. Vzácná operace (běžné zapnutí
+   * „vše" je jeden zápis), proto si ten průchod můžeme dovolit.
+   */
+  const expandWildcard = useCallback(
+    async (level: AlertLevel, items: { target: string; label: string }[], exceptTarget: string) => {
+      if (!user) return false;
+      await remove(level, WILDCARD);
+      for (const it of items) {
+        if (it.target !== exceptTarget && !has(level, it.target)) {
+          await add(level, it.target, it.label);
+        }
+      }
+      return true;
+    },
+    [user, remove, add, has],
+  );
+
+  return { alerts, loading, has, hasAny, hasWildcard, add, remove, toggle, expandWildcard, reload };
 }
 
 /** API hooku pro předávání do podkomponent (sdílená instance stavu). */

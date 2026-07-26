@@ -13,6 +13,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 export type AlertLevel = 'deals' | 'concern' | 'brand' | 'product';
 
+/**
+ * Hromadný alert na celou úroveň — jeden řádek místo N (např. „všechny
+ * značky"). Konkrétní cíl nikdy nesmí mít tuto hodnotu.
+ */
+export const WILDCARD = '*';
+
 export interface DealAlert {
   id: string;
   user_id: string;

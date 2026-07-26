@@ -45,6 +45,16 @@ export function BrandAlertCarousel({
       openEarlyAccessUpsell();
       return;
     }
+    // Zapnutý hromadný alert („všechny značky") se odebráním jedné značky
+    // rozpadne na jednotlivé alerty pro všechny ostatní.
+    if (alertsApi.hasWildcard('brand')) {
+      alertsApi.expandWildcard(
+        'brand',
+        brands.map((b) => ({ target: b.key, label: b.name })),
+        key,
+      );
+      return;
+    }
     alertsApi.toggle('brand', key, name);
   };
 
@@ -61,7 +71,7 @@ export function BrandAlertCarousel({
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {brands.map((b) => {
-          const on = alertsApi.has('brand', b.key);
+          const on = alertsApi.hasAny('brand', b.key);
           return (
             <div
               key={b.key}

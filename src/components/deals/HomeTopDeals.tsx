@@ -12,6 +12,7 @@ import { ModelAlertSearch } from './ModelAlertSearch';
 import { GoBigDealStrip } from './GoBigDealStrip';
 import { Gbd } from '@/components/GoBigDealLogo';
 import { CONCERNS } from '@/data/concerns';
+import { WILDCARD } from '@/lib/alerts';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { sortByBrandPriority } from '@/lib/brandOrder';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
@@ -156,6 +157,16 @@ export function HomeTopDeals() {
       openEarlyAccessUpsell();
       return;
     }
+    // Je-li zapnutý hromadný alert, odebrání jednoho koncernu ho rozpadne
+    // na jednotlivé alerty pro všechny ostatní.
+    if (alertsApi.hasWildcard('concern')) {
+      alertsApi.expandWildcard(
+        'concern',
+        feedConcerns.map((c) => ({ target: c.slug, label: c.name })),
+        slug,
+      );
+      return;
+    }
     alertsApi.toggle('concern', slug, name);
   };
 
@@ -173,11 +184,12 @@ export function HomeTopDeals() {
   );
   const feedBrands = useMemo(() => sortByBrandPriority(catalog), [catalog]);
 
-  const allConcernsOn = feedConcerns.length > 0 && feedConcerns.every((c) => alertsApi.has('concern', c.slug));
-  const allBrandsOn = feedBrands.length > 0 && feedBrands.every((b) => alertsApi.has('brand', b.key));
+  // Hromadný alert = jeden wildcard řádek (level + '*'), ne N jednotlivých.
+  const allConcernsOn = alertsApi.hasWildcard('concern');
+  const allBrandsOn = alertsApi.hasWildcard('brand');
 
-  /** Zapne/vypne alert na celou úroveň jedním klikem (stejné hradlo jako zvoneček). */
-  const toggleAll = async (level: 'concern' | 'brand') => {
+  /** Zapne/vypne alert na celou úroveň jedním zápisem (stejné hradlo jako zvoneček). */
+  const toggleAll = (level: 'concern' | 'brand') => {
     if (!user) {
       requireAuth();
       return;
@@ -186,15 +198,7 @@ export function HomeTopDeals() {
       openEarlyAccessUpsell();
       return;
     }
-    const items =
-      level === 'concern'
-        ? feedConcerns.map((c) => ({ target: c.slug, label: c.name }))
-        : feedBrands.map((b) => ({ target: b.key, label: b.name }));
-    const turnOff = level === 'concern' ? allConcernsOn : allBrandsOn;
-    for (const it of items) {
-      if (turnOff) await alertsApi.remove(level, it.target);
-      else if (!alertsApi.has(level, it.target)) await alertsApi.add(level, it.target, it.label);
-    }
+    alertsApi.toggle(level, WILDCARD, level === 'concern' ? 'All concerns' : 'All brands');
   };
 
   // Placené tarify zatím nemají platební flow — nepřihlášený jde do
@@ -281,7 +285,7 @@ export function HomeTopDeals() {
             texts={CONCERN_TEXTS}
             appearance="ios"
             alertBell={{
-              isOn: (slug) => alertsApi.has('concern', slug),
+              isOn: (slug) => alertsApi.hasAny('concern', slug),
               onToggle: handleConcernBell,
               onAria: t.alertsUi.alertOn,
               offAria: t.alertsUi.setAlert,
@@ -332,7 +336,7 @@ export function HomeTopDeals() {
           zdarma alert při spuštění, placené 48 h předem + odemčení. */}
       <div className="mx-auto mt-16 max-w-[1160px] px-5 sm:mt-24 sm:px-10 lg:px-14">
         <h3 className="text-center font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.75rem)] text-white">
-          Catch your deal of the year earlier and earn more.
+          Get early access and earn more.
         </h3>
         <p className="mt-3 text-center font-sans font-extralight tracking-tight text-xl sm:text-2xl">
           <span className="text-zinc-400">Everyone gets the alert. </span>
