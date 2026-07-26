@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
+import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
 
 export type LogoShelfItem = { name: string; domain?: string; slug: string };
 type Preview = { item: LogoShelfItem; left: number; top: number; width: number };
@@ -30,16 +31,12 @@ export function LogoShelf({
   /** menší karty i nadpis (mega menu) — víc obsahu na obrazovku */
   compact?: boolean;
 }) {
-  const trackRef = useRef<HTMLDivElement>(null);
+  // Nekonečný kolotoč: položky se renderují 3× a hook drží scroll ve střední
+  // kopii, takže police nikdy nenarazí na konec (šipky i swipe jedou pořád).
+  const { trackRef, go } = useInfiniteCarousel(items.length);
   const [preview, setPreview] = useState<Preview | null>(null);
   const dwellRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const scrollByPage = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
-  };
 
   const clearDwell = () => { if (dwellRef.current) clearTimeout(dwellRef.current); dwellRef.current = null; };
   const cancelClose = () => { if (closeRef.current) clearTimeout(closeRef.current); closeRef.current = null; };
@@ -129,10 +126,11 @@ export function LogoShelf({
                      scroll-pl-4 min-[480px]:scroll-pl-5 md:scroll-pl-8 min-[1200px]:scroll-pl-11
                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {items.map((item) => (
+          {[0, 1, 2].flatMap((copy) => items.map((item) => (
             <button
-              key={item.slug}
+              key={`${item.slug}-${copy}`}
               type="button"
+              data-card
               data-shelf-card
               data-name={item.name}
               data-domain={item.domain ?? ''}
@@ -160,13 +158,13 @@ export function LogoShelf({
                 <span className={`font-display font-black text-foreground ${compact ? 'text-sm' : 'text-base'}`}>{item.name}</span>
               )}
             </button>
-          ))}
+          )))}
         </div>
 
         {/* Arrows (desktop, on hover) */}
         <button
           type="button"
-          onClick={() => scrollByPage(-1)}
+          onClick={() => go(-1)}
           className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-none bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
           aria-label="Předchozí"
         >
@@ -174,7 +172,7 @@ export function LogoShelf({
         </button>
         <button
           type="button"
-          onClick={() => scrollByPage(1)}
+          onClick={() => go(1)}
           className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center rounded-none bg-white/85 backdrop-blur border border-border text-zinc-700 shadow-md hover:bg-white transition-all opacity-0 group-hover:opacity-100"
           aria-label="Další"
         >
