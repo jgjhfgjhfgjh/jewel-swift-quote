@@ -6,6 +6,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Škálování na velkých obrazovkách ────────────────────────────
+   Design je autorský pro ~1536px viewport (notebook). Nad touto šířkou
+   dřív layout přestal růst (max-w kontejnery) a po stranách zůstávaly
+   prázdné pruhy. Místo toho celé UI proporcionálně zoomujeme, takže
+   monitor/TV libovolné šířky vykreslí stránku identicky s notebookem,
+   jen větší. Stepped hodnoty jsou fallback pro prohlížeče bez podpory
+   dělení délek v calc(); calc() varianta je plynulá a má přednost. */
+@media (min-width: 1600px) { html { zoom: 1.08; zoom: calc(100vw / 1536px); } }
+@media (min-width: 1800px) { html { zoom: 1.20; zoom: calc(100vw / 1536px); } }
+@media (min-width: 2000px) { html { zoom: 1.33; zoom: calc(100vw / 1536px); } }
+@media (min-width: 2300px) { html { zoom: 1.55; zoom: calc(100vw / 1536px); } }
+@media (min-width: 2700px) { html { zoom: 1.80; zoom: calc(100vw / 1536px); } }
+@media (min-width: 3200px) { html { zoom: 2.15; zoom: calc(100vw / 1536px); } }
+@media (min-width: 3700px) { html { zoom: 2.45; zoom: calc(100vw / 1536px); } }
+
 /* Announcement bar: push the whole app down by the bar height (36px) only while
    the bar is shown. margin on #root moves the absolute navbar (anchored to
    #root) + flow content together; --ann-offset lets fixed-to-viewport elements
