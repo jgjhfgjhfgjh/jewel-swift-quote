@@ -312,7 +312,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
         >
           {/* wordmark GoBigDeal (barva přes currentColor) */}
           <GoBigDealLogo
-            className={`text-[13px] sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
+            className={`text-lg sm:text-xl lg:text-[1.4rem] ${(whiteLogo && !activeNav) || overVideo ? 'text-white' : 'text-foreground'}`}
           />
         </Link>
 
@@ -564,7 +564,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
-                className={`h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm bg-transparent transition-all shrink-0 shadow-none ${
+                className={`h-8 px-2 sm:h-9 sm:px-5 rounded-full font-semibold text-[11px] sm:text-sm bg-transparent transition-all shrink-0 shadow-none ${
                   overVideo ? 'text-white hover:bg-white/10' : 'text-zinc-900 hover:bg-zinc-900/5'
                 }`}
               >
@@ -577,7 +577,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}
-                  className={`h-9 px-4 sm:px-5 rounded-full font-semibold text-[13px] sm:text-sm transition-all shrink-0 ${
+                  className={`h-8 px-3 sm:h-9 sm:px-5 rounded-full font-semibold text-[11px] sm:text-sm transition-all shrink-0 ${
                     overVideo ? 'text-zinc-900 bg-white hover:bg-zinc-200' : 'text-white bg-black hover:bg-zinc-800'
                   }`}
                 >

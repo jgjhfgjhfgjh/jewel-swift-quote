@@ -102,7 +102,6 @@ const TIERS: Tier[] = [
     priceAnnual: '€209',
     wasAnnual: '€399',
     noteAnnual: 'billed yearly · €2 508',
-    badge: 'Most popular',
     features: [
       'The same alerts — 48 hours earlier',
       'Every deal open before it goes public',
@@ -403,7 +402,9 @@ export function HomeTopDeals() {
   );
 }
 
-/** Jedna pricing karta — Insider je zvýrazněný modrým rámečkem (Most popular).
+/** Jedna pricing karta. Karty jsou vizuálně rovnocenné — early access nesmí
+ *  působit jako „má ho každý", to by šlo proti jeho exkluzivitě. Odlišuje jen
+ *  tmavé CTA u placené úrovně.
  *  Hierarchie: největší je NÁZEV tarifu, cena je menší pod ním. */
 function PricingCard({ tier, onSelect, annual }: { tier: Tier; onSelect: () => void; annual: boolean }) {
   const featured = tier.id === 'pro';
@@ -413,13 +414,9 @@ function PricingCard({ tier, onSelect, annual }: { tier: Tier; onSelect: () => v
   const note = useAnnual ? tier.noteAnnual : tier.note;
   const was = useAnnual ? tier.wasAnnual : undefined;
   return (
-    <div
-      className={`relative flex flex-col rounded-2xl border bg-white p-5 ${
-        featured ? 'border-blue-600 ring-1 ring-blue-600 shadow-lg' : 'border-slate-200 shadow-sm'
-      }`}
-    >
+    <div className="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       {tier.badge && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-blue-600 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-900 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
           {tier.badge}
         </span>
       )}
