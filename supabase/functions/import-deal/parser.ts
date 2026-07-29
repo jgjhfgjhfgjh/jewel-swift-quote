@@ -271,7 +271,10 @@ function cdnUrlFromDescr(descr: string): string {
 }
 
 /** Parse an .xlsx workbook buffer into structured deal products. */
-export async function parseDealXlsx(buffer: ArrayBuffer): Promise<DealParseResult> {
+export async function parseDealXlsx(
+  buffer: ArrayBuffer,
+  opts: { brand?: string } = {},
+): Promise<DealParseResult> {
   const zip = new ZipArchive(buffer);
 
   // Sheet display name — used as the brand for single-brand offers that have no
@@ -302,10 +305,11 @@ export async function parseDealXlsx(buffer: ArrayBuffer): Promise<DealParseResul
     const en = cells.includes('brand') && cells.includes('sku');
     const cz = cells.includes('vyrobce') && cells.includes('kod');
     const ref = cells.includes('reference') && cells.includes('ean');
-    if (en || cz || ref) { headerIdx = i; break; }
+    const art = cells.includes('artikl') && cells.includes('ean');
+    if (en || cz || ref || art) { headerIdx = i; break; }
   }
   if (headerIdx < 0) {
-    throw new Error('V tabulce nebyl nalezen řádek s hlavičkou (Brand/SKU, Výrobce/Kód nebo Reference/EAN).');
+    throw new Error('V tabulce nebyl nalezen řádek s hlavičkou (Brand/SKU, Výrobce/Kód, Reference/EAN nebo Artikl/EAN).');
   }
   const header = normRow(rows[headerIdx]);
 
@@ -314,25 +318,34 @@ export async function parseDealXlsx(buffer: ArrayBuffer): Promise<DealParseResul
   // Each column accepts the English label and its Czech catalog-export alias.
   const col = {
     brand: find((h) => h === 'brand' || h === 'vyrobce'),
-    sku: find((h) => h === 'sku' || h === 'kod' || h === 'reference'),
+    sku: find((h) => h === 'sku' || h === 'kod' || h === 'reference' || h === 'artikl'),
     ean: find((h) => h === 'ean' || h.startsWith('ean')),
     gender: find((h) => h === 'gender' || h.includes('urceni')),
-    collection: find((h) => h === 'platform' || h.includes('modelova rada') || h === 'description'),
-    status: find((h) => h === 'status'),
-    movement: find((h) => h.includes('movement') || h.includes('silhouette') || h.includes('strojku')),
+    collection: find((h) => h === 'platform' || h.includes('modelova rada') || h === 'description' || h === 'popis'),
+    status: find((h) => h === 'status' || h === 'dostupnost'),
+    movement: find((h) =>
+      h.includes('movement') || h.includes('silhouette') || h.includes('strojku') || h.startsWith('kategorie produkt')),
     material: find((h) => h.includes('material')),
     size: find((h) =>
       h.includes('case size') || h === 'size' || h.includes('prumer cifernik') || h.includes('velikost cifernik')),
-    retail: find((h) => h.includes('retail price') || h.includes('prodejni')),
+    retail: find((h) => h.includes('retail price') || h.includes('prodejni') || h.includes('maloobchodni')),
     w50: find((h) => (h.includes('wholesale') || h.includes('velkoobchodni')) && h.includes('50')),
     w100: find((h) => (h.includes('wholesale') || h.includes('velkoobchodni')) && h.includes('100')),
     w200: find((h) => (h.includes('wholesale') || h.includes('velkoobchodni')) && h.includes('200')),
     available: find((h) => h === 'available' || h.includes('stav zasob')),
   };
-  if (col.sku < 0) throw new Error('Hlavička neobsahuje sloupec SKU / Kód / Reference.');
+  if (col.sku < 0) throw new Error('Hlavička neobsahuje sloupec SKU / Kód / Reference / Artikl.');
   // Single-brand offers (e.g. a Versace-only sheet) have no Brand column — fall
-  // back to the sheet's name. Only the SKU/Reference column is truly required.
-  const fallbackBrand = col.brand < 0 ? sheetName : '';
+  // back to meta.brand, then to the sheet's name, unless the sheet carries a
+  // generic placeholder name ("Sheet1", "List1"…) that would leak into the
+  // catalog as a bogus brand.
+  const genericSheet = /^(sheet|list|hoja|tabulka|produkty|export|data)\s*\d*$/i.test(sheetName);
+  const fallbackBrand = col.brand < 0 ? ((opts.brand ?? '').trim() || (genericSheet ? '' : sheetName)) : '';
+  if (col.brand < 0 && !fallbackBrand) {
+    throw new Error(
+      `Tabulka nemá sloupec Brand/Výrobce a název listu („${sheetName}") brand neurčuje — předej meta.brand (např. "Swarovski").`,
+    );
+  }
   // A single "Wholesale Price" column (no qty tiers) applies to all three tiers.
   if (col.w50 < 0 && col.w100 < 0 && col.w200 < 0) {
     const wSingle = find((h) => (h.includes('wholesale') || h.includes('velkoobchodni')) && !/[0-9]/.test(h));
@@ -345,12 +358,26 @@ export async function parseDealXlsx(buffer: ArrayBuffer): Promise<DealParseResul
 
   const movementHeader = col.movement >= 0 ? header[col.movement] : '';
   const headerText = header.join(' ');
-  const category: DealCategory =
+  let category: DealCategory =
     movementHeader.includes('movement') || movementHeader.includes('strojku')
       || headerText.includes('cifernik') || headerText.includes('case size')
       ? 'watches'
     : movementHeader.includes('silhouette') ? 'jewelry'
     : 'general';
+  // Czech full-catalog exports (Swarovski) carry the product domain in a
+  // Segment column ("Šperky" / "Hodinky") instead of the header names.
+  if (category === 'general') {
+    let segCol = find((h) => h === 'segment');
+    if (segCol < 0) segCol = find((h) => h === 'sortiment');
+    if (segCol >= 0) {
+      for (let r = headerIdx + 1; r < Math.min(rows.length, headerIdx + 25); r++) {
+        const v = deburr(str((rows[r] ?? [])[segCol]).toLowerCase());
+        if (!v) continue;
+        if (v.includes('sperky') || v.includes('jewel')) { category = 'jewelry'; break; }
+        if (v.includes('hodinky') || v.includes('watch')) { category = 'watches'; break; }
+      }
+    }
+  }
 
   // EU business defaults to EUR; only an explicit "(USD)" marker (e.g. Fossil
   // "Retail Price (USD)") switches to USD. Caller can override via meta.currency.

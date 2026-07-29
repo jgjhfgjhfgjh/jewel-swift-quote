@@ -37,7 +37,10 @@ Pro každý nalezený thread:
      - **deposit_percent** — záloha (např. 30 z *„zálohová faktura ve výši 30 %"*).
      - **delivery_weeks_min**, **delivery_weeks_max** — z *„dodací lhůta cca 4 až 6 týdnů"* dej 4 a 6.
      - **payment_terms** — celý odstavec o platebních podmínkách (od *„Platba předem…"* po *„… expedice"*), seskládaný jako jeden řetězec.
-     - **tiers** — slevová pásma z řádků jako *„50 ks – sleva 66 %"*: pole `[{min_qty:50,discount_percent:66}, {min_qty:100,discount_percent:67}, {min_qty:200,discount_percent:68}]`. Když uvidíš jiné hodnoty (jiný počet pásem, jiné %, jiné množství), zapiš je přesně podle e-mailu.
+     - **tiers** — slevová pásma z řádků jako *„50 ks – sleva 66 %"*: pole `[{min_qty:50,discount_percent:66}, {min_qty:100,discount_percent:67}, {min_qty:200,discount_percent:68}]`. Když uvidíš jiné hodnoty (jiný počet pásem, jiné %, jiné množství), zapiš je přesně podle e-mailu. **Když e-mail žádná slevová pásma neuvádí** (jen jednotnou nabídku), pole `tiers` úplně vynech — `import-deal` si pak jediné reálné pásmo spočítá z cen v tabulce.
+     - **min_order_qty** — minimální odběr z věty jako *„Minimální odběr: 200 ks"* → `200`. Pošli vždy, když je v e-mailu uveden.
+     - **brand** — když je nabídka jednoznačková (v předmětu/těle figuruje jediná značka, např. *„nabídka nové kolekce SWAROVSKI"*), pošli `"brand": "Swarovski"` (normální psaní, ne verzálky). Tabulky bez sloupce Brand/Výrobce a s generickým názvem listu („Sheet1") se bez toho nenaimportují.
+     - **category** — pokud je z e-mailu jasná kategorie zboží, pošli `"category": "jewelry"` (šperky) nebo `"watches"` (hodinky); jinak vynech — parser si ji zkusí určit sám.
    - **`deadline` a `payment_terms` jsou povinné** — `import-deal` vrátí 400, pokud chybí. Když je nemůžeš s jistotou vyčíst, **přeskoč thread** (nepřidávej label `deal-imported`, aby se to zkusilo příští hodinu) a v souhrnu to zalog. U ostatních polí — kterými si nejsi jistý — vynech je (nepouštěj prázdné). `import-deal` má rozumné výchozí hodnoty pro neúzkostné údaje.
    - **Pozor na české datum:** věty jako *„do středy 20. 5. 2026"* znamenají 20. května 2026. Když email neuvádí čas, použij 17:00 lokálního času (Europe/Prague). Výsledek do ISO formátu `2026-05-20T17:00:00+02:00` (nebo ekvivalent v UTC).
 4. Zavolej `import-deal`:
@@ -70,6 +73,7 @@ Pro každý nalezený thread:
 Pokud u některého threadu import selže — `import-deal` vrátí `error`, nebo spadne jakýkoli krok (Gmail/Supabase timeout, chyba parsování workbooku, neznámý formát souboru atd.) — **nezůstávej potichu**. Selhání se jinak nikde neprojeví a thread by se jen donekonečna zkoušel znovu. Proveď:
 
 1. **Label `deal-imported` NEPŘIDÁVEJ** — thread zůstane `deal-ready`, aby se import zkusil při příštím běhu.
+1b. **Přidej threadu label `deal-failed`** (pokud neexistuje, vytvoř ho přes `create_label` s display name `deal-failed`). Na tento label navazuje opravný agent „Deal Fixer", který tabulku upraví do formátu, kterému import rozumí, a import dokončí.
 2. **Pošli e-mail upozornění.** E-mailové notifikace doručuje kalendář (Gmail konektor umí jen draft, ne přímé odeslání), proto:
    a. Vytvoř přes `create_event` záznam, který zároveň **odešle e-mail** majiteli:
       - `summary`: `⚠️ DEAL import selhal — <dodavatel nebo subject e-mailu>`

@@ -32,6 +32,11 @@ interface DealMeta {
   title?: string;
   subtitle?: string;
   supplier?: string;
+  /** Brand for single-brand offers whose workbook has no Brand column and a
+   *  generic sheet name (e.g. the Swarovski "Sheet1" export). */
+  brand?: string;
+  /** Overrides the category auto-detected from the workbook headers. */
+  category?: DealCategory;
   deadline?: string;
   deposit_percent?: number;
   delivery_weeks_min?: number;
@@ -40,6 +45,8 @@ interface DealMeta {
   tiers?: { min_qty: number; discount_percent: number }[];
   /** Overrides the currency auto-detected from the workbook (e.g. 'EUR', 'USD'). */
   currency?: string;
+  /** Minimum order quantity from the offer email ("Minimální odběr: 200 ks"). */
+  min_order_qty?: number;
   /** When set to 'active' the deal goes live immediately; defaults to 'draft'. */
   status?: 'draft' | 'active' | 'ended';
 }
@@ -105,7 +112,11 @@ async function importOne(
     );
   }
 
-  const parsed = await parseDealXlsx(await file.arrayBuffer());
+  const parsed = await parseDealXlsx(await file.arrayBuffer(), { brand: meta.brand });
+  const category: DealCategory =
+    meta.category === 'watches' || meta.category === 'jewelry' || meta.category === 'general'
+      ? meta.category
+      : parsed.category;
 
   // Embedded images (Czech export) have no CDN host — upload them to the public
   // deal-images bucket and point each product at the resulting public URL.
@@ -164,9 +175,26 @@ async function importOne(
   const supplier = (meta.supplier ?? '').trim();
   const title = singleFile && meta.title
     ? meta.title.trim()
-    : `${supplier || 'DEAL nabídka'} — ${CATEGORY_LABEL[parsed.category]}`;
+    : `${supplier || 'DEAL nabídka'} — ${CATEGORY_LABEL[category]}`;
 
-  const tiers = Array.isArray(meta.tiers) && meta.tiers.length ? meta.tiers : DEFAULT_TIERS;
+  let tiers = Array.isArray(meta.tiers) && meta.tiers.length ? meta.tiers : null;
+  if (!tiers) {
+    // Single-price offers (one Wholesale column, no qty tiers) get one real tier
+    // derived from the data — the fabricated 50/100/200 defaults would show
+    // discount ladders the supplier never offered.
+    const single = parsed.products.every(
+      (p) => p.wholesale_tier1 === p.wholesale_tier2 && p.wholesale_tier2 === p.wholesale_tier3,
+    );
+    const discounts = parsed.products
+      .filter((p) => p.retail_price > 0 && p.wholesale_tier1 > 0)
+      .map((p) => 1 - p.wholesale_tier1 / p.retail_price);
+    if (single && discounts.length) {
+      const avg = Math.round((discounts.reduce((a, b) => a + b, 0) / discounts.length) * 100);
+      tiers = [{ min_qty: meta.min_order_qty ?? 1, discount_percent: avg }];
+    } else {
+      tiers = DEFAULT_TIERS;
+    }
+  }
   const deadline = meta.deadline
     ? new Date(meta.deadline).toISOString()
     : new Date(Date.now() + 14 * 86400000).toISOString();
@@ -175,7 +203,7 @@ async function importOne(
     title,
     subtitle: meta.subtitle ?? '',
     supplier,
-    category: parsed.category,
+    category,
     description: '',
     brands: parsed.brands,
     currency: (meta.currency ?? parsed.currency ?? 'EUR').toUpperCase(),
@@ -214,7 +242,7 @@ async function importOne(
     deal_id: dealId,
     slug,
     title,
-    category: parsed.category,
+    category,
     product_count: rows.length,
     images_matched: parsed.imagesMatched,
     brands: parsed.brands,
