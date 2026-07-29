@@ -33,7 +33,6 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why' },
   { id: 'products',     label: 'Products' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
-  { id: 'luxury-deals', label: 'Luxury Deals', path: '/prestige' },
   { id: 'katalog',      label: 'Catalog' },
 ];
 
@@ -71,22 +70,25 @@ const NAV_PANELS: Record<string, NavPanel> = {
     ],
     cta: { label: 'B2B registrace zdarma', path: 'auth:b2b' },
   },
+  /* Products = služby platformy (ne kategorie zboží). Copy drží tón homepage:
+     anglicky, čtenář hrdina, výsledek místo funkce, tvrzení kryté číslem. */
   'products': {
     heading: 'Products',
-    desc: '3 000+ produktů od 70+ prémiových značek skladem v EU. Velkoobchodní ceny od 1 kusu.',
+    desc: 'Everything you sell with — and everything you plug into. 70+ brands, wholesale prices from 1 unit.',
     cols: [
-      { title: 'Sortiment', links: [
-        { label: 'Hodinky', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/brands' },
-        { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/brands' },
-        { label: 'Dárkové sady', desc: 'Kompletní sety za speciální cenu', path: '/deals' },
+      { title: 'Ways to sell', links: [
+        { label: 'B2B Wholesale', desc: '70+ brands at 40–65% off retail', path: '/velkoobchod' },
+        { label: 'Dropshipping', desc: 'Sell without stock — we pack and ship', path: '/dropshipping' },
+        { label: 'Luxury Deals', desc: 'Omega, Cartier, IWC on request', path: '/prestige' },
+        { label: 'Shop without registration', desc: 'Wholesale prices, no B2B account', path: '/luxury' },
       ]},
-      { title: 'Jak nakoupit', links: [
-        { label: 'Velkoobchod', desc: 'Slevy 40–65 % z MOC', path: '/velkoobchod' },
-        { label: 'Bez registrace', desc: 'Velkoobchodní ceny bez B2B účtu', path: '/luxury' },
-        { label: 'Luxury na poptávku', desc: 'Omega, Cartier, IWC…', path: '/prestige' },
+      { title: 'Plug into swelt', links: [
+        { label: 'Product feed', desc: 'XML or CSV, updated 4× a day', path: '/feed' },
+        { label: 'Product Intelligence', desc: 'See what sells before you stock it', path: '/feed?to=product-intelligence' },
+        { label: 'MCP Server', desc: 'Connect your AI agents to the catalog', path: '/feed?to=mcp' },
       ]},
     ],
-    cta: { label: 'Prohlédnout značky', path: '/brands' },
+    cta: { label: 'Browse brands', path: '/brands' },
   },
   'top-deals': {
     heading: 'GoBigDeal',
@@ -105,23 +107,8 @@ const NAV_PANELS: Record<string, NavPanel> = {
     ],
     cta: { label: 'Zobrazit všechny DEAL nabídky', path: '/deals' },
   },
-  'luxury-deals': {
-    heading: 'Luxury Deals',
-    desc: 'Hodinky vyššího segmentu na poptávku. Originál s dokumentací, závazná cena, diskrétní doručení po EU.',
-    cols: [
-      { title: 'Prémiové domy', links: [
-        { label: 'Omega, Cartier, IWC', desc: 'Ikonické modely na poptávku', path: '/prestige' },
-        { label: 'Jaeger-LeCoultre, Girard-Perregaux', desc: 'Vysoká horologie na míru', path: '/prestige' },
-        { label: 'Longines, Tissot, Mido', desc: 'Dostupný prémiový segment', path: '/prestige' },
-      ]},
-      { title: 'Jak to funguje', links: [
-        { label: 'Sestavte poptávku', desc: 'Z katalogu nebo vlastní reference', path: '/prestige' },
-        { label: 'Závazná nabídka do 48 h', desc: 'Ověříme dostupnost i cenu', path: '/prestige' },
-        { label: 'Diskrétní doručení', desc: 'Pojištěně po celé EU', path: '/prestige' },
-      ]},
-    ],
-    cta: { label: 'Sestavit poptávku', path: '/prestige' },
-  },
+  /* Luxury Deals už nemá vlastní nav položku — žije jako služba pod Products
+     (odkaz vede na /prestige, kde je celý obsah). */
   'katalog': {
     heading: 'KATALOG 2026',
     desc: 'Kompletní B2B katalog s živými cenami a skladovou dostupností. Přístup po přihlášení.',
