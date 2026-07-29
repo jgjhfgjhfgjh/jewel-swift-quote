@@ -14,7 +14,8 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
-import { GoBigDealStrip, GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
+import { GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
+import { NavDealSpotlight } from '@/components/deals/NavDealSpotlight';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -655,11 +656,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                 </button>
               </div>
             ) : activeNav === 'top-deals' ? (
-              /* GoBigDeal — full-width kopie pásu z homepage bez levého sloupce
-                 (heading/desc/CTA), pod ním tlačítko s nabídkou úrovní alertů
-                 (koncern/značka/model → kotvy #gbd-alerts-*) */
-              <div className="px-6 py-6">
-                <GoBigDealStrip />
+              /* GoBigDeal — full-width spotlight končícího dealu (loga značek,
+                 koncern v rohu, odpočet; auto-slide po 3 s, placeholdery když
+                 dealy nejsou), pod ním kompaktní police koncernů a značek jako
+                 na landing dealů + tlačítko s úrovněmi alertů */
+              <div className="px-6 pt-5 pb-5 flex flex-col">
+                <NavDealSpotlight onNavigate={() => setActiveNav(null)} />
+                <div className="-mx-6">
+                  <ConcernLogoRow topMargin="mt-5" compact />
+                </div>
+                <div className="-mx-6">
+                  <BrandLogoRow topMargin="mt-5" compact />
+                </div>
                 <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
               </div>
             ) : (
