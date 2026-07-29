@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Bell, Check, MousePointerClick, Layers, TrendingUp, Clock,
   Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
@@ -52,8 +52,24 @@ export default function Deals() {
   const d = dealsI18n[lang];
   const { deals, productCounts, loading } = useDeals();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
+  const location = useLocation();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  // Proklik z mega menu (?concern= / ?brand=) předvybere filtr — funguje
+  // i když už na /deals jsme, proto efekt na query, ne jen initial state.
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    const concern = q.get('concern');
+    const brand = q.get('brand');
+    if (!concern && !brand) return;
+    setFilters({
+      ...EMPTY_FILTERS,
+      concerns: concern ? [concern] : [],
+      brands: brand ? [brand] : [],
+    });
+    window.scrollTo(0, 0);
+  }, [location.search]);
 
   /* ── Katalog ─────────────────────────────────────────────────────────── */
   const catalog = useMemo(

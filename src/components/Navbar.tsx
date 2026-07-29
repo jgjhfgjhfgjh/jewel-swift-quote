@@ -14,8 +14,7 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
-import { GoBigDealAlertButton } from '@/components/deals/GoBigDealStrip';
-import { NavDealSpotlight } from '@/components/deals/NavDealSpotlight';
+import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -658,17 +657,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
             ) : activeNav === 'top-deals' ? (
               /* GoBigDeal — full-width spotlight končícího dealu (loga značek,
                  koncern v rohu, odpočet; auto-slide po 3 s, placeholdery když
-                 dealy nejsou), pod ním kompaktní police koncernů a značek jako
-                 na landing dealů + tlačítko s úrovněmi alertů */
-              <div className="px-6 pt-5 pb-5 flex flex-col">
-                <NavDealSpotlight onNavigate={() => setActiveNav(null)} />
-                <div className="-mx-6">
-                  <ConcernLogoRow topMargin="mt-5" compact />
-                </div>
-                <div className="-mx-6">
-                  <BrandLogoRow topMargin="mt-5" compact />
-                </div>
-                <GoBigDealAlertButton onNavigate={() => setActiveNav(null)} />
+                 dealy nejsou), pod ním zmenšené karusely dlaždic koncernů a
+                 značek z landing dealů. Vše sedí do výšky ostatních panelů. */
+              <div className="px-6 pt-4 pb-3">
+                <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
             ) : (
             <div className="px-6 py-8">
