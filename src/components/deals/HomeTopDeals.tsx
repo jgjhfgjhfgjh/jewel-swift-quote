@@ -83,7 +83,7 @@ interface Tier {
 const TIERS: Tier[] = [
   {
     id: 'drop',
-    name: 'Drop Free',
+    name: 'Public Drop',
     price: 'Free',
     note: 'no card needed',
     features: [
@@ -95,7 +95,7 @@ const TIERS: Tier[] = [
   },
   {
     id: 'pro',
-    name: 'PRO',
+    name: 'Early Access',
     price: '€399',
     period: '/month',
     note: 'cancel anytime',
@@ -109,7 +109,7 @@ const TIERS: Tier[] = [
       'First pick while stock lasts',
       'Dedicated account manager',
     ],
-    cta: 'Go PRO',
+    cta: 'Get early access',
   },
 ];
 
