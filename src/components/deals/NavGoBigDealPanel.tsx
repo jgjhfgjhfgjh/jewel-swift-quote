@@ -288,15 +288,27 @@ function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Dea
   );
 }
 
-/** Slide reálného dealu — koncern v rohu, odpočet, loga značek dealu, CTA. */
+/** Slide reálného dealu — koncern v rohu, odpočet, loga značek dealu, CTA.
+    S kampaňovou fotkou (hero_image_url) jede fotka na pozadí a loga se
+    schovají — branding nese sama; patka dostane bílý scrim kvůli čitelnosti. */
 function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
   const concern = getConcernForDeal(deal);
   const brands = (deal.brands ?? []).slice(0, 6);
+  const photo = deal.hero_image_url;
 
   return (
-    <button type="button" onClick={onOpen} className="flex h-full w-full flex-col px-5 py-4 text-left">
+    <button type="button" onClick={onOpen} className="relative flex h-full w-full flex-col px-5 py-4 text-left">
+      {photo && (
+        <>
+          <img src={photo} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white/95 via-white/60 to-transparent"
+          />
+        </>
+      )}
       {/* horní řádek: koncern v rohu + odpočet do konce dealu */}
-      <div className="flex items-start justify-between gap-3">
+      <div className="relative flex items-start justify-between gap-3">
         {concern ? (
           <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5">
             <BrandLogo
@@ -313,28 +325,30 @@ function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
         <CountdownTimer deadline={deal.deadline} variant="compact" lang="en" />
       </div>
 
-      {/* loga značek dealu — jedno nebo všechna (Fossil Group jich má víc) */}
-      <div className="flex min-h-0 flex-1 flex-wrap items-center justify-center gap-x-6 gap-y-3 px-2">
-        {brands.map((b) => {
-          const meta = getBrandByName(b);
-          return meta ? (
-            <BrandLogo
-              key={b}
-              name={meta.name}
-              domain={meta.domain}
-              width={240}
-              height={100}
-              className="max-h-9 max-w-[120px] object-contain [mix-blend-mode:multiply]"
-              fallbackClassName="font-display text-lg font-black tracking-tight text-zinc-900"
-            />
-          ) : (
-            <span key={b} className="font-display text-lg font-black tracking-tight text-zinc-900">{b}</span>
-          );
-        })}
-      </div>
+      {/* loga značek dealu — jen bez fotky (fotka nese branding sama) */}
+      {!photo && (
+        <div className="flex min-h-0 flex-1 flex-wrap items-center justify-center gap-x-6 gap-y-3 px-2">
+          {brands.map((b) => {
+            const meta = getBrandByName(b);
+            return meta ? (
+              <BrandLogo
+                key={b}
+                name={meta.name}
+                domain={meta.domain}
+                width={240}
+                height={100}
+                className="max-h-9 max-w-[120px] object-contain [mix-blend-mode:multiply]"
+                fallbackClassName="font-display text-lg font-black tracking-tight text-zinc-900"
+              />
+            ) : (
+              <span key={b} className="font-display text-lg font-black tracking-tight text-zinc-900">{b}</span>
+            );
+          })}
+        </div>
+      )}
 
       {/* patka: název + CTA; tečky jsou pod tím na spodní hraně karty */}
-      <div className="pb-4">
+      <div className={`relative pb-4 ${photo ? 'mt-auto' : ''}`}>
         <p className="line-clamp-2 text-sm font-semibold text-zinc-900">{deal.title}</p>
         <span className="mt-1 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-900">
           Explore deal <ArrowRight className="h-3.5 w-3.5" />

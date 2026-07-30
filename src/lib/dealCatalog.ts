@@ -33,6 +33,8 @@ export interface DealTileItem {
   deadline?: string;
   /** Připravovaná dlaždice → odpočet do startu. */
   startsAt?: string;
+  /** Kampaňová fotka dealu — nahrazuje tónovaný podklad s logem koncernu. */
+  heroImageUrl?: string;
 }
 
 /** Reálný deal → dlaždice katalogu. */
@@ -56,6 +58,7 @@ export function tileFromDeal(deal: Deal, models: number): DealTileItem {
     maxDiscount: deal.tiers.reduce((m, t) => Math.max(m, t.discount_percent), 0),
     deadline: deal.deadline,
     startsAt: deal.starts_at,
+    heroImageUrl: deal.hero_image_url ?? undefined,
   };
 }
 

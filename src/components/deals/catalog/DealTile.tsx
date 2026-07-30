@@ -29,12 +29,20 @@ export function DealTile({
 
   const media = (
     /* podklad = tón koncernu ze sdílené palety, takže karta dealu vizuálně
-       navazuje na dlaždici koncernu ve filtračním pásu nahoře */
+       navazuje na dlaždici koncernu ve filtračním pásu nahoře; kampaňová
+       fotka dealu (hero_image_url) má přednost — branding nese sama */
     <div
       className="relative flex aspect-[16/10] items-center justify-center overflow-hidden p-6"
       style={{ backgroundColor: tintForKey(item.concernSlug ?? item.supplier) }}
     >
-      {item.concernDomain ? (
+      {item.heroImageUrl ? (
+        <img
+          src={item.heroImageUrl}
+          alt=""
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+        />
+      ) : item.concernDomain ? (
         <BrandLogo
           name={item.concernName ?? item.supplier}
           domain={item.concernDomain}

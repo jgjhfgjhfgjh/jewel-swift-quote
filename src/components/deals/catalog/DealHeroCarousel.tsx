@@ -143,15 +143,30 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
 
   const inner = (
     <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0d0d10] p-6 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
-      {/* jemná záře v pozadí — nahrazuje fotku, drží tmavý brand look */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-70"
-        style={{
-          background:
-            'radial-gradient(120% 80% at 85% 15%, rgba(56,189,248,0.22) 0%, rgba(16,185,129,0.12) 38%, rgba(0,0,0,0) 70%)',
-        }}
-      />
+      {item.heroImageUrl ? (
+        /* kampaňová fotka dealu + tmavý scrim, aby bílé texty zůstaly čitelné */
+        <>
+          <img
+            src={item.heroImageUrl}
+            alt=""
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10"
+          />
+        </>
+      ) : (
+        /* jemná záře v pozadí — nahrazuje fotku, drží tmavý brand look */
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-70"
+          style={{
+            background:
+              'radial-gradient(120% 80% at 85% 15%, rgba(56,189,248,0.22) 0%, rgba(16,185,129,0.12) 38%, rgba(0,0,0,0) 70%)',
+          }}
+        />
+      )}
       <div className="relative flex items-start justify-between gap-4">
         {item.concernDomain ? (
           <span className="inline-flex h-11 items-center rounded-xl bg-white px-3">

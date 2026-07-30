@@ -236,6 +236,17 @@ export default function DealDetail() {
               ))}
             </div>
           )}
+
+          {/* Kampaňová fotka dealu — široký zaoblený banner pod hero textem */}
+          {deal.hero_image_url && (
+            <div className="mt-8 overflow-hidden rounded-[24px] border border-border">
+              <img
+                src={deal.hero_image_url}
+                alt={deal.title}
+                className="aspect-[2/1] w-full object-cover sm:aspect-[21/9]"
+              />
+            </div>
+          )}
         </div>
       </section>
 
