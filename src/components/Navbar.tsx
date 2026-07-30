@@ -25,6 +25,9 @@ interface NavbarProps {
   wishlistCount?: number;
   onOpenWishlist?: () => void;
   whiteLogo?: boolean;
+  /** Stránka s tmavým pozadím (např. /alerts) — navbar jede v bílé
+      (inverzní) variantě, dokud otevřené mega menu nepřepne header na bílou. */
+  onDark?: boolean;
 }
 
 /* Desktop nav — 5 položek s chevronem, každá otevírá mega menu.
@@ -151,7 +154,7 @@ function FlagImg({ lang, className = '' }: { lang: string; className?: string })
   );
 }
 
-export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }: NavbarProps) {
+export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, onDark = false }: NavbarProps) {
   const { lang, setLang, cart, setCartOpen, setSidebarOpen, search, setSearch, salesCustomer, clearSalesMode, setViewMode, viewMode, setGatewayOpen, authOpen, authTab, openAuthModal, setAuthOpen } = useStore();
   const { user, profile, isAdmin, isB2bApproved, signOut, loading } = useAuthContext();
   const t = translations[lang];
@@ -205,7 +208,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   // navázáno i na location.pathname, jinak by na bílých stránkách (/brands…)
   // zůstal bílý text na bílém pozadí. Otevřené mega menu (bílý panel od vrchu)
   // taky vypíná bílé prvky → tmavé, čitelné.
-  const overVideo = location.pathname === '/' && isHome && isAtTop && !activeNav;
+  // Tmavá stránka (onDark) drží inverzní variantu trvale — header je nad
+  // černým obsahem; otevřené mega menu ji vypíná stejně jako na homepage.
+  const overVideo = ((location.pathname === '/' && isHome && isAtTop) || onDark) && !activeNav;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {

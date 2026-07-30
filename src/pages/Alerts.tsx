@@ -25,6 +25,9 @@ const LEVEL_LABEL: Record<AlertLevel, string> = {
   product: 'Model',
 };
 
+/** Tmavá stránka drží barvy černé sekce homepage (#0d0d10, bílé texty). */
+const DARK = '#0d0d10';
+
 /**
  * /alerts — správa deal alertů na celé stránce (protějšek /favorites pro
  * watchdogy): přehled aktivních alertů s možností odebrat, pod tím přidávání
@@ -104,22 +107,22 @@ export default function Alerts() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen text-white" style={{ backgroundColor: DARK }}>
+      <Navbar onDark />
       <BackButton />
 
-      {/* ── Hlavička — vzdušná jako detail dealu ── */}
-      <section className="border-b border-border bg-white">
+      {/* ── Hlavička — vzdušná jako detail dealu, jen v inverzi ── */}
+      <section className="border-b border-white/10">
         <div className="mx-auto max-w-5xl px-6 pb-10 pt-24 text-center sm:pb-12 sm:pt-32">
           <div className="mb-5 flex justify-center">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100">
-              <Bell className="h-6 w-6 text-zinc-900" />
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
+              <Bell className="h-6 w-6 text-white" />
             </span>
           </div>
-          <h1 className="font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-display text-3xl font-black tracking-tight text-white sm:text-5xl">
             Deal alerts
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+          <p className="mx-auto mt-3 max-w-xl text-zinc-400">
             Know the moment a deal drops — watch concerns, brands, or individual models.
           </p>
         </div>
@@ -129,23 +132,27 @@ export default function Alerts() {
         {!user && !authLoading ? (
           /* ── Nepřihlášený — prázdný stav jako na /favorites ── */
           <div className="flex flex-col items-center px-6 py-20 text-center">
-            <h2 className="font-display text-2xl font-black tracking-tight">
+            <h2 className="font-display text-2xl font-black tracking-tight text-white">
               Sign in to manage your alerts
             </h2>
-            <p className="mt-2 max-w-md text-muted-foreground">
+            <p className="mt-2 max-w-md text-zinc-400">
               Alerts are tied to your account, so they follow you on every device.
             </p>
-            <Button size="lg" className="mt-6" onClick={() => openAuthModal('register')}>
+            <Button
+              size="lg"
+              className="mt-6 bg-white text-zinc-900 hover:bg-zinc-200"
+              onClick={() => openAuthModal('register')}
+            >
               Create a free account
             </Button>
           </div>
         ) : (
           <>
             {/* ── Drop alert — free úroveň, jedna karta s přepínačem ── */}
-            <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-border bg-zinc-50 p-5 sm:flex-row sm:items-center sm:p-6">
+            <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center sm:p-6">
               <div>
-                <h2 className="text-base font-semibold text-foreground">Deal drop alerts</h2>
-                <p className="mt-0.5 text-sm text-muted-foreground">
+                <h2 className="text-base font-semibold text-white">Deal drop alerts</h2>
+                <p className="mt-0.5 text-sm text-zinc-400">
                   Every GoBigDeal the moment it goes public. Free forever.
                 </p>
               </div>
@@ -155,8 +162,8 @@ export default function Alerts() {
                 aria-pressed={dropOn}
                 className={`inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
                   dropOn
-                    ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-                    : 'bg-zinc-900 text-white hover:bg-zinc-800'
+                    ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                    : 'bg-white text-zinc-900 hover:bg-zinc-100'
                 }`}
               >
                 {dropOn ? (<><Check className="h-4 w-4" /> On</>) : (<><Bell className="h-4 w-4" /> Turn on</>)}
@@ -164,9 +171,9 @@ export default function Alerts() {
             </div>
 
             {/* ── Aktivní alerty ── */}
-            <h2 className="mt-12 text-lg font-semibold tracking-tight text-foreground">Your alerts</h2>
+            <h2 className="mt-12 text-lg font-semibold tracking-tight text-white">Your alerts</h2>
             {active.length === 0 ? (
-              <p className="mt-3 text-sm text-muted-foreground">
+              <p className="mt-3 text-sm text-zinc-400">
                 No alerts yet — pick concerns or brands below.
               </p>
             ) : (
@@ -176,7 +183,7 @@ export default function Alerts() {
                   return (
                     <div
                       key={a.id}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-white px-3 py-2.5"
+                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
                     >
                       <span
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] p-1.5"
@@ -196,10 +203,10 @@ export default function Alerts() {
                         )}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-foreground">
+                        <span className="block truncate text-sm font-semibold text-white">
                           {a.target === WILDCARD ? (a.label || 'All') : v.name}
                         </span>
-                        <span className="block text-[11px] font-medium uppercase tracking-wider text-zinc-400">
+                        <span className="block text-[11px] font-medium uppercase tracking-wider text-zinc-500">
                           {LEVEL_LABEL[a.level]}
                         </span>
                       </span>
@@ -207,7 +214,7 @@ export default function Alerts() {
                         type="button"
                         onClick={() => alertsApi.remove(a.level, a.target)}
                         aria-label={`Remove alert: ${v.name}`}
-                        className="shrink-0 rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                        className="shrink-0 rounded-full p-2 text-zinc-500 transition-colors hover:bg-white/10 hover:text-white"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -239,10 +246,10 @@ export default function Alerts() {
               />
             </div>
 
-            {/* ── Modely — našeptávač nad feedem ── */}
+            {/* ── Modely — našeptávač nad feedem (bílé prvky drží iOS look) ── */}
             <div className="mt-12 max-w-2xl">
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">Individual models</h2>
-              <p className="mb-4 mt-1 text-sm text-muted-foreground">
+              <h2 className="text-lg font-semibold tracking-tight text-white">Individual models</h2>
+              <p className="mb-4 mt-1 text-sm text-zinc-400">
                 Watch a single model — search by name, SKU or EAN.
               </p>
               <ModelAlertSearch alertsApi={alertsApi} onRequireAuth={requireAuth} />
@@ -271,24 +278,24 @@ function AlertPicker({
   return (
     <div className="min-w-0">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold tracking-tight text-foreground">{title}</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-white">{title}</h2>
         <button
           type="button"
           onClick={onToggleAll}
           aria-pressed={allOn}
           className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
             allOn
-              ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+              ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+              : 'bg-white text-zinc-900 hover:bg-zinc-100'
           }`}
         >
           {allOn ? <BellRing className="h-3.5 w-3.5" /> : <Bell className="h-3.5 w-3.5" />}
           {allOn ? 'All on' : 'Alert on all'}
         </button>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">{note}</p>
+      <p className="mt-1 text-xs text-zinc-500">{note}</p>
 
-      <div className="mt-3 max-h-[420px] overflow-y-auto rounded-xl border border-border">
+      <div className="mt-3 max-h-[420px] overflow-y-auto rounded-xl border border-white/10">
         {items.map((item) => {
           const on = isOn(item.key);
           return (
@@ -297,7 +304,7 @@ function AlertPicker({
               type="button"
               onClick={() => onToggle(item.key, item.name)}
               aria-pressed={on}
-              className="flex w-full items-center gap-3 border-b border-border/60 px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-slate-50"
+              className="flex w-full items-center gap-3 border-b border-white/5 px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-white/5"
             >
               <span
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg p-1.5"
@@ -312,10 +319,10 @@ function AlertPicker({
                   fallbackClassName="text-[9px] font-bold leading-none text-zinc-700"
                 />
               </span>
-              <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{item.name}</span>
+              <span className="min-w-0 flex-1 truncate text-sm font-medium text-white">{item.name}</span>
               <span
                 className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                  on ? 'bg-emerald-50 text-emerald-700' : 'bg-zinc-100 text-zinc-600'
+                  on ? 'bg-emerald-400/10 text-emerald-300' : 'bg-white/10 text-zinc-300'
                 }`}
               >
                 {on ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
