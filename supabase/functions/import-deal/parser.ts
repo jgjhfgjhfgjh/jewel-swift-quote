@@ -258,6 +258,18 @@ function normalizeBrand(raw: string): string {
   return raw.trim().replace(/\s+/g, ' ').toLowerCase()
     .replace(/\b\p{L}/gu, (c) => c.toUpperCase());
 }
+/** Czech catalog exports often carry only a textual availability status
+ *  ("skladem", "omezená dostupnost") with no piece counts. Derive an orderable
+ *  quantity from it so the storefront doesn't render everything as sold out —
+ *  50 doubles as the per-SKU order cap the card shows as "50+". */
+function availableFromStatus(status: string): number {
+  const s = deburr(status.toLowerCase());
+  if (!s) return 0;
+  if (s.includes('vyprodan') || s.includes('neni skladem') || s.includes('nedostupn') || s.includes('sold out')) return 0;
+  if (s.includes('omezen')) return 10;
+  if (s.includes('sklad') || s.includes('dostupn')) return 50;
+  return 0;
+}
 function skuFromDescr(descr: string): string {
   const m = /\/([A-Za-z0-9]+)_main\b/.exec(descr);
   return m ? m[1].toUpperCase() : '';
@@ -355,6 +367,11 @@ export async function parseDealXlsx(
   if (col.w50 < 0 || col.w100 < 0 || col.w200 < 0) {
     warnings.push('Některý ze sloupců velkoobchodní ceny (50/100/200 ks) chybí.');
   }
+  if (col.available < 0) {
+    warnings.push(col.status >= 0
+      ? 'Sloupec s počtem kusů (Available / Stav zásob) chybí — dostupnost odvozena ze stavu (skladem→50, omezená→10).'
+      : 'Sloupec s počtem kusů (Available / Stav zásob) chybí — produkty se zobrazí jako vyprodané.');
+  }
 
   const movementHeader = col.movement >= 0 ? header[col.movement] : '';
   const headerText = header.join(' ');
@@ -429,7 +446,9 @@ export async function parseDealXlsx(
       wholesale_tier1: col.w50 >= 0 ? num(row[col.w50]) : 0,
       wholesale_tier2: col.w100 >= 0 ? num(row[col.w100]) : 0,
       wholesale_tier3: col.w200 >= 0 ? num(row[col.w200]) : 0,
-      available: col.available >= 0 ? Math.round(num(row[col.available])) : 0,
+      available: col.available >= 0
+        ? Math.round(num(row[col.available]))
+        : availableFromStatus(str(row[col.status])),
       sort_order: products.length,
       image_url: url,
     });

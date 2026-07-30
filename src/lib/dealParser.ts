@@ -55,6 +55,19 @@ function normalizeBrand(raw: string): string {
     .replace(/\b\p{L}/gu, (c) => c.toUpperCase());
 }
 
+/** Czech catalog exports often carry only a textual availability status
+ *  ("skladem", "omezená dostupnost") with no piece counts. Derive an orderable
+ *  quantity from it so the storefront doesn't render everything as sold out —
+ *  50 doubles as the per-SKU order cap the card shows as "50+". */
+function availableFromStatus(status: string): number {
+  const s = status.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  if (!s) return 0;
+  if (s.includes('vyprodan') || s.includes('neni skladem') || s.includes('nedostupn') || s.includes('sold out')) return 0;
+  if (s.includes('omezen')) return 10;
+  if (s.includes('sklad') || s.includes('dostupn')) return 50;
+  return 0;
+}
+
 /** Pull the SKU out of a Fossil scene7 descr URL ("…/SKU_main?…"). */
 function skuFromDescr(descr: string): string {
   const m = /\/([A-Za-z0-9]+)_main\b/.exec(descr);
@@ -99,7 +112,7 @@ export function parseDealWorkbook(parsed: ParsedXlsx): DealParseResult {
     ean: exact('ean'),
     gender: exact('gender'),
     collection: exact('platform'),
-    status: exact('status'),
+    status: find((h) => h === 'status' || h === 'dostupnost'),
     movement: find((h) => h.includes('movement') || h.includes('silhouette')),
     material: find((h) => h.includes('material')),
     size: find((h) => h.includes('case size') || h === 'size'),
@@ -116,6 +129,11 @@ export function parseDealWorkbook(parsed: ParsedXlsx): DealParseResult {
   if (col.retail < 0) warnings.push('Sloupec "Retail Price" nenalezen — RRP bude 0.');
   if (col.w50 < 0 || col.w100 < 0 || col.w200 < 0) {
     warnings.push('Některý ze sloupců velkoobchodní ceny (50/100/200 ks) chybí.');
+  }
+  if (col.available < 0) {
+    warnings.push(col.status >= 0
+      ? 'Sloupec s počtem kusů (Available) chybí — dostupnost odvozena ze stavu (skladem→50, omezená→10).'
+      : 'Sloupec s počtem kusů (Available) chybí — produkty se zobrazí jako vyprodané.');
   }
 
   const category: DealCategory =
@@ -163,7 +181,9 @@ export function parseDealWorkbook(parsed: ParsedXlsx): DealParseResult {
       wholesale_tier1: col.w50 >= 0 ? num(row[col.w50]) : 0,
       wholesale_tier2: col.w100 >= 0 ? num(row[col.w100]) : 0,
       wholesale_tier3: col.w200 >= 0 ? num(row[col.w200]) : 0,
-      available: col.available >= 0 ? Math.round(num(row[col.available])) : 0,
+      available: col.available >= 0
+        ? Math.round(num(row[col.available]))
+        : availableFromStatus(str(row[col.status])),
       sort_order: products.length,
       image: img,
       cdnUrl: cdnUrlFromDescr(descr),
