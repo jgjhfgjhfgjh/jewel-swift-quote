@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { ArrowRight, Bell, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { dealsI18n } from '@/lib/i18n-deals';
@@ -79,8 +79,43 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         items={brandTiles}
         onPick={(tile) => go(`/deals?brand=${encodeURIComponent(tile.key)}`)}
       />
+
+      {/* Patička: alerty (retenční smyčka) + úniková cesta „všechny dealy" */}
+      <div className="mt-1.5 flex items-center justify-between gap-4 border-t border-slate-100 pt-1.5">
+        <button
+          type="button"
+          onClick={() => go('/#gbd-alerts-concerns')}
+          className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-900 transition-colors hover:text-zinc-600"
+        >
+          <Bell className="h-3.5 w-3.5" />
+          Set deal alerts
+          <span className="hidden font-normal text-zinc-400 xl:inline">· know the moment a deal drops</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => go('/deals')}
+          className="group inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-900 transition-colors hover:text-zinc-600"
+        >
+          Browse all deals
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        </button>
+      </div>
     </div>
   );
+}
+
+/** Auto-slide respektuje systémovou redukci pohybu. */
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return reduced;
 }
 
 /* ── Spotlight ──────────────────────────────────────────────────────────── */
@@ -98,16 +133,17 @@ function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Dea
 
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (paused || slides.length <= 1) return;
+    if (paused || reducedMotion || slides.length <= 1) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % slides.length), SLIDE_MS);
     return () => clearInterval(id);
-  }, [paused, slides.length]);
+  }, [paused, reducedMotion, slides.length]);
 
   return (
     <div
-      className="relative h-[112px] overflow-hidden rounded-2xl border border-slate-200 bg-white"
+      className="relative h-[104px] overflow-hidden rounded-2xl border border-slate-200 bg-white"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -123,13 +159,23 @@ function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Dea
         </div>
       ))}
 
-      {/* tečky — pozice slidu */}
-      <div className="pointer-events-none absolute bottom-1.5 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+      {/* tečky — pozice slidu, klikací (jediné ovládání při reduced motion) */}
+      <div className="absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2">
         {slides.map((_, i) => (
-          <span
+          <button
             key={i}
-            className={`h-1.5 w-1.5 rounded-full transition-colors ${i === idx ? 'bg-zinc-900' : 'bg-slate-300'}`}
-          />
+            type="button"
+            aria-label={`Slide ${i + 1}`}
+            aria-current={i === idx}
+            onClick={() => setIdx(i)}
+            className="group/dot p-1.5"
+          >
+            <span
+              className={`block h-1.5 w-1.5 rounded-full transition-colors ${
+                i === idx ? 'bg-zinc-900' : 'bg-slate-300 group-hover/dot:bg-slate-400'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>
@@ -230,31 +276,31 @@ function TileRow({
 
   return (
     <div className={`min-w-0 ${className}`}>
-      <div className="mb-1.5 flex items-center justify-between gap-4">
+      <div className="mb-1 flex items-center justify-between gap-4">
         <h3 className="text-xs font-semibold tracking-tight text-zinc-900">{label}</h3>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Předchozí"
-            className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
+            className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
           >
-            <ChevronLeft className="h-3.5 w-3.5" />
+            <ChevronLeft className="h-3 w-3" />
           </button>
           <button
             type="button"
             onClick={() => scroll(1)}
             aria-label="Další"
-            className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
+            className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
           >
-            <ChevronRight className="h-3.5 w-3.5" />
+            <ChevronRight className="h-3 w-3" />
           </button>
         </div>
       </div>
 
       <div
         ref={track}
-        className="flex snap-x gap-2.5 overflow-x-auto pb-1
+        className="flex snap-x gap-2.5 overflow-x-auto pb-0.5
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => (

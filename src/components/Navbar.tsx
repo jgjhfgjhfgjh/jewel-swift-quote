@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
 import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
+import { useDealUrgency } from '@/hooks/useDealUrgency';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -157,6 +158,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
   const location = useLocation();
+  const dealUrgent = useDealUrgency();
 
   const showSearch = location.pathname === '/' && viewMode === 'catalog';
 
@@ -330,7 +332,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                       : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
                   }`}
                 >
-                  {item.id === 'top-deals' ? <Gbd /> : item.label}
+                  {item.id === 'top-deals' ? (
+                    <span className="relative">
+                      <Gbd />
+                      {/* Tečka jen když nějaký deal reálně končí do 48 h — nikdy trvale */}
+                      {dealUrgent && (
+                        <span
+                          aria-hidden
+                          className="absolute -right-2 -top-1 h-1.5 w-1.5 rounded-full bg-red-500 motion-safe:animate-pulse"
+                        />
+                      )}
+                    </span>
+                  ) : item.label}
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`}
                     strokeWidth={isFlagship && !overVideo ? 2.75 : 2}
@@ -659,7 +672,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                  koncern v rohu, odpočet; auto-slide po 3 s, placeholdery když
                  dealy nejsou), pod ním zmenšené karusely dlaždic koncernů a
                  značek z landing dealů. Vše sedí do výšky ostatních panelů. */
-              <div className="px-6 pt-4 pb-3">
+              <div className="px-6 pt-3 pb-2.5">
                 <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
             ) : (
