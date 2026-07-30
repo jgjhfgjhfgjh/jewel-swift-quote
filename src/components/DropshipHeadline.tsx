@@ -13,15 +13,21 @@ import { useEffect, useRef, useState } from 'react';
 
 const LEAD_WORDS = 'Build your online business and create your freedom'.split(' ');
 const COLORED = 'without spending money on products.';
+/* Závěrečná věta za barevnou částí — indexy slov navazují na LEAD_WORDS */
+const TAIL_WORDS = "Pay us from customer's money.".split(' ');
+const TAIL_OFFSET = LEAD_WORDS.length;
 const DIM = 'text-zinc-600';
 const GRADIENT =
   'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
 
 /* Auto-cyklus (i bez hoveru, po 2 s) rozsvěcí fráze ze šedé do BÍLÉ:
-   0 = „online business" → 1 = barevná věta → 2 = „create your freedom".
+   0 = „online business" → 1 = barevná věta → 2 = „create your freedom"
+   → 3 = „Pay us from customer's money."
    Do gradientu se text barví výhradně hoverem. */
 const AUTO_ONLINE_BUSINESS = [2, 3];
 const AUTO_CREATE_FREEDOM = [5, 6, 7];
+const AUTO_TAIL = TAIL_WORDS.map((_, i) => TAIL_OFFSET + i);
+const AUTO_PHASES = 4;
 const AUTO_INTERVAL_MS = 2000;
 
 export function DropshipHeadline() {
@@ -48,7 +54,7 @@ export function DropshipHeadline() {
   useEffect(() => {
     if (!interactive) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const id = setInterval(() => setAutoPhase((p) => (p + 1) % 3), AUTO_INTERVAL_MS);
+    const id = setInterval(() => setAutoPhase((p) => (p + 1) % AUTO_PHASES), AUTO_INTERVAL_MS);
     return () => clearInterval(id);
   }, [interactive]);
 
@@ -108,7 +114,8 @@ export function DropshipHeadline() {
 
   const autoLit = (i: number) =>
     (autoPhase === 0 && AUTO_ONLINE_BUSINESS.includes(i)) ||
-    (autoPhase === 2 && AUTO_CREATE_FREEDOM.includes(i));
+    (autoPhase === 2 && AUTO_CREATE_FREEDOM.includes(i)) ||
+    (autoPhase === 3 && AUTO_TAIL.includes(i));
 
   const wordClass = (i: number) =>
     `transition-colors duration-500 ${!interactive || litWords.has(i) || autoLit(i) ? 'text-white' : DIM}`;
@@ -136,6 +143,15 @@ export function DropshipHeadline() {
       <span ref={coloredRef} className={coloredClass}>
         {COLORED}
       </span>
+      {TAIL_WORDS.map((w, i) => (
+        <span
+          key={TAIL_OFFSET + i}
+          ref={(el) => (wordRefs.current[TAIL_OFFSET + i] = el)}
+          className={wordClass(TAIL_OFFSET + i)}
+        >
+          {' '}{w}
+        </span>
+      ))}
     </p>
   );
 }
