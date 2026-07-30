@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package, Settings } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package, Settings, Bell } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
 import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
+import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -157,6 +158,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const navigate = useNavigate();
   const location = useLocation();
+  // Badge zvonečku — počet nastavených alertů (wildcard počítá za jeden)
+  const alertCount = useDealAlerts().alerts.length;
 
   const showSearch = location.pathname === '/' && viewMode === 'catalog';
 
@@ -403,6 +406,22 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false }:
                   {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
                 </Button>
               )}
+
+              {/* Zvoneček — správa deal alertů na /alerts (badge = počet alertů) */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`}
+                onClick={() => navigate('/alerts')}
+                title="Deal alerts"
+              >
+                <Bell className={`h-5 w-5 ${alertCount > 0 ? (overVideo ? 'fill-white text-white' : 'fill-zinc-900 text-zinc-900') : ''}`} />
+                {alertCount > 0 && (
+                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
+                    {alertCount}
+                  </Badge>
+                )}
+              </Button>
 
               <Button
                 variant="ghost"
