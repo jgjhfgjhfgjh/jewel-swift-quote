@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { ArrowRight, Bell, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { dealsI18n } from '@/lib/i18n-deals';
@@ -18,21 +18,28 @@ const t = dealsI18n.en;
 const MAX_SLIDES = 3;
 /** Interval automatického posunu na další deal. */
 const SLIDE_MS = 3000;
+/** Řádků v každém sloupci — víc by rozbilo výškový rozpočet panelu. */
+const MAX_ROWS = 6;
 
 type Slide = { kind: 'deal'; deal: Deal } | { kind: 'placeholder' };
 
-interface Tile {
+interface ScanEntry {
   key: string;
   name: string;
   domain?: string;
+  /** Počet reálných dealů v katalogu (živé + připravované + uzavřené). */
+  count: number;
+  /** Kolik z nich právě běží — živé řádky se řadí a zvýrazňují první. */
+  liveCount: number;
 }
 
 /**
- * Obsah GoBigDeal mega menu: full-width spotlight dealu, který končí nejdřív
- * (loga značek dealu, koncern v rohu, odpočet; auto-slide po 3 s, bez dealů
- * placeholdery), pod ním karusely koncernů a značek z landing dealů —
- * zmenšené dlaždice FilterTiles, proklik otevře /deals s filtrem. Vše sdílí
- * jedno načtení dealů, aby se menu nedotazovalo třikrát.
+ * Obsah GoBigDeal mega menu, stavěný na skenování: vlevo vertikální spotlight
+ * dealu, který končí nejdřív (koncern v rohu, odpočet, loga značek; auto-slide
+ * po 3 s), vedle dva sloupce řádků Concerns a Brands — logo na tónovaném
+ * čtverci, název a počet dealů („3 big deals", u běžícího červeně, bez dealů
+ * „deal in the works"). Proklik řádku otevře /deals s filtrem. Jedno načtení
+ * dealů pro celý panel.
  */
 export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
   const navigate = useNavigate();
@@ -43,45 +50,76 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
     navigate(path);
   };
 
-  // Stejná stavba dlaždic jako na /deals — koncerny v pořadí rejstříku,
-  // značky z katalogu (dealy + teasery) řazené podle počtu dávek.
+  // Stejný katalog jako /deals (reálné dealy + teasery koncernů) — počty
+  // v menu tak sedí na to, co zákazník po prokliku skutečně uvidí.
   const catalog = useMemo(() => buildCatalog(deals, productCounts, () => ''), [deals, productCounts]);
-  const concernTiles = useMemo<Tile[]>(
-    () => CONCERNS.map((c) => ({ key: c.slug, name: c.name, domain: c.domain })),
-    [],
-  );
-  const brandTiles = useMemo<Tile[]>(() => {
-    const acc = new Map<string, number>();
-    catalog.forEach((tile) => tile.brandKeys.forEach((k) => acc.set(k, (acc.get(k) ?? 0) + 1)));
-    return Array.from(acc.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 24)
-      .map(([key]) => {
-        const name = toDisplayName(key);
-        // Šperkové linky („Fossil Jewelry") mají logo mateřské značky.
-        const domain = (getBrandByName(name) ?? getBrandByName(name.replace(/\s+Jewelry$/i, '')))?.domain;
-        return { key, name, domain };
+
+  const concernEntries = useMemo<ScanEntry[]>(() => {
+    const real = new Map<string, number>();
+    const live = new Map<string, number>();
+    catalog.forEach((tile) => {
+      if (tile.kind === 'teaser' || !tile.concernSlug) return;
+      real.set(tile.concernSlug, (real.get(tile.concernSlug) ?? 0) + 1);
+      if (tile.kind === 'live') live.set(tile.concernSlug, (live.get(tile.concernSlug) ?? 0) + 1);
+    });
+    return CONCERNS
+      .map((c) => ({
+        key: c.slug,
+        name: c.name,
+        domain: c.domain,
+        count: real.get(c.slug) ?? 0,
+        liveCount: live.get(c.slug) ?? 0,
+      }))
+      .sort((a, b) => b.liveCount - a.liveCount || b.count - a.count)
+      .slice(0, MAX_ROWS);
+  }, [catalog]);
+
+  const brandEntries = useMemo<ScanEntry[]>(() => {
+    const real = new Map<string, number>();
+    const live = new Map<string, number>();
+    const inWorks = new Set<string>();
+    catalog.forEach((tile) => {
+      tile.brandKeys.forEach((k) => {
+        if (tile.kind === 'teaser') { inWorks.add(k); return; }
+        real.set(k, (real.get(k) ?? 0) + 1);
+        if (tile.kind === 'live') live.set(k, (live.get(k) ?? 0) + 1);
       });
+    });
+    const resolve = (key: string, count: number): ScanEntry => {
+      const name = toDisplayName(key);
+      // Šperkové linky („Fossil Jewelry") mají logo mateřské značky.
+      const domain = (getBrandByName(name) ?? getBrandByName(name.replace(/\s+Jewelry$/i, '')))?.domain;
+      return { key, name, domain, count, liveCount: live.get(key) ?? 0 };
+    };
+    const entries = Array.from(real.entries())
+      .map(([key, count]) => resolve(key, count))
+      .sort((a, b) => b.liveCount - a.liveCount || b.count - a.count);
+    // Když je reálných dealů málo, doplní sloupec značky s dealem v přípravě.
+    for (const k of inWorks) {
+      if (entries.length >= MAX_ROWS) break;
+      if (!real.has(k)) entries.push(resolve(k, 0));
+    }
+    return entries.slice(0, MAX_ROWS);
   }, [catalog]);
 
   return (
     <div className="flex flex-col">
-      <NavDealSpotlight deals={deals} onOpen={(deal) => go(`/deals/${deal.slug}`)} />
-      <TileRow
-        className="mt-3"
-        label={t.catalog.concernsLabel}
-        items={concernTiles}
-        onPick={(tile) => go(`/deals?concern=${encodeURIComponent(tile.key)}`)}
-      />
-      <TileRow
-        className="mt-2"
-        label={t.catalog.brandsLabel}
-        items={brandTiles}
-        onPick={(tile) => go(`/deals?brand=${encodeURIComponent(tile.key)}`)}
-      />
+      <div className="grid grid-cols-[minmax(340px,1.1fr)_1fr_1fr] gap-x-8">
+        <NavDealSpotlight deals={deals} onOpen={(deal) => go(`/deals/${deal.slug}`)} />
+        <ScanColumn
+          label={t.catalog.concernsLabel}
+          entries={concernEntries}
+          onPick={(e) => go(`/deals?concern=${encodeURIComponent(e.key)}`)}
+        />
+        <ScanColumn
+          label={t.catalog.brandsLabel}
+          entries={brandEntries}
+          onPick={(e) => go(`/deals?brand=${encodeURIComponent(e.key)}`)}
+        />
+      </div>
 
       {/* Patička: alerty (retenční smyčka) + úniková cesta „všechny dealy" */}
-      <div className="mt-1.5 flex items-center justify-between gap-4 border-t border-slate-100 pt-1.5">
+      <div className="mt-2.5 flex items-center justify-between gap-4 border-t border-slate-100 pt-2">
         <button
           type="button"
           onClick={() => go('/#gbd-alerts-concerns')}
@@ -118,6 +156,74 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+/* ── Skenovací sloupce ──────────────────────────────────────────────────── */
+
+function ScanColumn({
+  label, entries, onPick,
+}: {
+  label: string;
+  entries: ScanEntry[];
+  onPick: (entry: ScanEntry) => void;
+}) {
+  return (
+    <div className="min-w-0">
+      <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">{label}</h3>
+      <div className="flex flex-col gap-0.5">
+        {entries.map((entry) => (
+          <ScanRow key={entry.key} entry={entry} onPick={() => onPick(entry)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Jeden řádek: logo na tónovaném čtverci, název vlevo, počet dealů vpravo. */
+function ScanRow({ entry, onPick }: { entry: ScanEntry; onPick: () => void }) {
+  const label = entry.count > 0
+    ? `${entry.count} big ${entry.count === 1 ? 'deal' : 'deals'}`
+    : 'deal in the works';
+
+  return (
+    <button
+      type="button"
+      onClick={onPick}
+      className="group -mx-2 flex items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-colors hover:bg-slate-50"
+    >
+      <span
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] p-1.5"
+        style={{ backgroundColor: tintForKey(entry.key) }}
+      >
+        {entry.domain ? (
+          <BrandLogo
+            name={entry.name}
+            domain={entry.domain}
+            width={160}
+            height={80}
+            className="max-h-[18px] max-w-full object-contain [mix-blend-mode:multiply]"
+            fallbackClassName="text-[9px] font-bold leading-none text-zinc-700"
+          />
+        ) : (
+          <span className="text-[9px] font-bold leading-none text-zinc-700">
+            {entry.name.slice(0, 2).toUpperCase()}
+          </span>
+        )}
+      </span>
+      <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-zinc-900">{entry.name}</span>
+      <span
+        className={`shrink-0 text-xs ${
+          entry.liveCount > 0
+            ? 'font-semibold text-red-600'
+            : entry.count > 0
+              ? 'font-medium text-zinc-500'
+              : 'font-medium text-zinc-400'
+        }`}
+      >
+        {label}
+      </span>
+    </button>
+  );
+}
+
 /* ── Spotlight ──────────────────────────────────────────────────────────── */
 
 function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Deal) => void }) {
@@ -143,7 +249,7 @@ function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Dea
 
   return (
     <div
-      className="relative h-[104px] overflow-hidden rounded-2xl border border-slate-200 bg-white"
+      className="relative h-full min-h-[264px] overflow-hidden rounded-2xl border border-slate-200 bg-white"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -160,7 +266,7 @@ function NavDealSpotlight({ deals, onOpen }: { deals: Deal[]; onOpen: (deal: Dea
       ))}
 
       {/* tečky — pozice slidu, klikací (jediné ovládání při reduced motion) */}
-      <div className="absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2">
+      <div className="absolute bottom-1 left-1/2 z-10 flex -translate-x-1/2">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -188,7 +294,7 @@ function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
   const brands = (deal.brands ?? []).slice(0, 6);
 
   return (
-    <button type="button" onClick={onOpen} className="flex h-full w-full flex-col px-4 py-2.5 text-left">
+    <button type="button" onClick={onOpen} className="flex h-full w-full flex-col px-5 py-4 text-left">
       {/* horní řádek: koncern v rohu + odpočet do konce dealu */}
       <div className="flex items-start justify-between gap-3">
         {concern ? (
@@ -208,7 +314,7 @@ function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
       </div>
 
       {/* loga značek dealu — jedno nebo všechna (Fossil Group jich má víc) */}
-      <div className="flex min-h-0 flex-1 items-center justify-center gap-6 px-4">
+      <div className="flex min-h-0 flex-1 flex-wrap items-center justify-center gap-x-6 gap-y-3 px-2">
         {brands.map((b) => {
           const meta = getBrandByName(b);
           return meta ? (
@@ -218,19 +324,19 @@ function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
               domain={meta.domain}
               width={240}
               height={100}
-              className="max-h-8 max-w-[110px] object-contain [mix-blend-mode:multiply]"
-              fallbackClassName="font-display text-base font-black tracking-tight text-zinc-900"
+              className="max-h-9 max-w-[120px] object-contain [mix-blend-mode:multiply]"
+              fallbackClassName="font-display text-lg font-black tracking-tight text-zinc-900"
             />
           ) : (
-            <span key={b} className="font-display text-base font-black tracking-tight text-zinc-900">{b}</span>
+            <span key={b} className="font-display text-lg font-black tracking-tight text-zinc-900">{b}</span>
           );
         })}
       </div>
 
-      {/* patka: název + CTA (tečky jsou centrované, truncate jim uhne) */}
-      <div className="flex items-center justify-between gap-3 pb-1">
-        <p className="truncate text-[13px] font-semibold text-zinc-900">{deal.title}</p>
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-900">
+      {/* patka: název + CTA; tečky jsou pod tím na spodní hraně karty */}
+      <div className="pb-4">
+        <p className="line-clamp-2 text-sm font-semibold text-zinc-900">{deal.title}</p>
+        <span className="mt-1 inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-900">
           Explore deal <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>
@@ -241,7 +347,7 @@ function DealSlide({ deal, onOpen }: { deal: Deal; onOpen: () => void }) {
 /** Placeholder — další deal se chystá (stejný slovník jako pás na homepage). */
 function PlaceholderSlide() {
   return (
-    <div className="flex h-full w-full flex-col px-4 py-2.5">
+    <div className="flex h-full w-full flex-col px-5 py-4">
       <div className="flex items-start justify-between gap-3">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
           <Lock className="h-3 w-3" /> Next deal in the works
@@ -250,93 +356,10 @@ function PlaceholderSlide() {
           {t.home.comingSoon}
         </span>
       </div>
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1.5">
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2">
+        <div aria-hidden className="h-2.5 w-3/5 rounded-full bg-slate-100" />
         <div aria-hidden className="h-2.5 w-2/5 rounded-full bg-slate-100" />
-        <p className="text-[11px] text-slate-500">{t.home.lockedNote}</p>
-      </div>
-    </div>
-  );
-}
-
-/* ── Karusely dlaždic (zmenšené FilterTiles z /deals) ───────────────────── */
-
-function TileRow({
-  label, items, onPick, className = '',
-}: {
-  label: string;
-  items: Tile[];
-  onPick: (tile: Tile) => void;
-  className?: string;
-}) {
-  const track = useRef<HTMLDivElement>(null);
-  const scroll = (dir: 1 | -1) =>
-    track.current?.scrollBy({ left: dir * Math.max(280, track.current.clientWidth * 0.8), behavior: 'smooth' });
-
-  if (items.length === 0) return null;
-
-  return (
-    <div className={`min-w-0 ${className}`}>
-      <div className="mb-1 flex items-center justify-between gap-4">
-        <h3 className="text-xs font-semibold tracking-tight text-zinc-900">{label}</h3>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => scroll(-1)}
-            aria-label="Předchozí"
-            className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
-          >
-            <ChevronLeft className="h-3 w-3" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scroll(1)}
-            aria-label="Další"
-            className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50"
-          >
-            <ChevronRight className="h-3 w-3" />
-          </button>
-        </div>
-      </div>
-
-      <div
-        ref={track}
-        className="flex snap-x gap-2.5 overflow-x-auto pb-0.5
-                   [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {items.map((item) => (
-          <button
-            key={item.key}
-            type="button"
-            onClick={() => onPick(item)}
-            className="group flex w-16 shrink-0 snap-start flex-col items-center gap-1 focus:outline-none"
-          >
-            <span
-              className="flex aspect-square w-full items-center justify-center rounded-2xl p-2.5
-                         transition-all duration-200 group-hover:-translate-y-0.5
-                         group-hover:shadow-[0_8px_18px_-10px_rgba(0,0,0,0.35)]
-                         group-focus-visible:ring-2 group-focus-visible:ring-zinc-900 group-focus-visible:ring-offset-2"
-              style={{ backgroundColor: tintForKey(item.key) }}
-            >
-              {item.domain ? (
-                <BrandLogo
-                  name={item.name}
-                  domain={item.domain}
-                  width={280}
-                  height={120}
-                  className="max-h-6 max-w-[85%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
-                  fallbackClassName="line-clamp-2 text-center text-[9px] font-semibold leading-tight text-zinc-700"
-                />
-              ) : (
-                <span className="line-clamp-2 text-center text-[9px] font-semibold leading-tight text-zinc-700">
-                  {item.name}
-                </span>
-              )}
-            </span>
-            <span className="w-full truncate text-center text-[11px] font-medium leading-tight text-zinc-800">
-              {item.name}
-            </span>
-          </button>
-        ))}
+        <p className="mt-1 text-center text-[11px] text-slate-500">{t.home.lockedNote}</p>
       </div>
     </div>
   );
