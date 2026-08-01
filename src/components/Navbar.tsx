@@ -54,7 +54,18 @@ const HOME_NAV_ITEMS = [
 ];
 
 type NavPanelCol = { title: string; links: { label: string; desc: string; path: string }[] };
-type NavPanel = { heading: string; desc: string; cols: NavPanelCol[]; cta: { label: string; path: string } };
+type NavPanel = { heading: string; desc: string; cols?: NavPanelCol[]; cta: { label: string; path: string } };
+
+/* Products — číslovaný seznam v typografii kroků z DropshipFlowMap
+   (pořadí = prodejní argument, ne abeceda). Položek je málo, takže
+   jedou velkým extralight písmem přes celou šířku panelu. */
+const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
+  { label: 'Sell without spending money on products', sub: "Pay us from customer's money", path: '/dropshipping' },
+  { label: 'B2B wholesale', path: '/velkoobchod' },
+  { label: 'Fill your shop with our products', path: '/feed' },
+  { label: 'Luxury big deals', path: '/prestige' },
+  { label: 'Connect your AI agents', path: '/feed?to=mcp' },
+];
 
 const NAV_PANELS: Record<string, NavPanel> = {
   'why-swelt': {
@@ -79,19 +90,6 @@ const NAV_PANELS: Record<string, NavPanel> = {
   'products': {
     heading: 'Products',
     desc: 'Everything you sell with — and everything you plug into. 70+ brands, wholesale prices from 1 unit.',
-    cols: [
-      { title: 'Ways to sell', links: [
-        { label: 'B2B Wholesale', desc: '70+ brands at 40–65% off retail', path: '/velkoobchod' },
-        { label: 'Dropshipping', desc: 'Sell without stock — we pack and ship', path: '/dropshipping' },
-        { label: 'Luxury Deals', desc: 'Omega, Cartier, IWC on request', path: '/prestige' },
-        { label: 'Shop without registration', desc: 'Wholesale prices, no B2B account', path: '/luxury' },
-      ]},
-      { title: 'Plug into swelt', links: [
-        { label: 'Product feed', desc: 'XML or CSV, updated 4× a day', path: '/feed' },
-        { label: 'Product Intelligence', desc: 'See what sells before you stock it', path: '/feed?to=product-intelligence' },
-        { label: 'MCP Server', desc: 'Connect your AI agents to the catalog', path: '/feed?to=mcp' },
-      ]},
-    ],
     cta: { label: 'Browse brands', path: '/brands' },
   },
   'top-deals': {
@@ -686,6 +684,51 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               <div className="px-6 pt-3 pb-2.5">
                 <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
+            ) : activeNav === 'products' ? (
+              /* Products — číslovaný seznam v typografii kroků z dropship
+                 schématu: emeraldové pořadí, extralight nadpisové písmo,
+                 linky mezi řádky, hover přebarví řádek gradientem. */
+              <div className="px-6 py-7">
+                <div className="grid grid-cols-[minmax(220px,1fr)_2.4fr] gap-10 items-start">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.</p>
+                    <h3 className="text-2xl font-semibold text-zinc-900 mb-2">{panel.heading}</h3>
+                    <p className="text-sm text-zinc-500 mb-6 max-w-sm leading-relaxed">{panel.desc}</p>
+                    <button
+                      onClick={() => go(panel.cta.path)}
+                      className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                    >
+                      {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+
+                  <div>
+                    {PRODUCT_ITEMS.map((item, i) => (
+                      <div key={item.label}>
+                        <button
+                          onClick={() => go(item.path)}
+                          className="group flex w-full items-baseline gap-6 py-3 text-left"
+                        >
+                          <span className="text-xs font-semibold tabular-nums text-emerald-500 transition-colors group-hover:text-blue-500">
+                            0{i + 1}
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block font-sans text-2xl font-extralight leading-tight tracking-tight text-zinc-900 transition-colors duration-300 lg:text-[2rem] group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:via-cyan-500 group-hover:to-emerald-500 group-hover:bg-clip-text group-hover:text-transparent">
+                              {item.label}
+                            </span>
+                            {item.sub && (
+                              <span className="mt-0.5 block text-sm font-light leading-tight text-zinc-400">
+                                {item.sub}
+                              </span>
+                            )}
+                          </span>
+                        </button>
+                        {i < PRODUCT_ITEMS.length - 1 && <div aria-hidden className="h-px w-full bg-zinc-200" />}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ) : (
             <div className="px-6 py-8">
               <div className="grid grid-cols-[minmax(260px,1fr)_2fr] gap-10 items-start">
@@ -704,7 +747,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
                 {/* Right: link columns */}
                 <div className="grid grid-cols-2 gap-12">
-                  {panel.cols.map((col) => (
+                  {(panel.cols ?? []).map((col) => (
                     <div key={col.title}>
                       <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-3">{col.title}</p>
                       <ul className="space-y-1">
