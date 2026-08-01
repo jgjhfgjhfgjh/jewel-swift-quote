@@ -59,7 +59,7 @@ export default function Suppliers() {
         <div className="mx-auto max-w-4xl text-center">
           <BigDealSupplierLogo className="text-3xl text-white sm:text-4xl" />
           <h1 className={`${H2} mt-8 text-white`}>
-            Your stock. Our buyers across Europe.
+            We have liquidity for your stock.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
             Bring closeouts, overstock and end-of-season batches to a network of European retailers
