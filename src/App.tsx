@@ -10,6 +10,7 @@ import { PreviewBridge } from "@/lib/admin/previewBridge";
 import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { EarlyAccessUpsellDialog } from "@/components/deals/EarlyAccessUpsell";
+import { SupplierGateDialog } from "@/components/suppliers/SupplierGateDialog";
 
 // Route-level code splitting — each page ships as its own lazy-loaded chunk.
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -23,6 +24,7 @@ const CustomerDetail = lazy(() => import("./pages/CustomerDetail.tsx"));
 const FeedManagement = lazy(() => import("./pages/FeedManagement.tsx"));
 const Favorites = lazy(() => import("./pages/Favorites.tsx"));
 const Alerts = lazy(() => import("./pages/Alerts.tsx"));
+const Suppliers = lazy(() => import("./pages/Suppliers.tsx"));
 const AccountSettings = lazy(() => import("./pages/AccountSettings.tsx"));
 const Orders = lazy(() => import("./pages/Orders.tsx"));
 const AdminErp = lazy(() => import("./pages/AdminErp.tsx"));
@@ -89,6 +91,7 @@ const App = () => (
           {/* Globální upsell „Nemáte early access" — otevírají ho zvonečky
               v katalogu a alert tlačítka v detailech značek/koncernů */}
           <EarlyAccessUpsellDialog />
+          <SupplierGateDialog />
           <Suspense fallback={<PageFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -98,6 +101,7 @@ const App = () => (
               <Route path="/auth/reset-password" element={<ResetPassword />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/alerts" element={<Alerts />} />
+              <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/ucet" element={<AccountSettings />} />
               <Route path="/orders" element={<Orders />} />
               {/* Partner Hub — dropshipping dashboard */}

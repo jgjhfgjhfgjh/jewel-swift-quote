@@ -16,6 +16,7 @@ import {
 import { AuthModal } from '@/components/AuthModal';
 import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
+import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -354,6 +355,22 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
         {/* Right: icons + CTA — always visible */}
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
+
+          {/* Suppliers — jiný svět (BigDealSupplier), proto oddělený od
+              odběratelské navigace svislou linkou a za bránou v dialogu */}
+          <button
+            onClick={openSupplierGate}
+            title="Suppliers"
+            className={`hidden lg:inline-flex shrink-0 items-center h-8 px-3 rounded-lg text-[13px] font-semibold transition-colors ${
+              overVideo ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-zinc-600 hover:bg-muted hover:text-zinc-900'
+            }`}
+          >
+            Suppliers
+          </button>
+          <span
+            aria-hidden
+            className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
+          />
 
           {/* Globe / Language switcher — desktop only */}
           <DropdownMenu>
