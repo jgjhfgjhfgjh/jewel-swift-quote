@@ -358,11 +358,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
           {/* Suppliers — jiný svět (BigDealSupplier), proto oddělený od
               odběratelské navigace svislou linkou a za bránou v dialogu */}
+          {/* Stejná velikost i řez jako položky hlavní nav, jen šedý tón —
+              odlišuje jiný svět, aniž by vypadal jako jiný typ prvku. */}
           <button
             onClick={openSupplierGate}
             title="Suppliers"
-            className={`hidden lg:inline-flex shrink-0 items-center h-8 px-3 rounded-lg text-[13px] font-semibold transition-colors ${
-              overVideo ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-zinc-600 hover:bg-muted hover:text-zinc-900'
+            className={`hidden lg:inline-flex shrink-0 items-center px-3.5 py-2 font-sans text-[17px] font-medium transition-colors ${
+              overVideo ? 'text-white/60 hover:text-white/90' : 'text-zinc-500 hover:text-zinc-900'
             }`}
           >
             Suppliers
