@@ -688,46 +688,30 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               /* Products — číslovaný seznam v typografii kroků z dropship
                  schématu: emeraldové pořadí, extralight nadpisové písmo,
                  linky mezi řádky, hover přebarví řádek gradientem. */
-              <div className="px-6 py-7">
-                <div className="grid grid-cols-[minmax(220px,1fr)_2.4fr] gap-10 items-start">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 mb-1">swelt.</p>
-                    <h3 className="text-2xl font-semibold text-zinc-900 mb-2">{panel.heading}</h3>
-                    <p className="text-sm text-zinc-500 mb-6 max-w-sm leading-relaxed">{panel.desc}</p>
+              <div className="px-6 py-6">
+                {PRODUCT_ITEMS.map((item, i) => (
+                  <div key={item.label}>
                     <button
-                      onClick={() => go(panel.cta.path)}
-                      className="inline-flex items-center gap-2 bg-zinc-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-800 transition-colors"
+                      onClick={() => go(item.path)}
+                      className="group flex w-full items-baseline gap-6 py-3.5 text-left"
                     >
-                      {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
+                      <span className="text-xs font-semibold tabular-nums text-emerald-500 transition-colors group-hover:text-blue-500">
+                        0{i + 1}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block font-sans text-2xl font-extralight leading-tight tracking-tight text-zinc-900 transition-colors duration-300 lg:text-[2rem] group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:via-cyan-500 group-hover:to-emerald-500 group-hover:bg-clip-text group-hover:text-transparent">
+                          {item.label}
+                        </span>
+                        {item.sub && (
+                          <span className="mt-0.5 block text-sm font-light leading-tight text-zinc-400">
+                            {item.sub}
+                          </span>
+                        )}
+                      </span>
                     </button>
+                    {i < PRODUCT_ITEMS.length - 1 && <div aria-hidden className="h-px w-full bg-zinc-200" />}
                   </div>
-
-                  <div>
-                    {PRODUCT_ITEMS.map((item, i) => (
-                      <div key={item.label}>
-                        <button
-                          onClick={() => go(item.path)}
-                          className="group flex w-full items-baseline gap-6 py-3 text-left"
-                        >
-                          <span className="text-xs font-semibold tabular-nums text-emerald-500 transition-colors group-hover:text-blue-500">
-                            0{i + 1}
-                          </span>
-                          <span className="min-w-0">
-                            <span className="block font-sans text-2xl font-extralight leading-tight tracking-tight text-zinc-900 transition-colors duration-300 lg:text-[2rem] group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:via-cyan-500 group-hover:to-emerald-500 group-hover:bg-clip-text group-hover:text-transparent">
-                              {item.label}
-                            </span>
-                            {item.sub && (
-                              <span className="mt-0.5 block text-sm font-light leading-tight text-zinc-400">
-                                {item.sub}
-                              </span>
-                            )}
-                          </span>
-                        </button>
-                        {i < PRODUCT_ITEMS.length - 1 && <div aria-hidden className="h-px w-full bg-zinc-200" />}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
             ) : (
             <div className="px-6 py-8">
