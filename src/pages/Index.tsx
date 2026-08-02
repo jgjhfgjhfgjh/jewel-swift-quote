@@ -212,14 +212,19 @@ const Index = () => {
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[13vw]">
-                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
-                  Sell with smarter tools<br />for modern teams
+              {/* širší druhý řádek skoro vyplní šířku — větší posun by se na
+                  1280px ořezával; -1vw nechá blok jemně vlevo od středu */}
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[1vw]">
+                {/* min(12.5vh,6.3vw) — vh drží velikost na vysokých oknech,
+                    vw pojistka brání zalomení řádku „smarter tools…" na
+                    užších desktopech */}
+                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] text-white">
+                  Sell with<br />smarter tools for modern teams
                 </h1>
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
                     na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
-                <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
+                <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
                 </div>
               </div>
