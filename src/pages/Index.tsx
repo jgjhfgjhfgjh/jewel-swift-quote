@@ -21,7 +21,6 @@ import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
 import { AgentLogoRow } from '@/components/AgentLogoRow';
 import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
-import { AppsCards } from '@/components/AppsCards';
 import { HomeHero } from '@/components/HomeHero';
 import { HeroRotatingText } from '@/components/HeroRotatingText';
 import { GatewaySections } from '@/components/GatewaySections';
@@ -343,13 +342,9 @@ const Index = () => {
         )}
       </div>
 
-      {/* Apps/tools cards — na homepage navazují na tmavou dropship zónu, proto
-          bílý zaoblený start (stejný vzor přechodu jako mezi sekcemi výše) */}
-      {viewMode === 'home' && (
-        <div className="relative z-10 -mt-8 rounded-t-[1.75rem] bg-white pt-8 sm:-mt-12 sm:rounded-t-[2.5rem] sm:pt-12">
-          <AppsCards />
-        </div>
-      )}
+      {/* Higgsfield karty (AppsCards) i netflix carousel odstraněny — ocas
+          homepage teď začíná rovnou GatewaySections (níže), které přebírají
+          bílý zaoblený start na tmavé dropship zóně. */}
 
       {/* Admin/sales panels — only relevant in the catalog view */}
       {viewMode === 'catalog' && (
@@ -365,7 +360,7 @@ const Index = () => {
       <FilterSidebar {...fp} mobileOnly />
 
       {viewMode === 'home' && (
-        <div className="relative z-10 animate-fade-in bg-white pt-8 sm:pt-12">
+        <div className="relative z-10 -mt-8 rounded-t-[1.75rem] bg-white pt-8 sm:-mt-12 sm:rounded-t-[2.5rem] sm:pt-12 animate-fade-in">
           <GatewaySections onOpenCatalog={() => { setViewMode('catalog'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />
         </div>
       )}
