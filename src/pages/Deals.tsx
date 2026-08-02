@@ -20,6 +20,7 @@ import {
   type CatalogFilters,
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
+import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
 import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
@@ -31,10 +32,11 @@ const CONDITION_ICONS = [Package, CreditCard, Banknote, FileText, ListOrdered];
 
 /* ── Sdílené třídy s homepage ──────────────────────────────────────────────
    Vysvětlující část pod katalogem drží vzor homepage: full-width sekce se
-   zaobleným horním okrajem, střídání bílá ↔ černá (#0d0d10), extralight
+   zaobleným horním okrajem, střídání bílá ↔ černá (#0B1215), extralight
    nadpisy v clampu (lead → tlumené → gradient) a iOS pilulková CTA.
    Wrapper každé sekce nese barvu sekce PŘEDCHOZÍ — rohy ji odkrývají. */
-const DARK = '#0d0d10';
+/* Obsidian = 950 z teal palety katalogu (tints.ts) — plocha CELÉ stránky. */
+const DARK = '#0B1215';
 const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
 const SECTION = 'w-full rounded-t-[1.75rem] px-5 pt-16 pb-16 sm:rounded-t-[2.75rem] sm:px-10 sm:pt-24 sm:pb-24 lg:px-14';
 const H2 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,4.5vw,3rem)]';
@@ -178,27 +180,42 @@ export default function Deals() {
   ];
 
   return (
-    /* Kořen tmavý — horní i dolní overscroll bounce ukazuje černou (katalog
-       nahoře i závěrečná sekce dole jsou tmavé); bílé sekce si barvu kreslí samy. */
-    <div className="min-h-screen bg-[#0d0d10]">
-      {/* navbar leží na černém katalogu → trvale inverzní (bílé) prvky */}
+    /* Kořen v obsidianu — horní i dolní overscroll bounce ukazuje tmavou
+       (katalog nahoře i závěrečná sekce dole); bílé sekce si barvu kreslí samy. */
+    <div className="min-h-screen bg-[#0B1215]">
+      {/* navbar leží na tmavém katalogu → trvale inverzní (bílé) prvky */}
       <Navbar onDark />
       <BackButton />
 
-      {/* ═══ KATALOG — černá plocha, bílé karty a prvky na ní vyniknou ═══ */}
+      {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
       {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde ── */}
-      <header id="catalog" className="scroll-mt-16 px-5 pt-24 text-center sm:pt-28">
-        <h1 className="text-white">
+      <header id="catalog" className="relative scroll-mt-16 px-5 pt-24 text-center sm:pt-28">
+        {/* radiální bílá záře od středu H1 — zvedá logo z obsidianu; širší
+            než nadpis, ale uvnitř viewportu (žádný horizontální přetok) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[min(96vw,1100px)] -translate-x-1/2 -translate-y-16"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 52% at 50% 45%, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0) 72%)',
+          }}
+        />
+        <h1 className="relative text-white">
           <GoBigDealLogo className="text-[clamp(2.25rem,6vw,4rem)]" />
         </h1>
-        <h2 className="mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
+        <h2 className="relative mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
       </header>
 
-      {/* ── 2. Hledání — hned pod headerem, na střed ── */}
+      {/* ── 2. Běžící pás značek — šedé siluety s průhledností ── */}
+      <div className="pt-10 sm:pt-14">
+        <BrandMarquee brands={brandTiles} />
+      </div>
+
+      {/* ── 3. Hledání — pod pásem značek, na střed ── */}
       <div className="pt-8 sm:pt-10">
         <CatalogSearch
           value={filters.search}
@@ -206,7 +223,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 3. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      {/* ── 4. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
       <div className="pt-10 sm:pt-14">
         <FilterTiles
           items={concernTiles}
@@ -218,7 +235,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 4. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
+      {/* ── 5. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
       <div className="pt-6 sm:pt-8">
         <FilterTiles
           items={brandTiles}

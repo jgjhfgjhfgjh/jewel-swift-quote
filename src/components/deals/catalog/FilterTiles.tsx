@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Check, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { tintForKey } from './tints';
+import { tintForIndex } from './tints';
 
 export interface FilterTileItem {
   /** Hodnota do filtru — slug koncernu nebo kanonický klíč značky. */
@@ -19,7 +19,7 @@ export interface FilterTileItem {
  * šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky — mají
  * být k nerozeznání, liší se jen daty.
  *
- * Styling počítá s ČERNOU plochou katalogu (#0d0d10): dlaždice zůstávají
+ * Styling počítá s ČERNOU plochou katalogu (#0B1215): dlaždice zůstávají
  * barevné/bílé, texty jsou světlé a výběr značí bílý ring.
  */
 export function FilterTiles({
@@ -79,7 +79,7 @@ export function FilterTiles({
         className="flex snap-x gap-3 overflow-x-auto px-5 pb-2 pt-1 sm:gap-4 sm:px-8 lg:px-12
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((item) => {
+        {items.map((item, i) => {
           const active = selected.includes(item.key);
           const count = item.count ?? 0;
           return (
@@ -93,10 +93,12 @@ export function FilterTiles({
               <span
                 className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] p-4
                             transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.22)]
-                            group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0d0d10] ${
-                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0d0d10]' : ''
+                            group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0B1215] ${
+                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0B1215]' : ''
                             }`}
-                style={{ backgroundColor: tintForKey(item.key) }}
+                /* rotace podle pozice — koncerny jdou v pořadí CONCERNS,
+                   takže tón sedí i s kartami dealů (viz CONCERN_TINT) */
+                style={{ backgroundColor: tintForIndex(i) }}
               >
                 {item.domain ? (
                   <BrandLogo

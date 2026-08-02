@@ -31,7 +31,7 @@ export function CatalogSearch({
           placeholder={c.searchPlaceholder}
           className="h-14 w-full rounded-full border-0 bg-white pl-14 pr-12 text-base text-zinc-900
                      shadow-[0_8px_28px_-10px_rgba(0,0,0,0.6)] transition-all duration-200 placeholder:text-zinc-400
-                     focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0d0d10]"
+                     focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0B1215]"
         />
         {value && (
           <button

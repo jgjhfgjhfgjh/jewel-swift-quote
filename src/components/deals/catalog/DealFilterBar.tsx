@@ -33,7 +33,7 @@ export function DealFilterBar({
   return (
     /* tmavé sklo na černé ploše katalogu; lepí jen uvnitř katalogu (sticky
        v rámci tmavého wrapperu), do bílých sekcí níže nezasahuje */
-    <div className="sticky top-0 z-40 border-b border-white/10 bg-[#0d0d10]/85 backdrop-blur supports-[backdrop-filter]:bg-[#0d0d10]/70">
+    <div className="sticky top-0 z-40 border-b border-white/10 bg-[#0B1215]/85 backdrop-blur supports-[backdrop-filter]:bg-[#0B1215]/70">
       <div className="flex items-center gap-3 px-5 py-2.5 sm:px-8 lg:px-12">
         <span className="shrink-0 text-xs font-medium text-zinc-400">
           {fillTemplate(c.results, { n: resultCount })}

@@ -66,11 +66,11 @@ export function DealTile({
         {item.kind === 'live' && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
         ) : item.kind === 'upcoming' && item.startsAt ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700 ring-1 ring-blue-100">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#DDEEF0] px-2.5 py-1 text-[11px] font-bold text-[#355D69] ring-1 ring-[#BFDEE2]">
             <Lock className="h-3 w-3" /> {c.unlocksIn}
           </span>
         ) : item.kind === 'teaser' ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900/85 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1215]/85 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur">
             <Lock className="h-3 w-3" /> {c.upcoming}
           </span>
         ) : (
@@ -106,13 +106,14 @@ export function DealTile({
 
       {item.brands.length > 0 && (
         <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {/* chipy značek v teal paletě — navazují na tón média karty */}
           {item.brands.slice(0, 3).map((b) => (
-            <span key={b} className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-600">
+            <span key={b} className="rounded-full bg-[#DDEEF0]/70 px-2 py-0.5 text-[10px] font-semibold text-[#355D69]">
               {b}
             </span>
           ))}
           {item.brands.length > 3 && (
-            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-400">
+            <span className="rounded-full bg-[#DDEEF0]/70 px-2 py-0.5 text-[10px] font-semibold text-[#60A4B0]">
               +{item.brands.length - 3}
             </span>
           )}
@@ -143,7 +144,7 @@ export function DealTile({
   const shell =
     'group flex h-full w-full flex-col overflow-hidden rounded-2xl border-0 bg-white text-left ' +
     'shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_36px_-14px_rgba(255,255,255,0.28)] ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d10]';
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]';
 
   if (item.kind === 'teaser' || !item.slug) {
     return (

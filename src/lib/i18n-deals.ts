@@ -254,7 +254,7 @@ const cs: DealsText = {
     ctaSecondary: 'Nastavit alert',
   },
   catalog: {
-    headingLead: 'Nejlepší closeout dávky na jednom místě.',
+    headingLead: 'Nejlepší closeout dávky z Evropy na jednom místě.',
     headingMuted: 'Jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů.',
     searchPlaceholder: 'Hledat koncern, značku nebo dávku…',
     concernsLabel: 'Koncerny',
@@ -468,7 +468,7 @@ const en: DealsText = {
     ctaSecondary: 'Set a deal alert',
   },
   catalog: {
-    headingLead: 'The best closeout batches in one place.',
+    headingLead: 'The best closeout batches from Europe in one place.',
     headingMuted: 'One order, one invoice, no signing up with dozens of wholesalers.',
     searchPlaceholder: 'Search a concern, brand or batch…',
     concernsLabel: 'Concerns',

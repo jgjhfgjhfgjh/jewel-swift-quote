@@ -144,7 +144,7 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
 
   const inner = (
     /* tmavá karta na tmavé ploše → obrys ring-white/15, jinak by splynula */
-    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0d0d10] p-6 ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
+    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0B1215] p-6 ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
       {item.heroImageUrl ? (
         /* kampaňová fotka dealu + tmavý scrim, aby bílé texty zůstaly čitelné */
         <>
@@ -159,13 +159,13 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
           />
         </>
       ) : (
-        /* jemná záře v pozadí — nahrazuje fotku, drží tmavý brand look */
+        /* jemná záře v pozadí — nahrazuje fotku; tóny z teal palety GBD */
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
             background:
-              'radial-gradient(120% 80% at 85% 15%, rgba(56,189,248,0.22) 0%, rgba(16,185,129,0.12) 38%, rgba(0,0,0,0) 70%)',
+              'radial-gradient(120% 80% at 85% 15%, rgba(96,164,176,0.30) 0%, rgba(68,137,150,0.14) 38%, rgba(0,0,0,0) 70%)',
           }}
         />
       )}
@@ -232,13 +232,13 @@ function PromoSlide({
   to?: string;
   onClick?: () => void;
 }) {
-  /* tmavý tón dostává obrys — na černé ploše katalogu by jinak splynul;
-     světlá karta se místo zinc-100 (na černé vypadá špinavě) drží čistě bílá */
+  /* tóny z teal palety GBD (tints.ts): gradient 400→500→700, tmavá karta 900
+     (odlišná od obsidian plochy), světlá čistě bílá */
   const shell =
     tone === 'gradient'
-      ? 'bg-[linear-gradient(120deg,#2563eb_0%,#06b6d4_52%,#10b981_100%)] text-white'
+      ? 'bg-[linear-gradient(120deg,#60A4B0_0%,#448996_52%,#355D69_100%)] text-white'
       : tone === 'dark'
-        ? 'bg-[#0d0d10] text-white ring-1 ring-white/15'
+        ? 'bg-[#2D434C] text-white ring-1 ring-white/10'
         : 'bg-white text-zinc-900';
   const ctaClass =
     tone === 'light'
