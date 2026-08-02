@@ -229,8 +229,10 @@ const Index = () => {
                 </div>
               </div>
               {/* marquee log pod textem — stejný pás jako na /deals (bílé
-                  siluety, lehce průhledné), přes celou šířku videa */}
-              <div className="relative z-10 -mx-6 mt-10 sm:mt-14">
+                  siluety, lehce průhledné), přes celou šířku videa. Pevná
+                  výška = žádný layout skok; jede ze statického rejstříku,
+                  takže je vidět hned při načtení stránky. */}
+              <div className="relative z-10 -mx-6 mt-5 h-9 sm:mt-7 sm:h-10">
                 <BrandMarquee all />
               </div>
               {/* scroll cue — výš, aby ho nepřekryla následující sekce */}

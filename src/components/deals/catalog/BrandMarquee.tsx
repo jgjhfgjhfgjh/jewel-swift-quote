@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { sortByBrandPriority } from '@/lib/brandOrder';
+import { toBrandKey } from '@/lib/brandNormalize';
+import { BRANDS } from '@/data/brands';
 
 /**
  * Nekonečně běžící pás log značek pod headerem — reference „logo row" ze
@@ -22,9 +24,16 @@ export function BrandMarquee({ all = false }: {
   all?: boolean;
 }) {
   const { data: catalog = [] } = useBrandCatalog();
-  // Prioritní značky první (stejné řazení jako zbytek webu).
+  // Prioritní značky první (stejné řazení jako zbytek webu). Varianta `all`
+  // jede ze STATICKÉHO rejstříku značek — renderuje se hned při prvním
+  // paintu (žádné čekání na fetch katalogu, žádný layout skok v hero).
   const list = useMemo(
-    () => sortByBrandPriority(all ? catalog : catalog.filter((b) => b.count > 0)),
+    () =>
+      sortByBrandPriority(
+        all
+          ? BRANDS.map((b) => ({ key: toBrandKey(b.name), name: b.name, domain: b.domain }))
+          : catalog.filter((b) => b.count > 0),
+      ),
     [catalog, all],
   );
 
