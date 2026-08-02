@@ -196,13 +196,14 @@ export default function Deals() {
         id="catalog"
         className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
       >
-        {/* radiální bílá záře od středu hero bloku — zvedá logo z obsidianu */}
+        {/* radiální bílá záře od středu hero bloku — jemná, jen aby logo
+            vystoupilo z obsidianu (0.17 bylo per Tomka moc) */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 46% 38% at 50% 50%, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0) 72%)',
+              'radial-gradient(ellipse 46% 38% at 50% 50%, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0) 72%)',
           }}
         />
         <h1 className="relative text-white">
@@ -212,28 +213,28 @@ export default function Deals() {
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
+        {/* běžící pás značek — VŠECHNY značky z velkoobchodního katalogu;
+            kotvený ke spodku hero NAD chevronem, takže je na prvním screenu,
+            a logo + H2 zůstávají přesně na středu */}
+        <div className="absolute inset-x-0 bottom-20 sm:bottom-24">
+          <BrandMarquee />
+        </div>
         {/* scroll cue — stejný vzor jako hero na homepage */}
         <ChevronDown
           aria-hidden
-          className="absolute bottom-10 left-1/2 h-6 w-6 -translate-x-1/2 animate-bounce text-white/70 sm:bottom-12"
+          className="absolute bottom-8 left-1/2 h-6 w-6 -translate-x-1/2 animate-bounce text-white/70 sm:bottom-10"
         />
       </header>
 
-      {/* ── 2. Běžící pás značek — šedé siluety; VŠECHNY značky z
-             velkoobchodního katalogu (ne jen z dealů) ── */}
+      {/* ── 2. Hledání — první prvek pod hero, na střed ── */}
       <div className="pt-10 sm:pt-14">
-        <BrandMarquee />
-      </div>
-
-      {/* ── 3. Hledání — pod pásem značek, na střed ── */}
-      <div className="pt-8 sm:pt-10">
         <CatalogSearch
           value={filters.search}
           onChange={(search) => setFilters((f) => ({ ...f, search }))}
         />
       </div>
 
-      {/* ── 4. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      {/* ── 3. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
       <div className="pt-10 sm:pt-14">
         <FilterTiles
           items={concernTiles}
@@ -245,7 +246,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 5. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
+      {/* ── 4. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
       <div className="pt-6 sm:pt-8">
         <FilterTiles
           items={brandTiles}
