@@ -549,7 +549,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           0. INTRO — logo + tagline
       ══════════════════════════════════════════ */}
-      <section className="relative border-b border-border pt-1 sm:pt-[18px] lg:pt-5 pb-14 sm:pb-20">
+      <section className="relative pt-1 sm:pt-[18px] lg:pt-5 pb-14 sm:pb-20">
         {/* Netflix-carousel (HeroBanner) odstraněn — sekce začíná rovnou
             policemi značek a koncernů. */}
 
@@ -609,8 +609,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           3. CTA — Prohlédnout sortiment + Vytvořit B2B účet (only for guests)
       ══════════════════════════════════════════ */}
-      {!user && <section className="py-14 sm:py-20 border-b border-border">
-        <div className="mx-auto max-w-3xl px-6">
+      {/* Plnoformátová sekce ve vzoru homepage: zaoblený horní okraj odkrývá
+          bílou předchozí sekce, jemný zinc-50 tón s radiálem (stejný jako
+          filtrační pruh katalogu). */}
+      {!user && <div className="bg-white">
+      <section className="w-full rounded-t-[1.75rem] sm:rounded-t-[2.75rem] bg-zinc-50 [background-image:radial-gradient(ellipse_90%_75%_at_50%_45%,#ffffff_0%,rgba(255,255,255,0)_72%)] px-5 py-14 sm:px-10 sm:py-20">
+        <div className="mx-auto max-w-3xl">
           <Reveal>
             <div className="text-center">
               <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Začněte ještě dnes</p>
@@ -647,48 +651,56 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             </div>
           </Reveal>
         </div>
-      </section>}
+      </section>
+      </div>}
 
       {/* ══════════════════════════════════════════
           4. KATALOG — lead capture (jen pro hosty; nadpis „Jeden partner…",
-          servisní karty i blok „Potřebujete poradit?" odstraněny)
+          servisní karty i blok „Potřebujete poradit?" odstraněny).
+          Plnobarevná sekce v brand gradientu (blue → cyan → emerald),
+          zaoblený okraj odkrývá zinc-50 sekce nad ní.
       ══════════════════════════════════════════ */}
       {!user && (
-      <div className="relative border-b border-border py-16 sm:py-20 overflow-hidden">
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+      <div className="bg-zinc-50">
+      <section className="w-full rounded-t-[1.75rem] sm:rounded-t-[2.75rem] px-5 py-16 sm:px-10 sm:py-24 text-white bg-[linear-gradient(120deg,#2563eb_0%,#06b6d4_52%,#10b981_100%)]">
+        <div className="relative mx-auto max-w-4xl">
             <Reveal delay={100}>
               <div className="relative">
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="inline-flex items-center gap-1.5 rounded-none bg-zinc-900 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/15 text-white px-3 py-1 text-[10px] font-semibold tracking-wider uppercase backdrop-blur">
                       <Eye className="h-3 w-3" /> Zdarma · 30 sekund
                     </div>
-                    <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-500">
-                      <span className="h-1.5 w-1.5 rounded-none bg-emerald-500 animate-pulse" /> Bez čekání
+                    <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-white/80">
+                      <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" /> Bez čekání
                     </div>
                   </div>
-                  <h3 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.5rem)] text-zinc-900 mb-3 text-left">
+                  <h3 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,3.5vw,2.5rem)] text-white mb-3 text-left">
                     Prohlédněte si celý katalog —{' '}
-                    <span className="text-zinc-400">zdarma a bez čekání.</span>
+                    <span className="text-white/70">zdarma a bez čekání.</span>
                   </h3>
-                  <div className="text-sm sm:text-base text-zinc-600 mb-5 text-left max-w-2xl leading-relaxed space-y-3">
+                  <div className="text-sm sm:text-base text-white/85 mb-5 text-left max-w-2xl leading-relaxed space-y-3">
                     <p>
                       Nahlédněte dřív, než cokoli rozhodnete: přihlášení e-mailem nebo přes Google
                       trvá 30 sekund. Velkoobchodní ceny se odemknou po ověření B2B účtu —
                       zpravidla do 24 hodin, zcela zdarma.
                     </p>
                   </div>
-                  <div className="mb-5"><AccessTiersVisual /></div>
+                  {/* AccessTiersVisual je stavěný na bílou — na gradientu jede v bílé kartě */}
+                  <div className="mb-5 rounded-2xl bg-white p-4 sm:p-5">
+                    <AccessTiersVisual />
+                  </div>
                   <div className="flex flex-col sm:flex-row gap-2.5 sm:items-center">
-                    <button onClick={() => openAuth('login')} className="group flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-none px-5 py-3.5 shadow-lg transition-all font-bold text-sm sm:text-base">
+                    <button onClick={() => openAuth('login')} className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100 sm:text-base">
                       <Eye className="h-4 w-4 shrink-0" /> Prohlédnout sortiment <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                     </button>
-                    <div className="text-[11px] text-zinc-500 sm:ml-2">3 000+ produktů · 70+ značek · Bez závazku</div>
+                    <div className="text-[11px] text-white/80 sm:ml-2">3 000+ produktů · 70+ značek · Bez závazku</div>
                   </div>
                 </div>
               </div>
             </Reveal>
         </div>
+      </section>
       </div>
       )}
 
