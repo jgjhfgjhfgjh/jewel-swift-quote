@@ -19,6 +19,7 @@ import {
   applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
   type CatalogFilters,
 } from '@/lib/dealCatalog';
+import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
@@ -177,26 +178,36 @@ export default function Deals() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    /* Kořen tmavý — horní i dolní overscroll bounce ukazuje černou (katalog
+       nahoře i závěrečná sekce dole jsou tmavé); bílé sekce si barvu kreslí samy. */
+    <div className="min-h-screen bg-[#0d0d10]">
+      {/* navbar leží na černém katalogu → trvale inverzní (bílé) prvky */}
+      <Navbar onDark />
       <BackButton />
 
-      {/* Viditelný nadpis je pryč (katalog začíná rovnou dlaždicemi), ale
-          stránka nesmí zůstat bez H1 — čtečky a vyhledávače ho potřebují. */}
-      <h1 className="sr-only">
-        {d.catalog.headingLead} {d.catalog.headingMuted}
-      </h1>
+      {/* ═══ KATALOG — černá plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
-      {/* ── 1. Hledání — první prvek katalogu, na střed nad karusely ── */}
-      <div id="catalog" className="scroll-mt-16 pt-20 sm:pt-24">
+      {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde ── */}
+      <header id="catalog" className="scroll-mt-16 px-5 pt-24 text-center sm:pt-28">
+        <h1 className="text-white">
+          <GoBigDealLogo className="text-[clamp(2.25rem,6vw,4rem)]" />
+        </h1>
+        <h2 className="mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
+          <span className="text-white">{d.catalog.headingLead}</span>{' '}
+          <span className="text-zinc-400">{d.catalog.headingMuted}</span>
+        </h2>
+      </header>
+
+      {/* ── 2. Hledání — hned pod headerem, na střed ── */}
+      <div className="pt-8 sm:pt-10">
         <CatalogSearch
           value={filters.search}
           onChange={(search) => setFilters((f) => ({ ...f, search }))}
         />
       </div>
 
-      {/* ── 2. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
-      <div className="pt-8 sm:pt-10">
+      {/* ── 3. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
+      <div className="pt-10 sm:pt-14">
         <FilterTiles
           items={concernTiles}
           selected={filters.concerns}
@@ -207,7 +218,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 3. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
+      {/* ── 4. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
       <div className="pt-6 sm:pt-8">
         <FilterTiles
           items={brandTiles}
@@ -235,31 +246,23 @@ export default function Deals() {
           <>
             <div className="flex gap-4 overflow-hidden px-5 pt-6 sm:px-8 lg:px-12">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-zinc-100 sm:w-[276px]" />
+                <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-white/10 sm:w-[276px]" />
               ))}
             </div>
             <div className="px-5 pt-8 sm:px-8 lg:px-12">
-              <div className="h-[240px] animate-pulse rounded-[24px] bg-zinc-100 sm:h-[300px]" />
+              <div className="h-[240px] animate-pulse rounded-[24px] bg-white/10 sm:h-[300px]" />
             </div>
           </>
         ) : filtered.length === 0 ? (
           <div className="mx-auto mt-10 max-w-xl px-5 text-center">
-            <SearchX className="mx-auto h-8 w-8 text-zinc-300" />
-            <p className="mt-4 text-lg font-semibold tracking-tight text-zinc-900">{d.catalog.noResults}</p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-500">{d.catalog.noResultsSub}</p>
+            <SearchX className="mx-auto h-8 w-8 text-white/30" />
+            <p className="mt-4 text-lg font-semibold tracking-tight text-white">{d.catalog.noResults}</p>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">{d.catalog.noResultsSub}</p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => setFilters(EMPTY_FILTERS)}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-              >
+              <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className={PILL_LIGHT}>
                 {d.catalog.clear}
               </button>
-              <button
-                type="button"
-                onClick={goToAlerts}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50"
-              >
+              <button type="button" onClick={goToAlerts} className={PILL_OUTLINE_DARK}>
                 <Bell className="h-4 w-4" /> {d.active.emptyCta}
               </button>
             </div>
@@ -299,8 +302,9 @@ export default function Deals() {
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
 
-      {/* ── Co je GoBigDeal (černá) ── */}
-      <div className="bg-white">
+      {/* ── Co je GoBigDeal (černá) — katalog nad ní je taky černý, sekce na
+             něj navazuje beze švu (zaoblený roh by odkryl bílé růžky) ── */}
+      <div style={{ backgroundColor: DARK }}>
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
             <div className="mx-auto max-w-[1000px] text-left">

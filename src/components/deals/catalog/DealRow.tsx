@@ -29,17 +29,18 @@ export function DealRow({
 
   return (
     <section className="min-w-0 py-5 sm:py-6">
+      {/* na černé ploše katalogu: bílý nadpis, bílé kulaté šipky */}
       <div className="mb-3 flex items-baseline justify-between gap-4 px-5 sm:px-8 lg:px-12">
-        <h2 className="font-sans text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
+        <h2 className="font-sans text-lg font-semibold tracking-tight text-white sm:text-xl">
           {title}
-          <span className="ml-2 text-sm font-normal text-zinc-400">{items.length}</span>
+          <span className="ml-2 text-sm font-normal text-zinc-500">{items.length}</span>
         </h2>
         <div className="flex items-center gap-1.5">
           {onSeeAll && (
             <button
               type="button"
               onClick={onSeeAll}
-              className="mr-1 hidden text-xs font-semibold text-zinc-600 transition-colors hover:text-zinc-900 sm:inline"
+              className="mr-1 hidden text-xs font-semibold text-zinc-400 transition-colors hover:text-white sm:inline"
             >
               {seeAllLabel}
             </button>
@@ -48,7 +49,7 @@ export function DealRow({
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Předchozí"
-            className="hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -56,7 +57,7 @@ export function DealRow({
             type="button"
             onClick={() => scroll(1)}
             aria-label="Další"
-            className="hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

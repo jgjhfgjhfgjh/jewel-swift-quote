@@ -122,12 +122,13 @@ export function DealHeroCarousel({
         <ChevronRight className="h-5 w-5" />
       </button>
 
+      {/* tečky na černé ploše — aktivní bílá, ostatní tlumené */}
       <div className="mt-1 flex justify-center gap-1.5">
         {slides.map((_, i) => (
           <span
             key={i}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === active ? 'w-6 bg-zinc-900' : 'w-1.5 bg-zinc-300'
+              i === active ? 'w-6 bg-white' : 'w-1.5 bg-white/25'
             }`}
           />
         ))}
@@ -142,7 +143,8 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
   const live = item.kind === 'live';
 
   const inner = (
-    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0d0d10] p-6 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
+    /* tmavá karta na tmavé ploše → obrys ring-white/15, jinak by splynula */
+    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0d0d10] p-6 ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
       {item.heroImageUrl ? (
         /* kampaňová fotka dealu + tmavý scrim, aby bílé texty zůstaly čitelné */
         <>
@@ -230,12 +232,14 @@ function PromoSlide({
   to?: string;
   onClick?: () => void;
 }) {
+  /* tmavý tón dostává obrys — na černé ploše katalogu by jinak splynul;
+     světlá karta se místo zinc-100 (na černé vypadá špinavě) drží čistě bílá */
   const shell =
     tone === 'gradient'
       ? 'bg-[linear-gradient(120deg,#2563eb_0%,#06b6d4_52%,#10b981_100%)] text-white'
       : tone === 'dark'
-        ? 'bg-[#0d0d10] text-white'
-        : 'bg-zinc-100 text-zinc-900';
+        ? 'bg-[#0d0d10] text-white ring-1 ring-white/15'
+        : 'bg-white text-zinc-900';
   const ctaClass =
     tone === 'light'
       ? 'bg-zinc-900 text-white hover:bg-zinc-800'
@@ -246,7 +250,7 @@ function PromoSlide({
     <div className={`relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] p-6 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8 ${shell}`}>
       <span
         className={`inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider ${
-          tone === 'light' ? 'bg-white text-zinc-900' : 'bg-white/15 text-white'
+          tone === 'light' ? 'bg-zinc-100 text-zinc-900' : 'bg-white/15 text-white'
         }`}
       >
         {icon} {eyebrow}

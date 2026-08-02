@@ -18,6 +18,9 @@ export interface FilterTileItem {
  * tónovaném čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a kulaté
  * šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky — mají
  * být k nerozeznání, liší se jen daty.
+ *
+ * Styling počítá s ČERNOU plochou katalogu (#0d0d10): dlaždice zůstávají
+ * barevné/bílé, texty jsou světlé a výběr značí bílý ring.
  */
 export function FilterTiles({
   items, selected, onToggle, label, allLabel, onClearAll,
@@ -38,7 +41,7 @@ export function FilterTiles({
   return (
     <div className="min-w-0">
       <div className="mb-3 flex items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
-        <h2 className="text-sm font-semibold tracking-tight text-zinc-900">{label}</h2>
+        <h2 className="text-sm font-semibold tracking-tight text-white">{label}</h2>
         <div className="flex items-center gap-1.5">
           {/* „Vše" = zrušení výběru v této úrovni, jako první dlaždice u Woltu */}
           <button
@@ -46,8 +49,8 @@ export function FilterTiles({
             onClick={onClearAll}
             className={`mr-1 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
               selected.length === 0
-                ? 'bg-zinc-900 text-white'
-                : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'
+                ? 'bg-white text-zinc-900'
+                : 'text-zinc-400 hover:bg-white/10 hover:text-white'
             }`}
           >
             {allLabel}
@@ -56,7 +59,7 @@ export function FilterTiles({
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Předchozí"
-            className="hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -64,7 +67,7 @@ export function FilterTiles({
             type="button"
             onClick={() => scroll(1)}
             aria-label="Další"
-            className="hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 transition-colors hover:bg-zinc-50 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -89,9 +92,9 @@ export function FilterTiles({
             >
               <span
                 className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] p-4
-                            transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)]
-                            group-focus-visible:ring-2 group-focus-visible:ring-zinc-900 group-focus-visible:ring-offset-2 ${
-                              active ? 'ring-2 ring-zinc-900 ring-offset-2' : ''
+                            transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.22)]
+                            group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0d0d10] ${
+                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0d0d10]' : ''
                             }`}
                 style={{ backgroundColor: tintForKey(item.key) }}
               >
@@ -110,7 +113,9 @@ export function FilterTiles({
                   </span>
                 )}
                 {active && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 text-white shadow">
+                  /* bílý badge s tmavou fajfkou — čitelný na dlaždici i na
+                     černém pozadí, přes které rohem přesahuje */
+                  <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white text-zinc-900 shadow-md ring-1 ring-zinc-900/10">
                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                   </span>
                 )}
@@ -121,7 +126,7 @@ export function FilterTiles({
                   </span>
                 )}
               </span>
-              <span className="line-clamp-2 text-center text-[13px] font-medium leading-tight text-zinc-800">
+              <span className="line-clamp-2 text-center text-[13px] font-medium leading-tight text-zinc-200">
                 {item.name}
               </span>
             </button>

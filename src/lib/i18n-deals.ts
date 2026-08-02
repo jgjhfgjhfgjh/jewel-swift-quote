@@ -51,7 +51,6 @@ export interface DealsText {
   catalog: {
     headingLead: string;
     headingMuted: string;
-    sub: string;
     searchPlaceholder: string;
     concernsLabel: string;
     brandsLabel: string;
@@ -255,9 +254,8 @@ const cs: DealsText = {
     ctaSecondary: 'Nastavit alert',
   },
   catalog: {
-    headingLead: 'Katalog dávek.',
-    headingMuted: 'Vyberte koncern, značku a slevu.',
-    sub: 'Nejlepší closeout dávky na jednom místě — jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů. Filtrujte podle koncernu nebo značky.',
+    headingLead: 'Nejlepší closeout dávky na jednom místě.',
+    headingMuted: 'Jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů.',
     searchPlaceholder: 'Hledat koncern, značku nebo dávku…',
     concernsLabel: 'Koncerny',
     brandsLabel: 'Značky',
@@ -470,9 +468,8 @@ const en: DealsText = {
     ctaSecondary: 'Set a deal alert',
   },
   catalog: {
-    headingLead: 'The batch catalog.',
-    headingMuted: 'Pick a concern, a brand and your discount.',
-    sub: 'The best closeout batches in one place — one order, one invoice, no signing up with dozens of wholesalers. Filter by concern or brand.',
+    headingLead: 'The best closeout batches in one place.',
+    headingMuted: 'One order, one invoice, no signing up with dozens of wholesalers.',
     searchPlaceholder: 'Search a concern, brand or batch…',
     concernsLabel: 'Concerns',
     brandsLabel: 'Brands',

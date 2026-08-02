@@ -139,10 +139,11 @@ export function DealTile({
     </div>
   );
 
+  /* bílá karta na černé ploše — hover „svítí" (černý stín by na černé zanikl) */
   const shell =
-    'group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left ' +
-    'shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-[0_16px_32px_-18px_rgba(0,0,0,0.45)] ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2';
+    'group flex h-full w-full flex-col overflow-hidden rounded-2xl border-0 bg-white text-left ' +
+    'shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_36px_-14px_rgba(255,255,255,0.28)] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d10]';
 
   if (item.kind === 'teaser' || !item.slug) {
     return (

@@ -31,15 +31,17 @@ export function DealFilterBar({
   const active = filtersActive(filters);
 
   return (
-    <div className="sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+    /* tmavé sklo na černé ploše katalogu; lepí jen uvnitř katalogu (sticky
+       v rámci tmavého wrapperu), do bílých sekcí níže nezasahuje */
+    <div className="sticky top-0 z-40 border-b border-white/10 bg-[#0d0d10]/85 backdrop-blur supports-[backdrop-filter]:bg-[#0d0d10]/70">
       <div className="flex items-center gap-3 px-5 py-2.5 sm:px-8 lg:px-12">
-        <span className="shrink-0 text-xs font-medium text-zinc-500">
+        <span className="shrink-0 text-xs font-medium text-zinc-400">
           {fillTemplate(c.results, { n: resultCount })}
         </span>
 
         {/* běžící filtry vypsané jménem — po scrollu je jinak nevidět */}
         {activeLabels.length > 0 && (
-          <span className="min-w-0 truncate text-xs text-zinc-400">
+          <span className="min-w-0 truncate text-xs text-zinc-500">
             {activeLabels.join(' · ')}
           </span>
         )}
@@ -48,7 +50,7 @@ export function DealFilterBar({
           <button
             type="button"
             onClick={() => onChange({ concerns: [], brands: [], search: '' })}
-            className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-900 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-zinc-800"
+            className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-xs font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
           >
             <X className="h-3.5 w-3.5" /> {c.clear} · {active}
           </button>

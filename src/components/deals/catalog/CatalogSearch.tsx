@@ -3,8 +3,9 @@ import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
 /**
- * Vyhledávací pole na prvním místě katalogu — nad prvním karuselem, na střed.
+ * Vyhledávací pole na prvním místě katalogu — pod headerem, na střed.
  * Marketplace pattern: hledání je hlavní vstup do katalogu, ne doplněk lišty.
+ * Katalog leží na černé ploše → pole je plně bílé (jako karty), bez rámečku.
  *
  * Hledá napříč koncerny, značkami a názvy dávek. Dodavatele záměrně
  * neindexuje — ty Swelt nezveřejňuje.
@@ -28,9 +29,9 @@ export function CatalogSearch({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={c.searchPlaceholder}
-          className="h-14 w-full rounded-full border border-zinc-200 bg-zinc-50 pl-14 pr-12 text-base text-zinc-900
-                     shadow-sm transition-all duration-200 placeholder:text-zinc-400
-                     hover:border-zinc-300 focus:border-zinc-900 focus:bg-white focus:shadow-md focus:outline-none"
+          className="h-14 w-full rounded-full border-0 bg-white pl-14 pr-12 text-base text-zinc-900
+                     shadow-[0_8px_28px_-10px_rgba(0,0,0,0.6)] transition-all duration-200 placeholder:text-zinc-400
+                     focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0d0d10]"
         />
         {value && (
           <button
