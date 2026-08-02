@@ -74,9 +74,12 @@ export function FilterTiles({
         </div>
       </div>
 
+      {/* pt-3: hover zvedá dlaždici o 4 px a check badge přesahuje o 6 px
+          nad ni — overflow-x kontejner ořezává i svisle, bez rezervy se
+          zvednutá dlaždice ořízne o horní hranu */}
       <div
         ref={track}
-        className="flex snap-x gap-3 overflow-x-auto px-5 pb-2 pt-1 sm:gap-4 sm:px-8 lg:px-12
+        className="flex snap-x gap-3 overflow-x-auto px-5 pb-3 pt-3 sm:gap-4 sm:px-8 lg:px-12
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => {

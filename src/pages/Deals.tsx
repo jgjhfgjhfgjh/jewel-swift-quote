@@ -196,8 +196,10 @@ export default function Deals() {
         id="catalog"
         className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
       >
+        {/* ~2× větší logo; marquee je kotvený absolutně ke spodku hero,
+            takže ho růst bloku nevytlačí pod fold — blok jen roste ze středu */}
         <h1 className="relative text-white">
-          <GoBigDealLogo className="text-[clamp(2.25rem,6vw,4rem)]" />
+          <GoBigDealLogo className="text-[clamp(3.75rem,12vw,8rem)]" />
         </h1>
         <h2 className="relative mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}

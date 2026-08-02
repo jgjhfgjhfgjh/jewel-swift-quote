@@ -64,9 +64,11 @@ export function DealRow({
         </div>
       </div>
 
+      {/* pt-3: karty se na hover zvedají o 4 px + focus ring 4 px — bez
+          rezervy je overflow-x kontejner svisle ořízne o horní hranu */}
       <div
         ref={track}
-        className="flex snap-x gap-4 overflow-x-auto px-5 pb-3 pt-1 sm:px-8 lg:px-12
+        className="flex snap-x gap-4 overflow-x-auto px-5 pb-3 pt-3 sm:px-8 lg:px-12
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => (

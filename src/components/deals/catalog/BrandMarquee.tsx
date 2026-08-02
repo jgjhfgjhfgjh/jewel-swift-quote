@@ -27,13 +27,13 @@ export function BrandMarquee({ all = false }: {
   // Prioritní značky první (stejné řazení jako zbytek webu). Varianta `all`
   // jede ze STATICKÉHO rejstříku značek — renderuje se hned při prvním
   // paintu (žádné čekání na fetch katalogu, žádný layout skok v hero).
+  // sortByBrandPriority je generické přes {key} — union obou tvarů polí by
+  // inference rozbil, proto se řadí každá větev zvlášť.
   const list = useMemo(
     () =>
-      sortByBrandPriority(
-        all
-          ? BRANDS.map((b) => ({ key: toBrandKey(b.name), name: b.name, domain: b.domain }))
-          : catalog.filter((b) => b.count > 0),
-      ),
+      all
+        ? sortByBrandPriority(BRANDS.map((b) => ({ key: toBrandKey(b.name), name: b.name, domain: b.domain })))
+        : sortByBrandPriority(catalog.filter((b) => b.count > 0)),
     [catalog, all],
   );
 
