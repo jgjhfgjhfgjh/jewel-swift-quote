@@ -191,21 +191,11 @@ export default function Deals() {
 
       {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde — blok je svisle
              vycentrovaný na první obrazovku (odečítá announcement bar jako
-             homepage hero), záře sdílí stejný střed ── */}
+             homepage hero); bez záře, čistý obsidian ── */}
       <header
         id="catalog"
         className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
       >
-        {/* radiální bílá záře od středu hero bloku — jemná, jen aby logo
-            vystoupilo z obsidianu (0.17 bylo per Tomka moc) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 46% 38% at 50% 50%, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0) 72%)',
-          }}
-        />
         <h1 className="relative text-white">
           <GoBigDealLogo className="text-[clamp(2.25rem,6vw,4rem)]" />
         </h1>

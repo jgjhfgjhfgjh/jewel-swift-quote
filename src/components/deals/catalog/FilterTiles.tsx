@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { Check, ChevronLeft, ChevronRight, Layers } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
-import { tintForIndex } from './tints';
 
 export interface FilterTileItem {
   /** Hodnota do filtru — slug koncernu nebo kanonický klíč značky. */
@@ -15,12 +14,13 @@ export interface FilterTileItem {
 
 /**
  * Vodorovný pás filtračních dlaždic ve stylu kategorií na Woltu: logo na
- * tónovaném čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a kulaté
+ * BÍLÉM čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a kulaté
  * šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky — mají
  * být k nerozeznání, liší se jen daty.
  *
- * Styling počítá s ČERNOU plochou katalogu (#0B1215): dlaždice zůstávají
- * barevné/bílé, texty jsou světlé a výběr značí bílý ring.
+ * Styling počítá s obsidian plochou katalogu (#0B1215): dlaždice jednotně
+ * bílé (teal rotace zůstala jen na médiích karet dealů), texty světlé,
+ * výběr značí bílý ring.
  */
 export function FilterTiles({
   items, selected, onToggle, label, allLabel, onClearAll,
@@ -79,7 +79,7 @@ export function FilterTiles({
         className="flex snap-x gap-3 overflow-x-auto px-5 pb-2 pt-1 sm:gap-4 sm:px-8 lg:px-12
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((item, i) => {
+        {items.map((item) => {
           const active = selected.includes(item.key);
           const count = item.count ?? 0;
           return (
@@ -90,15 +90,14 @@ export function FilterTiles({
               aria-pressed={active}
               className="group flex w-[104px] shrink-0 snap-start flex-col items-center gap-2 focus:outline-none sm:w-[124px]"
             >
+              {/* dlaždice jednotně bílé (na pokyn) — barevná teal rotace
+                  zůstala jen na médiích karet dealů */}
               <span
-                className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] p-4
+                className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] bg-white p-4
                             transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.22)]
                             group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0B1215] ${
                               active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0B1215]' : ''
                             }`}
-                /* rotace podle pozice — koncerny jdou v pořadí CONCERNS,
-                   takže tón sedí i s kartami dealů (viz CONCERN_TINT) */
-                style={{ backgroundColor: tintForIndex(i) }}
               >
                 {item.domain ? (
                   <BrandLogo
@@ -122,7 +121,8 @@ export function FilterTiles({
                   </span>
                 )}
                 {count > 0 && !active && (
-                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-white/85 px-1.5 py-0.5 text-[10px] font-bold text-zinc-600 backdrop-blur">
+                  /* zinc podklad — bílý badge by na bílé dlaždici zanikl */
+                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-bold text-zinc-600">
                     <Layers className="h-2.5 w-2.5" />
                     {count}
                   </span>
