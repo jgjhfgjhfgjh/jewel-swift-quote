@@ -211,7 +211,7 @@ const Index = () => {
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[6vw]">
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[13vw]">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
                   Sell with smarter tools<br />for modern teams
                 </h1>
