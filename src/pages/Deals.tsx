@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ArrowRight, Bell, Check, MousePointerClick, Layers, TrendingUp, Clock,
-  Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
+  ArrowRight, Bell, Check, ChevronDown, MousePointerClick, Layers, TrendingUp,
+  Clock, Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -189,16 +189,20 @@ export default function Deals() {
 
       {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
-      {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde ── */}
-      <header id="catalog" className="relative scroll-mt-16 px-5 pt-24 text-center sm:pt-28">
-        {/* radiální bílá záře od středu H1 — zvedá logo z obsidianu; širší
-            než nadpis, ale uvnitř viewportu (žádný horizontální přetok) */}
+      {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde — blok je svisle
+             vycentrovaný na první obrazovku (odečítá announcement bar jako
+             homepage hero), záře sdílí stejný střed ── */}
+      <header
+        id="catalog"
+        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
+      >
+        {/* radiální bílá záře od středu hero bloku — zvedá logo z obsidianu */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[min(96vw,1100px)] -translate-x-1/2 -translate-y-16"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 60% 52% at 50% 45%, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0) 72%)',
+              'radial-gradient(ellipse 46% 38% at 50% 50%, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0) 72%)',
           }}
         />
         <h1 className="relative text-white">
@@ -208,11 +212,17 @@ export default function Deals() {
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
+        {/* scroll cue — stejný vzor jako hero na homepage */}
+        <ChevronDown
+          aria-hidden
+          className="absolute bottom-10 left-1/2 h-6 w-6 -translate-x-1/2 animate-bounce text-white/70 sm:bottom-12"
+        />
       </header>
 
-      {/* ── 2. Běžící pás značek — šedé siluety s průhledností ── */}
+      {/* ── 2. Běžící pás značek — šedé siluety; VŠECHNY značky z
+             velkoobchodního katalogu (ne jen z dealů) ── */}
       <div className="pt-10 sm:pt-14">
-        <BrandMarquee brands={brandTiles} />
+        <BrandMarquee />
       </div>
 
       {/* ── 3. Hledání — pod pásem značek, na střed ── */}
