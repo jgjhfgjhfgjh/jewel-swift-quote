@@ -657,12 +657,12 @@ export function GatewaySections({ onOpenCatalog }: Props) {
       {/* ══════════════════════════════════════════
           4. KATALOG — lead capture (jen pro hosty; nadpis „Jeden partner…",
           servisní karty i blok „Potřebujete poradit?" odstraněny).
-          Plnobarevná sekce v brand gradientu (blue → cyan → emerald),
-          zaoblený okraj odkrývá zinc-50 sekce nad ní.
+          Plnobarevná sekce v primary blue (#2563eb — modrá z brand
+          gradientu i CTA), zaoblený okraj odkrývá zinc-50 sekce nad ní.
       ══════════════════════════════════════════ */}
       {!user && (
       <div className="bg-zinc-50">
-      <section className="w-full rounded-t-[1.75rem] sm:rounded-t-[2.75rem] px-5 py-16 sm:px-10 sm:py-24 text-white bg-[linear-gradient(120deg,#2563eb_0%,#06b6d4_52%,#10b981_100%)]">
+      <section className="w-full rounded-t-[1.75rem] sm:rounded-t-[2.75rem] px-5 py-16 sm:px-10 sm:py-24 text-white bg-blue-600">
         <div className="relative mx-auto max-w-4xl">
             <Reveal delay={100}>
               <div className="relative">
