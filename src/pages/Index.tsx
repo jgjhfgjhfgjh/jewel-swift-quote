@@ -17,6 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
+import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
 import { DropshipHeadline } from '@/components/DropshipHeadline';
 import { DropshipFlowMap } from '@/components/DropshipFlowMap';
 import { AgentLogoRow } from '@/components/AgentLogoRow';
@@ -221,6 +222,11 @@ const Index = () => {
                 <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,12.5vh,7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
                 </div>
+              </div>
+              {/* marquee log pod textem — stejný pás jako na /deals (bílé
+                  siluety, lehce průhledné), přes celou šířku videa */}
+              <div className="relative z-10 -mx-6 mt-10 sm:mt-14">
+                <BrandMarquee all />
               </div>
               {/* scroll cue — výš, aby ho nepřekryla následující sekce */}
               <ChevronDown className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
