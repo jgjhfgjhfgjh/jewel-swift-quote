@@ -206,14 +206,14 @@ const Index = () => {
               <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
               {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
                   tall displays but never overflows short / zoomed ones; mobile
-                  clamps on vw so "Enterprise Technology" fits on one line.
+                  clamps on vw so "smarter tools" line fits on one line.
                   Inter Extra Light (200). Blok je vycentrovaný (w-fit podle H1),
                   řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
               <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[6vw]">
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,12.5vh,7.75rem)] text-white">
-                  Sell with<br />Enterprise Technology
+                  Sell with smarter tools<br />for modern teams
                 </h1>
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
