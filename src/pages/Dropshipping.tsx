@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight, PackageOpen, Truck, Tag, Zap, Users, ShieldCheck,
   HeadphonesIcon, BarChart2, Check, ChevronDown, TrendingUp,
-  Store, Globe, Sparkles, Calculator, RefreshCw, AlertCircle,
-  ArrowUpRight, Layers, Bell, Target, Lock, FileText,
-  Camera, Award, MapPin, X, ShoppingCart,
+  Globe, Sparkles, RefreshCw, AlertCircle, Layers, Bell, Target,
+  Lock, FileText, Camera, Award, MapPin, X, ShoppingCart, Store,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -17,39 +14,44 @@ import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useWishlist } from '@/hooks/useWishlist';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { useStore } from '@/lib/store';
-import { dropshipping as dropT } from '@/lib/i18n-dropshipping';
-import bgDrop from '@/assets/gateway-dropshipping.jpg';
-import heroLight from '@/assets/intel-hero-light.jpg';
+import { dropshipping as dropT, type DropText } from '@/lib/i18n-dropshipping';
 
-/* ─── JSON-LD SEO injection ─── */
+/* ── Sdílené třídy s homepage (stejný vzor jako /deals) ────────────────────
+   Full-width sekce se zaobleným horním okrajem, střídání bílá ↔ černá
+   (#0d0d10), extralight nadpisy v clampu a iOS pilulková CTA. Wrapper každé
+   sekce nese barvu sekce PŘEDCHOZÍ — zaoblené rohy ji odkrývají. */
+const DARK = '#0d0d10';
+const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
+const SECTION = 'w-full rounded-t-[1.75rem] px-5 pt-16 pb-16 sm:rounded-t-[2.75rem] sm:px-10 sm:pt-24 sm:pb-24 lg:px-14';
+const H2 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,4.5vw,3rem)]';
+const H3 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)]';
+const EYEBROW = 'text-[11px] font-semibold uppercase tracking-[0.25em]';
+const PILL_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100';
+const PILL_OUTLINE_DARK = 'inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10';
+const PILL_DARK = 'inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800';
+const PILL_OUTLINE_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-50';
+
+const scrollTo = (id: string) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+/* ─── JSON-LD SEO injection — obsah jede z CS slovníku (jeden zdroj pravdy) ─── */
 function SeoHead() {
   useEffect(() => {
+    const cs = dropT.cs;
     const faqSchema = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: [
-        { '@type': 'Question', name: 'Co je dropshipping a jak funguje?', acceptedAnswer: { '@type': 'Answer', text: 'Dropshipping je model prodeje, kde zákazník nakoupí ve tvém e-shopu, ale zboží mu odesíláme přímo my — pod tvou značkou. Ty nepotřebuješ sklad ani kapitál v zásobách.' } },
-        { '@type': 'Question', name: 'Potřebuji IČO nebo živnostenský list?', acceptedAnswer: { '@type': 'Answer', text: 'Ano, dropshipping je podnikatelská činnost. Potřebuješ platné IČO nebo živnostenský list.' } },
-        { '@type': 'Question', name: 'Zákazník uvidí, že zásilku posílá swelt.partner?', acceptedAnswer: { '@type': 'Answer', text: 'Ne. Na zásilce je tvoje faktura, tvůj název, tvoje logo. My nikde nefigurujeme — white-label od prvního dne.' } },
-        { '@type': 'Question', name: 'Jak rychle jsou zásilky odesílány?', acceptedAnswer: { '@type': 'Answer', text: 'Express do 24 h (>99,5 % spolehlivost), Standard do 48 h (~97 %), Economy do 72 h. Každá zásilka je sledovatelná online.' } },
-        { '@type': 'Question', name: 'Jaká je minimální objednávka?', acceptedAnswer: { '@type': 'Answer', text: 'Žádná. Posíláme i jeden kus na jednoho zákazníka — platíš až po objednávce zákazníka.' } },
-        { '@type': 'Question', name: 'Mohu dropshippovat do zahraničí?', acceptedAnswer: { '@type': 'Answer', text: 'Ano, dodáváme do celé EU. Feed je dostupný v češtině, slovenštině, angličtině a němčině. Primárně ČR a SK, expanze DE/AT na dotaz.' } },
-        { '@type': 'Question', name: 'Co je swelt.signal?', acceptedAnswer: { '@type': 'Answer', text: 'swelt.signal je AI modul, který sleduje trending produkty napříč naší distribucí a každý týden ti posílá přehled: co přidat do feedu, co odebrat a co roste.' } },
-        { '@type': 'Question', name: 'Jak funguje real-time inventory lock?', acceptedAnswer: { '@type': 'Answer', text: 'Jakmile zákazník dokončí objednávku, zásoby se okamžitě uzamknou v systému. Eliminuje riziko přeprodeji a negativní zákaznickou zkušenost.' } },
-        { '@type': 'Question', name: 'Jak funguje consolidated B2B invoicing?', acceptedAnswer: { '@type': 'Answer', text: 'Všechny tvoje B2C objednávky za měsíc se sloučí do jediné přehledné B2B faktury od nás. Méně administrativy, snadnější účetnictví.' } },
-        { '@type': 'Question', name: 'Co se stane, pokud zákazník chce vrátit zboží?', acceptedAnswer: { '@type': 'Answer', text: 'Zákazník pošle zboží tobě, ty nás kontaktuješ do 48 h, my to řešíme s dodavatelem a ty dostaneš náhradu nebo kredit. Máme i buyback option na pomaloobrátové zásoby.' } },
-        { '@type': 'Question', name: 'Mám API přístup?', acceptedAnswer: { '@type': 'Answer', text: 'Ano — Silver a Gold plány zahrnují plný API přístup (XML, CSV, JSON, REST API) pro automatickou synchronizaci objednávek a zásob.' } },
-        { '@type': 'Question', name: 'Jak funguje triple quality check?', acceptedAnswer: { '@type': 'Answer', text: 'Kontrolujeme zboží třikrát: při příjmu od výrobce, před balením (funkčnost a estetika) a fotodokumentace zásilky. Méně reklamací pro tebe.' } },
-        { '@type': 'Question', name: 'Mohu kombinovat dropshipping s vlastním skladem?', acceptedAnswer: { '@type': 'Answer', text: 'Ano, mnoho partnerů to dělá. Prodáváš ze svého skladu i z našeho — zákazník nerozezná rozdíl.' } },
-        { '@type': 'Question', name: 'Jak funguje swelt.launch onboarding?', acceptedAnswer: { '@type': 'Answer', text: 'Nový partner dostane 30denní guided onboarding s account managerem: nastavení feedu, výběr prvních produktů, podpora s první kampaní. Garantujeme první objednávku do 30 dní nebo prodloužíme trial zdarma.' } },
-      ],
+      mainEntity: cs.faqs.map((f) => ({
+        '@type': 'Question', name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     };
 
     const serviceSchema = {
       '@context': 'https://schema.org',
       '@type': 'Service',
       name: 'swelt.partner Dropshipping',
-      description: 'Kompletní dropshipping řešení pro české a slovenské e-shopy. Prémiové hodinky, šperky a módní doplňky — 70+ značek, white-label, real-time synchronizace, swelt.signal AI.',
+      description: 'Dropshipping prémiových hodinek, šperků a módních doplňků pro české a slovenské e-shopy. 70+ značek, white-label expedice do 24–72 h, real-time synchronizace zásob, swelt.signal AI.',
       provider: { '@type': 'Organization', name: 'swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
@@ -93,145 +95,20 @@ function SeoHead() {
   return null;
 }
 
-/* ─── Utility hooks ─── */
-function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setVisible(true); io.disconnect(); }
-    }, { threshold: 0.12 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return { ref, visible };
-}
+/* ─── Ikonová data (texty žijí v i18n slovníku) ─── */
+const PAIN_ICONS = [AlertCircle, Truck, Target, Lock];
+const STEP_ICONS = [Users, Layers, Store, PackageOpen, Truck];
+const HERO_CARD_ICONS = [ShoppingCart, PackageOpen, Truck];
+const SIGNAL_ICONS = [TrendingUp, Globe, BarChart2, Bell];
+const USP_ICONS = [Tag, Truck, Zap, Lock, ShieldCheck, RefreshCw, FileText, Award, HeadphonesIcon, Globe];
+const CONTACT_ICONS = [HeadphonesIcon, Globe, Users];
 
-function CountUp({ to, duration = 1400, suffix = '', prefix = '' }: { to: number; duration?: number; suffix?: string; prefix?: string }) {
-  const [val, setVal] = useState(0);
-  const { ref, visible } = useReveal<HTMLSpanElement>();
-  useEffect(() => {
-    if (!visible) return;
-    const start = performance.now();
-    let raf = 0;
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / duration);
-      setVal(Math.round(to * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [visible, to, duration]);
-  return <span ref={ref}>{prefix}{val}{suffix}</span>;
-}
-
-function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const { ref, visible } = useReveal<HTMLDivElement>();
-  return (
-    <div ref={ref} style={{ transitionDelay: `${delay}ms` }}
-      className={`${className} transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-      {children}
-    </div>
-  );
-}
-
-/* ─── Data ─── */
-const painPoints = [
-  { problem: 'Nemám peníze na naskladnění', icon: AlertCircle, title: 'Platíš až po prodeji', text: 'Zákazník zaplatí tobě. Ty zaplatíš nám. Nulová investice do zásob — žádné zmrazené peníze v regálech.' },
-  { problem: 'Nevím jak řešit logistiku', icon: Truck, title: 'O expedici se staráme my', text: 'Balíme, kontrolujeme, odesíláme. Pod tvou fakturou. Zákazník vidí tebe — ne nás. Trojí quality check na každé zásilce.' },
-  { problem: 'Bojím se že špatně zvolím produkty ', icon: Target, title: 'S plánem Silver 5000+ produktů', text: 'S plánem silver máš k dispozici všechny produkty z našeho katalogu formou Dropshippingu — přestaneš hádat co nakoupit' },
-  { problem: 'Bojím se přeprodat zákazníkovi', icon: Lock, title: 'Real-time inventory lock', text: 'Jakmile zákazník nakoupí, zásoby se okamžitě uzamknou v systému. Žádné "promiňte, zboží se vyprodalo po zaplacení."' },
-];
-
-const steps = [
-  { num: 1, title: 'Registrace zdarma', text: 'Vytvoříš B2B účet. Schválení do 24 hodin v pracovní dny. Stačí IČO — žádné dokumenty předem.', icon: Users },
-  { num: 2, title: 'Stáhneš produktový feed', text: 'XML, CSV nebo real-time API. Fotky, popisy, ceny, skladovost — vše automaticky. Do Shoptetu v 1 klik.', icon: Layers },
-  { num: 3, title: 'Zákazník nakoupí u tebe', text: 'Nastavíš vlastní cenu a marži. Zákazník platí přímo tobě. Ty si necháš rozdíl — my dostaneme velkoobchodní cenu.', icon: Store },
-  { num: 4, title: 'Předáš nám objednávku', text: 'Přes platformu, API nebo XML export. Zásilku zabalíme pod tvou hlavičkou a odešleme kuriérem.', icon: PackageOpen },
-  { num: 5, title: 'Zákazník dostane balíček', text: 'Doručení do 24–72 h. Tracking číslo automaticky. Zákazník nikdy nezjistí, kdo zásilku připravil.', icon: Truck },
-];
-
-const usps = [
-  { icon: Tag, title: '70+ prémiových značek', text: 'Světové značky, které zákazníci znají a chtějí koupit.' },
-  { icon: Truck, title: 'Expedice do 24–72 hodin', text: 'Sklad v ČR, tři rychlostní pásma, spolehlivé doručení.' },
-  { icon: Zap, title: 'Shoptet API v 1 klik', text: 'Přímá integrace s nejrozšířenější českou platformou.' },
-  { icon: Lock, title: 'Real-time inventory lock', text: 'Zásoby uzamčeny v momentě objednávky. Žádný přeprodej.' },
-  { icon: ShieldCheck, title: 'Trojí quality check', text: 'Kontrola při příjmu, před odesláním a fotodokumentace.' },
-  { icon: RefreshCw, title: 'Aktuální XML/CSV/API feed', text: 'Real-time nebo 4× denně — vždy aktuální ceny a sklad.' },
-  { icon: FileText, title: 'Consolidated B2B invoicing', text: 'Všechny B2C objednávky = 1 přehledná faktura měsíčně.' },
-  { icon: Award, title: 'Bílý štítek od prvního dne', text: 'Zákazník nikdy neuvidí, že zásilku posílá swelt.partner.' },
-  { icon: HeadphonesIcon, title: 'Osobní account manager', text: 'Skutečný člověk — ne bot, ne ticketovací systém.' },
-  { icon: Globe, title: 'EU expanze: ČR, SK, DE, AT', text: 'Jeden feed, čtyři trhy. Lokalizovaný v cs/sk/en/de.' },
-];
-
-const platforms = [
-  { name: 'Shoptet', detail: 'Přímá API integrace. Synchronizace produktů, cen a skladovosti jedním klikem. Nejrychlejší nastavení na CZ trhu.', tag: '#1 v ČR', time: '~15 min' },
-  { name: 'WooCommerce', detail: 'WordPress plugin s XML feedem. Automatická aktualizace. Plná kontrola nad designem produktových stránek.', tag: 'Open source', time: '~30 min' },
-  { name: 'Upgates', detail: 'CSV a XML import s plnou kompatibilitou. Automatická synchronizace cen a zásob.', tag: '', time: '~20 min' },
-  { name: 'Eshop-rychle', detail: 'Nativní podpora produktového feedu. Rychlé nastavení bez technických znalostí.', tag: '', time: '~20 min' },
-  { name: 'Shopify', detail: 'Ideální pro SK/DE/AT expanzi. Vícejazyčný feed, mezinárodní platební brány.', tag: 'EU expanze', time: '~45 min' },
-  { name: 'PrestaShop', detail: 'XML feed a REST API přístup. Podpora verzí 1.6, 1.7 i novějších. Custom module na dotaz.', tag: '', time: '~30 min' },
-  { name: 'REST API', detail: 'Plný programátorský přístup. JSON format, real-time synchronizace, vlastní integrace na libovolnou platformu.', tag: 'Pro devs', time: 'Custom' },
-];
-
-const faqs = [
-  { q: 'Co je dropshipping a jak přesně funguje?', a: 'Dropshipping je model prodeje, kde zákazník nakoupí ve tvém e-shopu, ale zboží mu odesíláme přímo my — pod tvou značkou, z tvé faktury. Ty nepotřebuješ sklad ani kapitál v zásobách. Zákazník to nerozezná.' },
-  { q: 'Potřebuji IČO nebo živnostenský list?', a: 'Ano. Dropshipping je podnikatelská činnost. Potřebuješ platné IČO nebo živnostenský list. Pomůžeme ti s nastavením, pokud teprve začínáš.' },
-  { q: 'Kolik stojí začátek?', a: 'Registrace je zdarma a 14denní trial bez platby. Placené plány začínají od 1 490 Kč/měsíc (Starter). Silver plán (2 490 Kč/měsíc) se ti vrátí jako kredit po dosažení obratu 50 000 Kč/měsíc.' },
-  { q: 'Zákazník uvidí, že zásilku posílá swelt.partner?', a: 'Ne. Na zásilce je tvoje faktura, tvoje logo, tvůj název. My nikde nefigurujeme — white-label je zahrnut ve všech placených plánech (kromě Starteru).' },
-  { q: 'Jak rychle jsou zásilky odesílány?', a: 'Máme tři rychlostní pásma: Express (do 24 h, >99,5 % spolehlivost), Standard (do 48 h, ~97 %) a Economy (do 72 h, ~95 %). Každá zásilka dostane tracking číslo.' },
-  { q: 'Jaká je minimální objednávka?', a: 'Žádná. Posíláme klidně jeden kus na jednoho zákazníka — platíš až po jeho objednávce. Žádné MOQ.' },
-  { q: 'Mohu dropshippovat do zahraničí?', a: 'Ano. Dodáváme primárně do ČR a SK, feed je lokalizovaný v cs/sk/en/de. Pro DE a AT expanzi kontaktuj account managera.' },
-  { q: 'Co je swelt.signal a proč ho potřebuji?', a: 'swelt.signal je AI modul sledující pohyb produktů napříč naší distribucí. Každý týden dostaneš top 10 trending produktů a 5 klesajících — víš co přidat a co odebrat z feedu dřív než konkurence.' },
-  { q: 'Jak funguje real-time inventory lock?', a: 'Jakmile zákazník dokončí objednávku ve tvém e-shopu, zásoby se okamžitě uzamknou v našem systému. Eliminuje riziko přeprodeji a negativní zákaznický zážitek z "promiňte, vyprodáno po zaplacení".' },
-  { q: 'Jak funguje consolidated B2B invoicing?', a: 'Všechny tvoje B2C objednávky za měsíc se sloučí do jedné přehledné B2B faktury od nás. Méně administrativy, snadnější účetnictví a daňové přiznání.' },
-  { q: 'Co se stane, pokud zákazník chce vrátit zboží?', a: 'Jasný 3-krokový proces: zákazník pošle zboží tobě → ty nás kontaktuješ do 48 h → my řešíme s dodavatelem a ty dostaneš náhradu nebo kredit na příští objednávku. Gold plán zahrnuje buyback option na pomaloobrátové zásoby.' },
-  { q: 'Jak funguje triple quality check?', a: 'Každou zásilku kontrolujeme třikrát: (1) kontrola při příjmu od výrobce, (2) kontrola funkčnosti a estetiky před balením, (3) fotodokumentace zásilky. Výsledkem je méně reklamací a lepší recenze ve tvém e-shopu.' },
-  { q: 'Mohu kombinovat dropshipping s vlastním skladem?', a: 'Ano. Mnoho partnerů prodává ze svého skladu i z toho našeho najednou. Zákazník nerozezná rozdíl — feed i expedice vypadají stejně.' },
-  { q: 'Co je swelt.launch a co zahrnuje?', a: 'Pro nové partnery: 30denní guided onboarding s account managerem. Projdeme nastavení feedu, výběr prvních produktů a podporu s první kampaní. Garantujeme první objednávku do 30 dní — nebo ti prodloužíme trial o měsíc zdarma.' },
-];
-
-const tiers = [
-  {
-    name: 'Starter', subtitle: 'Pro první kroky\na testování trhu',
-    monthlyPrice: 1490, quarterlyPrice: 1192, priceNote: 'Kč / měsíc bez DPH',
-    cta: 'Začít zdarma na 14 dní', ctaVariant: 'outline' as const, featured: false,
-    badge: '',
-    features: ['500 produktů — základní katalog', '1× denní aktualizace feedu', 'Expedice do 72 hodin', 'E-mailová podpora', 'swelt.launch onboarding'],
-    missing: ['Bílý štítek', 'Shoptet API', 'swelt.signal', 'Real-time inventory lock'],
-  },
-  {
-    name: 'Silver', subtitle: 'Pro rostoucí e-shopy\nco to myslí vážně',
-    monthlyPrice: 2490, quarterlyPrice: 1992, priceNote: 'Kč / měsíc bez DPH',
-    cta: 'Aktivovat Silver →', ctaVariant: 'default' as const, featured: true,
-    badge: 'Nejoblíbenější',
-    features: ['Celý katalog 3 000+ produktů', 'Real-time API + 4× denně XML/CSV', 'Expedice do 24–48 hodin', 'Bílý štítek — tvoje faktura + logo', 'Shoptet / WooCommerce API', 'Real-time inventory lock', 'Consolidated B2B invoicing', 'Telefonická + chat podpora', 'swelt.signal Lite — weekly digest', 'swelt.launch onboarding', 'Refund kreditem při obratu 50 000 Kč/měsíc'],
-    missing: [],
-  },
-  {
-    name: 'Gold', subtitle: 'Pro profesionální e-shopy\na EU expanzi',
-    monthlyPrice: 0, quarterlyPrice: 0, priceNote: 'individuální nabídka',
-    cta: 'Získat nabídku', ctaVariant: 'outline' as const, featured: false,
-    badge: 'Enterprise',
-    features: ['Vše ze Silver', 'Dedikovaný account manager', 'swelt.signal Pro — real-time + API', 'Prioritní vyřízení do 4 hodin', 'EU expanze SK/DE/AT — lokalizace', 'Triple quality check + fotodokumentace', 'Buyback option na slow-movers', 'Vlastní produktové fotky na vyžádání', 'SLA delivery záruka', 'Custom API integrace'],
-    missing: [],
-  },
-];
-
+/* Demo řádky swelt.signal digestu — identifikátory produktů, ne copy */
 const signalProducts = [
-  { sku: 'SKU-7712', name: 'Citizen Eco-Drive BM7455', trend: 92, change: '+28%', action: 'Přidat do feedu', actionTone: 'success' },
-  { sku: 'SKU-3301', name: 'Seiko Presage SRPE35', trend: 76, change: '+14%', action: 'Sledovat', actionTone: 'accent' },
-  { sku: 'SKU-9014', name: 'Police Menelik PEWJG', trend: 61, change: '+6%', action: 'Sledovat', actionTone: 'accent' },
-  { sku: 'SKU-2208', name: 'Versace V-Chronos VE5A', trend: 28, change: '−11%', action: 'Odebrat z feedu', actionTone: 'destructive' },
-];
-
-const logisticsZones = [
-  { zone: 'Česká republika', time: 'do 24 h', reliability: '99.5 %', couriers: 'DHL, DPD, GLS', color: 'emerald' },
-  { zone: 'Slovensko', time: 'do 48 h', reliability: '97 %', couriers: 'DPD, GLS', color: 'blue' },
-  { zone: 'Německo & Rakousko', time: 'do 72 h', reliability: '96 %', couriers: 'DHL Express', color: 'violet' },
-  { zone: 'Zbytek EU', time: 'na dotaz', reliability: '95 %+', couriers: 'DHL, FedEx, UPS', color: 'slate' },
+  { sku: 'SKU-7712', name: 'Citizen Eco-Drive BM7455', trend: 92, change: '+28%', tone: 'success' },
+  { sku: 'SKU-3301', name: 'Seiko Presage SRPE35', trend: 76, change: '+14%', tone: 'accent' },
+  { sku: 'SKU-9014', name: 'Police Menelik PEWJG', trend: 61, change: '+6%', tone: 'accent' },
+  { sku: 'SKU-2208', name: 'Versace V-Chronos VE5A', trend: 28, change: '−11%', tone: 'destructive' },
 ];
 
 /* ─── Product Calculator ─── */
@@ -253,7 +130,10 @@ const PLAN_PRICES = {
   silver:  { monthly: 2490, yearly: 1992 },
 };
 
-function ProductCalculator() {
+const CALC_PLAN_KEYS = ['starter', 'silver', 'gold'] as const;
+
+function ProductCalculator({ d }: { d: DropText }) {
+  const c = d.calc;
   const [sellPrice, setSellPrice] = useState(DEMO_PRODUCT.moc);
   const [orders, setOrders] = useState(30);
   const [planTier, setPlanTier] = useState<'starter' | 'silver'>('silver');
@@ -272,87 +152,51 @@ function ProductCalculator() {
 
   const navigate = useNavigate();
 
-  // Per-plan net profit helpers
   const netFor = (monthly: number) => yearlyProfit - monthly * 12;
-
-  const calcPlans = [
-    {
-      key: 'starter' as const,
-      name: 'Starter',
-      subtitle: 'Rozjezd bez rizika',
-      monthlyQ: PLAN_PRICES.starter.monthly,
-      monthlyY: PLAN_PRICES.starter.yearly,
-      badge: null,
-      featured: false,
-      features: ['Katalog 500 produktů', 'XML/CSV feed 1× denně', 'Expedice do 48 h', 'E-mailová podpora'],
-      cta: 'Začít se Starter',
-    },
-    {
-      key: 'silver' as const,
-      name: 'Silver',
-      subtitle: 'Pro rostoucí e-shopy',
-      monthlyQ: PLAN_PRICES.silver.monthly,
-      monthlyY: PLAN_PRICES.silver.yearly,
-      badge: 'Nejoblíbenější',
-      featured: true,
-      features: ['Celý katalog 3 000+ produktů', 'Real-time API + XML/CSV', 'Expedice do 24–48 h', 'White-label fakturace', 'Shoptet / WooCommerce API', 'swelt.signal Lite', 'Chat + telefonická podpora'],
-      cta: 'Aktivovat Silver',
-    },
-    {
-      key: 'gold' as const,
-      name: 'Gold',
-      subtitle: 'Enterprise & EU expanze',
-      monthlyQ: 0,
-      monthlyY: 0,
-      badge: 'Enterprise',
-      featured: false,
-      features: ['Vše ze Silver', 'Dedikovaný account manager', 'swelt.signal Pro — real-time', 'Prioritní vyřízení do 4 h', 'EU expanze SK/DE/AT', 'SLA delivery záruka', 'Custom API integrace'],
-      cta: 'Získat nabídku',
-    },
-  ];
+  const fmt = (n: number) => n.toLocaleString('cs');
 
   return (
     <div className="space-y-8">
 
       {/* ── Row 1: Product card + Sliders + Results ── */}
-      <div className="grid lg:grid-cols-3 gap-6 items-stretch">
+      <div className="grid lg:grid-cols-3 gap-5 items-stretch">
 
         {/* Product card */}
-        <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden flex flex-col">
+        <div className="rounded-2xl bg-white ring-1 ring-zinc-200 overflow-hidden flex flex-col">
           <div className="relative">
             <img
               src={DEMO_PRODUCT.img}
               alt={DEMO_PRODUCT.fullName}
-              className="w-full aspect-[4/3] object-contain bg-gray-50 p-4"
-              onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect width="300" height="200" fill="%23f1f5f9"/><text x="150" y="100" text-anchor="middle" font-family="sans-serif" fill="%2394a3b8">Obrázek produktu</text></svg>'; }}
+              className="w-full aspect-[4/3] object-contain bg-zinc-50 p-4"
+              onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect width="300" height="200" fill="%23f4f4f5"/><text x="150" y="100" text-anchor="middle" font-family="sans-serif" fill="%23a1a1aa">Foto produktu</text></svg>'; }}
             />
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white border border-border px-2 py-1 shadow-sm">
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white ring-1 ring-zinc-200 px-2 py-1">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[11px] font-semibold text-foreground">Živě</span>
+              <span className="text-[11px] font-semibold text-zinc-900">{c.live}</span>
             </div>
-            <div className="absolute top-3 right-3 rounded-lg bg-primary text-white text-xs font-bold px-2 py-1">
-              -{DEMO_PRODUCT.discount}%
+            <div className="absolute top-3 right-3 rounded-full bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1">
+              −{DEMO_PRODUCT.discount}%
             </div>
           </div>
           <div className="p-5 flex flex-col flex-1">
-            <div className="text-xs font-bold text-amber-600 tracking-wide mb-1">{DEMO_PRODUCT.brand}</div>
-            <div className="font-semibold text-sm leading-snug mb-3">{DEMO_PRODUCT.fullName}</div>
+            <div className="text-xs font-semibold text-zinc-400 tracking-wide mb-1">{DEMO_PRODUCT.brand}</div>
+            <div className="font-semibold text-sm leading-snug text-zinc-900 mb-3">{DEMO_PRODUCT.fullName}</div>
             <div className="flex items-center gap-1.5 mb-4">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-xs text-emerald-600 font-medium">Skladem: {DEMO_PRODUCT.stock} ks</span>
+              <span className="text-xs text-emerald-600 font-medium">{c.stockLabel}: {DEMO_PRODUCT.stock} {c.unit}</span>
             </div>
-            <div className="rounded-xl bg-muted/60 border border-border p-3 space-y-1.5 text-xs mt-auto">
+            <div className="rounded-xl bg-zinc-50 ring-1 ring-zinc-100 p-3 space-y-1.5 text-xs mt-auto">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">VOC (nákup)</span>
-                <span className="font-semibold">€{DEMO_PRODUCT.vocEur.toFixed(2)} <span className="text-muted-foreground font-normal">≈ {DEMO_PRODUCT.voc.toLocaleString('cs')} Kč</span></span>
+                <span className="text-zinc-500">{c.vocLabel}</span>
+                <span className="font-semibold text-zinc-900">€{DEMO_PRODUCT.vocEur.toFixed(2)} <span className="text-zinc-400 font-normal">≈ {fmt(DEMO_PRODUCT.voc)} {c.currency}</span></span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">MOC (doporučená)</span>
-                <span className="font-semibold">€{DEMO_PRODUCT.mocEur.toFixed(2)} <span className="text-muted-foreground font-normal">≈ {DEMO_PRODUCT.moc.toLocaleString('cs')} Kč</span></span>
+                <span className="text-zinc-500">{c.mocLabel}</span>
+                <span className="font-semibold text-zinc-900">€{DEMO_PRODUCT.mocEur.toFixed(2)} <span className="text-zinc-400 font-normal">≈ {fmt(DEMO_PRODUCT.moc)} {c.currency}</span></span>
               </div>
-              <div className="h-px bg-border my-1" />
+              <div className="h-px bg-zinc-200 my-1" />
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Marže při MOC</span>
+                <span className="text-zinc-500">{c.marginAtMoc}</span>
                 <span className="font-bold text-emerald-600">€{(DEMO_PRODUCT.mocEur - DEMO_PRODUCT.vocEur).toFixed(2)} ({DEMO_PRODUCT.discount} %)</span>
               </div>
             </div>
@@ -360,85 +204,85 @@ function ProductCalculator() {
         </div>
 
         {/* Sliders */}
-        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 flex flex-col gap-8">
+        <div className="rounded-2xl bg-white ring-1 ring-zinc-200 p-6 flex flex-col gap-8">
           <div className="flex-1 space-y-6">
-            <div className="text-[11px] tracking-[0.2em] uppercase text-primary font-semibold">Nastav svůj scénář</div>
+            <div className={`${EYEBROW} text-zinc-400`}>{c.scenarioEyebrow}</div>
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium flex items-center gap-1.5">
-                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                  Nákupní cena (pevná)
+                <label className="text-sm font-medium text-zinc-900 flex items-center gap-1.5">
+                  <Lock className="h-3.5 w-3.5 text-zinc-400" />
+                  {c.buyPriceLabel}
                 </label>
-                <span className="font-semibold text-muted-foreground tabular-nums">{DEMO_PRODUCT.voc.toLocaleString('cs')} Kč</span>
+                <span className="font-semibold text-zinc-500 tabular-nums">{fmt(DEMO_PRODUCT.voc)} {c.currency}</span>
               </div>
-              <div className="h-2 rounded-full bg-muted relative overflow-hidden">
-                <div className="absolute left-0 top-0 h-full bg-muted-foreground/30 rounded-full" style={{ width: `${(DEMO_PRODUCT.voc / 5000) * 100}%` }} />
+              <div className="h-2 rounded-full bg-zinc-100 relative overflow-hidden">
+                <div className="absolute left-0 top-0 h-full bg-zinc-300 rounded-full" style={{ width: `${(DEMO_PRODUCT.voc / 5000) * 100}%` }} />
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1">Velkoobchodní cena swelt.partner — fixní, nelze měnit</p>
+              <p className="text-[11px] text-zinc-400 mt-1">{c.buyPriceNote}</p>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium">Tvoje prodejní cena</label>
-                <span className="font-semibold text-primary tabular-nums">{sellPrice.toLocaleString('cs')} Kč</span>
+                <label className="text-sm font-medium text-zinc-900">{c.sellPriceLabel}</label>
+                <span className="font-semibold text-zinc-900 tabular-nums">{fmt(sellPrice)} {c.currency}</span>
               </div>
               <Slider value={[sellPrice]} onValueChange={([v]) => setSellPrice(v)} min={DEMO_PRODUCT.voc + 100} max={7000} step={25} />
-              <div className="flex justify-between text-[11px] text-muted-foreground mt-1">
-                <span>min. {(DEMO_PRODUCT.voc + 100).toLocaleString('cs')} Kč</span>
-                <span className="text-primary font-medium">MOC: {DEMO_PRODUCT.moc.toLocaleString('cs')} Kč</span>
+              <div className="flex justify-between text-[11px] text-zinc-400 mt-1">
+                <span>{c.minLabel} {fmt(DEMO_PRODUCT.voc + 100)} {c.currency}</span>
+                <span className="text-zinc-600 font-medium">{c.mocShort} {fmt(DEMO_PRODUCT.moc)} {c.currency}</span>
               </div>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium">Objednávky za měsíc</label>
-                <span className="font-semibold text-primary tabular-nums">{orders} ks</span>
+                <label className="text-sm font-medium text-zinc-900">{c.ordersLabel}</label>
+                <span className="font-semibold text-zinc-900 tabular-nums">{orders} {c.unit}</span>
               </div>
               <Slider value={[orders]} onValueChange={([v]) => setOrders(v)} min={1} max={200} step={1} />
-              <div className="flex justify-between text-[11px] text-muted-foreground mt-1">
-                <span>1 ks</span><span>200 ks</span>
+              <div className="flex justify-between text-[11px] text-zinc-400 mt-1">
+                <span>1 {c.unit}</span><span>200 {c.unit}</span>
               </div>
             </div>
           </div>
 
           {/* Mini results */}
-          <div className="rounded-xl bg-muted/40 border border-border p-4 grid grid-cols-2 gap-3">
+          <div className="rounded-xl bg-zinc-50 ring-1 ring-zinc-100 p-4 grid grid-cols-2 gap-3">
             <div>
-              <div className="text-xs text-muted-foreground">Marže / kus</div>
-              <div className={`font-display text-xl font-bold ${profitColor}`}>{margin.toLocaleString('cs')} Kč</div>
-              <div className="text-xs text-muted-foreground">{marginPct} %</div>
+              <div className="text-xs text-zinc-500">{c.marginPerPiece}</div>
+              <div className={`font-sans text-xl font-semibold tracking-tight ${profitColor}`}>{fmt(margin)} {c.currency}</div>
+              <div className="text-xs text-zinc-400">{marginPct} %</div>
             </div>
             <div>
-              <div className="text-xs text-muted-foreground">Měsíční zisk</div>
-              <div className={`font-display text-xl font-bold ${profitColor}`}>{monthlyProfit.toLocaleString('cs')} Kč</div>
-              <div className="text-xs text-muted-foreground">{orders} obj.</div>
+              <div className="text-xs text-zinc-500">{c.monthlyProfit}</div>
+              <div className={`font-sans text-xl font-semibold tracking-tight ${profitColor}`}>{fmt(monthlyProfit)} {c.currency}</div>
+              <div className="text-xs text-zinc-400">{orders} {c.ordersShort}</div>
             </div>
           </div>
         </div>
 
         {/* Results panel */}
-        <div className="rounded-2xl bg-primary text-primary-foreground p-6 shadow-md flex flex-col justify-between">
+        <div className="rounded-2xl bg-zinc-900 text-white p-6 flex flex-col justify-between">
           <div className="space-y-4">
-            <div className="text-xs opacity-70 uppercase tracking-wider">Roční potenciál po odečtení plánu</div>
+            <div className="text-xs text-zinc-400 uppercase tracking-wider">{c.resultsEyebrow}</div>
 
             {/* Plan tier selector */}
-            <div className="flex rounded-lg bg-white/15 p-0.5 gap-0.5">
-              {(['starter', 'silver'] as const).map(t => (
+            <div className="flex rounded-full bg-white/10 p-0.5 gap-0.5">
+              {(['starter', 'silver'] as const).map((t, i) => (
                 <button key={t} onClick={() => setPlanTier(t)}
-                  className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors ${planTier === t ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
-                  {t === 'starter' ? 'Starter' : 'Silver'}
+                  className={`flex-1 rounded-full py-1.5 text-[11px] font-semibold transition-colors ${planTier === t ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'}`}>
+                  {c.plans[i].name}
                 </button>
               ))}
             </div>
 
             {/* Billing frequency toggle */}
-            <div className="flex rounded-lg bg-white/15 p-0.5 gap-0.5">
+            <div className="flex rounded-full bg-white/10 p-0.5 gap-0.5">
               {(['quarterly', 'yearly'] as const).map(p => (
                 <button key={p} onClick={() => setPlanBilling(p)}
-                  className={`flex-1 rounded-md py-1.5 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 ${planBilling === p ? 'bg-white text-primary shadow-sm' : 'text-primary-foreground/70 hover:text-primary-foreground'}`}>
-                  {p === 'quarterly' ? 'Čtvrtletně' : (
-                    <span className="flex items-center gap-1.5">Ročně <span className="text-[9px] bg-emerald-500 text-white rounded px-1 py-0.5 leading-none">−20%</span></span>
+                  className={`flex-1 rounded-full py-1.5 text-[11px] font-semibold transition-colors flex items-center justify-center gap-1 ${planBilling === p ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'}`}>
+                  {p === 'quarterly' ? d.pricing.quarterly : (
+                    <span className="flex items-center gap-1.5">{d.pricing.yearly} <span className="text-[9px] bg-emerald-500 text-white rounded-full px-1.5 py-0.5 leading-none">−20 %</span></span>
                   )}
                 </button>
               ))}
@@ -446,33 +290,33 @@ function ProductCalculator() {
 
             {/* Gross */}
             <div>
-              <div className="text-[10px] opacity-50 uppercase tracking-wider mb-0.5">Hrubý potenciál</div>
-              <div className="font-display text-4xl font-bold leading-none">{yearlyProfit.toLocaleString('cs')}</div>
-              <div className="text-sm opacity-60 mt-1">Kč / rok · {orders} obj./měsíc</div>
+              <div className="text-[10px] text-zinc-500 uppercase tracking-wider mb-0.5">{c.grossLabel}</div>
+              <div className="font-sans font-extralight tracking-tight text-4xl leading-none">{fmt(yearlyProfit)}</div>
+              <div className="text-sm text-zinc-400 mt-1">{c.yearUnit} · {orders} {c.perMonthOrders}</div>
             </div>
 
             {/* Selected plan deduction */}
-            <div className="rounded-xl bg-white/10 border border-white/20 px-4 py-3 space-y-2">
+            <div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="opacity-70">Plán {planTier === 'starter' ? 'Starter' : 'Silver'} / rok</span>
-                <span className="text-red-300 font-semibold">−{planYearlyCost.toLocaleString('cs')} Kč</span>
+                <span className="text-zinc-400">{c.planLabel} {c.plans[planTier === 'starter' ? 0 : 1].name} {c.perYearSuffix}</span>
+                <span className="text-red-400 font-semibold">−{fmt(planYearlyCost)} {c.currency}</span>
               </div>
-              <div className="text-[10px] opacity-50">
-                {planMonthlyPrice.toLocaleString('cs')} Kč/měs · fakturováno {planBilling === 'quarterly' ? 'čtvrtletně' : 'ročně'}
+              <div className="text-[10px] text-zinc-500">
+                {fmt(planMonthlyPrice)} {c.perMonthShort} · {planBilling === 'quarterly' ? c.billedQuarterly : c.billedYearly}
               </div>
-              <div className="h-px bg-white/20" />
+              <div className="h-px bg-white/10" />
               <div className="flex justify-between text-sm font-bold">
-                <span>Čistý zisk / rok</span>
-                <span className={netYearlyProfit >= 0 ? 'text-emerald-300' : 'text-red-300'}>
-                  {netYearlyProfit.toLocaleString('cs')} Kč
+                <span>{c.netPerYear}</span>
+                <span className={netYearlyProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                  {fmt(netYearlyProfit)} {c.currency}
                 </span>
               </div>
             </div>
           </div>
 
           {isGood && (
-            <div className="mt-4 rounded-lg bg-white/15 px-3 py-2 text-xs">
-              ✓ Výborná marže — tento produkt stojí za propagaci
+            <div className="mt-4 rounded-xl bg-white/10 px-3 py-2 text-xs text-zinc-200">
+              {c.goodMargin}
             </div>
           )}
         </div>
@@ -480,13 +324,13 @@ function ProductCalculator() {
 
       {/* ── Separator + centered billing toggle ── */}
       <div className="flex flex-col items-center gap-3">
-        <p className="text-xs text-muted-foreground text-center">* Orientační kalkulace, nezahrnuje náklady na reklamu a platební brány.</p>
-        <div className="inline-flex rounded-xl border border-border bg-white p-1 gap-1 shadow-sm">
+        <p className="text-xs text-zinc-400 text-center">{c.disclaimer}</p>
+        <div className="inline-flex rounded-full bg-white ring-1 ring-zinc-200 p-1 gap-1">
           {(['quarterly', 'yearly'] as const).map(p => (
             <button key={p} onClick={() => setPlanBilling(p)}
-              className={`rounded-lg px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${planBilling === p ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}>
-              {p === 'quarterly' ? 'Čtvrtletně' : (
-                <span className="flex items-center gap-2">Ročně <span className="text-[10px] bg-emerald-500 text-white rounded px-1.5 py-0.5 leading-none">−20 %</span></span>
+              className={`rounded-full px-5 py-2 text-sm font-medium transition-all flex items-center gap-2 ${planBilling === p ? 'bg-zinc-900 text-white' : 'text-zinc-500 hover:text-zinc-900'}`}>
+              {p === 'quarterly' ? d.pricing.quarterly : (
+                <span className="flex items-center gap-2">{d.pricing.yearly} <span className="text-[10px] bg-emerald-500 text-white rounded-full px-1.5 py-0.5 leading-none">−20 %</span></span>
               )}
             </button>
           ))}
@@ -495,138 +339,133 @@ function ProductCalculator() {
 
       {/* ── Row 2: All plans ── */}
       <div className="grid lg:grid-cols-3 gap-4">
-          {calcPlans.map(plan => {
-            const monthlyPrice = planBilling === 'quarterly' ? plan.monthlyQ : plan.monthlyY;
-            const yearlyPlanCost = monthlyPrice * 12;
-            const net = plan.monthlyQ === 0 ? null : netFor(monthlyPrice);
-            const isSelected = planTier === plan.key && (plan.key as string) !== 'gold';
+        {c.plans.map((plan, i) => {
+          const key = CALC_PLAN_KEYS[i];
+          const isGold = key === 'gold';
+          const prices = isGold ? null : PLAN_PRICES[key as 'starter' | 'silver'];
+          const monthlyPrice = prices ? (planBilling === 'quarterly' ? prices.monthly : prices.yearly) : 0;
+          const yearlyPlanCost = monthlyPrice * 12;
+          const net = prices ? netFor(monthlyPrice) : null;
+          const isSelected = planTier === key;
+          const featured = key === 'silver';
 
-            return (
-              <div key={plan.key}
-                className={`relative rounded-2xl border-2 bg-white transition-all ${plan.featured ? 'border-primary shadow-xl' : isSelected ? 'border-primary/50 shadow-md' : 'border-border shadow-sm'}`}>
+          return (
+            <div key={plan.name}
+              className={`relative rounded-2xl bg-white transition-all ${featured ? 'border-2 border-zinc-900' : isSelected ? 'ring-2 ring-zinc-400' : 'ring-1 ring-zinc-200'}`}>
 
-                {/* Badge */}
-                {plan.badge && (
-                  <div className="absolute -top-3 left-0 right-0 flex justify-center">
-                    <span className={`inline-flex items-center rounded-full px-3 py-0.5 text-[11px] font-semibold shadow-md ${plan.featured ? 'bg-primary text-white' : 'bg-zinc-800 text-white'}`}>
-                      {plan.badge}
-                    </span>
+              {plan.badge && (
+                <div className="absolute -top-3 left-0 right-0 flex justify-center">
+                  <span className={`inline-flex items-center rounded-full px-3 py-0.5 text-[11px] font-semibold ${featured ? 'bg-zinc-900 text-white' : 'bg-white ring-1 ring-zinc-300 text-zinc-600'}`}>
+                    {plan.badge}
+                  </span>
+                </div>
+              )}
+
+              <div className="p-6 pt-7">
+                <div className="text-center mb-5">
+                  <div className="text-xl font-semibold tracking-tight text-zinc-900 mb-0.5">{plan.name}</div>
+                  <div className="text-xs text-zinc-500 mb-3">{plan.subtitle}</div>
+                  {isGold ? (
+                    <div className="text-sm text-zinc-500 font-medium py-1">{d.pricing.bespoke}</div>
+                  ) : (
+                    <>
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="font-sans font-extralight tracking-tight text-3xl text-zinc-900">{fmt(monthlyPrice)}</span>
+                        <span className="text-sm text-zinc-500">{d.pricing.perMonth}</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5">
+                        {planBilling === 'quarterly'
+                          ? `${fmt(monthlyPrice * 3)} ${d.pricing.quarterlyNote}`
+                          : `${fmt(yearlyPlanCost)} ${d.pricing.yearlyNote}`}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {net !== null && (
+                  <div
+                    className={`rounded-xl p-3 mb-4 text-center cursor-pointer transition-all ${isSelected ? 'bg-zinc-900 text-white' : 'bg-zinc-50 ring-1 ring-zinc-100 hover:ring-zinc-300'}`}
+                    onClick={() => !isGold && setPlanTier(key as 'starter' | 'silver')}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider mb-0.5 ${isSelected ? 'text-zinc-400' : 'text-zinc-500'}`}>{c.netPerYear}</div>
+                    <div className={`font-sans text-xl font-semibold tracking-tight ${isSelected ? '' : net >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                      {fmt(net)} {c.currency}
+                    </div>
+                    {!isSelected && <div className="text-[10px] text-zinc-500 mt-0.5">{c.selectPlan}</div>}
                   </div>
                 )}
 
-                <div className="p-6 pt-7">
-                  {/* Header */}
-                  <div className="text-center mb-5">
-                    <div className="font-display text-xl font-bold mb-0.5">{plan.name}</div>
-                    <div className="text-xs text-muted-foreground mb-3">{plan.subtitle}</div>
-                    {plan.monthlyQ === 0 ? (
-                      <div className="text-sm text-muted-foreground font-medium py-1">Individuální nabídka</div>
-                    ) : (
-                      <>
-                        <div className="flex items-baseline justify-center gap-1">
-                          <span className="font-display text-3xl font-bold">{monthlyPrice.toLocaleString('cs')}</span>
-                          <span className="text-sm text-muted-foreground">Kč / měs.</span>
-                        </div>
-                        <div className="text-[10px] text-muted-foreground mt-0.5">
-                          {planBilling === 'quarterly'
-                            ? `${(monthlyPrice * 3).toLocaleString('cs')} Kč čtvrtletně`
-                            : `${yearlyPlanCost.toLocaleString('cs')} Kč ročně`}
-                        </div>
-                      </>
-                    )}
-                  </div>
+                <ul className="space-y-1.5 mb-5">
+                  {plan.features.map(f => (
+                    <li key={f} className="flex items-start gap-2 text-xs text-zinc-700">
+                      <Check className="h-3.5 w-3.5 shrink-0 mt-0.5 text-emerald-500" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
 
-                  {/* Net profit highlight */}
-                  {net !== null && (
-                    <div
-                      className={`rounded-xl p-3 mb-4 text-center cursor-pointer transition-all border ${isSelected ? 'bg-primary text-primary-foreground border-primary' : 'bg-muted/40 border-border hover:border-primary/40'}`}
-                      onClick={() => plan.key !== 'gold' && setPlanTier(plan.key as 'starter' | 'silver')}
-                    >
-                      <div className={`text-[10px] uppercase tracking-wider mb-0.5 ${isSelected ? 'opacity-70' : 'text-muted-foreground'}`}>Čistý zisk / rok</div>
-                      <div className={`font-display text-xl font-bold ${isSelected ? '' : net >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                        {net.toLocaleString('cs')} Kč
-                      </div>
-                      {!isSelected && <div className="text-[10px] text-primary mt-0.5">Vybrat plán →</div>}
-                    </div>
-                  )}
+                <button
+                  type="button"
+                  className={`${featured ? PILL_DARK : PILL_OUTLINE_LIGHT} w-full`}
+                  onClick={() => navigate('/register')}
+                >
+                  {plan.cta} <ArrowRight className="h-4 w-4" />
+                </button>
 
-                  {/* Features */}
-                  <ul className="space-y-1.5 mb-5">
-                    {plan.features.map(f => (
-                      <li key={f} className="flex items-start gap-2 text-xs">
-                        <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${plan.featured ? 'text-primary' : 'text-emerald-500'}`} />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    className="w-full"
-                    variant={plan.featured ? 'default' : 'outline'}
-                    onClick={() => navigate('/register')}
-                  >
-                    {plan.cta} <ArrowRight className="h-4 w-4" />
-                  </Button>
-
-                  {plan.key === 'silver' && (
-                    <p className="text-center text-[10px] text-muted-foreground mt-2">Refund kreditem při obratu 50 000 Kč/měsíc</p>
-                  )}
-                </div>
+                {featured && (
+                  <p className="text-center text-[10px] text-zinc-400 mt-2">{c.silverNote}</p>
+                )}
               </div>
-            );
-          })}
-        </div>
-    </div>
-  );
-}
-
-/* ─── FAQ Item ─── */
-function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="border-b border-border last:border-0">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-5 text-left gap-4 hover:text-primary transition-colors">
-        <span className="font-medium text-sm sm:text-base">{q}</span>
-        <ChevronDown className={`h-5 w-5 text-primary shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
-      </button>
-      <div className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-96 pb-5' : 'max-h-0'}`}>
-        <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-/* ─── Floating social proof ─── */
-function FloatingNotif() {
-  const notifs = [
-    { name: 'Jan K.', city: 'Praha', action: 'se zaregistroval' },
-    { name: 'Tereza M.', city: 'Brno', action: 'aktivoval Silver plán' },
-    { name: 'Ondřej P.', city: 'Ostrava', action: 'spustil první feed' },
-    { name: 'Lucie V.', city: 'Plzeň', action: 'přidal 120 produktů' },
-    { name: 'Martin S.', city: 'Bratislava', action: 'expandoval na SK' },
-  ];
+/* ─── FAQ Item (tmavá sekce) ─── */
+function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-white/10 last:border-0">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-5 text-left gap-4 text-zinc-100 hover:text-white transition-colors">
+        <span className="font-medium text-sm sm:text-base">{q}</span>
+        <ChevronDown className={`h-5 w-5 text-zinc-500 shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-96 pb-5' : 'max-h-0'}`}>
+        <p className="text-sm text-zinc-400 leading-relaxed">{a}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Plovoucí social proof ─── */
+function FloatingNotif({ t }: { t: DropText['notif'] }) {
   const [idx, setIdx] = useState(0);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const show = () => { setVisible(true); setTimeout(() => setVisible(false), 4500); };
     const interval = setInterval(() => {
-      setIdx(i => (i + 1) % notifs.length);
+      setIdx(i => (i + 1) % t.entries.length);
       show();
     }, 10000);
-    const t = setTimeout(show, 3500);
-    return () => { clearInterval(interval); clearTimeout(t); };
-  }, []);
+    const timer = setTimeout(show, 3500);
+    return () => { clearInterval(interval); clearTimeout(timer); };
+  }, [t.entries.length]);
+
+  const entry = t.entries[idx];
 
   return (
     <div className={`fixed bottom-20 left-4 z-50 transition-all duration-500 lg:bottom-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-      <div className="flex items-center gap-3 rounded-xl border border-border bg-white shadow-xl px-4 py-3 max-w-xs">
-        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-          <Users className="h-4 w-4 text-primary" />
+      <div className="flex items-center gap-3 rounded-2xl bg-white ring-1 ring-zinc-200 shadow-xl px-4 py-3 max-w-xs">
+        <div className="h-8 w-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0">
+          <Users className="h-4 w-4 text-zinc-600" />
         </div>
         <div>
-          <div className="text-xs font-semibold">{notifs[idx].name} z {notifs[idx].city}</div>
-          <div className="text-[11px] text-muted-foreground">{notifs[idx].action} · právě teď</div>
+          <div className="text-xs font-semibold text-zinc-900">{entry.name} z {entry.city}</div>
+          <div className="text-[11px] text-zinc-500">{entry.action} · {t.justNow}</div>
         </div>
       </div>
     </div>
@@ -642,640 +481,594 @@ const Dropshipping = () => {
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [billingPeriod, setBillingPeriod] = useState<'quarterly' | 'yearly'>('quarterly');
   const [activePlatform, setActivePlatform] = useState(0);
-  const [activeStep, setActiveStep] = useState<number | null>(null);
   const [faqLimit, setFaqLimit] = useState(6);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  const heroStats = [
+    { value: '15+', label: d.hero.statLabels[0] },
+    { value: '70+', label: d.hero.statLabels[1] },
+    { value: '500+', label: d.hero.statLabels[2] },
+  ];
+
   return (
-    <div
-      className="drop-page relative flex min-h-screen flex-col pb-16 lg:pb-0 bg-background text-foreground"
-      style={{
-        ['--background' as any]: '220 30% 98%',
-        ['--foreground' as any]: '220 20% 10%',
-        ['--card' as any]: '0 0% 100%',
-        ['--card-foreground' as any]: '220 20% 10%',
-        ['--muted' as any]: '220 20% 95%',
-        ['--muted-foreground' as any]: '220 10% 50%',
-        ['--border' as any]: '220 20% 88%',
-        ['--primary' as any]: '220 80% 50%',
-        ['--primary-foreground' as any]: '0 0% 100%',
-        ['--accent' as any]: '220 80% 50%',
-        ['--accent-foreground' as any]: '0 0% 100%',
-      }}
-    >
+    <div className="relative flex min-h-screen flex-col bg-white pb-16 lg:pb-0">
       <SeoHead />
-      <Navbar wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
+      <Navbar onDark wishlistCount={wishlistIds.size} onOpenWishlist={() => setWishlistOpen(true)} />
       <BackButton />
-      <FloatingNotif />
+      <FloatingNotif t={d.notif} />
 
-      <main className="flex-1 pt-14 sm:pt-24">
+      <main className="flex-1">
 
-        {/* ══ HERO ══ */}
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="absolute inset-0 pointer-events-none">
-            <img src={bgDrop} alt="" className="absolute inset-0 h-full w-full object-cover opacity-[0.07]" />
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-          </div>
-
-          <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 grid lg:grid-cols-2 gap-12 items-center">
-            <Reveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-6">
-                <PackageOpen className="h-3.5 w-3.5" />
-                {d.hero.badge}
-              </div>
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
-                {d.hero.h1Part1}<br /><span className="italic text-primary">{d.hero.h1Highlight}</span>
-              </h1>
-              <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                {d.hero.sub}
-              </p>
-
-              <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                {[{ n: 15, s: '+', l: d.hero.statLabels[0] }, { n: 70, s: '+', l: d.hero.statLabels[1] }, { n: 500, s: '+', l: d.hero.statLabels[2] }].map(({ n, s, l }) => (
-                  <div key={l}>
-                    <div className="font-display text-3xl font-bold text-primary"><CountUp to={n} suffix={s} /></div>
-                    <div className="text-[11px] text-muted-foreground mt-1">{l}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button size="lg" onClick={() => navigate('/register')} className="shadow-md">
-                  {d.hero.ctaPrimary} <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <a href="#jak-to-funguje">{d.hero.ctaSecondary}</a>
-                </Button>
-              </div>
-              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-                {d.hero.bullets.map(t => (
-                  <span key={t} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-emerald-500" />{t}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-
-            {/* How it works hero card */}
-            <Reveal delay={200}>
-              <div className="rounded-2xl border border-border bg-white shadow-2xl p-6 max-w-md ml-auto space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold text-primary uppercase tracking-wider">Jak to funguje</div>
-                  <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-50 text-[10px]">Bez skladu</Badge>
+        {/* ══ 1. HERO (černá) ══ */}
+        <section className="w-full px-5 pt-28 pb-16 sm:px-10 sm:pt-36 sm:pb-24 lg:px-14" style={{ backgroundColor: DARK }}>
+          <div className="mx-auto max-w-[1400px]">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-zinc-300">
+                  <PackageOpen className="h-3.5 w-3.5" />
+                  {d.hero.badge}
                 </div>
-                <div className="space-y-3">
-                  {[
-                    { n: '01', label: 'Zákazník objedná', sub: 'na tvém e-shopu', Icon: ShoppingCart },
-                    { n: '02', label: 'swelt zabalí', sub: 'pod tvou značkou', Icon: PackageOpen },
-                    { n: '03', label: 'Doručení', sub: 'do 24–48 hodin', Icon: Truck },
-                  ].map((s) => (
-                    <div key={s.n} className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center shrink-0">
-                        <s.Icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-semibold">{s.label}</div>
-                        <div className="text-[11px] text-muted-foreground">{s.sub}</div>
-                      </div>
-                      <div className="text-[10px] font-bold text-primary/60">{s.n}</div>
+                <h1 className="mt-6 font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2.25rem,6vw,4.25rem)] text-white">
+                  {d.hero.h1Part1}<br /><span className={GRADIENT}>{d.hero.h1Highlight}</span>
+                </h1>
+                <p className="mt-6 max-w-xl font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-xl">
+                  {d.hero.sub}
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <button type="button" onClick={() => navigate('/register')} className={PILL_LIGHT}>
+                    {d.hero.ctaPrimary} <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <button type="button" onClick={() => scrollTo('jak-to-funguje')} className={PILL_OUTLINE_DARK}>
+                    {d.hero.ctaSecondary}
+                  </button>
+                </div>
+                <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+                  {d.hero.bullets.map(t => (
+                    <span key={t} className="flex items-center gap-1.5 text-xs text-zinc-400">
+                      <Check className="h-3.5 w-3.5 text-emerald-400" strokeWidth={3} />{t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-8">
+                  {heroStats.map(s => (
+                    <div key={s.label}>
+                      <div className="font-sans font-extralight tracking-tight leading-none text-[clamp(1.75rem,4vw,2.75rem)] text-white">{s.value}</div>
+                      <div className="mt-2 text-xs text-zinc-400">{s.label}</div>
                     </div>
                   ))}
                 </div>
-                <div className="rounded-xl bg-muted/40 border border-border p-3 grid grid-cols-2 gap-2 text-center">
-                  <div>
-                    <div className="text-base font-bold text-emerald-600">60 %</div>
-                    <div className="text-[10px] text-muted-foreground">průměrná marže</div>
-                  </div>
-                  <div>
-                    <div className="text-base font-bold text-primary">0 Kč</div>
-                    <div className="text-[10px] text-muted-foreground">investice do skladu</div>
-                  </div>
-                </div>
               </div>
-            </Reveal>
-          </div>
-        </section>
 
-        {/* ══ PAIN → SOLUTION ══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.pain.eyebrow}</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.pain.heading}</h2>
-          </Reveal>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {d.pain.items.map((p, i) => {
-              const Icon = painPoints[i].icon;
-              return (
-                <Reveal key={p.title} delay={i * 80}>
-                  <div className="group h-full rounded-2xl border border-border bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-primary/30 transition-all">
-                    <div className="inline-flex items-center gap-2 rounded-full bg-red-50 border border-red-100 px-3 py-1 text-xs text-red-600 font-medium mb-5">
-                      <Icon className="h-3.5 w-3.5" /> {p.problem}
-                    </div>
-                    <h3 className="font-display text-lg font-semibold mb-2">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.text}</p>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ══ HOW IT WORKS ══ */}
-        <section id="jak-to-funguje" className="border-y border-border bg-muted/40">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <Reveal className="text-center max-w-2xl mx-auto mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.steps.eyebrow}</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.steps.heading}</h2>
-              <p className="mt-3 text-muted-foreground">{d.steps.sub}</p>
-            </Reveal>
-
-            <div className="relative">
-              <div className="hidden lg:block absolute top-[52px] left-[calc(10%+24px)] right-[calc(10%+24px)] h-px bg-border z-0" />
-              <div className="grid gap-4 sm:grid-cols-5 relative z-10">
-                {d.steps.items.map((s, i) => {
-                  const Icon = steps[i].icon;
-                  const num = steps[i].num;
-                  const isActive = activeStep === i;
-                  return (
-                    <Reveal key={num} delay={i * 80}>
-                      <button onClick={() => setActiveStep(isActive ? null : i)} className="w-full text-left group">
-                        <div className={`rounded-2xl border p-5 transition-all duration-300 cursor-pointer
-                          ${isActive ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-[1.02]' : 'border-border bg-white hover:border-primary/40 hover:shadow-md'}`}>
-                          <div className={`flex items-center justify-center h-10 w-10 rounded-full mb-4 font-display font-semibold text-sm transition-colors
-                            ${isActive ? 'bg-white/20' : 'bg-primary/10 text-primary'}`}>{num}</div>
-                          <Icon className={`h-5 w-5 mb-3 ${isActive ? 'text-white/80' : 'text-primary'}`} />
-                          <h3 className={`font-semibold text-sm mb-2 ${isActive ? 'text-white' : ''}`}>{s.title}</h3>
-                          <p className={`text-xs leading-relaxed ${isActive ? 'text-white/80' : 'text-muted-foreground'}`}>{s.text}</p>
+              {/* Flow card — jak to funguje ve 3 krocích */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 lg:ml-auto lg:w-full lg:max-w-md">
+                <div className="flex items-center justify-between">
+                  <div className={`${EYEBROW} text-zinc-400`}>{d.hero.card.eyebrow}</div>
+                  <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                    {d.hero.card.badge}
+                  </span>
+                </div>
+                <div className="mt-6 space-y-5">
+                  {d.hero.card.steps.map((s, i) => {
+                    const Icon = HERO_CARD_ICONS[i];
+                    return (
+                      <div key={s.label} className="flex items-center gap-4">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                          <Icon className="h-5 w-5 text-white" />
                         </div>
-                      </button>
-                    </Reveal>
-                  );
-                })}
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-white">{s.label}</div>
+                          <div className="text-xs text-zinc-500">{s.sub}</div>
+                        </div>
+                        <div className="select-none font-sans font-extralight text-2xl leading-none text-zinc-600">
+                          {String(i + 1).padStart(2, '0')}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                  {d.hero.card.stats.map(s => (
+                    <div key={s.label}>
+                      <div className="font-sans font-extralight tracking-tight text-2xl text-white">{s.value}</div>
+                      <div className="mt-1 text-[10px] text-zinc-500">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ══ SWELT.SIGNAL ══ */}
-        <section id="signal" className="mx-auto max-w-6xl px-6 py-20">
-          <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/5 via-white to-primary/8 overflow-hidden">
-            <div className="grid lg:grid-cols-[1.1fr_1fr] gap-0">
-              <div className="p-10 lg:p-14">
-                <Reveal>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary mb-6">
-                    <Sparkles className="h-3.5 w-3.5" /> Nová služba — swelt.signal
+        {/* ══ 2. PAIN → SOLUTION (bílá) ══ */}
+        <div style={{ backgroundColor: DARK }}>
+          <section className={`${SECTION} bg-white`}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-400`}>{d.pain.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-zinc-900`}>{d.pain.heading}</h2>
+              </div>
+              <div className="mx-auto mt-10 grid max-w-[1160px] gap-5 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
+                {d.pain.items.map((p, i) => {
+                  const Icon = PAIN_ICONS[i];
+                  return (
+                    <div key={p.title} className="rounded-2xl bg-zinc-50 p-6 ring-1 ring-zinc-100">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs text-zinc-500 ring-1 ring-zinc-200">
+                        <Icon className="h-3.5 w-3.5" /> „{p.problem}“
+                      </div>
+                      <h3 className="mt-5 text-base font-semibold tracking-tight text-zinc-900">{p.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-zinc-500">{p.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 3. JAK TO FUNGUJE (černá) ══ */}
+        <div className="bg-white">
+          <section id="jak-to-funguje" className={`${SECTION} scroll-mt-16`} style={{ backgroundColor: DARK }}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-500`}>{d.steps.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-white`}>{d.steps.heading}</h2>
+                <p className="mt-4 max-w-2xl font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-lg">{d.steps.sub}</p>
+              </div>
+              <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-5">
+                {d.steps.items.map((s, i) => {
+                  const Icon = STEP_ICONS[i];
+                  return (
+                    <div key={s.title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                      <div className="select-none font-sans font-extralight leading-none text-4xl text-zinc-600">
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div className="mt-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                        <Icon className="h-5 w-5 text-white" />
+                      </div>
+                      <h3 className="mt-4 text-sm font-semibold tracking-tight text-white">{s.title}</h3>
+                      <p className="mt-2 text-xs leading-relaxed text-zinc-400">{s.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 4. SWELT.SIGNAL (bílá) ══ */}
+        <div style={{ backgroundColor: DARK }}>
+          <section id="signal" className={`${SECTION} scroll-mt-16 bg-white`}>
+            <div className="mx-auto max-w-[1160px]">
+              <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+                <div className="flex flex-col justify-center">
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-600">
+                    <Sparkles className="h-3.5 w-3.5" /> {d.shopUpsell.badge}
                   </div>
-                  <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight mb-4">
-                    Věz, co se bude prodávat.<br /><span className="italic text-primary">swelt.signal ti to řekne předem.</span>
+                  <h2 className={`${H2} mt-6`}>
+                    <span className="text-zinc-900">{d.shopUpsell.h1}</span><br />
+                    <span className={GRADIENT}>{d.shopUpsell.h1Highlight}</span>
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
-                    swelt.signal je product intelligence pro tvůj sortiment — týdenní digest trendů z celého katalogu 3 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást dropshipping plánů Silver a Gold.
+                  <p className="mt-5 max-w-xl font-sans text-base font-light leading-relaxed text-zinc-500 sm:text-lg">
+                    {d.shopUpsell.sub}
                   </p>
-                  <div className="space-y-4 mb-8">
-                    {[
-                      { icon: TrendingUp, title: 'Trendová data každý týden', text: 'Vidíš, co roste a co klesá napříč celým katalogem.' },
-                      { icon: Globe, title: 'Signály z celé EU', text: 'Prodejní data z 15+ evropských trhů, ne jen z toho tvého.' },
-                      { icon: BarChart2, title: 'AI doporučení sortimentu', text: 'Konkrétní tipy: co přidat, co stáhnout a kdy — bez hádání.' },
-                      { icon: Bell, title: 'Upozornění na příležitosti', text: 'Cenové poklesy, closeouty a nové kolekce se dozvíš první.' },
-                    ].map((f, i) => {
-                      const Icon = f.icon;
+                  <div className="mt-8 space-y-4">
+                    {d.shopUpsell.features.map((f, i) => {
+                      const Icon = SIGNAL_ICONS[i];
                       return (
-                        <Reveal key={f.title} delay={i * 70}>
-                          <div className="flex gap-3">
-                            <div className="shrink-0 h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <Icon className="h-4 w-4 text-primary" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm">{f.title}</div>
-                              <div className="text-xs text-muted-foreground mt-0.5">{f.text}</div>
-                            </div>
+                        <div key={f.title} className="flex gap-3">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-900">
+                            <Icon className="h-4 w-4 text-white" />
                           </div>
-                        </Reveal>
+                          <div>
+                            <div className="text-sm font-semibold text-zinc-900">{f.title}</div>
+                            <div className="mt-0.5 text-xs text-zinc-500">{f.text}</div>
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
-                  <div className="flex flex-wrap gap-3">
-                    <Button onClick={() => navigate('/register')}>
-                      Vyzkoušet dropshipping <ArrowUpRight className="h-4 w-4" />
-                    </Button>
+                  <div className="mt-8">
+                    <button type="button" onClick={() => navigate('/register')} className={PILL_DARK}>
+                      {d.shopUpsell.cta1} <ArrowRight className="h-4 w-4" />
+                    </button>
                   </div>
-                </Reveal>
-              </div>
+                </div>
 
-              {/* Signal live panel */}
-              <div className="border-l border-primary/10 bg-white/60 p-10 lg:p-14 flex flex-col justify-center">
-                <Reveal delay={150}>
-                  <div className="rounded-2xl border border-border bg-white shadow-lg p-6">
-                    <div className="flex items-center justify-between mb-5">
+                {/* Signal live panel */}
+                <div className="flex flex-col justify-center">
+                  <div className="rounded-2xl bg-zinc-50 p-6 ring-1 ring-zinc-100">
+                    <div className="mb-5 flex items-center justify-between">
                       <div>
-                        <div className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Týdenní digest</div>
-                        <div className="text-xs text-muted-foreground">Týden 17 · 2026</div>
+                        <div className={`${EYEBROW} text-zinc-500`}>{d.shopUpsell.digestEyebrow}</div>
+                        <div className="mt-1 text-xs text-zinc-400">{d.shopUpsell.digestWeek}</div>
                       </div>
                       <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
-                    <div className="space-y-3 mb-5">
+                    <div className="mb-5 space-y-3">
                       {signalProducts.map((p) => {
-                        const tc = p.actionTone === 'success' ? 'text-emerald-600' : p.actionTone === 'destructive' ? 'text-red-500' : 'text-blue-600';
-                        const bc = p.actionTone === 'success' ? 'bg-emerald-500' : p.actionTone === 'destructive' ? 'bg-red-400' : 'bg-primary';
+                        const tc = p.tone === 'success' ? 'text-emerald-600' : p.tone === 'destructive' ? 'text-red-500' : 'text-blue-600';
+                        const bc = p.tone === 'success' ? 'bg-emerald-500' : p.tone === 'destructive' ? 'bg-red-400' : 'bg-blue-600';
                         return (
                           <div key={p.sku} className="flex items-center gap-3">
                             <div className="w-28 shrink-0">
-                              <div className="text-xs font-medium truncate">{p.name.split(' ').slice(0, 2).join(' ')}</div>
-                              <div className="text-[10px] text-muted-foreground">{p.sku}</div>
+                              <div className="truncate text-xs font-medium text-zinc-900">{p.name.split(' ').slice(0, 2).join(' ')}</div>
+                              <div className="text-[10px] text-zinc-400">{p.sku}</div>
                             </div>
-                            <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-zinc-200">
                               <div className={`h-full rounded-full ${bc}`} style={{ width: `${p.trend}%` }} />
                             </div>
-                            <div className={`text-xs font-bold w-12 text-right ${tc}`}>{p.change}</div>
+                            <div className={`w-12 text-right text-xs font-bold ${tc}`}>{p.change}</div>
                           </div>
                         );
                       })}
                     </div>
-                    <div className="rounded-xl bg-primary/5 border border-primary/15 p-4">
-                      <div className="text-[10px] uppercase tracking-wider text-primary font-semibold mb-2">AI doporučení tohoto týdne</div>
+                    <div className="rounded-xl bg-white p-4 ring-1 ring-zinc-200">
+                      <div className={`${EYEBROW} mb-2 text-zinc-500`}>{d.shopUpsell.digestRecsEyebrow}</div>
                       <ul className="space-y-1.5">
-                        {['Přidej Citizen Eco-Drive — trend +28 % MoM', 'Odeber Versace V-Chronos — klesá 3 týdny v řadě', 'Sleduj Seiko Presage — stabilní růst, dobré timing'].map(r => (
-                          <li key={r} className="flex items-start gap-1.5 text-xs">
-                            <Check className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />{r}
+                        {d.shopUpsell.digestRecs.map(r => (
+                          <li key={r} className="flex items-start gap-1.5 text-xs text-zinc-700">
+                            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />{r}
                           </li>
                         ))}
                       </ul>
                     </div>
                   </div>
-                </Reveal>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
-        {/* ══ LOGISTIKA & KVALITA (nové) ══ */}
-        <section id="logistika" className="border-y border-border bg-muted/30">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <Reveal className="text-center max-w-2xl mx-auto mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Spolehlivost</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Spolehlivost, na které záleží tvým zákazníkům</h2>
-              <p className="mt-4 text-muted-foreground">Transparentní logistika. Žádné překvapení.</p>
-            </Reveal>
+        {/* ══ 5. LOGISTIKA & KVALITA (černá) ══ */}
+        <div className="bg-white">
+          <section id="logistika" className={`${SECTION} scroll-mt-16`} style={{ backgroundColor: DARK }}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-500`}>{d.logistics.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-white`}>{d.logistics.heading}</h2>
+                <p className="mt-4 font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-lg">{d.logistics.sub}</p>
+              </div>
 
-            <div className="grid lg:grid-cols-2 gap-10 mb-14">
-              {/* Shipping zones */}
-              <Reveal>
-                <div className="rounded-2xl border border-border bg-white shadow-sm p-6">
-                  <div className="flex items-center gap-2 mb-5">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">Doručovací zóny</h3>
+              <div className="mx-auto mt-10 grid max-w-[1160px] gap-5 sm:mt-14 lg:grid-cols-2">
+                {/* Shipping zones */}
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                  <div className="mb-4 flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-zinc-400" />
+                    <h3 className="text-base font-semibold tracking-tight text-white">{d.logistics.zonesTitle}</h3>
                   </div>
-                  <div className="space-y-3">
-                    {logisticsZones.map((z) => (
-                      <div key={z.zone} className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border">
+                  <div>
+                    {d.logistics.zones.map((z, i) => (
+                      <div key={z.zone} className={`flex items-center gap-3 py-3 ${i > 0 ? 'border-t border-white/10' : ''}`}>
                         <div className="min-w-0 flex-1">
-                          <div className="text-sm font-medium">{z.zone}</div>
-                          <div className="text-xs text-muted-foreground">{z.couriers}</div>
+                          <div className="text-sm font-medium text-white">{z.zone}</div>
+                          <div className="text-xs text-zinc-500">{z.couriers}</div>
                         </div>
-                        <div className="text-right shrink-0">
-                          <div className="text-sm font-bold text-foreground">{z.time}</div>
-                          <div className="text-xs text-emerald-600">{z.reliability}</div>
+                        <div className="shrink-0 text-right">
+                          <div className="text-sm font-semibold text-white">{z.time}</div>
+                          <div className="text-xs text-emerald-400">{z.reliability}</div>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              </Reveal>
 
-              {/* Quality check */}
-              <Reveal delay={100}>
-                <div className="rounded-2xl border border-border bg-white shadow-sm p-6 h-full">
-                  <div className="flex items-center gap-2 mb-5">
-                    <Camera className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">Trojí quality check</h3>
+                {/* Quality check */}
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                  <div className="mb-5 flex items-center gap-2">
+                    <Camera className="h-5 w-5 text-zinc-400" />
+                    <h3 className="text-base font-semibold tracking-tight text-white">{d.logistics.qcHeading}</h3>
                   </div>
                   <ol className="space-y-5">
-                    {[
-                      { n: '01', title: 'Kontrola při příjmu', text: 'Každý produkt projde vizuální kontrolou při příjmu od výrobce. Poškozené zboží vrátíme okamžitě.' },
-                      { n: '02', title: 'Kontrola před balením', text: 'Funkčnost, estetika, kompletnost. Baterie zkontrolovány. Výsledek: méně reklamací v tvém e-shopu.' },
-                      { n: '03', title: 'Fotodokumentace zásilky', text: 'Každá zásilka vyfotografována před odesláním. V případě sporu máš důkaz — okamžitě.' },
-                    ].map(s => (
-                      <li key={s.n} className="flex gap-4">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">{s.n}</div>
+                    {d.logistics.qcSteps.map((s, i) => (
+                      <li key={s.title} className="flex gap-4">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white">
+                          {String(i + 1).padStart(2, '0')}
+                        </div>
                         <div>
-                          <div className="font-semibold text-sm">{s.title}</div>
-                          <div className="text-xs text-muted-foreground leading-relaxed mt-0.5">{s.text}</div>
+                          <div className="text-sm font-semibold text-white">{s.title}</div>
+                          <div className="mt-0.5 text-xs leading-relaxed text-zinc-400">{s.text}</div>
                         </div>
                       </li>
                     ))}
                   </ol>
                 </div>
-              </Reveal>
-            </div>
-
-            {/* Consolidated invoicing + inventory lock callouts */}
-            <div className="grid sm:grid-cols-2 gap-6">
-              <Reveal>
-                <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <FileText className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">Consolidated B2B invoicing</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Všechny tvoje B2C objednávky za měsíc = <strong className="text-foreground">1 přehledná faktura</strong> od nás. Snadnější účetnictví,
-                    méně administrativy, čistší cash flow. PDF + strojově čitelný export.
-                  </p>
-                </div>
-              </Reveal>
-              <Reveal delay={100}>
-                <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Lock className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">Real-time inventory lock</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Zásoby se <strong className="text-foreground">uzamknou v momentě objednávky</strong> zákazníka. Žádný přeprodej, žádné "promiňte, vyprodáno
-                    po zaplacení." Zákaznická zkušenost bez kompromisů.
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* ══ MARGIN CALCULATOR ══ */}
-        <section id="kalkulator" className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Kalkulačka marže</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Kolik můžeš vydělat?</h2>
-            <p className="mt-4 text-muted-foreground">Nastav ceny a počet objednávek — kalkulačka ukáže tvůj potenciál.</p>
-          </Reveal>
-          <Reveal>
-            <div className="rounded-2xl border border-border bg-white shadow-sm p-8 sm:p-10">
-              <ProductCalculator />
-            </div>
-          </Reveal>
-        </section>
-
-        {/* ══ USP GRID ══ */}
-        <section className="border-y border-border bg-muted/30">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <Reveal className="text-center max-w-2xl mx-auto mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Proč swelt.Dropshipping</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Nejsme jen dodavatel. Jsme tvůj byznys partner.</h2>
-            </Reveal>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-              {usps.map((u, i) => {
-                const Icon = u.icon;
-                return (
-                  <Reveal key={u.title} delay={(i % 5) * 60}>
-                    <div className="group h-full rounded-2xl border border-border bg-white p-5 hover:-translate-y-1 hover:shadow-md hover:border-primary/30 transition-all">
-                      <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
-                        <Icon className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
-                      </div>
-                      <h3 className="font-semibold text-sm mb-1.5">{u.title}</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{u.text}</p>
-                    </div>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ══ STATS ══ */}
-        <section className="bg-primary">
-          <div className="mx-auto max-w-6xl px-6 py-16">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center text-primary-foreground">
-              {[
-                { val: 15, suffix: '+', label: 'zemí doručení' },
-                { val: 70, suffix: '+', label: 'prémiových značek' },
-                { val: 3000, suffix: '+', label: 'produktů v katalogu' },
-                { val: 500, suffix: '+', label: 'aktivních partnerů' },
-              ].map((s, i) => (
-                <Reveal key={s.label} delay={i * 80}>
-                  <div>
-                    <div className="font-display text-5xl font-bold mb-2"><CountUp to={s.val} suffix={s.suffix} /></div>
-                    <div className="text-sm opacity-80">{s.label}</div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══ PLATFORM TABS ══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Integrace</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Funguje s platformou, kterou už máš</h2>
-          </Reveal>
-          <Reveal>
-            <div className="flex flex-wrap gap-2 justify-center mb-8">
-              {platforms.map((p, i) => (
-                <button key={p.name} onClick={() => setActivePlatform(i)}
-                  className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-all ${activePlatform === i ? 'border-primary bg-primary text-white shadow-md' : 'border-border bg-white hover:border-primary/40'}`}>
-                  {p.name}
-                  {p.tag && <span className="ml-2 text-[10px] opacity-70">{p.tag}</span>}
-                </button>
-              ))}
-            </div>
-            <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-white p-8 max-w-lg mx-auto text-center">
-              <div className="font-display text-2xl font-semibold mb-2">{platforms[activePlatform].name}</div>
-              <div className="flex items-center justify-center gap-3 mb-4">
-                {platforms[activePlatform].tag && (
-                  <Badge className="bg-primary/10 text-primary hover:bg-primary/10">{platforms[activePlatform].tag}</Badge>
-                )}
-                <span className="text-xs text-muted-foreground">Nastavení: {platforms[activePlatform].time}</span>
               </div>
-              <p className="text-muted-foreground mb-6 text-sm">{platforms[activePlatform].detail}</p>
-              <Button variant="outline" onClick={() => navigate('/register')}>
-                Zjistit více o integraci <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Reveal>
-        </section>
 
-        {/* ══ EU EXPANZE (nové) ══ */}
-        <section className="border-y border-border bg-muted/30">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <Reveal className="text-center max-w-2xl mx-auto mb-12">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">EU expanze</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Začneš v ČR. Dorůsteš do celé EU.</h2>
-              <p className="mt-4 text-muted-foreground">Jeden partner, jeden feed, čtyři trhy. Bez zakládání poboček nebo skladů v zahraničí.</p>
-            </Reveal>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {[
-                { flag: '🇨🇿', country: 'Česká republika', detail: 'Primární trh. 24 h doručení. Shoptet, WooCommerce, Upgates.', badge: 'Primární' },
-                { flag: '🇸🇰', country: 'Slovensko', detail: 'Lokalizovaný SK feed. SK dopravci. Stejný account manager.', badge: 'Live' },
-                { flag: '🇩🇪', country: 'Německo', detail: 'EN/DE feed. DHL Express. Na dotaz — pomůžeme nastavit.', badge: 'Na dotaz' },
-                { flag: '🇦🇹', country: 'Rakousko', detail: 'EN/DE feed. DHL Express. Ideální pro Shopify e-shopy.', badge: 'Na dotaz' },
-              ].map((m, i) => (
-                <Reveal key={m.country} delay={i * 80}>
-                  <div className="rounded-2xl border border-border bg-white p-6 text-center hover:shadow-md hover:border-primary/30 transition-all">
-                    <div className="text-4xl mb-3">{m.flag}</div>
-                    <div className="font-semibold mb-1">{m.country}</div>
-                    <Badge className="mb-3 bg-primary/10 text-primary hover:bg-primary/10 text-xs">{m.badge}</Badge>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{m.detail}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══ PRICING ══ */}
-        <section id="cenik" className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal className="text-center max-w-2xl mx-auto mb-10">
-            <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">Ceník</div>
-            <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">Vyber plán pro svůj e-shop</h2>
-          </Reveal>
-          <Reveal className="flex justify-center mb-10">
-            <div className="inline-flex rounded-xl border border-border bg-white p-1 gap-1">
-              {(['quarterly', 'yearly'] as const).map(p => (
-                <button key={p} onClick={() => setBillingPeriod(p)}
-                  className={`rounded-lg px-5 py-2 text-sm font-medium transition-all ${billingPeriod === p ? 'bg-primary text-white shadow' : 'text-muted-foreground hover:text-foreground'}`}>
-                  {p === 'quarterly'
-                    ? 'Čtvrtletně'
-                    : <span className="flex items-center gap-2">Ročně <span className="text-[10px] bg-emerald-500 text-white rounded px-1.5 py-0.5">−20 %</span></span>
-                  }
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <div className="grid lg:grid-cols-3 gap-6 items-stretch">
-            {tiers.map((t, i) => {
-              const price = billingPeriod === 'quarterly' ? t.monthlyPrice : t.quarterlyPrice;
-              const billingNote = t.monthlyPrice > 0
-                ? (billingPeriod === 'quarterly'
-                    ? `${(t.monthlyPrice * 3).toLocaleString('cs')} Kč · fakturováno čtvrtletně`
-                    : `${(t.quarterlyPrice * 12).toLocaleString('cs')} Kč · fakturováno ročně`)
-                : t.priceNote;
-              return (
-                <Reveal key={t.name} delay={i * 80}>
-                  <div className={`relative h-full rounded-2xl border bg-white flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all ${t.featured ? 'border-primary border-2 shadow-lg' : 'border-border'}`}>
-                    {t.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <Badge className={`text-white hover:opacity-90 ${t.featured ? 'bg-primary' : 'bg-zinc-800'}`}>{t.badge}</Badge>
-                      </div>
-                    )}
-                    <div className="p-8 pb-6 border-b border-border text-center">
-                      <h3 className="font-display text-3xl font-black tracking-tight mb-2">{t.name}</h3>
-                      <p className="text-sm text-muted-foreground whitespace-pre-line min-h-[2.5rem]">{t.subtitle}</p>
-                      <div className="mt-6 mb-6">
-                        {t.monthlyPrice > 0 ? (
-                          <>
-                            <div className="flex items-baseline justify-center gap-1">
-                              <span className="font-display text-5xl font-bold">{price.toLocaleString('cs')}</span>
-                              <span className="text-sm text-muted-foreground ml-1">Kč / měs.</span>
-                            </div>
-                            <p className="text-xs text-muted-foreground mt-1">{billingNote}</p>
-                          </>
-                        ) : (
-                          <>
-                            <div className="font-display text-3xl font-black tracking-tight">Na míru</div>
-                            <p className="text-xs text-muted-foreground mt-1">{t.priceNote}</p>
-                          </>
-                        )}
-                      </div>
-                      <Button variant={t.ctaVariant} className="w-full" size="lg" onClick={() => navigate('/register')}>{t.cta}</Button>
+              {/* Invoicing + inventory lock callouts */}
+              <div className="mx-auto mt-5 grid max-w-[1160px] gap-5 sm:grid-cols-2">
+                {[
+                  { icon: FileText, ...d.logistics.invoicing },
+                  { icon: Lock, ...d.logistics.lock },
+                ].map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                    <div className="mb-3 flex items-center gap-2">
+                      <Icon className="h-5 w-5 text-zinc-400" />
+                      <h3 className="text-base font-semibold tracking-tight text-white">{title}</h3>
                     </div>
-                    <div className="p-8 pt-6 flex-1 bg-muted/20 rounded-b-2xl">
-                      {i > 0 && (
-                        <div className="text-xs text-muted-foreground mb-3 flex items-center gap-1.5">
-                          <ArrowRight className="h-3 w-3" /> Vše z {tiers[i - 1].name}, plus…
+                    <p className="text-sm leading-relaxed text-zinc-400">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 6. KALKULAČKA MARŽE (bílá) ══ */}
+        <div style={{ backgroundColor: DARK }}>
+          <section id="kalkulator" className={`${SECTION} scroll-mt-16 bg-white`}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-400`}>{d.calc.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-zinc-900`}>{d.calc.heading}</h2>
+                <p className="mt-4 font-sans text-base font-light leading-relaxed text-zinc-500 sm:text-lg">{d.calc.sub}</p>
+              </div>
+              <div className="mx-auto mt-10 max-w-[1160px] sm:mt-14">
+                <ProductCalculator d={d} />
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 7. PROČ SWELT.DROPSHIPPING + STATS (černá) ══ */}
+        <div className="bg-white">
+          <section className={SECTION} style={{ backgroundColor: DARK }}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-500`}>{d.usps.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-white`}>{d.usps.heading}</h2>
+              </div>
+              <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-5">
+                {d.usps.items.map((u, i) => {
+                  const Icon = USP_ICONS[i];
+                  return (
+                    <div key={u.title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                        <Icon className="h-5 w-5 text-white" />
+                      </div>
+                      <h3 className="text-sm font-semibold tracking-tight text-white">{u.title}</h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">{u.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mx-auto mt-12 grid max-w-[1160px] grid-cols-2 gap-x-6 gap-y-8 border-t border-white/10 pt-8 sm:mt-16 sm:grid-cols-4 sm:gap-8">
+                {d.statsBand.map(s => (
+                  <div key={s.label}>
+                    <div className="font-sans font-extralight tracking-tight leading-none text-[clamp(1.75rem,4vw,2.75rem)] text-white">{s.value}</div>
+                    <div className="mt-2 text-xs text-zinc-400 sm:text-sm">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 8. INTEGRACE (bílá) ══ */}
+        <div style={{ backgroundColor: DARK }}>
+          <section className={`${SECTION} bg-white`}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-400`}>{d.platforms.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-zinc-900`}>{d.platforms.heading}</h2>
+                <p className="mt-4 max-w-2xl font-sans text-base font-light leading-relaxed text-zinc-500 sm:text-lg">{d.platforms.sub}</p>
+              </div>
+              <div className="mx-auto mt-10 max-w-[1000px]">
+                <div className="flex flex-wrap gap-2">
+                  {d.platforms.items.map((p, i) => (
+                    <button key={p.name} type="button" onClick={() => setActivePlatform(i)}
+                      className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${activePlatform === i ? 'bg-zinc-900 text-white' : 'text-zinc-600 ring-1 ring-zinc-200 hover:ring-zinc-300'}`}>
+                      {p.name}
+                      {p.data.tag && <span className="ml-2 text-[10px] opacity-60">{p.data.tag}</span>}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-6 max-w-xl rounded-2xl bg-zinc-50 p-8 ring-1 ring-zinc-100">
+                  <div className={`${H3} text-zinc-900`}>{d.platforms.items[activePlatform].name}</div>
+                  <div className="mt-3 flex items-center gap-3">
+                    {d.platforms.items[activePlatform].data.tag && (
+                      <span className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-semibold text-zinc-600 ring-1 ring-zinc-200">
+                        {d.platforms.items[activePlatform].data.tag}
+                      </span>
+                    )}
+                    <span className="text-xs text-zinc-500">{d.platforms.setupTime}: {d.platforms.items[activePlatform].data.time}</span>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-500">{d.platforms.items[activePlatform].data.detail}</p>
+                  <button type="button" onClick={() => navigate('/register')} className={`${PILL_DARK} mt-6`}>
+                    {d.platforms.cta} <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 9. EU EXPANZE (černá) ══ */}
+        <div className="bg-white">
+          <section className={SECTION} style={{ backgroundColor: DARK }}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-500`}>{d.euExpansion.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-white`}>{d.euExpansion.heading}</h2>
+                <p className="mt-4 font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-lg">{d.euExpansion.sub}</p>
+              </div>
+              <div className="mx-auto mt-10 grid max-w-[1160px] gap-5 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { flag: '🇨🇿', ...d.euExpansion.markets[0] },
+                  { flag: '🇸🇰', ...d.euExpansion.markets[1] },
+                  { flag: '🇩🇪', ...d.euExpansion.markets[2] },
+                  { flag: '🇦🇹', ...d.euExpansion.markets[3] },
+                ].map((m) => (
+                  <div key={m.country} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                    <div className="text-3xl">{m.flag}</div>
+                    <div className="mt-3 flex items-center gap-2">
+                      <div className="text-sm font-semibold tracking-tight text-white">{m.country}</div>
+                      <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-zinc-300">{m.badge}</span>
+                    </div>
+                    <p className="mt-2 text-xs leading-relaxed text-zinc-400">{m.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ══ 10. CENÍK (bílá) ══ */}
+        <div style={{ backgroundColor: DARK }}>
+          <section id="cenik" className={`${SECTION} scroll-mt-16 bg-white`}>
+            <div className="mx-auto max-w-[1400px]">
+              <div className="mx-auto max-w-[1000px] text-left">
+                <div className={`${EYEBROW} text-zinc-400`}>{d.pricing.eyebrow}</div>
+                <h2 className={`${H2} mt-3 text-zinc-900`}>{d.pricing.heading}</h2>
+              </div>
+
+              <div className="mt-10 flex justify-center">
+                <div className="inline-flex gap-1 rounded-full bg-white p-1 ring-1 ring-zinc-200">
+                  {(['quarterly', 'yearly'] as const).map(p => (
+                    <button key={p} type="button" onClick={() => setBillingPeriod(p)}
+                      className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${billingPeriod === p ? 'bg-zinc-900 text-white' : 'text-zinc-500 hover:text-zinc-900'}`}>
+                      {p === 'quarterly'
+                        ? d.pricing.quarterly
+                        : <span className="flex items-center gap-2">{d.pricing.yearly} <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] leading-none text-white">−20 %</span></span>
+                      }
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mx-auto mt-10 grid max-w-[1160px] items-stretch gap-5 lg:grid-cols-3">
+                {d.pricing.tiers.map((t, i) => {
+                  const monthly = i === 0 ? PLAN_PRICES.starter.monthly : i === 1 ? PLAN_PRICES.silver.monthly : 0;
+                  const yearlyMonthly = i === 0 ? PLAN_PRICES.starter.yearly : i === 1 ? PLAN_PRICES.silver.yearly : 0;
+                  const price = billingPeriod === 'quarterly' ? monthly : yearlyMonthly;
+                  const featured = i === 1;
+                  const billingNote = monthly > 0
+                    ? (billingPeriod === 'quarterly'
+                        ? `${(monthly * 3).toLocaleString('cs')} ${d.pricing.quarterlyNote}`
+                        : `${(yearlyMonthly * 12).toLocaleString('cs')} ${d.pricing.yearlyNote}`)
+                    : t.priceNote;
+                  return (
+                    <div key={t.name} className={`relative flex h-full flex-col rounded-2xl bg-white ${featured ? 'border-2 border-zinc-900' : 'ring-1 ring-zinc-200'}`}>
+                      {t.badge && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                          <span className={`inline-flex items-center whitespace-nowrap rounded-full px-3 py-0.5 text-[11px] font-semibold ${featured ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-600 ring-1 ring-zinc-300'}`}>
+                            {t.badge}
+                          </span>
                         </div>
                       )}
-                      <ul className="space-y-2.5">
-                        {t.features.map(f => (
-                          <li key={f} className="flex items-start gap-2.5 text-sm">
-                            <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />{f}
-                          </li>
-                        ))}
-                        {t.missing.map(f => (
-                          <li key={f} className="flex items-start gap-2.5 text-sm opacity-35">
-                            <X className="h-4 w-4 shrink-0 mt-0.5" /><span className="line-through">{f}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="border-b border-zinc-100 p-8 pb-6 text-center">
+                        <h3 className="text-xl font-semibold tracking-tight text-zinc-900">{t.name}</h3>
+                        <p className="mt-1 min-h-[2.5rem] whitespace-pre-line text-sm text-zinc-500">{t.subtitle}</p>
+                        <div className="mb-6 mt-6">
+                          {monthly > 0 ? (
+                            <>
+                              <div className="flex items-baseline justify-center gap-1">
+                                <span className="font-sans font-extralight tracking-tight text-5xl text-zinc-900">{price.toLocaleString('cs')}</span>
+                                <span className="ml-1 text-sm text-zinc-500">{d.pricing.perMonth}</span>
+                              </div>
+                              <p className="mt-1 text-xs text-zinc-400">{billingNote}</p>
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-sans font-extralight tracking-tight text-4xl text-zinc-900">{d.pricing.bespoke}</div>
+                              <p className="mt-1 text-xs text-zinc-400">{t.priceNote}</p>
+                            </>
+                          )}
+                        </div>
+                        <button type="button" onClick={() => navigate('/register')} className={`${featured ? PILL_DARK : PILL_OUTLINE_LIGHT} w-full`}>
+                          {t.cta}
+                        </button>
+                      </div>
+                      <div className="flex-1 rounded-b-2xl bg-zinc-50 p-8 pt-6">
+                        {i > 0 && (
+                          <div className="mb-3 flex items-center gap-1.5 text-xs text-zinc-500">
+                            <ArrowRight className="h-3 w-3" /> {d.pricing.allPrev} {d.pricing.tiers[i - 1].name}, plus…
+                          </div>
+                        )}
+                        <ul className="space-y-2.5">
+                          {t.features.map(f => (
+                            <li key={f} className="flex items-start gap-2.5 text-sm text-zinc-700">
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />{f}
+                            </li>
+                          ))}
+                          {t.missing.map(f => (
+                            <li key={f} className="flex items-start gap-2.5 text-sm text-zinc-400 opacity-60">
+                              <X className="mt-0.5 h-4 w-4 shrink-0" /><span className="line-through">{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
 
-          <Reveal className="mt-10 text-center">
-            <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-6 py-4 text-sm text-muted-foreground shadow-sm">
-              <ShieldCheck className="h-5 w-5 text-primary shrink-0" />
-              <span><strong className="text-foreground">30denní záruka spokojenosti</strong> — pokud do 30 dní zjistíš, že to není pro tebe, vrátíme ti celý poplatek bez otázek.</span>
+              <div className="mt-10 flex justify-center">
+                <div className="inline-flex items-center gap-3 rounded-2xl bg-zinc-50 px-6 py-4 text-sm text-zinc-500 ring-1 ring-zinc-100">
+                  <ShieldCheck className="h-5 w-5 shrink-0 text-zinc-900" />
+                  <span>{d.pricing.guarantee}</span>
+                </div>
+              </div>
             </div>
-          </Reveal>
-        </section>
+          </section>
+        </div>
 
-        {/* ══ FAQ ══ */}
-        <section className="border-t border-border bg-muted/30">
-          <div className="mx-auto max-w-3xl px-6 py-20">
-            <Reveal className="text-center mb-14">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-primary font-semibold mb-3">{d.faq.eyebrow}</div>
-              <h2 className="font-display text-3xl sm:text-4xl font-black tracking-tight">{d.faq.heading}</h2>
-            </Reveal>
-            <Reveal>
-              <div className="rounded-2xl border border-border bg-white shadow-sm px-8 py-2">
+        {/* ══ 11. FAQ + ZÁVĚREČNÉ CTA (černá) ══ */}
+        <div className="bg-white">
+          <section className={`${SECTION} pb-20 sm:pb-28`} style={{ backgroundColor: DARK }}>
+            <div className="mx-auto max-w-[800px]">
+              <div className={`${EYEBROW} text-zinc-500`}>{d.faq.eyebrow}</div>
+              <h2 className={`${H2} mt-3 text-white`}>{d.faq.heading}</h2>
+              <div className="mt-8">
                 {d.faqs.slice(0, faqLimit).map((f, i) => <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />)}
               </div>
               {faqLimit < d.faqs.length && (
-                <div className="text-center mt-6">
-                  <Button variant="outline" onClick={() => setFaqLimit(d.faqs.length)}>
+                <div className="mt-8 text-center">
+                  <button type="button" onClick={() => setFaqLimit(d.faqs.length)} className={PILL_OUTLINE_DARK}>
                     {d.faq.showAll} ({d.faqs.length}) <ChevronDown className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               )}
-            </Reveal>
-          </div>
-        </section>
+            </div>
 
-        {/* ══ FINAL CTA ══ */}
-        <section className="border-t border-border">
-          <div className="relative overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none">
-              <img src={heroLight} alt="" className="absolute inset-0 h-full w-full object-cover opacity-10" />
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-white to-primary/5" />
-            </div>
-            <div className="relative mx-auto max-w-4xl px-6 py-24 text-center">
-              <Reveal>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-6">
-                  <Calculator className="h-3.5 w-3.5" /> {d.finalCta.badge}
-                </div>
-                <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tight mb-4">
-                  {d.finalCta.h2Part1}<br /><span className="italic text-primary">{d.finalCta.h2Highlight}</span>
-                </h2>
-                <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg leading-relaxed">
-                  {d.finalCta.sub}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button size="lg" onClick={() => navigate('/register')} className="shadow-lg">
-                    {d.finalCta.ctaPrimary} <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline" asChild>
-                    <a href="mailto:dropshipping@swelt.partner">{d.finalCta.ctaSecondary}</a>
-                  </Button>
-                </div>
-                <div className="mt-6 grid sm:grid-cols-3 gap-4 max-w-lg mx-auto">
-                  {[
-                    { icon: HeadphonesIcon, ...d.finalCta.contactItems[0] },
-                    { icon: Globe,          ...d.finalCta.contactItems[1] },
-                    { icon: Users,          ...d.finalCta.contactItems[2] },
-                  ].map(({ icon: Icon, label, sub }) => (
-                    <div key={label} className="rounded-xl border border-border bg-white/80 p-3 text-center">
-                      <Icon className="h-4 w-4 text-primary mx-auto mb-1" />
-                      <div className="text-xs font-medium">{label}</div>
-                      <div className="text-[10px] text-muted-foreground">{sub}</div>
+            <div className="mx-auto mt-16 max-w-[1000px] border-t border-white/10 pt-16 text-center sm:mt-24 sm:pt-24">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-zinc-300">
+                <Zap className="h-3.5 w-3.5" /> {d.finalCta.badge}
+              </div>
+              <h2 className={`${H2} mt-6`}>
+                <span className="text-white">{d.finalCta.h2Part1}</span><br />
+                <span className={GRADIENT}>{d.finalCta.h2Highlight}</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl font-sans text-base font-light leading-relaxed text-zinc-400 sm:text-lg">
+                {d.finalCta.sub}
+              </p>
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                <button type="button" onClick={() => navigate('/register')} className={PILL_LIGHT}>
+                  {d.finalCta.ctaPrimary} <ArrowRight className="h-4 w-4" />
+                </button>
+                <a href="mailto:dropshipping@swelt.partner" className={PILL_OUTLINE_DARK}>
+                  {d.finalCta.ctaSecondary}
+                </a>
+              </div>
+              <div className="mx-auto mt-8 grid max-w-lg gap-3 sm:grid-cols-3">
+                {d.finalCta.contactItems.map((item, i) => {
+                  const Icon = CONTACT_ICONS[i];
+                  return (
+                    <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                      <Icon className="mx-auto mb-1 h-4 w-4 text-zinc-400" />
+                      <div className="text-xs font-medium text-white">{item.label}</div>
+                      <div className="text-[10px] text-zinc-500">{item.sub}</div>
                     </div>
-                  ))}
-                </div>
-                <p className="mt-5 text-xs text-muted-foreground">{d.finalCta.smallNote}</p>
-              </Reveal>
+                  );
+                })}
+              </div>
+              <p className="mt-6 text-xs text-zinc-500">{d.finalCta.smallNote}</p>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
       </main>
 
