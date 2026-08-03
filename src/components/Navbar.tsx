@@ -93,22 +93,12 @@ const NAV_PANELS: Record<string, NavPanel> = {
     desc: 'Everything you sell with — and everything you plug into. 70+ brands, wholesale prices from 1 unit.',
     cta: { label: 'Browse brands', path: '/brands' },
   },
+  /* Obsah panelu žije v NavGoBigDealPanel — tenhle záznam je jen existence
+     gate pro render (guard `NAV_PANELS[activeNav]`), pole se nepoužívají. */
   'top-deals': {
     heading: 'GoBigDeal',
-    desc: 'Časově omezené akce na prémiové hodinky a šperky za výjimečné ceny.',
-    cols: [
-      { title: 'Kategorie', links: [
-        { label: 'Hodinky', desc: 'Luxusní a sportovní hodinky ve slevě', path: '/deals' },
-        { label: 'Šperky', desc: 'Náhrdelníky, náramky, prsteny', path: '/deals' },
-        { label: 'Dárkové sady', desc: 'Kompletní sety za speciální cenu', path: '/deals' },
-      ]},
-      { title: 'Aktuální akce', links: [
-        { label: 'Tommy Hilfiger', desc: 'DEAL: −60 % z MOC', path: '/deals' },
-        { label: 'Versace', desc: 'DEAL: −55 % z MOC', path: '/deals' },
-        { label: 'Hugo Boss', desc: 'DEAL: −58 % z MOC', path: '/deals' },
-      ]},
-    ],
-    cta: { label: 'Zobrazit všechny DEAL nabídky', path: '/deals' },
+    desc: '',
+    cta: { label: '', path: '/deals' },
   },
   /* Luxury Deals už nemá vlastní nav položku — žije jako služba pod Products
      (odkaz vede na /prestige, kde je celý obsah). */
@@ -665,7 +655,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               vertikální velikosti jako Why Swelt (jehož výšku určuje karusel karet:
               clamp(260,26vw,360) + padding). */}
           <div
-            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block min-h-[clamp(320px,30vw,412px)]"
+            className={`absolute left-0 right-0 z-[95] border-b shadow-2xl hidden lg:block min-h-[clamp(320px,30vw,412px)] ${
+              /* GoBigDeal = obsidianová předsíň /deals; ostatní panely bílé */
+              activeNav === 'top-deals' ? 'bg-[#0B1215] border-white/10' : 'bg-white border-zinc-200'
+            }`}
             style={{ top: headerHeight }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
@@ -696,10 +689,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                 </button>
               </div>
             ) : activeNav === 'top-deals' ? (
-              /* GoBigDeal — full-width spotlight končícího dealu (loga značek,
-                 koncern v rohu, odpočet; auto-slide po 3 s, placeholdery když
-                 dealy nejsou), pod ním zmenšené karusely dlaždic koncernů a
-                 značek z landing dealů. Vše sedí do výšky ostatních panelů. */
+              /* GoBigDeal — obsidianová předsíň /deals: headline strip se
+                 živými čísly, spotlight končícího dealu, Live by concern
+                 (poctivé počty), Early Access karta a patička s free drop
+                 alertem. Viz NavGoBigDealPanel. */
               <div className="px-6 pt-3 pb-2.5">
                 <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
