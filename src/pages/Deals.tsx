@@ -198,19 +198,25 @@ export default function Deals() {
         id="catalog"
         className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-start justify-center px-5 text-left sm:px-8 lg:px-12"
       >
-        <h1 className="relative text-white">
-          <GoBigDealLogo className="text-[clamp(2.5rem,6.5vw,4.25rem)]" />
-        </h1>
+        {/* řádek značky: logo + běžící pás VŠECH značek katalogu vedle něj
+            (zkouška dle screenshotu) — pás dobíhá až k pravé hraně obrazovky,
+            proto záporný pravý margin ruší odsazení sekce */}
+        <div className="flex w-full items-center gap-6 lg:gap-10">
+          <h1 className="relative shrink-0 text-white">
+            <GoBigDealLogo className="text-[clamp(2.5rem,6.5vw,4.25rem)]" />
+          </h1>
+          {/* mobil: vedle loga není místo, pás zůstává kotvený u spodní hrany
+              hero (absolutně vůči <header>); od sm běží v řádku s logem */}
+          <div className="absolute inset-x-0 bottom-8 sm:relative sm:inset-auto sm:-mr-8 sm:min-w-0 sm:flex-1 lg:-mr-12">
+            <BrandMarquee />
+          </div>
+        </div>
+        {/* skladba jako headliny na homepage: bílý lead → tlumené → gradient */}
         <h2 className="relative mt-5 max-w-4xl font-sans font-extralight tracking-tight leading-[1.25] text-[clamp(1.5rem,3.4vw,2.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
-          <span className="text-zinc-400">{d.catalog.headingMuted}</span>
+          <span className="text-zinc-400">{d.catalog.headingMuted}</span>{' '}
+          <span className={GRADIENT}>{d.catalog.headingAccent}</span>
         </h2>
-        {/* běžící pás značek — VŠECHNY značky z velkoobchodního katalogu;
-            kotvený níž ke spodku hero (chevron zrušen, pás má vzduch),
-            ale stále na prvním screenu; blok logo+věta zůstává na středu */}
-        <div className="absolute inset-x-0 bottom-8 sm:bottom-10">
-          <BrandMarquee />
-        </div>
       </header>
 
       {/* ── 2. Hledání — první prvek pod hero, na střed ── */}

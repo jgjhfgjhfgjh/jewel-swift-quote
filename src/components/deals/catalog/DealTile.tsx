@@ -6,10 +6,17 @@ import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 
+/** Kanonický gradient webu (homepage hero, PRO karta v mega menu). */
+const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
+
 /**
  * Dlaždice dávky — obdoba karty podniku na Woltu: médium nahoře (logo
  * koncernu na jemném podkladu), stavový štítek vlevo nahoře, sleva vpravo,
  * pod tím název a metadata. Hover zvedne kartu a přiblíží logo.
+ *
+ * Barevný jazyk podle referenční PRO karty (NavGoBigDealPanel): gradientový
+ * eyebrow + ZELENÁ = přínos (sleva, rozsah katalogu) a MODRÁ = zamčeno /
+ * teprve se otevře. Červená zůstává jen v odpočtu, kde nese urgenci.
  *
  * Teaser (`kind: 'teaser'`) je připravovaná dávka bez dat — nikdy nepředstírá
  * živou nabídku: má zámek, štítek „Připravujeme" a klik vede na alert.
@@ -61,11 +68,12 @@ export function DealTile({
         {item.kind === 'live' && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
         ) : item.kind === 'upcoming' && item.startsAt ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-zinc-200 ring-1 ring-white/15">
+          /* modrá = zamčeno / teprve se otevře (jazyk Early Access) */
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-1 text-[11px] font-bold text-blue-300 ring-1 ring-blue-400/30 backdrop-blur">
             <Lock className="h-3 w-3" /> {c.unlocksIn}
           </span>
         ) : item.kind === 'teaser' ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white ring-1 ring-white/15 backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-1 text-[11px] font-bold text-blue-300 ring-1 ring-blue-400/30 backdrop-blur">
             <Lock className="h-3 w-3" /> {c.upcoming}
           </span>
         ) : (
@@ -76,7 +84,9 @@ export function DealTile({
       </div>
 
       {item.maxDiscount > 0 && (
-        <span className="absolute right-3 top-3 rounded-full bg-red-500/15 px-2.5 py-1 text-[11px] font-bold text-red-400 ring-1 ring-red-500/25">
+        /* zelená = úspora (stejný jazyk jako emerald ceny v detailu dávky);
+           urgenci na kartě nese odpočet, ne procento */
+        <span className="absolute right-3 top-3 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-bold text-emerald-300 ring-1 ring-emerald-400/30 backdrop-blur">
           −{item.maxDiscount} %
         </span>
       )}
@@ -91,7 +101,8 @@ export function DealTile({
   const body = (
     <div className="flex flex-1 flex-col p-4">
       {item.supplier && (
-        <span className="truncate text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+        /* eyebrow jako „EARLY ACCESS" na referenční PRO kartě */
+        <span className={`truncate text-[11px] font-bold uppercase tracking-wider ${GRADIENT}`}>
           {item.supplier}
         </span>
       )}
@@ -119,13 +130,14 @@ export function DealTile({
           <span className="font-semibold text-zinc-500">{c.teaserNote}</span>
         ) : (
           <>
+            {/* zelené ikony = co v dávce dostanete (protějšek fajfek na PRO kartě) */}
             {item.models > 0 && (
               <span className="flex items-center gap-1">
-                <Layers className="h-3 w-3" /> {countLabel(lang, item.models, 'models')}
+                <Layers className="h-3 w-3 text-emerald-400" /> {countLabel(lang, item.models, 'models')}
               </span>
             )}
             <span className="flex items-center gap-1">
-              <Tag className="h-3 w-3" /> {countLabel(lang, item.brands.length, 'brands')}
+              <Tag className="h-3 w-3 text-emerald-400" /> {countLabel(lang, item.brands.length, 'brands')}
             </span>
           </>
         )}

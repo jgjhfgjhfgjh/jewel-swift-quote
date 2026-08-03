@@ -51,6 +51,8 @@ export interface DealsText {
   catalog: {
     headingLead: string;
     headingMuted: string;
+    /** Gradientový závěr věty — stejná skladba jako headliny na homepage. */
+    headingAccent: string;
     searchPlaceholder: string;
     concernsLabel: string;
     brandsLabel: string;
@@ -254,8 +256,9 @@ const cs: DealsText = {
     ctaSecondary: 'Nastavit alert',
   },
   catalog: {
-    headingLead: 'Nejlepší closeout dávky z Evropy na jednom místě.',
-    headingMuted: 'Jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů.',
+    headingLead: 'Nejlepší Dealy z Evropy',
+    headingMuted: 'na jednom místě. Jedna objednávka, jedna faktura,',
+    headingAccent: 'žádná registrace u desítek velkoobchodů napříč Evropou.',
     searchPlaceholder: 'Hledat koncern, značku nebo dávku…',
     concernsLabel: 'Koncerny',
     brandsLabel: 'Značky',
@@ -468,8 +471,9 @@ const en: DealsText = {
     ctaSecondary: 'Set a deal alert',
   },
   catalog: {
-    headingLead: 'The best closeout batches from Europe in one place.',
-    headingMuted: 'One order, one invoice, no signing up with dozens of wholesalers.',
+    headingLead: 'The best Deals from Europe',
+    headingMuted: 'in one place. One order, one invoice,',
+    headingAccent: 'no signing up with dozens of wholesalers across Europe.',
     searchPlaceholder: 'Search a concern, brand or batch…',
     concernsLabel: 'Concerns',
     brandsLabel: 'Brands',

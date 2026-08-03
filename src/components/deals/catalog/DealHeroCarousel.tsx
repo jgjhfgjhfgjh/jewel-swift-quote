@@ -7,6 +7,9 @@ import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 
+/** Kanonický gradient webu (homepage hero, PRO karta v mega menu). */
+const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
+
 /**
  * Hero pás bannerů nad katalogem — přímý protějšek promo karuselu na Woltu:
  * široké karty s přesahem sousedů (peek), scroll-snap, kulaté šipky přes
@@ -175,7 +178,7 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
         {live && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang as 'cs'} />
         ) : (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-blue-300 ring-1 ring-blue-400/30 backdrop-blur">
             <Lock className="h-3 w-3" /> {t.catalog.tile.upcoming}
           </span>
         )}
@@ -187,7 +190,8 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
         </h2>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {item.maxDiscount > 0 && (
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-zinc-900">
+            /* zelená = úspora, shodně s dlaždicí dealu */
+            <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-300 ring-1 ring-emerald-400/30 backdrop-blur">
               −{item.maxDiscount} %
             </span>
           )}
@@ -230,8 +234,11 @@ function PromoSlide({
 
   const content = (
     <div className={`relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] p-6 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8 ${shell}`}>
-      <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white ring-1 ring-white/15">
-        {icon} {eyebrow}
+      {/* eyebrow 1:1 podle referenční PRO karty: holý gradientový štítek,
+          ikonu (pilulka pryč) nese cyan střed gradientu */}
+      <span className="inline-flex w-fit items-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+        <span className="text-cyan-400">{icon}</span>
+        <span className={GRADIENT}>{eyebrow}</span>
       </span>
       <div>
         <h2 className="max-w-[20ch] font-sans text-2xl font-semibold leading-tight tracking-tight sm:text-[2rem]">

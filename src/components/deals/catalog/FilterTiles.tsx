@@ -20,8 +20,11 @@ export interface FilterTileItem {
  *
  * „Luxusní dashboard" look (pokyn Tomka, screenshot PRO karty): dlaždice
  * bg-white/5 + ring-white/10 na obsidianu, loga sjednocená do BÍLÝCH siluet
- * (brightness(0) invert(1) — stejná technika jako marquee), výběr = plný
- * bílý ring.
+ * (brightness(0) invert(1) — stejná technika jako marquee).
+ *
+ * Barvy podle referenční PRO karty: MODRÁ = výběr (stejně jako u světlého
+ * ConcernFilterCarousel na homepage), ZELENÁ = počet živých dávek (stejně
+ * jako „{n} live" v mega menu).
  */
 export function FilterTiles({
   items, selected, onToggle, label, allLabel, onClearAll,
@@ -99,7 +102,9 @@ export function FilterTiles({
                 className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] bg-white/[0.04] p-4
                             transition-all duration-200 group-hover:-translate-y-1 group-hover:bg-white/[0.08] group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.18)]
                             group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0B1215] ${
-                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0B1215]' : 'ring-1 ring-white/10'
+                              active
+                                ? 'bg-blue-500/[0.12] ring-2 ring-blue-500 ring-offset-2 ring-offset-[#0B1215]'
+                                : 'ring-1 ring-white/10'
                             }`}
               >
                 {item.domain ? (
@@ -117,20 +122,25 @@ export function FilterTiles({
                   </span>
                 )}
                 {active && (
-                  /* bílý badge s tmavou fajfkou — čitelný na dlaždici i na
+                  /* modrý badge s bílou fajfkou — čitelný na dlaždici i na
                      černém pozadí, přes které rohem přesahuje */
-                  <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white text-zinc-900 shadow-md ring-1 ring-zinc-900/10">
+                  <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow-md ring-2 ring-[#0B1215]">
                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                   </span>
                 )}
                 {count > 0 && !active && (
-                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-zinc-300">
+                  /* zelený počet dávek — „kolik je tu pro vás" */
+                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-300 ring-1 ring-emerald-400/25">
                     <Layers className="h-2.5 w-2.5" />
                     {count}
                   </span>
                 )}
               </span>
-              <span className="line-clamp-2 text-center text-[13px] font-medium leading-tight text-zinc-200">
+              <span
+                className={`line-clamp-2 text-center text-[13px] leading-tight ${
+                  active ? 'font-semibold text-white' : 'font-medium text-zinc-200'
+                }`}
+              >
                 {item.name}
               </span>
             </button>
