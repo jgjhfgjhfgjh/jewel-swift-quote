@@ -19,7 +19,6 @@ import {
   applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
   type CatalogFilters,
 } from '@/lib/dealCatalog';
-import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
 import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
@@ -189,25 +188,24 @@ export default function Deals() {
 
       {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
-      {/* ── 1. Header: H1 = logo GoBigDeal, H2 = o co jde — blok je svisle
-             vycentrovaný na první obrazovku (odečítá announcement bar jako
-             homepage hero); bez záře, čistý obsidian ── */}
+      {/* ── 1. Header: hero nese POUZE pozicovací větu (logo je v navbaru),
+             blok je svisle vycentrovaný na první obrazovku (odečítá
+             announcement bar jako homepage hero); čistý obsidian ── */}
       <header
         id="catalog"
         className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
       >
-        {/* ~2× větší logo; marquee je kotvený absolutně ke spodku hero,
-            takže ho růst bloku nevytlačí pod fold — blok jen roste ze středu */}
-        <h1 className="relative text-white">
-          <GoBigDealLogo className="text-[clamp(3.75rem,12vw,8rem)]" />
-        </h1>
-        <h2 className="relative mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
+        {/* značka pro čtečky a vyhledávače — vizuálně ji nese navbar */}
+        <h1 className="sr-only">GoBigDeal</h1>
+        {/* hlavní prvek hero: extralight clamp v typografii homepage,
+            bílá věta + tlumené pokračování */}
+        <h2 className="relative mx-auto max-w-4xl font-sans font-extralight tracking-tight leading-[1.2] text-[clamp(1.5rem,4.6vw,3.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
         {/* běžící pás značek — VŠECHNY značky z velkoobchodního katalogu;
             kotvený níž ke spodku hero (chevron zrušen, pás má vzduch),
-            ale stále na prvním screenu; logo + H2 zůstávají přesně na středu */}
+            ale stále na prvním screenu; H2 zůstává přesně na středu */}
         <div className="absolute inset-x-0 bottom-8 sm:bottom-10">
           <BrandMarquee />
         </div>
