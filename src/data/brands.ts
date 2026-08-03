@@ -76,6 +76,7 @@ export const BRANDS: Brand[] = [
   { name: 'Luminox', domain: 'luminox.com' },
   { name: 'Timberland', domain: 'timberland.com' },
   { name: 'Victorinox', domain: 'victorinox.com' },
+  { name: 'Roamer', domain: 'roamer.ch' },
   // ZEPPELIN: Brandfetch nemá použitelné logo — záměrně bez záznamu, UI použije
   // textový fallback. Ověřeno znovu 2026-07: zeppelinwatch.com / zeppelin-watch.de /
   // zeppelinuhren.de vrací prázdný bílý obrázek, pointtec.de logo jiné značky

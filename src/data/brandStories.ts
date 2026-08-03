@@ -1534,6 +1534,35 @@ export const BRAND_STORIES: Record<string, StoryEra[]> = {
     },
   ],
 
+  'ROAMER': [
+    {
+      heading: '1888: Dílna v Solothurnu',
+      items: [
+        {
+          lead: 'Fritz Meyer',
+          text: 'Hodinář založil ve švýcarském Solothurnu dílnu se šesti zaměstnanci; během sedmi let firma vyrostla na šedesát lidí a začala vyrábět kompletní hodinky.',
+        },
+        {
+          lead: '1895 – Kalibr číslo 38',
+          text: 'První vlastní strojek dostal jméno podle zakladatelových 38. narozenin; z partnerství Meyer & Stüdeli (MST) vyrostla manufaktura s vlastní výrobou kalibrů.',
+        },
+      ],
+    },
+    {
+      heading: 'Anfibio a světová pověst',
+      items: [
+        {
+          lead: '1955 – Patentované vodotěsné pouzdro',
+          text: 'Řada Anfibio s patentovaným vodotěsným pouzdrem způsobila senzaci a získala si celosvětovou pověst kvality, odolnosti a spolehlivosti.',
+        },
+        {
+          lead: 'Swiss Made dodnes',
+          text: 'Roamer of Switzerland sídlí v Solothurnu i dnes a pokračuje v tradici precizních švýcarských hodinek za dostupnou cenu.',
+        },
+      ],
+    },
+  ],
+
   'MILLNER': [
     {
       heading: '2017: Barcelona',
