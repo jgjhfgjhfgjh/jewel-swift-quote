@@ -90,6 +90,26 @@ export interface DealsText {
       howSub: string;
       howCta: string;
     };
+    /** Dashboardová podoba katalogu — KPI lišta, řazení, přepínač zobrazení. */
+    dash: {
+      kpiLive: string;
+      kpiModels: string;
+      kpiDiscount: string;
+      kpiDeadline: string;
+      kpiNextStart: string;
+      kpiConcerns: string;
+      sortEnding: string;
+      sortDiscount: string;
+      sortModels: string;
+      sortNewest: string;
+      viewGrid: string;
+      viewList: string;
+      secLive: string;
+      /** Badge počtu živých dávek v sidebaru — šablona `{n}`. */
+      live: string;
+      soon: string;
+      eyebrowPro: string;
+    };
   };
   // deal card
   card: { models: string; brands: string; view: string; endsIn: string; discountUpTo: string; ended: string; closed: string };
@@ -295,6 +315,24 @@ const cs: DealsText = {
       howTitle: 'Čím víc kusů, tím nižší cena — na celé objednávce.',
       howSub: 'Každá překročená hladina zlevní celou objednávku, ne jen kusy nad hranicí.',
       howCta: 'Jak deal funguje',
+    },
+    dash: {
+      kpiLive: 'Živé dávky',
+      kpiModels: 'Modelů v katalogu',
+      kpiDiscount: 'Sleva až',
+      kpiDeadline: 'Nejbližší uzávěrka',
+      kpiNextStart: 'Nejbližší start',
+      kpiConcerns: 'Koncernů v katalogu',
+      sortEnding: 'Končí nejdřív',
+      sortDiscount: 'Nejvyšší sleva',
+      sortModels: 'Nejvíc modelů',
+      sortNewest: 'Nejnovější',
+      viewGrid: 'Mřížka',
+      viewList: 'Seznam',
+      secLive: 'Živé dávky',
+      live: '{n} live',
+      soon: 'brzy',
+      eyebrowPro: 'Early Access',
     },
   },
   card: {
@@ -510,6 +548,24 @@ const en: DealsText = {
       howTitle: 'More units, lower price — across the whole order.',
       howSub: 'Every threshold you cross drops the price of the entire order, not just the units above it.',
       howCta: 'How a deal works',
+    },
+    dash: {
+      kpiLive: 'Live batches',
+      kpiModels: 'Models in catalog',
+      kpiDiscount: 'Discount up to',
+      kpiDeadline: 'Next deadline',
+      kpiNextStart: 'Next start',
+      kpiConcerns: 'Concerns in catalog',
+      sortEnding: 'Ending first',
+      sortDiscount: 'Biggest discount',
+      sortModels: 'Most models',
+      sortNewest: 'Newest',
+      viewGrid: 'Grid',
+      viewList: 'List',
+      secLive: 'Live batches',
+      live: '{n} live',
+      soon: 'soon',
+      eyebrowPro: 'Early Access',
     },
   },
   card: {

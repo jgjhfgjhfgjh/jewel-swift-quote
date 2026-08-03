@@ -16,16 +16,22 @@ import { toDisplayName } from '@/lib/brandNormalize';
 import { getBrandByName } from '@/data/brands';
 import { CONCERNS } from '@/data/concerns';
 import {
-  applyFilters, buildCatalog, buildRows, EMPTY_FILTERS,
-  type CatalogFilters,
+  applyFilters, buildCatalog, EMPTY_FILTERS,
+  type CatalogFilters, type DealTileItem,
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
 import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
-import { DealFilterBar } from '@/components/deals/catalog/DealFilterBar';
-import { DealHeroCarousel } from '@/components/deals/catalog/DealHeroCarousel';
-import { DealRow } from '@/components/deals/catalog/DealRow';
+import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
+import { CatalogSidebar } from '@/components/deals/catalog/CatalogSidebar';
+import {
+  CatalogControlBar, type CatalogSortKey, type CatalogView,
+} from '@/components/deals/catalog/CatalogControlBar';
+import { DealTile } from '@/components/deals/catalog/DealTile';
+import { DealListRow } from '@/components/deals/catalog/DealListRow';
+import { DealSpotlight } from '@/components/deals/catalog/DealSpotlight';
+import { CountdownTimer } from '@/components/deals/CountdownTimer';
 
 const STEP_ICONS = [MousePointerClick, Layers, TrendingUp, Clock];
 const CONDITION_ICONS = [Package, CreditCard, Banknote, FileText, ListOrdered];
@@ -44,6 +50,18 @@ const H3 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(
 const PILL_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100';
 const PILL_OUTLINE_DARK = 'inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10';
 
+/* Řazení dashboardu — uplatní se UVNITŘ stavových sekcí (živé / připravujeme /
+   uzavřené); stav má vždy přednost, obchodník nikdy nemíchá živé s mrtvým. */
+const FAR_FUTURE = 8640000000000000; // dlaždice bez termínu patří nakonec
+const SORTERS: Record<CatalogSortKey, (a: DealTileItem, b: DealTileItem) => number> = {
+  ending: (a, b) =>
+    new Date(a.deadline ?? a.startsAt ?? FAR_FUTURE).getTime() -
+    new Date(b.deadline ?? b.startsAt ?? FAR_FUTURE).getTime(),
+  discount: (a, b) => b.maxDiscount - a.maxDiscount,
+  models: (a, b) => b.models - a.models,
+  newest: (a, b) => new Date(b.startsAt ?? 0).getTime() - new Date(a.startsAt ?? 0).getTime(),
+};
+
 const scrollTo = (id: string) =>
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -55,7 +73,10 @@ export default function Deals() {
   const d = dealsI18n[lang];
   const { deals, productCounts, loading } = useDeals();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
+  const [sort, setSort] = useState<CatalogSortKey>('ending');
+  const [view, setView] = useState<CatalogView>('grid');
   const location = useLocation();
+  const dash = d.catalog.dash;
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -82,27 +103,46 @@ export default function Deals() {
   );
   const filtered = useMemo(() => applyFilters(catalog, filters), [catalog, filters]);
 
-  const rows = useMemo(
-    () => buildRows(filtered, {
-      endingSoon: d.catalog.rows.endingSoon,
-      fresh: d.catalog.rows.fresh,
-      watches: d.catalog.rows.watches,
-      jewelry: d.catalog.rows.jewelry,
-      upcoming: d.catalog.rows.upcoming,
-      closed: d.catalog.rows.closed,
-      byConcern: (name) => fillTemplate(d.catalog.rows.byConcern, { name }),
-    }),
-    [filtered, d],
-  );
+  /* Dashboardové sekce — dlaždice dělí STAV, pořadí uvnitř řídí řazení. */
+  const sections = useMemo(() => {
+    const s = SORTERS[sort];
+    return {
+      live: filtered.filter((t) => t.kind === 'live').sort(s),
+      upcoming: filtered.filter((t) => t.kind === 'upcoming' || t.kind === 'teaser').sort(s),
+      closed: filtered.filter((t) => t.kind === 'closed').sort(s),
+    };
+  }, [filtered, sort]);
+
+  /* KPI lišta — počítá se z CELÉHO katalogu, ne z filtru: přehled trhu
+     se obchodníkovi nemění pod rukama, když si filtruje. */
+  const kpis = useMemo(() => {
+    const real = catalog.filter((t) => t.kind !== 'teaser');
+    const live = real.filter((t) => t.kind === 'live');
+    return {
+      liveCount: live.length,
+      models: real.reduce((n, t) => n + t.models, 0),
+      maxDiscount: catalog.reduce((m, t) => Math.max(m, t.maxDiscount), 0),
+      nextDeadline: live.map((t) => t.deadline).filter(Boolean).sort()[0],
+      nextStart: real
+        .filter((t) => t.kind === 'upcoming' && t.startsAt)
+        .map((t) => t.startsAt as string)
+        .sort()[0],
+    };
+  }, [catalog]);
 
   // Dlaždice koncernů — badge nese počet REÁLNÝCH dávek, teaser se nepočítá.
   const concernTiles = useMemo(() => {
-    const acc: Record<string, number> = {};
+    const totals: Record<string, number> = {};
+    const lives: Record<string, number> = {};
     catalog.forEach((t) => {
-      if (t.kind !== 'teaser' && t.concernSlug) acc[t.concernSlug] = (acc[t.concernSlug] ?? 0) + 1;
+      if (t.kind !== 'teaser' && t.concernSlug) {
+        totals[t.concernSlug] = (totals[t.concernSlug] ?? 0) + 1;
+        if (t.kind === 'live') lives[t.concernSlug] = (lives[t.concernSlug] ?? 0) + 1;
+      }
     });
     return CONCERNS.map((c) => ({
-      key: c.slug, name: c.name, domain: c.domain, count: acc[c.slug] ?? 0,
+      key: c.slug, name: c.name, domain: c.domain,
+      count: totals[c.slug] ?? 0, live: lives[c.slug] ?? 0,
     }));
   }, [catalog]);
 
@@ -133,11 +173,7 @@ export default function Deals() {
     ];
   }, [filters, concernTiles, brandTiles]);
 
-  // Řada „Připravujeme" jde před velké karty, ostatní za ně.
-  const upcomingRow = useMemo(() => rows.find((r) => r.id === 'upcoming'), [rows]);
-  const restRows = useMemo(() => rows.filter((r) => r.id !== 'upcoming'), [rows]);
-
-  // Do hero pásu jde nejnaléhavější dlaždice: běžící dávka, jinak nejbližší start.
+  // Do spotlight banneru jde nejnaléhavější dlaždice: běžící dávka, jinak nejbližší start.
   const featured = useMemo(
     () => filtered.find((t) => t.kind === 'live') ?? filtered.find((t) => t.kind === 'upcoming'),
     [filtered],
@@ -160,6 +196,32 @@ export default function Deals() {
       ...f,
       brands: f.brands.includes(key) ? f.brands.filter((b) => b !== key) : [...f.brands, key],
     }));
+
+  /* Sekce dashboardu — nadpis s počtem, pod ním mřížka DealTile, nebo hustý
+     seznam DealListRow (přepínač v řídicí liště). */
+  const renderSection = (title: string, items: DealTileItem[], liveDot = false) =>
+    items.length === 0 ? null : (
+      <section className="pt-9">
+        <div className="flex items-center gap-2.5">
+          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />}
+          <h2 className="font-sans text-lg font-semibold tracking-tight text-white">{title}</h2>
+          <span className="text-sm text-zinc-500">{items.length}</span>
+        </div>
+        {view === 'grid' ? (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {items.map((t) => (
+              <DealTile key={t.id} item={t} onTeaserClick={goToAlerts} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4 flex flex-col gap-2.5">
+            {items.map((t) => (
+              <DealListRow key={t.id} item={t} onTeaserClick={goToAlerts} />
+            ))}
+          </div>
+        )}
+      </section>
+    );
 
   /* ── Vysvětlující část pod katalogem ─────────────────────────────────── */
   const allBrands = new Set<string>();
@@ -189,136 +251,165 @@ export default function Deals() {
 
       {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
-      {/* ── 1. Header: H1 = logo GoBigDeal (drobná značka nad větou), H2 =
-             hlavní pozicovací věta; blok je zarovnaný VLEVO na stejné
-             odsazení jako řady katalogu (px-5/8/12), aby logo, věta i karty
-             pod nimi stály na jedné svislé lince, a svisle vycentrovaný na
-             první obrazovku (odečítá announcement bar jako homepage hero) ── */}
+      {/* ── 1. Kompaktní command header: logo + marquee v jednom řádku,
+             pozicovací věta pod nimi. Dashboard nemá 100vh hero — data
+             (KPI, filtry, dávky) začínají hned pod headerem. ── */}
       <header
         id="catalog"
-        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-start justify-center px-5 text-left sm:px-8 lg:px-12"
+        className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        {/* řádek značky: logo + běžící pás VŠECH značek katalogu vedle něj
-            (zkouška dle screenshotu) — pás dobíhá až k pravé hraně obrazovky,
-            proto záporný pravý margin ruší odsazení sekce */}
         <div className="flex w-full items-center gap-6 lg:gap-10">
-          <h1 className="relative shrink-0 text-white">
-            <GoBigDealLogo className="text-[clamp(2.5rem,6.5vw,4.25rem)]" />
+          <h1 className="shrink-0 text-white">
+            <GoBigDealLogo className="text-[clamp(2rem,4.5vw,3rem)]" />
           </h1>
-          {/* mobil: vedle loga není místo, pás zůstává kotvený u spodní hrany
-              hero (absolutně vůči <header>); od sm běží v řádku s logem */}
-          <div className="absolute inset-x-0 bottom-8 sm:relative sm:inset-auto sm:-mr-8 sm:min-w-0 sm:flex-1 lg:-mr-12">
+          {/* pás značek dobíhá až k pravé hraně obrazovky (ruší px sekce) */}
+          <div className="hidden min-w-0 flex-1 sm:-mr-8 sm:block lg:-mr-12">
             <BrandMarquee />
           </div>
         </div>
         {/* skladba jako headliny na homepage: bílý lead → tlumené → gradient */}
-        <h2 className="relative mt-5 max-w-4xl font-sans font-extralight tracking-tight leading-[1.25] text-[clamp(1.5rem,3.4vw,2.5rem)]">
+        <h2 className="mt-3 max-w-3xl font-sans font-extralight tracking-tight leading-[1.35] text-[clamp(1rem,1.8vw,1.35rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>{' '}
           <span className={GRADIENT}>{d.catalog.headingAccent}</span>
         </h2>
+        {/* mobil: pás pod větou, full-bleed */}
+        <div className="-mx-5 mt-5 sm:hidden">
+          <BrandMarquee />
+        </div>
       </header>
 
-      {/* ── 2. Hledání — první prvek pod hero, na střed ── */}
-      <div className="pt-10 sm:pt-14">
+      {/* ── 2. KPI lišta — stav trhu na první pohled ── */}
+      <div className="px-5 pt-7 sm:px-8 lg:px-12">
+        {loading ? (
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-[92px] animate-pulse rounded-2xl bg-white/10" />
+            ))}
+          </div>
+        ) : (
+          <CatalogKpis
+            items={[
+              { label: dash.kpiLive, value: String(kpis.liveCount), liveDot: kpis.liveCount > 0 },
+              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
+              {
+                label: dash.kpiDiscount,
+                value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
+                gradient: kpis.maxDiscount > 0,
+              },
+              kpis.nextDeadline
+                ? {
+                    label: dash.kpiDeadline,
+                    value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
+                  }
+                : kpis.nextStart
+                  ? {
+                      label: dash.kpiNextStart,
+                      value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
+                    }
+                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
+            ]}
+          />
+        )}
+      </div>
+
+      {/* ── 3. Mobilní filtry — desktop je má v sidebaru ── */}
+      <div className="pt-8 lg:hidden">
         <CatalogSearch
           value={filters.search}
           onChange={(search) => setFilters((f) => ({ ...f, search }))}
         />
+        <div className="pt-8">
+          <FilterTiles
+            items={concernTiles}
+            selected={filters.concerns}
+            onToggle={toggleConcern}
+            label={d.catalog.concernsLabel}
+            allLabel={d.catalog.allConcerns}
+            onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
+          />
+        </div>
+        <div className="pt-6">
+          <FilterTiles
+            items={brandTiles}
+            selected={filters.brands}
+            onToggle={toggleBrand}
+            label={d.catalog.brandsLabel}
+            allLabel={d.catalog.allConcerns}
+            onClearAll={() => setFilters((f) => ({ ...f, brands: [] }))}
+          />
+        </div>
       </div>
 
-      {/* ── 3. Koncerny jako dlaždice (logo na tónovaném čtverci, popisek pod) ── */}
-      <div className="pt-10 sm:pt-14">
-        <FilterTiles
-          items={concernTiles}
-          selected={filters.concerns}
-          onToggle={toggleConcern}
-          label={d.catalog.concernsLabel}
-          allLabel={d.catalog.allConcerns}
-          onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
-        />
-      </div>
+      {/* ── 4. Dashboard: lepivý sidebar s filtry + hlavní datový sloupec ── */}
+      <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:grid lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10 lg:px-12 lg:pt-8">
+        <aside className="hidden lg:block">
+          <div
+            className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto pb-4 pr-1
+                       [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            <CatalogSidebar
+              search={filters.search}
+              onSearch={(search) => setFilters((f) => ({ ...f, search }))}
+              concerns={concernTiles}
+              brands={brandTiles}
+              selectedConcerns={filters.concerns}
+              selectedBrands={filters.brands}
+              onToggleConcern={toggleConcern}
+              onToggleBrand={toggleBrand}
+              onAlerts={goToAlerts}
+              onHow={() => scrollTo('how-it-works')}
+            />
+          </div>
+        </aside>
 
-      {/* ── 4. Značky — stejné dlaždice jako koncerny, jen jiná data ── */}
-      <div className="pt-6 sm:pt-8">
-        <FilterTiles
-          items={brandTiles}
-          selected={filters.brands}
-          onToggle={toggleBrand}
-          label={d.catalog.brandsLabel}
-          allLabel={d.catalog.allConcerns}
-          onClearAll={() => setFilters((f) => ({ ...f, brands: [] }))}
-        />
-      </div>
-
-      {/* ── Lepivá stavová lišta: počet výsledků a běžící filtry ── */}
-      <div className="mt-5">
-        <DealFilterBar
-          filters={filters}
-          onChange={setFilters}
-          resultCount={filtered.length}
-          activeLabels={activeLabels}
-        />
-      </div>
-
-      {/* ── Dealy: nejdřív Připravujeme, pak tři velké karty, pak zbytek ── */}
-      <div className="pb-10 pt-2 sm:pb-16">
-        {loading ? (
-          <>
-            <div className="flex gap-4 overflow-hidden px-5 pt-6 sm:px-8 lg:px-12">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-64 w-[248px] shrink-0 animate-pulse rounded-2xl bg-white/10 sm:w-[276px]" />
+        <main className="min-w-0">
+          {loading ? (
+            <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-72 animate-pulse rounded-2xl bg-white/10" />
               ))}
             </div>
-            <div className="px-5 pt-8 sm:px-8 lg:px-12">
-              <div className="h-[240px] animate-pulse rounded-[24px] bg-white/10 sm:h-[300px]" />
+          ) : filtered.length === 0 ? (
+            <div className="mx-auto mt-12 max-w-xl text-center">
+              <SearchX className="mx-auto h-8 w-8 text-white/30" />
+              <p className="mt-4 text-lg font-semibold tracking-tight text-white">{d.catalog.noResults}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{d.catalog.noResultsSub}</p>
+              <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+                <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className={PILL_LIGHT}>
+                  {d.catalog.clear}
+                </button>
+                <button type="button" onClick={goToAlerts} className={PILL_OUTLINE_DARK}>
+                  <Bell className="h-4 w-4" /> {d.active.emptyCta}
+                </button>
+              </div>
             </div>
-          </>
-        ) : filtered.length === 0 ? (
-          <div className="mx-auto mt-10 max-w-xl px-5 text-center">
-            <SearchX className="mx-auto h-8 w-8 text-white/30" />
-            <p className="mt-4 text-lg font-semibold tracking-tight text-white">{d.catalog.noResults}</p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400">{d.catalog.noResultsSub}</p>
-            <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-              <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className={PILL_LIGHT}>
-                {d.catalog.clear}
-              </button>
-              <button type="button" onClick={goToAlerts} className={PILL_OUTLINE_DARK}>
-                <Bell className="h-4 w-4" /> {d.active.emptyCta}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {upcomingRow && (
-              <DealRow
-                title={upcomingRow.title}
-                items={upcomingRow.items}
-                seeAllLabel={d.catalog.seeAll}
-                onTeaserClick={goToAlerts}
+          ) : (
+            <>
+              <CatalogControlBar
+                resultCount={filtered.length}
+                activeCount={activeLabels.length}
+                activeLabels={activeLabels}
+                onClear={() => setFilters(EMPTY_FILTERS)}
+                sort={sort}
+                onSort={setSort}
+                view={view}
+                onView={setView}
               />
-            )}
 
-            {/* tři velké karty — hero pás sedí mezi „Připravujeme" a zbytkem řad */}
-            <div className="py-4 sm:py-6">
-              <DealHeroCarousel
-                featured={featured}
-                onAlerts={goToAlerts}
-                onHow={() => scrollTo('how-it-works')}
-              />
-            </div>
+              {/* spotlight — jedna nejnaléhavější dávka místo promo karuselu */}
+              {featured && (
+                <div className="pt-5">
+                  <DealSpotlight item={featured} />
+                </div>
+              )}
 
-            {restRows.map((row) => (
-              <DealRow
-                key={row.id}
-                title={row.title}
-                items={row.items}
-                seeAllLabel={d.catalog.seeAll}
-                onTeaserClick={goToAlerts}
-              />
-            ))}
-          </>
-        )}
+              {renderSection(dash.secLive, sections.live, true)}
+              {renderSection(d.catalog.rows.upcoming, sections.upcoming)}
+              {renderSection(d.catalog.rows.closed, sections.closed)}
+            </>
+          )}
+        </main>
       </div>
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
