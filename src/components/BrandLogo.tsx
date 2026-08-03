@@ -8,6 +8,8 @@ interface BrandLogoProps {
   fallbackClassName?: string;
   width?: number;
   height?: number;
+  /** Dekorativní loga (marquee) — fetchpriority=low, ať nesoupeří s hero videem. */
+  lowPriority?: boolean;
 }
 
 export function BrandLogo({
@@ -17,6 +19,7 @@ export function BrandLogo({
   fallbackClassName = '',
   width = 400,
   height = 200,
+  lowPriority = false,
 }: BrandLogoProps) {
   const [imgError, setImgError] = useState(false);
 
@@ -37,6 +40,8 @@ export function BrandLogo({
       decoding="async"
       draggable={false}
       onError={() => setImgError(true)}
+      // React 18 nezná fetchPriority prop — malé písmeno projde jako atribut
+      {...(lowPriority ? ({ fetchpriority: 'low' } as Record<string, string>) : {})}
     />
   );
 }

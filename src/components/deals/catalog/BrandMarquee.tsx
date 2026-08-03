@@ -64,6 +64,7 @@ export function BrandMarquee({ all = false }: {
                   domain={b.domain}
                   width={200}
                   height={80}
+                  lowPriority
                   className="h-5 w-auto max-w-[110px] shrink-0 object-contain opacity-40 [filter:brightness(0)_invert(1)] sm:h-6 sm:max-w-[130px]"
                   fallbackClassName="shrink-0 whitespace-nowrap text-sm font-semibold tracking-wide text-white/40"
                 />

@@ -213,8 +213,10 @@ const Index = () => {
                   šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
               {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
               {/* širší druhý řádek skoro vyplní šířku — větší posun by se na
-                  1280px ořezával; -1vw nechá blok jemně vlevo od středu */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left sm:-translate-x-[1vw]">
+                  1280px ořezával; -1vw nechá blok jemně vlevo od středu.
+                  Na mobilu jede blok (i marquee níže) o 8vh dolů — nad
+                  textem je volný prostor, translate nemění výšku sekce. */}
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left translate-y-[8vh] sm:translate-y-0 sm:-translate-x-[1vw]">
                 {/* min(12.5vh,6.3vw) — vh drží velikost na vysokých oknech,
                     vw pojistka brání zalomení řádku „smarter tools…" na
                     užších desktopech */}
@@ -232,7 +234,7 @@ const Index = () => {
                   siluety, lehce průhledné), přes celou šířku videa. Pevná
                   výška = žádný layout skok; jede ze statického rejstříku,
                   takže je vidět hned při načtení stránky. */}
-              <div className="relative z-10 -mx-6 mt-5 h-9 sm:mt-7 sm:h-10">
+              <div className="relative z-10 -mx-6 mt-5 h-9 translate-y-[8vh] sm:mt-7 sm:h-10 sm:translate-y-0">
                 <BrandMarquee all />
               </div>
               {/* scroll cue — výš, aby ho nepřekryla následující sekce */}
