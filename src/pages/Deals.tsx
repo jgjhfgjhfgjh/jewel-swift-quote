@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ArrowRight, Bell, Check, ChevronDown, MousePointerClick, Layers, TrendingUp,
+  ArrowRight, Bell, Check, MousePointerClick, Layers, TrendingUp,
   Clock, Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
@@ -206,16 +206,11 @@ export default function Deals() {
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
         {/* běžící pás značek — VŠECHNY značky z velkoobchodního katalogu;
-            kotvený ke spodku hero NAD chevronem, takže je na prvním screenu,
-            a logo + H2 zůstávají přesně na středu */}
-        <div className="absolute inset-x-0 bottom-20 sm:bottom-24">
+            kotvený níž ke spodku hero (chevron zrušen, pás má vzduch),
+            ale stále na prvním screenu; logo + H2 zůstávají přesně na středu */}
+        <div className="absolute inset-x-0 bottom-8 sm:bottom-10">
           <BrandMarquee />
         </div>
-        {/* scroll cue — stejný vzor jako hero na homepage */}
-        <ChevronDown
-          aria-hidden
-          className="absolute bottom-8 left-1/2 h-6 w-6 -translate-x-1/2 animate-bounce text-white/70 sm:bottom-10"
-        />
       </header>
 
       {/* ── 2. Hledání — první prvek pod hero, na střed ── */}
