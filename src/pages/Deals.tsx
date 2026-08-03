@@ -191,15 +191,18 @@ export default function Deals() {
       {/* ── 1. Header: hero nese POUZE pozicovací větu (logo je v navbaru),
              blok je svisle vycentrovaný na první obrazovku (odečítá
              announcement bar jako homepage hero); čistý obsidian ── */}
+      {/* text-left: čtyřřádková věta se čte líp od jedné hrany (centrovaný
+          víceřádkový blok nutí oko hledat začátek každého řádku); blok jako
+          celek zůstává vodorovně na středu přes mx-auto na H2 */}
       <header
         id="catalog"
-        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
+        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-left sm:px-8 lg:px-12"
       >
         {/* značka pro čtečky a vyhledávače — vizuálně ji nese navbar */}
         <h1 className="sr-only">GoBigDeal</h1>
         {/* hlavní prvek hero: extralight clamp v typografii homepage,
             bílá věta + tlumené pokračování */}
-        <h2 className="relative mx-auto max-w-4xl font-sans font-extralight tracking-tight leading-[1.2] text-[clamp(1.5rem,4.6vw,3.5rem)]">
+        <h2 className="relative mx-auto w-full max-w-4xl font-sans font-extralight tracking-tight leading-[1.2] text-[clamp(1.5rem,4.6vw,3.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
