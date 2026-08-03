@@ -189,23 +189,25 @@ export default function Deals() {
 
       {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
 
-      {/* ── 1. Header: H1 = logo GoBigDeal (vráceno na pokyn), H2 = menší
-             doprovodná věta pod ním; blok je svisle vycentrovaný na první
-             obrazovku (odečítá announcement bar jako homepage hero) ── */}
+      {/* ── 1. Header: H1 = logo GoBigDeal (drobná značka nad větou), H2 =
+             hlavní pozicovací věta; blok je zarovnaný VLEVO na stejné
+             odsazení jako řady katalogu (px-5/8/12), aby logo, věta i karty
+             pod nimi stály na jedné svislé lince, a svisle vycentrovaný na
+             první obrazovku (odečítá announcement bar jako homepage hero) ── */}
       <header
         id="catalog"
-        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-center justify-center px-5 text-center"
+        className="relative flex min-h-[calc(100svh-var(--ann-offset,0px))] scroll-mt-16 flex-col items-start justify-center px-5 text-left sm:px-8 lg:px-12"
       >
         <h1 className="relative text-white">
-          <GoBigDealLogo className="text-[clamp(3.75rem,12vw,8rem)]" />
+          <GoBigDealLogo className="text-[clamp(2.5rem,6.5vw,4.25rem)]" />
         </h1>
-        <h2 className="relative mx-auto mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.05rem,2.3vw,1.5rem)]">
+        <h2 className="relative mt-5 max-w-4xl font-sans font-extralight tracking-tight leading-[1.25] text-[clamp(1.5rem,3.4vw,2.5rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>
         </h2>
         {/* běžící pás značek — VŠECHNY značky z velkoobchodního katalogu;
             kotvený níž ke spodku hero (chevron zrušen, pás má vzduch),
-            ale stále na prvním screenu; H2 zůstává přesně na středu */}
+            ale stále na prvním screenu; blok logo+věta zůstává na středu */}
         <div className="absolute inset-x-0 bottom-8 sm:bottom-10">
           <BrandMarquee />
         </div>
