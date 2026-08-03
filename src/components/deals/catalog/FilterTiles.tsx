@@ -14,13 +14,14 @@ export interface FilterTileItem {
 
 /**
  * Vodorovný pás filtračních dlaždic ve stylu kategorií na Woltu: logo na
- * BÍLÉM čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a kulaté
- * šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky — mají
- * být k nerozeznání, liší se jen daty.
+ * tmavém glass čtverci, POPISEK POD dlaždicí (ne uvnitř), scroll-snap a
+ * kulaté šipky vpravo nahoře. Stejná komponenta obsluhuje koncerny i značky
+ * — mají být k nerozeznání, liší se jen daty.
  *
- * Styling počítá s obsidian plochou katalogu (#0B1215): dlaždice jednotně
- * bílé (teal rotace zůstala jen na médiích karet dealů), texty světlé,
- * výběr značí bílý ring.
+ * „Luxusní dashboard" look (pokyn Tomka, screenshot PRO karty): dlaždice
+ * bg-white/5 + ring-white/10 na obsidianu, loga sjednocená do BÍLÝCH siluet
+ * (brightness(0) invert(1) — stejná technika jako marquee), výběr = plný
+ * bílý ring.
  */
 export function FilterTiles({
   items, selected, onToggle, label, allLabel, onClearAll,
@@ -59,7 +60,7 @@ export function FilterTiles({
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Předchozí"
-            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-colors hover:bg-white/20 sm:inline-flex"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -67,7 +68,7 @@ export function FilterTiles({
             type="button"
             onClick={() => scroll(1)}
             aria-label="Další"
-            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-colors hover:bg-white/20 sm:inline-flex"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -93,13 +94,12 @@ export function FilterTiles({
               aria-pressed={active}
               className="group flex w-[104px] shrink-0 snap-start flex-col items-center gap-2 focus:outline-none sm:w-[124px]"
             >
-              {/* dlaždice jednotně bílé (na pokyn) — barevná teal rotace
-                  zůstala jen na médiích karet dealů */}
+              {/* tmavý glass čtverec — loga jedou jako bílé siluety */}
               <span
-                className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] bg-white p-4
-                            transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.22)]
+                className={`relative flex aspect-square w-full items-center justify-center rounded-[20px] bg-white/[0.04] p-4
+                            transition-all duration-200 group-hover:-translate-y-1 group-hover:bg-white/[0.08] group-hover:shadow-[0_12px_28px_-12px_rgba(255,255,255,0.18)]
                             group-focus-visible:ring-2 group-focus-visible:ring-white group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-[#0B1215] ${
-                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0B1215]' : ''
+                              active ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0B1215]' : 'ring-1 ring-white/10'
                             }`}
               >
                 {item.domain ? (
@@ -108,11 +108,11 @@ export function FilterTiles({
                     domain={item.domain}
                     width={280}
                     height={120}
-                    className="max-h-9 max-w-[78%] object-contain [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
-                    fallbackClassName="line-clamp-2 text-center text-xs font-semibold leading-tight text-zinc-700"
+                    className="max-h-9 max-w-[78%] object-contain opacity-80 [filter:brightness(0)_invert(1)] transition-all duration-300 group-hover:scale-[1.06] group-hover:opacity-100"
+                    fallbackClassName="line-clamp-2 text-center text-xs font-semibold leading-tight text-white/80"
                   />
                 ) : (
-                  <span className="line-clamp-3 text-center text-xs font-semibold leading-tight text-zinc-700">
+                  <span className="line-clamp-3 text-center text-xs font-semibold leading-tight text-white/80">
                     {item.name}
                   </span>
                 )}
@@ -124,8 +124,7 @@ export function FilterTiles({
                   </span>
                 )}
                 {count > 0 && !active && (
-                  /* zinc podklad — bílý badge by na bílé dlaždici zanikl */
-                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-bold text-zinc-600">
+                  <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-zinc-300">
                     <Layers className="h-2.5 w-2.5" />
                     {count}
                   </span>

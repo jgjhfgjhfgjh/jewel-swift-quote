@@ -109,7 +109,7 @@ export function DealHeroCarousel({
         type="button"
         onClick={() => scroll(-1)}
         aria-label="Předchozí"
-        className="absolute left-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-800 shadow-lg backdrop-blur transition-all hover:bg-white sm:flex lg:left-5"
+        className="absolute left-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#0B1215]/80 text-white ring-1 ring-white/15 shadow-lg backdrop-blur transition-all hover:bg-white/10 sm:flex lg:left-5"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -117,7 +117,7 @@ export function DealHeroCarousel({
         type="button"
         onClick={() => scroll(1)}
         aria-label="Další"
-        className="absolute right-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-800 shadow-lg backdrop-blur transition-all hover:bg-white sm:flex lg:right-5"
+        className="absolute right-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#0B1215]/80 text-white ring-1 ring-white/15 shadow-lg backdrop-blur transition-all hover:bg-white/10 sm:flex lg:right-5"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
@@ -143,9 +143,9 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
   const live = item.kind === 'live';
 
   const inner = (
-    /* tmavá karta na tmavé ploše → obrys ring-white/15, jinak by splynula */
-    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#0B1215] p-6 ring-1 ring-white/15 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
-      {item.heroImageUrl ? (
+    /* tmavá glass karta — stejný tón jako všechny karty katalogu */
+    <div className="relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] bg-white/[0.04] p-6 ring-1 ring-white/10 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8">
+      {item.heroImageUrl && (
         /* kampaňová fotka dealu + tmavý scrim, aby bílé texty zůstaly čitelné */
         <>
           <img
@@ -158,29 +158,17 @@ function FeaturedSlide({ item, lang }: { item: DealTileItem; lang: 'cs' | string
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10"
           />
         </>
-      ) : (
-        /* jemná záře v pozadí — nahrazuje fotku; tóny z teal palety GBD */
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-70"
-          style={{
-            background:
-              'radial-gradient(120% 80% at 85% 15%, rgba(96,164,176,0.30) 0%, rgba(68,137,150,0.14) 38%, rgba(0,0,0,0) 70%)',
-          }}
-        />
       )}
       <div className="relative flex items-start justify-between gap-4">
         {item.concernDomain ? (
-          <span className="inline-flex h-11 items-center rounded-xl bg-white px-3">
-            <BrandLogo
-              name={item.concernName ?? item.supplier}
-              domain={item.concernDomain}
-              width={280}
-              height={120}
-              className="max-h-6 max-w-[130px] object-contain"
-              fallbackClassName="text-sm font-bold text-zinc-900"
-            />
-          </span>
+          <BrandLogo
+            name={item.concernName ?? item.supplier}
+            domain={item.concernDomain}
+            width={280}
+            height={120}
+            className="max-h-7 max-w-[150px] object-contain opacity-90 [filter:brightness(0)_invert(1)]"
+            fallbackClassName="text-sm font-bold text-white"
+          />
         ) : (
           <span className="text-sm font-bold text-white">{item.supplier}</span>
         )}
@@ -232,27 +220,17 @@ function PromoSlide({
   to?: string;
   onClick?: () => void;
 }) {
-  /* tóny z teal palety GBD (tints.ts): gradient 400→500→700, tmavá karta 900
-     (odlišná od obsidian plochy), světlá čistě bílá */
-  const shell =
-    tone === 'gradient'
-      ? 'bg-[linear-gradient(120deg,#60A4B0_0%,#448996_52%,#355D69_100%)] text-white'
-      : tone === 'dark'
-        ? 'bg-[#2D434C] text-white ring-1 ring-white/10'
-        : 'bg-white text-zinc-900';
-  const ctaClass =
-    tone === 'light'
-      ? 'bg-zinc-900 text-white hover:bg-zinc-800'
-      : 'bg-white text-zinc-900 hover:bg-zinc-100';
-  const subClass = tone === 'light' ? 'text-zinc-600' : 'text-white/80';
+  /* jednotný dashboard tón (pokyn Tomka) — všechny promo karty stejné tmavé
+     glass jako zbytek katalogu; `tone` zůstává v signatuře pro volající,
+     barvu už neřídí */
+  void tone;
+  const shell = 'bg-white/[0.04] text-white ring-1 ring-white/10';
+  const ctaClass = 'bg-white text-zinc-900 hover:bg-zinc-200';
+  const subClass = 'text-zinc-400';
 
   const content = (
     <div className={`relative flex h-[240px] flex-col justify-between overflow-hidden rounded-[24px] p-6 transition-transform duration-300 hover:scale-[1.005] sm:h-[300px] sm:p-8 ${shell}`}>
-      <span
-        className={`inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider ${
-          tone === 'light' ? 'bg-zinc-100 text-zinc-900' : 'bg-white/15 text-white'
-        }`}
-      >
+      <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white ring-1 ring-white/15">
         {icon} {eyebrow}
       </span>
       <div>

@@ -22,23 +22,24 @@ export function CatalogSearch({
 
   return (
     <div className="px-5 sm:px-8 lg:px-12">
+      {/* tmavé glass pole — stejný tón jako karty (dashboard look) */}
       <label className="relative mx-auto flex max-w-2xl items-center">
-        <Search className="pointer-events-none absolute left-5 h-5 w-5 text-zinc-400" />
+        <Search className="pointer-events-none absolute left-5 h-5 w-5 text-zinc-500" />
         <span className="sr-only">{c.searchPlaceholder}</span>
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={c.searchPlaceholder}
-          className="h-14 w-full rounded-full border-0 bg-white pl-14 pr-12 text-base text-zinc-900
-                     shadow-[0_8px_28px_-10px_rgba(0,0,0,0.6)] transition-all duration-200 placeholder:text-zinc-400
-                     focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0B1215]"
+          className="h-14 w-full rounded-full border-0 bg-white/[0.06] pl-14 pr-12 text-base text-white
+                     ring-1 ring-white/10 transition-all duration-200 placeholder:text-zinc-500
+                     hover:bg-white/[0.08] focus:bg-white/[0.09] focus:outline-none focus:ring-2 focus:ring-white/30"
         />
         {value && (
           <button
             type="button"
             onClick={() => onChange('')}
             aria-label={c.clear}
-            className="absolute right-4 flex h-6 w-6 items-center justify-center rounded-full bg-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-300"
+            className="absolute right-4 flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-zinc-300 transition-colors hover:bg-white/25"
           >
             <X className="h-3.5 w-3.5" />
           </button>

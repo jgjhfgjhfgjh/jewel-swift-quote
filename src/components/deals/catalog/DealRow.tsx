@@ -49,7 +49,7 @@ export function DealRow({
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Předchozí"
-            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-colors hover:bg-white/20 sm:inline-flex"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -57,7 +57,7 @@ export function DealRow({
             type="button"
             onClick={() => scroll(1)}
             aria-label="Další"
-            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white text-zinc-700 transition-colors hover:bg-zinc-200 sm:inline-flex"
+            className="hidden h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/10 transition-colors hover:bg-white/20 sm:inline-flex"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
