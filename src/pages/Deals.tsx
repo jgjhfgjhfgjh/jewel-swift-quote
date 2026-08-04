@@ -258,25 +258,20 @@ export default function Deals() {
         id="catalog"
         className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        <div className="flex w-full items-center gap-6 lg:gap-10">
-          <h1 className="shrink-0 text-white">
-            <GoBigDealLogo className="text-[clamp(2rem,4.5vw,3rem)]" />
-          </h1>
-          {/* pás značek dobíhá až k pravé hraně obrazovky (ruší px sekce) */}
-          <div className="hidden min-w-0 flex-1 sm:-mr-8 sm:block lg:-mr-12">
-            <BrandMarquee />
-          </div>
+        <h1 className="text-white">
+          <GoBigDealLogo className="text-[clamp(2rem,4.5vw,3rem)]" />
+        </h1>
+        {/* pás značek POD logem, full-bleed přes celou šíři obrazovky
+            (záporné marginy ruší odsazení sekce) */}
+        <div className="-mx-5 mt-4 sm:-mx-8 lg:-mx-12">
+          <BrandMarquee />
         </div>
         {/* skladba jako headliny na homepage: bílý lead → tlumené → gradient */}
-        <h2 className="mt-3 max-w-3xl font-sans font-extralight tracking-tight leading-[1.35] text-[clamp(1rem,1.8vw,1.35rem)]">
+        <h2 className="mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.35] text-[clamp(1rem,1.8vw,1.35rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>{' '}
           <span className={GRADIENT}>{d.catalog.headingAccent}</span>
         </h2>
-        {/* mobil: pás pod větou, full-bleed */}
-        <div className="-mx-5 mt-5 sm:hidden">
-          <BrandMarquee />
-        </div>
       </header>
 
       {/* ── 2. KPI lišta — stav trhu na první pohled ── */}
