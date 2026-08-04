@@ -258,16 +258,18 @@ export default function Deals() {
         id="catalog"
         className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        <h1 className="text-white">
-          <GoBigDealLogo className="text-[clamp(2rem,4.5vw,3rem)]" />
+        {/* centrovaný brand lockup: velké logo → full-width pás → věta,
+            velkorysé mezery, ať hlava dashboardu dýchá */}
+        <h1 className="flex justify-center text-white">
+          <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
         </h1>
         {/* pás značek POD logem, full-bleed přes celou šíři obrazovky
             (záporné marginy ruší odsazení sekce) */}
-        <div className="-mx-5 mt-4 sm:-mx-8 lg:-mx-12">
+        <div className="-mx-5 mt-8 sm:-mx-8 lg:-mx-12">
           <BrandMarquee />
         </div>
         {/* skladba jako headliny na homepage: bílý lead → tlumené → gradient */}
-        <h2 className="mt-4 max-w-3xl font-sans font-extralight tracking-tight leading-[1.35] text-[clamp(1rem,1.8vw,1.35rem)]">
+        <h2 className="mx-auto mt-8 max-w-3xl text-center font-sans font-extralight tracking-tight leading-[1.4] text-[clamp(1rem,1.8vw,1.35rem)]">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
           <span className="text-zinc-400">{d.catalog.headingMuted}</span>{' '}
           <span className={GRADIENT}>{d.catalog.headingAccent}</span>
@@ -275,7 +277,7 @@ export default function Deals() {
       </header>
 
       {/* ── 2. KPI lišta — stav trhu na první pohled ── */}
-      <div className="px-5 pt-7 sm:px-8 lg:px-12">
+      <div className="px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
         {loading ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
