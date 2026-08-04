@@ -24,6 +24,7 @@ import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
+import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, type CatalogSortKey, type CatalogView,
 } from '@/components/deals/catalog/CatalogControlBar';
@@ -184,6 +185,14 @@ export default function Deals() {
     navigate('/#gbd-alerts-concerns');
   };
 
+  /* Ceník na stránce — bez platebního flow (jako homepage): nepřihlášený
+     jde do registrace, přihlášený zpět na katalog; Enterprise píše obchodu. */
+  const handleTier = (id: GbdPricingTier) => {
+    if (id === 'enterprise') { window.location.href = 'mailto:obchod@swelt.cz'; return; }
+    if (!user) { openAuthModal('register'); return; }
+    scrollTo('catalog');
+  };
+
   const toggleConcern = (slug: string) =>
     setFilters((f) => ({
       ...f,
@@ -220,6 +229,7 @@ export default function Deals() {
           </div>
         ) : (
           <div className="mt-4 flex flex-col gap-2.5">
+            {opts.lead && <EarlyAccessCard variant="row" />}
             {items.map((t) => (
               <DealListRow key={t.id} item={t} onTeaserClick={goToAlerts} />
             ))}
@@ -525,9 +535,9 @@ export default function Deals() {
                   <button type="button" onClick={goToAlerts} className={PILL_LIGHT}>
                     <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
                   </button>
-                  <Link to="/#gbd-pricing" className={PILL_OUTLINE_DARK}>
+                  <button type="button" onClick={() => scrollTo('gbd-pricing')} className={PILL_OUTLINE_DARK}>
                     {d.early.ctaPro} <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </button>
                 </div>
               </div>
               <ul className="flex flex-col justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8">
@@ -539,6 +549,10 @@ export default function Deals() {
                 ))}
               </ul>
             </div>
+
+            {/* ceník — stejný blok jako na homepage (sdílená GbdPricing);
+                CTA z katalogu (upsell karta, early sekce) scrollují sem */}
+            <GbdPricing onTier={handleTier} />
           </div>
         </section>
       </div>
