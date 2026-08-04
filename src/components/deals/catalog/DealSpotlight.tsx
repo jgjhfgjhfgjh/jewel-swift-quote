@@ -10,9 +10,10 @@ import type { DealTileItem } from '@/lib/dealCatalog';
 const FALLBACK_BG = '/gbd-spotlight-bg.jpg';
 
 /**
- * Spotlight banner dashboardu — JEDNA nejnaléhavější dávka přes šířku hlavního
- * sloupce. Hairline monochrom: vláskový rámeček, mono sleva, bordered stavový
- * chip; kampaňová fotka (nebo generovaný podkres) zůstává jediné „médium".
+ * Spotlight banner dashboardu — JEDNA nejnaléhavější dávka přes šířku
+ * hlavního sloupce. Na bílé stránce zůstává záměrně TMAVÝM médiem
+ * (kampaňová fotka / obsidianový podkres + scrim): editorialní kontrastní
+ * blok, bílý text na fotce, sleva červeně na bílé pilulce.
  */
 export function DealSpotlight({ item }: { item: DealTileItem }) {
   const lang = useStore((s) => s.lang);
@@ -20,7 +21,7 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
   const live = item.kind === 'live';
 
   const inner = (
-    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.08] bg-[#050505] p-6 transition-colors duration-300 hover:border-white/[0.2] sm:h-[250px] sm:p-8">
+    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-xl border border-slate-200 p-6 shadow-sm transition-all duration-300 hover:shadow-md sm:h-[250px] sm:p-8">
       {/* kampaňová fotka dealu, jinak generovaný obsidianový podkres */}
       <img
         src={item.heroImageUrl ?? FALLBACK_BG}
@@ -49,7 +50,7 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
         {live && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
         ) : (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.15] bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-widest text-neutral-300 backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-medium uppercase tracking-widest text-slate-600 backdrop-blur">
             <Lock className="h-3 w-3" /> {t.catalog.tile.upcoming}
           </span>
         )}
@@ -61,19 +62,19 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
         </h2>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {item.maxDiscount > 0 && (
-            <span className="rounded-full border border-white/[0.2] bg-black/60 px-3 py-1 font-mono text-xs font-medium text-white backdrop-blur">
+            <span className="rounded-full bg-white px-3 py-1 font-mono text-xs font-bold text-red-600 backdrop-blur">
               −{item.maxDiscount} %
             </span>
           )}
           {item.brands.slice(0, 3).map((b) => (
             <span
               key={b}
-              className="rounded-full border border-white/[0.12] bg-black/50 px-3 py-1 text-xs font-medium text-neutral-300 backdrop-blur"
+              className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur"
             >
               {b}
             </span>
           ))}
-          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition-colors group-hover:bg-neutral-200">
+          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 transition-colors group-hover:bg-slate-100">
             {t.card.view} <ArrowRight className="h-4 w-4" />
           </span>
         </div>

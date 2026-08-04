@@ -203,9 +203,9 @@ export default function Deals() {
     items.length === 0 ? null : (
       <section className="pt-9">
         <div className="flex items-center gap-2.5">
-          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-white" />}
-          <h2 className="font-sans text-lg font-medium tracking-tighter text-white">{title}</h2>
-          <span className="font-mono text-sm text-neutral-500">{items.length}</span>
+          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />}
+          <h2 className="font-sans text-lg font-medium tracking-tighter text-zinc-900">{title}</h2>
+          <span className="font-mono text-sm text-slate-400">{items.length}</span>
         </div>
         {view === 'grid' ? (
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -242,14 +242,13 @@ export default function Deals() {
   ];
 
   return (
-    /* Kořen v čisté černé (hairline monochrom) — horní i dolní overscroll
-       bounce ukazuje tmavou; bílé sekce si barvu kreslí samy. */
-    <div className="min-h-screen bg-black font-sans selection:bg-white selection:text-black">
-      {/* navbar leží na tmavém katalogu → trvale inverzní (bílé) prvky */}
-      <Navbar onDark />
+    /* Kořen v bílé (světlá varianta dashboardu) — tmavé landing sekce níže
+       si barvu kreslí samy. */
+    <div className="min-h-screen bg-white font-sans selection:bg-zinc-900 selection:text-white">
+      <Navbar />
       <BackButton />
 
-      {/* ═══ KATALOG — obsidian plocha, bílé karty a prvky na ní vyniknou ═══ */}
+      {/* ═══ KATALOG — bílá plocha, karty s hairline rámečky a jemným stínem ═══ */}
 
       {/* ── 1. Kompaktní command header: logo + marquee v jednom řádku,
              pozicovací věta pod nimi. Dashboard nemá 100vh hero — data
@@ -264,14 +263,14 @@ export default function Deals() {
             sloupec, výjev jeho výšku jen vyplní */}
         <div className="relative">
           <div className="min-w-0 py-2 sm:pr-[46%]">
-            <h1 className="text-white">
+            <h1 className="text-zinc-900">
               <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
             </h1>
-            {/* dvoutónový headline referenčního stylu: bílý lead, zbytek neutral-600 */}
+            {/* dvoutónový headline: tmavý lead, zbytek tlumeně slate */}
             <h2 className="mt-6 max-w-xl text-balance font-sans text-xl font-medium tracking-tighter sm:text-2xl">
-              <span className="text-white">{d.catalog.headingLead}</span>{' '}
-              <span className="text-neutral-600">{d.catalog.headingMuted}</span>{' '}
-              <span className="text-neutral-600">{d.catalog.headingAccent}</span>
+              <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
+              <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
+              <span className="text-slate-400">{d.catalog.headingAccent}</span>
             </h2>
           </div>
           {/* výjev od sm výš; na mobilu má vlastní blok pod textem */}
@@ -289,7 +288,7 @@ export default function Deals() {
         {loading ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[92px] animate-pulse rounded-xl bg-white/[0.06]" />
+              <div key={i} className="h-[92px] animate-pulse rounded-xl bg-slate-100" />
             ))}
           </div>
         ) : (
@@ -372,19 +371,27 @@ export default function Deals() {
           {loading ? (
             <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-xl bg-white/[0.06]" />
+                <div key={i} className="h-72 animate-pulse rounded-xl bg-slate-100" />
               ))}
             </div>
           ) : filtered.length === 0 ? (
             <div className="mx-auto mt-12 max-w-xl text-center">
-              <SearchX className="mx-auto h-8 w-8 text-white/30" />
-              <p className="mt-4 text-lg font-semibold tracking-tight text-white">{d.catalog.noResults}</p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{d.catalog.noResultsSub}</p>
+              <SearchX className="mx-auto h-8 w-8 text-slate-300" />
+              <p className="mt-4 text-lg font-medium tracking-tighter text-zinc-900">{d.catalog.noResults}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">{d.catalog.noResultsSub}</p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-                <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className={PILL_LIGHT}>
+                <button
+                  type="button"
+                  onClick={() => setFilters(EMPTY_FILTERS)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700"
+                >
                   {d.catalog.clear}
                 </button>
-                <button type="button" onClick={goToAlerts} className={PILL_OUTLINE_DARK}>
+                <button
+                  type="button"
+                  onClick={goToAlerts}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50"
+                >
                   <Bell className="h-4 w-4" /> {d.active.emptyCta}
                 </button>
               </div>
@@ -419,9 +426,9 @@ export default function Deals() {
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
 
-      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je ČERNÝ; wrapper nese
-             černou a zaoblený roh sekce odkrývá černé růžky (vzor stránky) ── */}
-      <div className="bg-black">
+      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je BÍLÝ; wrapper nese
+             bílou a zaoblený roh sekce odkrývá bílé růžky (vzor stránky) ── */}
+      <div className="bg-white">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
             <div className="mx-auto max-w-[1000px] text-left">

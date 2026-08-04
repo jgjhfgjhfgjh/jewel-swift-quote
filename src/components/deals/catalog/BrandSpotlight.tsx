@@ -4,10 +4,10 @@ import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { sortByBrandPriority } from '@/lib/brandOrder';
 
 /**
- * Střídající se VELKÉ logo značky — ústřední prvek hero /deals (nahradilo
- * běžící pás). Jedna silueta naplno, plynulý crossfade s jemným scale
- * (opacity + transform, žádný layout shift): odcházející logo mizí, nové
- * se vynořuje. Kurátorský výběr = prioritní značky s logem, ne celý katalog.
+ * Střídající se VELKÉ logo značky — ústřední prvek hero /deals. Světlá
+ * varianta: loga v jednotné šedé (grayscale + multiply na bílé ploše),
+ * plynulý crossfade s jemným scale (opacity + transform, žádný layout
+ * shift). Kurátorský výběr = prioritní značky s logem, ne celý katalog.
  *
  * Vyplní rodiče (absolute inset-0 vrstvy) — rodič určuje plochu výjevu.
  */
@@ -50,8 +50,8 @@ export function BrandSpotlight({ intervalMs = 3200 }: { intervalMs?: number }) {
               width={560}
               height={240}
               lowPriority
-              className="max-h-20 w-auto max-w-[82%] object-contain opacity-70 [filter:brightness(0)_invert(1)] sm:max-h-28 lg:max-h-36"
-              fallbackClassName="text-center text-3xl font-semibold tracking-wide text-white/60 sm:text-4xl"
+              className="max-h-20 w-auto max-w-[82%] object-contain opacity-70 [filter:grayscale(1)] [mix-blend-mode:multiply] sm:max-h-28 lg:max-h-36"
+              fallbackClassName="text-center text-3xl font-medium tracking-tighter text-slate-300 sm:text-4xl"
             />
           </div>
         );
