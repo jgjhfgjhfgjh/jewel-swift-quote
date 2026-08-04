@@ -21,7 +21,7 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
   const live = item.kind === 'live';
 
   const inner = (
-    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-xl border border-slate-200 p-6 shadow-sm transition-all duration-300 hover:shadow-md sm:h-[250px] sm:p-8">
+    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-[1.25rem] border border-slate-100 p-6 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16)] transition-all duration-300 hover:shadow-[0_22px_52px_-14px_rgba(15,23,42,0.24)] sm:h-[250px] sm:p-8">
       {/* kampaňová fotka dealu, jinak generovaný obsidianový podkres */}
       <img
         src={item.heroImageUrl ?? FALLBACK_BG}

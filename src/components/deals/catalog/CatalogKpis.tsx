@@ -22,7 +22,7 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
       {items.map((k) => (
         <div
           key={k.label}
-          className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-slate-300 hover:shadow-md sm:p-5"
+          className="rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] transition-all duration-200 hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)] sm:p-5"
         >
           <span className="block truncate text-[11px] font-medium uppercase tracking-widest text-slate-400">
             {k.label}

@@ -87,7 +87,7 @@ export function CatalogFilterNav({
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen((o) => (o === s.key ? null : s.key))}
-              className={`inline-flex h-11 items-center gap-2 rounded-lg border px-3.5 text-sm font-medium text-zinc-900 shadow-sm transition-colors ${
+              className={`inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium text-zinc-900 shadow-sm transition-colors ${
                 isOpen || s.selected > 0
                   ? 'border-slate-300 bg-slate-50'
                   : 'border-slate-200 bg-white hover:border-slate-300'
@@ -109,7 +109,7 @@ export function CatalogFilterNav({
 
       {/* ── expanze: Koncerny — logo volně na bílé + název + stav ── */}
       {open === 'concerns' && (
-        <div className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div className="mt-2 rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_12px_32px_-10px_rgba(15,23,42,0.14)]">
           <div className="flex flex-wrap items-center gap-1.5">
             {clearPill(selectedConcerns.length === 0, onClearConcerns)}
             {concerns.map((c) => {
@@ -156,7 +156,7 @@ export function CatalogFilterNav({
 
       {/* ── expanze: Značky — chipy s počtem ── */}
       {open === 'brands' && (
-        <div className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div className="mt-2 rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_12px_32px_-10px_rgba(15,23,42,0.14)]">
           <div className="flex flex-wrap items-center gap-1.5">
             {clearPill(selectedBrands.length === 0, onClearBrands)}
             {brands.map((b) => {

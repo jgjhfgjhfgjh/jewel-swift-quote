@@ -83,13 +83,13 @@ export function CatalogControlBar({
             </>
           )}
           {/* mřížka / seznam */}
-          <div className="flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
+          <div className="flex rounded-full border border-slate-200 bg-slate-50 p-0.5">
             <button
               type="button"
               aria-label={s.viewGrid}
               aria-pressed={view === 'grid'}
               onClick={() => onView('grid')}
-              className={`flex h-7 w-8 items-center justify-center rounded-md transition-colors ${
+              className={`flex h-7 w-8 items-center justify-center rounded-full transition-colors ${
                 view === 'grid' ? 'bg-zinc-900 text-white' : 'text-slate-500 hover:text-zinc-900'
               }`}
             >
@@ -100,7 +100,7 @@ export function CatalogControlBar({
               aria-label={s.viewList}
               aria-pressed={view === 'list'}
               onClick={() => onView('list')}
-              className={`flex h-7 w-8 items-center justify-center rounded-md transition-colors ${
+              className={`flex h-7 w-8 items-center justify-center rounded-full transition-colors ${
                 view === 'list' ? 'bg-zinc-900 text-white' : 'text-slate-500 hover:text-zinc-900'
               }`}
             >

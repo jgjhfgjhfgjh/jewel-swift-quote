@@ -16,7 +16,7 @@ export function EarlyAccessCard() {
   return (
     <Link
       to="/#gbd-pricing"
-      className="group flex h-full w-full flex-col rounded-xl bg-[#0B1215] p-5 text-left ring-1 ring-white/10 transition-all duration-200 hover:ring-white/25
+      className="group flex h-full w-full flex-col rounded-[1.25rem] bg-[#0B1215] p-5 text-left shadow-[0_14px_36px_-10px_rgba(11,18,21,0.5)] ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_24px_52px_-14px_rgba(11,18,21,0.6)] hover:ring-white/25
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:p-6"
     >
       <span className="text-[11px] font-bold uppercase tracking-widest text-blue-500">

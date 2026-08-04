@@ -140,8 +140,9 @@ export function DealTile({
 
   /* bílá karta — hover zjasní stín a rámeček (jazyk světlých karet webu) */
   const shell =
-    'group flex h-full w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-sm ' +
-    'transition-all duration-200 hover:border-slate-300 hover:shadow-md ' +
+    'group flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] border border-slate-100 bg-white text-left ' +
+    'shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] ' +
+    'transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)] ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
   if (item.kind === 'teaser' || !item.slug) {

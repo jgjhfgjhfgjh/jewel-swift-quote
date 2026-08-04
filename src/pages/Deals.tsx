@@ -298,7 +298,7 @@ export default function Deals() {
         {loading ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[92px] animate-pulse rounded-xl bg-slate-100" />
+              <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-slate-100" />
             ))}
           </div>
         ) : (
@@ -350,7 +350,7 @@ export default function Deals() {
           {loading ? (
             <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-xl bg-slate-100" />
+                <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-slate-100" />
               ))}
             </div>
           ) : filtered.length === 0 ? (

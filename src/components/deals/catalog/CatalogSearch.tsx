@@ -33,7 +33,7 @@ export function CatalogSearch({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={c.searchPlaceholder}
-        className={`w-full rounded-lg border border-slate-200 bg-white text-zinc-900 shadow-sm
+        className={`w-full rounded-full border border-slate-200 bg-white text-zinc-900 shadow-sm
                     transition-colors duration-200 placeholder:text-slate-400
                     hover:border-slate-300 focus:border-slate-400 focus:outline-none ${
                       compact ? 'h-11 pl-10 pr-9 text-sm' : 'h-14 pl-14 pr-12 text-base'
@@ -44,7 +44,7 @@ export function CatalogSearch({
           type="button"
           onClick={() => onChange('')}
           aria-label={c.clear}
-          className={`absolute flex h-6 w-6 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500 transition-colors hover:border-slate-300 hover:text-zinc-900 ${
+          className={`absolute flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 transition-colors hover:border-slate-300 hover:text-zinc-900 ${
             compact ? 'right-2.5' : 'right-4'
           }`}
         >

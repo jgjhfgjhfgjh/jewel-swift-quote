@@ -90,8 +90,9 @@ export function DealListRow({
   );
 
   const shell =
-    'group flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-left shadow-sm ' +
-    'transition-all duration-200 hover:border-slate-300 hover:shadow-md sm:gap-4 sm:px-4 ' +
+    'group flex w-full items-center gap-3 rounded-[1.25rem] border border-slate-100 bg-white px-3.5 py-3 text-left ' +
+    'shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] ' +
+    'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)] sm:gap-4 sm:px-4 ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
   if (item.kind === 'teaser' || !item.slug) {
