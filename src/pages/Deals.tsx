@@ -20,7 +20,7 @@ import {
   type CatalogFilters, type DealTileItem,
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
-import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
+import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
 import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
@@ -258,17 +258,13 @@ export default function Deals() {
         id="catalog"
         className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        {/* dvousloupcové hero: VLEVO chip → logo → dvoutónová věta, VPRAVO
-            svislý pás log značek — jede shora dolů, siluety výrazně větší
-            než dřívější vodorovný pás. Pás je pozicovaný ABSOLUTNĚ (inset-y-0):
-            výšku řádku určuje jen levý sloupec — natažený flex item by ji
-            převzal z neořezaného pásu (~12 000 px) */}
+        {/* hero: VLEVO logo → dvoutónová věta, VPRAVO ústřední výjev —
+            střídající se VELKÉ logo značky s plynulým crossfade. Zóna je
+            pozicovaná ABSOLUTNĚ (inset-y-0): výšku řádku určuje levý
+            sloupec, výjev jeho výšku jen vyplní */}
         <div className="relative">
-          <div className="min-w-0 py-2 pr-28 sm:pr-44 lg:pr-72">
-            <div className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.03] px-3 py-1 text-xs font-medium uppercase tracking-widest text-neutral-400">
-              {dash.eyebrow}
-            </div>
-            <h1 className="mt-6 text-white">
+          <div className="min-w-0 py-2 sm:pr-[46%]">
+            <h1 className="text-white">
               <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
             </h1>
             {/* dvoutónový headline referenčního stylu: bílý lead, zbytek neutral-600 */}
@@ -278,9 +274,13 @@ export default function Deals() {
               <span className="text-neutral-600">{d.catalog.headingAccent}</span>
             </h2>
           </div>
-          <div className="absolute inset-y-0 right-0 w-24 sm:w-36 lg:w-56">
-            <BrandMarquee vertical />
+          {/* výjev od sm výš; na mobilu má vlastní blok pod textem */}
+          <div className="absolute inset-y-0 right-0 hidden w-[44%] sm:block">
+            <BrandSpotlight />
           </div>
+        </div>
+        <div className="mt-8 h-24 sm:hidden">
+          <BrandSpotlight />
         </div>
       </header>
 

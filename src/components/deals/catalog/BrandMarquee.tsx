@@ -19,12 +19,9 @@ import { BRANDS } from '@/data/brands';
  * Siluety: brightness(0) → černá silueta, invert(1) → bílá; opacity dodá
  * tlumený šedý vzhled na tmavé ploše.
  */
-export function BrandMarquee({ all = false, vertical = false }: {
+export function BrandMarquee({ all = false }: {
   /** true = všechna loga z katalogu (homepage hero); default jen značky s produkty (/deals). */
   all?: boolean;
-  /** Svislý pás (hero /deals): jede shora dolů, výrazně větší siluety,
-      vyplní výšku rodiče (rodič musí mít určenou/nataženou výšku). */
-  vertical?: boolean;
 }) {
   const { data: catalog = [] } = useBrandCatalog();
   // Prioritní značky první (stejné řazení jako zbytek webu). Varianta `all`
@@ -46,49 +43,6 @@ export function BrandMarquee({ all = false, vertical = false }: {
   // drží tempo nezávisle na počtu log (delší pás = delší perioda).
   const copies = [0, 1] as const;
   const duration = Math.max(40, Math.round(list.length * 2.2));
-
-  if (vertical) {
-    return (
-      /* svislý sloupec: start na -50 % (viditelná druhá kopie) → 0, obsah
-         tedy plyne SHORA DOLŮ; fade nahoře i dole přes mask-image */
-      <div
-        className="relative h-full overflow-hidden
-                   [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]"
-      >
-        <style>{'@keyframes gbd-marquee-y{from{transform:translateY(-50%)}to{transform:translateY(0)}}'}</style>
-        <div
-          className="flex h-max w-full flex-col items-center gap-10 [animation:gbd-marquee-y_60s_linear_infinite] motion-reduce:[animation:none] lg:gap-12"
-          style={{ animationDuration: `${duration}s` }}
-        >
-          {copies.map((copy) => (
-            <div key={copy} className="flex w-full flex-col items-center gap-10 lg:gap-12" aria-hidden={copy === 1}>
-              {list.map((b) =>
-                b.domain ? (
-                  <BrandLogo
-                    key={`${copy}-${b.key}`}
-                    name={b.name}
-                    domain={b.domain}
-                    width={280}
-                    height={120}
-                    lowPriority
-                    className="h-10 w-auto max-w-[85%] shrink-0 object-contain opacity-50 [filter:brightness(0)_invert(1)] sm:h-12 lg:h-14"
-                    fallbackClassName="shrink-0 text-center text-lg font-semibold tracking-wide text-white/50"
-                  />
-                ) : (
-                  <span
-                    key={`${copy}-${b.key}`}
-                    className="shrink-0 text-center text-lg font-semibold tracking-wide text-white/50"
-                  >
-                    {b.name}
-                  </span>
-                ),
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
