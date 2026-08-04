@@ -6,17 +6,12 @@ import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 
-/** Kanonický gradient webu (homepage hero, PRO karta v mega menu). */
-const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
-
 /**
- * Dlaždice dávky — obdoba karty podniku na Woltu: médium nahoře (logo
- * koncernu na jemném podkladu), stavový štítek vlevo nahoře, sleva vpravo,
- * pod tím název a metadata. Hover zvedne kartu a přiblíží logo.
- *
- * Barevný jazyk podle referenční PRO karty (NavGoBigDealPanel): gradientový
- * eyebrow + ZELENÁ = přínos (sleva, rozsah katalogu) a MODRÁ = zamčeno /
- * teprve se otevře. Červená zůstává jen v odpočtu, kde nese urgenci.
+ * Dlaždice dávky — hairline monochrom (referenční bento grid): karta #050505
+ * s vláskovým rámečkem, hover jen zjasní rámeček; médium odděluje vláskový
+ * border-t, tělo sedí na sotva znatelném podkladu. Data (sleva, počty) v mono
+ * písmu, stavy jako bordered chipy — bez barevných akcentů, urgenci nese
+ * jen sdílený odpočet.
  *
  * Teaser (`kind: 'teaser'`) je připravovaná dávka bez dat — nikdy nepředstírá
  * živou nabídku: má zámek, štítek „Připravujeme" a klik vede na alert.
@@ -34,9 +29,8 @@ export function DealTile({
   const c = t.catalog.tile;
 
   const media = (
-    /* tmavé glass médium — logo koncernu jako bílá silueta (dashboard look);
-       kampaňová fotka dealu (hero_image_url) má přednost — branding nese sama */
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-white/[0.03] p-6">
+    /* médium — logo koncernu jako bílá silueta na černé ploše */
+    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-white/[0.04] bg-black p-6">
       {item.heroImageUrl ? (
         <img
           src={item.heroImageUrl}
@@ -55,10 +49,10 @@ export function DealTile({
                že dávka ještě neběží, říká zámek a štítek */
             item.kind === 'teaser' ? 'opacity-45 group-hover:opacity-90' : 'opacity-90 group-hover:opacity-100'
           }`}
-          fallbackClassName="text-center text-lg font-semibold tracking-tight text-white"
+          fallbackClassName="text-center text-lg font-medium tracking-tight text-white"
         />
       ) : (
-        <span className="text-center text-lg font-semibold tracking-tight text-white">
+        <span className="text-center text-lg font-medium tracking-tight text-white">
           {item.supplier || item.title}
         </span>
       )}
@@ -68,25 +62,23 @@ export function DealTile({
         {item.kind === 'live' && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
         ) : item.kind === 'upcoming' && item.startsAt ? (
-          /* modrá = zamčeno / teprve se otevře (jazyk Early Access) */
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-1 text-[11px] font-bold text-blue-300 ring-1 ring-blue-400/30 backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-black/60 px-2.5 py-1 text-[11px] font-medium text-neutral-300 backdrop-blur">
             <Lock className="h-3 w-3" /> {c.unlocksIn}
           </span>
         ) : item.kind === 'teaser' ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-1 text-[11px] font-bold text-blue-300 ring-1 ring-blue-400/30 backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-black/60 px-2.5 py-1 text-[11px] font-medium text-neutral-300 backdrop-blur">
             <Lock className="h-3 w-3" /> {c.upcoming}
           </span>
         ) : (
-          <span className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-zinc-400">
+          <span className="rounded-full border border-white/[0.08] bg-black/60 px-2.5 py-1 text-[11px] font-medium text-neutral-500 backdrop-blur">
             {c.closed}
           </span>
         )}
       </div>
 
       {item.maxDiscount > 0 && (
-        /* zelená = úspora (stejný jazyk jako emerald ceny v detailu dávky);
-           urgenci na kartě nese odpočet, ne procento */
-        <span className="absolute right-3 top-3 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-bold text-emerald-300 ring-1 ring-emerald-400/30 backdrop-blur">
+        /* sleva — mono číslo v bordered chipu, jediný „datový" akcent karty */
+        <span className="absolute right-3 top-3 rounded-full border border-white/[0.2] bg-black/60 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur">
           −{item.maxDiscount} %
         </span>
       )}
@@ -99,59 +91,59 @@ export function DealTile({
   );
 
   const body = (
-    <div className="flex flex-1 flex-col p-4">
+    <div className="flex flex-1 flex-col bg-white/[0.01] p-4">
       {item.supplier && (
-        /* eyebrow jako „EARLY ACCESS" na referenční PRO kartě */
-        <span className={`truncate text-[11px] font-bold uppercase tracking-wider ${GRADIENT}`}>
+        <span className="truncate text-[10px] font-medium uppercase tracking-widest text-neutral-500">
           {item.supplier}
         </span>
       )}
-      <h3 className="mt-1 line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-white">
+      <h3 className="mt-1 line-clamp-2 text-[15px] font-medium leading-snug tracking-tight text-white">
         {item.title}
       </h3>
 
       {item.brands.length > 0 && (
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           {item.brands.slice(0, 3).map((b) => (
-            <span key={b} className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-zinc-300">
+            <span
+              key={b}
+              className="rounded-full border border-white/[0.08] bg-white/[0.02] px-2 py-0.5 text-[10px] font-medium text-neutral-400"
+            >
               {b}
             </span>
           ))}
           {item.brands.length > 3 && (
-            <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-zinc-500">
+            <span className="rounded-full border border-white/[0.08] bg-white/[0.02] px-2 py-0.5 text-[10px] font-medium text-neutral-600">
               +{item.brands.length - 3}
             </span>
           )}
         </div>
       )}
 
-      <div className="mt-auto flex items-center gap-3 pt-4 text-[11px] text-zinc-400">
+      <div className="mt-auto flex items-center gap-3 pt-4 font-mono text-[11px] text-neutral-400">
         {item.kind === 'teaser' ? (
-          <span className="font-semibold text-zinc-500">{c.teaserNote}</span>
+          <span className="font-sans font-medium text-neutral-500">{c.teaserNote}</span>
         ) : (
           <>
-            {/* zelené ikony = co v dávce dostanete (protějšek fajfek na PRO kartě) */}
             {item.models > 0 && (
               <span className="flex items-center gap-1">
-                <Layers className="h-3 w-3 text-emerald-400" /> {countLabel(lang, item.models, 'models')}
+                <Layers className="h-3 w-3 text-neutral-500" /> {countLabel(lang, item.models, 'models')}
               </span>
             )}
             <span className="flex items-center gap-1">
-              <Tag className="h-3 w-3 text-emerald-400" /> {countLabel(lang, item.brands.length, 'brands')}
+              <Tag className="h-3 w-3 text-neutral-500" /> {countLabel(lang, item.brands.length, 'brands')}
             </span>
           </>
         )}
-        <ArrowRight className="ml-auto h-4 w-4 text-zinc-500 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
+        <ArrowRight className="ml-auto h-4 w-4 text-neutral-600 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
       </div>
     </div>
   );
 
-  /* tmavá glass karta (dashboard look) — hover zesvětlí plochu a „svítí"
-     (černý stín by na obsidianu zanikl) */
+  /* hairline karta — hover pouze zjasní rámeček (jazyk referenčního gridu) */
   const shell =
-    'group flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white/[0.04] text-left ring-1 ring-white/10 ' +
-    'transition-all duration-200 hover:-translate-y-1 hover:bg-white/[0.07] hover:ring-white/20 hover:shadow-[0_16px_36px_-14px_rgba(255,255,255,0.15)] ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]';
+    'group flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-[#050505] text-left ' +
+    'transition-colors duration-200 hover:border-white/[0.15] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black';
 
   if (item.kind === 'teaser' || !item.slug) {
     return (

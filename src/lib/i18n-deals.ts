@@ -92,6 +92,8 @@ export interface DealsText {
     };
     /** Dashboardová podoba katalogu — KPI lišta, řazení, přepínač zobrazení. */
     dash: {
+      /** Bordered chip nad logem v hlavičce dashboardu. */
+      eyebrow: string;
       kpiLive: string;
       kpiModels: string;
       kpiDiscount: string;
@@ -317,6 +319,7 @@ const cs: DealsText = {
       howCta: 'Jak deal funguje',
     },
     dash: {
+      eyebrow: 'B2B closeout trh · Evropa',
       kpiLive: 'Živé dávky',
       kpiModels: 'Modelů v katalogu',
       kpiDiscount: 'Sleva až',
@@ -550,6 +553,7 @@ const en: DealsText = {
       howCta: 'How a deal works',
     },
     dash: {
+      eyebrow: 'B2B closeout market · Europe',
       kpiLive: 'Live batches',
       kpiModels: 'Models in catalog',
       kpiDiscount: 'Discount up to',

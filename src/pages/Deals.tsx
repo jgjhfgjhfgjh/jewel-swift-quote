@@ -203,9 +203,9 @@ export default function Deals() {
     items.length === 0 ? null : (
       <section className="pt-9">
         <div className="flex items-center gap-2.5">
-          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />}
-          <h2 className="font-sans text-lg font-semibold tracking-tight text-white">{title}</h2>
-          <span className="text-sm text-zinc-500">{items.length}</span>
+          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-white" />}
+          <h2 className="font-sans text-lg font-medium tracking-tighter text-white">{title}</h2>
+          <span className="font-mono text-sm text-neutral-500">{items.length}</span>
         </div>
         {view === 'grid' ? (
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -242,9 +242,9 @@ export default function Deals() {
   ];
 
   return (
-    /* Kořen v obsidianu — horní i dolní overscroll bounce ukazuje tmavou
-       (katalog nahoře i závěrečná sekce dole); bílé sekce si barvu kreslí samy. */
-    <div className="min-h-screen bg-[#0B1215]">
+    /* Kořen v čisté černé (hairline monochrom) — horní i dolní overscroll
+       bounce ukazuje tmavou; bílé sekce si barvu kreslí samy. */
+    <div className="min-h-screen bg-black font-sans selection:bg-white selection:text-black">
       {/* navbar leží na tmavém katalogu → trvale inverzní (bílé) prvky */}
       <Navbar onDark />
       <BackButton />
@@ -258,9 +258,14 @@ export default function Deals() {
         id="catalog"
         className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        {/* centrovaný brand lockup: velké logo → full-width pás → věta,
-            velkorysé mezery, ať hlava dashboardu dýchá */}
-        <h1 className="flex justify-center text-white">
+        {/* centrovaný brand lockup v hairline stylu: bordered eyebrow chip →
+            velké logo → full-width pás → dvoutónová věta (bílá / neutral-600) */}
+        <div className="flex justify-center">
+          <div className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.03] px-3 py-1 text-xs font-medium uppercase tracking-widest text-neutral-400">
+            {dash.eyebrow}
+          </div>
+        </div>
+        <h1 className="mt-6 flex justify-center text-white">
           <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
         </h1>
         {/* pás značek POD logem, full-bleed přes celou šíři obrazovky
@@ -268,11 +273,11 @@ export default function Deals() {
         <div className="-mx-5 mt-8 sm:-mx-8 lg:-mx-12">
           <BrandMarquee />
         </div>
-        {/* skladba jako headliny na homepage: bílý lead → tlumené → gradient */}
-        <h2 className="mx-auto mt-8 max-w-3xl text-center font-sans font-extralight tracking-tight leading-[1.4] text-[clamp(1rem,1.8vw,1.35rem)]">
+        {/* dvoutónový headline referenčního stylu: bílý lead, zbytek neutral-600 */}
+        <h2 className="mx-auto mt-8 max-w-3xl text-balance text-center font-sans text-xl font-medium tracking-tighter sm:text-2xl">
           <span className="text-white">{d.catalog.headingLead}</span>{' '}
-          <span className="text-zinc-400">{d.catalog.headingMuted}</span>{' '}
-          <span className={GRADIENT}>{d.catalog.headingAccent}</span>
+          <span className="text-neutral-600">{d.catalog.headingMuted}</span>{' '}
+          <span className="text-neutral-600">{d.catalog.headingAccent}</span>
         </h2>
       </header>
 
@@ -281,7 +286,7 @@ export default function Deals() {
         {loading ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[92px] animate-pulse rounded-2xl bg-white/10" />
+              <div key={i} className="h-[92px] animate-pulse rounded-xl bg-white/[0.06]" />
             ))}
           </div>
         ) : (
@@ -364,7 +369,7 @@ export default function Deals() {
           {loading ? (
             <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-2xl bg-white/10" />
+                <div key={i} className="h-72 animate-pulse rounded-xl bg-white/[0.06]" />
               ))}
             </div>
           ) : filtered.length === 0 ? (
@@ -411,9 +416,9 @@ export default function Deals() {
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
 
-      {/* ── Co je GoBigDeal (černá) — katalog nad ní je taky černý, sekce na
-             něj navazuje beze švu (zaoblený roh by odkryl bílé růžky) ── */}
-      <div style={{ backgroundColor: DARK }}>
+      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je ČERNÝ; wrapper nese
+             černou a zaoblený roh sekce odkrývá černé růžky (vzor stránky) ── */}
+      <div className="bg-black">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
             <div className="mx-auto max-w-[1000px] text-left">

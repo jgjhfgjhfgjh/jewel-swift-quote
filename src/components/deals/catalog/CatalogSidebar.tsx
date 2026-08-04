@@ -5,8 +5,6 @@ import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
-/** Kanonický gradient webu (eyebrow Early Access karty). */
-const GRADIENT = 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent';
 /** Loga jako bílé siluety — stejná technika jako marquee a dlaždice. */
 const SILHOUETTE = '[filter:brightness(0)_invert(1)]';
 
@@ -28,9 +26,8 @@ export interface SidebarBrand {
 
 /**
  * Levý panel dashboardu (desktop) — hledání, filtr koncernů a značek a
- * Early Access karta. Řádky koncernů přebírají vzor z mega menu GoBigDeal:
- * logo silueta + název + zelený počet živých dávek. Modrá značí výběr,
- * stejně jako dlaždice FilterTiles na mobilu.
+ * Early Access karta. Hairline monochrom: výběr = plná bílá (chip / check),
+ * živé dávky = bílá pulsující tečka + mono počet, klid = neutral.
  */
 export function CatalogSidebar({
   search,
@@ -59,7 +56,7 @@ export function CatalogSidebar({
   const d = dealsI18n[lang];
   const dash = d.catalog.dash;
 
-  const label = 'text-[11px] font-bold uppercase tracking-wider text-zinc-500';
+  const label = 'text-[11px] font-medium uppercase tracking-widest text-neutral-500';
 
   return (
     <div className="flex flex-col gap-7">
@@ -77,13 +74,13 @@ export function CatalogSidebar({
                 type="button"
                 aria-pressed={active}
                 onClick={() => onToggleConcern(c.key)}
-                className={`-mx-2 flex h-10 items-center gap-3 rounded-xl px-2 text-left transition-colors ${
-                  active ? 'bg-blue-500/[0.12]' : 'hover:bg-white/[0.06]'
+                className={`-mx-2 flex h-10 items-center gap-3 rounded-lg px-2 text-left transition-colors ${
+                  active ? 'bg-white/[0.06]' : 'hover:bg-white/[0.04]'
                 }`}
               >
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] p-1.5 ring-1 ${
-                    active ? 'bg-blue-500/15 ring-blue-400/40' : 'bg-white/[0.06] ring-white/10'
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border p-1.5 ${
+                    active ? 'border-white/[0.25] bg-white/[0.06]' : 'border-white/[0.08] bg-white/[0.02]'
                   }`}
                 >
                   <BrandLogo
@@ -94,26 +91,27 @@ export function CatalogSidebar({
                     className={`max-h-4 max-w-full object-contain ${SILHOUETTE} ${
                       c.count === 0 ? 'opacity-40' : 'opacity-90'
                     }`}
-                    fallbackClassName="text-[9px] font-bold leading-none text-zinc-300"
+                    fallbackClassName="text-[9px] font-bold leading-none text-neutral-300"
                   />
                 </span>
                 <span
                   className={`min-w-0 flex-1 truncate text-[13px] font-medium ${
-                    active ? 'text-white' : 'text-zinc-100'
+                    active ? 'text-white' : 'text-neutral-200'
                   }`}
                 >
                   {c.name}
                 </span>
                 {active ? (
-                  <Check className="h-4 w-4 shrink-0 text-blue-400" strokeWidth={2.5} />
+                  <Check className="h-4 w-4 shrink-0 text-white" strokeWidth={2.5} />
                 ) : c.live > 0 ? (
-                  <span className="shrink-0 text-xs font-semibold text-emerald-400">
+                  <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs text-white">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                     {fillTemplate(dash.live, { n: String(c.live) })}
                   </span>
                 ) : c.count > 0 ? (
-                  <span className="shrink-0 text-xs tabular-nums text-zinc-500">{c.count}</span>
+                  <span className="shrink-0 font-mono text-xs text-neutral-500">{c.count}</span>
                 ) : (
-                  <span className="shrink-0 text-xs text-zinc-600">{dash.soon}</span>
+                  <span className="shrink-0 text-xs text-neutral-600">{dash.soon}</span>
                 )}
               </button>
             );
@@ -133,15 +131,15 @@ export function CatalogSidebar({
                 type="button"
                 aria-pressed={active}
                 onClick={() => onToggleBrand(b.key)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
                   active
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white/[0.06] text-zinc-300 ring-1 ring-white/10 hover:bg-white/10 hover:text-white'
+                    ? 'border-white bg-white text-black'
+                    : 'border-white/[0.08] bg-white/[0.02] text-neutral-400 hover:border-white/[0.2] hover:text-white'
                 }`}
               >
                 {b.name}
                 {b.count > 0 && (
-                  <span className={`tabular-nums ${active ? 'text-white/70' : 'text-zinc-500'}`}>
+                  <span className={`font-mono ${active ? 'text-black/60' : 'text-neutral-600'}`}>
                     {b.count}
                   </span>
                 )}
@@ -151,27 +149,27 @@ export function CatalogSidebar({
         </div>
       </div>
 
-      {/* ── Early Access — referenční PRO karta (gradient eyebrow + zelené
-             fajfky), stejná jako v mega menu GoBigDeal ── */}
-      <div className="flex flex-col rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
-        <span className={`text-[10px] font-bold uppercase tracking-widest ${GRADIENT}`}>
+      {/* ── Early Access — monetizační karta v hairline stylu: bordered
+             eyebrow chip, bílé fajfky, bílé CTA ── */}
+      <div className="flex flex-col rounded-xl border border-white/[0.08] bg-[#050505] p-5 transition-colors hover:border-white/[0.15]">
+        <span className="inline-flex w-fit items-center rounded-full border border-white/[0.12] bg-white/[0.03] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-widest text-neutral-400">
           {dash.eyebrowPro}
         </span>
-        <p className="mt-2 font-sans text-[17px] font-extralight leading-snug tracking-tight">
+        <p className="mt-3 font-sans text-[17px] font-medium leading-snug tracking-tighter">
           <span className="text-white">{d.early.headingLead} </span>
-          <span className="text-zinc-400">{d.early.headingMuted}</span>
+          <span className="text-neutral-600">{d.early.headingMuted}</span>
         </p>
         <ul className="mt-3 space-y-1.5">
           {d.early.bullets.slice(0, 3).map((b) => (
-            <li key={b} className="flex items-start gap-2 text-[13px] leading-snug text-zinc-300">
-              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" strokeWidth={2.5} />
+            <li key={b} className="flex items-start gap-2 text-[13px] leading-snug text-neutral-400">
+              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" strokeWidth={2.5} />
               {b}
             </li>
           ))}
         </ul>
         <Link
           to="/#gbd-pricing"
-          className="mt-4 inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-full bg-white px-5 text-[13px] font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
+          className="mt-4 inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-full bg-white px-5 text-[13px] font-medium text-black transition-colors hover:bg-neutral-200"
         >
           {d.early.ctaPro} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
@@ -182,14 +180,14 @@ export function CatalogSidebar({
         <button
           type="button"
           onClick={onAlerts}
-          className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-full border border-white/15 px-4 text-[13px] font-semibold text-white transition-colors hover:bg-white/10"
+          className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-full border border-white/[0.12] px-4 text-[13px] font-medium text-white transition-colors hover:border-white/[0.25] hover:bg-white/[0.04]"
         >
           <Bell className="h-3.5 w-3.5" /> {d.early.ctaAlerts}
         </button>
         <button
           type="button"
           onClick={onHow}
-          className="inline-flex items-center justify-center gap-1.5 text-[13px] text-zinc-400 transition-colors hover:text-white"
+          className="inline-flex items-center justify-center gap-1.5 text-[13px] text-neutral-500 transition-colors hover:text-white"
         >
           {d.catalog.promo.howCta} <ArrowRight className="h-3.5 w-3.5" />
         </button>

@@ -3,7 +3,8 @@ import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
 /**
- * Vyhledávací pole katalogu. Dvě podoby:
+ * Vyhledávací pole katalogu — hairline monochrom: černé pole s vláskovým
+ * rámečkem, focus jen zjasní rámeček. Dvě podoby:
  * - výchozí: velké pole na střed (mobilní katalog — hledání jako hlavní vstup),
  * - `compact`: štíhlá varianta pro sidebar dashboardu (bez vlastního odsazení).
  *
@@ -23,19 +24,18 @@ export function CatalogSearch({
   const c = dealsI18n[lang].catalog;
 
   const input = (
-    /* tmavé glass pole — stejný tón jako karty (dashboard look) */
     <label className={`relative flex items-center ${compact ? '' : 'mx-auto max-w-2xl'}`}>
       <Search
-        className={`pointer-events-none absolute text-zinc-500 ${compact ? 'left-3.5 h-4 w-4' : 'left-5 h-5 w-5'}`}
+        className={`pointer-events-none absolute text-neutral-500 ${compact ? 'left-3.5 h-4 w-4' : 'left-5 h-5 w-5'}`}
       />
       <span className="sr-only">{c.searchPlaceholder}</span>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={c.searchPlaceholder}
-        className={`w-full rounded-full border-0 bg-white/[0.06] text-white
-                    ring-1 ring-white/10 transition-all duration-200 placeholder:text-zinc-500
-                    hover:bg-white/[0.08] focus:bg-white/[0.09] focus:outline-none focus:ring-2 focus:ring-white/30 ${
+        className={`w-full rounded-lg border border-white/[0.08] bg-white/[0.02] text-white
+                    transition-colors duration-200 placeholder:text-neutral-500
+                    hover:border-white/[0.15] focus:border-white/[0.3] focus:outline-none ${
                       compact ? 'h-11 pl-10 pr-9 text-sm' : 'h-14 pl-14 pr-12 text-base'
                     }`}
       />
@@ -44,7 +44,7 @@ export function CatalogSearch({
           type="button"
           onClick={() => onChange('')}
           aria-label={c.clear}
-          className={`absolute flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-zinc-300 transition-colors hover:bg-white/25 ${
+          className={`absolute flex h-6 w-6 items-center justify-center rounded-md border border-white/[0.1] bg-white/[0.04] text-neutral-400 transition-colors hover:border-white/[0.25] hover:text-white ${
             compact ? 'right-2.5' : 'right-4'
           }`}
         >
