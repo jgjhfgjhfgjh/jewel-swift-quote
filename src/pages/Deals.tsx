@@ -258,27 +258,30 @@ export default function Deals() {
         id="catalog"
         className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
       >
-        {/* centrovaný brand lockup v hairline stylu: bordered eyebrow chip →
-            velké logo → full-width pás → dvoutónová věta (bílá / neutral-600) */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.03] px-3 py-1 text-xs font-medium uppercase tracking-widest text-neutral-400">
-            {dash.eyebrow}
+        {/* dvousloupcové hero: VLEVO chip → logo → dvoutónová věta, VPRAVO
+            svislý pás log značek — jede shora dolů, siluety výrazně větší
+            než dřívější vodorovný pás. Pás je pozicovaný ABSOLUTNĚ (inset-y-0):
+            výšku řádku určuje jen levý sloupec — natažený flex item by ji
+            převzal z neořezaného pásu (~12 000 px) */}
+        <div className="relative">
+          <div className="min-w-0 py-2 pr-28 sm:pr-44 lg:pr-72">
+            <div className="inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.03] px-3 py-1 text-xs font-medium uppercase tracking-widest text-neutral-400">
+              {dash.eyebrow}
+            </div>
+            <h1 className="mt-6 text-white">
+              <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
+            </h1>
+            {/* dvoutónový headline referenčního stylu: bílý lead, zbytek neutral-600 */}
+            <h2 className="mt-6 max-w-xl text-balance font-sans text-xl font-medium tracking-tighter sm:text-2xl">
+              <span className="text-white">{d.catalog.headingLead}</span>{' '}
+              <span className="text-neutral-600">{d.catalog.headingMuted}</span>{' '}
+              <span className="text-neutral-600">{d.catalog.headingAccent}</span>
+            </h2>
+          </div>
+          <div className="absolute inset-y-0 right-0 w-24 sm:w-36 lg:w-56">
+            <BrandMarquee vertical />
           </div>
         </div>
-        <h1 className="mt-6 flex justify-center text-white">
-          <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
-        </h1>
-        {/* pás značek POD logem, full-bleed přes celou šíři obrazovky
-            (záporné marginy ruší odsazení sekce) */}
-        <div className="-mx-5 mt-8 sm:-mx-8 lg:-mx-12">
-          <BrandMarquee />
-        </div>
-        {/* dvoutónový headline referenčního stylu: bílý lead, zbytek neutral-600 */}
-        <h2 className="mx-auto mt-8 max-w-3xl text-balance text-center font-sans text-xl font-medium tracking-tighter sm:text-2xl">
-          <span className="text-white">{d.catalog.headingLead}</span>{' '}
-          <span className="text-neutral-600">{d.catalog.headingMuted}</span>{' '}
-          <span className="text-neutral-600">{d.catalog.headingAccent}</span>
-        </h2>
       </header>
 
       {/* ── 2. KPI lišta — stav trhu na první pohled ── */}
