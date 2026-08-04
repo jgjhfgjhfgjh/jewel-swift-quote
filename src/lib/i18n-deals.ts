@@ -218,7 +218,7 @@ const cs: DealsText = {
     deals: 'Živé dealy',
     brands: 'Značek v dávkách',
     discount: 'Nejvyšší sleva',
-    early: 'Náskok pro PRO',
+    early: 'Náskok s Early Access',
     earlyValue: '48 h',
   },
   how: {
@@ -242,15 +242,15 @@ const cs: DealsText = {
     sub: 'Každý deal má vlastní katalog, vlastní uzávěrku a vlastní slevový žebřík. Otevřete ho a skládejte objednávku kus po kuse — sleva se přepočítává, jak přidáváte.',
     empty: 'Právě neběží žádný deal.',
     emptyHeadingMuted: 'Další dávku ale vyjednáváme s koncernem právě teď.',
-    emptySub: 'Zapněte si alert a budete u toho, jakmile deal spadne — partneři s PRO ho uvidí o 48 hodin dřív. Zatím se podívejte, jak dopadly předchozí dávky.',
+    emptySub: 'Zapněte si alert a budete u toho, jakmile deal spadne — partneři s Early Access ho uvidí o 48 hodin dřív. Zatím se podívejte, jak dopadly předchozí dávky.',
     emptyCta: 'Nastavit alert',
     closedLabel: 'Uzavřené dávky',
     closedSub: 'Rozebráno dle pořadí objednávek. Přesně tohle příště nechcete propásnout.',
   },
   early: {
     headingLead: 'Deal dostane každý.',
-    headingMuted: 'PRO ho má o 48 hodin dřív.',
-    body: 'Dávka má pevný počet kusů a nejžádanější reference mizí první. PRO otevírá každý deal dva dny před veřejným startem a hlídá koncerny, značky i jednotlivé modely — vybíráte z plného katalogu, ne ze zbytků.',
+    headingMuted: 'Early Access ho má o 48 hodin dřív.',
+    body: 'Dávka má pevný počet kusů a nejžádanější reference mizí první. Early Access otevírá každý deal dva dny před veřejným startem a hlídá koncerny, značky i jednotlivé modely — vybíráte z plného katalogu, ne ze zbytků.',
     bullets: [
       'Každý deal otevřený 48 hodin před veřejným startem',
       'Alerty na koncerny, značky i jednotlivé modely',
@@ -258,7 +258,7 @@ const cs: DealsText = {
       'Vlastní account manager',
     ],
     ctaAlerts: 'Nastavit alert',
-    ctaPro: 'Zobrazit tarify PRO',
+    ctaPro: 'Zobrazit Early Access',
   },
   conditions: {
     heading: 'Jak nákup z DEAL nabídky probíhá',
@@ -452,7 +452,7 @@ const en: DealsText = {
     deals: 'Live deals',
     brands: 'Brands in the batches',
     discount: 'Deepest discount',
-    early: 'Head start for PRO',
+    early: 'Head start with Early Access',
     earlyValue: '48 h',
   },
   how: {
@@ -476,15 +476,15 @@ const en: DealsText = {
     sub: 'Each deal has its own catalog, its own deadline and its own discount ladder. Open one and build the order piece by piece — the discount recalculates as you add units.',
     empty: 'No deal is live right now.',
     emptyHeadingMuted: 'The next batch is being negotiated with the concern as we speak.',
-    emptySub: 'Turn on an alert and you will be there the moment a deal drops — PRO partners see it 48 hours earlier. In the meantime, take a look at how the previous batches went.',
+    emptySub: 'Turn on an alert and you will be there the moment a deal drops — Early Access partners see it 48 hours earlier. In the meantime, take a look at how the previous batches went.',
     emptyCta: 'Set a deal alert',
     closedLabel: 'Closed batches',
     closedSub: 'Taken in the order received. Exactly what you do not want to miss next time.',
   },
   early: {
     headingLead: 'Everyone gets the deal.',
-    headingMuted: 'PRO gets it 48 hours earlier.',
-    body: 'A batch holds a fixed number of units and the most wanted references go first. PRO opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.',
+    headingMuted: 'Early Access gets it 48 hours earlier.',
+    body: 'A batch holds a fixed number of units and the most wanted references go first. Early Access opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.',
     bullets: [
       'Every deal open 48 hours before the public start',
       'Alerts on concerns, brands and individual models',
@@ -492,7 +492,7 @@ const en: DealsText = {
       'Dedicated account manager',
     ],
     ctaAlerts: 'Set a deal alert',
-    ctaPro: 'See PRO plans',
+    ctaPro: 'See Early Access',
   },
   conditions: {
     heading: 'How a DEAL purchase works',

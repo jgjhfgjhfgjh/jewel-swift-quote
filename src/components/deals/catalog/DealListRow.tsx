@@ -36,15 +36,15 @@ export function DealListRow({
 
   const inner = (
     <>
-      {/* logo koncernu — plné barvy na světlém podkladu */}
-      <span className="flex h-11 w-14 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-2">
+      {/* logo koncernu — volně na bílé, plná barva, bez rámečku */}
+      <span className="flex h-11 w-14 shrink-0 items-center justify-center">
         {item.concernDomain ? (
           <BrandLogo
             name={item.concernName ?? item.supplier}
             domain={item.concernDomain}
             width={200}
             height={80}
-            className={`max-h-5 max-w-full object-contain [mix-blend-mode:multiply] ${
+            className={`max-h-6 max-w-full object-contain [mix-blend-mode:multiply] ${
               item.kind === 'teaser' ? 'opacity-50' : 'opacity-90'
             }`}
             fallbackClassName="text-[9px] font-bold leading-none text-zinc-900"

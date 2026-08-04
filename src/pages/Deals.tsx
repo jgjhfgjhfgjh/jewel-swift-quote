@@ -21,10 +21,9 @@ import {
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
-import { CatalogSearch } from '@/components/deals/catalog/CatalogSearch';
-import { FilterTiles } from '@/components/deals/catalog/FilterTiles';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
-import { CatalogSidebar } from '@/components/deals/catalog/CatalogSidebar';
+import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
+import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import {
   CatalogControlBar, type CatalogSortKey, type CatalogView,
 } from '@/components/deals/catalog/CatalogControlBar';
@@ -197,18 +196,24 @@ export default function Deals() {
       brands: f.brands.includes(key) ? f.brands.filter((b) => b !== key) : [...f.brands, key],
     }));
 
-  /* Sekce dashboardu — nadpis s počtem, pod ním mřížka DealTile, nebo hustý
-     seznam DealListRow (přepínač v řídicí liště). */
-  const renderSection = (title: string, items: DealTileItem[], liveDot = false) =>
+  /* Sekce dashboardu — nadpis s počtem, pod ním mřížka DealTile přes celou
+     šíři (první sekci vede upsell karta Early Access), nebo hustý seznam
+     DealListRow (přepínač v řídicí liště). */
+  const renderSection = (
+    title: string,
+    items: DealTileItem[],
+    opts: { liveDot?: boolean; lead?: boolean } = {},
+  ) =>
     items.length === 0 ? null : (
       <section className="pt-9">
         <div className="flex items-center gap-2.5">
-          {liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />}
+          {opts.liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />}
           <h2 className="font-sans text-lg font-medium tracking-tighter text-zinc-900">{title}</h2>
           <span className="font-mono text-sm text-slate-400">{items.length}</span>
         </div>
         {view === 'grid' ? (
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {opts.lead && <EarlyAccessCard />}
             {items.map((t) => (
               <DealTile key={t.id} item={t} onTeaserClick={goToAlerts} />
             ))}
@@ -222,6 +227,9 @@ export default function Deals() {
         )}
       </section>
     );
+
+  /* Upsell karta patří do první NEprázdné sekce. */
+  const firstSection = sections.live.length ? 'live' : sections.upcoming.length ? 'upcoming' : 'closed';
 
   /* ── Vysvětlující část pod katalogem ─────────────────────────────────── */
   const allBrands = new Set<string>();
@@ -266,15 +274,17 @@ export default function Deals() {
             <h1 className="text-zinc-900">
               <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
             </h1>
-            {/* dvoutónový headline: tmavý lead, zbytek tlumeně slate */}
-            <h2 className="mt-6 max-w-xl text-balance font-sans text-xl font-medium tracking-tighter sm:text-2xl">
+            {/* dvoutónový headline v typografii webu (extralight jako
+                headliny homepage): tmavý lead, zbytek tlumeně slate */}
+            <h2 className="mt-6 max-w-xl text-balance font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.35rem,2.4vw,2rem)]">
               <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
               <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
               <span className="text-slate-400">{d.catalog.headingAccent}</span>
             </h2>
           </div>
-          {/* výjev od sm výš; na mobilu má vlastní blok pod textem */}
-          <div className="absolute inset-y-0 right-0 hidden w-[44%] sm:block">
+          {/* výjev od sm výš (posunutý VÍC DOLEVA od pravé hrany);
+              na mobilu má vlastní blok pod textem */}
+          <div className="absolute inset-y-0 right-[8%] hidden w-[42%] sm:block">
             <BrandSpotlight />
           </div>
         </div>
@@ -317,56 +327,25 @@ export default function Deals() {
         )}
       </div>
 
-      {/* ── 3. Mobilní filtry — desktop je má v sidebaru ── */}
-      <div className="pt-8 lg:hidden">
-        <CatalogSearch
-          value={filters.search}
-          onChange={(search) => setFilters((f) => ({ ...f, search }))}
+      {/* ── 3. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+             (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
+      <div className="px-5 pt-8 sm:px-8 lg:px-12">
+        <CatalogFilterNav
+          search={filters.search}
+          onSearch={(search) => setFilters((f) => ({ ...f, search }))}
+          concerns={concernTiles}
+          brands={brandTiles}
+          selectedConcerns={filters.concerns}
+          selectedBrands={filters.brands}
+          onToggleConcern={toggleConcern}
+          onToggleBrand={toggleBrand}
+          onClearConcerns={() => setFilters((f) => ({ ...f, concerns: [] }))}
+          onClearBrands={() => setFilters((f) => ({ ...f, brands: [] }))}
         />
-        <div className="pt-8">
-          <FilterTiles
-            items={concernTiles}
-            selected={filters.concerns}
-            onToggle={toggleConcern}
-            label={d.catalog.concernsLabel}
-            allLabel={d.catalog.allConcerns}
-            onClearAll={() => setFilters((f) => ({ ...f, concerns: [] }))}
-          />
-        </div>
-        <div className="pt-6">
-          <FilterTiles
-            items={brandTiles}
-            selected={filters.brands}
-            onToggle={toggleBrand}
-            label={d.catalog.brandsLabel}
-            allLabel={d.catalog.allConcerns}
-            onClearAll={() => setFilters((f) => ({ ...f, brands: [] }))}
-          />
-        </div>
       </div>
 
-      {/* ── 4. Dashboard: lepivý sidebar s filtry + hlavní datový sloupec ── */}
-      <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:grid lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10 lg:px-12 lg:pt-8">
-        <aside className="hidden lg:block">
-          <div
-            className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto pb-4 pr-1
-                       [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            <CatalogSidebar
-              search={filters.search}
-              onSearch={(search) => setFilters((f) => ({ ...f, search }))}
-              concerns={concernTiles}
-              brands={brandTiles}
-              selectedConcerns={filters.concerns}
-              selectedBrands={filters.brands}
-              onToggleConcern={toggleConcern}
-              onToggleBrand={toggleBrand}
-              onAlerts={goToAlerts}
-              onHow={() => scrollTo('how-it-works')}
-            />
-          </div>
-        </aside>
-
+      {/* ── 4. Obsah přes celou šíři ── */}
+      <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (
             <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -416,9 +395,9 @@ export default function Deals() {
                 </div>
               )}
 
-              {renderSection(dash.secLive, sections.live, true)}
-              {renderSection(d.catalog.rows.upcoming, sections.upcoming)}
-              {renderSection(d.catalog.rows.closed, sections.closed)}
+              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live' })}
+              {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: firstSection === 'upcoming' })}
+              {renderSection(d.catalog.rows.closed, sections.closed, { lead: firstSection === 'closed' })}
             </>
           )}
         </main>
