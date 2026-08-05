@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, Home, Info, Briefcase, Phone, BookOpen, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package, Settings, Bell } from 'lucide-react';
+import { ShoppingCart, Menu, LogOut, Users, Search, Heart, User, Globe, X, LayoutDashboard, Flame, ChevronDown, ChevronRight, ArrowRight, MessagesSquare, Package, Settings, Bell } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -779,7 +779,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     <Sheet open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
       <SheetContent
         side="left"
-        className="flex flex-col w-72 p-0 z-[95]"
+        className="flex flex-col w-72 p-0 z-[95] bg-[#F2F2F7]"
         style={{ top: headerHeight, height: `calc(100dvh - ${headerHeight}px)` }}
         onInteractOutside={(e) => {
           if (desktopMenuButtonRef.current?.contains(e.target as Node)) {
@@ -787,79 +787,118 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
           }
         }}
       >
-        <SheetHeader className="px-4 py-4 border-b shrink-0">
-          <SheetTitle className="text-left">Nabídka</SheetTitle>
+        <SheetHeader className="px-4 py-4 shrink-0">
+          <SheetTitle className="text-left">Menu</SheetTitle>
         </SheetHeader>
-        <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto py-2">
-          {/* Primary services */}
-          {HOME_NAV_ITEMS.map(({ path, label }) => (
+        {/* iOS grouped list — sekce zrcadlí desktopové panely, skupiny jsou
+            bílé zaoblené karty na systémové šedé, řádky drží stávající font
+            (text-sm font-medium) + mikro copy z PRODUCT_ITEMS. */}
+        <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto pb-6">
+          {/* Why — sólo skupina bez hlavičky (příběh vypráví homepage) */}
+          <div className="mx-4 overflow-hidden rounded-2xl bg-white">
             <button
-              key={path}
-              onClick={() => { setMenuOpen(false); navigate(path); }}
-              className="flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-zinc-50 transition-colors"
+              onClick={() => { setMenuOpen(false); go('/'); }}
+              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100"
             >
-              {label === 'GoBigDeal' ? <Gbd /> : label}
-              <ChevronRight className="h-4 w-4 text-zinc-400 shrink-0" />
+              Why
+              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
             </button>
-          ))}
+          </div>
 
-          <div className="border-t my-2" />
+          {/* Products — 1:1 položky desktopového panelu vč. mikro copy */}
+          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Products</p>
+          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
+            {PRODUCT_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => { setMenuOpen(false); go(item.path); }}
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
+              >
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
+                  {item.sub && (
+                    <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
+                  )}
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
+              </button>
+            ))}
+          </div>
 
-          {isHome ? (
-            <>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Info className="h-4 w-4 text-muted-foreground" /> O nás
+          {/* GoBigDeal — vlajkové cíle z desktop panelu */}
+          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">GoBigDeal</p>
+          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
+            {MOBILE_GBD_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => { setMenuOpen(false); go(item.path); }}
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
+              >
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
+                  <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
               </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
+            ))}
+          </div>
+
+          {/* Catalog */}
+          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Catalog</p>
+          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
+            {MOBILE_CATALOG_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => { setMenuOpen(false); go(item.path); }}
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
+              >
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
+                  <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
               </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
-              </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <BookOpen className="h-4 w-4 text-muted-foreground" /> Blog
-              </button>
-            </>
-          ) : (
-            <>
-              <button onClick={() => { setViewMode('home'); setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Home className="h-4 w-4 text-muted-foreground" /> Domů
-              </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Info className="h-4 w-4 text-muted-foreground" /> O nás
-              </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Briefcase className="h-4 w-4 text-muted-foreground" /> Naše služby
-              </button>
-              <button onClick={() => { setMenuOpen(false); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Phone className="h-4 w-4 text-muted-foreground" /> Kontakt
-              </button>
-            </>
-          )}
+            ))}
+          </div>
+
+          {/* Suppliers — jiný svět, šedě jako na desktopu, přes bránu */}
+          <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
+            <button
+              onClick={() => { setMenuOpen(false); openSupplierGate(); }}
+              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-500 transition-colors active:bg-zinc-100"
+            >
+              Suppliers
+              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
+            </button>
+          </div>
 
           {(isB2bApproved || isAdmin) && (
             <>
-              <div className="border-t my-2" />
-              <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 hover:bg-muted/50 transition-colors">
-                <LayoutDashboard className="h-4 w-4 text-zinc-500" /> Partner Hub
-              </button>
+              <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Account</p>
+              <div className="mx-4 overflow-hidden rounded-2xl bg-white">
+                <button onClick={() => { setMenuOpen(false); navigate('/partner'); }} className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100">
+                  <LayoutDashboard className="h-4 w-4 text-zinc-500" /> Partner Hub
+                  <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
+                </button>
+              </div>
             </>
           )}
           {isAdmin && (
             <>
-              <div className="border-t my-2" />
-              <button onClick={() => { setMenuOpen(false); navigate('/customers'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Users className="h-4 w-4 text-muted-foreground" /> Správa zákazníků
-              </button>
-              <button onClick={() => { setMenuOpen(false); navigate('/admin/deals'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <Flame className="h-4 w-4 text-muted-foreground" /> Správa DEAL nabídek
-              </button>
-              <button onClick={() => { setMenuOpen(false); navigate('/komunikace'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <MessagesSquare className="h-4 w-4 text-muted-foreground" /> Komunikace swelt × zago
-              </button>
-              <button onClick={() => { setMenuOpen(false); navigate('/admin/audit'); }} className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-muted/50 transition-colors">
-                <LayoutDashboard className="h-4 w-4 text-muted-foreground" /> Web Cockpit (audit)
-              </button>
+              <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Admin</p>
+              <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
+                {[
+                  { icon: Users, label: 'Správa zákazníků', path: '/customers' },
+                  { icon: Flame, label: 'Správa DEAL nabídek', path: '/admin/deals' },
+                  { icon: MessagesSquare, label: 'Komunikace swelt × zago', path: '/komunikace' },
+                  { icon: LayoutDashboard, label: 'Web Cockpit (audit)', path: '/admin/audit' },
+                ].map(({ icon: Icon, label, path }) => (
+                  <button key={path} onClick={() => { setMenuOpen(false); navigate(path); }} className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-zinc-900 transition-colors active:bg-zinc-100">
+                    <Icon className="h-4 w-4 text-zinc-500" /> {label}
+                    <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
+                  </button>
+                ))}
+              </div>
             </>
           )}
         </nav>
