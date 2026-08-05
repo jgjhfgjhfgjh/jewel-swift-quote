@@ -1,13 +1,20 @@
 /**
- * Krystalová scéna pod CELOU hero sekcí /deals — pomalu rotující černé broušené
- * krystaly na bílé. „Krystalový" dojem nese POZADÍ, ne písmo: wordmark
- * zůstává čistá typografie (varianta 3 z návrhu).
+ * Krystalová scéna pod CELOU hero sekcí /deals — černé broušené krystaly na
+ * bílé. „Krystalový" dojem nese POZADÍ, ne písmo: wordmark zůstává čistá
+ * typografie (varianta 3 z návrhu).
  *
  * Vrstva kryje hlavičku i KPI lištu (logo → headline → CTA → čísla). Pod ní se
  * stránka vrací do čisté bílé, aby katalog a filtry zůstaly klidné čtení.
  *
+ * STATICKÁ ILUSTRACE, ne video. Původně tu běžela smyčka `crystals.mp4`; scéna
+ * je zaseknutá na jednom snímku (t ≈ 2,35 s — kámen tam sahá k oběma okrajům,
+ * což viněta potřebuje) vyexportovaném do `/gbd-crystals.jpg`. Pozadí pod celou
+ * hero zónou nemá důvod se hýbat a 42 kB obrázek nahradil 1,5 MB video, které
+ * se dekódovalo po celou dobu scrollu. Zdrojové video zůstává v repu
+ * (`public/deal-videos/crystals.mp4`) pro případ návratu k pohybu.
+ *
  * Kompozice:
- *  · `mix-blend-mode: multiply` — bílé pozadí videa zmizí, zůstane jen tmavý
+ *  · `mix-blend-mode: multiply` — bílé pozadí snímku zmizí, zůstane jen tmavý
  *    kámen, takže vrstva splyne s bílou plochou dashboardu bez tvrdých hran,
  *  · radiální maska VEN do ztracena (střed viditelný, okraje průhledné) —
  *    jinak by plocha na bílé ploše končila tvrdou hranou obdélníku,
@@ -19,22 +26,20 @@
  *    na okrajích a rámuje kompozici jako viněta; spodní rozpouští scénu do
  *    bílé, aby KPI lišta navázala na katalog bez viditelné hrany,
  *  · nižší opacita než u dřívějšího pásu jen za logem — kámen teď leží pod
- *    živým obsahem, ne pod jedním slovem,
- *  · `motion-reduce:hidden` — kdo má vypnuté animace, vrstvu nedostane.
+ *    živým obsahem, ne pod jedním slovem.
+ *
+ * Bez `motion-reduce:hidden` — vrstva se nehýbe, není co skrývat.
  */
 export function CrystalBackdrop({ className = '' }: { className?: string }) {
   return (
     <div
       aria-hidden
-      className={`pointer-events-none absolute overflow-hidden motion-reduce:hidden ${className}`}
+      className={`pointer-events-none absolute overflow-hidden ${className}`}
     >
-      <video
-        src="/deal-videos/crystals.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
+      <img
+        src="/gbd-crystals.jpg"
+        alt=""
+        draggable={false}
         className="h-full w-full object-cover opacity-[0.58] [mix-blend-mode:multiply]
                    [filter:grayscale(1)_contrast(1.9)_brightness(0.8)]
                    [mask-image:radial-gradient(86%_92%_at_50%_45%,black_0%,transparent_100%)]"
