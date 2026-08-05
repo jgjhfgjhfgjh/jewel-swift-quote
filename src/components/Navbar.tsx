@@ -62,7 +62,10 @@ type NavPanel = { heading: string; desc: string; cols?: NavPanelCol[]; cta: { la
    jedou velkým extralight písmem přes celou šířku panelu. */
 const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
   { label: 'Sell without spending money on stock', sub: "Pay us from your customer's money", path: '/dropshipping' },
-  { label: 'Buy 70+ brands at 40–65 % below retail', sub: 'From a single unit, no minimum order', path: '/velkoobchod' },
+  /* Čísla ověřená dotazem do DB (2026-08): max sleva 85 % (produkty.retail
+     vs wholesale, p99 = 84 %), značek po normalizaci 67 → tvrdíme 65+.
+     Neměnit bez nového ověření. */
+  { label: 'Buy 65+ brands at 40–85 % below retail', sub: 'From a single unit, no minimum order', path: '/velkoobchod' },
   { label: 'Fill your shop with zero hustle', path: '/feed' },
   { label: 'Connect your AI agents', path: '/feed?to=mcp' },
   { label: 'Source luxury watches on request', sub: 'Omega, Cartier, IWC and more — binding quote in 48 hours', path: '/prestige' },
