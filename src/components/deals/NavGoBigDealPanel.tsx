@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Check, Lock } from 'lucide-react';
+import { ArrowRight, Bell, Check, Layers, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { dealIsLive, type Deal } from '@/lib/deals';
 import { CONCERNS, getConcernForDeal } from '@/data/concerns';
@@ -80,7 +80,8 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         upcoming: upcoming.get(c.slug) ?? 0,
       }))
       .sort((a, b) => b.live - a.live || b.upcoming - a.upcoming)
-      .slice(0, 5);
+      // 4 koncerny + pátý řádek „Browse all deals" = stále 5 řádků ve sloupci
+      .slice(0, 4);
   }, [liveTiles, upcomingTiles]);
 
   return (
@@ -147,6 +148,26 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
                 </button>
               );
             })}
+
+            {/* Poslední řádek — vstup do celého katalogu v modrém upsell
+                jazyce z karet dealů (EA pill): modrá plocha, na hover se
+                invertuje do plné modré s glow. */}
+            <button
+              type="button"
+              onClick={() => go('/deals')}
+              className="group/row flex h-10 w-full items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/95 px-3 text-left
+                         shadow-[0_8px_24px_-6px_rgba(37,99,235,0.10),0_2px_6px_rgba(15,23,42,0.05)]
+                         transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-600 hover:bg-blue-600
+                         hover:shadow-[0_16px_36px_-10px_rgba(37,99,235,0.5)]"
+            >
+              <span className="flex h-6 w-11 shrink-0 items-center justify-center">
+                <Layers className="h-4 w-4 text-blue-600 transition-colors group-hover/row:text-white" />
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[13px] font-bold tracking-tight text-blue-700 transition-colors group-hover/row:text-white">
+                Browse all deals
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-blue-400 transition-all duration-200 group-hover/row:translate-x-0.5 group-hover/row:text-white" />
+            </button>
           </div>
         </div>
 
@@ -181,7 +202,9 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      {/* ── Patička: free drop alert (nejnižší schod) + katalogová úniková cesta ── */}
+      {/* ── Patička: free drop alert = nejnižší schod konverze. Vstup do
+             katalogu se přesunul do sloupce jako poslední řádek, aby v
+             panelu nebyl dvakrát. ── */}
       <div className="mt-3 flex items-center justify-between gap-4 border-t border-slate-200 pt-2.5">
         <button
           type="button"
@@ -193,14 +216,6 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
             Deal drop alerts — free forever.
           </span>
           <span className="hidden font-normal text-zinc-500 xl:inline">One email when a batch goes live.</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => go('/deals')}
-          className="group inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-700 transition-colors hover:text-zinc-900"
-        >
-          Browse all deals
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
     </div>
