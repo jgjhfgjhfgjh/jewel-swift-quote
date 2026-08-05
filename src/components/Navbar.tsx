@@ -63,7 +63,7 @@ type NavPanel = { heading: string; desc: string; cols?: NavPanelCol[]; cta: { la
 const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
   { label: 'Sell without spending money on products', sub: "Pay us from customer's money", path: '/dropshipping' },
   { label: 'B2B wholesale', path: '/velkoobchod' },
-  { label: 'Fill your shop with our products', path: '/feed' },
+  { label: 'Fill your shop with zero hassle', path: '/feed' },
   { label: 'Luxury big deals', path: '/prestige' },
   { label: 'Connect your AI agents', path: '/feed?to=mcp' },
 ];
