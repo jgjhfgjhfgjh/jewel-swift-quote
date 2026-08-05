@@ -113,6 +113,26 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         <div className="flex h-[256px] min-w-0 flex-col">
           <h3 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Live by concern</h3>
           <div className="mt-2 flex flex-col gap-1.5">
+            {/* První řádek — vstup do celého katalogu. Tmavý jako obě velké
+                karty vedle (stejné napevno spočítané barvy), takže je
+                okamžitě čitelný jako hlavní akce sloupce. */}
+            <button
+              type="button"
+              onClick={() => go('/deals')}
+              className="group/row flex h-10 w-full items-center gap-3 rounded-2xl border border-[#2C3235] bg-[#151B1E] px-3 text-left
+                         shadow-[0_8px_24px_-6px_rgba(15,23,42,0.18),0_2px_6px_rgba(15,23,42,0.08)]
+                         transition-all duration-200 hover:-translate-y-0.5 hover:border-[#494F51] hover:bg-[#1C2325]
+                         hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.35),0_4px_10px_rgba(15,23,42,0.12)]"
+            >
+              <span className="flex h-6 w-11 shrink-0 items-center justify-center">
+                <Layers className="h-4 w-4 text-zinc-300 transition-colors group-hover/row:text-white" />
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-white">
+                Browse all deals
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-zinc-500 transition-all duration-200 group-hover/row:translate-x-0.5 group-hover/row:text-white" />
+            </button>
+
             {concernRows.map((c) => {
               const dim = c.live === 0 && c.upcoming === 0;
               return (
@@ -149,25 +169,6 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
               );
             })}
 
-            {/* Poslední řádek — vstup do celého katalogu v modrém upsell
-                jazyce z karet dealů (EA pill): modrá plocha, na hover se
-                invertuje do plné modré s glow. */}
-            <button
-              type="button"
-              onClick={() => go('/deals')}
-              className="group/row flex h-10 w-full items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/95 px-3 text-left
-                         shadow-[0_8px_24px_-6px_rgba(37,99,235,0.10),0_2px_6px_rgba(15,23,42,0.05)]
-                         transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-600 hover:bg-blue-600
-                         hover:shadow-[0_16px_36px_-10px_rgba(37,99,235,0.5)]"
-            >
-              <span className="flex h-6 w-11 shrink-0 items-center justify-center">
-                <Layers className="h-4 w-4 text-blue-600 transition-colors group-hover/row:text-white" />
-              </span>
-              <span className="min-w-0 flex-1 truncate text-[13px] font-bold tracking-tight text-blue-700 transition-colors group-hover/row:text-white">
-                Browse all deals
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-blue-400 transition-all duration-200 group-hover/row:translate-x-0.5 group-hover/row:text-white" />
-            </button>
           </div>
         </div>
 
