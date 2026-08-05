@@ -65,7 +65,7 @@ const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
   { label: 'Buy 70+ brands at 40–65 % below retail', sub: 'From a single unit, no minimum order', path: '/velkoobchod' },
   { label: 'Fill your shop with zero hustle', path: '/feed' },
   { label: 'Connect your AI agents', path: '/feed?to=mcp' },
-  { label: 'Source Omega and Cartier on request', sub: 'Binding quote in 48 hours', path: '/prestige' },
+  { label: 'Source luxury watches on request', sub: 'Omega, Cartier, IWC and more — binding quote in 48 hours', path: '/prestige' },
 ];
 
 const NAV_PANELS: Record<string, NavPanel> = {
