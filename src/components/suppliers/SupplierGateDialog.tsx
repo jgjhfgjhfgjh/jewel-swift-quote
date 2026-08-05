@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { useNavigate } from 'react-router-dom';
-import { Check, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import { BigDealSupplierLogo } from '@/components/BigDealSupplierLogo';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 /**
@@ -55,9 +56,8 @@ export function SupplierGateDialog() {
           >
             <X className="h-5 w-5" />
           </button>
-          <div className="mx-auto flex h-[72px] w-[72px] items-center justify-center rounded-full border border-white/10 bg-gradient-to-b from-white/[0.16] to-white/[0.04]">
-            <Check className="h-7 w-7 text-white" strokeWidth={2.5} />
-          </div>
+          {/* značka dodavatelského světa zůstává hlavním prvkem (pokyn) */}
+          <BigDealSupplierLogo className="text-2xl text-white" />
 
           <DialogTitle className="mt-7 font-sans text-2xl font-bold tracking-tight text-white">
             You&rsquo;re entering the supplier area

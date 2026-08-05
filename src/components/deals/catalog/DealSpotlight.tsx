@@ -5,6 +5,8 @@ import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
+import { getDealVideo } from '@/data/dealVideos';
+import { DealVideoMedia } from '@/components/deals/catalog/DealVideoMedia';
 
 /** Podkres bez kampaňové fotky — generovaný obsidianový přechod (public/). */
 const FALLBACK_BG = '/gbd-spotlight-bg.jpg';
@@ -22,13 +24,21 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
 
   const inner = (
     <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-[1.25rem] border border-slate-100 p-6 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16)] transition-all duration-300 hover:shadow-[0_22px_52px_-14px_rgba(15,23,42,0.24)] sm:h-[250px] sm:p-8">
-      {/* kampaňová fotka dealu, jinak generovaný obsidianový podkres */}
-      <img
-        src={item.heroImageUrl ?? FALLBACK_BG}
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-      />
+      {/* reklamní video (s outro logem značky) > kampaňová fotka dealu >
+          obsidianový podkres */}
+      {getDealVideo(item.concernSlug, item.supplier) ? (
+        <DealVideoMedia
+          video={getDealVideo(item.concernSlug, item.supplier)!}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+      ) : (
+        <img
+          src={item.heroImageUrl ?? FALLBACK_BG}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+      )}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"

@@ -5,6 +5,8 @@ import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
+import { getDealVideo } from '@/data/dealVideos';
+import { DealVideoMedia } from '@/components/deals/catalog/DealVideoMedia';
 
 /** EA pill vede na ceník na stránce (#gbd-pricing) — ne do karty. */
 const scrollToPricing = () =>
@@ -31,10 +33,37 @@ export function DealTile({
   const t = dealsI18n[lang];
   const c = t.catalog.tile;
 
+  /* přidaná hodnota velké karty: krátké reklamní video s produktem v reálném
+     životě (generované z produktových fotek katalogu) — má přednost i před
+     kampaňovou fotkou (pokyn: video i na Swarovski kartě, která fotku má) */
+  const video = getDealVideo(item.concernSlug, item.supplier);
+
   const media = (
     /* médium — logo koncernu v plných barvách na světlém podkladu */
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
-      {item.heroImageUrl ? (
+      {video ? (
+        <>
+          <DealVideoMedia
+            video={video}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+          {/* scrim + logo koncernu — video nese produkt, logo drží branding */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/55 to-transparent"
+          />
+          {item.concernDomain && (
+            <BrandLogo
+              name={item.concernName ?? item.supplier}
+              domain={item.concernDomain}
+              width={200}
+              height={80}
+              className="absolute bottom-3 left-3 max-h-5 w-auto max-w-[110px] object-contain opacity-95 [filter:brightness(0)_invert(1)] drop-shadow"
+              fallbackClassName="absolute bottom-3 left-3 text-xs font-bold text-white drop-shadow"
+            />
+          )}
+        </>
+      ) : item.heroImageUrl ? (
         <img
           src={item.heroImageUrl}
           alt=""
