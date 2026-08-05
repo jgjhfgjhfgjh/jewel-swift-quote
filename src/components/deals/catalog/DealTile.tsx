@@ -7,6 +7,8 @@ import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 import { getDealVideo } from '@/data/dealVideos';
 import { DealVideoMedia } from '@/components/deals/catalog/DealVideoMedia';
+import { DealInventoryReel } from '@/components/deals/catalog/DealInventoryReel';
+import { useDealReel } from '@/hooks/useDealReel';
 
 /** EA pill vede na ceník na stránce (#gbd-pricing) — ne do karty. */
 const scrollToPricing = () =>
@@ -33,15 +35,21 @@ export function DealTile({
   const t = dealsI18n[lang];
   const c = t.catalog.tile;
 
-  /* přidaná hodnota velké karty: krátké reklamní video s produktem v reálném
-     životě (generované z produktových fotek katalogu) — má přednost i před
-     kampaňovou fotkou (pokyn: video i na Swarovski kartě, která fotku má) */
+  /* Médium karty pro OBCHODNÍKA: první je „inventory reel" — mřížka skutečného
+     zboží z dávky s cenami (odpovídá na „co v tom je a kolik na tom vydělám").
+     Vygenerovaná reklama je až náhradník pro dávky bez produktových fotek —
+     prodává touhu koncovému zákazníkovi, ne jistotu kupci. */
   const video = getDealVideo(item.concernSlug, item.supplier);
+  const isRealDeal = item.kind !== 'teaser' && !!item.slug;
+  const { data: reel = [] } = useDealReel(item.id, isRealDeal);
+  const hasReel = isRealDeal && reel.length >= 4;
 
   const media = (
     /* médium — logo koncernu v plných barvách na světlém podkladu */
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
-      {video ? (
+      {hasReel ? (
+        <DealInventoryReel dealId={item.id} className="absolute inset-0" />
+      ) : video ? (
         <>
           <DealVideoMedia
             video={video}
@@ -128,7 +136,9 @@ export function DealTile({
 
         {/* pravý cluster: sleva + u připravovaných stavový štítek (bez zámku) */}
         <div className="pointer-events-auto ml-auto flex flex-col items-end gap-1.5">
-          {item.maxDiscount > 0 && (
+          {/* kartová sleva jen BEZ reelu — s reelem už cenu i slevu nese pruh
+              u konkrétního kusu a dvě červené pilulky si konkurují */}
+          {!hasReel && item.maxDiscount > 0 && (
             /* sleva — červená pilulka, zavedený jazyk světlých karet webu */
             <span className="rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
               −{item.maxDiscount} %
