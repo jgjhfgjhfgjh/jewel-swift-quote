@@ -286,7 +286,8 @@ export default function Deals() {
             sloupec, výjev jeho výšku jen vyplní */}
         <div className="relative">
           <div className="min-w-0 py-2 sm:pr-[46%]">
-            <h1 className="text-zinc-900">
+            {/* mobil: logo na střed; od sm doleva k textu */}
+            <h1 className="flex justify-center text-zinc-900 sm:justify-start">
               <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
             </h1>
             {/* dvoutónový headline v typografii webu (extralight jako

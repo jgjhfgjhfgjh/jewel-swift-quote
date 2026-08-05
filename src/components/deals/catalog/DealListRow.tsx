@@ -6,10 +6,15 @@ import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 
+/** EA pill vede na ceník na stránce (#gbd-pricing) — ne do řádku. */
+const scrollToPricing = () =>
+  document.getElementById('gbd-pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
 /**
  * Řádek dávky pro seznamové zobrazení dashboardu — hustá, skenovatelná
  * obdoba DealTile ve světlé variantě: bílá karta s hairline rámečkem,
  * logo v plných barvách na slate-50, data v mono písmu, sleva červeně.
+ * Připravované řádky nesou stejný interaktivní EA pill jako karty.
  */
 export function DealListRow({
   item,
@@ -19,15 +24,38 @@ export function DealListRow({
   onTeaserClick?: () => void;
 }) {
   const lang = useStore((s) => s.lang);
-  const c = dealsI18n[lang].catalog.tile;
+  const d = dealsI18n[lang];
+  const c = d.catalog.tile;
 
   const status =
     item.kind === 'live' && item.deadline ? (
       <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
     ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600">
-        <Lock className="h-3 w-3" /> {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
-      </span>
+      <>
+        {/* interaktivní EA upsell pill — shodný s kartou: samostatný cíl,
+            klik vede na ceník (ne do řádku), silný hover s nápovědou */}
+        <span
+          role="button"
+          tabIndex={0}
+          aria-label={`${d.catalog.dash.earlyBadge} — ${d.catalog.dash.earlyBadgeHint}`}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
+          }}
+          className="group/ea inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700
+                     transition-all duration-200 hover:scale-[1.06] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+        >
+          <Lock className="h-3 w-3" /> {d.catalog.dash.earlyBadge}
+          <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/ea:max-w-[8rem] group-hover/ea:opacity-100">
+            · {d.catalog.dash.earlyBadgeHint}
+          </span>
+        </span>
+        {/* stavový chip bez zámku — na mobilu ho vynecháváme, řádek je plný */}
+        <span className="hidden rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 md:inline-flex">
+          {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
+        </span>
+      </>
     ) : (
       <span className="rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-400">
         {c.closed}
@@ -84,7 +112,7 @@ export function DealListRow({
           −{item.maxDiscount} %
         </span>
       )}
-      <span className="shrink-0">{status}</span>
+      <span className="flex shrink-0 items-center gap-1.5">{status}</span>
       <ArrowRight className="hidden h-4 w-4 shrink-0 text-slate-300 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-zinc-900 sm:block" />
     </>
   );
