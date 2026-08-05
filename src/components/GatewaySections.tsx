@@ -250,9 +250,9 @@ function B2BVisual() {
         </div>
 
         <div>
-          <div className="font-display text-2xl font-bold text-foreground mb-1">3 000+ produktů</div>
+          <div className="font-display text-2xl font-bold text-foreground mb-1">15 000+ produktů</div>
           <div className="text-sm text-foreground/70 leading-snug">
-            70+ prémiových značek · slevy 40–65 %<br />Přihlaste se a odemkněte celý katalog.
+            65+ prémiových značek · slevy 40–65 %<br />Přihlaste se a odemkněte celý katalog.
           </div>
         </div>
 
@@ -324,7 +324,7 @@ function FeedVisual() {
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div className="rounded-none bg-muted/40 border border-border p-2 text-center">
-          <div className="text-lg font-bold text-zinc-900">3 000+</div>
+          <div className="text-lg font-bold text-zinc-900">15 000+</div>
           <div className="text-[10px] text-muted-foreground">produktů v feedu</div>
         </div>
         <div className="rounded-none bg-muted/40 border border-border p-2 text-center">
@@ -619,7 +619,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
             <div className="text-center">
               <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Začněte ještě dnes</p>
               <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,4vw,2.75rem)] text-foreground mb-3">
-                3 000+ produktů.{' '}
+                15 000+ produktů.{' '}
                 <span className="text-zinc-400">Velkoobchodní ceny od 1 kusu.</span>
               </h2>
               <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
@@ -694,7 +694,7 @@ export function GatewaySections({ onOpenCatalog }: Props) {
                     <button onClick={() => openAuth('login')} className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100 sm:text-base">
                       <Eye className="h-4 w-4 shrink-0" /> Prohlédnout sortiment <ArrowRight className="h-4 w-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                     </button>
-                    <div className="text-[11px] text-white/80 sm:ml-2">3 000+ produktů · 70+ značek · Bez závazku</div>
+                    <div className="text-[11px] text-white/80 sm:ml-2">15 000+ produktů · 65+ značek · Bez závazku</div>
                   </div>
                 </div>
               </div>

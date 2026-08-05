@@ -38,18 +38,18 @@ const cs: ShopText = {
   hero: {
     badge: 'swelt.shop · Hotový e-shop do 48 hodin',
     heading: 'Váš e-shop s prémiovým zbožím. Hotový. Naplněný. Spuštěný.',
-    sub: 'Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ prémiovými produkty — připravený k prodeji do 48 hodin.',
+    sub: 'Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 15 000+ prémiovými produkty — připravený k prodeji do 48 hodin.',
     ctaPrimary: 'Chci svůj e-shop', ctaSecondary: 'Prohlédnout ukázku',
-    bullets: ['Spuštění do 48 hodin', 'Žádné zkušenosti s e-commerce', '3 000+ produktů hned', 'Bez závazků'],
+    bullets: ['Spuštění do 48 hodin', 'Žádné zkušenosti s e-commerce', '15 000+ produktů hned', 'Bez závazků'],
   },
-  preview: { url: 'vaseshop.cz', updated: 'Zboží aktualizováno před 2 hod.', productCount: '3 000+ produktů', tabWatches: 'Hodinky', tabJewelry: 'Šperky' },
+  preview: { url: 'vaseshop.cz', updated: 'Zboží aktualizováno před 2 hod.', productCount: '15 000+ produktů', tabWatches: 'Hodinky', tabJewelry: 'Šperky' },
   stats: ['od objednávky ke spuštění', 'produktů v katalogu', 'prémiových značek', 'průměrná marže pod MOC'],
   modes: { eyebrow: 'Dvě cesty', heading: 'Vyberte si model, který vám sedí', sub: 'Hotový e-shop dostanete v obou případech. Rozdíl je v tom, jak řešíte zásoby a expedici.', cta: 'Zjistit více' },
   modeItems: [
     {
       name: 'swelt.shop + Dropshipping', tagline: 'Prodáváte. My skladujeme a posíláme.', badge: 'Doporučeno',
       desc: 'Hotový e-shop + dropshipping integrace. Zákazník objedná u vás, my mu zboží zabalíme a odešleme přímo pod vaším jménem. Nulový sklad, nulová logistika.',
-      pros: ['Žádný sklad — žádné vázané náklady', 'Automatická expedice pod vaší značkou', 'Okamžitě 3 000+ produktů online', 'Vy se staráte jen o marketing a zákazníky'],
+      pros: ['Žádný sklad — žádné vázané náklady', 'Automatická expedice pod vaší značkou', 'Okamžitě 15 000+ produktů online', 'Vy se staráte jen o marketing a zákazníky'],
     },
     {
       name: 'swelt.shop + Feed', tagline: 'Hotový e-shop. Zboží si naskladníte sami.', badge: 'Plná kontrola',
@@ -60,7 +60,7 @@ const cs: ShopText = {
   howItWorks: { eyebrow: 'Jak to funguje', heading: 'Od objednávky k prvnímu prodeji za 48 hodin', sub: 'Celý setup řešíme my. Vy pouze schvalujete a pak prodáváte.', cta: 'Chci zahájit setup' },
   steps: [
     { title: 'Vyberete platformu', desc: 'Shoptet, WooCommerce, Upgates nebo vlastní řešení. Nastavíme e-shop přesně pro vaši potřebu.' },
-    { title: 'Naplníme katalog', desc: 'Importujeme 3 000+ produktů se správnými popisky, fotkami, cenami a kategoriemi. Vy nenastavujete nic.' },
+    { title: 'Naplníme katalog', desc: 'Importujeme 15 000+ produktů se správnými popisky, fotkami, cenami a kategoriemi. Vy nenastavujete nic.' },
     { title: 'Propojíme feed', desc: 'Zásoby a ceny se aktualizují automaticky 1–4× denně. Nikdy nezobrazíte nedostupné zboží.' },
     { title: 'Spouštíte a prodáváte', desc: 'Do 48 hodin máte live e-shop. Vy se věnujete marketingu, my se staráme o zbytek.' },
   ],
@@ -78,7 +78,7 @@ const cs: ShopText = {
   },
   features: [
     { label: 'Profesionální design', desc: 'Responzivní šablona optimalizovaná pro konverze' },
-    { label: '3 000+ produktů', desc: 'Hodinky, šperky a příslušenství 70+ značek' },
+    { label: '15 000+ produktů', desc: 'Hodinky, šperky a příslušenství 65+ značek' },
     { label: 'Auto-sync katalogu', desc: 'Zásoby a ceny aktuální každé 2–6 hodin' },
     { label: 'SEO připravený', desc: 'Správná struktura, meta tagy, sitemap' },
     { label: 'Mobilní verze', desc: '60 %+ zákazníků nakupuje z mobilu' },
@@ -101,7 +101,7 @@ const cs: ShopText = {
     },
     {
       name: 'Business', desc: 'Kompletní řešení s dropshippingem',
-      features: ['E-shop setup (libovolná platforma)', 'Plný katalog 3 000+ produktů', 'swelt.feed (4× denní sync)', 'swelt.Dropshipping integrace', 'Premium design s brandingem', 'SEO + Heureka/Zbozi napojení', 'Prioritní podpora'],
+      features: ['E-shop setup (libovolná platforma)', 'Plný katalog 15 000+ produktů', 'swelt.feed (4× denní sync)', 'swelt.Dropshipping integrace', 'Premium design s brandingem', 'SEO + Heureka/Zbozi napojení', 'Prioritní podpora'],
       cta: 'Začít na Business', bespoke: 'Na míru',
     },
     {
@@ -134,7 +134,7 @@ const cs: ShopText = {
   ],
   faq: { heading: 'Nejčastější otázky', sub: 'Vše, co potřebujete vědět před spuštěním.' },
   faqs: [
-    { q: 'Co přesně dostanu v rámci swelt.shop?', a: 'Dostanete kompletně nastavenou e-commerce platformu (Shoptet, WooCommerce nebo jinou), naplněnou 3 000+ prémiových produktů s popisky, fotkami a kategoriemi. Katalog je automaticky propojený s naším feedem — ceny a zásoby se aktualizují samy. V Business plánu je součástí i dropshipping integrace, takže nemusíte vůbec nakupovat ani expedovat zboží.' },
+    { q: 'Co přesně dostanu v rámci swelt.shop?', a: 'Dostanete kompletně nastavenou e-commerce platformu (Shoptet, WooCommerce nebo jinou), naplněnou 15 000+ prémiových produktů s popisky, fotkami a kategoriemi. Katalog je automaticky propojený s naším feedem — ceny a zásoby se aktualizují samy. V Business plánu je součástí i dropshipping integrace, takže nemusíte vůbec nakupovat ani expedovat zboží.' },
     { q: 'Jak rychle budu mít e-shop spuštěný?', a: 'Standardně do 48 hodin od podpisu smlouvy. Při složitější konfiguraci nebo vlastním designu je to 3–5 pracovních dní. V každém případě dostanete přesný harmonogram hned na začátku.' },
     { q: 'Jaký je rozdíl mezi swelt.shop + Feed a swelt.shop + Dropshipping?', a: 'S Feed variantou dostanete e-shop napojený na katalog, ale zboží si musíte nakoupit sami a sami ho expedovat zákazníkům. S Dropshipping variantou nemusíte nic nakupovat ani skladovat — zákazník objedná u vás a my mu zboží zabalíme a odešleme přímo. Dropshipping varianta je výhodná pro ty, kdo chtějí minimální počáteční náklady.' },
     { q: 'Musím mít zkušenosti s e-commerce?', a: 'Vůbec ne. Celé nastavení řešíme my. Dostanete funkční e-shop s produkty, se kterým se naučíte pracovat za pár hodin. Součástí každého plánu je onboarding — provede vás vším, co potřebujete znát.' },
@@ -156,18 +156,18 @@ const en: ShopText = {
   hero: {
     badge: 'swelt.shop · Turnkey shop in 48 hours',
     heading: 'Your e-shop with premium goods. Ready. Loaded. Live.',
-    sub: 'Skip months of development and supplier hunting. Get a complete shop preloaded with 3,000+ premium products — ready to sell within 48 hours.',
+    sub: 'Skip months of development and supplier hunting. Get a complete shop preloaded with 15,000+ premium products — ready to sell within 48 hours.',
     ctaPrimary: 'I want my shop', ctaSecondary: 'Browse the demo',
-    bullets: ['Live within 48 hours', 'No e-commerce experience needed', '3,000+ products at launch', 'No commitment'],
+    bullets: ['Live within 48 hours', 'No e-commerce experience needed', '15,000+ products at launch', 'No commitment'],
   },
-  preview: { url: 'yourshop.com', updated: 'Catalog updated 2 hours ago', productCount: '3,000+ products', tabWatches: 'Watches', tabJewelry: 'Jewelry' },
+  preview: { url: 'yourshop.com', updated: 'Catalog updated 2 hours ago', productCount: '15,000+ products', tabWatches: 'Watches', tabJewelry: 'Jewelry' },
   stats: ['from order to launch', 'products in the catalog', 'premium brands', 'average margin below RRP'],
   modes: { eyebrow: 'Two paths', heading: 'Pick the model that fits you', sub: 'You get a turnkey shop in both cases. The difference is how you handle stock and dispatch.', cta: 'Learn more' },
   modeItems: [
     {
       name: 'swelt.shop + Dropshipping', tagline: 'You sell. We store and ship.', badge: 'Recommended',
       desc: 'Turnkey shop + dropshipping integration. Customer orders from you, we pack and ship under your name. No stock, no logistics.',
-      pros: ['No stock — no tied-up costs', 'Automatic dispatch under your brand', '3,000+ products online instantly', 'You only handle marketing and customers'],
+      pros: ['No stock — no tied-up costs', 'Automatic dispatch under your brand', '15,000+ products online instantly', 'You only handle marketing and customers'],
     },
     {
       name: 'swelt.shop + Feed', tagline: 'Turnkey shop. You handle stock yourself.', badge: 'Full control',
@@ -178,7 +178,7 @@ const en: ShopText = {
   howItWorks: { eyebrow: 'How it works', heading: 'From order to first sale in 48 hours', sub: 'We handle the whole setup. You just approve and start selling.', cta: 'Start setup' },
   steps: [
     { title: 'Pick a platform', desc: 'Shoptet, WooCommerce, Upgates or custom. We set up the shop tailored to your needs.' },
-    { title: 'Load the catalog', desc: 'We import 3,000+ products with proper descriptions, photos, prices and categories. You configure nothing.' },
+    { title: 'Load the catalog', desc: 'We import 15,000+ products with proper descriptions, photos, prices and categories. You configure nothing.' },
     { title: 'Connect the feed', desc: 'Stock and prices update automatically 1–4× per day. You never display unavailable goods.' },
     { title: 'Launch and sell', desc: 'You have a live shop within 48 hours. You focus on marketing — we handle the rest.' },
   ],
@@ -196,7 +196,7 @@ const en: ShopText = {
   },
   features: [
     { label: 'Professional design', desc: 'Responsive template optimized for conversions' },
-    { label: '3,000+ products', desc: 'Watches, jewelry and accessories from 70+ brands' },
+    { label: '15,000+ products', desc: 'Watches, jewelry and accessories from 65+ brands' },
     { label: 'Auto-sync catalog', desc: 'Stock and prices fresh every 2–6 hours' },
     { label: 'SEO ready', desc: 'Proper structure, meta tags, sitemap' },
     { label: 'Mobile version', desc: '60 %+ of customers shop on mobile' },
@@ -213,7 +213,7 @@ const en: ShopText = {
   },
   plans: [
     { name: 'Starter', desc: 'Quick start for the first shop', features: ['Shop setup on Shoptet / WooCommerce', 'Up to 500 products imported', 'swelt.feed (daily sync)', 'Responsive template', 'Basic SEO setup', 'Onboarding and support'], cta: 'Start with Starter', bespoke: 'Bespoke' },
-    { name: 'Business', desc: 'Complete solution with dropshipping', features: ['Shop setup (any platform)', 'Full catalog 3,000+ products', 'swelt.feed (4× daily sync)', 'swelt.Dropshipping integration', 'Premium design with branding', 'SEO + Heureka/Zbozi integration', 'Priority support'], cta: 'Start with Business', bespoke: 'Bespoke' },
+    { name: 'Business', desc: 'Complete solution with dropshipping', features: ['Shop setup (any platform)', 'Full catalog 15,000+ products', 'swelt.feed (4× daily sync)', 'swelt.Dropshipping integration', 'Premium design with branding', 'SEO + Heureka/Zbozi integration', 'Priority support'], cta: 'Start with Business', bespoke: 'Bespoke' },
     { name: 'Enterprise', desc: 'Bespoke solution', features: ['Everything from Business', 'Custom shop tailored to you', 'API integration and automation', 'White-label options', 'Dedicated project manager', 'SLA uptime guarantee'], cta: 'Contact sales', bespoke: 'Bespoke' },
   ],
   trust: {
@@ -236,7 +236,7 @@ const en: ShopText = {
   ],
   faq: { heading: 'Frequently asked questions', sub: 'Everything you need to know before launch.' },
   faqs: [
-    { q: 'What exactly do I get with swelt.shop?', a: 'You get a fully set up e-commerce platform (Shoptet, WooCommerce or other), preloaded with 3,000+ premium products with descriptions, photos and categories. The catalog is automatically connected to our feed — prices and stock update themselves. The Business plan also includes dropshipping integration, so you do not need to buy or ship any goods.' },
+    { q: 'What exactly do I get with swelt.shop?', a: 'You get a fully set up e-commerce platform (Shoptet, WooCommerce or other), preloaded with 15,000+ premium products with descriptions, photos and categories. The catalog is automatically connected to our feed — prices and stock update themselves. The Business plan also includes dropshipping integration, so you do not need to buy or ship any goods.' },
     { q: 'How fast will my shop be live?', a: 'Standard turnaround is 48 hours from contract signing. Complex configurations or custom designs take 3–5 business days. In any case you receive a precise schedule from the start.' },
     { q: 'What is the difference between swelt.shop + Feed and swelt.shop + Dropshipping?', a: 'With Feed you get a shop connected to the catalog, but you have to buy and ship goods yourself. With Dropshipping you do not buy or store anything — the customer orders from you and we pack and ship directly. Dropshipping is great for those who want minimal upfront cost.' },
     { q: 'Do I need e-commerce experience?', a: 'Not at all. We handle the whole setup. You get a working shop with products and learn to operate it within hours. Onboarding is included in every plan — it walks you through everything.' },

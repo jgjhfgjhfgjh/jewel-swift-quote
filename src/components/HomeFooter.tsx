@@ -101,7 +101,7 @@ export function HomeFooter() {
             <GoBigDealLogo className="text-2xl text-white" />
           </button>
           <p className="text-[#999999] text-sm leading-relaxed mt-3 max-w-xs">
-            Velkoobchod prémiových hodinek a šperků. 70+ značek, ceny od 1 kusu, doručení po celé EU.
+            Velkoobchod prémiových hodinek a šperků. 65+ značek, ceny od 1 kusu, doručení po celé EU.
           </p>
           <button
             onClick={() => navigate('/register')}
@@ -146,8 +146,8 @@ export function HomeFooter() {
             { icon: ShieldCheck, t: '100% garance pravosti' },
             { icon: Truck, t: 'Doručení do EU 72 h' },
             { icon: Award, t: '15+ let na trhu' },
-            { icon: Package, t: '3 000+ produktů' },
-            { icon: Star, t: '70+ značek' },
+            { icon: Package, t: '15 000+ produktů' },
+            { icon: Star, t: '65+ značek' },
           ].map(({ icon: Icon, t }) => (
             <span key={t} className="inline-flex items-center gap-2">
               <Icon className="h-4 w-4 text-[#66696e]" /> {t}

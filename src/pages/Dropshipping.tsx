@@ -51,7 +51,7 @@ function SeoHead() {
       '@context': 'https://schema.org',
       '@type': 'Service',
       name: 'swelt.partner Dropshipping',
-      description: 'Dropshipping prémiových hodinek, šperků a módních doplňků pro české a slovenské e-shopy. 70+ značek, white-label expedice do 24–72 h, real-time synchronizace zásob, swelt.signal AI.',
+      description: 'Dropshipping prémiových hodinek, šperků a módních doplňků pro české a slovenské e-shopy. 65+ značek, white-label expedice do 24–72 h, real-time synchronizace zásob, swelt.signal AI.',
       provider: { '@type': 'Organization', name: 'swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
@@ -487,7 +487,7 @@ const Dropshipping = () => {
 
   const heroStats = [
     { value: '15+', label: d.hero.statLabels[0] },
-    { value: '70+', label: d.hero.statLabels[1] },
+    { value: '65+', label: d.hero.statLabels[1] },
     { value: '500+', label: d.hero.statLabels[2] },
   ];
 

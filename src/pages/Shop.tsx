@@ -183,7 +183,7 @@ function ShopPreview() {
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           Zboží aktualizováno před 2 hod.
         </span>
-        <span className="text-[10px] text-slate-400">3 000+ produktů</span>
+        <span className="text-[10px] text-slate-400">15 000+ produktů</span>
       </div>
     </div>
   );

@@ -32,11 +32,11 @@ const cs: LuxuryText = {
     h1Part1: 'Prémiové hodinky a šperky.',
     h1Highlight: 'Bez kompromisů.',
     h1Part2: 'Za velkoobchodní ceny.',
-    sub: 'Exkluzivní přístup k 3 000+ produktům světových značek. Pro soukromé osoby i firmy. Bez nutnosti IČO. Dostupné od 1 kusu.',
+    sub: 'Exkluzivní přístup k 15 000+ produktům světových značek. Pro soukromé osoby i firmy. Bez nutnosti IČO. Dostupné od 1 kusu.',
     ctaInquiry: 'Odeslat poptávku', ctaBrands: 'Prohlédnout značky',
     pills: ['Od 1 kusu', 'Bez nutnosti IČO', 'Doručení EU do 72h'],
-    sampleLabel: 'Ukázka katalogu', productCount: '3 000+ produktů',
-    brandsLabel: 'Značky v katalogu:', moreCount: '+65 dalších',
+    sampleLabel: 'Ukázka katalogu', productCount: '15 000+ produktů',
+    brandsLabel: 'Značky v katalogu:', moreCount: '+60 dalších',
   },
   stats: ['Produktů v katalogu', 'Světových značek', 'Průměrná úspora', 'Zemí doručení'],
   benefits: {
@@ -50,12 +50,12 @@ const cs: LuxuryText = {
   howItWorks: {
     eyebrow: 'Jak to funguje', heading: 'Tři kroky k vašemu produktu',
     steps: [
-      { title: 'Popište, co hledáte', text: 'Vyplňte formulář nebo nám napište. Máme katalog 3 000+ produktů 70+ světových značek. Nevíte přesně? Poradíme.' },
+      { title: 'Popište, co hledáte', text: 'Vyplňte formulář nebo nám napište. Máme katalog 15 000+ produktů 65+ světových značek. Nevíte přesně? Poradíme.' },
       { title: 'Obdržíte nabídku do 24 hodin', text: 'Odešleme vám přesnou cenovou nabídku s aktuální dostupností a velkoobchodní cenou. Bez závazku, bez poplatku.' },
       { title: 'Zásilka přímo k vám', text: 'Po potvrzení a platbě expedujeme do 24–48 hodin. Diskrétní balení, pojištěná zásilka, sledování zásilky online.' },
     ],
   },
-  brandsStrip: '70+ světových značek — výběr z katalogu',
+  brandsStrip: '65+ světových značek — výběr z katalogu',
   inquiry: {
     eyebrow: 'Poptávkový formulář', heading: 'Napište nám, co hledáte',
     submitted: 'Poptávka odeslána!', submittedSub: 'Odpovíme vám do 24 hodin na',
@@ -101,11 +101,11 @@ const en: LuxuryText = {
     h1Part1: 'Premium watches and jewelry.',
     h1Highlight: 'No compromises.',
     h1Part2: 'At wholesale prices.',
-    sub: 'Exclusive access to 3,000+ products from world brands. For individuals and companies. No VAT ID required. Available from 1 piece.',
+    sub: 'Exclusive access to 15,000+ products from world brands. For individuals and companies. No VAT ID required. Available from 1 piece.',
     ctaInquiry: 'Send inquiry', ctaBrands: 'Browse brands',
     pills: ['From 1 piece', 'No VAT ID required', 'EU delivery in 72h'],
-    sampleLabel: 'Catalog sample', productCount: '3,000+ products',
-    brandsLabel: 'Brands in the catalog:', moreCount: '+65 more',
+    sampleLabel: 'Catalog sample', productCount: '15,000+ products',
+    brandsLabel: 'Brands in the catalog:', moreCount: '+60 more',
   },
   stats: ['Products in catalog', 'World brands', 'Average savings', 'Delivery countries'],
   benefits: {
@@ -119,12 +119,12 @@ const en: LuxuryText = {
   howItWorks: {
     eyebrow: 'How it works', heading: 'Three steps to your product',
     steps: [
-      { title: 'Tell us what you are looking for', text: 'Fill out the form or write to us. We have a catalog of 3,000+ products from 70+ world brands. Not sure? We will help.' },
+      { title: 'Tell us what you are looking for', text: 'Fill out the form or write to us. We have a catalog of 15,000+ products from 65+ world brands. Not sure? We will help.' },
       { title: 'Receive a quote within 24 hours', text: 'We will send a precise quote with current availability and wholesale price. No commitment, no fee.' },
       { title: 'Shipment direct to you', text: 'After confirmation and payment we dispatch within 24–48 hours. Discreet packaging, insured shipment, online tracking.' },
     ],
   },
-  brandsStrip: '70+ world brands — selection from the catalog',
+  brandsStrip: '65+ world brands — selection from the catalog',
   inquiry: {
     eyebrow: 'Inquiry form', heading: 'Tell us what you are looking for',
     submitted: 'Inquiry sent!', submittedSub: 'We will reply within 24 hours to',

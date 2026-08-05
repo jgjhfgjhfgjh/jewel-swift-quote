@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-02T10:58:11.930Z",
+  "generatedAt": "2026-08-05T00:50:29.758Z",
   "langs": [
     "cs",
     "sk",
@@ -20,79 +20,79 @@
     "el",
     "is"
   ],
-  "totalStrings": 1584,
+  "totalStrings": 1605,
   "langCoverage": {
     "cs": {
-      "present": 1444,
-      "total": 1584
+      "present": 1463,
+      "total": 1605
     },
     "sk": {
       "present": 216,
-      "total": 1584
+      "total": 1605
     },
     "pl": {
       "present": 117,
-      "total": 1584
+      "total": 1605
     },
     "de": {
       "present": 215,
-      "total": 1584
+      "total": 1605
     },
     "en": {
-      "present": 1577,
-      "total": 1584
+      "present": 1598,
+      "total": 1605
     },
     "fr": {
       "present": 115,
-      "total": 1584
+      "total": 1605
     },
     "es": {
       "present": 116,
-      "total": 1584
+      "total": 1605
     },
     "it": {
       "present": 114,
-      "total": 1584
+      "total": 1605
     },
     "nl": {
       "present": 116,
-      "total": 1584
+      "total": 1605
     },
     "pt": {
       "present": 116,
-      "total": 1584
+      "total": 1605
     },
     "hu": {
       "present": 117,
-      "total": 1584
+      "total": 1605
     },
     "ro": {
       "present": 115,
-      "total": 1584
+      "total": 1605
     },
     "sv": {
       "present": 119,
-      "total": 1584
+      "total": 1605
     },
     "da": {
       "present": 116,
-      "total": 1584
+      "total": 1605
     },
     "fi": {
       "present": 119,
-      "total": 1584
+      "total": 1605
     },
     "no": {
       "present": 118,
-      "total": 1584
+      "total": 1605
     },
     "el": {
       "present": 117,
-      "total": 1584
+      "total": 1605
     },
     "is": {
       "present": 119,
-      "total": 1584
+      "total": 1605
     }
   },
   "groups": [
@@ -3366,8 +3366,8 @@
             },
             {
               "keyPath": "velkoobchod.subheading",
-              "cs": "Katalog 3 000+ produktů 70+ světových značek. Aktuální ceny a zásoby v reálném čase. Pro firmy s IČO.",
-              "en": "Catalog of 3,000+ products from 70+ world brands. Real-time prices and stock. For companies with VAT ID.",
+              "cs": "Katalog 15 000+ produktů 65+ světových značek. Aktuální ceny a zásoby v reálném čase. Pro firmy s IČO.",
+              "en": "Catalog of 15,000+ products from 65+ world brands. Real-time prices and stock. For companies with VAT ID.",
               "langsPresent": [
                 "cs",
                 "sk",
@@ -3922,8 +3922,8 @@
             },
             {
               "keyPath": "feed.subheading",
-              "cs": "Automatický XML/CSV feed 3 000+ prémiových produktů. Heureka, Zboží.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.",
-              "en": "Automatic XML/CSV feed of 3,000+ premium products. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronized hands-free.",
+              "cs": "Automatický XML/CSV feed 15 000+ prémiových produktů. Heureka, Zboží.cz, Google Shopping, Shoptet — synchronizované bez práce z vaší strany.",
+              "en": "Automatic XML/CSV feed of 15,000+ premium products. Heureka, Zbozi.cz, Google Shopping, Shoptet — synchronized hands-free.",
               "langsPresent": [
                 "cs",
                 "sk",
@@ -4505,8 +4505,8 @@
             },
             {
               "keyPath": "shop.subheading",
-              "cs": "Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ produkty — připravený k prodeji ihned.",
-              "en": "Skip months of development and supplier hunting. Get a complete e-shop preloaded with 3,000+ products — ready to sell.",
+              "cs": "Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 15 000+ produkty — připravený k prodeji ihned.",
+              "en": "Skip months of development and supplier hunting. Get a complete e-shop preloaded with 15,000+ products — ready to sell.",
               "langsPresent": [
                 "cs",
                 "sk",
@@ -4559,8 +4559,8 @@
             },
             {
               "keyPath": "shop.bullets[1]",
-              "cs": "3 000+ produktů importovaných hned od začátku",
-              "en": "3,000+ products imported from day one",
+              "cs": "15 000+ produktů importovaných hned od začátku",
+              "en": "15,000+ products imported from day one",
               "langsPresent": [
                 "cs",
                 "sk",
@@ -6409,8 +6409,8 @@
             },
             {
               "keyPath": "hero.sub",
-              "cs": "3 000+ produktů, 70+ světových značek, marže 40–65 %. Žádní prostředníci, žádné zbytečné přirážky. Registrace zdarma — schválení do 24 hodin.",
-              "en": "3,000+ products, 70+ world brands, margins 40–65 %. No middlemen, no extra markups. Free registration — approval within 24 hours.",
+              "cs": "15 000+ produktů, 65+ světových značek, marže 40–65 %. Žádní prostředníci, žádné zbytečné přirážky. Registrace zdarma — schválení do 24 hodin.",
+              "en": "15,000+ products, 65+ world brands, margins 40–65 %. No middlemen, no extra markups. Free registration — approval within 24 hours.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -6857,8 +6857,8 @@
             },
             {
               "keyPath": "preview.p2",
-              "cs": "Uvidíte celý sortiment: 3 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC). Takže si rovnou spočítáte, jaké marže vás čekají.",
-              "en": "You will see the entire range: 3,000+ products, photos, real-time stock and recommended retail prices (RRP). So you can immediately calculate the margins you can expect.",
+              "cs": "Uvidíte celý sortiment: 15 000+ produktů, fotky, dostupnost v reálném čase a doporučené maloobchodní ceny (MOC). Takže si rovnou spočítáte, jaké marže vás čekají.",
+              "en": "You will see the entire range: 15,000+ products, photos, real-time stock and recommended retail prices (RRP). So you can immediately calculate the margins you can expect.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8174,8 +8174,8 @@
             },
             {
               "keyPath": "steps[3].desc",
-              "cs": "Prohlédněte si 3 000+ produktů, zadejte objednávku, my se postaráme o expedici do 24–48 hodin.",
-              "en": "Browse 3,000+ products, place an order, and we will handle dispatch within 24–48 hours.",
+              "cs": "Prohlédněte si 15 000+ produktů, zadejte objednávku, my se postaráme o expedici do 24–48 hodin.",
+              "en": "Browse 15,000+ products, place an order, and we will handle dispatch within 24–48 hours.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8263,8 +8263,8 @@
             },
             {
               "keyPath": "catalog.sub",
-              "cs": "Přímý přístup k 3 000+ prémiových hodinek a šperků. Vše skladem, vše s aktuálními velkoobchodními cenami a přesným přehledem zásob.",
-              "en": "Direct access to 3,000+ premium watches and jewelry. Everything in stock, with current wholesale prices and accurate stock visibility.",
+              "cs": "Přímý přístup k 15 000+ prémiovým hodinkám a šperkům, 8 000+ položek ihned skladem — vše s aktuálními velkoobchodními cenami a přesným přehledem zásob.",
+              "en": "Direct access to 15,000+ premium watches and jewelry, 8,000+ items in stock right now — with current wholesale prices and accurate stock visibility.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8290,8 +8290,8 @@
             },
             {
               "keyPath": "catalog.brandsLabel",
-              "cs": "70+ značek dostupných od prvního kusu",
-              "en": "70+ brands available from the first piece",
+              "cs": "65+ značek dostupných od prvního kusu",
+              "en": "65+ brands available from the first piece",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8317,8 +8317,8 @@
             },
             {
               "keyPath": "catalog.brandsMore",
-              "cs": "+50 dalších →",
-              "en": "+50 more →",
+              "cs": "+40 dalších →",
+              "en": "+40 more →",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8352,8 +8352,8 @@
           "strings": [
             {
               "keyPath": "features[0].label",
-              "cs": "3 000+ produktů",
-              "en": "3,000+ products",
+              "cs": "15 000+ produktů",
+              "en": "15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -8406,8 +8406,8 @@
             },
             {
               "keyPath": "features[1].label",
-              "cs": "70+ světových značek",
-              "en": "70+ world brands",
+              "cs": "65+ světových značek",
+              "en": "65+ world brands",
               "langsPresent": [
                 "cs",
                 "en"
@@ -9815,8 +9815,8 @@
             },
             {
               "keyPath": "ecosystemItems[0].desc",
-              "cs": "Automatický XML/CSV feed 3 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.",
-              "en": "Automatic XML/CSV feed of 3,000+ products. Sync your shop with no manual work.",
+              "cs": "Automatický XML/CSV feed 15 000+ produktů. Synchronizujte katalog s vaším e-shopem bez jakékoliv manuální práce.",
+              "en": "Automatic XML/CSV feed of 15,000+ products. Sync your shop with no manual work.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -10595,8 +10595,8 @@
             },
             {
               "keyPath": "finalCta.bottomSub",
-              "cs": "Registrace zdarma. Schválení do 24 hodin. Přístup k 3 000+ produktům s marží 40–65 %.",
-              "en": "Free registration. Approval in 24 hours. Access to 3,000+ products with 40–65 % margins.",
+              "cs": "Registrace zdarma. Schválení do 24 hodin. Přístup k 15 000+ produktům s marží 40–65 %.",
+              "en": "Free registration. Approval in 24 hours. Access to 15,000+ products with 40–65 % margins.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -10800,8 +10800,8 @@
             },
             {
               "keyPath": "whySwelt.bullets[0]",
-              "cs": "Přímé partnerství s 70+ světovými značkami",
-              "en": "Direct partnership with 70+ world brands",
+              "cs": "Přímé partnerství s 65+ světovými značkami",
+              "en": "Direct partnership with 65+ world brands",
               "langsPresent": [
                 "cs",
                 "en"
@@ -11667,8 +11667,8 @@
             },
             {
               "keyPath": "hero.sub",
-              "cs": "Vyberte si z 3 000+ produktů od 70+ světových značek. My zabalíme, zkontrolujeme a odešleme — pod vaší značkou do 24–72 hodin. Real-time inventory lock hlídá přeprodej, swelt.signal vám každý týden řekne, co zákazníci právě chtějí.",
-              "en": "Pick from 3,000+ products by 70+ world brands. We pack, inspect and ship — under your brand within 24–72 hours. Real-time inventory lock stops overselling, swelt.signal tells you every week what customers want right now.",
+              "cs": "Vyberte si z 15 000+ produktů od 65+ světových značek. My zabalíme, zkontrolujeme a odešleme — pod vaší značkou do 24–72 hodin. Real-time inventory lock hlídá přeprodej, swelt.signal vám každý týden řekne, co zákazníci právě chtějí.",
+              "en": "Pick from 15,000+ products by 65+ world brands. We pack, inspect and ship — under your brand within 24–72 hours. Real-time inventory lock stops overselling, swelt.signal tells you every week what customers want right now.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -13068,8 +13068,8 @@
             },
             {
               "keyPath": "shopUpsell.sub",
-              "cs": "swelt.signal je product intelligence pro váš sortiment — týdenní digest trendů z katalogu 3 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást plánů Silver a Gold.",
-              "en": "swelt.signal is product intelligence for your assortment — a weekly trend digest across the 3,000+ product catalog with AI recommendations on what to add, what to drop and when. Included in the Silver and Gold plans.",
+              "cs": "swelt.signal je product intelligence pro váš sortiment — týdenní digest trendů z katalogu 15 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást plánů Silver a Gold.",
+              "en": "swelt.signal is product intelligence for your assortment — a weekly trend digest across the 15,000+ product catalog with AI recommendations on what to add, what to drop and when. Included in the Silver and Gold plans.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -15540,8 +15540,8 @@
             },
             {
               "keyPath": "calc.plans[1].features[0]",
-              "cs": "Celý katalog 3 000+ produktů",
-              "en": "Full catalog of 3,000+ products",
+              "cs": "Celý katalog 15 000+ produktů",
+              "en": "Full catalog of 15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -16142,8 +16142,8 @@
             },
             {
               "keyPath": "usps.items[0].title",
-              "cs": "70+ prémiových značek",
-              "en": "70+ premium brands",
+              "cs": "65+ prémiových značek",
+              "en": "65+ premium brands",
               "langsPresent": [
                 "cs",
                 "en"
@@ -16744,8 +16744,8 @@
             },
             {
               "keyPath": "statsBand[1].value",
-              "cs": "70+",
-              "en": "70+",
+              "cs": "65+",
+              "en": "65+",
               "langsPresent": [
                 "en"
               ],
@@ -16798,8 +16798,8 @@
             },
             {
               "keyPath": "statsBand[2].value",
-              "cs": "3 000+",
-              "en": "3,000+",
+              "cs": "15 000+",
+              "en": "15,000+",
               "langsPresent": [
                 "cs",
                 "en"
@@ -18439,7 +18439,7 @@
             },
             {
               "keyPath": "pricing.allPrev",
-              "cs": "Vše z",
+              "cs": "Vše ze",
               "en": "Everything from",
               "langsPresent": [
                 "cs",
@@ -19005,8 +19005,8 @@
             },
             {
               "keyPath": "pricing.tiers[1].features[0]",
-              "cs": "Celý katalog 3 000+ produktů",
-              "en": "Full catalog of 3,000+ products",
+              "cs": "Celý katalog 15 000+ produktů",
+              "en": "Full catalog of 15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -21484,8 +21484,8 @@
             },
             {
               "keyPath": "hero.sub",
-              "cs": "Exkluzivní přístup k 3 000+ produktům světových značek. Pro soukromé osoby i firmy. Bez nutnosti IČO. Dostupné od 1 kusu.",
-              "en": "Exclusive access to 3,000+ products from world brands. For individuals and companies. No VAT ID required. Available from 1 piece.",
+              "cs": "Exkluzivní přístup k 15 000+ produktům světových značek. Pro soukromé osoby i firmy. Bez nutnosti IČO. Dostupné od 1 kusu.",
+              "en": "Exclusive access to 15,000+ products from world brands. For individuals and companies. No VAT ID required. Available from 1 piece.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -21673,8 +21673,8 @@
             },
             {
               "keyPath": "hero.productCount",
-              "cs": "3 000+ produktů",
-              "en": "3,000+ products",
+              "cs": "15 000+ produktů",
+              "en": "15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -21727,8 +21727,8 @@
             },
             {
               "keyPath": "hero.moreCount",
-              "cs": "+65 dalších",
-              "en": "+65 more",
+              "cs": "+60 dalších",
+              "en": "+60 more",
               "langsPresent": [
                 "cs",
                 "en"
@@ -22183,8 +22183,8 @@
             },
             {
               "keyPath": "howItWorks.steps[0].text",
-              "cs": "Vyplňte formulář nebo nám napište. Máme katalog 3 000+ produktů 70+ světových značek. Nevíte přesně? Poradíme.",
-              "en": "Fill out the form or write to us. We have a catalog of 3,000+ products from 70+ world brands. Not sure? We will help.",
+              "cs": "Vyplňte formulář nebo nám napište. Máme katalog 15 000+ produktů 65+ světových značek. Nevíte přesně? Poradíme.",
+              "en": "Fill out the form or write to us. We have a catalog of 15,000+ products from 65+ world brands. Not sure? We will help.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -22326,8 +22326,8 @@
           "strings": [
             {
               "keyPath": "brandsStrip",
-              "cs": "70+ světových značek — výběr z katalogu",
-              "en": "70+ world brands — selection from the catalog",
+              "cs": "65+ světových značek — výběr z katalogu",
+              "en": "65+ world brands — selection from the catalog",
               "langsPresent": [
                 "cs",
                 "en"
@@ -24394,8 +24394,8 @@
             },
             {
               "keyPath": "hero.sub",
-              "cs": "Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 3 000+ prémiovými produkty — připravený k prodeji do 48 hodin.",
-              "en": "Skip months of development and supplier hunting. Get a complete shop preloaded with 3,000+ premium products — ready to sell within 48 hours.",
+              "cs": "Zapomeňte na měsíce vývoje a hledání dodavatelů. Dostanete kompletní e-shop naplněný 15 000+ prémiovými produkty — připravený k prodeji do 48 hodin.",
+              "en": "Skip months of development and supplier hunting. Get a complete shop preloaded with 15,000+ premium products — ready to sell within 48 hours.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -24529,8 +24529,8 @@
             },
             {
               "keyPath": "hero.bullets[2]",
-              "cs": "3 000+ produktů hned",
-              "en": "3,000+ products at launch",
+              "cs": "15 000+ produktů hned",
+              "en": "15,000+ products at launch",
               "langsPresent": [
                 "cs",
                 "en"
@@ -24645,8 +24645,8 @@
             },
             {
               "keyPath": "preview.productCount",
-              "cs": "3 000+ produktů",
-              "en": "3,000+ products",
+              "cs": "15 000+ produktů",
+              "en": "15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -25128,8 +25128,8 @@
             },
             {
               "keyPath": "modeItems[0].pros[2]",
-              "cs": "Okamžitě 3 000+ produktů online",
-              "en": "3,000+ products online instantly",
+              "cs": "Okamžitě 15 000+ produktů online",
+              "en": "15,000+ products online instantly",
               "langsPresent": [
                 "cs",
                 "en"
@@ -25603,8 +25603,8 @@
             },
             {
               "keyPath": "steps[1].desc",
-              "cs": "Importujeme 3 000+ produktů se správnými popisky, fotkami, cenami a kategoriemi. Vy nenastavujete nic.",
-              "en": "We import 3,000+ products with proper descriptions, photos, prices and categories. You configure nothing.",
+              "cs": "Importujeme 15 000+ produktů se správnými popisky, fotkami, cenami a kategoriemi. Vy nenastavujete nic.",
+              "en": "We import 15,000+ products with proper descriptions, photos, prices and categories. You configure nothing.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -26051,8 +26051,8 @@
             },
             {
               "keyPath": "features[1].label",
-              "cs": "3 000+ produktů",
-              "en": "3,000+ products",
+              "cs": "15 000+ produktů",
+              "en": "15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -26078,8 +26078,8 @@
             },
             {
               "keyPath": "features[1].desc",
-              "cs": "Hodinky, šperky a příslušenství 70+ značek",
-              "en": "Watches, jewelry and accessories from 70+ brands",
+              "cs": "Hodinky, šperky a příslušenství 65+ značek",
+              "en": "Watches, jewelry and accessories from 65+ brands",
               "langsPresent": [
                 "cs",
                 "en"
@@ -27039,8 +27039,8 @@
             },
             {
               "keyPath": "plans[1].features[1]",
-              "cs": "Plný katalog 3 000+ produktů",
-              "en": "Full catalog 3,000+ products",
+              "cs": "Plný katalog 15 000+ produktů",
+              "en": "Full catalog 15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -28410,8 +28410,8 @@
             },
             {
               "keyPath": "faqs[0].a",
-              "cs": "Dostanete kompletně nastavenou e-commerce platformu (Shoptet, WooCommerce nebo jinou), naplněnou 3 000+ prémiových produktů s popisky, fotkami a kategoriemi. Katalog je automaticky propojený s naším feedem — ceny a zásoby se aktualizují samy. V Business plánu je součástí i dropshipping integrace, takže nemusíte vůbec nakupovat ani expedovat zboží.",
-              "en": "You get a fully set up e-commerce platform (Shoptet, WooCommerce or other), preloaded with 3,000+ premium products with descriptions, photos and categories. The catalog is automatically connected to our feed — prices and stock update themselves. The Business plan also includes dropshipping integration, so you do not need to buy or ship any goods.",
+              "cs": "Dostanete kompletně nastavenou e-commerce platformu (Shoptet, WooCommerce nebo jinou), naplněnou 15 000+ prémiových produktů s popisky, fotkami a kategoriemi. Katalog je automaticky propojený s naším feedem — ceny a zásoby se aktualizují samy. V Business plánu je součástí i dropshipping integrace, takže nemusíte vůbec nakupovat ani expedovat zboží.",
+              "en": "You get a fully set up e-commerce platform (Shoptet, WooCommerce or other), preloaded with 15,000+ premium products with descriptions, photos and categories. The catalog is automatically connected to our feed — prices and stock update themselves. The Business plan also includes dropshipping integration, so you do not need to buy or ship any goods.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -29226,8 +29226,8 @@
             },
             {
               "keyPath": "hero.sub1Post",
-              "cs": " a my vám propojíme e-shop s naším katalogem 3 000+ prémiových hodinek a doplňků — žádné technické znalosti nejsou potřeba.",
-              "en": " and we will connect your shop to our catalog of 3,000+ premium watches and accessories — no technical skills needed.",
+              "cs": " a my vám propojíme e-shop s naším katalogem 15 000+ prémiových hodinek a doplňků — žádné technické znalosti nejsou potřeba.",
+              "en": " and we will connect your shop to our catalog of 15,000+ premium watches and accessories — no technical skills needed.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -29388,8 +29388,8 @@
             },
             {
               "keyPath": "hero.bullets[0]",
-              "cs": "3 000+ produktů",
-              "en": "3,000+ products",
+              "cs": "15 000+ produktů",
+              "en": "15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -30211,8 +30211,8 @@
             },
             {
               "keyPath": "catalog.heading",
-              "cs": "3 000+ produktů připravených k prodeji",
-              "en": "3,000+ products ready to sell",
+              "cs": "15 000+ produktů připravených k prodeji",
+              "en": "15,000+ products ready to sell",
               "langsPresent": [
                 "cs",
                 "en"
@@ -31835,8 +31835,8 @@
             },
             {
               "keyPath": "plans[1].features[1]",
-              "cs": "Celý katalog — 3 000+ produktů",
-              "en": "Full catalog — 3,000+ products",
+              "cs": "Celý katalog — 15 000+ produktů",
+              "en": "Full catalog — 15,000+ products",
               "langsPresent": [
                 "cs",
                 "en"
@@ -32418,8 +32418,8 @@
             },
             {
               "keyPath": "faqs[0].a",
-              "cs": "swelt.feed je služba, která automaticky přenese náš katalog 3 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.",
-              "en": "swelt.feed is a service that automatically transfers our catalog of 3,000+ premium watches and jewelry to your shop. Pick a plan, we prepare the feed file with products, prices and availability — your shop reads it once or four times a day automatically. No manual copying, no stale prices.",
+              "cs": "swelt.feed je služba, která automaticky přenese náš katalog 15 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.",
+              "en": "swelt.feed is a service that automatically transfers our catalog of 15,000+ premium watches and jewelry to your shop. Pick a plan, we prepare the feed file with products, prices and availability — your shop reads it once or four times a day automatically. No manual copying, no stale prices.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -33493,8 +33493,8 @@
             },
             {
               "keyPath": "stats.early",
-              "cs": "Náskok pro PRO",
-              "en": "Head start for PRO",
+              "cs": "Náskok s Early Access",
+              "en": "Head start with Early Access",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34057,8 +34057,8 @@
             },
             {
               "keyPath": "active.emptySub",
-              "cs": "Zapněte si alert a budete u toho, jakmile deal spadne — partneři s PRO ho uvidí o 48 hodin dřív. Zatím se podívejte, jak dopadly předchozí dávky.",
-              "en": "Turn on an alert and you will be there the moment a deal drops — PRO partners see it 48 hours earlier. In the meantime, take a look at how the previous batches went.",
+              "cs": "Zapněte si alert a budete u toho, jakmile deal spadne — partneři s Early Access ho uvidí o 48 hodin dřív. Zatím se podívejte, jak dopadly předchozí dávky.",
+              "en": "Turn on an alert and you will be there the moment a deal drops — Early Access partners see it 48 hours earlier. In the meantime, take a look at how the previous batches went.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34200,8 +34200,8 @@
             },
             {
               "keyPath": "early.headingMuted",
-              "cs": "PRO ho má o 48 hodin dřív.",
-              "en": "PRO gets it 48 hours earlier.",
+              "cs": "Early Access ho má o 48 hodin dřív.",
+              "en": "Early Access gets it 48 hours earlier.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34227,8 +34227,8 @@
             },
             {
               "keyPath": "early.body",
-              "cs": "Dávka má pevný počet kusů a nejžádanější reference mizí první. PRO otevírá každý deal dva dny před veřejným startem a hlídá koncerny, značky i jednotlivé modely — vybíráte z plného katalogu, ne ze zbytků.",
-              "en": "A batch holds a fixed number of units and the most wanted references go first. PRO opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.",
+              "cs": "Dávka má pevný počet kusů a nejžádanější reference mizí první. Early Access otevírá každý deal dva dny před veřejným startem a hlídá koncerny, značky i jednotlivé modely — vybíráte z plného katalogu, ne ze zbytků.",
+              "en": "A batch holds a fixed number of units and the most wanted references go first. Early Access opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34389,8 +34389,8 @@
             },
             {
               "keyPath": "early.ctaPro",
-              "cs": "Zobrazit tarify PRO",
-              "en": "See PRO plans",
+              "cs": "Zobrazit Early Access",
+              "en": "See Early Access",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34868,12 +34868,12 @@
           "key": "catalog",
           "label": "Catalog",
           "nodeId": "deals::dealsI18n.catalog",
-          "stringCount": 34,
+          "stringCount": 55,
           "strings": [
             {
               "keyPath": "catalog.headingLead",
-              "cs": "Katalog dávek.",
-              "en": "The batch catalog.",
+              "cs": "Nejlepší Dealy z Evropy",
+              "en": "The best Deals from Europe",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34899,8 +34899,8 @@
             },
             {
               "keyPath": "catalog.headingMuted",
-              "cs": "Vyberte koncern, značku a slevu.",
-              "en": "Pick a concern, a brand and your discount.",
+              "cs": "na jednom místě. Jedna objednávka, jedna faktura,",
+              "en": "in one place. One order, one invoice,",
               "langsPresent": [
                 "cs",
                 "en"
@@ -34925,9 +34925,9 @@
               ]
             },
             {
-              "keyPath": "catalog.sub",
-              "cs": "Nejlepší closeout dávky na jednom místě — jedna objednávka, jedna faktura, žádná registrace u desítek velkoobchodů. Filtrujte podle koncernu nebo značky.",
-              "en": "The best closeout batches in one place — one order, one invoice, no signing up with dozens of wholesalers. Filter by concern or brand.",
+              "keyPath": "catalog.headingAccent",
+              "cs": "žádná registrace u desítek velkoobchodů napříč Evropou.",
+              "en": "no signing up with dozens of wholesalers across Europe.",
               "langsPresent": [
                 "cs",
                 "en"
@@ -35770,6 +35770,573 @@
                 "en"
               ],
               "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.eyebrow",
+              "cs": "B2B closeout trh · Evropa",
+              "en": "B2B closeout market · Europe",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.ctaRegister",
+              "cs": "Registrovat zdarma",
+              "en": "Register free",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiLiveAlert",
+              "cs": "Nastavit alert na další dávku",
+              "en": "Set an alert for the next batch",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.earlyBadge",
+              "cs": "48 h Early Access",
+              "en": "48h Early Access",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.earlyBadgeHint",
+              "cs": "Zobrazit ceník",
+              "en": "See pricing",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiLive",
+              "cs": "Živé dávky",
+              "en": "Live batches",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiModels",
+              "cs": "Modelů v katalogu",
+              "en": "Models in catalog",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiDiscount",
+              "cs": "Sleva až",
+              "en": "Discount up to",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiDeadline",
+              "cs": "Nejbližší uzávěrka",
+              "en": "Next deadline",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiNextStart",
+              "cs": "Nejbližší start",
+              "en": "Next start",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.kpiConcerns",
+              "cs": "Koncernů v katalogu",
+              "en": "Concerns in catalog",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.sortEnding",
+              "cs": "Končí nejdřív",
+              "en": "Ending first",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.sortDiscount",
+              "cs": "Nejvyšší sleva",
+              "en": "Biggest discount",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.sortModels",
+              "cs": "Nejvíc modelů",
+              "en": "Most models",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.sortNewest",
+              "cs": "Nejnovější",
+              "en": "Newest",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.viewGrid",
+              "cs": "Mřížka",
+              "en": "Grid",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.viewList",
+              "cs": "Seznam",
+              "en": "List",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.secLive",
+              "cs": "Živé dávky",
+              "en": "Live batches",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.live",
+              "cs": "{n} live",
+              "en": "{n} live",
+              "langsPresent": [
+                "en"
+              ],
+              "langsMissing": [
+                "cs",
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.soon",
+              "cs": "brzy",
+              "en": "soon",
+              "langsPresent": [
+                "cs",
+                "en"
+              ],
+              "langsMissing": [
+                "sk",
+                "pl",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+                "pt",
+                "hu",
+                "ro",
+                "sv",
+                "da",
+                "fi",
+                "no",
+                "el",
+                "is"
+              ]
+            },
+            {
+              "keyPath": "catalog.dash.eyebrowPro",
+              "cs": "Early Access",
+              "en": "Early Access",
+              "langsPresent": [
+                "en"
+              ],
+              "langsMissing": [
+                "cs",
                 "sk",
                 "pl",
                 "de",
@@ -38579,7 +39146,7 @@
           ]
         }
       ],
-      "stringCount": 194
+      "stringCount": 215
     },
     {
       "file": "i18n-checkout.ts",

@@ -41,17 +41,17 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'katalog',      label: 'Catalog' },
 ];
 
-/* Mobile sheet — mega menu je desktop-only, mobil si nechává plochý seznam. */
-const HOME_NAV_ITEMS = [
-  { path: '/deals',        label: 'GoBigDeal' },
-  { path: '/velkoobchod',  label: 'Velkoobchod' },
-  { path: '/dropshipping', label: 'Dropshipping' },
-  { path: '/prestige',     label: 'Luxury' },
-  { path: '/luxury',       label: 'Shop Without Registration' },
-  { path: '/feed',         label: 'Feed' },
-  // NEW — placeholder destination (/feed) until dedicated pages exist
-  { path: '/feed?to=product-intelligence', label: 'Product Intelligence' },
-  { path: '/feed?to=mcp',                   label: 'MCP Server' },
+/* Mobile sheet — iOS grouped list zrcadlící desktopové mega menu: sekce =
+   panely (Products sdílí PRODUCT_ITEMS 1:1), skupiny = bílé zaoblené karty
+   na systémové šedé, řádky s chevronem a mikro copy. */
+const MOBILE_GBD_ITEMS = [
+  { label: 'Browse all deals', sub: 'Closeout batches, bigger wholesale discounts', path: '/deals' },
+  { label: 'Deal drop alerts', sub: 'One email when a batch goes live — free forever', path: '/alerts' },
+  { label: 'Early Access · 48 h head start', sub: 'Everyone gets the alert. You get it 48 hours early.', path: '/#gbd-pricing' },
+];
+const MOBILE_CATALOG_ITEMS = [
+  { label: 'Open the catalog', sub: 'Live wholesale prices after sign-in', path: 'catalog:open' },
+  { label: 'All brands', sub: '65+ brands from the live feed', path: '/brands' },
 ];
 
 type NavPanelCol = { title: string; links: { label: string; desc: string; path: string }[] };
@@ -77,7 +77,7 @@ const NAV_PANELS: Record<string, NavPanel> = {
     desc: 'Prodávejte luxusní hodinky a šperky s enterprise technologií — bez skladu, bez rizika, s doručením po celé EU.',
     cols: [
       { title: 'Platforma', links: [
-        { label: 'B2B Velkoobchod', desc: '3 000+ produktů za velkoobchodní ceny', path: '/velkoobchod' },
+        { label: 'B2B Velkoobchod', desc: '15 000+ produktů za velkoobchodní ceny', path: '/velkoobchod' },
         { label: 'Dropshipping', desc: 'Bez skladu — balíme a odesíláme my', path: '/dropshipping' },
         { label: 'Produktový feed', desc: 'XML/CSV, aktualizace 4× denně', path: '/feed' },
       ]},
@@ -93,7 +93,7 @@ const NAV_PANELS: Record<string, NavPanel> = {
      anglicky, čtenář hrdina, výsledek místo funkce, tvrzení kryté číslem. */
   'products': {
     heading: 'Products',
-    desc: 'Everything you sell with — and everything you plug into. 70+ brands, wholesale prices from 1 unit.',
+    desc: 'Everything you sell with — and everything you plug into. 65+ brands, wholesale prices from 1 unit.',
     cta: { label: 'Browse brands', path: '/brands' },
   },
   /* Obsah panelu žije v NavGoBigDealPanel — tenhle záznam je jen existence
@@ -110,7 +110,7 @@ const NAV_PANELS: Record<string, NavPanel> = {
     desc: 'Kompletní B2B katalog s živými cenami a skladovou dostupností. Přístup po přihlášení.',
     cols: [
       { title: 'Co je uvnitř', links: [
-        { label: 'Hodinky 70+ značek', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/velkoobchod' },
+        { label: 'Hodinky 65+ značek', desc: 'Tommy Hilfiger, Versace, Seiko…', path: '/velkoobchod' },
         { label: 'Šperky & doplňky', desc: 'Swarovski, Pandora, Morellato…', path: '/velkoobchod' },
         { label: 'Slevy 40–65 %', desc: 'Velkoobchodní ceny od 1 kusu', path: '/velkoobchod' },
       ]},

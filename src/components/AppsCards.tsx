@@ -63,7 +63,7 @@ export function AppsCards() {
   const tools: Tool[] = [
     // Top row
     { icon: PackageOpen, title: 'Dropshipping', desc: 'Prodávejte bez skladu — zabalíme a odešleme pod vaší značkou', to: '/dropshipping', badge: 'trending' },
-    { icon: Handshake, title: 'B2B Velkoobchod', desc: '3 000+ produktů za velkoobchodní ceny', to: '/velkoobchod' },
+    { icon: Handshake, title: 'B2B Velkoobchod', desc: '15 000+ produktů za velkoobchodní ceny', to: '/velkoobchod' },
     { icon: Tag, title: 'DEAL nabídky', desc: 'Closeout výprodeje za mimořádné ceny', to: '/deals' },
     // Bottom row
     { icon: HandCoins, title: 'Nákup bez registrace', desc: 'Velkoobchodní ceny, stačí IČO', to: '/luxury' },
@@ -95,7 +95,7 @@ export function AppsCards() {
               </span>
             </div>
             <p className="mt-3 max-w-[300px] text-sm text-[#898a8b] leading-relaxed">
-              3 000+ prémiových hodinek a šperků od 70+ světových značek. Velkoobchodní ceny až 60 % pod MOC, zásoby aktuální každý den.
+              15 000+ prémiových hodinek a šperků od 65+ světových značek. Velkoobchodní ceny až 60 % pod MOC, zásoby aktuální každý den.
             </p>
             {isB2bApproved && stockCount != null && stockCount > 0 ? (
               <p className="mt-2 text-xs text-white/70">

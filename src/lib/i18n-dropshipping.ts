@@ -68,7 +68,7 @@ const cs: DropText = {
   hero: {
     badge: 'swelt.Dropshipping — e-shop bez skladu',
     h1Part1: 'Prodávejte prémiové produkty', h1Highlight: 'bez skladu.',
-    sub: 'Vyberte si z 3 000+ produktů od 70+ světových značek. My zabalíme, zkontrolujeme a odešleme — pod vaší značkou do 24–72 hodin. Real-time inventory lock hlídá přeprodej, swelt.signal vám každý týden řekne, co zákazníci právě chtějí.',
+    sub: 'Vyberte si z 15 000+ produktů od 65+ světových značek. My zabalíme, zkontrolujeme a odešleme — pod vaší značkou do 24–72 hodin. Real-time inventory lock hlídá přeprodej, swelt.signal vám každý týden řekne, co zákazníci právě chtějí.',
     statLabels: ['zemí doručení', 'značek', 'aktivních partnerů'],
     ctaPrimary: 'Chci dropshipping', ctaSecondary: 'Jak to funguje?',
     bullets: ['Bez závazků', 'Bez kreditní karty', 'Schválení do 24 h'],
@@ -108,7 +108,7 @@ const cs: DropText = {
   shopUpsell: {
     badge: 'Nová služba — swelt.signal',
     h1: 'Co se bude prodávat?', h1Highlight: 'swelt.signal to ví předem.',
-    sub: 'swelt.signal je product intelligence pro váš sortiment — týdenní digest trendů z katalogu 3 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást plánů Silver a Gold.',
+    sub: 'swelt.signal je product intelligence pro váš sortiment — týdenní digest trendů z katalogu 15 000+ produktů a AI doporučení, co přidat, co stáhnout a kdy. Součást plánů Silver a Gold.',
     features: [
       { title: 'Trendová data každý týden', text: 'Vidíte, co roste a co klesá napříč celým katalogem.' },
       { title: 'Signály z celé EU', text: 'Prodejní data z 15+ evropských trhů, ne jen z toho vašeho.' },
@@ -166,7 +166,7 @@ const cs: DropText = {
         features: ['Katalog 500 produktů', 'XML/CSV feed 1× denně', 'Expedice do 48 h', 'E-mailová podpora'],
         cta: 'Začít se Starterem' },
       { name: 'Silver', subtitle: 'Pro rostoucí e-shopy', badge: 'Nejoblíbenější',
-        features: ['Celý katalog 3 000+ produktů', 'Real-time API + XML/CSV', 'Expedice do 24–48 h', 'White-label fakturace', 'Shoptet / WooCommerce API', 'swelt.signal Lite', 'Chat + telefonická podpora'],
+        features: ['Celý katalog 15 000+ produktů', 'Real-time API + XML/CSV', 'Expedice do 24–48 h', 'White-label fakturace', 'Shoptet / WooCommerce API', 'swelt.signal Lite', 'Chat + telefonická podpora'],
         cta: 'Aktivovat Silver' },
       { name: 'Gold', subtitle: 'Enterprise & EU expanze', badge: 'Enterprise',
         features: ['Vše ze Silver', 'Dedikovaný account manager', 'swelt.signal Pro — real-time', 'Prioritní vyřízení do 4 h', 'EU expanze SK/DE/AT', 'SLA záruka doručení', 'Custom API integrace'],
@@ -178,7 +178,7 @@ const cs: DropText = {
     eyebrow: 'Proč swelt.Dropshipping',
     heading: 'Nejsme jen dodavatel. Jsme váš byznys partner.',
     items: [
-      { title: '70+ prémiových značek', text: 'Světové značky, které zákazníci znají a chtějí koupit.' },
+      { title: '65+ prémiových značek', text: 'Světové značky, které zákazníci znají a chtějí koupit.' },
       { title: 'Expedice do 24–72 hodin', text: 'Sklad v ČR, tři rychlostní pásma, spolehlivé doručení.' },
       { title: 'Shoptet API na 1 klik', text: 'Přímá integrace s nejrozšířenější českou platformou.' },
       { title: 'Real-time inventory lock', text: 'Zásoby uzamčeny v momentě objednávky. Žádný přeprodej.' },
@@ -192,8 +192,8 @@ const cs: DropText = {
   },
   statsBand: [
     { value: '15+',     label: 'zemí doručení' },
-    { value: '70+',     label: 'prémiových značek' },
-    { value: '3 000+',  label: 'produktů v katalogu' },
+    { value: '65+',     label: 'prémiových značek' },
+    { value: '15 000+',  label: 'produktů v katalogu' },
     { value: '500+',    label: 'aktivních partnerů' },
   ],
   platforms: {
@@ -232,7 +232,7 @@ const cs: DropText = {
         features: ['500 produktů — základní katalog', '1× denní aktualizace feedu', 'Expedice do 72 hodin', 'E-mailová podpora', 'swelt.launch onboarding'],
         missing: ['Bílý štítek', 'Shoptet API', 'swelt.signal', 'Real-time inventory lock'] },
       { name: 'Silver', subtitle: 'Pro rostoucí e-shopy,\nkteré to myslí vážně', priceNote: 'Kč / měsíc bez DPH', cta: 'Aktivovat Silver →', badge: 'Nejoblíbenější',
-        features: ['Celý katalog 3 000+ produktů', 'Real-time API + 4× denně XML/CSV', 'Expedice do 24–48 hodin', 'Bílý štítek — vaše faktura + logo', 'Shoptet / WooCommerce API', 'Real-time inventory lock', 'Consolidated B2B invoicing', 'Telefonická + chat podpora', 'swelt.signal Lite — týdenní digest', 'swelt.launch onboarding', 'Refund kreditem při obratu 50 000 Kč/měsíc'],
+        features: ['Celý katalog 15 000+ produktů', 'Real-time API + 4× denně XML/CSV', 'Expedice do 24–48 hodin', 'Bílý štítek — vaše faktura + logo', 'Shoptet / WooCommerce API', 'Real-time inventory lock', 'Consolidated B2B invoicing', 'Telefonická + chat podpora', 'swelt.signal Lite — týdenní digest', 'swelt.launch onboarding', 'Refund kreditem při obratu 50 000 Kč/měsíc'],
         missing: [] },
       { name: 'Gold', subtitle: 'Pro profesionální e-shopy\na EU expanzi', priceNote: 'individuální nabídka', cta: 'Získat nabídku', badge: 'Enterprise',
         features: ['Vše ze Silver', 'Dedikovaný account manager', 'swelt.signal Pro — real-time + API', 'Prioritní vyřízení do 4 hodin', 'EU expanze SK/DE/AT — lokalizace', 'Trojí quality check + fotodokumentace', 'Buyback pomaloobrátkových zásob', 'Vlastní produktové fotky na vyžádání', 'SLA záruka doručení', 'Custom API integrace'],
@@ -284,7 +284,7 @@ const en: DropText = {
   hero: {
     badge: 'swelt.Dropshipping — a shop without a warehouse',
     h1Part1: 'Sell premium products', h1Highlight: 'without a warehouse.',
-    sub: 'Pick from 3,000+ products by 70+ world brands. We pack, inspect and ship — under your brand within 24–72 hours. Real-time inventory lock stops overselling, swelt.signal tells you every week what customers want right now.',
+    sub: 'Pick from 15,000+ products by 65+ world brands. We pack, inspect and ship — under your brand within 24–72 hours. Real-time inventory lock stops overselling, swelt.signal tells you every week what customers want right now.',
     statLabels: ['delivery countries', 'brands', 'active partners'],
     ctaPrimary: 'Start dropshipping free', ctaSecondary: 'How it works',
     bullets: ['No commitment', 'No credit card', 'Approval within 24 h'],
@@ -324,7 +324,7 @@ const en: DropText = {
   shopUpsell: {
     badge: 'New service — swelt.signal',
     h1: 'What will sell next?', h1Highlight: 'swelt.signal knows ahead of time.',
-    sub: 'swelt.signal is product intelligence for your assortment — a weekly trend digest across the 3,000+ product catalog with AI recommendations on what to add, what to drop and when. Included in the Silver and Gold plans.',
+    sub: 'swelt.signal is product intelligence for your assortment — a weekly trend digest across the 15,000+ product catalog with AI recommendations on what to add, what to drop and when. Included in the Silver and Gold plans.',
     features: [
       { title: 'Trend data every week', text: 'See what is rising and falling across the entire catalog.' },
       { title: 'Signals from all over the EU', text: 'Sales data from 15+ European markets, not just yours.' },
@@ -382,7 +382,7 @@ const en: DropText = {
         features: ['Catalog of 500 products', 'XML/CSV feed 1× daily', 'Dispatch within 48 h', 'Email support'],
         cta: 'Start with Starter' },
       { name: 'Silver', subtitle: 'For growing e-shops', badge: 'Most popular',
-        features: ['Full catalog of 3,000+ products', 'Real-time API + XML/CSV', 'Dispatch within 24–48 h', 'White-label invoicing', 'Shoptet / WooCommerce API', 'swelt.signal Lite', 'Chat + phone support'],
+        features: ['Full catalog of 15,000+ products', 'Real-time API + XML/CSV', 'Dispatch within 24–48 h', 'White-label invoicing', 'Shoptet / WooCommerce API', 'swelt.signal Lite', 'Chat + phone support'],
         cta: 'Activate Silver' },
       { name: 'Gold', subtitle: 'Enterprise & EU expansion', badge: 'Enterprise',
         features: ['Everything in Silver', 'Dedicated account manager', 'swelt.signal Pro — real-time', 'Priority handling within 4 h', 'EU expansion SK/DE/AT', 'SLA delivery guarantee', 'Custom API integration'],
@@ -394,7 +394,7 @@ const en: DropText = {
     eyebrow: 'Why swelt.Dropshipping',
     heading: 'Not just a supplier. Your business partner.',
     items: [
-      { title: '70+ premium brands', text: 'World brands customers know and want to buy.' },
+      { title: '65+ premium brands', text: 'World brands customers know and want to buy.' },
       { title: 'Dispatch within 24–72 hours', text: 'Warehouse in CZ, three speed tiers, reliable delivery.' },
       { title: 'Shoptet API in 1 click', text: 'Direct integration with the most popular CZ platform.' },
       { title: 'Real-time inventory lock', text: 'Stock locked at the moment of order. No overselling.' },
@@ -408,8 +408,8 @@ const en: DropText = {
   },
   statsBand: [
     { value: '15+',    label: 'delivery countries' },
-    { value: '70+',    label: 'premium brands' },
-    { value: '3,000+', label: 'products in catalog' },
+    { value: '65+',    label: 'premium brands' },
+    { value: '15,000+', label: 'products in catalog' },
     { value: '500+',   label: 'active partners' },
   ],
   platforms: {
@@ -448,7 +448,7 @@ const en: DropText = {
         features: ['500 products — basic catalog', 'Daily feed update', 'Dispatch within 72 hours', 'Email support', 'swelt.launch onboarding'],
         missing: ['White label', 'Shoptet API', 'swelt.signal', 'Real-time inventory lock'] },
       { name: 'Silver', subtitle: 'For growing e-shops\nthat mean business', priceNote: 'CZK / month excl. VAT', cta: 'Activate Silver →', badge: 'Most popular',
-        features: ['Full catalog of 3,000+ products', 'Real-time API + 4× daily XML/CSV', 'Dispatch within 24–48 hours', 'White label — your invoice + logo', 'Shoptet / WooCommerce API', 'Real-time inventory lock', 'Consolidated B2B invoicing', 'Phone + chat support', 'swelt.signal Lite — weekly digest', 'swelt.launch onboarding', 'Credit refund at 50,000 CZK monthly turnover'],
+        features: ['Full catalog of 15,000+ products', 'Real-time API + 4× daily XML/CSV', 'Dispatch within 24–48 hours', 'White label — your invoice + logo', 'Shoptet / WooCommerce API', 'Real-time inventory lock', 'Consolidated B2B invoicing', 'Phone + chat support', 'swelt.signal Lite — weekly digest', 'swelt.launch onboarding', 'Credit refund at 50,000 CZK monthly turnover'],
         missing: [] },
       { name: 'Gold', subtitle: 'For professional e-shops\nand EU expansion', priceNote: 'individual offer', cta: 'Get an offer', badge: 'Enterprise',
         features: ['Everything from Silver', 'Dedicated account manager', 'swelt.signal Pro — real-time + API', 'Priority handling within 4 hours', 'EU expansion SK/DE/AT — localization', 'Triple quality check + photo documentation', 'Buyback option for slow movers', 'Custom product photos on request', 'SLA delivery guarantee', 'Custom API integration'],

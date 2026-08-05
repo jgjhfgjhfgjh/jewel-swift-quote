@@ -27,7 +27,7 @@ function SeoHead() {
           name: 'Co je swelt.feed a jak mi pomůže?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'swelt.feed je služba, která automaticky přenese náš katalog 3 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
+            text: 'swelt.feed je služba, která automaticky přenese náš katalog 15 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
           },
         },
         {
@@ -85,7 +85,7 @@ function SeoHead() {
       '@context': 'https://schema.org',
       '@type': 'Service',
       name: 'swelt.feed — Produktový feed prémiových hodinek a šperků',
-      description: 'Automatický produktový feed 3 000+ prémiových hodinek a šperků pro české a slovenské e-shopy. Shoptet, WooCommerce, Heureka, Zbozi.cz, Google Shopping — bez technických znalostí.',
+      description: 'Automatický produktový feed 15 000+ prémiových hodinek a šperků pro české a slovenské e-shopy. Shoptet, WooCommerce, Heureka, Zbozi.cz, Google Shopping — bez technických znalostí.',
       provider: { '@type': 'Organization', name: 'swelt.partner', url: 'https://swelt.partner' },
       areaServed: [
         { '@type': 'Country', name: 'CZ' },
@@ -338,7 +338,7 @@ const FEATURES = [
 const FAQS = [
   {
     q: 'Co je swelt.feed a jak mi pomůže?',
-    a: 'swelt.feed je služba, která automaticky přenese náš katalog 3 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
+    a: 'swelt.feed je služba, která automaticky přenese náš katalog 15 000+ prémiových hodinek a šperků do vašeho e-shopu. Stačí si vybrat plán, my vám připravíme soubor (feed) s produkty, cenami a dostupností — a váš e-shop ho jednou denně nebo čtyřikrát denně automaticky načte. Žádné ruční kopírování, žádné zastaralé ceny.',
   },
   {
     q: 'Musím umět programovat, abych mohl swelt.feed použít?',
@@ -771,7 +771,7 @@ export default function Feed() {
             <div>
               <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">Co dostanete v katalogu</Badge>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-5">
-                3 000+ produktů připravených k prodeji
+                15 000+ produktů připravených k prodeji
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Katalog zahrnuje <strong className="text-foreground">prémiové hodinky, šperky a doplňky</strong> od světových značek jako Tommy Hilfiger, Festina, Swarovski a dalších. Každý produkt má kompletní data:
