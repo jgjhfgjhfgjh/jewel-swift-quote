@@ -22,6 +22,7 @@ import {
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
+import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
@@ -286,9 +287,16 @@ export default function Deals() {
             sloupec, výjev jeho výšku jen vyplní */}
         <div className="relative">
           <div className="min-w-0 py-2 sm:pr-[46%]">
-            {/* mobil: logo na střed; od sm doleva k textu */}
-            <h1 className="flex justify-center text-zinc-900 sm:justify-start">
-              <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
+            {/* mobil: logo na střed; od sm doleva k textu.
+                Za wordmarkem běží scéna z černých krystalů (CrystalBackdrop) —
+                pás je širší než text a přetéká do stran, aby působil jako
+                plocha, na které logo leží; písmo zůstává čistá typografie. */}
+            {/* POZOR: vrstva NESMÍ mít -z-10 — spadla by za bílé pozadí
+                stránky a zmizela. Krystaly jsou první v DOM (z-0), logo nad
+                nimi přes relative z-10. */}
+            <h1 className="relative flex justify-center text-zinc-900 sm:justify-start">
+              <CrystalBackdrop className="-inset-x-8 -inset-y-6 sm:-inset-x-14 sm:-inset-y-8" />
+              <GoBigDealLogo className="relative z-10 text-[clamp(2.75rem,6.5vw,4.5rem)]" />
             </h1>
             {/* dvoutónový headline v typografii webu (extralight jako
                 headliny homepage): tmavý lead, zbytek tlumeně slate */}
