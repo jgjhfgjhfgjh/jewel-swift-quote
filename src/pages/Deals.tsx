@@ -217,10 +217,10 @@ export default function Deals() {
   const renderSection = (
     title: string,
     items: DealTileItem[],
-    opts: { liveDot?: boolean; lead?: boolean } = {},
+    opts: { liveDot?: boolean; lead?: boolean; id?: string } = {},
   ) =>
     items.length === 0 ? null : (
-      <section className="pt-9">
+      <section id={opts.id} className="scroll-mt-24 pt-9">
         <div className="flex items-center gap-2.5">
           {opts.liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />}
           <h2 className="font-sans text-lg font-medium tracking-tighter text-zinc-900">{title}</h2>
@@ -364,8 +364,11 @@ export default function Deals() {
                   /* modrá jako eyebrow EarlyAccessCard — živé dávky a Early
                      Access drží v katalogu jednu akcentní barvu */
                   accent: true,
-                  /* nula živých dávek = nejslabší místo dashboardu → konverzní bod */
-                  action: kpis.liveCount === 0 ? { label: dash.kpiLiveAlert, onClick: goToAlerts } : undefined,
+                  /* nula živých dealů = nejslabší místo dashboardu → konverzní
+                     bod (alert); jinak zkratka dolů na sekci živých dealů */
+                  action: kpis.liveCount === 0
+                    ? { label: dash.kpiLiveAlert, onClick: goToAlerts }
+                    : { label: dash.kpiLiveSeeAll, onClick: () => scrollTo('deals-live'), icon: 'arrow' },
                 },
                 { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
                 {
@@ -459,7 +462,7 @@ export default function Deals() {
                 </div>
               )}
 
-              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live' })}
+              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live', id: 'deals-live' })}
               {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: firstSection === 'upcoming' })}
               {renderSection(d.catalog.rows.closed, sections.closed, { lead: firstSection === 'closed' })}
             </>

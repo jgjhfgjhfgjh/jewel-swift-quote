@@ -62,7 +62,7 @@ export default function Suppliers() {
             We have liquidity for your stock.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
-            Bring closeouts, overstock and end-of-season batches to a network of European retailers
+            Bring closeouts, overstock and end-of-season stock to a network of European retailers
             that buys from 1 unit.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -93,7 +93,7 @@ export default function Suppliers() {
             </h2>
 
             <div className="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-3">
-              {['Send us the batch', 'We price and publish', 'You get paid'].map((step, i) => (
+              {['Send us the stock', 'We price and publish', 'You get paid'].map((step, i) => (
                 <div key={step}>
                   <span className="text-sm font-bold text-zinc-300">0{i + 1}</span>
                   <h3 className="mt-2 text-lg font-semibold tracking-tight">{step}</h3>
@@ -134,10 +134,10 @@ export default function Suppliers() {
             <DraftChip />
             <h2 className={`${H2} mt-4`}>
               <span className="text-zinc-900">What we need </span>
-              <span className="text-zinc-400">before the first batch.</span>
+              <span className="text-zinc-400">before the first deal.</span>
             </h2>
             <div className="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-2">
-              {['Brands and categories', 'Batch sizes and pricing', 'Authenticity and paperwork', 'Shipping and terms'].map((topic) => (
+              {['Brands and categories', 'Deal sizes and pricing', 'Authenticity and paperwork', 'Shipping and terms'].map((topic) => (
                 <div key={topic} className="border-t border-slate-200 pt-5">
                   <h3 className="text-base font-semibold tracking-tight">{topic}</h3>
                   <Placeholder lines={2} />

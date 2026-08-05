@@ -89,7 +89,7 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
       {/* ── Headline strip: co GoBigDeal je + živá čísla jako důkaz ── */}
       <div className="flex items-center justify-between gap-6">
         <p className="font-sans font-extralight tracking-tight leading-snug text-[19px]">
-          <span className="text-zinc-900">Closeout batches, bigger wholesale discounts. </span>
+          <span className="text-zinc-900">Closeout deals, bigger wholesale discounts. </span>
           <span className="text-zinc-500">One order, one invoice — from concerns you already sell.</span>
         </p>
         {liveTiles.length > 0 ? (
@@ -98,7 +98,7 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
           </span>
         ) : upcomingTiles.length > 0 ? (
           <span className="shrink-0 whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200">
-            {upcomingTiles.length} {upcomingTiles.length === 1 ? 'batch' : 'batches'} in the works
+            {upcomingTiles.length} {upcomingTiles.length === 1 ? 'deal' : 'deals'} in the works
           </span>
         ) : null}
       </div>
@@ -181,7 +181,7 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
           </p>
           <ul className="mt-3 space-y-1.5">
             {[
-              'Every batch opens for you 48 hours early',
+              'Every deal opens for you 48 hours early',
               'First pick before top references sell out',
               'Alerts for the concerns and brands you sell',
             ].map((b) => (
@@ -214,7 +214,7 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
           <span className="font-medium text-zinc-700 transition-colors group-hover:text-zinc-900">
             Deal drop alerts — free forever.
           </span>
-          <span className="hidden font-normal text-zinc-500 xl:inline">One email when a batch goes live.</span>
+          <span className="hidden font-normal text-zinc-500 xl:inline">One email when a deal goes live.</span>
         </button>
       </div>
     </div>
@@ -311,10 +311,10 @@ function SpotlightEmpty({ onAlerts }: { onAlerts: () => void }) {
       </span>
       <div className="flex min-h-0 flex-1 flex-col justify-center">
         <p className="font-sans text-xl font-extralight tracking-tight text-white">
-          The next batch is being negotiated.
+          The next deal is being negotiated.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-          PRO members see every batch 48 hours before public open.
+          PRO members see every deal 48 hours before public open.
         </p>
       </div>
       <button

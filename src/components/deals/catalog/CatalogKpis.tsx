@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Bell } from 'lucide-react';
+import { ArrowRight, Bell } from 'lucide-react';
 
 export interface CatalogKpi {
   label: string;
@@ -14,8 +14,9 @@ export interface CatalogKpi {
       takže „živé dávky" a Early Access mluví v katalogu jednou barvou. */
   accent?: boolean;
   /** Drobná akce pod hodnotou — z mrtvého čísla konverzní bod
-      (např. „Živé dávky: 0" → nastavit alert). */
-  action?: { label: string; onClick: () => void };
+      („Živé dealy: 0" → alert) nebo zkratka na sekci („See all" → scroll).
+      `icon` volí zvoneček (alert, výchozí) nebo šipku (navigace). */
+  action?: { label: string; onClick: () => void; icon?: 'bell' | 'arrow' };
 }
 
 /**
@@ -52,9 +53,18 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
             <button
               type="button"
               onClick={k.action.onClick}
-              className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-900 underline-offset-2 transition-colors hover:underline"
+              className="group/kpi mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-900 underline-offset-2 transition-colors hover:underline"
             >
-              <Bell className="h-3 w-3" /> {k.action.label}
+              {k.action.icon === 'arrow' ? (
+                <>
+                  {k.action.label}
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover/kpi:translate-x-0.5" />
+                </>
+              ) : (
+                <>
+                  <Bell className="h-3 w-3" /> {k.action.label}
+                </>
+              )}
             </button>
           )}
         </div>

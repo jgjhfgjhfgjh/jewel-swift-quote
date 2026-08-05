@@ -45,8 +45,8 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
    panely (Products sdílí PRODUCT_ITEMS 1:1), skupiny = bílé zaoblené karty
    na systémové šedé, řádky s chevronem a mikro copy. */
 const MOBILE_GBD_ITEMS = [
-  { label: 'Browse all deals', sub: 'Closeout batches, bigger wholesale discounts', path: '/deals' },
-  { label: 'Deal drop alerts', sub: 'One email when a batch goes live — free forever', path: '/alerts' },
+  { label: 'Browse all deals', sub: 'Closeout deals, bigger wholesale discounts', path: '/deals' },
+  { label: 'Deal drop alerts', sub: 'One email when a deal goes live — free forever', path: '/alerts' },
   { label: 'Early Access · 48 h head start', sub: 'Everyone gets the alert. You get it 48 hours early.', path: '/#gbd-pricing' },
 ];
 const MOBILE_CATALOG_ITEMS = [
