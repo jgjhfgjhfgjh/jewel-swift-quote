@@ -6,6 +6,23 @@
  * obličejem i celou postavou a produktem značky v reálném životě. Soubory
  * leží v public/deal-videos/.
  *
+ * PRÁVNÍ MANTINEL (platí pro každé nové video): originální spoty značek
+ * (Pinterest, YouTube, sociální sítě) NELZE použít ani zrekonstruovat —
+ * scénář, kompozice a sled záběrů jsou autorské dílo, přehrání „jen s jiným
+ * člověkem" je odvozené dílo. Nepoužívat ani podobu ambasadorů (osobnostní
+ * práva). Čerpat lze POUZE obecný styl: paleta, světlo, tempo, typ prostředí.
+ * Scénář vždy vlastní, produkt vždy ten, který reálně prodáváme.
+ *
+ * Style descriptory odvozené z veřejných kampaní značek (jen estetika):
+ *  · Swarovski (SS25 „high-fashion fantasy"): pastelový lilac/blush snový
+ *    studiový void, poletující průsvitné okvětní lístky a krystalové střepy,
+ *    krystalová mesh textura šatů, high-key světlo, beauty detail, jemné
+ *    lomy světla.
+ *  · Emporio Armani: italská sartoriální elegance, kamenná architektura,
+ *    zlaté podvečerní světlo.
+ *  · Tommy Hilfiger: preppy americká klasika, navy/červená, ostré denní
+ *    světlo, energický pohyb.
+ *
  * Klíč = slug koncernu (data/concerns.ts), NEBO lowercase dodavatel pro
  * dealy bez koncernu v rejstříku (Swarovski). Priorita média na kartě:
  * VIDEO > kampaňová fotka dealu > logo koncernu. Outro: poslední ~1,3 s
