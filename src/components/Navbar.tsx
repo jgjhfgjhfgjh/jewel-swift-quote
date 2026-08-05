@@ -66,8 +66,8 @@ const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
      vs wholesale, p99 = 84 %), značek po normalizaci 67 → tvrdíme 65+.
      Neměnit bez nového ověření. */
   { label: 'Buy 65+ brands at 40–85 % below retail', sub: 'From a single unit, no minimum order', path: '/velkoobchod' },
-  { label: 'Fill your shop with zero hustle', path: '/feed' },
-  { label: 'Connect your AI agents', path: '/feed?to=mcp' },
+  { label: 'Fill your shop with zero hustle', sub: 'XML or CSV feed, prices refreshed 4× a day', path: '/feed' },
+  { label: 'Connect your AI agents', sub: 'MCP server with live stock and prices', path: '/feed?to=mcp' },
   { label: 'Source luxury watches on request', sub: 'Omega, Cartier, IWC and more — binding quote in 48 hours', path: '/prestige' },
 ];
 
@@ -703,14 +703,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               /* Products — číslovaný seznam v typografii kroků z dropship
                  schématu: emeraldové pořadí, extralight nadpisové písmo,
                  linky mezi řádky, hover přebarví řádek gradientem. */
-              <div className="px-6 py-6">
+              <div className="px-6 py-4">
                 {PRODUCT_ITEMS.map((item, i) => (
                   <div key={item.label}>
                     <button
                       onClick={() => go(item.path)}
-                      /* py-2 (ne 3.5) — tři řádky s podtitulkem by jinak
-                         panel roztáhly nad výšku ostatních (384–395 px) */
-                      className="group flex w-full items-baseline gap-6 py-2 text-left"
+                      /* těsné py — pět řádků s podtitulky se musí vejít do
+                         výšky ostatních panelů (384–395 px) */
+                      className="group flex w-full items-baseline gap-6 py-1.5 text-left"
                     >
                       <span className="text-xs font-semibold tabular-nums text-emerald-500 transition-colors group-hover:text-blue-500">
                         0{i + 1}
