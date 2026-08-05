@@ -274,114 +274,119 @@ export default function Deals() {
 
       {/* ═══ KATALOG — bílá plocha, karty s hairline rámečky a jemným stínem ═══ */}
 
-      {/* ── 1. Kompaktní command header: logo + marquee v jednom řádku,
-             pozicovací věta pod nimi. Dashboard nemá 100vh hero — data
-             (KPI, filtry, dávky) začínají hned pod headerem. ── */}
-      <header
-        id="catalog"
-        className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
-      >
-        {/* hero: VLEVO logo → dvoutónová věta, VPRAVO ústřední výjev —
-            střídající se VELKÉ logo značky s plynulým crossfade. Zóna je
-            pozicovaná ABSOLUTNĚ (inset-y-0): výšku řádku určuje levý
-            sloupec, výjev jeho výšku jen vyplní */}
-        <div className="relative">
-          <div className="min-w-0 py-2 sm:pr-[46%]">
-            {/* mobil: logo na střed; od sm doleva k textu.
-                Za wordmarkem běží scéna z černých krystalů (CrystalBackdrop) —
-                pás je širší než text a přetéká do stran, aby působil jako
-                plocha, na které logo leží; písmo zůstává čistá typografie. */}
-            {/* POZOR: vrstva NESMÍ mít -z-10 — spadla by za bílé pozadí
-                stránky a zmizela. Krystaly jsou první v DOM (z-0), logo nad
-                nimi přes relative z-10. */}
-            <h1 className="relative flex justify-center text-zinc-900 sm:justify-start">
-              <CrystalBackdrop className="-inset-x-8 -inset-y-6 sm:-inset-x-14 sm:-inset-y-8" />
-              <GoBigDealLogo className="relative z-10 text-[clamp(2.75rem,6.5vw,4.5rem)]" />
-            </h1>
-            {/* dvoutónový headline v typografii webu (extralight jako
-                headliny homepage): tmavý lead, zbytek tlumeně slate */}
-            <h2 className="mt-6 max-w-xl text-balance font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.35rem,2.4vw,2rem)]">
-              <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
-              <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
-              <span className="text-slate-400">{d.catalog.headingAccent}</span>
-            </h2>
-            {/* stavová CTA dvojice — konverzní řetěz: registrace → alert →
-                (FOMO v katalogu) → Early Access. EA tu proto NENÍ primární:
-                anonym konvertuje na identitu, přihlášený na alert; EA prodávají
-                kontextové momenty níž (upsell karta, teasery, ceník). */}
-            {!user ? (
-              <>
+      {/* ═══ HERO ZÓNA — hlavička a KPI lišta leží na jedné krystalové ploše.
+             CrystalBackdrop je první v DOM (z-0), obsah nad ním přes relative
+             z-10. Vrstva NESMÍ mít -z-10 — spadla by za bílé pozadí stránky
+             a zmizela. Pod touto zónou se stránka vrací do čisté bílé. ═══ */}
+      <div className="relative">
+        <CrystalBackdrop className="inset-0" />
+
+        {/* ── 1. Kompaktní command header: logo + marquee v jednom řádku,
+               pozicovací věta pod nimi. Dashboard nemá 100vh hero — data
+               (KPI, filtry, dávky) začínají hned pod headerem. ── */}
+        <header
+          id="catalog"
+          className="relative z-10 scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
+        >
+          {/* hero: VLEVO logo → dvoutónová věta, VPRAVO ústřední výjev —
+              střídající se VELKÉ logo značky s plynulým crossfade. Zóna je
+              pozicovaná ABSOLUTNĚ (inset-y-0): výšku řádku určuje levý
+              sloupec, výjev jeho výšku jen vyplní */}
+          <div className="relative">
+            <div className="min-w-0 py-2 sm:pr-[46%]">
+              {/* mobil: logo na střed; od sm doleva k textu. Krystalová scéna
+                  leží pod celou hero zónou (viz CrystalBackdrop výše), logo na ní
+                  jen sedí; písmo zůstává čistá typografie. */}
+              <h1 className="flex justify-center text-zinc-900 sm:justify-start">
+                <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
+              </h1>
+              {/* dvoutónový headline v typografii webu (extralight jako
+                  headliny homepage): tmavý lead, zbytek tlumeně slate */}
+              <h2 className="mt-6 max-w-xl text-balance font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.35rem,2.4vw,2rem)]">
+                <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
+                <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
+                <span className="text-slate-400">{d.catalog.headingAccent}</span>
+              </h2>
+              {/* stavová CTA dvojice — konverzní řetěz: registrace → alert →
+                  (FOMO v katalogu) → Early Access. EA tu proto NENÍ primární:
+                  anonym konvertuje na identitu, přihlášený na alert; EA prodávají
+                  kontextové momenty níž (upsell karta, teasery, ceník). */}
+              {!user ? (
+                <>
+                  <div className="mt-7 flex flex-wrap items-center gap-3">
+                    <button type="button" onClick={() => openAuthModal('register')} className={CTA_PRIMARY}>
+                      {dash.ctaRegister} <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <button type="button" onClick={goToAlerts} className={CTA_GHOST}>
+                      <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
+                    </button>
+                  </div>
+                  <p className="mt-3 text-[13px] text-slate-400">{d.hero.note}</p>
+                </>
+              ) : !hasEarlyAccess ? (
                 <div className="mt-7 flex flex-wrap items-center gap-3">
-                  <button type="button" onClick={() => openAuthModal('register')} className={CTA_PRIMARY}>
-                    {dash.ctaRegister} <ArrowRight className="h-4 w-4" />
-                  </button>
-                  <button type="button" onClick={goToAlerts} className={CTA_GHOST}>
+                  <button type="button" onClick={goToAlerts} className={CTA_PRIMARY}>
                     <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
                   </button>
+                  <button type="button" onClick={() => scrollTo('gbd-pricing')} className={CTA_GHOST}>
+                    {d.early.ctaPro} <ArrowRight className="h-4 w-4" />
+                  </button>
                 </div>
-                <p className="mt-3 text-[13px] text-slate-400">{d.hero.note}</p>
-              </>
-            ) : !hasEarlyAccess ? (
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <button type="button" onClick={goToAlerts} className={CTA_PRIMARY}>
-                  <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
-                </button>
-                <button type="button" onClick={() => scrollTo('gbd-pricing')} className={CTA_GHOST}>
-                  {d.early.ctaPro} <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
+            {/* výjev od sm výš (posunutý VÍC DOLEVA od pravé hrany);
+                na mobilu má vlastní blok pod textem */}
+            <div className="absolute inset-y-0 right-[8%] hidden w-[42%] sm:block">
+              <BrandSpotlight />
+            </div>
           </div>
-          {/* výjev od sm výš (posunutý VÍC DOLEVA od pravé hrany);
-              na mobilu má vlastní blok pod textem */}
-          <div className="absolute inset-y-0 right-[8%] hidden w-[42%] sm:block">
+          <div className="mt-8 h-24 sm:hidden">
             <BrandSpotlight />
           </div>
-        </div>
-        <div className="mt-8 h-24 sm:hidden">
-          <BrandSpotlight />
-        </div>
-      </header>
+        </header>
 
-      {/* ── 2. KPI lišta — stav trhu na první pohled ── */}
-      <div className="px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
-        {loading ? (
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-slate-100" />
-            ))}
-          </div>
-        ) : (
-          <CatalogKpis
-            items={[
-              {
-                label: dash.kpiLive,
-                value: String(kpis.liveCount),
-                liveDot: kpis.liveCount > 0,
-                /* nula živých dávek = nejslabší místo dashboardu → konverzní bod */
-                action: kpis.liveCount === 0 ? { label: dash.kpiLiveAlert, onClick: goToAlerts } : undefined,
-              },
-              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
-              {
-                label: dash.kpiDiscount,
-                value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
-                gradient: kpis.maxDiscount > 0,
-              },
-              kpis.nextDeadline
-                ? {
-                    label: dash.kpiDeadline,
-                    value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
-                  }
-                : kpis.nextStart
+        {/* ── 2. KPI lišta — stav trhu na první pohled. Poslední patro hero zóny:
+               končí tu krystalová plocha, katalog pod ní jede na čisté bílé. ── */}
+        <div className="relative z-10 px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
+          {loading ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-slate-100" />
+              ))}
+            </div>
+          ) : (
+            <CatalogKpis
+              items={[
+                {
+                  label: dash.kpiLive,
+                  value: String(kpis.liveCount),
+                  liveDot: kpis.liveCount > 0,
+                  /* nula živých dávek = nejslabší místo dashboardu → konverzní bod */
+                  action: kpis.liveCount === 0 ? { label: dash.kpiLiveAlert, onClick: goToAlerts } : undefined,
+                },
+                { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
+                {
+                  label: dash.kpiDiscount,
+                  value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
+                  gradient: kpis.maxDiscount > 0,
+                },
+                kpis.nextDeadline
                   ? {
-                      label: dash.kpiNextStart,
-                      value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
+                      label: dash.kpiDeadline,
+                      value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
                     }
-                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
-            ]}
-          />
-        )}
+                  : kpis.nextStart
+                    ? {
+                        label: dash.kpiNextStart,
+                        value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
+                      }
+                    : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
+              ]}
+            />
+          )}
+        </div>
       </div>
+      {/* ═══ konec hero zóny s krystaly ═══ */}
 
       {/* ── 3. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
