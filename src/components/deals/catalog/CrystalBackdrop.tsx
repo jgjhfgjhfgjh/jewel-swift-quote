@@ -40,13 +40,15 @@ export function CrystalBackdrop({ className = '' }: { className?: string }) {
         src="/gbd-crystals.jpg"
         alt=""
         draggable={false}
-        className="h-full w-full object-cover opacity-[0.58] [mix-blend-mode:multiply]
-                   [filter:grayscale(1)_contrast(1.9)_brightness(0.8)]
-                   [mask-image:radial-gradient(86%_92%_at_50%_45%,black_0%,transparent_100%)]"
+        className="h-full w-full object-cover opacity-[0.82] [mix-blend-mode:multiply]
+                   [filter:grayscale(1)_contrast(2.15)_brightness(0.7)]
+                   [mask-image:radial-gradient(94%_98%_at_50%_45%,black_0%,transparent_100%)]"
       />
       {/* středový závoj — bílá je nejkrycí tam, kde leží obsah (levý sloupec
-          i výjev vpravo), k okrajům se otevírá a pouští kámen ke slovu */}
-      <div className="absolute inset-0 [background:radial-gradient(115%_100%_at_50%_52%,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.78)_42%,rgba(255,255,255,0.28)_78%,transparent_100%)]" />
+          i výjev vpravo), k okrajům se otevírá a pouští kámen ke slovu.
+          Střed drží krycí, i když kámen kolem zesílil: pod headlinem a
+          BrandSpotlightem se čte text, ne kámen. */}
+      <div className="absolute inset-0 [background:radial-gradient(112%_98%_at_50%_52%,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.66)_40%,rgba(255,255,255,0.14)_76%,transparent_100%)]" />
       {/* spodní třetina do čista — přechod hero → bílý katalog bez hrany */}
       <div className="absolute inset-x-0 bottom-0 h-1/3 [background:linear-gradient(to_bottom,transparent,#fff)]" />
     </div>
