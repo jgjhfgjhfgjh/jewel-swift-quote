@@ -188,6 +188,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
   const lastScrollY = useRef(0);
   const navCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Klik na nav položku s cílem → hover neotevírá, dokud kurzor neodejde. */
+  const hoverSuppressedRef = useRef(false);
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const menuOpenRef = useRef(false);
@@ -256,11 +258,16 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   useEffect(() => { setActiveNav(null); }, [location.pathname]);
 
   const handleNavEnter = (path: string) => {
+    // Po prokliku na landing zůstává kurzor nad položkou a překreslení
+    // stránky pošle nový mouseenter — bez téhle pojistky by se mega menu
+    // hned zase otevřelo přes právě otevřenou stránku.
+    if (hoverSuppressedRef.current) return;
     if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
     setActiveNav(path);
   };
 
   const handleNavLeave = () => {
+    hoverSuppressedRef.current = false;
     navCloseTimer.current = setTimeout(() => setActiveNav(null), 120);
   };
 
@@ -319,8 +326,15 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   onMouseEnter={() => handleNavEnter(item.id)}
                   onMouseLeave={handleNavLeave}
                   onClick={() => {
-                    if (item.path) { setActiveNav(null); navigate(item.path); }
-                    else setActiveNav(active ? null : item.id);
+                    if (item.path) {
+                      // menu zajede a nesmí se po překreslení landingu vrátit
+                      hoverSuppressedRef.current = true;
+                      if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
+                      setActiveNav(null);
+                      navigate(item.path);
+                    } else {
+                      setActiveNav(active ? null : item.id);
+                    }
                   }}
                   className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
                     isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
