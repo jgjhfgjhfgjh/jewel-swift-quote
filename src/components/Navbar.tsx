@@ -62,7 +62,7 @@ type NavPanel = { heading: string; desc: string; cols?: NavPanelCol[]; cta: { la
    jedou velkým extralight písmem přes celou šířku panelu. */
 const PRODUCT_ITEMS: { label: string; sub?: string; path: string }[] = [
   { label: 'Sell without spending money on stock', sub: "Pay us from your customer's money", path: '/dropshipping' },
-  { label: 'B2B wholesale', path: '/velkoobchod' },
+  { label: 'Buy 70+ brands at 40–65 % below retail', sub: 'From a single unit, no minimum order', path: '/velkoobchod' },
   { label: 'Fill your shop with zero hustle', path: '/feed' },
   { label: 'Connect your AI agents', path: '/feed?to=mcp' },
   { label: 'Source Omega and Cartier on request', sub: 'Binding quote in 48 hours', path: '/prestige' },
@@ -705,9 +705,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   <div key={item.label}>
                     <button
                       onClick={() => go(item.path)}
-                      /* py-2.5 (ne 3.5) — dva řádky s podtitulkem by jinak
+                      /* py-2 (ne 3.5) — tři řádky s podtitulkem by jinak
                          panel roztáhly nad výšku ostatních (384–395 px) */
-                      className="group flex w-full items-baseline gap-6 py-2.5 text-left"
+                      className="group flex w-full items-baseline gap-6 py-2 text-left"
                     >
                       <span className="text-xs font-semibold tabular-nums text-emerald-500 transition-colors group-hover:text-blue-500">
                         0{i + 1}
