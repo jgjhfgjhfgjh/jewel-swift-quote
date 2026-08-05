@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { sortedTiers, wholesaleForTierIndex, type DealProduct, type DealTier } from '@/lib/deals';
+import { useDealProductGallery } from '@/hooks/useDealProductGallery';
 
 function fmt(currency: string, value: number): string {
   const symbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency + ' ';
@@ -27,9 +28,22 @@ export function DealProductModal({
   const lang = useStore((s) => s.lang);
   const t = dealsI18n[lang];
 
+  /* Galerie jako v hlavním katalogu: šipky, pás náhledů a ←/→ na klávesnici.
+     Zdroj snímků řeší hook — dávka sama má jen jednu fotku. */
+  const images = useDealProductGallery(product);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // Nový produkt = zpátky na první snímek, jinak by se otevřel na indexu
+  // z minule (a u kusu s jedinou fotkou na prázdnu).
+  useEffect(() => { setGalleryIndex(0); }, [product?.id]);
+
   useEffect(() => {
     if (!product) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (images.length > 1 && e.key === 'ArrowRight') setGalleryIndex((i) => (i + 1) % images.length);
+      if (images.length > 1 && e.key === 'ArrowLeft') setGalleryIndex((i) => (i - 1 + images.length) % images.length);
+    };
     window.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -37,7 +51,7 @@ export function DealProductModal({
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [product, onClose]);
+  }, [product, onClose, images.length]);
 
   if (!product || typeof document === 'undefined') return null;
 
@@ -71,10 +85,55 @@ export function DealProductModal({
         </button>
 
         <div className="grid gap-0 overflow-y-auto sm:grid-cols-2">
-          {/* image */}
-          <div className="flex aspect-square items-center justify-center bg-slate-50 p-6">
-            {product.image_url ? (
-              <img src={product.image_url} alt={title} className="max-h-full max-w-full object-contain" />
+          {/* galerie — jeden snímek se chová jako dřív, víc jich zapne
+              šipky i pás náhledů (shodně s ProductDetailModal katalogu) */}
+          <div className="relative flex aspect-square items-center justify-center bg-slate-50 p-6">
+            {images.length > 0 ? (
+              <>
+                <img
+                  src={images[galleryIndex]}
+                  alt={title}
+                  className="max-h-full max-w-full select-none object-contain"
+                  draggable={false}
+                />
+                {images.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label={t.modal.prevImage}
+                      onClick={() => setGalleryIndex((i) => (i - 1 + images.length) % images.length)}
+                      className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 shadow transition hover:bg-white"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={t.modal.nextImage}
+                      onClick={() => setGalleryIndex((i) => (i + 1) % images.length)}
+                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 shadow transition hover:bg-white"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                    <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5 overflow-x-auto px-4">
+                      {images.map((src, i) => (
+                        <button
+                          key={src}
+                          type="button"
+                          aria-label={`${i + 1}/${images.length}`}
+                          onClick={() => setGalleryIndex(i)}
+                          className={`h-10 w-10 shrink-0 overflow-hidden rounded border-2 bg-white transition ${
+                            i === galleryIndex
+                              ? 'border-zinc-900'
+                              : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={src} alt="" className="h-full w-full object-contain" draggable={false} />
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
               <span className="text-sm font-semibold text-slate-300">{product.brand}</span>
             )}

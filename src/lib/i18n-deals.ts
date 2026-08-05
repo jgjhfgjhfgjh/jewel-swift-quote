@@ -98,6 +98,8 @@ export interface DealsText {
       ctaRegister: string;
       /** Odkaz v KPI dlaždici živých dávek, když je jich 0. */
       kpiLiveAlert: string;
+      /** Odkaz v KPI dlaždici živých dávek, když nějaké běží — scroll na sekci. */
+      kpiLiveSeeAll: string;
       /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
@@ -175,7 +177,7 @@ export interface DealsText {
   };
   product: { rrp: string; yourPrice: string; inStock: string; soldOut: string; margin: string; marginTotal: string; add: string; perPc: string; voc: string; moc: string; detail: string };
   cart: { title: string; empty: string; clear: string; remove: string; total: string; submit: string };
-  modal: { availability: string; sku: string; ean: string; priceTiers: string; tier: string; close: string };
+  modal: { availability: string; sku: string; ean: string; priceTiers: string; tier: string; close: string; prevImage: string; nextImage: string };
   // homepage sekce „Top Deals" — celá sekce se záměrně renderuje VŽDY anglicky
   // (jako ostatní tmavé homepage sekce); komponenta čte napřímo dealsI18n.en.
   // CS překlady tu zůstávají pro případnou budoucí lokalizaci sekce.
@@ -329,7 +331,8 @@ const cs: DealsText = {
     dash: {
       eyebrow: 'B2B closeout trh · Evropa',
       ctaRegister: 'Registrovat zdarma',
-      kpiLiveAlert: 'Nastavit alert na další dávku',
+      kpiLiveAlert: 'Nastavit alert na další deal',
+      kpiLiveSeeAll: 'Zobrazit vše',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
       kpiLive: 'Živé dávky',
@@ -417,6 +420,7 @@ const cs: DealsText = {
   modal: {
     availability: 'Dostupnost', sku: 'SKU', ean: 'EAN',
     priceTiers: 'Ceny dle množství', tier: 'od {qty} ks', close: 'Zavřít',
+    prevImage: 'Předchozí fotka', nextImage: 'Další fotka',
   },
   home: {
     badge: 'GoBigDeal nabídky',
@@ -452,29 +456,29 @@ const cs: DealsText = {
 const en: DealsText = {
   navLabel: 'DEAL offers',
   hero: {
-    headingLead: 'Closeout batches',
+    headingLead: 'Closeout deals',
     headingMuted: 'from the concerns you already sell, with',
     headingAccent: 'bigger wholesale discount.',
-    sub: 'A GoBigDeal is a limited batch: one concern, real units, one deadline. The more units you take, the deeper the discount goes — and it applies to the whole order, not just the units above the line.',
+    sub: 'A GoBigDeal is limited: one concern, real units, one deadline. The more units you take, the deeper the discount goes — and it applies to the whole order, not just the units above the line.',
     cta: 'Browse the deals',
     ctaSecondary: 'How a deal works',
     note: 'Browsing is free. Wholesale prices and margins show once you sign in.',
   },
   stats: {
     deals: 'Live deals',
-    brands: 'Brands in the batches',
+    brands: 'Brands in the deals',
     discount: 'Deepest discount',
     early: 'Head start with Early Access',
     earlyValue: '48 h',
   },
   how: {
     headingLead: 'Four steps',
-    headingMuted: 'from picking a batch to the deepest discount.',
+    headingMuted: 'from picking a deal to the deepest discount.',
     steps: [
-      { title: 'Pick a batch', desc: 'Open a live deal and go through its catalog: brands, references, availability and RRP in a single list.' },
+      { title: 'Pick a deal', desc: 'Open a live deal and go through its catalog: brands, references, availability and RRP in a single list.' },
       { title: 'Build the order', desc: 'Mix references across brands in one order. The counter shows how many units you still need for a valid order.' },
       { title: 'Unlock the ladder', desc: 'Every threshold you cross drops the price of the whole order — not just the units above it. You see the recalculation instantly.' },
-      { title: 'Confirm in time', desc: 'Units are reserved in the order received. The deadline is real: once it passes, the batch closes.' },
+      { title: 'Confirm in time', desc: 'Units are reserved in the order received. The deadline is real: once it passes, the deal closes.' },
     ],
   },
   ladder: {
@@ -484,19 +488,19 @@ const en: DealsText = {
   },
   active: {
     headingLead: 'Live now.',
-    headingMuted: 'When the countdown hits zero, the batch is gone.',
+    headingMuted: 'When the countdown hits zero, the deal is gone.',
     sub: 'Each deal has its own catalog, its own deadline and its own discount ladder. Open one and build the order piece by piece — the discount recalculates as you add units.',
     empty: 'No deal is live right now.',
-    emptyHeadingMuted: 'The next batch is being negotiated with the concern as we speak.',
-    emptySub: 'Turn on an alert and you will be there the moment a deal drops — Early Access partners see it 48 hours earlier. In the meantime, take a look at how the previous batches went.',
+    emptyHeadingMuted: 'The next deal is being negotiated with the concern as we speak.',
+    emptySub: 'Turn on an alert and you will be there the moment a deal drops — Early Access partners see it 48 hours earlier. In the meantime, take a look at how the previous deals went.',
     emptyCta: 'Set a deal alert',
-    closedLabel: 'Closed batches',
+    closedLabel: 'Closed deals',
     closedSub: 'Taken in the order received. Exactly what you do not want to miss next time.',
   },
   early: {
     headingLead: 'Everyone gets the deal.',
     headingMuted: 'Early Access gets it 48 hours earlier.',
-    body: 'A batch holds a fixed number of units and the most wanted references go first. Early Access opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.',
+    body: 'A deal holds a fixed number of units and the most wanted references go first. Early Access opens every deal two days before the public start and watches concerns, brands and individual models — so you pick from a full catalog instead of the leftovers.',
     bullets: [
       'Every deal open 48 hours before the public start',
       'Alerts on concerns, brands and individual models',
@@ -518,7 +522,7 @@ const en: DealsText = {
     ],
   },
   closing: {
-    headingLead: 'The next batch is on its way.',
+    headingLead: 'The next deal is on its way.',
     headingMuted: 'The only question is whether you are first in line.',
     cta: 'Browse the deals',
     ctaSecondary: 'Set a deal alert',
@@ -527,14 +531,14 @@ const en: DealsText = {
     headingLead: 'The best Deals from Europe',
     headingMuted: 'in one place. One order, one invoice,',
     headingAccent: 'no signing up with dozens of wholesalers across Europe.',
-    searchPlaceholder: 'Search a concern, brand or batch…',
+    searchPlaceholder: 'Search a concern, brand or deal…',
     concernsLabel: 'Concerns',
     brandsLabel: 'Brands',
     allConcerns: 'All',
     clear: 'Clear filters',
     results: '{n} · match the filter',
     noResults: 'Nothing matches the filter.',
-    noResultsSub: 'Try another concern or brand — or let an alert find the batch for you.',
+    noResultsSub: 'Try another concern or brand — or let an alert find the deal for you.',
     seeAll: 'See all',
     rows: {
       endingSoon: 'Closing first',
@@ -542,23 +546,23 @@ const en: DealsText = {
       watches: 'Watches',
       jewelry: 'Jewelry',
       upcoming: 'In the works',
-      closed: 'Closed batches',
-      byConcern: 'Batches · {name}',
+      closed: 'Closed deals',
+      byConcern: 'Deals · {name}',
     },
     tile: {
       teaserTitle: '{concern} closeout',
-      teaserNote: 'Batch in negotiation',
+      teaserNote: 'Deal in negotiation',
       upcoming: 'In the works',
       unlocksIn: 'Starts in',
       closed: 'Closed',
       models: 'models',
     },
     promo: {
-      proTitle: 'You see the same batch as everyone. Just 48 hours earlier.',
-      proSub: 'PRO opens every batch two days before the public start. The best references go first.',
+      proTitle: 'You see the same deal as everyone. Just 48 hours earlier.',
+      proSub: 'PRO opens every deal two days before the public start. The best references go first.',
       proCta: 'See PRO plans',
       alertTitle: 'Let the deal find you.',
-      alertSub: 'An alert on a concern, a brand or one specific model. It fires the moment a batch drops.',
+      alertSub: 'An alert on a concern, a brand or one specific model. It fires the moment a deal drops.',
       alertCta: 'Set a deal alert',
       howTitle: 'More units, lower price — across the whole order.',
       howSub: 'Every threshold you cross drops the price of the entire order, not just the units above it.',
@@ -567,10 +571,11 @@ const en: DealsText = {
     dash: {
       eyebrow: 'B2B closeout market · Europe',
       ctaRegister: 'Register free',
-      kpiLiveAlert: 'Set an alert for the next batch',
+      kpiLiveAlert: 'Set an alert for the next deal',
+      kpiLiveSeeAll: 'See all',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
-      kpiLive: 'Live batches',
+      kpiLive: 'Live deals',
       kpiModels: 'Models in catalog',
       kpiDiscount: 'Discount up to',
       kpiDeadline: 'Next deadline',
@@ -582,7 +587,7 @@ const en: DealsText = {
       sortNewest: 'Newest',
       viewGrid: 'Grid',
       viewList: 'List',
-      secLive: 'Live batches',
+      secLive: 'Live deals',
       live: '{n} live',
       soon: 'soon',
       eyebrowPro: 'Early Access',
@@ -655,6 +660,7 @@ const en: DealsText = {
   modal: {
     availability: 'Availability', sku: 'SKU', ean: 'EAN',
     priceTiers: 'Prices by quantity', tier: 'from {qty} pcs', close: 'Close',
+    prevImage: 'Previous photo', nextImage: 'Next photo',
   },
   home: {
     badge: 'GoBigDeal offers',
