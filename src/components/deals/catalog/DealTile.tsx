@@ -56,17 +56,15 @@ export function DealTile({
         </span>
       )}
 
-      {/* stavový štítek vlevo nahoře */}
+      {/* vlevo nahoře: živá → odpočet; PŘIPRAVOVANÁ → EA upsell pill se
+          zámkem („48 h Early Access" na každé in-the-works kartě);
+          uzavřená → štítek */}
       <div className="absolute left-3 top-3">
         {item.kind === 'live' && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
-        ) : item.kind === 'upcoming' && item.startsAt ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
-            <Lock className="h-3 w-3" /> {c.unlocksIn}
-          </span>
-        ) : item.kind === 'teaser' ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
-            <Lock className="h-3 w-3" /> {c.upcoming}
+        ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700 backdrop-blur">
+            <Lock className="h-3 w-3" /> {t.catalog.dash.earlyBadge}
           </span>
         ) : (
           <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-400 backdrop-blur">
@@ -75,12 +73,21 @@ export function DealTile({
         )}
       </div>
 
-      {item.maxDiscount > 0 && (
-        /* sleva — červená pilulka, zavedený jazyk světlých karet webu */
-        <span className="absolute right-3 top-3 rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
-          −{item.maxDiscount} %
-        </span>
-      )}
+      {/* vpravo nahoře: sleva + u připravovaných stavový pill (bez zámku —
+          ten se přestěhoval do EA upsell pillu vlevo) */}
+      <div className="absolute right-3 top-3 flex flex-col items-end gap-1.5">
+        {item.maxDiscount > 0 && (
+          /* sleva — červená pilulka, zavedený jazyk světlých karet webu */
+          <span className="rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
+            −{item.maxDiscount} %
+          </span>
+        )}
+        {(item.kind === 'upcoming' || item.kind === 'teaser') && (
+          <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
+            {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
+          </span>
+        )}
+      </div>
       {item.kind === 'upcoming' && item.startsAt && (
         <span className="absolute bottom-3 right-3">
           <CountdownTimer deadline={item.startsAt} variant="compact" lang={lang} />

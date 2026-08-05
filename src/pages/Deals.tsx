@@ -11,6 +11,7 @@ import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
+import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
 import { toDisplayName } from '@/lib/brandNormalize';
 import { getBrandByName } from '@/data/brands';
@@ -49,6 +50,9 @@ const H2 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(
 const H3 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)]';
 const PILL_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100';
 const PILL_OUTLINE_DARK = 'inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10';
+/* CTA dvojice pod hero (bílá plocha dashboardu) */
+const CTA_PRIMARY = 'inline-flex h-11 items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 text-sm font-semibold text-white transition-colors hover:bg-zinc-700';
+const CTA_GHOST = 'inline-flex h-11 items-center justify-center gap-2 rounded-full border border-slate-300 px-6 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50';
 
 /* Řazení dashboardu — uplatní se UVNITŘ stavových sekcí (živé / připravujeme /
    uzavřené); stav má vždy přednost, obchodník nikdy nemíchá živé s mrtvým. */
@@ -69,6 +73,7 @@ export default function Deals() {
   const lang = useStore((s) => s.lang);
   const openAuthModal = useStore((s) => s.openAuthModal);
   const { user } = useAuthContext();
+  const { hasEarlyAccess } = useEarlyAccess();
   const navigate = useNavigate();
   const d = dealsI18n[lang];
   const { deals, productCounts, loading } = useDeals();
@@ -291,6 +296,32 @@ export default function Deals() {
               <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
               <span className="text-slate-400">{d.catalog.headingAccent}</span>
             </h2>
+            {/* stavová CTA dvojice — konverzní řetěz: registrace → alert →
+                (FOMO v katalogu) → Early Access. EA tu proto NENÍ primární:
+                anonym konvertuje na identitu, přihlášený na alert; EA prodávají
+                kontextové momenty níž (upsell karta, teasery, ceník). */}
+            {!user ? (
+              <>
+                <div className="mt-7 flex flex-wrap items-center gap-3">
+                  <button type="button" onClick={() => openAuthModal('register')} className={CTA_PRIMARY}>
+                    {dash.ctaRegister} <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <button type="button" onClick={goToAlerts} className={CTA_GHOST}>
+                    <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
+                  </button>
+                </div>
+                <p className="mt-3 text-[13px] text-slate-400">{d.hero.note}</p>
+              </>
+            ) : !hasEarlyAccess ? (
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <button type="button" onClick={goToAlerts} className={CTA_PRIMARY}>
+                  <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
+                </button>
+                <button type="button" onClick={() => scrollTo('gbd-pricing')} className={CTA_GHOST}>
+                  {d.early.ctaPro} <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            ) : null}
           </div>
           {/* výjev od sm výš (posunutý VÍC DOLEVA od pravé hrany);
               na mobilu má vlastní blok pod textem */}
@@ -314,7 +345,13 @@ export default function Deals() {
         ) : (
           <CatalogKpis
             items={[
-              { label: dash.kpiLive, value: String(kpis.liveCount), liveDot: kpis.liveCount > 0 },
+              {
+                label: dash.kpiLive,
+                value: String(kpis.liveCount),
+                liveDot: kpis.liveCount > 0,
+                /* nula živých dávek = nejslabší místo dashboardu → konverzní bod */
+                action: kpis.liveCount === 0 ? { label: dash.kpiLiveAlert, onClick: goToAlerts } : undefined,
+              },
               { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
               {
                 label: dash.kpiDiscount,

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Bell } from 'lucide-react';
 
 export interface CatalogKpi {
   label: string;
@@ -9,6 +10,9 @@ export interface CatalogKpi {
   /** Historicky zvýrazněná hodnota (sleva) — světlá varianta ji sází tmavě;
       prop zůstává v signatuře kvůli volajícím. */
   gradient?: boolean;
+  /** Drobná akce pod hodnotou — z mrtvého čísla konverzní bod
+      (např. „Živé dávky: 0" → nastavit alert). */
+  action?: { label: string; onClick: () => void };
 }
 
 /**
@@ -37,6 +41,15 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
               k.value
             )}
           </span>
+          {k.action && (
+            <button
+              type="button"
+              onClick={k.action.onClick}
+              className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-900 underline-offset-2 transition-colors hover:underline"
+            >
+              <Bell className="h-3 w-3" /> {k.action.label}
+            </button>
+          )}
         </div>
       ))}
     </div>

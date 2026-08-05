@@ -94,6 +94,12 @@ export interface DealsText {
     dash: {
       /** Bordered chip nad logem v hlavičce dashboardu. */
       eyebrow: string;
+      /** CTA pod hero — registrace (anonym). */
+      ctaRegister: string;
+      /** Odkaz v KPI dlaždici živých dávek, když je jich 0. */
+      kpiLiveAlert: string;
+      /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
+      earlyBadge: string;
       kpiLive: string;
       kpiModels: string;
       kpiDiscount: string;
@@ -320,6 +326,9 @@ const cs: DealsText = {
     },
     dash: {
       eyebrow: 'B2B closeout trh · Evropa',
+      ctaRegister: 'Registrovat zdarma',
+      kpiLiveAlert: 'Nastavit alert na další dávku',
+      earlyBadge: '48 h Early Access',
       kpiLive: 'Živé dávky',
       kpiModels: 'Modelů v katalogu',
       kpiDiscount: 'Sleva až',
@@ -554,6 +563,9 @@ const en: DealsText = {
     },
     dash: {
       eyebrow: 'B2B closeout market · Europe',
+      ctaRegister: 'Register free',
+      kpiLiveAlert: 'Set an alert for the next batch',
+      earlyBadge: '48h Early Access',
       kpiLive: 'Live batches',
       kpiModels: 'Models in catalog',
       kpiDiscount: 'Discount up to',
