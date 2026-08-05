@@ -26,6 +26,12 @@ export const DEAL_VIDEOS: Record<string, DealVideo> = {
   'timex-group': { src: '/deal-videos/timex-group.mp4', brandName: 'Versace', brandDomain: 'versace.com' },
   // Swarovski Infinity Heart (5518865) — deal bez koncernu, klíč = dodavatel
   swarovski: { src: '/deal-videos/swarovski.mp4', brandName: 'Swarovski', brandDomain: 'swarovski.com' },
+  // Emporio Armani Sportivo (AR5889) — vlajková licence Fossil Group;
+  // scénář z příběhu koncernu (italská sartoriální elegance)
+  'fossil-group': { src: '/deal-videos/fossil-group.mp4', brandName: 'Emporio Armani', brandDomain: 'armani.com' },
+  // Tommy Hilfiger Layla (1782457) — licence Movado Group; scénář z příběhu
+  // (preppy americká klasika)
+  'movado-group': { src: '/deal-videos/movado-group.mp4', brandName: 'Tommy Hilfiger', brandDomain: 'tommy.com' },
 };
 
 export function getDealVideo(concernSlug?: string, supplier?: string): DealVideo | undefined {
