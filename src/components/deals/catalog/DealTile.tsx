@@ -60,56 +60,57 @@ export function DealTile({
         </span>
       )}
 
-      {/* vlevo nahoře: živá → odpočet; PŘIPRAVOVANÁ → EA upsell pill se
-          zámkem („48 h Early Access" na každé in-the-works kartě);
-          uzavřená → štítek */}
-      <div className="absolute left-3 top-3">
-        {item.kind === 'live' && item.deadline ? (
-          <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
-        ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
-          /* EA upsell pill — SAMOSTATNÝ cíl uvnitř klikací karty: klik vede
-             na ceník (stopPropagation + preventDefault, jinak by propadl do
-             karty/Linku), silný vlastní hover invertuje do plné modré a
-             rozbalí nápovědu, co klik udělá. span[role=button], protože
-             <button> nesmí být vnořený v buttonu karty. */
-          <span
-            role="button"
-            tabIndex={0}
-            aria-label={`${t.catalog.dash.earlyBadge} — ${t.catalog.dash.earlyBadgeHint}`}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
-            }}
-            className="group/ea inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700 backdrop-blur
-                       transition-all duration-200 hover:scale-[1.06] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
-          >
-            <Lock className="h-3 w-3" /> {t.catalog.dash.earlyBadge}
-            <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/ea:max-w-[8rem] group-hover/ea:opacity-100">
-              · {t.catalog.dash.earlyBadgeHint}
+      {/* horní pás štítků — JEDEN flex s wrapem místo dvou absolutních rohů:
+          na úzké kartě se pravý cluster zalomí POD levý pill, nikdy se
+          nepřekryjí (viz kolize EA pillu s „Připravujeme") */}
+      <div className="pointer-events-none absolute inset-x-3 top-3 flex flex-wrap items-start justify-between gap-1.5">
+        <div className="pointer-events-auto">
+          {item.kind === 'live' && item.deadline ? (
+            <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
+          ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
+            /* EA upsell pill — SAMOSTATNÝ cíl uvnitř klikací karty: klik vede
+               na ceník (stopPropagation + preventDefault), silný hover
+               invertuje do plné modré; nápověda „co klik udělá" je TOOLTIP
+               POD pillem (absolute) — nemění šířku pillu, takže nekoliduje
+               se stavovým štítkem. span[role=button] kvůli vnoření. */
+            <span
+              role="button"
+              tabIndex={0}
+              aria-label={`${t.catalog.dash.earlyBadge} — ${t.catalog.dash.earlyBadgeHint}`}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
+              }}
+              className="group/ea relative inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700 backdrop-blur
+                         transition-all duration-200 hover:scale-[1.05] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+            >
+              <Lock className="h-3 w-3" /> {t.catalog.dash.earlyBadge}
+              <span className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-full bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/ea:opacity-100 group-focus-visible/ea:opacity-100">
+                {t.catalog.dash.earlyBadgeHint}
+              </span>
             </span>
-          </span>
-        ) : (
-          <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-400 backdrop-blur">
-            {c.closed}
-          </span>
-        )}
-      </div>
+          ) : (
+            <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-400 backdrop-blur">
+              {c.closed}
+            </span>
+          )}
+        </div>
 
-      {/* vpravo nahoře: sleva + u připravovaných stavový pill (bez zámku —
-          ten se přestěhoval do EA upsell pillu vlevo) */}
-      <div className="absolute right-3 top-3 flex flex-col items-end gap-1.5">
-        {item.maxDiscount > 0 && (
-          /* sleva — červená pilulka, zavedený jazyk světlých karet webu */
-          <span className="rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
-            −{item.maxDiscount} %
-          </span>
-        )}
-        {(item.kind === 'upcoming' || item.kind === 'teaser') && (
-          <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
-            {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
-          </span>
-        )}
+        {/* pravý cluster: sleva + u připravovaných stavový štítek (bez zámku) */}
+        <div className="pointer-events-auto ml-auto flex flex-col items-end gap-1.5">
+          {item.maxDiscount > 0 && (
+            /* sleva — červená pilulka, zavedený jazyk světlých karet webu */
+            <span className="rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
+              −{item.maxDiscount} %
+            </span>
+          )}
+          {(item.kind === 'upcoming' || item.kind === 'teaser') && (
+            <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
+              {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
+            </span>
+          )}
+        </div>
       </div>
       {item.kind === 'upcoming' && item.startsAt && (
         <span className="absolute bottom-3 right-3">

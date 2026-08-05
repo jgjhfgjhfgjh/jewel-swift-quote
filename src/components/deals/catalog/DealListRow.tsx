@@ -33,7 +33,8 @@ export function DealListRow({
     ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
       <>
         {/* interaktivní EA upsell pill — shodný s kartou: samostatný cíl,
-            klik vede na ceník (ne do řádku), silný hover s nápovědou */}
+            klik vede na ceník (ne do řádku), silný hover; nápověda jako
+            TOOLTIP pod pillem (nemění šířku pillu → nerozbíjí layout řádku) */}
         <span
           role="button"
           tabIndex={0}
@@ -42,13 +43,13 @@ export function DealListRow({
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
           }}
-          className="group/ea inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700
-                     transition-all duration-200 hover:scale-[1.06] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
+          className="group/ea relative inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700
+                     transition-all duration-200 hover:scale-[1.05] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
           <Lock className="h-3 w-3" /> {d.catalog.dash.earlyBadge}
-          <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/ea:max-w-[8rem] group-hover/ea:opacity-100">
-            · {d.catalog.dash.earlyBadgeHint}
+          <span className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-full bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/ea:opacity-100 group-focus-visible/ea:opacity-100">
+            {d.catalog.dash.earlyBadgeHint}
           </span>
         </span>
         {/* stavový chip bez zámku — na mobilu ho vynecháváme, řádek je plný */}
