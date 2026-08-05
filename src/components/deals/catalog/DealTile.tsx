@@ -208,11 +208,23 @@ export function DealTile({
     </div>
   );
 
-  /* bílá karta — hover zjasní stín a rámeček (jazyk světlých karet webu) */
+  /* Bílá karta s „netflixím" hoverem: karta se ZVĚTŠÍ a vystoupí NAD sousedy
+     (relative + hover:z-20), stín se prohloubí. Detaily, na kterých ten efekt
+     stojí:
+      · `hover:delay-150` — Netflix nechá kartu vyskočit až když u ní myš chvíli
+        zůstane; bez prodlevy grid poskakuje při každém přejetí kurzorem,
+      · odchod BEZ prodlevy (delay-0 v základu) — zmenšení musí být okamžité,
+        jinak se karty při rychlém pohybu překrývají,
+      · `origin-center` + `duration-300 ease-out` — růst z těžiště, ne z rohu,
+      · scale drží 1.05: víc už na krajních sloupcích leze mimo mřížku,
+      · `motion-reduce:` vypne zvětšení i posun, zůstane jen stín. */
   const shell =
-    'group flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] border border-slate-100 bg-white text-left ' +
+    'group relative flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] border border-slate-100 bg-white text-left ' +
     'shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] ' +
-    'transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)] ' +
+    'origin-center transition-all delay-0 duration-300 ease-out will-change-transform ' +
+    'hover:z-20 hover:-translate-y-1.5 hover:scale-[1.05] hover:delay-150 ' +
+    'hover:shadow-[0_28px_60px_-16px_rgba(15,23,42,0.28),0_6px_14px_rgba(15,23,42,0.10)] ' +
+    'motion-reduce:transform-none motion-reduce:hover:transform-none ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
   if (item.kind === 'teaser' || !item.slug) {

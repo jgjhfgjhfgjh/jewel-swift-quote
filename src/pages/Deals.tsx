@@ -361,6 +361,9 @@ export default function Deals() {
                   label: dash.kpiLive,
                   value: String(kpis.liveCount),
                   liveDot: kpis.liveCount > 0,
+                  /* modrá jako eyebrow EarlyAccessCard — živé dávky a Early
+                     Access drží v katalogu jednu akcentní barvu */
+                  accent: true,
                   /* nula živých dávek = nejslabší místo dashboardu → konverzní bod */
                   action: kpis.liveCount === 0 ? { label: dash.kpiLiveAlert, onClick: goToAlerts } : undefined,
                 },

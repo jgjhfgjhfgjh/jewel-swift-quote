@@ -10,6 +10,9 @@ export interface CatalogKpi {
   /** Historicky zvýrazněná hodnota (sleva) — světlá varianta ji sází tmavě;
       prop zůstává v signatuře kvůli volajícím. */
   gradient?: boolean;
+  /** Hodnotu vysází modře — stejný `blue-500` jako eyebrow na EarlyAccessCard,
+      takže „živé dávky" a Early Access mluví v katalogu jednou barvou. */
+  accent?: boolean;
   /** Drobná akce pod hodnotou — z mrtvého čísla konverzní bod
       (např. „Živé dávky: 0" → nastavit alert). */
   action?: { label: string; onClick: () => void };
@@ -34,7 +37,11 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
           <span className="mt-2.5 flex min-h-[2rem] items-center gap-2.5">
             {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-500" />}
             {typeof k.value === 'string' ? (
-              <span className="font-sans text-[1.6rem] font-medium leading-none tracking-tighter text-zinc-900 sm:text-3xl">
+              <span
+                className={`font-sans text-[1.6rem] font-medium leading-none tracking-tighter sm:text-3xl ${
+                  k.accent ? 'text-blue-500' : 'text-zinc-900'
+                }`}
+              >
                 {k.value}
               </span>
             ) : (
