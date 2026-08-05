@@ -106,10 +106,12 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
       <div className="mt-3 grid grid-cols-[minmax(360px,1.05fr)_minmax(0,0.9fr)_minmax(0,1fr)] gap-x-8">
         {spotlight ? <SpotlightCard deal={spotlight} onOpen={() => go(`/deals/${spotlight.slug}`)} /> : <SpotlightEmpty onAlerts={() => go('/alerts')} />}
 
-        {/* Live by concern — poctivé počty, emerald = dostupnost */}
-        <div className="min-w-0">
+        {/* Live by concern — řádky v jazyce seznamu dealů na /deals:
+            bílá karta se silným vrstveným stínem, logo volně v řádku (bez
+            tónovaného čtverce), hover nadzvedne. Sloupec drží výšku karet. */}
+        <div className="flex h-[256px] min-w-0 flex-col">
           <h3 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Live by concern</h3>
-          <div className="mt-2 flex flex-col gap-1">
+          <div className="mt-2 flex flex-col gap-1.5">
             {concernRows.map((c) => {
               const dim = c.live === 0 && c.upcoming === 0;
               return (
@@ -117,37 +119,35 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
                   key={c.slug}
                   type="button"
                   onClick={() => go(`/deals?concern=${encodeURIComponent(c.slug)}`)}
-                  className="-mx-2 flex h-[38px] items-center gap-3 rounded-xl px-2 text-left transition-colors hover:bg-slate-50"
+                  className="group/row flex h-10 w-full items-center gap-3 rounded-2xl border border-slate-100 bg-white px-3 text-left
+                             shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)]
+                             transition-all duration-200 hover:-translate-y-0.5
+                             hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)]"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-slate-50 p-1.5 ring-1 ring-slate-200">
+                  {/* logo volně na bílé, plná barva, bez rámečku (jako DealListRow) */}
+                  <span className="flex h-6 w-11 shrink-0 items-center justify-center">
                     <BrandLogo
                       name={c.name}
                       domain={c.domain ?? ''}
-                      width={160}
+                      width={200}
                       height={80}
-                      className={`max-h-4 max-w-full object-contain [mix-blend-mode:multiply] ${dim ? 'opacity-40' : 'opacity-90'}`}
-                      fallbackClassName="text-[9px] font-bold leading-none text-slate-600"
+                      className={`max-h-5 max-w-full object-contain [mix-blend-mode:multiply] ${dim ? 'opacity-50' : 'opacity-90'}`}
+                      fallbackClassName="truncate text-[9px] font-bold leading-none text-zinc-900"
                     />
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-zinc-900">{c.name}</span>
+                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium tracking-tight text-zinc-900">{c.name}</span>
                   {c.live > 0 ? (
-                    <span className="shrink-0 text-xs font-semibold text-emerald-600">{c.live} live</span>
+                    <span className="shrink-0 font-mono text-[11px] font-bold text-emerald-600">{c.live} live</span>
                   ) : c.upcoming > 0 ? (
-                    <span className="shrink-0 text-xs text-zinc-500">opens soon</span>
+                    <span className="shrink-0 font-mono text-[11px] text-slate-500">opens soon</span>
                   ) : (
-                    <span className="shrink-0 text-xs text-zinc-400">coming soon</span>
+                    <span className="shrink-0 font-mono text-[11px] text-slate-400">coming soon</span>
                   )}
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-300 transition-all duration-200 group-hover/row:translate-x-0.5 group-hover/row:text-zinc-900" />
                 </button>
               );
             })}
           </div>
-          <button
-            type="button"
-            onClick={() => go('/deals#catalog')}
-            className="mt-1.5 inline-flex items-center gap-1.5 text-[13px] text-zinc-500 transition-colors hover:text-zinc-900"
-          >
-            All concerns &amp; brands <ArrowRight className="h-3.5 w-3.5" />
-          </button>
         </div>
 
         {/* Early Access — jediná monetizace světa; jediné plné bílé CTA panelu */}
