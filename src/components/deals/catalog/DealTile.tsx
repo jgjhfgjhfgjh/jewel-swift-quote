@@ -6,6 +6,10 @@ import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
 
+/** EA pill vede na ceník na stránce (#gbd-pricing) — ne do karty. */
+const scrollToPricing = () =>
+  document.getElementById('gbd-pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
 /**
  * Dlaždice dávky — světlá varianta (jazyk bílých karet homepage): bílá karta
  * s hairline slate rámečkem a jemným stínem, médium na slate-50 s logem
@@ -63,8 +67,27 @@ export function DealTile({
         {item.kind === 'live' && item.deadline ? (
           <CountdownTimer deadline={item.deadline} variant="compact" lang={lang} />
         ) : item.kind === 'upcoming' || item.kind === 'teaser' ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700 backdrop-blur">
+          /* EA upsell pill — SAMOSTATNÝ cíl uvnitř klikací karty: klik vede
+             na ceník (stopPropagation + preventDefault, jinak by propadl do
+             karty/Linku), silný vlastní hover invertuje do plné modré a
+             rozbalí nápovědu, co klik udělá. span[role=button], protože
+             <button> nesmí být vnořený v buttonu karty. */
+          <span
+            role="button"
+            tabIndex={0}
+            aria-label={`${t.catalog.dash.earlyBadge} — ${t.catalog.dash.earlyBadgeHint}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
+            }}
+            className="group/ea inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700 backdrop-blur
+                       transition-all duration-200 hover:scale-[1.06] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+          >
             <Lock className="h-3 w-3" /> {t.catalog.dash.earlyBadge}
+            <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover/ea:max-w-[8rem] group-hover/ea:opacity-100">
+              · {t.catalog.dash.earlyBadgeHint}
+            </span>
           </span>
         ) : (
           <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-400 backdrop-blur">
