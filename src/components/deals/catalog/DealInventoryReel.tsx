@@ -62,8 +62,9 @@ export function DealInventoryReel({
 
   return (
     <div data-reel className={`flex flex-col bg-white ${className}`}>
-      {/* ── plocha produktu ── */}
-      <div className="relative flex min-h-0 flex-1 items-center justify-center p-3">
+      {/* ── plocha produktu — odsazení jako v brandshow karuselu
+             (mx-4 mt-3 mb-4 kolem produktu) ── */}
+      <div className="relative mx-4 mb-4 mt-3 flex min-h-0 flex-1 items-center justify-center">
         <img
           key={item.img}
           src={item.img}
@@ -76,7 +77,7 @@ export function DealInventoryReel({
         />
 
         {/* cena PRÁVĚ zobrazeného kusu */}
-        <div className="absolute right-2 top-2 flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/95 px-2 py-1 shadow-sm backdrop-blur">
+        <div className="absolute -right-2 -top-1 flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/95 px-2 py-1 shadow-sm backdrop-blur">
           <span className="font-mono text-[10px] text-slate-500">
             {t.product.rrp} <span className="text-zinc-900">{Math.round(item.retail)} €</span>
           </span>
@@ -95,9 +96,9 @@ export function DealInventoryReel({
         </div>
       </div>
 
-      {/* ── pruh značky (jazyk brandshow karuselu): logo značky uprostřed,
-             koncern drobně vlevo ── */}
-      <div className="relative flex h-[34%] shrink-0 items-center justify-center border-t border-slate-100 bg-slate-50/60 px-3">
+      {/* ── řádek značky — 1:1 s karuselem: pevných h-10, logo uprostřed,
+             žádný tónovaný pruh; koncern drobně vlevo ── */}
+      <div className="relative flex h-10 shrink-0 items-center justify-center px-3">
         {concernDomain && (
           <BrandLogo
             name={concernName ?? ''}
@@ -115,12 +116,16 @@ export function DealInventoryReel({
             domain={brandDomain ?? ''}
             width={400}
             height={160}
-            /* pevná výška → všechna loga mají stejnou vizuální váhu */
-            className="h-7 w-auto max-w-[58%] animate-in fade-in object-contain duration-500 [mix-blend-mode:multiply]"
-            fallbackClassName="text-base font-bold uppercase tracking-wide text-zinc-900"
+            /* jako v karuselu logo vyplní řádek na výšku; h-full (ne max-h-full)
+               drží místo i dokud se obrázek nenačte — s max-h by měl nulovou
+               výšku a řádek by zůstal prázdný */
+            className="h-full w-auto max-w-[62%] animate-in fade-in object-contain py-0.5 duration-500 [mix-blend-mode:multiply]"
+            fallbackClassName="whitespace-nowrap text-sm font-black tracking-tight text-zinc-900"
           />
         )}
       </div>
+      {/* spodní mezera karuselu (p-1.5) — logo nesedí na hraně média */}
+      <div className="h-1.5 shrink-0" />
     </div>
   );
 }

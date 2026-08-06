@@ -45,8 +45,10 @@ export function DealTile({
   const hasReel = isRealDeal && reel.length >= 4;
 
   const media = (
-    /* médium — logo koncernu v plných barvách na světlém podkladu */
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
+    /* médium — proporce PŘEVZATÉ z brandshow karuselu (kompaktní karta
+       210×240 px = 7:8), aby produkt i logo značky měly stejný prostor jako
+       tam; karta je tím vyšší, spodní část se lepí pod médium beze změny */
+    <div className="relative flex aspect-[7/8] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
       {hasReel ? (
         <DealInventoryReel
           dealId={item.id}
