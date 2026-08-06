@@ -577,7 +577,7 @@ export default function Deals() {
         </section>
       </div>
 
-      {/* ── Náskok 48 h / PRO (černá) ── */}
+      {/* ── Náskok 48 h / Early Access (černá) ── */}
       <div className="bg-white">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1160px]">

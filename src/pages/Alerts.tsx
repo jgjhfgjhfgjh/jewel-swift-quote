@@ -33,7 +33,7 @@ const DARK = '#0d0d10';
  * watchdogy): přehled aktivních alertů s možností odebrat, pod tím přidávání
  * po úrovních — koncerny, značky (obojí s hromadným wildcard přepínačem)
  * a našeptávač modelů. Stejná hradla jako na homepage: nepřihlášený →
- * registrace, concern/brand bez early accessu → PRO upsell, drop alert free.
+ * registrace, concern/brand bez early accessu → Early Access upsell, drop alert free.
  */
 export default function Alerts() {
   const openAuthModal = useStore((s) => s.openAuthModal);
@@ -52,7 +52,7 @@ export default function Alerts() {
 
   const requireAuth = () => openAuthModal('register');
 
-  /** Hradlo placených úrovní (concern/brand): registrace → PRO upsell. */
+  /** Hradlo placených úrovní (concern/brand): registrace → Early Access upsell. */
   const gate = () => {
     if (!user) { requireAuth(); return false; }
     if (!hasEarlyAccess) { openEarlyAccessUpsell(); return false; }

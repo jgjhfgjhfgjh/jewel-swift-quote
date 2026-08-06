@@ -319,8 +319,8 @@ const cs: DealsText = {
     },
     promo: {
       proTitle: 'Vidíte to samé co ostatní. Jen o 48 hodin dřív.',
-      proSub: 'PRO otevírá každou dávku dva dny před veřejným startem. Nejlepší reference mizí první.',
-      proCta: 'Zobrazit tarify PRO',
+      proSub: 'Early Access otevírá každou dávku dva dny před veřejným startem. Nejlepší reference mizí první.',
+      proCta: 'Zobrazit Early Access',
       alertTitle: 'Nechte deal, ať si najde vás.',
       alertSub: 'Alert na koncern, značku nebo konkrétní model. Přijde ve chvíli, kdy dávka spadne.',
       alertCta: 'Nastavit alert',
@@ -559,8 +559,8 @@ const en: DealsText = {
     },
     promo: {
       proTitle: 'You see the same deal as everyone. Just 48 hours earlier.',
-      proSub: 'PRO opens every deal two days before the public start. The best references go first.',
-      proCta: 'See PRO plans',
+      proSub: 'Early Access opens every deal two days before the public start. The best references go first.',
+      proCta: 'See Early Access',
       alertTitle: 'Let the deal find you.',
       alertSub: 'An alert on a concern, a brand or one specific model. It fires the moment a deal drops.',
       alertCta: 'Set a deal alert',

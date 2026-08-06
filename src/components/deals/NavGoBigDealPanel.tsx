@@ -134,7 +134,7 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
             onClick={() => go('/#gbd-pricing')}
             className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-full bg-white px-5 text-[13px] font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
           >
-            See PRO plans <ArrowRight className="h-3.5 w-3.5" />
+            See Early Access <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
         {/* Live by concern — řádky v jazyce seznamu dealů na /deals:
@@ -315,7 +315,7 @@ function SpotlightEmpty({ onAlerts }: { onAlerts: () => void }) {
           The next deal is being negotiated.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-          PRO members see every deal 48 hours before public open.
+          Early Access members see every deal 48 hours before public open.
         </p>
       </div>
       <button
