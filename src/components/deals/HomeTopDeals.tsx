@@ -221,7 +221,6 @@ export function HomeTopDeals() {
         <div className="mx-auto max-w-[1400px] px-1 sm:px-3 lg:px-5">
           <ConcernCarousel
             texts={CONCERN_TEXTS}
-            appearance="ios"
             alertBell={{
               isOn: (slug) => alertsApi.hasAny('concern', slug),
               onToggle: handleConcernBell,

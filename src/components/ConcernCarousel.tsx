@@ -65,14 +65,11 @@ const MAX_LOGOS = 8;
 function ConcernCard({
   data,
   texts,
-  appearance,
   alertBell,
   maxBrands,
 }: {
   data: ConcernCardData;
   texts: ConcernCarouselTexts;
-  /** 'sharp' = hranatá katalogová karta; 'ios' = zakulacená karta s pill CTA */
-  appearance: 'sharp' | 'ios';
   /** Když je předán, CTA nahradí samotný zvoneček (alert toggle) */
   alertBell?: ConcernAlertBell;
   /** Nejvyšší počet značek napříč koncerny — určuje výšku plochy se značkami
@@ -102,7 +99,7 @@ function ConcernCard({
       /* Silné vrstvené podstínění (jazyk karet /deals, jen hlubší) + výrazný
          hover: karta se zvedne o 6 px, stín se skoro zdvojnásobí a okraj
          ztmavne — na bílé ploše to dělá hlavní hloubkový akcent sekce. */
-      className={`group/card relative flex cursor-pointer flex-col overflow-hidden ${appearance === 'ios' ? 'rounded-[1.25rem]' : 'rounded-none'} border border-slate-200/80 bg-white text-left
+      className={`group/card relative flex cursor-pointer flex-col overflow-hidden rounded-[1.5rem] border border-slate-200/70 bg-white text-left
                   shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)]
                   transition-all duration-300 ease-out
                   hover:-translate-y-1.5 hover:border-slate-300
@@ -141,7 +138,7 @@ function ConcernCard({
                   e.stopPropagation();
                   alertBell.onToggle(concern.slug, concern.name);
                 }}
-                className={`w-full inline-flex items-center justify-center ${appearance === 'ios' ? 'rounded-full' : 'rounded-md'} px-4 py-2.5 transition-colors ${
+                className={`w-full inline-flex items-center justify-center rounded-full px-4 py-2.5 transition-colors ${
                   on
                     ? 'border border-emerald-200 bg-emerald-50 text-emerald-600'
                     : 'bg-zinc-900 text-white group-hover/card:bg-zinc-800'
@@ -152,7 +149,7 @@ function ConcernCard({
             );
           })()
         ) : (
-          <span className={`w-full inline-flex items-center justify-center gap-1.5 ${appearance === 'ios' ? 'rounded-full' : 'rounded-md'} bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white group-hover/card:bg-zinc-800 transition-colors whitespace-nowrap`}>
+          <span className={`w-full inline-flex items-center justify-center gap-1.5 rounded-full bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white group-hover/card:bg-zinc-800 transition-colors whitespace-nowrap`}>
             {texts.cta} <ArrowRight className="h-3.5 w-3.5 shrink-0" />
           </span>
         )}
@@ -211,11 +208,9 @@ function ConcernCard({
 /* ─── Carousel ─── */
 export function ConcernCarousel({
   texts = CS_TEXTS,
-  appearance = 'sharp',
   alertBell,
 }: {
   texts?: ConcernCarouselTexts;
-  appearance?: 'sharp' | 'ios';
   alertBell?: ConcernAlertBell;
 }) {
   // Live brand catalog (bound to the feed) — counts per koncern follow it
@@ -270,7 +265,7 @@ export function ConcernCarousel({
                    [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {loop.map((data, i) => (
-          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} appearance={appearance} alertBell={alertBell} maxBrands={maxBrands} />
+          <ConcernCard key={`${data.concern.slug}-${i}`} data={data} texts={texts} alertBell={alertBell} maxBrands={maxBrands} />
         ))}
       </div>
 
