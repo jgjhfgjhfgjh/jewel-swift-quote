@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Layers, Lock, Tag } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
+import { getBrandByName } from '@/data/brands';
+import { toDisplayName } from '@/lib/brandNormalize';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
@@ -26,6 +28,14 @@ export function DealListRow({
   const lang = useStore((s) => s.lang);
   const d = dealsI18n[lang];
   const c = d.catalog.tile;
+
+  /* Značky dávky pro řadu log před textem — na mobilu se řádek nesmí ucpat,
+     proto jen dvě; od md čtyři. Doména z rejstříku značek, bez ní textový
+     fallback (BrandLogo si ho vykreslí sám). */
+  const brandLogos = item.brands.slice(0, 4).map((b) => {
+    const name = toDisplayName(b);
+    return { name, domain: getBrandByName(name)?.domain };
+  });
 
   const status =
     item.kind === 'live' && item.deadline ? (
@@ -65,22 +75,30 @@ export function DealListRow({
 
   const inner = (
     <>
-      {/* logo koncernu — volně na bílé, plná barva, bez rámečku */}
-      <span className="flex h-11 w-14 shrink-0 items-center justify-center">
-        {item.concernDomain ? (
-          <BrandLogo
-            name={item.concernName ?? item.supplier}
-            domain={item.concernDomain}
-            width={200}
-            height={80}
-            className={`max-h-6 max-w-full object-contain [mix-blend-mode:multiply] ${
-              item.kind === 'teaser' ? 'opacity-50' : 'opacity-90'
-            }`}
-            fallbackClassName="text-[9px] font-bold leading-none text-zinc-900"
+      {/* LOGA ZNAČEK v dávce — řada vedle sebe, zarovnaná doprava, takže končí
+          těsně PŘED textem ve směru čtení. Platí i pro připravované dávky
+          („in the works"), kde značky nese koncern. Bez rámečků, plná barva. */}
+      {/* PEVNÁ šířka slotu + zarovnání doprava: řada log končí u všech řádků
+          na stejné svislé lince, takže titulky pod sebou nekloužou */}
+      <span className="flex h-11 w-[104px] shrink-0 items-center justify-end gap-2.5 md:w-[232px]">
+        {brandLogos.map((b, i) => (
+            <BrandLogo
+              key={b.name}
+              name={b.name}
+              domain={b.domain ?? ''}
+              width={200}
+              height={80}
+              /* pevná výška → značky mají napříč řádky stejnou vizuální váhu;
+                 od třetí značky se logo objeví až od md, aby se na mobilu
+                 řádek neucpal */
+              className={`h-4 w-auto max-w-[64px] object-contain [mix-blend-mode:multiply] ${
+                i >= 2 ? 'hidden md:block' : ''
+              }`}
+              fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-zinc-900 ${
+                i >= 2 ? 'hidden md:block' : ''
+              }`}
           />
-        ) : (
-          <span className="truncate text-[9px] font-bold leading-none text-zinc-900">{item.supplier}</span>
-        )}
+        ))}
       </span>
 
       <span className="min-w-0 flex-1">
