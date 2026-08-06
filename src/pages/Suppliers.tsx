@@ -121,7 +121,11 @@ const QUESTIONS = [
   ['Who ships, and from where?', 'Your warehouse or ours, EXW or DDP. Both work; it changes the price, not the deal.'],
 ] as const;
 
-const MAILTO = 'mailto:obchod@swelt.cz?subject=BigDealSupplier';
+/* TODO(rebranding): kontaktní adresa dodavatelské větve. Zbylá adresa na
+   staré doméně — čeká na potvrzení nové schránky po přechodu na GoBigDeal.
+   Mění se na jediném místě, stránka ji bere odsud. */
+const CONTACT_EMAIL = 'obchod@swelt.cz';
+const MAILTO = `mailto:${CONTACT_EMAIL}?subject=BigDealSupplier`;
 
 /** Hranaté CTA — záměrný protiklad pilulek na odběratelském webu. */
 function Cta({ variant = 'solid', href, children }: { variant?: 'solid' | 'ghost'; href: string; children: React.ReactNode }) {
@@ -142,9 +146,9 @@ function Cta({ variant = 'solid', href, children }: { variant?: 'solid' | 'ghost
 
 /**
  * Vlastní hlavička dodavatelského světa. Odběratelský `Navbar` sem záměrně
- * nepatří — nese GoBigDeal branding a „B2B registration" CTA, což popírá
+ * nepatří — nese odběratelskou navigaci a „B2B registration" CTA, což popírá
  * oddělení světů, kvůli kterému stojí SupplierGateDialog. Cestu zpět drží
- * jediný odkaz na swelt.partner.
+ * jediný odkaz na hlavní web GoBigDeal.
  */
 function SupplierHeader() {
   return (
@@ -158,7 +162,7 @@ function SupplierHeader() {
             to="/"
             className={`${MONO} inline-flex items-center gap-1 text-zinc-400 transition-colors hover:text-[#F3F1EC]`}
           >
-            swelt.partner <ArrowUpRight className="h-3 w-3" />
+            GoBigDeal <ArrowUpRight className="h-3 w-3" />
           </Link>
           <a
             href={MAILTO}
@@ -419,7 +423,7 @@ export default function Suppliers() {
 
           <div className={`mt-20 flex flex-col gap-4 border-t pt-8 sm:flex-row sm:items-center sm:justify-between ${RULE_DARK}`}>
             <BigDealSupplierLogo className="text-base" />
-            <p className={`${MONO} text-zinc-500`}>The supply side of Swelt &nbsp;·&nbsp; obchod@swelt.cz</p>
+            <p className={`${MONO} text-zinc-500`}>The supply side of GoBigDeal &nbsp;·&nbsp; {CONTACT_EMAIL}</p>
           </div>
         </div>
       </footer>

@@ -15,7 +15,7 @@ Pravidla pro veškeré texty mířené na **dodavatelskou stranu**: `/suppliers`
 
 Odběratelská a dodavatelská strana nejsou dvě publika téže značky. Je to obrácený obchod a obrácená psychologie.
 
-| | Odběratel (swelt.partner) | **Dodavatel (BigDealSupplier)** |
+| | Odběratel (hlavní web GoBigDeal) | **Dodavatel (BigDealSupplier)** |
 |---|---|---|
 | Směr obchodu | my prodáváme jemu | **on prodává skrz nás — hodnotí nás jako protistranu** |
 | Emoce | hledá příležitost | **chrání se před chybou** |
@@ -165,7 +165,7 @@ Termíny, čísla, jasné podmínky, žádný prodejní tón. Tady se copy blí�
 - **EN je zdrojový jazyk** (opak odběratelského webu — dodavatelé jsou mezinárodní). CS je sekundární a **není doslovný překlad**. V CS platí vykání.
 - Copy patří do i18n (`src/lib/i18n*.ts`), žádné hardcoded stringy — stejné pravidlo jako u odběratelské strany.
 - Sdílená vizuální kostra s homepage a `/deals` (střídavé sekce, extralight nadpisy) zůstává — **liší se hlas, ne layout**.
-- Wordmark je `BigDealSupplierLogo`, ne Swelt logo. V dodavatelských textech značku Swelt do popředí netlač.
+- Wordmark je `BigDealSupplierLogo`, ne logo hlavní značky. V dodavatelských textech GoBigDeal do popředí netlač — dodavatel jedná s dodavatelskou větví, ne s odběratelským webem.
 
 ---
 
