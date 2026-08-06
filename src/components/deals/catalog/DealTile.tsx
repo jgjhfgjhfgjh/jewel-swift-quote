@@ -141,8 +141,10 @@ export function DealTile({
           bílý nápis nezmizel na bílém produktovém pozadí */}
       {item.kind === 'closed' && (
         <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center bg-zinc-900/20">
+          {/* vodoznak je vždy anglicky „CLOSED" — razítko stavu dávky, ne
+              lokalizovaný popisek (ten drží pill v rohu) */}
           <span className="rotate-[-8deg] text-center text-[clamp(1.1rem,4.5vw,1.9rem)] font-black uppercase tracking-[0.2em] text-white/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
-            {c.closed}
+            Closed
           </span>
         </div>
       )}
