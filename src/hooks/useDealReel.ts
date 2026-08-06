@@ -13,6 +13,8 @@ import { dealProductsTable } from '@/lib/deals';
  */
 export interface DealReelItem {
   img: string;
+  /** Značka kusu — nese vodoznak přes produkt. */
+  brand: string;
   /** Doporučená maloobchodní cena. */
   retail: number;
   /** Nejnižší velkoobchodní cena (nejvyšší hladina) — jen pro přihlášené. */
@@ -27,7 +29,7 @@ const POOL = 18;
 
 async function fetchReel(dealId: string): Promise<DealReelItem[]> {
   const { data, error } = await dealProductsTable()
-    .select('image_url, retail_price, wholesale_tier3, available')
+    .select('image_url, brand, retail_price, wholesale_tier3, available')
     .eq('deal_id', dealId)
     .not('image_url', 'is', null)
     .gt('retail_price', 0)
@@ -37,6 +39,7 @@ async function fetchReel(dealId: string): Promise<DealReelItem[]> {
 
   return (data as {
     image_url: string | null;
+    brand: string | null;
     retail_price: number | null;
     wholesale_tier3: number | null;
     available: number | null;
@@ -47,6 +50,7 @@ async function fetchReel(dealId: string): Promise<DealReelItem[]> {
       const wholesale = Number(p.wholesale_tier3) || 0;
       return {
         img: p.image_url as string,
+        brand: p.brand ?? '',
         retail,
         wholesale,
         discount: wholesale > 0 ? Math.round((1 - wholesale / retail) * 100) : 0,

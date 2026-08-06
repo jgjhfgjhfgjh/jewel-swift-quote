@@ -268,7 +268,9 @@ export default function Deals() {
   return (
     /* Kořen v bílé (světlá varianta dashboardu) — tmavé landing sekce níže
        si barvu kreslí samy. */
-    <div className="min-h-screen bg-white font-sans selection:bg-zinc-900 selection:text-white">
+    /* Plocha dashboardu je světle šedá (slate-50), aby bílé karty, pole a
+       pilulky vystoupily; landing sekce níž si barvu kreslí samy. */
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-zinc-900 selection:text-white">
       <Navbar />
       <BackButton />
 
@@ -472,9 +474,9 @@ export default function Deals() {
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
 
-      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je BÍLÝ; wrapper nese
-             bílou a zaoblený roh sekce odkrývá bílé růžky (vzor stránky) ── */}
-      <div className="bg-white">
+      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je ŠEDÝ; wrapper nese
+             šedou a zaoblený roh sekce odkrývá šedé růžky (vzor stránky) ── */}
+      <div className="bg-slate-50">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
             <div className="mx-auto max-w-[1000px] text-left">

@@ -48,7 +48,12 @@ export function DealTile({
     /* médium — logo koncernu v plných barvách na světlém podkladu */
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
       {hasReel ? (
-        <DealInventoryReel dealId={item.id} className="absolute inset-0" />
+        <DealInventoryReel
+          dealId={item.id}
+          concernName={item.concernName ?? item.supplier}
+          concernDomain={item.concernDomain}
+          className="absolute inset-0"
+        />
       ) : video ? (
         <>
           <DealVideoMedia
@@ -84,11 +89,9 @@ export function DealTile({
           domain={item.concernDomain}
           width={360}
           height={150}
-          className={`max-h-12 max-w-[74%] object-contain [mix-blend-mode:multiply] transition-all duration-300 group-hover:scale-[1.06] ${
-            /* teaser: koncern zůstává čitelný (o to jde), jen ztlumený —
-               že dávka ještě neběží, říká zámek a štítek */
-            item.kind === 'teaser' ? 'opacity-50 group-hover:opacity-90' : 'opacity-90 group-hover:opacity-100'
-          }`}
+          /* logo koncernu vždy v PLNÉ barvě — i u teaserů („Připravujeme"):
+             ztlumení působilo jako vada, že dávka neběží říkají zámek a štítek */
+          className="max-h-12 max-w-[74%] object-contain opacity-100 [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
           fallbackClassName="text-center text-lg font-medium tracking-tight text-zinc-900"
         />
       ) : (

@@ -1,117 +1,111 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Lock } from 'lucide-react';
+import { BrandLogo } from '@/components/BrandLogo';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { useDealReel, type DealReelItem } from '@/hooks/useDealReel';
+import { getBrandByName } from '@/data/brands';
+import { useDealReel } from '@/hooks/useDealReel';
+import { toDisplayName } from '@/lib/brandNormalize';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
-/** Kolik dlaždic zboží je v mřížce vidět (3×2). */
-const CELLS = 6;
-/** Jak často se jedna buňka vymění za další kus z dávky. */
-const SWAP_MS = 1500;
+/** Jak dlouho zůstane jeden kus v záběru. */
+const HOLD_MS = 2600;
 
 /**
- * Médium karty pro OBCHODNÍKA — „inventory reel": mřížka SKUTEČNÝCH produktů
- * z té konkrétní dávky, kde se po sekundách jedna buňka prostřídá za další
- * kus. Místo vygenerované reklamy (jazyk koncového zákazníka) odpovídá na to,
- * co kupec skutečně řeší: co v dávce je, jaká je úroveň zboží a jaká marže.
+ * Médium karty pro OBCHODNÍKA — SKUTEČNÉ zboží z té konkrétní dávky, kus po
+ * kuse. Místo vygenerované reklamy (jazyk koncového zákazníka) odpovídá na to,
+ * co kupec řeší: co v dávce je, jaká je úroveň zboží a jaká marže.
  *
- * Data jsou po produktech, nic se neprůměruje — pod aktivní buňkou svítí cena
- * PRÁVĚ toho kusu. Velkoobchodní cena je za přihlášením (stejné hradlo jako
- * `hero.note`: „Velkoobchodní ceny a marže se zobrazí po přihlášení"), host
- * vidí RRP a slevu.
+ * Skladba drží jazyk dřívějšího videa: produkt plní médium, PŘES něj leží
+ * vodoznak značky daného kusu a v rohu logo koncernu. Cena patří vždy k právě
+ * zobrazenému kusu — data po produktech, nic se neprůměruje. Velkoobchodní
+ * cena je za přihlášením (hradlo `hero.note`), host vidí RRP, slevu a zámek.
  */
 export function DealInventoryReel({
   dealId,
+  concernName,
+  concernDomain,
   className = '',
 }: {
   dealId: string;
+  concernName?: string;
+  concernDomain?: string;
   className?: string;
 }) {
   const lang = useStore((s) => s.lang);
   const t = dealsI18n[lang];
   const { user } = useAuthContext();
   const { data: pool = [] } = useDealReel(dealId);
-
-  /* Buňky drží indexy do poolu; každý tik posune JEDNU buňku na další kus,
-     takže mřížka žije, ale nepůsobí jako slideshow. */
-  const [cells, setCells] = useState<number[]>([]);
-  const [cursor, setCursor] = useState(CELLS);
-  const [active, setActive] = useState(0);
+  const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    if (pool.length) setCells(Array.from({ length: CELLS }, (_, i) => i % pool.length));
-  }, [pool.length]);
-
-  useEffect(() => {
-    if (pool.length <= CELLS) return;
-    const id = setInterval(() => {
-      setCells((prev) => {
-        if (!prev.length) return prev;
-        const slot = cursor % CELLS;
-        const next = [...prev];
-        next[slot] = cursor % pool.length;
-        setActive(slot);
-        return next;
-      });
-      setCursor((c) => c + 1);
-    }, SWAP_MS);
+    if (pool.length < 2) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % pool.length), HOLD_MS);
     return () => clearInterval(id);
-  }, [cursor, pool.length]);
-
-  const shown: (DealReelItem | undefined)[] = useMemo(
-    () => cells.map((i) => pool[i]),
-    [cells, pool],
-  );
-  const highlight = shown[active];
+  }, [pool.length]);
 
   if (!pool.length) return null;
 
-  return (
-    <div className={`grid grid-cols-3 grid-rows-2 gap-px bg-slate-100 ${className}`}>
-      {shown.map((p, i) => (
-        <div key={i} className="relative flex items-center justify-center overflow-hidden bg-white p-2">
-          {p && (
-            <img
-              /* klíč na URL → výměna kusu se prolne, ne přeblikne */
-              key={p.img}
-              src={p.img}
-              alt=""
-              loading="lazy"
-              className="h-full w-full animate-in fade-in object-contain duration-700 [mix-blend-mode:multiply]"
-            />
-          )}
-          {/* jemný rámeček kolem právě vyměněného kusu — oko ví, ke kterému
-              zboží patří cena v pruhu, aniž by na kartě přibyl další chip */}
-          {p && i === active && (
-            <span className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-zinc-900/15" />
-          )}
-        </div>
-      ))}
+  const item = pool[idx % pool.length];
+  const brandName = item.brand ? toDisplayName(item.brand) : undefined;
+  const brandDomain = brandName ? getBrandByName(brandName)?.domain : undefined;
 
-      {/* cenový pruh vždy k PRÁVĚ vyměněnému kusu — RRP a sleva veřejně,
-          velkoobchodní cena za přihlášením (hradlo `hero.note`) */}
-      {highlight && (
-        <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-white via-white/95 to-transparent px-3 pb-2 pt-5">
-          <span className="font-mono text-[11px] text-slate-500">
-            {t.product.rrp} <span className="text-zinc-900">{Math.round(highlight.retail)} €</span>
-          </span>
-          {user && highlight.wholesale > 0 ? (
-            <span className="font-mono text-[11px] text-slate-500">
-              → <span className="font-bold text-emerald-600">{Math.round(highlight.wholesale)} €</span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-400">
-              <Lock className="h-2.5 w-2.5" /> {t.product.yourPrice}
-            </span>
-          )}
-          {highlight.discount > 0 && (
-            <span className="ml-auto rounded-full bg-red-50 px-1.5 py-0.5 font-mono text-[10px] font-bold text-red-600 ring-1 ring-red-100">
-              −{highlight.discount} %
-            </span>
-          )}
+  return (
+    <div data-reel className={`overflow-hidden bg-white ${className}`}>
+      {/* vodoznak značky PŘES produkt — tichá obdoba outra z videa */}
+      {brandName && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <BrandLogo
+            key={brandName}
+            name={brandName}
+            domain={brandDomain ?? ''}
+            width={400}
+            height={160}
+            className="h-auto w-[62%] object-contain opacity-[0.13] [mix-blend-mode:multiply]"
+            fallbackClassName="text-2xl font-bold uppercase tracking-widest text-zinc-900/10"
+          />
         </div>
       )}
+
+      {/* produkt — jeden kus přes celé médium, výměna prolnutím */}
+      <img
+        key={item.img}
+        src={item.img}
+        alt=""
+        loading="lazy"
+        className="absolute inset-0 h-full w-full animate-in fade-in object-contain p-5 duration-700 [mix-blend-mode:multiply]"
+      />
+
+      {/* koncern v rohu — stejně jako když v médiu běželo video */}
+      {concernDomain && (
+        <BrandLogo
+          name={concernName ?? ''}
+          domain={concernDomain}
+          width={200}
+          height={80}
+          className="absolute bottom-2.5 left-3 h-4 w-auto max-w-[92px] object-contain opacity-80 [mix-blend-mode:multiply]"
+          fallbackClassName="absolute bottom-2.5 left-3 text-[10px] font-bold text-zinc-500"
+        />
+      )}
+
+      {/* cena PRÁVĚ zobrazeného kusu — RRP a sleva veřejně, VO za přihlášením */}
+      <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/95 px-2 py-1 shadow-sm backdrop-blur">
+        <span className="font-mono text-[10px] text-slate-500">
+          {t.product.rrp} <span className="text-zinc-900">{Math.round(item.retail)} €</span>
+        </span>
+        {user && item.wholesale > 0 ? (
+          <span className="font-mono text-[10px] font-bold text-emerald-600">
+            → {Math.round(item.wholesale)} €
+          </span>
+        ) : (
+          <Lock className="h-2.5 w-2.5 text-slate-400" />
+        )}
+        {item.discount > 0 && (
+          <span className="rounded-full bg-red-50 px-1.5 font-mono text-[10px] font-bold text-red-600">
+            −{item.discount} %
+          </span>
+        )}
+      </div>
     </div>
   );
 }

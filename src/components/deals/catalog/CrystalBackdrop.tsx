@@ -49,8 +49,9 @@ export function CrystalBackdrop({ className = '' }: { className?: string }) {
           Střed drží krycí, i když kámen kolem zesílil: pod headlinem a
           BrandSpotlightem se čte text, ne kámen. */}
       <div className="absolute inset-0 [background:radial-gradient(112%_98%_at_50%_52%,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.66)_40%,rgba(255,255,255,0.14)_76%,transparent_100%)]" />
-      {/* spodní třetina do čista — přechod hero → bílý katalog bez hrany */}
-      <div className="absolute inset-x-0 bottom-0 h-1/3 [background:linear-gradient(to_bottom,transparent,#fff)]" />
+      {/* spodní třetina do čista — přechod hero → šedá plocha katalogu bez
+          hrany (slate-50 #f8fafc, ne bílá: plocha stránky je nově šedá) */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 [background:linear-gradient(to_bottom,transparent,#f8fafc)]" />
     </div>
   );
 }

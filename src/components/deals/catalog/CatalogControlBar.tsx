@@ -43,7 +43,7 @@ export function CatalogControlBar({
   ];
 
   return (
-    <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+    <div className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/85 py-3 backdrop-blur supports-[backdrop-filter]:bg-slate-50/70">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         {/* řazení — segmenty jako pilulky, na úzkém displeji scrollují */}
         <div
