@@ -99,27 +99,35 @@ function ConcernCard({
           openConcern();
         }
       }}
-      className={`group/card relative flex cursor-pointer flex-col overflow-hidden ${appearance === 'ios' ? 'rounded-[1.25rem]' : 'rounded-none'} border border-border bg-white shadow-md text-left transition-shadow hover:shadow-lg ${CARD_CLASS}`}
+      /* Silné vrstvené podstínění (jazyk karet /deals, jen hlubší) + výrazný
+         hover: karta se zvedne o 6 px, stín se skoro zdvojnásobí a okraj
+         ztmavne — na bílé ploše to dělá hlavní hloubkový akcent sekce. */
+      className={`group/card relative flex cursor-pointer flex-col overflow-hidden ${appearance === 'ios' ? 'rounded-[1.25rem]' : 'rounded-none'} border border-slate-200/80 bg-white text-left
+                  shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)]
+                  transition-all duration-300 ease-out
+                  hover:-translate-y-1.5 hover:border-slate-300
+                  hover:shadow-[0_36px_64px_-18px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.12)]
+                  ${CARD_CLASS}`}
     >
-      {/* Koncern logo — labelled so it reads clearly as the parent group */}
-      <div className="pt-4 shrink-0 flex flex-col items-center">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+      {/* Hlava karty — ČTVERCOVÉ pole (aspect-square podle šířky karty) s logem
+          koncernu přesně na středu; label sedí ukotvený nahoře, aby logo
+          zůstalo v optickém středu čtverce. Odtud „vzdušnost" karty. */}
+      <div className="relative flex aspect-square shrink-0 items-center justify-center px-6">
+        <span className="absolute inset-x-0 top-4 text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {texts.groupLabel}
         </span>
-        <div className="h-12 sm:h-14 mt-1 flex items-center justify-center px-6">
-          <BrandLogo
-            name={concern.name}
-            domain={concern.domain}
-            width={400}
-            height={160}
-            className="max-h-full max-w-[200px] object-contain [mix-blend-mode:multiply]"
-            fallbackClassName="font-display text-xl font-black tracking-tight text-foreground text-center"
-          />
-        </div>
+        <BrandLogo
+          name={concern.name}
+          domain={concern.domain}
+          width={400}
+          height={160}
+          className="max-h-16 max-w-[78%] object-contain [mix-blend-mode:multiply] sm:max-h-20"
+          fallbackClassName="font-display text-2xl font-black tracking-tight text-foreground text-center"
+        />
       </div>
 
-      {/* CTA — hned pod logem koncernu, nad seznamem značek */}
-      <div className="px-4 pt-3 shrink-0">
+      {/* CTA — hned pod čtvercovou hlavou, nad seznamem značek */}
+      <div className="px-4 pt-1 shrink-0">
         {alertBell ? (
           (() => {
             const on = alertBell.isOn(concern.slug);
@@ -151,7 +159,7 @@ function ConcernCard({
       </div>
 
       {/* Divider — odděluje koncern od jeho značek */}
-      <div className="px-6 mt-3 shrink-0 flex items-center gap-3">
+      <div className="px-6 mt-5 shrink-0 flex items-center gap-3">
         <span className="h-px flex-1 bg-border" />
         <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {texts.brandsLabel}
@@ -162,7 +170,7 @@ function ConcernCard({
       {/* Značky koncernu — jedna pod druhou; min-height podle koncernu s
           nejvíce značkami → všechny karty mají stejnou výšku */}
       <div
-        className="px-5 sm:px-6 py-2 flex flex-col items-center justify-center gap-2"
+        className="px-5 sm:px-6 py-3 flex flex-col items-center justify-center gap-2.5"
         style={{ minHeight: maxBrands * BRAND_ROW_H }}
       >
         {logoBrands.map((key) => {
@@ -189,7 +197,7 @@ function ConcernCard({
       </div>
 
       {/* Stats */}
-      <div className="px-6 pb-4 pt-1 shrink-0 mt-auto">
+      <div className="px-6 pb-5 pt-2 shrink-0 mt-auto">
         <p className="text-center text-xs text-muted-foreground">
           {brandKeys.length} {texts.brandWord(brandKeys.length)}
           {' · '}
