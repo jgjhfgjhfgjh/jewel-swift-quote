@@ -804,7 +804,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         {/* iOS grouped list — sekce zrcadlí desktopové panely, skupiny jsou
             bílé zaoblené karty na systémové šedé, řádky drží stávající font
             (text-sm font-medium) + mikro copy z PRODUCT_ITEMS. */}
-        <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto pb-6">
+        {/* [&>*]:shrink-0 je KRITICKÉ: bez něj flexbox skupiny smrskne (mají
+            výchozí flex-shrink:1), obsah jim přeteče, řádky se navzájem
+            překryjí a ťuknutí padne na cizí prvek — místo toho se má zapnout
+            scroll (proto scrollHeight musí být > clientHeight). */}
+        <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto overscroll-contain pb-6 [&>*]:shrink-0">
           {/* Why — sólo skupina bez hlavičky (příběh vypráví homepage) */}
           <div className="mx-4 overflow-hidden rounded-2xl bg-white">
             <button
