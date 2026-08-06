@@ -90,8 +90,10 @@ export function DealTile({
           width={360}
           height={150}
           /* logo koncernu vždy v PLNÉ barvě — i u teaserů („Připravujeme"):
-             ztlumení působilo jako vada, že dávka neběží říkají zámek a štítek */
-          className="max-h-12 max-w-[74%] object-contain opacity-100 [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
+             ztlumení působilo jako vada, že dávka neběží říkají zámek a štítek.
+             PEVNÁ výška (ne max-h) → všechna loga mají napříč kartami stejnou
+             vizuální váhu; max-w jen brání přetečení u velmi širokých značek. */
+          className="h-11 w-auto max-w-[74%] object-contain opacity-100 [mix-blend-mode:multiply] transition-transform duration-300 group-hover:scale-[1.06]"
           fallbackClassName="text-center text-lg font-medium tracking-tight text-zinc-900"
         />
       ) : (
