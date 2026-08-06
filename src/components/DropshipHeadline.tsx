@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react';
  */
 
 const LEAD_WORDS = 'Build your online business and create your freedom'.split(' ');
-const COLORED = 'without spending money on products.';
+const COLORED = 'without spending money on stock.';
 /* Závěrečná věta za barevnou částí — indexy slov navazují na LEAD_WORDS */
 const TAIL_WORDS = "Pay us from customer's money.".split(' ');
 const TAIL_OFFSET = LEAD_WORDS.length;
