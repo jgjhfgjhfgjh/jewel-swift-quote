@@ -16,6 +16,9 @@ export default {
         sans: ['Inter', 'sans-serif'],
         spartan: ['"League Spartan"', 'sans-serif'],
         grotesk: ['"Space Grotesk"', 'sans-serif'],
+        // Dodavatelská větev (BigDealSupplier) — mono popisky a indexy.
+        // Vlastní klíč místo přepsání `mono`, aby se nezměnilo nic stávajícího.
+        plex: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
