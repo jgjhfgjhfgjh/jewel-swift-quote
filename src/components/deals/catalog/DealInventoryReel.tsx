@@ -19,7 +19,7 @@ const SMALL_PX = 260;
  * Skladba podle brandshow karuselu: produkt v horní části, POD ním pruh
  * s logem značky (u dávek s více značkami se logo střídá spolu s produktem,
  * u jednoznačkových stojí — plyne to samo z toho, že logo patří k právě
- * zobrazenému kusu). V pruhu vlevo zůstává koncern, jako když tu hrálo video.
+ * zobrazenému kusu). Levý roh média drží číslo dávky (kreslí DealTile).
  *
  * Cena patří vždy k právě zobrazenému kusu — data po produktech, nic se
  * neprůměruje. Velkoobchodní cena je za přihlášením (hradlo `hero.note`).
@@ -30,13 +30,9 @@ const SMALL_PX = 260;
  */
 export function DealInventoryReel({
   dealId,
-  concernName,
-  concernDomain,
   className = '',
 }: {
   dealId: string;
-  concernName?: string;
-  concernDomain?: string;
   className?: string;
 }) {
   const lang = useStore((s) => s.lang);
@@ -99,16 +95,6 @@ export function DealInventoryReel({
       {/* ── řádek značky — 1:1 s karuselem: pevných h-10, logo uprostřed,
              žádný tónovaný pruh; koncern drobně vlevo ── */}
       <div className="relative flex h-10 shrink-0 items-center justify-center px-3">
-        {concernDomain && (
-          <BrandLogo
-            name={concernName ?? ''}
-            domain={concernDomain}
-            width={200}
-            height={80}
-            className="absolute left-3 h-3.5 w-auto max-w-[64px] object-contain opacity-60 [mix-blend-mode:multiply]"
-            fallbackClassName="absolute left-3 text-[9px] font-bold uppercase tracking-wider text-slate-400"
-          />
-        )}
         {brandName && (
           <BrandLogo
             key={brandName}

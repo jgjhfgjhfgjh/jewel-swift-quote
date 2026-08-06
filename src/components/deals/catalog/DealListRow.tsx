@@ -1,12 +1,15 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Layers, Lock, Tag } from 'lucide-react';
+import { ArrowRight, Bell, BellRing, Layers, Lock, Tag } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
+import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { getBrandByName } from '@/data/brands';
 import { toDisplayName } from '@/lib/brandNormalize';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
+import type { DealAlertsApi } from '@/hooks/useDealAlerts';
 
 /** EA pill vede na ceník na stránce (#gbd-pricing) — ne do řádku. */
 const scrollToPricing = () =>
@@ -21,13 +24,33 @@ const scrollToPricing = () =>
 export function DealListRow({
   item,
   onTeaserClick,
+  alertsApi,
+  onRequireAuth,
 }: {
   item: DealTileItem;
   onTeaserClick?: () => void;
+  /** SDÍLENÁ instance alertů — každý řádek by jinak tahal svůj vlastní dotaz. */
+  alertsApi?: DealAlertsApi;
+  /** Host nemá kam alert uložit → hradlo registrace. */
+  onRequireAuth?: () => void;
 }) {
   const lang = useStore((s) => s.lang);
   const d = dealsI18n[lang];
   const c = d.catalog.tile;
+  const dash = d.catalog.dash;
+
+  /* Hlídač KONKRÉTNÍ dávky (level 'deal', target = slug). Funguje i u
+     uzavřené dávky — tam je to projev zájmu o repete. */
+  const watchTarget = item.slug ?? item.id;
+  const watching = alertsApi?.has('deal', watchTarget) ?? false;
+  const toggleWatch = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!alertsApi) return;
+    void alertsApi.toggle('deal', watchTarget, item.title).then((ok) => {
+      if (!ok) onRequireAuth?.();
+    });
+  };
 
   /* Značky dávky pro řadu log před textem — na mobilu se řádek nesmí ucpat,
      proto jen dvě; od md čtyři. Doména z rejstříku značek, bez ní textový
@@ -36,6 +59,15 @@ export function DealListRow({
     const name = toDisplayName(b);
     return { name, domain: getBrandByName(name)?.domain };
   });
+
+  /* MOBIL: místo řady log jedna pozice, kde se značky střídají. */
+  const [brandIdx, setBrandIdx] = useState(0);
+  useEffect(() => {
+    if (brandLogos.length < 2) return;
+    const id = setInterval(() => setBrandIdx((i) => (i + 1) % brandLogos.length), 2200);
+    return () => clearInterval(id);
+  }, [brandLogos.length]);
+
 
   const status =
     item.kind === 'live' && item.deadline ? (
@@ -57,48 +89,67 @@ export function DealListRow({
                      transition-all duration-200 hover:scale-[1.05] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         >
-          <Lock className="h-3 w-3" /> {d.catalog.dash.earlyBadge}
+          <Lock className="h-3 w-3" />
+          <span className="sm:hidden">{d.catalog.dash.earlyBadgeShort}</span>
+          <span className="hidden sm:inline">{d.catalog.dash.earlyBadge}</span>
           <span className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-full bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/ea:opacity-100 group-focus-visible/ea:opacity-100">
             {d.catalog.dash.earlyBadgeHint}
           </span>
         </span>
-        {/* stavový chip bez zámku — na mobilu ho vynecháváme, řádek je plný */}
-        <span className="hidden rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 md:inline-flex">
-          {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
+        {/* stavový chip = HLÍDAČ té dávky: zvoneček vlevo, klik zapne alert
+            (na mobilu se chip vynechává, řádek je plný) */}
+        <span
+          role="button"
+          tabIndex={0}
+          aria-pressed={watching}
+          aria-label={watching ? dash.watchingDeal : dash.watchDeal}
+          title={watching ? dash.watchingDeal : dash.watchDeal}
+          onClick={toggleWatch}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleWatch(e); }}
+          className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium transition-colors md:px-2.5 ${
+            watching
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:text-zinc-900'
+          }`}
+        >
+          {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
+          <span className="hidden md:inline">{item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}</span>
         </span>
       </>
     ) : (
-      <span className="rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-400">
+      /* uzavřená dávka — zákazník musí mít možnost projevit zájem o repete */
+      <span
+        role="button"
+        tabIndex={0}
+        aria-pressed={watching}
+        aria-label={watching ? dash.watchingDeal : dash.watchClosed}
+        title={watching ? dash.watchingDeal : dash.watchClosed}
+        onClick={toggleWatch}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleWatch(e); }}
+        className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+          watching
+            ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+            : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:text-zinc-900'
+        }`}
+      >
+        {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
         {c.closed}
       </span>
     );
 
   const inner = (
     <>
-      {/* LOGA ZNAČEK v dávce — řada vedle sebe, zarovnaná doprava, takže končí
-          těsně PŘED textem ve směru čtení. Platí i pro připravované dávky
-          („in the works"), kde značky nese koncern. Bez rámečků, plná barva. */}
-      {/* PEVNÁ šířka slotu + zarovnání doprava: řada log končí u všech řádků
-          na stejné svislé lince, takže titulky pod sebou nekloužou */}
-      <span className="flex h-11 w-[104px] shrink-0 items-center justify-end gap-2.5 md:w-[232px]">
-        {brandLogos.map((b, i) => (
-            <BrandLogo
-              key={b.name}
-              name={b.name}
-              domain={b.domain ?? ''}
-              width={200}
-              height={80}
-              /* pevná výška → značky mají napříč řádky stejnou vizuální váhu;
-                 od třetí značky se logo objeví až od md, aby se na mobilu
-                 řádek neucpal */
-              className={`h-4 w-auto max-w-[64px] object-contain [mix-blend-mode:multiply] ${
-                i >= 2 ? 'hidden md:block' : ''
-              }`}
-              fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-zinc-900 ${
-                i >= 2 ? 'hidden md:block' : ''
-              }`}
-          />
-        ))}
+      {/* ČÍSLO DÁVKY — drobná šedá značka vlevo místo ikony; stejné číslo
+          slouží i pro interní evidenci (deals.deal_no) */}
+      <span className="hidden h-11 w-[70px] shrink-0 flex-col items-center justify-center leading-none text-slate-400 sm:flex">
+        {/* teaser není evidovaná dávka → číslo nemá; slot zůstává kvůli
+            zarovnání titulků do jedné svislé linky */}
+        {item.dealNo && (
+          <>
+            <GoBigDealLogo className="text-[9px] text-slate-400" />
+            <span className="mt-0.5 font-mono text-[10px] tracking-tight">nr. {item.dealNo}</span>
+          </>
+        )}
       </span>
 
       <span className="min-w-0 flex-1">
@@ -111,6 +162,44 @@ export function DealListRow({
           {item.title}
         </span>
       </span>
+
+      {/* LOGA ZNAČEK v dávce — v mezeře ZA textem (dle reference), zarovnaná
+          doprava, takže končí těsně před stavovými pilulkami. Platí i pro
+          připravované dávky, kde značky nese koncern. */}
+      <span className="hidden shrink-0 items-center justify-end gap-3 sm:flex">
+        {brandLogos.map((b, i) => (
+          <BrandLogo
+            key={b.name}
+            name={b.name}
+            domain={b.domain ?? ''}
+            width={200}
+            height={80}
+            /* pevná výška → značky mají napříč řádky stejnou vizuální váhu;
+               od třetí se logo objeví až od lg, aby se řádek neucpal */
+            className={`h-4 w-auto max-w-[72px] object-contain [mix-blend-mode:multiply] ${
+              i >= 2 ? 'hidden lg:block' : ''
+            }`}
+            fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-zinc-900 ${
+              i >= 2 ? 'hidden lg:block' : ''
+            }`}
+          />
+        ))}
+      </span>
+
+      {/* MOBIL: jedna pozice, značky se v ní střídají (řada by se nevešla) */}
+      {brandLogos.length > 0 && (
+        <span className="flex w-[62px] shrink-0 items-center justify-end sm:hidden">
+          <BrandLogo
+            key={brandLogos[brandIdx % brandLogos.length].name}
+            name={brandLogos[brandIdx % brandLogos.length].name}
+            domain={brandLogos[brandIdx % brandLogos.length].domain ?? ''}
+            width={200}
+            height={80}
+            className="h-4 w-auto max-w-full animate-in fade-in object-contain duration-500 [mix-blend-mode:multiply]"
+            fallbackClassName="truncate text-[10px] font-bold leading-none text-zinc-900"
+          />
+        </span>
+      )}
 
       {/* počty — jen desktop, na mobilu je řádek už tak plný */}
       {item.kind !== 'teaser' && (

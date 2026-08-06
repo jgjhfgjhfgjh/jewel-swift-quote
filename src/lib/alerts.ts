@@ -1,7 +1,9 @@
 /**
  * Watchdog alerty — hlídače deal dropů na čtyřech úrovních:
- * 'deals' (všechny nové dealy, free tier), 'concern' (slug koncernu),
- * 'brand' (kanonický brand key z toBrandKey), 'product' (SKU modelu).
+ * 'deals' (všechny nové dealy, free tier), 'deal' (JEDNA konkrétní dávka —
+ * target je její slug; funguje i u uzavřené dávky jako projev zájmu o
+ * repete), 'concern' (slug koncernu), 'brand' (kanonický brand key
+ * z toBrandKey), 'product' (SKU modelu).
  *
  * V1 pouze ukládá stav do tabulky `deal_alerts`; notifikace při dropu
  * se napojí v další fázi. Tabulka zatím není v generovaných typech
@@ -11,7 +13,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
-export type AlertLevel = 'deals' | 'concern' | 'brand' | 'product';
+export type AlertLevel = 'deals' | 'deal' | 'concern' | 'brand' | 'product';
 
 /**
  * Hromadný alert na celou úroveň — jeden řádek místo N (např. „všechny

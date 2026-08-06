@@ -104,6 +104,13 @@ export interface DealsText {
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
       earlyBadgeHint: string;
+      /** Zkrácený EA pill pro mobil (vedle zvonečku). */
+      earlyBadgeShort: string;
+      /** Hlídač konkrétní dávky — zvoneček ve stavovém pillu. */
+      watchDeal: string;
+      watchingDeal: string;
+      /** Zájem o uzavřenou dávku (repete). */
+      watchClosed: string;
       kpiLive: string;
       kpiModels: string;
       kpiDiscount: string;
@@ -335,8 +342,12 @@ const cs: DealsText = {
       kpiLiveSeeAll: 'Zobrazit vše',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
+      earlyBadgeShort: '48 h',
+      watchDeal: 'Hlídat tuto dávku',
+      watchingDeal: 'Dávku hlídáte',
+      watchClosed: 'Dejte vědět, až bude repete',
       kpiLive: 'Živé dávky',
-      kpiModels: 'Modelů v katalogu',
+      kpiModels: 'Modelů v živých dávkách',
       kpiDiscount: 'Sleva až',
       kpiDeadline: 'Nejbližší uzávěrka',
       kpiNextStart: 'Nejbližší start',
@@ -575,8 +586,12 @@ const en: DealsText = {
       kpiLiveSeeAll: 'See all',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
+      earlyBadgeShort: '48h',
+      watchDeal: 'Watch this batch',
+      watchingDeal: 'Watching this batch',
+      watchClosed: 'Tell me when it runs again',
       kpiLive: 'Live deals',
-      kpiModels: 'Models in catalog',
+      kpiModels: 'Models in live deals',
       kpiDiscount: 'Discount up to',
       kpiDeadline: 'Next deadline',
       kpiNextStart: 'Next start',

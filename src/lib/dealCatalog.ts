@@ -15,6 +15,8 @@ export type TileKind = 'live' | 'closed' | 'upcoming' | 'teaser';
 
 export interface DealTileItem {
   id: string;
+  /** Číslo dávky (deals.deal_no) — zákaznická i interní evidence. */
+  dealNo?: number;
   kind: TileKind;
   /** Cíl prokliku; teaser dlaždice ho nemají (řeší se hradlem registrace). */
   slug?: string;
@@ -44,6 +46,7 @@ export function tileFromDeal(deal: Deal, models: number): DealTileItem {
   const upcoming = deal.status === 'active' && new Date(deal.starts_at).getTime() > Date.now();
   return {
     id: deal.id,
+    dealNo: deal.deal_no ?? undefined,
     kind: upcoming ? 'upcoming' : live ? 'live' : 'closed',
     slug: deal.slug,
     title: deal.title,

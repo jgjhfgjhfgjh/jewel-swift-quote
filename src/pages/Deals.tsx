@@ -11,6 +11,7 @@ import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
+import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
 import { toDisplayName } from '@/lib/brandNormalize';
@@ -78,6 +79,9 @@ export default function Deals() {
   const navigate = useNavigate();
   const d = dealsI18n[lang];
   const { deals, productCounts, loading } = useDeals();
+  /* JEDNA sdílená instance alertů pro všechny karty i řádky — každá karta
+     by jinak tahala vlastní dotaz na deal_alerts. */
+  const alertsApi = useDealAlerts();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<CatalogSortKey>('ending');
   const [view, setView] = useState<CatalogView>('grid');
@@ -126,7 +130,8 @@ export default function Deals() {
     const live = real.filter((t) => t.kind === 'live');
     return {
       liveCount: live.length,
-      models: real.reduce((n, t) => n + t.models, 0),
+      /* modely POUZE z živých dávek — KPI má říkat, co je teď k mání */
+      models: live.reduce((n, t) => n + t.models, 0),
       maxDiscount: catalog.reduce((m, t) => Math.max(m, t.maxDiscount), 0),
       nextDeadline: live.map((t) => t.deadline).filter(Boolean).sort()[0],
       nextStart: real
@@ -230,14 +235,26 @@ export default function Deals() {
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {opts.lead && <EarlyAccessCard />}
             {items.map((t) => (
-              <DealTile key={t.id} item={t} onTeaserClick={goToAlerts} />
+              <DealTile
+                key={t.id}
+                item={t}
+                onTeaserClick={goToAlerts}
+                alertsApi={alertsApi}
+                onRequireAuth={() => openAuthModal('register')}
+              />
             ))}
           </div>
         ) : (
           <div className="mt-4 flex flex-col gap-2.5">
             {opts.lead && <EarlyAccessCard variant="row" />}
             {items.map((t) => (
-              <DealListRow key={t.id} item={t} onTeaserClick={goToAlerts} />
+              <DealListRow
+                key={t.id}
+                item={t}
+                onTeaserClick={goToAlerts}
+                alertsApi={alertsApi}
+                onRequireAuth={() => openAuthModal('register')}
+              />
             ))}
           </div>
         )}

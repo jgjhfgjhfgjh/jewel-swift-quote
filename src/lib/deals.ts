@@ -15,6 +15,8 @@ export type DealStatus = 'draft' | 'active' | 'ended';
 export interface Deal {
   id: string;
   slug: string;
+  /** Interní i zákaznické číslo dávky (GoBigDeal nr. 1001). */
+  deal_no: number | null;
   title: string;
   subtitle: string;
   category: DealCategory;

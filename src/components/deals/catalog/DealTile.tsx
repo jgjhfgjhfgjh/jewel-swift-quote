@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Layers, Lock, Tag } from 'lucide-react';
+import { ArrowRight, Bell, BellRing, Layers, Lock, Tag } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
+import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
+import type { DealAlertsApi } from '@/hooks/useDealAlerts';
 import { getDealVideo } from '@/data/dealVideos';
 import { DealVideoMedia } from '@/components/deals/catalog/DealVideoMedia';
 import { DealInventoryReel } from '@/components/deals/catalog/DealInventoryReel';
@@ -26,14 +28,50 @@ const scrollToPricing = () =>
 export function DealTile({
   item,
   onTeaserClick,
+  alertsApi,
+  onRequireAuth,
 }: {
   item: DealTileItem;
   /** Klik na teaser dlaždici (hradlo registrace / alert). */
   onTeaserClick?: () => void;
+  /** SDÍLENÁ instance alertů — každá karta by jinak tahala svůj dotaz. */
+  alertsApi?: DealAlertsApi;
+  /** Host nemá kam alert uložit → hradlo registrace. */
+  onRequireAuth?: () => void;
 }) {
   const lang = useStore((s) => s.lang);
   const t = dealsI18n[lang];
   const c = t.catalog.tile;
+  const dash = t.catalog.dash;
+
+  /* Hlídač KONKRÉTNÍ dávky (level 'deal') — u uzavřené je to zájem o repete. */
+  const watchTarget = item.slug ?? item.id;
+  const watching = alertsApi?.has('deal', watchTarget) ?? false;
+  const toggleWatch = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!alertsApi) return;
+    void alertsApi.toggle('deal', watchTarget, item.title).then((ok) => {
+      if (!ok) onRequireAuth?.();
+    });
+  };
+  const watchPill = (label: string, hint: string, tone: string) => (
+    <span
+      role="button"
+      tabIndex={0}
+      aria-pressed={watching}
+      aria-label={watching ? dash.watchingDeal : hint}
+      title={watching ? dash.watchingDeal : hint}
+      onClick={toggleWatch}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleWatch(e); }}
+      className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium backdrop-blur transition-colors ${
+        watching ? 'border-emerald-200 bg-emerald-50/95 text-emerald-700' : tone
+      }`}
+    >
+      {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
+      {label}
+    </span>
+  );
 
   /* Médium karty pro OBCHODNÍKA: první je „inventory reel" — mřížka skutečného
      zboží z dávky s cenami (odpovídá na „co v tom je a kolik na tom vydělám").
@@ -50,12 +88,7 @@ export function DealTile({
        tam; karta je tím vyšší, spodní část se lepí pod médium beze změny */
     <div className="relative flex aspect-[7/8] items-center justify-center overflow-hidden border-b border-slate-100 bg-slate-50 p-6">
       {hasReel ? (
-        <DealInventoryReel
-          dealId={item.id}
-          concernName={item.concernName ?? item.supplier}
-          concernDomain={item.concernDomain}
-          className="absolute inset-0"
-        />
+        <DealInventoryReel dealId={item.id} className="absolute inset-0" />
       ) : video ? (
         <>
           <DealVideoMedia
@@ -104,6 +137,16 @@ export function DealTile({
         </span>
       )}
 
+      {/* UZAVŘENÁ dávka — bílý vodoznak přes fotku; tmavý závoj pod ním, aby
+          bílý nápis nezmizel na bílém produktovém pozadí */}
+      {item.kind === 'closed' && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center bg-zinc-900/20">
+          <span className="rotate-[-8deg] text-center text-[clamp(1.1rem,4.5vw,1.9rem)] font-black uppercase tracking-[0.2em] text-white/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
+            {c.closed}
+          </span>
+        </div>
+      )}
+
       {/* horní pás štítků — JEDEN flex s wrapem místo dvou absolutních rohů:
           na úzké kartě se pravý cluster zalomí POD levý pill, nikdy se
           nepřekryjí (viz kolize EA pillu s „Připravujeme") */}
@@ -135,9 +178,11 @@ export function DealTile({
               </span>
             </span>
           ) : (
-            <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-400 backdrop-blur">
-              {c.closed}
-            </span>
+            watchPill(
+              c.closed,
+              dash.watchClosed,
+              'border-slate-200 bg-white/90 text-slate-500 hover:border-slate-300 hover:text-zinc-900',
+            )
           )}
         </div>
 
@@ -151,11 +196,12 @@ export function DealTile({
               −{item.maxDiscount} %
             </span>
           )}
-          {(item.kind === 'upcoming' || item.kind === 'teaser') && (
-            <span className="rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-600 backdrop-blur">
-              {item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}
-            </span>
-          )}
+          {(item.kind === 'upcoming' || item.kind === 'teaser') &&
+            watchPill(
+              item.kind === 'upcoming' ? c.unlocksIn : c.upcoming,
+              dash.watchDeal,
+              'border-slate-200 bg-white/90 text-slate-600 hover:border-slate-300 hover:text-zinc-900',
+            )}
         </div>
       </div>
       {item.kind === 'upcoming' && item.startsAt && (
@@ -168,11 +214,21 @@ export function DealTile({
 
   const body = (
     <div className="flex flex-1 flex-col p-4">
-      {item.supplier && (
-        <span className="truncate text-[10px] font-medium uppercase tracking-widest text-slate-400">
-          {item.supplier}
-        </span>
-      )}
+      {/* eyebrow řádek: vlevo koncern, vpravo ČÍSLO DÁVKY (interní i zákaznická
+          evidence). V médiu by se číslo pralo s logem značky v pruhu. */}
+      <span className="flex items-baseline justify-between gap-2">
+        {item.supplier ? (
+          <span className="truncate text-[10px] font-medium uppercase tracking-widest text-slate-400">
+            {item.supplier}
+          </span>
+        ) : <span />}
+        {item.dealNo && (
+          <span className="flex shrink-0 items-center gap-1 leading-none text-slate-400">
+            <GoBigDealLogo className="text-[8px] text-slate-400" />
+            <span className="font-mono text-[10px] tracking-tight">nr. {item.dealNo}</span>
+          </span>
+        )}
+      </span>
       <h3 className="mt-1 line-clamp-2 text-[15px] font-medium leading-snug tracking-tight text-zinc-900">
         {item.title}
       </h3>

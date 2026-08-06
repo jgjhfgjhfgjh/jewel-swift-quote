@@ -20,6 +20,7 @@ import { WILDCARD, type AlertLevel, type DealAlert } from '@/lib/alerts';
 /** Popisek úrovně alertu v chipech — texty EN jako celý GoBigDeal svět. */
 const LEVEL_LABEL: Record<AlertLevel, string> = {
   deals: 'Drops',
+  deal: 'Batch',
   concern: 'Concern',
   brand: 'Brand',
   product: 'Model',
