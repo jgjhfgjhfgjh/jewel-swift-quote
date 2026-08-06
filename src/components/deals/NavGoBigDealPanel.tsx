@@ -103,10 +103,40 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         ) : null}
       </div>
 
-      {/* ── Grid: spotlight (GMV) · koncerny (orientace) · PRO (revenue) ── */}
-      <div className="mt-3 grid grid-cols-[minmax(360px,1.05fr)_minmax(0,0.9fr)_minmax(0,1fr)] gap-x-8">
+      {/* ── Grid: spotlight (GMV) · Early Access (revenue, střed panelu) ·
+             koncerny (orientace, vpravo) ── */}
+      <div className="mt-3 grid grid-cols-[minmax(360px,1.05fr)_minmax(0,1fr)_minmax(0,0.9fr)] gap-x-8">
         {spotlight ? <SpotlightCard deal={spotlight} onOpen={() => go(`/deals/${spotlight.slug}`)} /> : <SpotlightEmpty onAlerts={() => go('/alerts')} />}
 
+        {/* Early Access — jediná monetizace světa; jediné plné bílé CTA panelu */}
+        <div className={`flex min-w-0 flex-col p-5 ${CARD}`}>
+          <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-[10px] font-bold uppercase tracking-widest text-transparent">
+            Early Access
+          </span>
+          <p className="mt-2 font-sans font-extralight tracking-tight leading-snug text-[17px]">
+            <span className="text-white">Everyone gets the alert. </span>
+            <span className="text-zinc-400">You get it 48 hours early.</span>
+          </p>
+          <ul className="mt-3 space-y-1.5">
+            {[
+              'Every deal opens for you 48 hours early',
+              'First pick before top references sell out',
+              'Alerts for the concerns and brands you sell',
+            ].map((b) => (
+              <li key={b} className="flex items-start gap-2 text-[13px] leading-snug text-zinc-300">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" strokeWidth={2.5} />
+                {b}
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => go('/#gbd-pricing')}
+            className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-full bg-white px-5 text-[13px] font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
+          >
+            See PRO plans <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
         {/* Live by concern — řádky v jazyce seznamu dealů na /deals:
             bílá karta se silným vrstveným stínem, logo volně v řádku (bez
             tónovaného čtverce), hover nadzvedne. Sloupec drží výšku karet. */}
@@ -170,35 +200,6 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
           </div>
         </div>
 
-        {/* Early Access — jediná monetizace světa; jediné plné bílé CTA panelu */}
-        <div className={`flex min-w-0 flex-col p-5 ${CARD}`}>
-          <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-[10px] font-bold uppercase tracking-widest text-transparent">
-            Early Access
-          </span>
-          <p className="mt-2 font-sans font-extralight tracking-tight leading-snug text-[17px]">
-            <span className="text-white">Everyone gets the alert. </span>
-            <span className="text-zinc-400">You get it 48 hours early.</span>
-          </p>
-          <ul className="mt-3 space-y-1.5">
-            {[
-              'Every deal opens for you 48 hours early',
-              'First pick before top references sell out',
-              'Alerts for the concerns and brands you sell',
-            ].map((b) => (
-              <li key={b} className="flex items-start gap-2 text-[13px] leading-snug text-zinc-300">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" strokeWidth={2.5} />
-                {b}
-              </li>
-            ))}
-          </ul>
-          <button
-            type="button"
-            onClick={() => go('/#gbd-pricing')}
-            className="mt-auto inline-flex h-9 items-center justify-center gap-1.5 self-start rounded-full bg-white px-5 text-[13px] font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
-          >
-            See PRO plans <ArrowRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
       </div>
 
       {/* ── Patička: free drop alert = nejnižší schod konverze. Vstup do
