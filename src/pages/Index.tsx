@@ -221,7 +221,7 @@ const Index = () => {
                     vw pojistka brání zalomení řádku „smarter tools…" na
                     užších desktopech */}
                 <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] text-white">
-                  Sell with<br />smarter tools for modern teams
+                  Buy and sell with<br />smarter tools for modern teams
                 </h1>
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
