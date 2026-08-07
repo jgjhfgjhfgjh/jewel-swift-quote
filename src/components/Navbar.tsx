@@ -360,13 +360,24 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                       setActiveNav(active ? null : item.id);
                     }
                   }}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
-                    isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
-                  } ${
-                    overVideo
-                      ? active || isFlagship ? 'text-white' : 'text-white/80 hover:text-white'
-                      : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
-                  }`}
+                  className={
+                    /* CreateDeal = CTA, ale barvu bere z kontextu stejně jako
+                       ostatní text navigace (bílá nad videem, tmavá na bílé) —
+                       iOS pilulka obtažená currentColorem, ne černý blok. */
+                    item.id === 'create-deal'
+                      ? `ml-1.5 flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-colors ${
+                          overVideo
+                            ? 'border-white/40 text-white hover:bg-white/10'
+                            : 'border-zinc-300 text-zinc-900 hover:bg-zinc-100'
+                        }`
+                      : `flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
+                          isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
+                        } ${
+                          overVideo
+                            ? active || isFlagship ? 'text-white' : 'text-white/80 hover:text-white'
+                            : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
+                        }`
+                  }
                 >
                   {/* CreateDeal nese plus jako symbol akce (místo chevronu) */}
                   {item.id === 'create-deal' && <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />}
@@ -391,23 +402,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         {/* Right: icons + CTA — always visible */}
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
-          {/* Suppliers — jiný svět (BigDealSupplier), proto oddělený od
-              odběratelské navigace svislou linkou a za bránou v dialogu */}
-          {/* Stejná velikost i řez jako položky hlavní nav, jen šedý tón —
-              odlišuje jiný svět, aniž by vypadal jako jiný typ prvku. */}
-          <button
-            onClick={openSupplierGate}
-            title="Suppliers"
-            className={`hidden lg:inline-flex shrink-0 items-center px-3.5 py-2 font-sans text-[17px] font-medium transition-colors ${
-              overVideo ? 'text-white/60 hover:text-white/90' : 'text-zinc-500 hover:text-zinc-900'
-            }`}
-          >
-            Suppliers
-          </button>
-          <span
-            aria-hidden
-            className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
-          />
+          {/* Suppliers z navigace odstraněn — dodavatelský landing žije pod
+              CreateDeal panelem (brána SupplierGateDialog zůstává). */}
 
           {/* Globe / Language switcher — desktop only */}
           <DropdownMenu>
@@ -783,6 +779,27 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                     ))}
                   </div>
                 </div>
+
+                {/* Dodavatelský svět — přesunutý sem z navigace; klik otevře
+                    bránu BigDealSupplier (aby sem odběratel nespadl omylem) */}
+                <button
+                  type="button"
+                  onClick={() => { setActiveNav(null); openSupplierGate(); }}
+                  className="group/sup mt-5 flex w-full items-center gap-3 rounded-2xl border-t border-slate-100 bg-white pt-5 text-left"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[13px] font-semibold text-zinc-900">
+                      Have stock to move instead?
+                    </span>
+                    <span className="mt-0.5 block text-xs text-zinc-500">
+                      BigDealSupplier — bring closeouts and overstock to European retailers.
+                    </span>
+                  </span>
+                  <span className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-900">
+                    Open supplier area
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/sup:translate-x-0.5" />
+                  </span>
+                </button>
               </div>
             ) : activeNav === 'my-deal' ? (
               /* MyDeal — osobní zóna: čtyři karty ve stejném iOS jazyce jako
@@ -1017,17 +1034,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               CreateDeal
               <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
             </a>
-          </div>
-
-          {/* Suppliers — jiný svět, šedě jako na desktopu, přes bránu */}
-          <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
-            <button
-              onClick={() => { setMenuOpen(false); openSupplierGate(); }}
-              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-500 transition-colors active:bg-zinc-100"
-            >
-              Suppliers
-              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-            </button>
           </div>
 
           {(isB2bApproved || isAdmin) && (
