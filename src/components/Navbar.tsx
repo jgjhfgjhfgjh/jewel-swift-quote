@@ -36,7 +36,9 @@ interface NavbarProps {
    Speciální "cesty" v panelech: auth:login / auth:b2b / catalog:open. */
 const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why' },
-  { id: 'products',     label: 'Products' },
+  /* Products je dočasně skrytý (panel i PRODUCT_ITEMS zůstávají — stačí
+     vrátit řádek): { id: 'products', label: 'Products' }, */
+  { id: 'mcp',          label: 'MCP Server',   path: '/feed?to=mcp' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'my-deal',      label: 'MyDeal' },
   { id: 'create-deal',  label: 'CreateDeal' },
@@ -967,9 +969,25 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             </button>
           </div>
 
-          {/* Products — 1:1 položky desktopového panelu vč. mikro copy */}
-          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Products</p>
-          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
+          {/* MCP Server — zrcadlí desktop (Products je dočasně skrytý) */}
+          <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
+            <button
+              onClick={() => { setMenuOpen(false); go('/feed?to=mcp'); }}
+              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
+            >
+              <span className="min-w-0">
+                <span className="block text-sm font-medium leading-snug text-zinc-900">MCP Server</span>
+                <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">
+                  Connect your AI agents to live stock and prices
+                </span>
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
+            </button>
+          </div>
+
+          {/* Products dočasně skrytý — skupina zůstává v kódu pro rychlý návrat */}
+          <p className="mb-1.5 mt-5 hidden px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Products</p>
+          <div className="mx-4 hidden divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
             {PRODUCT_ITEMS.map((item) => (
               <button
                 key={item.label}
