@@ -41,7 +41,9 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'mcp',          label: 'MCP Server',   path: '/feed?to=mcp' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'my-deal',      label: 'MyDeal' },
-  { id: 'create-deal',  label: 'CreateDeal' },
+  /* CreateBigDeal není v hlavní nav — je to CTA ukotvené vpravo (tam, kde
+     dřív sedělo Suppliers), viz pravý cluster. Panel se otevírá stejně
+     přes activeNav === 'create-deal'. */
   /* Catalog je dočasně skrytý (panel i data zůstávají — stačí vrátit řádek):
      { id: 'katalog', label: 'Catalog' }, */
 ];
@@ -362,34 +364,19 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                       setActiveNav(active ? null : item.id);
                     }
                   }}
-                  className={
-                    /* CreateDeal = CTA, ale barvu bere z kontextu stejně jako
-                       ostatní text navigace (bílá nad videem, tmavá na bílé) —
-                       iOS pilulka obtažená currentColorem, ne černý blok. */
-                    item.id === 'create-deal'
-                      ? `ml-1.5 flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-colors ${
-                          overVideo
-                            ? 'border-white/40 text-white hover:bg-white/10'
-                            : 'border-zinc-300 text-zinc-900 hover:bg-zinc-100'
-                        }`
-                      : `flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
-                          isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
-                        } ${
-                          overVideo
-                            ? active || isFlagship ? 'text-white' : 'text-white/80 hover:text-white'
-                            : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
-                        }`
-                  }
+                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
+                    isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
+                  } ${
+                    overVideo
+                      ? active || isFlagship ? 'text-white' : 'text-white/80 hover:text-white'
+                      : active ? 'text-zinc-950' : 'text-zinc-700 hover:text-zinc-950'
+                  }`}
                 >
-                  {/* CreateDeal nese plus jako symbol akce (místo chevronu) */}
-                  {item.id === 'create-deal' && <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />}
                   {item.id === 'top-deals' ? <Gbd /> : item.label}
-                  {item.id !== 'create-deal' && (
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`}
-                      strokeWidth={isFlagship && !overVideo ? 2.75 : 2}
-                    />
-                  )}
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${active ? 'rotate-180' : ''}`}
+                    strokeWidth={isFlagship && !overVideo ? 2.75 : 2}
+                  />
                 </button>
               );
             })}
@@ -404,8 +391,28 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         {/* Right: icons + CTA — always visible */}
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
-          {/* Suppliers z navigace odstraněn — dodavatelský landing žije pod
-              CreateDeal panelem (brána SupplierGateDialog zůstává). */}
+          {/* CreateBigDeal — CTA ukotvené vpravo (na místě dřívějšího
+              Suppliers), oddělené od hlavní nav svislou linkou. Otevírá
+              stejný mega panel jako ostatní položky (activeNav). Barvu bere
+              z kontextu jako text navigace; plus je symbol akce. */}
+          <button
+            onMouseEnter={() => handleNavEnter('create-deal')}
+            onMouseLeave={handleNavLeave}
+            onClick={() => setActiveNav(activeNav === 'create-deal' ? null : 'create-deal')}
+            title="CreateBigDeal"
+            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-colors ${
+              overVideo
+                ? 'border-white/40 text-white hover:bg-white/10'
+                : 'border-zinc-300 text-zinc-900 hover:bg-zinc-100'
+            }`}
+          >
+            <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+            CreateBigDeal
+          </button>
+          <span
+            aria-hidden
+            className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
+          />
 
           {/* Globe / Language switcher — desktop only */}
           <DropdownMenu>
@@ -1049,7 +1056,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100"
             >
               <Plus className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2.5} />
-              CreateDeal
+              CreateBigDeal
               <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
             </a>
           </div>
