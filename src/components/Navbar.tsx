@@ -38,7 +38,17 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why' },
   { id: 'products',     label: 'Products' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
-  { id: 'katalog',      label: 'Catalog' },
+  { id: 'my-deal',      label: 'MyDeal' },
+  /* Catalog je dočasně skrytý (panel i data zůstávají — stačí vrátit řádek):
+     { id: 'katalog', label: 'Catalog' }, */
+];
+
+/* MyDeal — osobní zóna partnera: co si objednal, co hlídá, co si uložil. */
+const MY_DEAL_ITEMS: { label: string; sub: string; path: string }[] = [
+  { label: 'My orders', sub: 'Deals you ordered and where each one stands', path: '/orders' },
+  { label: 'Deal alerts', sub: 'Concerns, brands and models you watch', path: '/alerts' },
+  { label: 'Saved products', sub: 'Everything you starred in the catalog', path: '/favorites' },
+  { label: 'Account settings', sub: 'Company details, delivery and invoicing', path: '/ucet' },
 ];
 
 /* Mobile sheet — iOS grouped list zrcadlící desktopové mega menu: sekce =
@@ -49,10 +59,11 @@ const MOBILE_GBD_ITEMS = [
   { label: 'Deal drop alerts', sub: 'One email when a deal goes live — free forever', path: '/alerts' },
   { label: 'Early Access · 48 h head start', sub: 'Everyone gets the alert. You get it 48 hours early.', path: '/#gbd-pricing' },
 ];
+/* Catalog skupina je skrytá spolu s nav položkou — ponecháno pro rychlý návrat:
 const MOBILE_CATALOG_ITEMS = [
   { label: 'Open the catalog', sub: 'Live wholesale prices after sign-in', path: 'catalog:open' },
   { label: 'All brands', sub: '65+ brands from the live feed', path: '/brands' },
-];
+]; */
 
 type NavPanelCol = { title: string; links: { label: string; desc: string; path: string }[] };
 type NavPanel = { heading: string; desc: string; cols?: NavPanelCol[]; cta: { label: string; path: string } };
@@ -102,6 +113,12 @@ const NAV_PANELS: Record<string, NavPanel> = {
     heading: 'GoBigDeal',
     desc: '',
     cta: { label: '', path: '/deals' },
+  },
+  /* MyDeal — obsah se renderuje z MY_DEAL_ITEMS, tohle je jen existence gate. */
+  'my-deal': {
+    heading: 'MyDeal',
+    desc: '',
+    cta: { label: '', path: '/orders' },
   },
   /* Luxury Deals už nemá vlastní nav položku — žije jako služba pod Products
      (odkaz vede na /prestige, kde je celý obsah). */
@@ -702,6 +719,54 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
+            ) : activeNav === 'my-deal' ? (
+              /* MyDeal — osobní zóna: čtyři karty ve stejném iOS jazyce jako
+                 zbytek webu (bílá karta, silný stín, hover nadzvedne).
+                 Nepřihlášenému místo nich nabídne registraci. */
+              <div className="px-6 pt-5 pb-6">
+                {user ? (
+                  <div className="grid grid-cols-4 gap-4">
+                    {MY_DEAL_ITEMS.map((item) => (
+                      <button
+                        key={item.path}
+                        type="button"
+                        onClick={() => go(item.path)}
+                        className="group/my flex flex-col items-start rounded-[1.25rem] border border-slate-200/70 bg-white p-5 text-left
+                                   shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)]
+                                   transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-slate-300
+                                   hover:shadow-[0_36px_64px_-18px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.12)]"
+                      >
+                        <span className="text-[15px] font-semibold tracking-tight text-zinc-900">{item.label}</span>
+                        <span className="mt-1.5 text-[13px] leading-snug text-zinc-500">{item.sub}</span>
+                        <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[13px] font-semibold text-zinc-900">
+                          Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/my:translate-x-0.5" />
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-start">
+                    <p className="font-sans font-extralight tracking-tight leading-snug text-[19px]">
+                      <span className="text-zinc-900">Your deals, alerts and orders in one place. </span>
+                      <span className="text-zinc-500">Sign in to open MyDeal.</span>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => go('auth:b2b')}
+                      className="mt-5 inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                    >
+                      Create a free account <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => go('auth:login')}
+                      className="mt-2.5 text-[13px] font-medium text-zinc-500 transition-colors hover:text-zinc-900"
+                    >
+                      I already have an account
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : activeNav === 'top-deals' ? (
               /* GoBigDeal — obsidianová předsíň /deals: headline strip se
                  živými čísly, spotlight končícího dealu, Live by concern
@@ -858,10 +923,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             ))}
           </div>
 
-          {/* Catalog */}
-          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Catalog</p>
+          {/* MyDeal — osobní zóna (Catalog je skrytý spolu s nav položkou) */}
+          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">MyDeal</p>
           <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
-            {MOBILE_CATALOG_ITEMS.map((item) => (
+            {MY_DEAL_ITEMS.map((item) => (
               <button
                 key={item.label}
                 onClick={() => { setMenuOpen(false); go(item.path); }}
