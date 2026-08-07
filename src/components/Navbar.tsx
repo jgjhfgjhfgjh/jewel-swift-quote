@@ -856,7 +856,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                  živými čísly, spotlight končícího dealu, Live by concern
                  (poctivé počty), Early Access karta a patička s free drop
                  alertem. Viz NavGoBigDealPanel. */
-              <div className="px-6 pt-3 pb-2.5">
+              <div className="px-6 pt-4 pb-4">
                 <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
             ) : activeNav === 'products' ? (
