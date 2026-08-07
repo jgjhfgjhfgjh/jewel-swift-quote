@@ -17,6 +17,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
+import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
 import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -42,8 +43,8 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   { id: 'my-deal',      label: 'MyDeal' },
   /* CreateBigDeal není v hlavní nav — je to CTA ukotvené vpravo (tam, kde
-     dřív sedělo Suppliers), viz pravý cluster. Panel se otevírá stejně
-     přes activeNav === 'create-deal'. */
+     dřív sedělo Suppliers). Neotevírá mega menu; klik otevře popup
+     CreateDealDialog. */
   /* Catalog je dočasně skrytý (panel i data zůstávají — stačí vrátit řádek):
      { id: 'katalog', label: 'Catalog' }, */
 ];
@@ -124,12 +125,6 @@ const NAV_PANELS: Record<string, NavPanel> = {
     heading: 'MyDeal',
     desc: '',
     cta: { label: '', path: '/orders' },
-  },
-  /* CreateDeal — existence gate; obsah renderuje vlastní větev panelu. */
-  'create-deal': {
-    heading: 'CreateDeal',
-    desc: '',
-    cta: { label: '', path: '/deals' },
   },
   /* Luxury Deals už nemá vlastní nav položku — žije jako služba pod Products
      (odkaz vede na /prestige, kde je celý obsah). */
@@ -392,18 +387,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
           {/* CreateBigDeal — CTA ukotvené vpravo (na místě dřívějšího
-              Suppliers), oddělené od hlavní nav svislou linkou. Otevírá
-              stejný mega panel jako ostatní položky (activeNav). Barvu bere
-              z kontextu jako text navigace; plus je symbol akce. */}
+              Suppliers). NEOTVÍRÁ mega menu: hover ho vyplní bíle, klik
+              otevře popup s poptávkou. Klidový stav bere barvu z kontextu
+              jako text navigace; plus je symbol akce. */}
           <button
-            onMouseEnter={() => handleNavEnter('create-deal')}
-            onMouseLeave={handleNavLeave}
-            onClick={() => setActiveNav(activeNav === 'create-deal' ? null : 'create-deal')}
+            onClick={openCreateDealDialog}
             title="CreateBigDeal"
-            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-colors ${
-              overVideo
-                ? 'border-white/40 text-white hover:bg-white/10'
-                : 'border-zinc-300 text-zinc-900 hover:bg-zinc-100'
+            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)] ${
+              overVideo ? 'border-white/40 text-white' : 'border-zinc-300 text-zinc-900'
             }`}
           >
             <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />
@@ -735,81 +726,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   {panel.cta.label} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
-            ) : activeNav === 'create-deal' ? (
-              /* CreateDeal — poptávka dealu na míru. Samoobslužný sestavovač
-                 zatím neexistuje, proto panel nabízí jedinou cestu, která
-                 dnes reálně funguje (poptávka obchodu) a říká to na rovinu. */
-              <div className="px-6 pt-6 pb-6">
-                <div className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-start gap-10">
-                  <div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      <Plus className="h-3 w-3" /> Deal on request
-                    </span>
-                    <p className="mt-4 font-sans font-extralight tracking-tight leading-snug text-[19px]">
-                      <span className="text-zinc-900">Missing a deal you would buy? </span>
-                      <span className="text-zinc-500">Tell us the brands and volumes and we go source it.</span>
-                    </p>
-                    <div className="mt-6 flex flex-wrap items-center gap-3">
-                      <a
-                        href="mailto:obchod@swelt.cz?subject=CreateDeal"
-                        onClick={() => setActiveNav(null)}
-                        className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-                      >
-                        Request a deal <ArrowRight className="h-4 w-4" />
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => go('/deals')}
-                        className="text-[13px] font-medium text-zinc-500 transition-colors hover:text-zinc-900"
-                      >
-                        See what is running now
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Tři kroky — co se stane po odeslání poptávky */}
-                  <div className="grid gap-2.5">
-                    {[
-                      ['01', 'Send us the wish list', 'Brands, references and how many units you can take.'],
-                      ['02', 'We check availability', 'We go to the concern and come back with a price.'],
-                      ['03', 'It opens as a GoBigDeal', 'You get first pick before it goes public.'],
-                    ].map(([n, title, desc]) => (
-                      <div
-                        key={n}
-                        className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-white px-4 py-3
-                                   shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)]"
-                      >
-                        <span className="font-mono text-[11px] font-bold text-slate-300">{n}</span>
-                        <span className="min-w-0">
-                          <span className="block text-[13px] font-semibold text-zinc-900">{title}</span>
-                          <span className="mt-0.5 block text-xs leading-snug text-zinc-500">{desc}</span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Dodavatelský svět — přesunutý sem z navigace; klik otevře
-                    bránu BigDealSupplier (aby sem odběratel nespadl omylem) */}
-                <button
-                  type="button"
-                  onClick={() => { setActiveNav(null); openSupplierGate(); }}
-                  className="group/sup mt-5 flex w-full items-center gap-3 rounded-2xl border-t border-slate-100 bg-white pt-5 text-left"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[13px] font-semibold text-zinc-900">
-                      Have stock to move instead?
-                    </span>
-                    <span className="mt-0.5 block text-xs text-zinc-500">
-                      BigDealSupplier — bring closeouts and overstock to European retailers.
-                    </span>
-                  </span>
-                  <span className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-900">
-                    Open supplier area
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/sup:translate-x-0.5" />
-                  </span>
-                </button>
-              </div>
             ) : activeNav === 'my-deal' ? (
               /* MyDeal — osobní zóna: čtyři karty ve stejném iOS jazyce jako
                  zbytek webu (bílá karta, silný stín, hover nadzvedne).
@@ -1050,15 +966,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
           {/* CreateDeal — poptávka dealu na míru (mailto, jako na desktopu) */}
           <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
-            <a
-              href="mailto:obchod@swelt.cz?subject=CreateDeal"
-              onClick={() => setMenuOpen(false)}
+            <button
+              onClick={() => { setMenuOpen(false); openCreateDealDialog(); }}
               className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100"
             >
               <Plus className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2.5} />
               CreateBigDeal
               <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
-            </a>
+            </button>
           </div>
 
           {(isB2bApproved || isAdmin) && (

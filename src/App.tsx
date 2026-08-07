@@ -11,6 +11,7 @@ import { ViewAsSwitcher } from "@/components/ViewAsSwitcher";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { EarlyAccessUpsellDialog } from "@/components/deals/EarlyAccessUpsell";
 import { SupplierGateDialog } from "@/components/suppliers/SupplierGateDialog";
+import { CreateDealDialog } from "@/components/deals/CreateDealDialog";
 
 // Route-level code splitting — each page ships as its own lazy-loaded chunk.
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -92,6 +93,7 @@ const App = () => (
               v katalogu a alert tlačítka v detailech značek/koncernů */}
           <EarlyAccessUpsellDialog />
           <SupplierGateDialog />
+          <CreateDealDialog />
           <Suspense fallback={<PageFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
