@@ -23,6 +23,15 @@ import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 import { ConcernLogoRow } from '@/components/ConcernLogoRow';
 
+/* ── Dočasně skryté prvky navigace ───────────────────────────────────────
+   Jeden vypínač na prvek, ať je na první pohled vidět, co je pryč a jak to
+   vrátit (stačí přepnout na true). Kód prvků zůstává na místě.
+   Skryté i jinde v souboru: nav položky Products a Catalog (viz NAV_ITEMS)
+   a mobilní skupina Products.                                            */
+const SHOW_WISHLIST = false;    // srdíčko (oblíbené) v pravém clusteru
+const SHOW_CART = false;        // ikona košíku v pravém clusteru
+const SHOW_PARTNER_HUB = false; // CTA Partner Hub (desktop i mobilní menu)
+
 interface NavbarProps {
   wishlistCount?: number;
   onOpenWishlist?: () => void;
@@ -437,7 +446,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
           {!loading && user ? (
             <>
               {/* Partner Hub — for dropshipping partners and admins */}
-              {(isB2bApproved || isAdmin) && (
+              {SHOW_PARTNER_HUB && (isB2bApproved || isAdmin) && (
                 <button
                   onClick={() => navigate('/partner')}
                   title="Partner Hub"
@@ -476,29 +485,33 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                 )}
               </Button>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`}
-                onClick={() => navigate('/favorites')}
-                title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
-              >
-                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? (overVideo ? 'fill-white text-white' : 'fill-zinc-900 text-zinc-900') : ''}`} />
-                {wishlistCount > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
-                    {wishlistCount}
-                  </Badge>
-                )}
-              </Button>
+              {SHOW_WISHLIST && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`}
+                  onClick={() => navigate('/favorites')}
+                  title={isAdmin && salesCustomer ? `Oblíbené zákazníka: ${salesCustomer.company_name}` : 'Oblíbené'}
+                >
+                  <Heart className={`h-5 w-5 ${wishlistCount > 0 ? (overVideo ? 'fill-white text-white' : 'fill-zinc-900 text-zinc-900') : ''}`} />
+                  {wishlistCount > 0 && (
+                    <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
+                      {wishlistCount}
+                    </Badge>
+                  )}
+                </Button>
+              )}
 
-              <Button variant="ghost" size="icon" className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`} onClick={() => setCartOpen(true)}>
-                <ShoppingCart className="h-5 w-5" />
-                {totalItems > 0 && (
-                  <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
-                    {totalItems}
-                  </Badge>
-                )}
-              </Button>
+              {SHOW_CART && (
+                <Button variant="ghost" size="icon" className={`relative hidden lg:inline-flex ${overVideo ? 'text-white hover:bg-white/10 hover:text-white' : ''}`} onClick={() => setCartOpen(true)}>
+                  <ShoppingCart className="h-5 w-5" />
+                  {totalItems > 0 && (
+                    <Badge className="absolute -right-1 -top-1 h-5 min-w-5 justify-center rounded-none bg-zinc-900 px-1 text-[10px] font-bold text-white">
+                      {totalItems}
+                    </Badge>
+                  )}
+                </Button>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -976,7 +989,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             </button>
           </div>
 
-          {(isB2bApproved || isAdmin) && (
+          {SHOW_PARTNER_HUB && (isB2bApproved || isAdmin) && (
             <>
               <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Account</p>
               <div className="mx-4 overflow-hidden rounded-2xl bg-white">
