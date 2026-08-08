@@ -4,11 +4,13 @@ import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { sortByBrandPriority } from '@/lib/brandOrder';
 
 /**
- * Střídající se VELKÉ logo značky — ústřední prvek hero /deals: loga
- * v PLNÉ barvě (multiply na bílé ploše), velikost sjednocená pevnou výškou
- * (ne max-h — každé logo tak drží stejnou vizuální váhu), plynulý crossfade
- * s jemným scale (opacity + transform, žádný layout shift). Kurátorský
- * výběr = prioritní značky s logem, ne celý katalog.
+ * Střídající se VELKÉ logo značky — ústřední prvek hero /deals. Plocha je
+ * matně černá, takže loga jdou jako BÍLÉ siluety (`brightness(0) invert(1)`);
+ * plná barva by tu buď zmizela (multiply na černé), nebo přinesla bílé
+ * obdélníky podkladů. Velikost sjednocená pevnou výškou (ne max-h — každé
+ * logo tak drží stejnou vizuální váhu), plynulý crossfade s jemným scale
+ * (opacity + transform, žádný layout shift). Kurátorský výběr = prioritní
+ * značky s logem, ne celý katalog.
  *
  * Vyplní rodiče (absolute inset-0 vrstvy) — rodič určuje plochu výjevu.
  */
@@ -51,8 +53,8 @@ export function BrandSpotlight({ intervalMs = 3200 }: { intervalMs?: number }) {
               width={560}
               height={240}
               lowPriority
-              className="h-20 w-auto max-w-[78%] object-contain [mix-blend-mode:multiply] sm:h-28 lg:h-32"
-              fallbackClassName="text-center text-3xl font-medium tracking-tighter text-slate-300 sm:text-4xl"
+              className="h-20 w-auto max-w-[78%] object-contain opacity-90 [filter:brightness(0)_invert(1)] sm:h-28 lg:h-32"
+              fallbackClassName="text-center text-3xl font-medium tracking-tighter text-zinc-400 sm:text-4xl"
             />
           </div>
         );

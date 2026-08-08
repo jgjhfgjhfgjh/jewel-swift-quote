@@ -283,14 +283,17 @@ export function DealTile({
       · `origin-center` + `duration-300 ease-out` — růst z těžiště, ne z rohu,
       · scale drží 1.05: víc už na krajních sloupcích leze mimo mřížku,
       · `motion-reduce:` vypne zvětšení i posun, zůstane jen stín. */
+  /* Na matně černé ploše nese hloubku SVĚTLO, ne stín: pod kartou leží
+     černý ambient (drží tvar) a kolem ní se při hoveru rozsvítí jemné bílé
+     halo — slate stíny světlé varianty by na černé nebyly vidět vůbec. */
   const shell =
-    'group relative flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] border border-slate-100 bg-white text-left ' +
-    'shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] ' +
+    'group relative flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] bg-white text-left ' +
+    'shadow-[0_10px_30px_-8px_rgba(0,0,0,0.75)] ' +
     'origin-center transition-all delay-0 duration-300 ease-out will-change-transform ' +
     'hover:z-20 hover:-translate-y-1.5 hover:scale-[1.05] hover:delay-150 ' +
-    'hover:shadow-[0_28px_60px_-16px_rgba(15,23,42,0.28),0_6px_14px_rgba(15,23,42,0.10)] ' +
+    'hover:shadow-[0_34px_70px_-18px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.14),0_0_44px_-12px_rgba(255,255,255,0.28)] ' +
     'motion-reduce:transform-none motion-reduce:hover:transform-none ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]';
 
   if (item.kind === 'teaser' || !item.slug) {
     return (

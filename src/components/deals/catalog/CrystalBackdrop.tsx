@@ -1,10 +1,10 @@
 /**
- * Krystalová scéna pod CELOU hero sekcí /deals — černé broušené krystaly na
- * bílé. „Krystalový" dojem nese POZADÍ, ne písmo: wordmark zůstává čistá
- * typografie (varianta 3 z návrhu).
+ * Krystalová scéna pod CELOU hero sekcí /deals — broušené krystaly na matně
+ * černé ploše. „Krystalový" dojem nese POZADÍ, ne písmo: wordmark zůstává
+ * čistá typografie (varianta 3 z návrhu).
  *
- * Vrstva kryje hlavičku i KPI lištu (logo → headline → CTA → čísla). Pod ní se
- * stránka vrací do čisté bílé, aby katalog a filtry zůstaly klidné čtení.
+ * Vrstva kryje značkovou hlavičku (logo → headline → CTA). Nad ní i pod ní
+ * jede stránka na čisté obsidiánové ploše, aby katalog zůstal klidné čtení.
  *
  * STATICKÁ ILUSTRACE, ne video. Původně tu běžela smyčka `crystals.mp4`; scéna
  * je zaseknutá na jednom snímku (t ≈ 2,35 s — kámen tam sahá k oběma okrajům,
@@ -13,20 +13,19 @@
  * se dekódovalo po celou dobu scrollu. Zdrojové video zůstává v repu
  * (`public/deal-videos/crystals.mp4`) pro případ návratu k pohybu.
  *
- * Kompozice:
- *  · `mix-blend-mode: multiply` — bílé pozadí snímku zmizí, zůstane jen tmavý
- *    kámen, takže vrstva splyne s bílou plochou dashboardu bez tvrdých hran,
+ * Kompozice (verze pro MATNĚ ČERNOU plochu stránky):
+ *  · `invert(1)` + `mix-blend-mode: screen` — snímek je černý kámen na bílé;
+ *    inverze z něj udělá stříbrný kámen na černé a `screen` pak nechá projít
+ *    jen ten kámen (černá se na černé ploše nijak neprojeví). Multiply, který
+ *    tu byl pro bílou variantu, by na černé nezobrazil vůbec nic,
  *  · radiální maska VEN do ztracena (střed viditelný, okraje průhledné) —
- *    jinak by plocha na bílé ploše končila tvrdou hranou obdélníku,
- *  · grayscale + kontrast — generovaný kámen vyšel světle šedý, filtr ho
- *    stáhne do černého obsidiánu bez další generace,
- *  · dva bílé závoje: středový drží kontrast OBOU obsahových zón naráz —
- *    textového sloupce vlevo i BrandSpotlightu vpravo (ten kreslí velké názvy
- *    značek světle šedou, v kameni by se ztratily) — takže kámen zůstane jen
- *    na okrajích a rámuje kompozici jako viněta; spodní rozpouští scénu do
- *    bílé, aby KPI lišta navázala na katalog bez viditelné hrany,
- *  · nižší opacita než u dřívějšího pásu jen za logem — kámen teď leží pod
- *    živým obsahem, ne pod jedním slovem.
+ *    jinak by plocha končila tvrdou hranou obdélníku,
+ *  · grayscale + brightness — inverze rozsvítí kámen do skoro bílé, filtr ho
+ *    stáhne zpět do stříbrné, aby nepřebil obsah,
+ *  · dva ČERNÉ závoje (dřív bílé): středový drží kontrast OBOU obsahových zón
+ *    naráz — textového sloupce vlevo i BrandSpotlightu vpravo — takže kámen
+ *    zůstane jen na okrajích a rámuje kompozici jako viněta; spodní rozpouští
+ *    scénu do plochy stránky, aby hero navázalo na landing sekce bez hrany.
  *
  * Bez `motion-reduce:hidden` — vrstva se nehýbe, není co skrývat.
  */
@@ -40,18 +39,16 @@ export function CrystalBackdrop({ className = '' }: { className?: string }) {
         src="/gbd-crystals.jpg"
         alt=""
         draggable={false}
-        className="h-full w-full object-cover opacity-[0.82] [mix-blend-mode:multiply]
-                   [filter:grayscale(1)_contrast(2.15)_brightness(0.7)]
+        className="h-full w-full object-cover opacity-[0.55] [mix-blend-mode:screen]
+                   [filter:grayscale(1)_invert(1)_contrast(1.35)_brightness(0.62)]
                    [mask-image:radial-gradient(94%_98%_at_50%_45%,black_0%,transparent_100%)]"
       />
-      {/* středový závoj — bílá je nejkrycí tam, kde leží obsah (levý sloupec
-          i výjev vpravo), k okrajům se otevírá a pouští kámen ke slovu.
-          Střed drží krycí, i když kámen kolem zesílil: pod headlinem a
-          BrandSpotlightem se čte text, ne kámen. */}
-      <div className="absolute inset-0 [background:radial-gradient(112%_98%_at_50%_52%,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.66)_40%,rgba(255,255,255,0.14)_76%,transparent_100%)]" />
-      {/* spodní třetina do čista — přechod hero → šedá plocha katalogu bez
-          hrany (slate-50 #f8fafc, ne bílá: plocha stránky je nově šedá) */}
-      <div className="absolute inset-x-0 bottom-0 h-1/3 [background:linear-gradient(to_bottom,transparent,#f8fafc)]" />
+      {/* středový závoj — černá je nejkrycí tam, kde leží obsah (levý sloupec
+          i výjev vpravo), k okrajům se otevírá a pouští kámen ke slovu */}
+      <div className="absolute inset-0 [background:radial-gradient(112%_98%_at_50%_52%,rgba(11,18,21,0.86)_0%,rgba(11,18,21,0.62)_40%,rgba(11,18,21,0.12)_76%,transparent_100%)]" />
+      {/* spodní třetina do plochy stránky — přechod hero → landing sekce bez
+          viditelné hrany (obsidián #0B1215) */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 [background:linear-gradient(to_bottom,transparent,#0B1215)]" />
     </div>
   );
 }

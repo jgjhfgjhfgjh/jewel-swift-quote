@@ -8,12 +8,23 @@ const scrollToPricing = () =>
 
 /**
  * Upsell karta Early Access — VŽDY na začátku první neprázdné sekce
- * katalogu. Věrná referenčnímu screenshotu: tmavá karta na bílé ploše,
- * modrý eyebrow, bílý+šedý headline, zelené fajfky, bílé pilulkové CTA.
+ * katalogu: modrý eyebrow, bílý+šedý headline, zelené fajfky, bílé pilulkové
+ * CTA.
+ *
+ * Plocha stránky je matně černá, takže tmavá karta by mezi bílými kartami
+ * dávek splynula s pozadím. Drží ji proto vlastní ocelový gradient, vlasový
+ * bílý ring a MODRÉ halo při hoveru — čte se jako záměrný jiný materiál,
+ * ne jako díra v mřížce.
  *
  * `variant="tile"` = dlaždice stejné velikosti jako karta dávky (mřížka),
  * `variant="row"` = plochý banner přes šířku seznamu (řádkové zobrazení).
  */
+/** Sdílený materiál obou variant — ocelový gradient + ring + modré halo. */
+const EA_SKIN =
+  'bg-[linear-gradient(155deg,#1B2731_0%,#0E171C_52%,#0B1215_100%)] ring-1 ring-white/15 ' +
+  'shadow-[0_14px_36px_-10px_rgba(0,0,0,0.8)] transition-all duration-200 ' +
+  'hover:ring-blue-500/60 hover:shadow-[0_26px_58px_-14px_rgba(0,0,0,0.9),0_0_40px_-10px_rgba(59,130,246,0.45)] ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]';
 export function EarlyAccessCard({ variant = 'tile' }: { variant?: 'tile' | 'row' }) {
   const lang = useStore((s) => s.lang);
   const d = dealsI18n[lang];
@@ -23,8 +34,7 @@ export function EarlyAccessCard({ variant = 'tile' }: { variant?: 'tile' | 'row'
       <button
         type="button"
         onClick={scrollToPricing}
-        className="group flex w-full items-center gap-4 rounded-[1.25rem] bg-[#0B1215] px-5 py-4 text-left shadow-[0_14px_36px_-10px_rgba(11,18,21,0.5)] ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_52px_-14px_rgba(11,18,21,0.6)] hover:ring-white/25
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        className={`group flex w-full items-center gap-4 rounded-[1.25rem] px-5 py-4 text-left hover:-translate-y-0.5 ${EA_SKIN}`}
       >
         <span className="min-w-0 flex-1">
           <span className="block text-[11px] font-bold uppercase tracking-widest text-blue-500">
@@ -46,8 +56,7 @@ export function EarlyAccessCard({ variant = 'tile' }: { variant?: 'tile' | 'row'
     <button
       type="button"
       onClick={scrollToPricing}
-      className="group flex h-full w-full flex-col rounded-[1.25rem] bg-[#0B1215] p-5 text-left shadow-[0_14px_36px_-10px_rgba(11,18,21,0.5)] ring-1 ring-white/10 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_24px_52px_-14px_rgba(11,18,21,0.6)] hover:ring-white/25
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:p-6"
+      className={`group flex h-full w-full flex-col rounded-[1.25rem] p-5 text-left hover:-translate-y-1 sm:p-6 ${EA_SKIN}`}
     >
       <span className="text-[11px] font-bold uppercase tracking-widest text-blue-500">
         {d.catalog.dash.eyebrowPro}

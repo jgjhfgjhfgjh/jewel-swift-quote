@@ -52,9 +52,10 @@ const H2 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(
 const H3 = 'font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.35rem,3vw,2.25rem)]';
 const PILL_LIGHT = 'inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-100';
 const PILL_OUTLINE_DARK = 'inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10';
-/* CTA dvojice pod hero (bílá plocha dashboardu) */
-const CTA_PRIMARY = 'inline-flex h-11 items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 text-sm font-semibold text-white transition-colors hover:bg-zinc-700';
-const CTA_GHOST = 'inline-flex h-11 items-center justify-center gap-2 rounded-full border border-slate-300 px-6 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50';
+/* CTA dvojice v hero (matně černá plocha dashboardu) — primární je BÍLÁ
+   pilulka, sekundární hairline outline; stejný jazyk jako landing sekce. */
+const CTA_PRIMARY = 'inline-flex h-11 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-200';
+const CTA_GHOST = 'inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/20 px-6 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/10';
 
 /* Řazení dashboardu — uplatní se UVNITŘ stavových sekcí (živé / připravujeme /
    uzavřené); stav má vždy přednost, obchodník nikdy nemíchá živé s mrtvým. */
@@ -227,9 +228,9 @@ export default function Deals() {
     items.length === 0 ? null : (
       <section id={opts.id} className="scroll-mt-24 pt-9">
         <div className="flex items-center gap-2.5">
-          {opts.liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />}
-          <h2 className="font-sans text-lg font-medium tracking-tighter text-zinc-900">{title}</h2>
-          <span className="font-mono text-sm text-slate-400">{items.length}</span>
+          {opts.liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />}
+          <h2 className="font-sans text-lg font-medium tracking-tighter text-white">{title}</h2>
+          <span className="font-mono text-sm text-zinc-500">{items.length}</span>
         </div>
         {view === 'grid' ? (
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -283,21 +284,75 @@ export default function Deals() {
   ];
 
   return (
-    /* Kořen v bílé (světlá varianta dashboardu) — tmavé landing sekce níže
-       si barvu kreslí samy. */
-    /* Plocha dashboardu je světle šedá (slate-50), aby bílé karty, pole a
-       pilulky vystoupily; landing sekce níž si barvu kreslí samy. */
-    <div className="min-h-screen bg-slate-50 font-sans selection:bg-zinc-900 selection:text-white">
-      <Navbar />
+    /* Plocha CELÉ stránky je matně černá (obsidián #0B1215) — chrom (KPI,
+       filtry, řídicí lišta) je tmavý hairline, ZBOŽÍ je bílé: karty a řádky
+       dávek zůstávají bílé a na černé ploše vystoupí nejvíc. Landing sekce
+       níž si barvu kreslí samy a na tuhle plochu plynule navazují. */
+    <div className="min-h-screen bg-[#0B1215] font-sans selection:bg-white selection:text-zinc-900">
+      {/* navbar v inverzní variantě — stránka je celá tmavá, tmavé logo
+          i „Přihlásit" by na ní zmizely (stejně jako /alerts a /dropshipping) */}
+      <Navbar onDark />
       <BackButton />
 
-      {/* ═══ DASHBOARD — stránka ZAČÍNÁ seznamem dávek (pokyn): obchodník
-             přichází pro zboží, ne pro headline. Hero se značkou a KPI leží
-             AŽ POD katalogem, vysvětlující sekce pod ním. ═══ */}
+      {/* ═══ DASHBOARD — stránka ZAČÍNÁ stavem trhu a seznamem dávek (pokyn):
+             obchodník přichází pro zboží, ne pro headline. Hero se značkou
+             leží AŽ POD katalogem, vysvětlující sekce pod ním.
+             `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
+             z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+      {/* ── 1. KPI lišta — stav trhu úplně nahoře (pokyn): čísla dřív než
+             filtry, obchodník hned vidí, jestli se dnes vyplatí dívat ── */}
+      {/* horní odsazení počítá s plovoucím BackButtonem (fixed, top 72/112 px):
+          KPI dlaždice začínají až pod ním, jinak by mu jeho skleněný kroužek
+          seděl přímo na rohu první dlaždice */}
+      <div id="catalog" className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+7.5rem)] sm:px-8 sm:pt-[calc(var(--ann-offset,0px)+10rem)] lg:px-12">
+        {loading ? (
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-white/[0.06]" />
+            ))}
+          </div>
+        ) : (
+          <CatalogKpis
+            items={[
+              {
+                label: dash.kpiLive,
+                value: String(kpis.liveCount),
+                liveDot: kpis.liveCount > 0,
+                /* modrá jako eyebrow EarlyAccessCard — živé dávky a Early
+                   Access drží v katalogu jednu akcentní barvu */
+                accent: true,
+                /* nula živých dealů = nejslabší místo dashboardu → konverzní
+                   bod (alert); jinak zkratka dolů na sekci živých dealů */
+                action: kpis.liveCount === 0
+                  ? { label: dash.kpiLiveAlert, onClick: goToAlerts }
+                  : { label: dash.kpiLiveSeeAll, onClick: () => scrollTo('deals-live'), icon: 'arrow' },
+              },
+              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
+              {
+                label: dash.kpiDiscount,
+                value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
+                gradient: kpis.maxDiscount > 0,
+              },
+              kpis.nextDeadline
+                ? {
+                    label: dash.kpiDeadline,
+                    value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
+                  }
+                : kpis.nextStart
+                  ? {
+                      label: dash.kpiNextStart,
+                      value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
+                    }
+                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
+            ]}
+          />
+        )}
+      </div>
+
+      {/* ── 2. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
-      <div className="px-5 pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:px-8 lg:px-12">
+      <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
           search={filters.search}
           onSearch={(search) => setFilters((f) => ({ ...f, search }))}
@@ -312,32 +367,32 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 2. Obsah přes celou šíři ── */}
+      {/* ── 3. Obsah přes celou šíři ── */}
       <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (
             <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-slate-100" />
+                <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-white/[0.06]" />
               ))}
             </div>
           ) : filtered.length === 0 ? (
             <div className="mx-auto mt-12 max-w-xl text-center">
-              <SearchX className="mx-auto h-8 w-8 text-slate-300" />
-              <p className="mt-4 text-lg font-medium tracking-tighter text-zinc-900">{d.catalog.noResults}</p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-500">{d.catalog.noResultsSub}</p>
+              <SearchX className="mx-auto h-8 w-8 text-zinc-600" />
+              <p className="mt-4 text-lg font-medium tracking-tighter text-white">{d.catalog.noResults}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{d.catalog.noResultsSub}</p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                 <button
                   type="button"
                   onClick={() => setFilters(EMPTY_FILTERS)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
                 >
                   {d.catalog.clear}
                 </button>
                 <button
                   type="button"
                   onClick={goToAlerts}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/10"
                 >
                   <Bell className="h-4 w-4" /> {d.active.emptyCta}
                 </button>
@@ -371,20 +426,17 @@ export default function Deals() {
         </main>
       </div>
 
-      {/* ═══ HERO ZÓNA — hlavička a KPI lišta leží na jedné krystalové ploše.
-             CrystalBackdrop je první v DOM (z-0), obsah nad ním přes relative
-             z-10. Vrstva NESMÍ mít -z-10 — spadla by za bílé pozadí stránky
-             a zmizela. Pod touto zónou se stránka vrací do čisté bílé. ═══ */}
-      <div className="relative">
+      {/* ═══ HERO ZÓNA — značka na krystalové ploše. CrystalBackdrop je první
+             v DOM (z-0), obsah nad ním přes relative z-10. Vrstva NESMÍ mít
+             -z-10 — spadla by za pozadí stránky a zmizela. KPI lišta odtud
+             odešla nahoru nad katalog (pokyn), zóna je čistě značková. ═══ */}
+      <div className="relative pb-16 sm:pb-20">
         <CrystalBackdrop className="inset-0" />
 
-        {/* ── Kompaktní command header: logo + marquee v jednom řádku,
+        {/* ── Kompaktní command header: logo + střídající se výjev značky,
                pozicovací věta pod nimi. Leží POD katalogem — kdo doscrolluje,
-               dostane značku, příběh a čísla trhu. ── */}
-        <header
-          id="catalog"
-          className="relative z-10 scroll-mt-16 px-5 pt-14 sm:px-8 lg:px-12"
-        >
+               dostane značku a příběh. ── */}
+        <header className="relative z-10 px-5 pt-14 sm:px-8 lg:px-12">
           {/* hero: VLEVO logo → dvoutónová věta, VPRAVO ústřední výjev —
               střídající se VELKÉ logo značky s plynulým crossfade. Zóna je
               pozicovaná ABSOLUTNĚ (inset-y-0): výšku řádku určuje levý
@@ -394,15 +446,15 @@ export default function Deals() {
               {/* mobil: logo na střed; od sm doleva k textu. Krystalová scéna
                   leží pod celou hero zónou (viz CrystalBackdrop výše), logo na ní
                   jen sedí; písmo zůstává čistá typografie. */}
-              <h1 className="flex justify-center text-zinc-900 sm:justify-start">
+              <h1 className="flex justify-center text-white sm:justify-start">
                 <GoBigDealLogo className="text-[clamp(2.75rem,6.5vw,4.5rem)]" />
               </h1>
               {/* dvoutónový headline v typografii webu (extralight jako
-                  headliny homepage): tmavý lead, zbytek tlumeně slate */}
+                  headliny homepage): bílý lead, zbytek tlumeně zinc */}
               <h2 className="mt-6 max-w-xl text-balance font-sans font-extralight tracking-tight leading-[1.3] text-[clamp(1.35rem,2.4vw,2rem)]">
-                <span className="text-zinc-900">{d.catalog.headingLead}</span>{' '}
-                <span className="text-slate-400">{d.catalog.headingMuted}</span>{' '}
-                <span className="text-slate-400">{d.catalog.headingAccent}</span>
+                <span className="text-white">{d.catalog.headingLead}</span>{' '}
+                <span className="text-zinc-500">{d.catalog.headingMuted}</span>{' '}
+                <span className="text-zinc-500">{d.catalog.headingAccent}</span>
               </h2>
               {/* stavová CTA dvojice — konverzní řetěz: registrace → alert →
                   (FOMO v katalogu) → Early Access. EA tu proto NENÍ primární:
@@ -418,7 +470,7 @@ export default function Deals() {
                       <Bell className="h-4 w-4" /> {d.early.ctaAlerts}
                     </button>
                   </div>
-                  <p className="mt-3 text-[13px] text-slate-400">{d.hero.note}</p>
+                  <p className="mt-3 text-[13px] text-zinc-500">{d.hero.note}</p>
                 </>
               ) : !hasEarlyAccess ? (
                 <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -441,61 +493,14 @@ export default function Deals() {
             <BrandSpotlight />
           </div>
         </header>
-
-        {/* ── KPI lišta — stav trhu. Poslední patro hero zóny:
-               končí tu krystalová plocha, katalog pod ní jede na čisté bílé. ── */}
-        <div className="relative z-10 px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
-          {loading ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-slate-100" />
-              ))}
-            </div>
-          ) : (
-            <CatalogKpis
-              items={[
-                {
-                  label: dash.kpiLive,
-                  value: String(kpis.liveCount),
-                  liveDot: kpis.liveCount > 0,
-                  /* modrá jako eyebrow EarlyAccessCard — živé dávky a Early
-                     Access drží v katalogu jednu akcentní barvu */
-                  accent: true,
-                  /* nula živých dealů = nejslabší místo dashboardu → konverzní
-                     bod (alert); jinak zkratka dolů na sekci živých dealů */
-                  action: kpis.liveCount === 0
-                    ? { label: dash.kpiLiveAlert, onClick: goToAlerts }
-                    : { label: dash.kpiLiveSeeAll, onClick: () => scrollTo('deals-live'), icon: 'arrow' },
-                },
-                { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
-                {
-                  label: dash.kpiDiscount,
-                  value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
-                  gradient: kpis.maxDiscount > 0,
-                },
-                kpis.nextDeadline
-                  ? {
-                      label: dash.kpiDeadline,
-                      value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
-                    }
-                  : kpis.nextStart
-                    ? {
-                        label: dash.kpiNextStart,
-                        value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
-                      }
-                    : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
-              ]}
-            />
-          )}
-        </div>
       </div>
       {/* ═══ konec hero zóny s krystaly ═══ */}
 
-      {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
+      {/* ══ Pod hero: původní vysvětlující část stránky ══ */}
 
-      {/* ── Co je GoBigDeal (tmavá) — katalog nad ní je ŠEDÝ; wrapper nese
-             šedou a zaoblený roh sekce odkrývá šedé růžky (vzor stránky) ── */}
-      <div className="bg-slate-50">
+      {/* ── Co je GoBigDeal (tmavá) — plocha nad ní je taky matně černá,
+             wrapper ji nese dál, takže zaoblený roh sekce splyne beze švu ── */}
+      <div className="bg-[#0B1215]">
         <section className={SECTION} style={{ backgroundColor: DARK }}>
           <div className="mx-auto max-w-[1400px]">
             <div className="mx-auto max-w-[1000px] text-left">

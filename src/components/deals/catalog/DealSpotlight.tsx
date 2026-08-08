@@ -13,9 +13,9 @@ const FALLBACK_BG = '/gbd-spotlight-bg.jpg';
 
 /**
  * Spotlight banner dashboardu — JEDNA nejnaléhavější dávka přes šířku
- * hlavního sloupce. Na bílé stránce zůstává záměrně TMAVÝM médiem
- * (kampaňová fotka / obsidianový podkres + scrim): editorialní kontrastní
- * blok, bílý text na fotce, sleva červeně na bílé pilulce.
+ * hlavního sloupce: kampaňová fotka / obsidianový podkres + scrim, bílý text
+ * na fotce, sleva červeně na bílé pilulce. Na matně černé ploše ho od okolí
+ * odděluje vlasový bílý ring (stín by na černé nebyl vidět).
  */
 export function DealSpotlight({ item }: { item: DealTileItem }) {
   const lang = useStore((s) => s.lang);
@@ -23,7 +23,7 @@ export function DealSpotlight({ item }: { item: DealTileItem }) {
   const live = item.kind === 'live';
 
   const inner = (
-    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-[1.25rem] border border-slate-100 p-6 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16)] transition-all duration-300 hover:shadow-[0_22px_52px_-14px_rgba(15,23,42,0.24)] sm:h-[250px] sm:p-8">
+    <div className="group relative flex h-[210px] flex-col justify-between overflow-hidden rounded-[1.25rem] p-6 ring-1 ring-white/10 transition-all duration-300 hover:ring-white/25 sm:h-[250px] sm:p-8">
       {/* reklamní video (s outro logem značky) > kampaňová fotka dealu >
           obsidianový podkres */}
       {getDealVideo(item.concernSlug, item.supplier) ? (

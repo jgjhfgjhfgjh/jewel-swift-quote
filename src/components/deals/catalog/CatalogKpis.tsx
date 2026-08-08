@@ -20,9 +20,10 @@ export interface CatalogKpi {
 }
 
 /**
- * KPI lišta dashboardu — světlá varianta: bílé karty s hairline slate
- * rámečkem a jemným stínem, hodnoty velkou tmavou typografií font-medium
- * tracking-tighter, živý stav značí zelená pulsující tečka.
+ * KPI lišta dashboardu — tmavá hairline varianta na matně černé ploše:
+ * dlaždice jsou jen jemně prosvětlené pole s vlasovým rámečkem, hodnoty bílou
+ * typografií font-medium tracking-tighter, živý stav značí zelená pulsující
+ * tečka. Chrom stránky je záměrně tmavý — bílé zůstávají jen karty dávek.
  */
 export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
   return (
@@ -30,17 +31,17 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
       {items.map((k) => (
         <div
           key={k.label}
-          className="rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.10),0_2px_6px_rgba(15,23,42,0.05)] transition-all duration-200 hover:shadow-[0_20px_44px_-12px_rgba(15,23,42,0.18),0_4px_10px_rgba(15,23,42,0.07)] sm:p-5"
+          className="rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-4 transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.07] sm:p-5"
         >
-          <span className="block truncate text-[11px] font-medium uppercase tracking-widest text-slate-400">
+          <span className="block truncate text-[11px] font-medium uppercase tracking-widest text-zinc-500">
             {k.label}
           </span>
           <span className="mt-2.5 flex min-h-[2rem] items-center gap-2.5">
-            {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-500" />}
+            {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400" />}
             {typeof k.value === 'string' ? (
               <span
                 className={`font-sans text-[1.6rem] font-medium leading-none tracking-tighter sm:text-3xl ${
-                  k.accent ? 'text-blue-500' : 'text-zinc-900'
+                  k.accent ? 'text-blue-400' : 'text-white'
                 }`}
               >
                 {k.value}
@@ -53,7 +54,7 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
             <button
               type="button"
               onClick={k.action.onClick}
-              className="group/kpi mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-900 underline-offset-2 transition-colors hover:underline"
+              className="group/kpi mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline"
             >
               {k.action.icon === 'arrow' ? (
                 <>

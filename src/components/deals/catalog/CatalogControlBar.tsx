@@ -7,8 +7,8 @@ export type CatalogView = 'grid' | 'list';
 
 /**
  * Řídicí lišta dashboardu — řazení, přepínač mřížka/seznam, počet výsledků
- * a zrušení filtrů. Světlá varianta: aktivní = plná zinc-900, klid = slate,
- * počty v mono písmu.
+ * a zrušení filtrů. Tmavá varianta na matně černé ploše: aktivní stav je
+ * INVERZNÍ (bílá pilulka, černý text), klid tlumeně zinc, počty v mono písmu.
  */
 export function CatalogControlBar({
   resultCount,
@@ -43,7 +43,7 @@ export function CatalogControlBar({
   ];
 
   return (
-    <div className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50/85 py-3 backdrop-blur supports-[backdrop-filter]:bg-slate-50/70">
+    <div className="sticky top-0 z-30 border-b border-white/10 bg-[#0B1215]/90 py-3 backdrop-blur supports-[backdrop-filter]:bg-[#0B1215]/75">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         {/* řazení — segmenty jako pilulky, na úzkém displeji scrollují */}
         <div
@@ -58,8 +58,8 @@ export function CatalogControlBar({
               onClick={() => onSort(o.key)}
               className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 sort === o.key
-                  ? 'bg-zinc-900 text-white'
-                  : 'text-slate-500 hover:bg-slate-100 hover:text-zinc-900'
+                  ? 'bg-white text-zinc-900'
+                  : 'text-zinc-400 hover:bg-white/10 hover:text-white'
               }`}
             >
               {o.label}
@@ -70,27 +70,27 @@ export function CatalogControlBar({
         <div className="ml-auto flex items-center gap-2.5">
           {activeCount > 0 && (
             <>
-              <span className="hidden font-mono text-xs text-slate-400 sm:block">
+              <span className="hidden font-mono text-xs text-zinc-500 sm:block">
                 {fillTemplate(d.catalog.results, { n: String(resultCount) })}
               </span>
               <button
                 type="button"
                 onClick={onClear}
-                className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-zinc-700"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
               >
                 <X className="h-3.5 w-3.5" /> {d.catalog.clear} · {activeCount}
               </button>
             </>
           )}
           {/* mřížka / seznam */}
-          <div className="flex rounded-full border border-slate-200 bg-slate-50 p-0.5">
+          <div className="flex rounded-full border border-white/10 bg-white/[0.04] p-0.5">
             <button
               type="button"
               aria-label={s.viewGrid}
               aria-pressed={view === 'grid'}
               onClick={() => onView('grid')}
               className={`flex h-7 w-8 items-center justify-center rounded-full transition-colors ${
-                view === 'grid' ? 'bg-zinc-900 text-white' : 'text-slate-500 hover:text-zinc-900'
+                view === 'grid' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
               }`}
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -101,7 +101,7 @@ export function CatalogControlBar({
               aria-pressed={view === 'list'}
               onClick={() => onView('list')}
               className={`flex h-7 w-8 items-center justify-center rounded-full transition-colors ${
-                view === 'list' ? 'bg-zinc-900 text-white' : 'text-slate-500 hover:text-zinc-900'
+                view === 'list' ? 'bg-white text-zinc-900' : 'text-zinc-400 hover:text-white'
               }`}
             >
               <Rows3 className="h-3.5 w-3.5" />
@@ -110,7 +110,7 @@ export function CatalogControlBar({
         </div>
       </div>
       {activeLabels.length > 0 && (
-        <div className="mt-2 truncate text-xs text-slate-400">{activeLabels.join(' · ')}</div>
+        <div className="mt-2 truncate text-xs text-zinc-500">{activeLabels.join(' · ')}</div>
       )}
     </div>
   );

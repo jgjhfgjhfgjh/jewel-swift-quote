@@ -25,7 +25,11 @@ export interface FilterNavBrand {
  * Filtrační nav lišta s expanzemi — nahrazuje sidebar, aby karty katalogu
  * dostaly plnou šířku stránky: hledání + tlačítka Koncerny/Značky, každé
  * rozbalí panel přes celou šíři (otevřená je vždy max jedna sekce).
- * Malá loga koncernů jedou VOLNĚ na bílé v plné barvě — bez rámečků.
+ *
+ * Lišta samotná je TMAVÁ (plocha stránky je matně černá), rozbalený panel
+ * zůstává BÍLÝ list — jednak se chová jako popover, jednak loga koncernů
+ * a značek tak můžou dál jet volně v PLNÉ barvě (multiply na bílé); na černé
+ * by z nich multiply udělal nic.
  */
 export function CatalogFilterNav({
   search,
@@ -87,20 +91,20 @@ export function CatalogFilterNav({
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen((o) => (o === s.key ? null : s.key))}
-              className={`inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium text-zinc-900 shadow-sm transition-colors ${
+              className={`inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium text-white transition-colors ${
                 isOpen || s.selected > 0
-                  ? 'border-slate-300 bg-slate-50'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
+                  ? 'border-white/30 bg-white/10'
+                  : 'border-white/10 bg-white/[0.04] hover:border-white/25'
               }`}
             >
               {s.label}
               {s.selected > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-zinc-900 px-1.5 font-mono text-[11px] font-medium text-white">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 font-mono text-[11px] font-medium text-zinc-900">
                   {s.selected}
                 </span>
               )}
               <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                className={`h-4 w-4 text-zinc-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
               />
             </button>
           );
@@ -109,7 +113,9 @@ export function CatalogFilterNav({
 
       {/* ── expanze: Koncerny — logo volně na bílé + název + stav ── */}
       {open === 'concerns' && (
-        <div className="mt-2 rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_12px_32px_-10px_rgba(15,23,42,0.14)]">
+        /* bílý list na černé ploše — stín je čistě černý (slate stín by na
+           matně černé nebyl vidět), takže panel „leží nad" stránkou */
+        <div className="mt-2 rounded-[1.25rem] bg-white p-4 shadow-[0_28px_64px_-18px_rgba(0,0,0,0.9)]">
           <div className="flex flex-wrap items-center gap-1.5">
             {clearPill(selectedConcerns.length === 0, onClearConcerns)}
             {concerns.map((c) => {
@@ -156,7 +162,9 @@ export function CatalogFilterNav({
 
       {/* ── expanze: Značky — chipy s počtem ── */}
       {open === 'brands' && (
-        <div className="mt-2 rounded-[1.25rem] border border-slate-100 bg-white p-4 shadow-[0_12px_32px_-10px_rgba(15,23,42,0.14)]">
+        /* bílý list na černé ploše — stín je čistě černý (slate stín by na
+           matně černé nebyl vidět), takže panel „leží nad" stránkou */
+        <div className="mt-2 rounded-[1.25rem] bg-white p-4 shadow-[0_28px_64px_-18px_rgba(0,0,0,0.9)]">
           <div className="flex flex-wrap items-center gap-1.5">
             {clearPill(selectedBrands.length === 0, onClearBrands)}
             {brands.map((b) => {
