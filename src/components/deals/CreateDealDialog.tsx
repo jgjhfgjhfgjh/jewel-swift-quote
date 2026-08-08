@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Plus, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronRight, Plus, X } from 'lucide-react';
 import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
 import { BigDealSupplierLogo } from '@/components/BigDealSupplierLogo';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -22,9 +22,12 @@ import { supplierMailto } from '@/lib/supplierContact';
  * Přihlášený vidí dosavadní poptávku dealu na míru beze změny — samoobslužný
  * sestavovač zatím neexistuje.
  *
- * Vizuál i copy patří do dodavatelského světa (skill
- * `bigdealsupplier-copywriting`): tmavá karta, vlasové linky, mono popisky,
- * hrany 2px, oznamovací způsob. Odběratelská pravidla tu NEPLATÍ.
+ * Vizuál drží iOS jazyk projektu — zaoblená karta, kruhové X, karty se stíny
+ * a velké pilulkové CTA — v tmavé variantě, protože jde o dodavatelský svět
+ * (stejná rodina jako SupplierGateDialog, kterým se sem vchází).
+ *
+ * Copy se řídí skillem `bigdealsupplier-copywriting` (oznamovací způsob,
+ * žádné imperativy). Odběratelská copy pravidla tu NEPLATÍ.
  */
 interface CreateDealState {
   open: boolean;
@@ -86,24 +89,29 @@ const SIZE_NOTE: Record<SizeId, string> = {
   over10k: 'Lots that size get a route per market and a schedule.',
 };
 
-const RULE = 'border-[rgba(255,255,255,0.14)]';
-const MONO = 'font-plex text-[10px] uppercase tracking-[0.2em]';
+/** Štítek kroku — tmavý protějšek šedé pilulky z bílé iOS varianty. */
+function StepChip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+      {children}
+    </span>
+  );
+}
 
-/** Řádek volby — vlasová linka, mono index, žádné karty ani stíny. */
+/** Řádek volby — iOS karta: zaoblení, kruhový index, chevron, jemný stín. */
 function OptionRow({ index, label, onClick }: { index: number; label: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group flex w-full items-center gap-4 border-b py-4 text-left transition-colors hover:bg-white/[0.04] ${RULE}`}
+      className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3.5 text-left
+                 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] transition-colors hover:border-white/20 hover:bg-white/[0.10]"
     >
-      <span className={`${MONO} shrink-0 text-zinc-600 transition-colors group-hover:text-[#B0793F]`}>
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-mono text-[11px] font-bold text-zinc-400 transition-colors group-hover:text-white">
         {String(index).padStart(2, '0')}
       </span>
-      <span className="flex-1 text-[14px] leading-snug text-zinc-300 transition-colors group-hover:text-white">
-        {label}
-      </span>
-      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-white" />
+      <span className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-white">{label}</span>
+      <ChevronRight className="h-4 w-4 shrink-0 text-zinc-500 transition-all group-hover:translate-x-0.5 group-hover:text-white" />
     </button>
   );
 }
@@ -223,37 +231,37 @@ export function CreateDealDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="overflow-hidden rounded-[4px] border border-white/10 p-0 text-[#F3F1EC] sm:max-w-lg sm:rounded-[4px] [&>button]:hidden"
-        style={{ backgroundColor: '#111315' }}
-      >
-        <div className="px-7 pb-8 pt-7 sm:px-9">
+      {/* iOS varianta v tmavém — stejná rodina jako SupplierGateDialog:
+          zaoblení 28px, kruhové X, karty se stíny, velké pilulkové CTA. */}
+      <DialogContent className="overflow-hidden rounded-[28px] border-none bg-[#1b1b1e] p-0 text-white sm:max-w-lg sm:rounded-[28px] [&>button]:hidden">
+        <div className="px-7 pb-7 pt-9 sm:px-9">
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close"
-            className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-[2px] bg-white/[0.08] text-white transition-colors hover:bg-white/[0.16]"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/[0.16]"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
 
-          {/* Hlavička — značka dodavatelského světa a stav postupu */}
-          <div className="flex items-center gap-3">
+          {/* Značka dodavatelského světa vlevo, stav postupu vpravo — chip
+              nesmí obalit wordmark, uppercase by ho rozbil na verzálky. */}
+          <div className="flex items-center justify-between gap-3 pr-12">
             <BigDealSupplierLogo className="text-sm" />
-            <span className={`${MONO} text-zinc-600`}>{step < 2 ? `Step ${step + 1} / 2` : 'Done'}</span>
+            <StepChip>{step < 2 ? `Step ${step + 1} of 2` : 'Done'}</StepChip>
           </div>
 
           {step === 0 && (
             <>
-              <DialogTitle className="mt-7 font-grotesk text-[1.55rem] font-medium leading-tight tracking-[-0.03em] text-[#F3F1EC]">
+              <DialogTitle className="mt-5 font-sans text-2xl font-bold tracking-tight text-white">
                 What is the stock doing right now?
               </DialogTitle>
-              <DialogDescription className="mt-2.5 text-[14px] leading-relaxed text-zinc-400">
+              <DialogDescription className="mt-2 text-base leading-relaxed text-zinc-400">
                 It decides which desk picks the lot up. Skip anything you would rather not put in
                 writing yet.
               </DialogDescription>
 
-              <div className={`mt-7 border-t ${RULE}`}>
+              <div className="mt-6 grid gap-2.5">
                 {SITUATIONS.map((s, i) => (
                   <OptionRow
                     key={s.id}
@@ -267,23 +275,23 @@ export function CreateDealDialog() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className={`${MONO} mt-5 text-zinc-500 transition-colors hover:text-zinc-300`}
+                className="mt-5 w-full text-center text-[13px] font-semibold text-zinc-500 transition-colors hover:text-zinc-300"
               >
-                Rather not say &rarr;
+                Rather not say
               </button>
             </>
           )}
 
           {step === 1 && (
             <>
-              <DialogTitle className="mt-7 font-grotesk text-[1.55rem] font-medium leading-tight tracking-[-0.03em] text-[#F3F1EC]">
+              <DialogTitle className="mt-5 font-sans text-2xl font-bold tracking-tight text-white">
                 How big is the lot?
               </DialogTitle>
-              <DialogDescription className="mt-2.5 text-[14px] leading-relaxed text-zinc-400">
+              <DialogDescription className="mt-2 text-base leading-relaxed text-zinc-400">
                 A range is enough. It sets the route, not the price.
               </DialogDescription>
 
-              <div className={`mt-7 border-t ${RULE}`}>
+              <div className="mt-6 grid gap-2.5">
                 {SIZES.map((s, i) => (
                   <OptionRow
                     key={s.id}
@@ -294,20 +302,20 @@ export function CreateDealDialog() {
                 ))}
               </div>
 
-              <div className="mt-5 flex items-center justify-between">
+              <div className="mt-5 flex items-center justify-between text-[13px] font-semibold text-zinc-500">
                 <button
                   type="button"
                   onClick={() => setStep(0)}
-                  className={`${MONO} inline-flex items-center gap-1.5 text-zinc-500 transition-colors hover:text-zinc-300`}
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-zinc-300"
                 >
-                  <ArrowLeft className="h-3 w-3" /> Back
+                  <ArrowLeft className="h-3.5 w-3.5" /> Back
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className={`${MONO} text-zinc-500 transition-colors hover:text-zinc-300`}
+                  className="transition-colors hover:text-zinc-300"
                 >
-                  Not sure yet &rarr;
+                  Not sure yet
                 </button>
               </div>
             </>
@@ -315,20 +323,24 @@ export function CreateDealDialog() {
 
           {step === 2 && (
             <>
-              <DialogTitle className="mt-7 font-grotesk text-[1.55rem] font-medium leading-tight tracking-[-0.03em] text-[#F3F1EC]">
+              <DialogTitle className="mt-5 font-sans text-2xl font-bold tracking-tight text-white">
                 That is enough to start.
               </DialogTitle>
-              <DialogDescription className="mt-2.5 text-[14px] leading-relaxed text-zinc-400">
+              <DialogDescription className="mt-2 text-base leading-relaxed text-zinc-400">
                 {situation ? OUTCOME[situation] : OUTCOME_SKIPPED}
                 {size ? ` ${SIZE_NOTE[size]}` : ''}
               </DialogDescription>
 
               {/* Rekapitulace odpovědí — dodavatel vidí, co o sobě řekl */}
-              <dl className={`mt-7 border-t ${RULE}`}>
+              <dl className="mt-6 grid gap-2.5">
                 {[['Situation', situationLabel], ['Lot size', sizeLabel]].map(([k, v]) => (
-                  <div key={k} className={`flex items-baseline gap-4 border-b py-3.5 ${RULE}`}>
-                    <dt className={`${MONO} w-24 shrink-0 text-zinc-600`}>{k}</dt>
-                    <dd className="flex-1 text-[13px] leading-snug text-zinc-300">{v}</dd>
+                  <div
+                    key={k}
+                    className="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3
+                               shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)]"
+                  >
+                    <dt className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{k}</dt>
+                    <dd className="mt-1 text-[13px] font-semibold leading-snug text-white">{v}</dd>
                   </div>
                 ))}
               </dl>
@@ -336,28 +348,28 @@ export function CreateDealDialog() {
               <button
                 type="button"
                 onClick={startRegistration}
-                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-[#F3F1EC] py-4 text-[13px] font-medium tracking-wide text-[#111315] transition-colors hover:bg-white"
+                className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white text-base font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
               >
-                Create a supplier account <ArrowRight className="h-3.5 w-3.5" />
+                Create a supplier account <ArrowRight className="h-4 w-4" />
               </button>
-              <p className={`${MONO} mt-3.5 text-center text-zinc-600`}>
+              <p className="mt-3 text-center text-xs text-zinc-500">
                 Approved in 24 h &nbsp;·&nbsp; No exclusivity
               </p>
 
-              <div className={`mt-6 flex items-center justify-between border-t pt-5 ${RULE}`}>
+              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5 text-[13px] font-semibold text-zinc-500">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className={`${MONO} inline-flex items-center gap-1.5 text-zinc-500 transition-colors hover:text-zinc-300`}
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-zinc-300"
                 >
-                  <ArrowLeft className="h-3 w-3" /> Back
+                  <ArrowLeft className="h-3.5 w-3.5" /> Back
                 </button>
                 <a
                   href={mailto}
                   onClick={() => setOpen(false)}
-                  className={`${MONO} inline-flex items-center gap-1.5 text-zinc-500 transition-colors hover:text-zinc-300`}
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-zinc-300"
                 >
-                  Send the list by e-mail <ArrowUpRight className="h-3 w-3" />
+                  Send the list by e-mail <ArrowUpRight className="h-3.5 w-3.5" />
                 </a>
               </div>
             </>
@@ -368,10 +380,15 @@ export function CreateDealDialog() {
             <button
               type="button"
               onClick={() => { setOpen(false); navigate('/deals'); }}
-              className={`${MONO} mt-7 flex w-full items-center justify-between border-t pt-5 text-left text-zinc-600 transition-colors hover:text-zinc-400 ${RULE}`}
+              className="group/buy mt-5 flex w-full items-center gap-3 border-t border-white/10 pt-5 text-left"
             >
-              Looking to buy instead? Browse the deals
-              <ArrowRight className="h-3 w-3" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[13px] font-semibold text-white">Looking to buy instead?</span>
+                <span className="mt-0.5 block text-xs text-zinc-500">
+                  GoBigDeal — closeout prices for European retailers, from one unit.
+                </span>
+              </span>
+              <ArrowRight className="h-4 w-4 shrink-0 text-zinc-500 transition-all group-hover/buy:translate-x-0.5 group-hover/buy:text-white" />
             </button>
           )}
         </div>
