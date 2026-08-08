@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { AuthModal } from '@/components/AuthModal';
 import { NavGoBigDealPanel } from '@/components/deals/NavGoBigDealPanel';
+import { NavMyDealPanel } from '@/components/deals/NavMyDealPanel';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
@@ -762,52 +763,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                 </button>
               </div>
             ) : activeNav === 'my-deal' ? (
-              /* MyDeal — osobní zóna: čtyři karty ve stejném iOS jazyce jako
-                 zbytek webu (bílá karta, silný stín, hover nadzvedne).
-                 Nepřihlášenému místo nich nabídne registraci. */
+              /* MyDeal — vlevo karta stavu vlastních dealů (dodavatelská
+                 strana: ověření účtu / zadání dávky / běžící dávky), vpravo
+                 osobní zóna. Obsah žije v NavMyDealPanel. */
               <div className="px-6 pt-5 pb-6">
-                {user ? (
-                  <div className="grid grid-cols-4 gap-4">
-                    {MY_DEAL_ITEMS.map((item) => (
-                      <button
-                        key={item.path}
-                        type="button"
-                        onClick={() => go(item.path)}
-                        className="group/my flex flex-col items-start rounded-[1.25rem] border border-slate-200/70 bg-white p-5 text-left
-                                   shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)]
-                                   transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-slate-300
-                                   hover:shadow-[0_36px_64px_-18px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.12)]"
-                      >
-                        <span className="text-[15px] font-semibold tracking-tight text-zinc-900">{item.label}</span>
-                        <span className="mt-1.5 text-[13px] leading-snug text-zinc-500">{item.sub}</span>
-                        <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[13px] font-semibold text-zinc-900">
-                          Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/my:translate-x-0.5" />
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-start">
-                    <p className="font-sans font-extralight tracking-tight leading-snug text-[19px]">
-                      <span className="text-zinc-900">Your deals, alerts and orders in one place. </span>
-                      <span className="text-zinc-500">Sign in to open MyDeal.</span>
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => go('auth:b2b')}
-                      className="mt-5 inline-flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
-                    >
-                      Create a free account <ArrowRight className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => go('auth:login')}
-                      className="mt-2.5 text-[13px] font-medium text-zinc-500 transition-colors hover:text-zinc-900"
-                    >
-                      I already have an account
-                    </button>
-                  </div>
-                )}
+                <NavMyDealPanel go={go} />
               </div>
             ) : activeNav === 'top-deals' ? (
               /* GoBigDeal — obsidianová předsíň /deals: headline strip se

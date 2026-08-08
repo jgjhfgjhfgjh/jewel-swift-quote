@@ -31,16 +31,24 @@ import { supplierMailto } from '@/lib/supplierContact';
  */
 interface CreateDealState {
   open: boolean;
+  /** Kontext otevření — „nasadit znovu dávku nr. 1003" z MyDeal karty. */
+  repeatOf: string | null;
   setOpen: (v: boolean) => void;
 }
 
 const useCreateDealStore = create<CreateDealState>((set) => ({
   open: false,
+  repeatOf: null,
   setOpen: (v) => set({ open: v }),
 }));
 
-export function openCreateDealDialog() {
-  useCreateDealStore.setState({ open: true });
+/**
+ * Otevře dialog CreateBigDeal. `repeatOf` nese popis dávky, která se má
+ * zopakovat (např. „nr. 1003 — Fossil Group — Hodinky") — dialog ho ukáže
+ * a přiloží do poptávky, aby obchod nemusel dohledávat, o kterou dávku jde.
+ */
+export function openCreateDealDialog(repeatOf?: string) {
+  useCreateDealStore.setState({ open: true, repeatOf: repeatOf ?? null });
 }
 
 /* ── Segmentace ──────────────────────────────────────────────────────────
@@ -117,7 +125,7 @@ function OptionRow({ index, label, onClick }: { index: number; label: string; on
 }
 
 export function CreateDealDialog() {
-  const { open, setOpen } = useCreateDealStore();
+  const { open, setOpen, repeatOf } = useCreateDealStore();
   const { user } = useAuthContext();
   const openAuthModal = useStore((s) => s.openAuthModal);
   const navigate = useNavigate();
@@ -156,15 +164,25 @@ export function CreateDealDialog() {
             </button>
 
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              <Plus className="h-3 w-3" /> Deal on request
+              <Plus className="h-3 w-3" /> {repeatOf ? 'Run it again' : 'Deal on request'}
             </span>
 
             <DialogTitle className="mt-5 font-sans text-2xl font-bold tracking-tight text-zinc-900">
-              Missing a deal you would buy?
+              {repeatOf ? 'Run this batch again?' : 'Missing a deal you would buy?'}
             </DialogTitle>
             <DialogDescription className="mt-2 text-base leading-relaxed text-zinc-500">
-              Tell us the brands and volumes and we go source it.
+              {repeatOf
+                ? 'We check what is left at the concern and reopen it under a new deal number.'
+                : 'Tell us the brands and volumes and we go source it.'}
             </DialogDescription>
+
+            {/* dávka, která se opakuje — jde s poptávkou, obchod ji nemusí
+                dohledávat podle popisu */}
+            {repeatOf && (
+              <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-[13px] text-zinc-700">
+                {repeatOf}
+              </div>
+            )}
 
             <div className="mt-5 grid gap-2">
               {([
@@ -187,11 +205,15 @@ export function CreateDealDialog() {
             </div>
 
             <a
-              href={supplierMailto('CreateBigDeal')}
+              href={
+                repeatOf
+                  ? supplierMailto('CreateBigDeal — run again', `Batch to repeat: ${repeatOf}\n\nWhat changed since last time:\n`)
+                  : supplierMailto('CreateBigDeal')
+              }
               onClick={() => setOpen(false)}
               className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-zinc-900 text-base font-semibold text-white transition-colors hover:bg-zinc-800"
             >
-              Request a deal <ArrowRight className="h-4 w-4" />
+              {repeatOf ? 'Request a repeat' : 'Request a deal'} <ArrowRight className="h-4 w-4" />
             </a>
 
             <button
