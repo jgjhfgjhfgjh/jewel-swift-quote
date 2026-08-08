@@ -185,7 +185,6 @@ export default function Deals() {
       ...filters.concerns.map((s) => byConcern.get(s) ?? s),
       ...filters.brands.map((k) => byBrand.get(k) ?? toDisplayName(k)),
       ...(filters.search.trim() ? [`„${filters.search.trim()}"`] : []),
-      ...(filters.minDiscount ? [`−${filters.minDiscount} %`] : []),
     ];
   }, [filters, concernTiles, brandTiles]);
 
@@ -210,13 +209,6 @@ export default function Deals() {
           : 'deals-closed',
     );
 
-  /* KPI „živá nejvyšší sleva" je zároveň filtr: klik nechá v katalogu jen
-     dávky s touto slevou, druhý klik ho zase pustí. */
-  const topDiscountOn = filters.minDiscount > 0;
-  const toggleTopDiscount = () => {
-    setFilters((f) => ({ ...f, minDiscount: f.minDiscount ? 0 : kpis.maxDiscount }));
-    scrollTo('catalog');
-  };
 
   /* Ceník na stránce — bez platebního flow (jako homepage): nepřihlášený
      jde do registrace, přihlášený zpět na katalog; Enterprise píše obchodu. */
@@ -351,10 +343,6 @@ export default function Deals() {
                 label: dash.kpiDiscount,
                 value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
                 tone: 'rose',
-                /* dlaždice je rovnou ovladač — odfiltruje dávky s touto slevou */
-                onClick: kpis.maxDiscount ? toggleTopDiscount : undefined,
-                active: topDiscountOn,
-                hint: dash.kpiDiscountHint,
               },
               kpis.nextDeadline
                 ? {

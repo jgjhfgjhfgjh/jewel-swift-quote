@@ -102,13 +102,9 @@ export interface DealsText {
       kpiLiveSeeAll: string;
       /** Akce v KPI dlaždici živých dealů — odroluje na jejich sekci. */
       kpiLiveGo: string;
-      /** Nápověda u klikací KPI dlaždice s nejvyšší slevou. */
-      kpiDiscountHint: string;
-      /** Veřejný alertový řádek nad katalogem (bílý pruh nad Early Access). */
+      /** Eyebrow veřejného alertového řádku nad katalogem (bílý pruh nad
+          Early Access); text řádku bere zavedené `promo.alert*`. */
       alertRowEyebrow: string;
-      alertRowTitle: string;
-      alertRowMuted: string;
-      alertRowCta: string;
       /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
@@ -350,11 +346,7 @@ const cs: DealsText = {
       kpiLiveAlert: 'Nastavit alert na další deal',
       kpiLiveSeeAll: 'Zobrazit vše',
       kpiLiveGo: 'GoDeal',
-      kpiDiscountHint: 'Zobrazit jen dávky s touto slevou',
       alertRowEyebrow: 'Alerty zdarma',
-      alertRowTitle: 'O novém dealu víš první.',
-      alertRowMuted: 'Jeden e-mail, když dávka naskočí.',
-      alertRowCta: 'Nastavit alert',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
       earlyBadgeShort: '48 h',
@@ -600,11 +592,7 @@ const en: DealsText = {
       kpiLiveAlert: 'Set an alert for the next deal',
       kpiLiveSeeAll: 'See all',
       kpiLiveGo: 'GoDeal',
-      kpiDiscountHint: 'Show only batches with this discount',
       alertRowEyebrow: 'Free alerts',
-      alertRowTitle: 'Be first to know about a new deal.',
-      alertRowMuted: 'One email when a batch goes live.',
-      alertRowCta: 'Set an alert',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
       earlyBadgeShort: '48h',

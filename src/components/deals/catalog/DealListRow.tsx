@@ -144,13 +144,15 @@ export function DealListRow({
           pod kterým dávka běží interně i vůči zákazníkovi (deals.deal_no).
           Teaser koncernu ještě evidovaná dávka není → nese jen značku, slot
           ale zůstává, aby titulky stály v jedné svislé lince. */}
-      <span className="flex h-11 w-[52px] shrink-0 flex-col items-center justify-center leading-none sm:w-[74px]">
-        <GoBigDealLogo className="text-[9px] text-slate-400 sm:text-[10px]" />
-        {/* teaser koncernu ještě nemá přidělené číslo → pomlčka, aby značka
-            nestála osamoceně a bylo vidět, že evidence teprve přijde */}
+      <span className="flex h-11 w-[66px] shrink-0 flex-col items-center justify-center leading-none sm:w-[96px]">
+        {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
+            a výrazně větší než ostatní chrom řádku */}
+        <GoBigDealLogo className="text-[11px] text-zinc-900 sm:text-[14px]" />
+        {/* číslo je jen evidenční stopa: malé, černé, tenké. Teaser koncernu
+            ještě přidělené číslo nemá → pomlčka, aby značka nestála osaměle */}
         <span
-          className={`mt-1 font-sans text-[10px] font-light tracking-wide sm:text-[11px] ${
-            item.dealNo ? 'text-slate-400' : 'text-slate-300'
+          className={`mt-1 font-sans text-[9px] font-light tracking-wide text-zinc-900 sm:text-[10px] ${
+            item.dealNo ? '' : 'text-zinc-400'
           }`}
         >
           nr. {item.dealNo ?? '—'}
@@ -163,7 +165,9 @@ export function DealListRow({
             {item.supplier}
           </span>
         )}
-        <span className="mt-0.5 block truncate text-sm font-medium tracking-tight text-zinc-900">
+        {/* MOBIL: název se raději zalomí do dvou řádků, než aby se z něj po
+            zvětšení značky stalo „Closeout …" — od sm zpět na jeden řádek */}
+        <span className="mt-0.5 line-clamp-2 text-sm font-medium tracking-tight text-zinc-900 sm:line-clamp-none sm:block sm:truncate">
           {item.title}
         </span>
       </span>

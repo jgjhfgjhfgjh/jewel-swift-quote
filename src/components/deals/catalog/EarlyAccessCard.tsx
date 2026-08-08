@@ -19,6 +19,17 @@ const scrollToPricing = () =>
  * `variant="tile"` = dlaždice stejné velikosti jako karta dávky (mřížka),
  * `variant="row"` = plochý banner přes šířku seznamu (řádkové zobrazení).
  */
+/** Tvar ŘÁDKU (alerty i Early Access) — na mobilu sloupec s CTA přes celou
+    šíři, od sm klasický řádek. Sdílí ho PublicAlertsRow, aby oba pruhy nad
+    katalogem stály úplně stejně. */
+export const EA_ROW_SHELL =
+  'group flex w-full flex-col items-start gap-3 rounded-[1.25rem] px-5 py-4 text-left sm:flex-row sm:items-center sm:gap-4';
+
+/** Tvar CTA pilulky v řádkové variantě — PEVNÁ šířka od sm, aby obě tlačítka
+    pod sebou byla stejně dlouhá (různé délky vypadaly rozsypaně). */
+export const EA_ROW_CTA =
+  'inline-flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-full px-4 text-[13px] font-medium transition-colors sm:w-[13.5rem]';
+
 /** Sdílený materiál obou variant — ocelový gradient + ring + modré halo. */
 const EA_SKIN =
   'bg-[linear-gradient(155deg,#1B2731_0%,#0E171C_52%,#0B1215_100%)] ring-1 ring-white/15 ' +
@@ -34,9 +45,10 @@ export function EarlyAccessCard({ variant = 'tile' }: { variant?: 'tile' | 'row'
       <button
         type="button"
         onClick={scrollToPricing}
-        className={`group flex w-full items-center gap-4 rounded-[1.25rem] px-5 py-4 text-left hover:-translate-y-0.5 ${EA_SKIN}`}
+        className={`${EA_ROW_SHELL} hover:-translate-y-0.5 ${EA_SKIN}`}
       >
-        <span className="min-w-0 flex-1">
+        {/* w-full kvůli mobilnímu sloupci — jinak se text neomezí a přeteče */}
+        <span className="w-full min-w-0 sm:flex-1">
           <span className="block text-[11px] font-bold uppercase tracking-widest text-blue-500">
             {d.catalog.dash.eyebrowPro}
           </span>
@@ -45,7 +57,7 @@ export function EarlyAccessCard({ variant = 'tile' }: { variant?: 'tile' | 'row'
             <span className="text-zinc-400">{d.early.headingMuted}</span>
           </span>
         </span>
-        <span className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-medium text-zinc-900 transition-colors group-hover:bg-slate-100">
+        <span className={`${EA_ROW_CTA} bg-white text-zinc-900 group-hover:bg-slate-100`}>
           {d.early.ctaPro} <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </button>
