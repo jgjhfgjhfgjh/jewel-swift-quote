@@ -325,12 +325,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     tone?: 'violet';
   }[] = [
     { id: 'why', label: 'Why', onSelect: () => go('/') },
-    {
-      id: 'mcp',
-      label: 'MCP Server',
-      sub: 'Connect your AI agents to live stock and prices',
-      onSelect: () => go('/feed?to=mcp'),
-    },
+    { id: 'mcp', label: 'MCP Server', onSelect: () => go('/feed?to=mcp') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
     { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
     { id: 'create', label: 'CreateBigDeal', tone: 'violet', onSelect: openCreateDealDialog },
