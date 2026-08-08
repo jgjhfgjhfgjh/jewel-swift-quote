@@ -96,8 +96,9 @@ export function DealListRow({
             {d.catalog.dash.earlyBadgeHint}
           </span>
         </span>
-        {/* stavový chip = HLÍDAČ té dávky: zvoneček vlevo, klik zapne alert
-            (na mobilu se chip vynechává, řádek je plný) */}
+        {/* HLÍDAČ dávky — zvoneček s popiskem „alert zdarma". Klik NIKAM
+            nenaviguje: alert se uloží (hostovi do odložených, viz
+            useDealAlerts) a řádek zůstane, kde byl. */}
         <span
           role="button"
           tabIndex={0}
@@ -113,7 +114,7 @@ export function DealListRow({
           }`}
         >
           {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
-          <span className="hidden md:inline">{item.kind === 'upcoming' ? c.unlocksIn : c.upcoming}</span>
+          <span className="hidden md:inline">{watching ? dash.alertOn : dash.alertFree}</span>
         </span>
       </>
     ) : (
@@ -150,14 +151,15 @@ export function DealListRow({
         {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
             a výrazně větší než ostatní chrom řádku */}
         <GoBigDealLogo className="text-[14px] text-zinc-900" />
-        {/* číslo je jen evidenční stopa: malé, černé, tenké. Teaser koncernu
-            ještě přidělené číslo nemá → pomlčka, aby značka nestála osaměle */}
+        {/* pod značkou je stav dávky: připravovaná dávka ještě číslo nemá,
+            takže tu stojí prostý text „Připravujeme" (dřív byl v pilulce
+            vpravo), evidovaná dávka nese své číslo — malé, černé, tenké */}
         <span
           className={`mt-1 font-sans text-[10px] font-light tracking-wide ${
-            item.dealNo ? 'text-zinc-900' : 'text-zinc-400'
+            item.dealNo ? 'text-zinc-900' : 'text-slate-400'
           }`}
         >
-          nr. {item.dealNo ?? '—'}
+          {item.dealNo ? `nr. ${item.dealNo}` : c.upcoming}
         </span>
       </span>
 

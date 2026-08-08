@@ -1,15 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { dealAlertsTable, WILDCARD, type AlertLevel, type DealAlert } from '@/lib/alerts';
 import { useAuthContext } from '@/contexts/AuthContext';
+import {
+  clearPendingAlerts, readPendingAlerts, writePendingAlerts, type PendingAlert,
+} from '@/lib/pendingAlerts';
 
 /**
  * Alerty přihlášeného uživatele s optimistickým zapínáním/vypínáním.
- * Nepřihlášený uživatel má prázdný seznam — volající řeší výzvu k registraci
- * (add/toggle vrací false, když není koho zapsat).
+ *
+ * Nepřihlášený uživatel není odmítnut ani nikam přesměrován: alert se odloží
+ * do localStorage (viz pendingAlerts), zvoneček hned svítí a při prvním
+ * přihlášení se odložené alerty přepíšou do účtu. `add`/`toggle` proto vrací
+ * true i pro hosta — volající nemá důvod otevírat registraci.
  */
 export function useDealAlerts() {
   const { user } = useAuthContext();
   const [alerts, setAlerts] = useState<DealAlert[]>([]);
+  const [pending, setPending] = useState<PendingAlert[]>(() => readPendingAlerts());
   const [loading, setLoading] = useState(false);
 
   const reload = useCallback(async () => {
@@ -29,16 +36,45 @@ export function useDealAlerts() {
     reload();
   }, [reload]);
 
+  /* Přihlášení splní slib z hostovského kliknutí: odložené alerty se zapíšou
+     do účtu a z localStorage zmizí. Ref hlídá, aby se zápis nespustil dvakrát
+     (efekt běží znovu při každé změně `pending`). */
+  const flushing = useRef(false);
+  useEffect(() => {
+    if (!user || pending.length === 0 || flushing.current) return;
+    flushing.current = true;
+    void (async () => {
+      for (const p of pending) {
+        // duplicitu (23505) ignorujeme — alert už v účtu je
+        await dealAlertsTable().insert({ user_id: user.id, level: p.level, target: p.target, label: p.label });
+      }
+      clearPendingAlerts();
+      setPending([]);
+      flushing.current = false;
+      await reload();
+    })();
+  }, [user, pending, reload]);
+
   const has = useCallback(
     (level: AlertLevel, target = '') =>
-      alerts.some((a) => a.level === level && a.target === target),
-    [alerts],
+      alerts.some((a) => a.level === level && a.target === target) ||
+      pending.some((p) => p.level === level && p.target === target),
+    [alerts, pending],
   );
 
-  /** Optimisticky zapne alert; false = žádný přihlášený uživatel. */
+  /** Optimisticky zapne alert; host ho dostane do odložených (localStorage). */
   const add = useCallback(
     async (level: AlertLevel, target = '', label = '') => {
-      if (!user) return false;
+      if (!user) {
+        setPending((prev) => {
+          const next = prev.some((p) => p.level === level && p.target === target)
+            ? prev
+            : [...prev, { level, target, label }];
+          writePendingAlerts(next);
+          return next;
+        });
+        return true;
+      }
       const optimistic: DealAlert = {
         id: `tmp-${level}-${target}`,
         user_id: user.id,
@@ -71,7 +107,14 @@ export function useDealAlerts() {
 
   const remove = useCallback(
     async (level: AlertLevel, target = '') => {
-      if (!user) return;
+      if (!user) {
+        setPending((prev) => {
+          const next = prev.filter((p) => !(p.level === level && p.target === target));
+          writePendingAlerts(next);
+          return next;
+        });
+        return;
+      }
       setAlerts((prev) => prev.filter((a) => !(a.level === level && a.target === target)));
       await dealAlertsTable()
         .delete()
@@ -82,10 +125,9 @@ export function useDealAlerts() {
     [user],
   );
 
-  /** Přepne alert; false = žádný přihlášený uživatel (volající otevře registraci). */
+  /** Přepne alert. Vrací true i hostovi — jeho alert čeká v odložených. */
   const toggle = useCallback(
     async (level: AlertLevel, target = '', label = '') => {
-      if (!user) return false;
       if (has(level, target)) {
         await remove(level, target);
         return true;

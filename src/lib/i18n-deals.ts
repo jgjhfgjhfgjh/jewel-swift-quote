@@ -116,6 +116,9 @@ export interface DealsText {
       watchingDeal: string;
       /** Zájem o uzavřenou dávku (repete). */
       watchClosed: string;
+      /** Popisek u zvonečku na řádku dávky — alert je zdarma a bez odchodu. */
+      alertFree: string;
+      alertOn: string;
       kpiLive: string;
       kpiModels: string;
       kpiDiscount: string;
@@ -353,6 +356,8 @@ const cs: DealsText = {
       watchDeal: 'Hlídat tuto dávku',
       watchingDeal: 'Dávku hlídáte',
       watchClosed: 'Dejte vědět, až bude repete',
+      alertFree: 'Set alert free',
+      alertOn: 'Alert on',
       kpiLive: 'Živé dealy',
       kpiModels: 'Modelů v živých dávkách',
       kpiDiscount: 'Živá nejvyšší sleva',
@@ -599,6 +604,8 @@ const en: DealsText = {
       watchDeal: 'Watch this batch',
       watchingDeal: 'Watching this batch',
       watchClosed: 'Tell me when it runs again',
+      alertFree: 'Set alert free',
+      alertOn: 'Alert on',
       kpiLive: 'Live deals',
       kpiModels: 'Models in live deals',
       kpiDiscount: 'Live top discount',
