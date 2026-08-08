@@ -195,6 +195,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState<string | null>(null);
+  /** Rozbalená kategorie v mobilním menu (jen jedna naráz). */
+  const [mobileCat, setMobileCat] = useState<string | null>(null);
 
   const openAuth = openAuthModal;
 
@@ -311,6 +313,29 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     navCloseTimer.current = setTimeout(() => setActiveNav(null), 120);
   };
 
+  /* Mobilní kategorie — jediná úroveň, kterou menu ukazuje; zbytek se
+     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, MyDeal
+     a CreateBigDeal (akce, proto pastelově fialová). */
+  const MOBILE_CATS: {
+    id: string;
+    label: string;
+    sub?: string;
+    items?: { label: string; sub: string; path: string }[];
+    onSelect?: () => void;
+    tone?: 'violet';
+  }[] = [
+    { id: 'why', label: 'Why', onSelect: () => go('/') },
+    {
+      id: 'mcp',
+      label: 'MCP Server',
+      sub: 'Connect your AI agents to live stock and prices',
+      onSelect: () => go('/feed?to=mcp'),
+    },
+    { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
+    { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
+    { id: 'create', label: 'CreateBigDeal', tone: 'violet', onSelect: openCreateDealDialog },
+  ];
+
   const handleLogout = async () => {
     await signOut();
     setViewMode('home');
@@ -396,14 +421,18 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
           {/* CreateBigDeal — CTA ukotvené vpravo (na místě dřívějšího
-              Suppliers). NEOTVÍRÁ mega menu: hover ho vyplní bíle, klik
-              otevře popup s poptávkou. Klidový stav bere barvu z kontextu
-              jako text navigace; plus je symbol akce. */}
+              Suppliers). NEOTVÍRÁ mega menu: klik otevře popup s poptávkou.
+              Na TMAVÉM pozadí jede pastelově fialově (na černé je to jediné
+              barevné CTA, bílá by splynula s registrací) a hover ho vyplní
+              plnou pastelovou fialovou; na světlé stránce zůstává tmavý
+              s bílým hoverem. Plus je symbol akce. */}
           <button
             onClick={openCreateDealDialog}
             title="CreateBigDeal"
-            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)] ${
-              overVideo ? 'border-white/40 text-white' : 'border-zinc-300 text-zinc-900'
+            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 ${
+              overVideo
+                ? 'border-violet-300/45 text-violet-300 hover:border-violet-300 hover:bg-violet-300 hover:text-zinc-900 hover:shadow-[0_10px_28px_-8px_rgba(196,181,253,0.45)]'
+                : 'border-zinc-300 text-zinc-900 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)]'
             }`}
           >
             <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />
@@ -896,100 +925,66 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             překryjí a ťuknutí padne na cizí prvek — místo toho se má zapnout
             scroll (proto scrollHeight musí být > clientHeight). */}
         <nav className="flex flex-1 min-h-0 flex-col overflow-y-auto overscroll-contain pb-6 [&>*]:shrink-0">
-          {/* Why — sólo skupina bez hlavičky (příběh vypráví homepage) */}
-          <div className="mx-4 overflow-hidden rounded-2xl bg-white">
-            <button
-              onClick={() => { setMenuOpen(false); go('/'); }}
-              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100"
-            >
-              Why
-              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-            </button>
-          </div>
-
-          {/* MCP Server — zrcadlí desktop (Products je dočasně skrytý) */}
-          <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
-            <button
-              onClick={() => { setMenuOpen(false); go('/feed?to=mcp'); }}
-              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
-            >
-              <span className="min-w-0">
-                <span className="block text-sm font-medium leading-snug text-zinc-900">MCP Server</span>
-                <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">
-                  Connect your AI agents to live stock and prices
-                </span>
-              </span>
-              <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-            </button>
-          </div>
-
-          {/* Products dočasně skrytý — skupina zůstává v kódu pro rychlý návrat */}
-          <p className="mb-1.5 mt-5 hidden px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Products</p>
-          <div className="mx-4 hidden divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
-            {PRODUCT_ITEMS.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => { setMenuOpen(false); go(item.path); }}
-                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
-              >
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
-                  {item.sub && (
-                    <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
+          {/* Kategorie = jediná úroveň, kterou mobil ukazuje. Obsah menu se
+              skládá POD ně: kategorie s podpoložkami se rozbaluje, kategorie
+              bez nich rovnou naviguje. CreateBigDeal je akce (pastelově
+              fialová), ne rozcestník. */}
+          {MOBILE_CATS.map((cat) => {
+            const expanded = mobileCat === cat.id;
+            const violet = cat.tone === 'violet';
+            return (
+              <div key={cat.id} className="mx-4 mt-3 overflow-hidden rounded-2xl first:mt-0">
+                <button
+                  onClick={() => {
+                    if (cat.items) { setMobileCat(expanded ? null : cat.id); return; }
+                    setMenuOpen(false);
+                    cat.onSelect?.();
+                  }}
+                  aria-expanded={cat.items ? expanded : undefined}
+                  className={`flex w-full items-center gap-2 px-4 py-3.5 text-left transition-colors ${
+                    violet
+                      ? 'bg-violet-100 text-violet-700 active:bg-violet-200'
+                      : 'bg-white text-zinc-900 active:bg-zinc-100'
+                  }`}
+                >
+                  {violet && <Plus className="h-4 w-4 shrink-0 text-violet-500" strokeWidth={2.5} />}
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold leading-snug">{cat.label}</span>
+                    {cat.sub && (
+                      <span className={`mt-0.5 block text-xs font-normal leading-snug ${violet ? 'text-violet-500' : 'text-zinc-500'}`}>
+                        {cat.sub}
+                      </span>
+                    )}
+                  </span>
+                  {cat.items ? (
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 text-zinc-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                    />
+                  ) : (
+                    <ChevronRight className={`h-4 w-4 shrink-0 ${violet ? 'text-violet-400' : 'text-zinc-300'}`} />
                   )}
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-              </button>
-            ))}
-          </div>
+                </button>
 
-          {/* GoBigDeal — vlajkové cíle z desktop panelu */}
-          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">GoBigDeal</p>
-          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
-            {MOBILE_GBD_ITEMS.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => { setMenuOpen(false); go(item.path); }}
-                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
-              >
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
-                  <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-              </button>
-            ))}
-          </div>
-
-          {/* MyDeal — osobní zóna (Catalog je skrytý spolu s nav položkou) */}
-          <p className="mb-1.5 mt-5 px-8 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">MyDeal</p>
-          <div className="mx-4 divide-y divide-zinc-100 overflow-hidden rounded-2xl bg-white">
-            {MY_DEAL_ITEMS.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => { setMenuOpen(false); go(item.path); }}
-                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors active:bg-zinc-100"
-              >
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
-                  <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
-              </button>
-            ))}
-          </div>
-
-          {/* CreateDeal — poptávka dealu na míru (mailto, jako na desktopu) */}
-          <div className="mx-4 mt-5 overflow-hidden rounded-2xl bg-white">
-            <button
-              onClick={() => { setMenuOpen(false); openCreateDealDialog(); }}
-              className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-medium text-zinc-900 transition-colors active:bg-zinc-100"
-            >
-              <Plus className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2.5} />
-              CreateBigDeal
-              <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-zinc-300" />
-            </button>
-          </div>
+                {cat.items && expanded && (
+                  <div className="divide-y divide-zinc-100 border-t border-zinc-100 bg-white">
+                    {cat.items.map((item) => (
+                      <button
+                        key={item.label}
+                        onClick={() => { setMenuOpen(false); go(item.path); }}
+                        className="flex w-full items-center justify-between gap-3 py-3 pl-7 pr-4 text-left transition-colors active:bg-zinc-100"
+                      >
+                        <span className="min-w-0">
+                          <span className="block text-sm font-medium leading-snug text-zinc-900">{item.label}</span>
+                          <span className="mt-0.5 block text-xs font-normal leading-snug text-zinc-500">{item.sub}</span>
+                        </span>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-zinc-300" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           {SHOW_PARTNER_HUB && (isB2bApproved || isAdmin) && (
             <>
