@@ -104,14 +104,14 @@ function OptionRow({ index, label, onClick }: { index: number; label: string; on
     <button
       type="button"
       onClick={onClick}
-      className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3.5 text-left
-                 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)] transition-colors hover:border-white/20 hover:bg-white/[0.10]"
+      className="group flex w-full items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2.5 text-left
+                 shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-colors hover:border-white/20 hover:bg-white/[0.10]"
     >
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-mono text-[11px] font-bold text-zinc-400 transition-colors group-hover:text-white">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-mono text-[10px] font-bold text-zinc-400 transition-colors group-hover:text-white">
         {String(index).padStart(2, '0')}
       </span>
-      <span className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-white">{label}</span>
-      <ChevronRight className="h-4 w-4 shrink-0 text-zinc-500 transition-all group-hover:translate-x-0.5 group-hover:text-white" />
+      <span className="min-w-0 flex-1 text-[12.5px] font-semibold leading-snug text-white">{label}</span>
+      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-zinc-500 transition-all group-hover:translate-x-0.5 group-hover:text-white" />
     </button>
   );
 }
@@ -166,7 +166,7 @@ export function CreateDealDialog() {
               Tell us the brands and volumes and we go source it.
             </DialogDescription>
 
-            <div className="mt-6 grid gap-2.5">
+            <div className="mt-5 grid gap-2">
               {([
                 ['01', 'Send us the wish list', 'Brands, references and how many units you can take.'],
                 ['02', 'We check availability', 'We go to the concern and come back with a price.'],
@@ -233,30 +233,34 @@ export function CreateDealDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       {/* iOS varianta v tmavém — stejná rodina jako SupplierGateDialog:
           zaoblení 28px, kruhové X, karty se stíny, velké pilulkové CTA. */}
-      <DialogContent className="overflow-hidden rounded-[28px] border-none bg-[#1b1b1e] p-0 text-white sm:max-w-lg sm:rounded-[28px] [&>button]:hidden">
-        <div className="px-7 pb-7 pt-9 sm:px-9">
+      {/* Výšku musí stropovat dialog sám — základní DialogContent je
+          top-50% + translate-y-50% bez max-height, takže vysoký obsah uteče
+          nad i pod obrazovku a není jak se k němu dostat. Scroll drží vnitřní
+          div, aby kruhové X zůstalo ukotvené v rohu a neodrolovalo. */}
+      <DialogContent className="max-h-[88dvh] overflow-hidden rounded-[28px] border-none bg-[#1b1b1e] p-0 text-white sm:max-w-md sm:rounded-[28px] [&>button]:hidden">
+        <div className="max-h-[88dvh] overflow-y-auto overscroll-contain px-6 pb-6 pt-7 sm:px-7">
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close"
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/[0.16]"
+            className="absolute right-3.5 top-3.5 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.08] text-white transition-colors hover:bg-white/[0.16]"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
 
           {/* Značka dodavatelského světa vlevo, stav postupu vpravo — chip
               nesmí obalit wordmark, uppercase by ho rozbil na verzálky. */}
-          <div className="flex items-center justify-between gap-3 pr-12">
+          <div className="flex items-center justify-between gap-3 pr-10">
             <BigDealSupplierLogo className="text-sm" />
             <StepChip>{step < 2 ? `Step ${step + 1} of 2` : 'Done'}</StepChip>
           </div>
 
           {step === 0 && (
             <>
-              <DialogTitle className="mt-5 font-sans text-2xl font-bold tracking-tight text-white">
+              <DialogTitle className="mt-4 font-sans text-lg font-bold tracking-tight text-white sm:text-xl">
                 What is the stock doing right now?
               </DialogTitle>
-              <DialogDescription className="mt-2 text-base leading-relaxed text-zinc-400">
+              <DialogDescription className="mt-1.5 text-[13px] leading-relaxed text-zinc-400">
                 It decides which desk picks the lot up. Skip anything you would rather not put in
                 writing yet.
               </DialogDescription>
@@ -275,7 +279,7 @@ export function CreateDealDialog() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="mt-5 w-full text-center text-[13px] font-semibold text-zinc-500 transition-colors hover:text-zinc-300"
+                className="mt-4 w-full text-center text-[12.5px] font-semibold text-zinc-500 transition-colors hover:text-zinc-300"
               >
                 Rather not say
               </button>
@@ -302,7 +306,7 @@ export function CreateDealDialog() {
                 ))}
               </div>
 
-              <div className="mt-5 flex items-center justify-between text-[13px] font-semibold text-zinc-500">
+              <div className="mt-4 flex items-center justify-between text-[12.5px] font-semibold text-zinc-500">
                 <button
                   type="button"
                   onClick={() => setStep(0)}
@@ -332,15 +336,15 @@ export function CreateDealDialog() {
               </DialogDescription>
 
               {/* Rekapitulace odpovědí — dodavatel vidí, co o sobě řekl */}
-              <dl className="mt-6 grid gap-2.5">
+              <dl className="mt-5 grid gap-2">
                 {[['Situation', situationLabel], ['Lot size', sizeLabel]].map(([k, v]) => (
                   <div
                     key={k}
-                    className="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3
-                               shadow-[0_8px_24px_-6px_rgba(0,0,0,0.45)]"
+                    className="rounded-xl border border-white/10 bg-white/[0.05] px-3.5 py-2.5
+                               shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)]"
                   >
                     <dt className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{k}</dt>
-                    <dd className="mt-1 text-[13px] font-semibold leading-snug text-white">{v}</dd>
+                    <dd className="mt-0.5 text-[12.5px] font-semibold leading-snug text-white">{v}</dd>
                   </div>
                 ))}
               </dl>
@@ -348,15 +352,15 @@ export function CreateDealDialog() {
               <button
                 type="button"
                 onClick={startRegistration}
-                className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white text-base font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
+                className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white text-[15px] font-semibold text-zinc-900 transition-colors hover:bg-zinc-200"
               >
                 Create a supplier account <ArrowRight className="h-4 w-4" />
               </button>
-              <p className="mt-3 text-center text-xs text-zinc-500">
+              <p className="mt-2.5 text-center text-[11px] text-zinc-500">
                 Approved in 24 h &nbsp;·&nbsp; No exclusivity
               </p>
 
-              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5 text-[13px] font-semibold text-zinc-500">
+              <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-[12.5px] font-semibold text-zinc-500">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
@@ -380,11 +384,11 @@ export function CreateDealDialog() {
             <button
               type="button"
               onClick={() => { setOpen(false); navigate('/deals'); }}
-              className="group/buy mt-5 flex w-full items-center gap-3 border-t border-white/10 pt-5 text-left"
+              className="group/buy mt-4 flex w-full items-center gap-3 border-t border-white/10 pt-4 text-left"
             >
               <span className="min-w-0 flex-1">
-                <span className="block text-[13px] font-semibold text-white">Looking to buy instead?</span>
-                <span className="mt-0.5 block text-xs text-zinc-500">
+                <span className="block text-[12.5px] font-semibold text-white">Looking to buy instead?</span>
+                <span className="mt-0.5 block text-[11px] text-zinc-500">
                   GoBigDeal — closeout prices for European retailers, from one unit.
                 </span>
               </span>
