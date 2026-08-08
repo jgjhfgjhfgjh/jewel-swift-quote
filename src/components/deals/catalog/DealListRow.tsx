@@ -139,20 +139,22 @@ export function DealListRow({
 
   const inner = (
     <>
-      {/* OZNAČENÍ DÁVKY — začátek KAŽDÉHO řádku (i na mobilu): značka
-          GoBigDeal a pod ní číslo dávky lehkým fontem. Tohle je identifikátor,
-          pod kterým dávka běží interně i vůči zákazníkovi (deals.deal_no).
-          Teaser koncernu ještě evidovaná dávka není → nese jen značku, slot
-          ale zůstává, aby titulky stály v jedné svislé lince. */}
-      <span className="flex h-11 w-[66px] shrink-0 flex-col items-center justify-center leading-none sm:w-[96px]">
+      {/* OZNAČENÍ DÁVKY — začátek řádku: značka GoBigDeal a pod ní číslo dávky
+          lehkým fontem. Tohle je identifikátor, pod kterým dávka běží interně
+          i vůči zákazníkovi (deals.deal_no). Teaser koncernu ještě evidovaná
+          dávka není → nese pomlčku, slot ale zůstává, aby titulky stály
+          v jedné svislé lince.
+          Na MOBILU se blok vynechává (pokyn) — řádek je tam plný a název dávky
+          potřebuje šířku víc než evidenční značka. */}
+      <span className="hidden h-11 w-[96px] shrink-0 flex-col items-center justify-center leading-none sm:flex">
         {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
             a výrazně větší než ostatní chrom řádku */}
-        <GoBigDealLogo className="text-[11px] text-zinc-900 sm:text-[14px]" />
+        <GoBigDealLogo className="text-[14px] text-zinc-900" />
         {/* číslo je jen evidenční stopa: malé, černé, tenké. Teaser koncernu
             ještě přidělené číslo nemá → pomlčka, aby značka nestála osaměle */}
         <span
-          className={`mt-1 font-sans text-[9px] font-light tracking-wide text-zinc-900 sm:text-[10px] ${
-            item.dealNo ? '' : 'text-zinc-400'
+          className={`mt-1 font-sans text-[10px] font-light tracking-wide ${
+            item.dealNo ? 'text-zinc-900' : 'text-zinc-400'
           }`}
         >
           nr. {item.dealNo ?? '—'}
@@ -165,9 +167,7 @@ export function DealListRow({
             {item.supplier}
           </span>
         )}
-        {/* MOBIL: název se raději zalomí do dvou řádků, než aby se z něj po
-            zvětšení značky stalo „Closeout …" — od sm zpět na jeden řádek */}
-        <span className="mt-0.5 line-clamp-2 text-sm font-medium tracking-tight text-zinc-900 sm:line-clamp-none sm:block sm:truncate">
+        <span className="mt-0.5 block truncate text-sm font-medium tracking-tight text-zinc-900">
           {item.title}
         </span>
       </span>
@@ -197,7 +197,7 @@ export function DealListRow({
 
       {/* MOBIL: jedna pozice, značky se v ní střídají (řada by se nevešla) */}
       {brandLogos.length > 0 && (
-        <span className="flex w-[46px] shrink-0 items-center justify-end sm:hidden">
+        <span className="flex w-[62px] shrink-0 items-center justify-end sm:hidden">
           <BrandLogo
             key={brandLogos[brandIdx % brandLogos.length].name}
             name={brandLogos[brandIdx % brandLogos.length].name}

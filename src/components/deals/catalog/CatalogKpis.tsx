@@ -1,15 +1,6 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Bell } from 'lucide-react';
 
-/** Pastelová paleta hodnot — každá dlaždice mluví svou barvou (pokyn).
-    Odstíny 300 drží na obsidiánu kontrast a přitom zůstanou pastelové. */
-export const KPI_TONES = {
-  blue: 'text-blue-300',
-  violet: 'text-violet-300',
-  rose: 'text-rose-300',
-  mint: 'text-emerald-300',
-} as const;
-
 /* Na MOBILU se první dvě dlaždice prohodí: nejdůležitější („živé dealy")
    patří do pravého sloupce, tedy blíž palci pravačky. Od sm výš zůstává
    čtecí pořadí. Hodnoty musí být doslovné třídy, jinak je Tailwind
@@ -18,12 +9,10 @@ const MOBILE_ORDER = ['order-2', 'order-1', 'order-3', 'order-4'];
 
 export interface CatalogKpi {
   label: string;
-  /** String se vysází velkou barevnou typografií, uzel (odpočet) se vloží tak, jak je. */
+  /** String se vysází velkou bílou typografií, uzel (odpočet) se vloží tak, jak je. */
   value: ReactNode;
   /** Pulsující zelená tečka před hodnotou — živé dávky. */
   liveDot?: boolean;
-  /** Pastelový odstín hodnoty; bez něj se sází bíle. */
-  tone?: keyof typeof KPI_TONES;
   /** Drobná akce pod hodnotou — z mrtvého čísla konverzní bod
       („Živé dealy: 0" → alert) nebo zkratka na sekci („GoDeal" → scroll).
       `icon` volí zvoneček (alert, výchozí) nebo šipku (navigace). */
@@ -32,9 +21,9 @@ export interface CatalogKpi {
 
 /**
  * KPI lišta dashboardu — tmavá hairline varianta na matně černé ploše:
- * dlaždice jsou jen jemně prosvětlené pole s vlasovým rámečkem, každá hodnota
- * ve svém pastelovém odstínu, živý stav značí zelená pulsující tečka. Chrom
- * stránky je záměrně tmavý — bílé zůstávají jen karty dávek.
+ * dlaždice jsou jen jemně prosvětlené pole s vlasovým rámečkem, hodnoty bílou
+ * typografií, živý stav značí zelená pulsující tečka. Chrom stránky je záměrně
+ * tmavý — bílé zůstávají jen karty dávek.
  */
 export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
   return (
@@ -52,11 +41,7 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
             <span className="mt-2.5 flex min-h-[2rem] items-center gap-2.5">
               {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400" />}
               {typeof k.value === 'string' ? (
-                <span
-                  className={`font-sans text-[1.6rem] font-medium leading-none tracking-tighter sm:text-3xl ${
-                    k.tone ? KPI_TONES[k.tone] : 'text-white'
-                  }`}
-                >
+                <span className="font-sans text-[1.6rem] font-medium leading-none tracking-tighter text-white sm:text-3xl">
                   {k.value}
                 </span>
               ) : (

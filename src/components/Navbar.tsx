@@ -416,18 +416,14 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 relative z-10">
 
           {/* CreateBigDeal — CTA ukotvené vpravo (na místě dřívějšího
-              Suppliers). NEOTVÍRÁ mega menu: klik otevře popup s poptávkou.
-              Na TMAVÉM pozadí jede pastelově fialově (na černé je to jediné
-              barevné CTA, bílá by splynula s registrací) a hover ho vyplní
-              plnou pastelovou fialovou; na světlé stránce zůstává tmavý
-              s bílým hoverem. Plus je symbol akce. */}
+              Suppliers). NEOTVÍRÁ mega menu: hover ho vyplní bíle, klik
+              otevře popup s poptávkou. Klidový stav bere barvu z kontextu
+              jako text navigace; plus je symbol akce. */}
           <button
             onClick={openCreateDealDialog}
             title="CreateBigDeal"
-            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 ${
-              overVideo
-                ? 'border-violet-300/45 text-violet-300 hover:border-violet-300 hover:bg-violet-300 hover:text-zinc-900 hover:shadow-[0_10px_28px_-8px_rgba(196,181,253,0.45)]'
-                : 'border-zinc-300 text-zinc-900 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)]'
+            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)] ${
+              overVideo ? 'border-white/40 text-white' : 'border-zinc-300 text-zinc-900'
             }`}
           >
             <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />

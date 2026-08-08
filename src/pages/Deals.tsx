@@ -332,17 +332,13 @@ export default function Deals() {
                 label: dash.kpiLive,
                 value: String(kpis.liveCount),
                 liveDot: kpis.liveCount > 0,
-                /* každá dlaždice má vlastní pastel — modrá zůstává živým
-                   dávkám (stejná rodina jako eyebrow Early Access) */
-                tone: 'blue',
                 /* jeden a týž vstup do zboží: GoDeal odroluje na dealy (pokyn) */
                 action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
               },
-              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—', tone: 'violet' },
+              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
               {
                 label: dash.kpiDiscount,
                 value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
-                tone: 'rose',
               },
               kpis.nextDeadline
                 ? {
@@ -354,7 +350,7 @@ export default function Deals() {
                       label: dash.kpiNextStart,
                       value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
                     }
-                  : { label: dash.kpiConcerns, value: String(CONCERNS.length), tone: 'mint' },
+                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
             ]}
           />
         )}
