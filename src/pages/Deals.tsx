@@ -291,7 +291,85 @@ export default function Deals() {
       <Navbar />
       <BackButton />
 
-      {/* ═══ KATALOG — bílá plocha, karty s hairline rámečky a jemným stínem ═══ */}
+      {/* ═══ DASHBOARD — stránka ZAČÍNÁ seznamem dávek (pokyn): obchodník
+             přichází pro zboží, ne pro headline. Hero se značkou a KPI leží
+             AŽ POD katalogem, vysvětlující sekce pod ním. ═══ */}
+
+      {/* ── 1. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+             (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
+      <div className="px-5 pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:px-8 lg:px-12">
+        <CatalogFilterNav
+          search={filters.search}
+          onSearch={(search) => setFilters((f) => ({ ...f, search }))}
+          concerns={concernTiles}
+          brands={brandTiles}
+          selectedConcerns={filters.concerns}
+          selectedBrands={filters.brands}
+          onToggleConcern={toggleConcern}
+          onToggleBrand={toggleBrand}
+          onClearConcerns={() => setFilters((f) => ({ ...f, concerns: [] }))}
+          onClearBrands={() => setFilters((f) => ({ ...f, brands: [] }))}
+        />
+      </div>
+
+      {/* ── 2. Obsah přes celou šíři ── */}
+      <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
+        <main className="min-w-0">
+          {loading ? (
+            <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-slate-100" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="mx-auto mt-12 max-w-xl text-center">
+              <SearchX className="mx-auto h-8 w-8 text-slate-300" />
+              <p className="mt-4 text-lg font-medium tracking-tighter text-zinc-900">{d.catalog.noResults}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">{d.catalog.noResultsSub}</p>
+              <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => setFilters(EMPTY_FILTERS)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700"
+                >
+                  {d.catalog.clear}
+                </button>
+                <button
+                  type="button"
+                  onClick={goToAlerts}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50"
+                >
+                  <Bell className="h-4 w-4" /> {d.active.emptyCta}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <CatalogControlBar
+                resultCount={filtered.length}
+                activeCount={activeLabels.length}
+                activeLabels={activeLabels}
+                onClear={() => setFilters(EMPTY_FILTERS)}
+                sort={sort}
+                onSort={setSort}
+                view={view}
+                onView={setView}
+              />
+
+              {/* spotlight — jedna nejnaléhavější dávka místo promo karuselu */}
+              {featured && (
+                <div className="pt-5">
+                  <DealSpotlight item={featured} />
+                </div>
+              )}
+
+              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live', id: 'deals-live' })}
+              {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: firstSection === 'upcoming' })}
+              {renderSection(d.catalog.rows.closed, sections.closed, { lead: firstSection === 'closed' })}
+            </>
+          )}
+        </main>
+      </div>
 
       {/* ═══ HERO ZÓNA — hlavička a KPI lišta leží na jedné krystalové ploše.
              CrystalBackdrop je první v DOM (z-0), obsah nad ním přes relative
@@ -300,12 +378,12 @@ export default function Deals() {
       <div className="relative">
         <CrystalBackdrop className="inset-0" />
 
-        {/* ── 1. Kompaktní command header: logo + marquee v jednom řádku,
-               pozicovací věta pod nimi. Dashboard nemá 100vh hero — data
-               (KPI, filtry, dávky) začínají hned pod headerem. ── */}
+        {/* ── Kompaktní command header: logo + marquee v jednom řádku,
+               pozicovací věta pod nimi. Leží POD katalogem — kdo doscrolluje,
+               dostane značku, příběh a čísla trhu. ── */}
         <header
           id="catalog"
-          className="relative z-10 scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+8.5rem)] sm:px-8 lg:px-12"
+          className="relative z-10 scroll-mt-16 px-5 pt-14 sm:px-8 lg:px-12"
         >
           {/* hero: VLEVO logo → dvoutónová věta, VPRAVO ústřední výjev —
               střídající se VELKÉ logo značky s plynulým crossfade. Zóna je
@@ -364,7 +442,7 @@ export default function Deals() {
           </div>
         </header>
 
-        {/* ── 2. KPI lišta — stav trhu na první pohled. Poslední patro hero zóny:
+        {/* ── KPI lišta — stav trhu. Poslední patro hero zóny:
                končí tu krystalová plocha, katalog pod ní jede na čisté bílé. ── */}
         <div className="relative z-10 px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
           {loading ? (
@@ -412,82 +490,6 @@ export default function Deals() {
         </div>
       </div>
       {/* ═══ konec hero zóny s krystaly ═══ */}
-
-      {/* ── 3. Filtrační nav lišta s expanzemi — společná pro všechny šířky
-             (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
-      <div className="px-5 pt-8 sm:px-8 lg:px-12">
-        <CatalogFilterNav
-          search={filters.search}
-          onSearch={(search) => setFilters((f) => ({ ...f, search }))}
-          concerns={concernTiles}
-          brands={brandTiles}
-          selectedConcerns={filters.concerns}
-          selectedBrands={filters.brands}
-          onToggleConcern={toggleConcern}
-          onToggleBrand={toggleBrand}
-          onClearConcerns={() => setFilters((f) => ({ ...f, concerns: [] }))}
-          onClearBrands={() => setFilters((f) => ({ ...f, brands: [] }))}
-        />
-      </div>
-
-      {/* ── 4. Obsah přes celou šíři ── */}
-      <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
-        <main className="min-w-0">
-          {loading ? (
-            <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 xl:grid-cols-3">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-slate-100" />
-              ))}
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="mx-auto mt-12 max-w-xl text-center">
-              <SearchX className="mx-auto h-8 w-8 text-slate-300" />
-              <p className="mt-4 text-lg font-medium tracking-tighter text-zinc-900">{d.catalog.noResults}</p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-500">{d.catalog.noResultsSub}</p>
-              <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={() => setFilters(EMPTY_FILTERS)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700"
-                >
-                  {d.catalog.clear}
-                </button>
-                <button
-                  type="button"
-                  onClick={goToAlerts}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:bg-slate-50"
-                >
-                  <Bell className="h-4 w-4" /> {d.active.emptyCta}
-                </button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <CatalogControlBar
-                resultCount={filtered.length}
-                activeCount={activeLabels.length}
-                activeLabels={activeLabels}
-                onClear={() => setFilters(EMPTY_FILTERS)}
-                sort={sort}
-                onSort={setSort}
-                view={view}
-                onView={setView}
-              />
-
-              {/* spotlight — jedna nejnaléhavější dávka místo promo karuselu */}
-              {featured && (
-                <div className="pt-5">
-                  <DealSpotlight item={featured} />
-                </div>
-              )}
-
-              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live', id: 'deals-live' })}
-              {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: firstSection === 'upcoming' })}
-              {renderSection(d.catalog.rows.closed, sections.closed, { lead: firstSection === 'closed' })}
-            </>
-          )}
-        </main>
-      </div>
 
       {/* ══ Pod katalogem: původní vysvětlující část stránky ══ */}
 

@@ -117,8 +117,19 @@ function DealMiniCard({ item, onOpen }: { item: DealTileItem; onOpen: () => void
     <button
       type="button"
       onClick={onOpen}
-      className={`${CARD_BASE} ${CARD_LIGHT} ${closed ? 'opacity-70 hover:opacity-100' : ''}`}
+      className={`relative overflow-hidden ${CARD_BASE} ${CARD_LIGHT} ${closed ? 'opacity-70 hover:opacity-100' : ''}`}
     >
+      {/* UZAVŘENÁ dávka — stejné razítko jako na kartách katalogu. Miniatura
+          nemá fotku, takže bílý nápis by na světlé kartě zmizel: razítko je
+          šedé a průsvitné, aby nepřebilo název dávky. */}
+      {closed && (
+        <span aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="rotate-[-8deg] text-lg font-black uppercase tracking-[0.22em] text-zinc-900/[0.16]">
+            Closed
+          </span>
+        </span>
+      )}
+
       {/* horní řádek: logo koncernu + sleva */}
       <div className="flex items-start justify-between gap-2">
         <span className="flex h-6 min-w-0 flex-1 items-center">
