@@ -407,7 +407,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             }`}
           >
             <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-            CreateBigDeal
+            {/* pod xl jen plus — s popiskem by pravý cluster na 1024 px
+                přetekl a stránka by scrollovala do strany */}
+            <span className="hidden xl:inline">CreateBigDeal</span>
           </button>
           <span
             aria-hidden

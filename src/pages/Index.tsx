@@ -216,7 +216,7 @@ const Index = () => {
                   1280px ořezával; -1vw nechá blok jemně vlevo od středu.
                   Na mobilu jede blok (i marquee níže) o 8vh dolů — nad
                   textem je volný prostor, translate nemění výšku sekce. */}
-              <div className="relative z-10 w-full sm:w-fit mx-auto text-left translate-y-[8vh] sm:translate-y-0 sm:-translate-x-[1vw]">
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left translate-y-[8vh] sm:translate-y-0 sm:-translate-x-[5vw]">
                 {/* min(12.5vh,6.3vw) — vh drží velikost na vysokých oknech,
                     vw pojistka brání zalomení řádku „smarter tools…" na
                     užších desktopech */}
