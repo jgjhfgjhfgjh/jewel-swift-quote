@@ -313,12 +313,17 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. KPI lišta — stav trhu úplně nahoře (pokyn): čísla dřív než
-             filtry, obchodník hned vidí, jestli se dnes vyplatí dívat ── */}
-      {/* horní odsazení počítá s plovoucím BackButtonem (fixed, top 72/112 px):
-          KPI dlaždice začínají až pod ním, jinak by mu jeho skleněný kroužek
-          seděl přímo na rohu první dlaždice */}
-      <div id="catalog" className="scroll-mt-16 px-5 pt-[calc(var(--ann-offset,0px)+7.5rem)] sm:px-8 sm:pt-[calc(var(--ann-offset,0px)+10rem)] lg:px-12">
+      {/* ── 1. Alertový pruh — ÚPLNĚ PRVNÍ prvek stránky (pokyn): alert je
+             zdarma a je to nejnižší schod konverze, tak stojí nad vším.
+             Horní odsazení počítá s plovoucím BackButtonem (fixed, top
+             72/112 px) — jinak by mu jeho skleněný kroužek seděl na rohu. ── */}
+      <div className="px-5 pt-[calc(var(--ann-offset,0px)+7.5rem)] sm:px-8 sm:pt-[calc(var(--ann-offset,0px)+10rem)] lg:px-12">
+        <PublicAlertsRow onClick={goToAlerts} />
+      </div>
+
+      {/* ── 2. KPI lišta — stav trhu: čísla dřív než filtry, obchodník hned
+             vidí, jestli se dnes vyplatí dívat ── */}
+      <div id="catalog" className="scroll-mt-16 px-5 pt-3 sm:px-8 sm:pt-4 lg:px-12">
         {loading ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
@@ -356,7 +361,7 @@ export default function Deals() {
         )}
       </div>
 
-      {/* ── 2. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+      {/* ── 3. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
       <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
@@ -373,7 +378,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 3. Obsah přes celou šíři ── */}
+      {/* ── 4. Obsah přes celou šíři ── */}
       <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (
@@ -424,12 +429,11 @@ export default function Deals() {
                 </div>
               )}
 
-              {/* NAD kategoriemi (pokyn): dva pruhy přes celou šíři, které
-                  nepatří žádné sekci — nejdřív veřejné alerty zdarma, pod nimi
-                  upsell Early Access. V mřížce zůstává EA první dlaždicí. */}
+              {/* NAD kategoriemi (pokyn): upsell Early Access jako samostatný
+                  pruh, který nepatří žádné sekci. Alerty zdarma odsud odešly
+                  úplně nahoru nad KPI. V mřížce zůstává EA první dlaždicí. */}
               {view === 'list' && (
-                <div className="flex flex-col gap-2.5 pt-9">
-                  <PublicAlertsRow onClick={goToAlerts} />
+                <div className="pt-9">
                   <EarlyAccessCard variant="row" />
                 </div>
               )}
