@@ -100,6 +100,15 @@ export interface DealsText {
       kpiLiveAlert: string;
       /** Odkaz v KPI dlaždici živých dávek, když nějaké běží — scroll na sekci. */
       kpiLiveSeeAll: string;
+      /** Akce v KPI dlaždici živých dealů — odroluje na jejich sekci. */
+      kpiLiveGo: string;
+      /** Nápověda u klikací KPI dlaždice s nejvyšší slevou. */
+      kpiDiscountHint: string;
+      /** Veřejný alertový řádek nad katalogem (bílý pruh nad Early Access). */
+      alertRowEyebrow: string;
+      alertRowTitle: string;
+      alertRowMuted: string;
+      alertRowCta: string;
       /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
@@ -340,15 +349,21 @@ const cs: DealsText = {
       ctaRegister: 'Registrovat zdarma',
       kpiLiveAlert: 'Nastavit alert na další deal',
       kpiLiveSeeAll: 'Zobrazit vše',
+      kpiLiveGo: 'GoDeal',
+      kpiDiscountHint: 'Zobrazit jen dávky s touto slevou',
+      alertRowEyebrow: 'Alerty zdarma',
+      alertRowTitle: 'O novém dealu víš první.',
+      alertRowMuted: 'Jeden e-mail, když dávka naskočí.',
+      alertRowCta: 'Nastavit alert',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
       earlyBadgeShort: '48 h',
       watchDeal: 'Hlídat tuto dávku',
       watchingDeal: 'Dávku hlídáte',
       watchClosed: 'Dejte vědět, až bude repete',
-      kpiLive: 'Živé dávky',
+      kpiLive: 'Živé dealy',
       kpiModels: 'Modelů v živých dávkách',
-      kpiDiscount: 'Sleva až',
+      kpiDiscount: 'Živá nejvyšší sleva',
       kpiDeadline: 'Nejbližší uzávěrka',
       kpiNextStart: 'Nejbližší start',
       kpiConcerns: 'Koncernů v katalogu',
@@ -584,6 +599,12 @@ const en: DealsText = {
       ctaRegister: 'Register free',
       kpiLiveAlert: 'Set an alert for the next deal',
       kpiLiveSeeAll: 'See all',
+      kpiLiveGo: 'GoDeal',
+      kpiDiscountHint: 'Show only batches with this discount',
+      alertRowEyebrow: 'Free alerts',
+      alertRowTitle: 'Be first to know about a new deal.',
+      alertRowMuted: 'One email when a batch goes live.',
+      alertRowCta: 'Set an alert',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
       earlyBadgeShort: '48h',
@@ -592,7 +613,7 @@ const en: DealsText = {
       watchClosed: 'Tell me when it runs again',
       kpiLive: 'Live deals',
       kpiModels: 'Models in live deals',
-      kpiDiscount: 'Discount up to',
+      kpiDiscount: 'Live top discount',
       kpiDeadline: 'Next deadline',
       kpiNextStart: 'Next start',
       kpiConcerns: 'Concerns in catalog',

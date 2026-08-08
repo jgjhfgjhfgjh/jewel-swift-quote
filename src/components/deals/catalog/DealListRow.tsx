@@ -139,17 +139,22 @@ export function DealListRow({
 
   const inner = (
     <>
-      {/* ČÍSLO DÁVKY — drobná šedá značka vlevo místo ikony; stejné číslo
-          slouží i pro interní evidenci (deals.deal_no) */}
-      <span className="hidden h-11 w-[70px] shrink-0 flex-col items-center justify-center leading-none text-slate-400 sm:flex">
-        {/* teaser není evidovaná dávka → číslo nemá; slot zůstává kvůli
-            zarovnání titulků do jedné svislé linky */}
-        {item.dealNo && (
-          <>
-            <GoBigDealLogo className="text-[9px] text-slate-400" />
-            <span className="mt-0.5 font-mono text-[10px] tracking-tight">nr. {item.dealNo}</span>
-          </>
-        )}
+      {/* OZNAČENÍ DÁVKY — začátek KAŽDÉHO řádku (i na mobilu): značka
+          GoBigDeal a pod ní číslo dávky lehkým fontem. Tohle je identifikátor,
+          pod kterým dávka běží interně i vůči zákazníkovi (deals.deal_no).
+          Teaser koncernu ještě evidovaná dávka není → nese jen značku, slot
+          ale zůstává, aby titulky stály v jedné svislé lince. */}
+      <span className="flex h-11 w-[52px] shrink-0 flex-col items-center justify-center leading-none sm:w-[74px]">
+        <GoBigDealLogo className="text-[9px] text-slate-400 sm:text-[10px]" />
+        {/* teaser koncernu ještě nemá přidělené číslo → pomlčka, aby značka
+            nestála osamoceně a bylo vidět, že evidence teprve přijde */}
+        <span
+          className={`mt-1 font-sans text-[10px] font-light tracking-wide sm:text-[11px] ${
+            item.dealNo ? 'text-slate-400' : 'text-slate-300'
+          }`}
+        >
+          nr. {item.dealNo ?? '—'}
+        </span>
       </span>
 
       <span className="min-w-0 flex-1">
@@ -188,7 +193,7 @@ export function DealListRow({
 
       {/* MOBIL: jedna pozice, značky se v ní střídají (řada by se nevešla) */}
       {brandLogos.length > 0 && (
-        <span className="flex w-[62px] shrink-0 items-center justify-end sm:hidden">
+        <span className="flex w-[46px] shrink-0 items-center justify-end sm:hidden">
           <BrandLogo
             key={brandLogos[brandIdx % brandLogos.length].name}
             name={brandLogos[brandIdx % brandLogos.length].name}

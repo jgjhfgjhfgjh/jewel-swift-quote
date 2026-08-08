@@ -111,12 +111,15 @@ export interface CatalogFilters {
   /** Kanonické klíče značek. */
   brands: string[];
   search: string;
+  /** Minimální sleva v procentech; 0 = bez omezení. Zapíná ji klik na KPI
+      dlaždici „nejvyšší sleva" — dashboard tak není jen ukazatel, ale filtr. */
+  minDiscount: number;
 }
 
-export const EMPTY_FILTERS: CatalogFilters = { concerns: [], brands: [], search: '' };
+export const EMPTY_FILTERS: CatalogFilters = { concerns: [], brands: [], search: '', minDiscount: 0 };
 
 export function filtersActive(f: CatalogFilters): number {
-  return f.concerns.length + f.brands.length + (f.search.trim() ? 1 : 0);
+  return f.concerns.length + f.brands.length + (f.search.trim() ? 1 : 0) + (f.minDiscount ? 1 : 0);
 }
 
 export function applyFilters(items: DealTileItem[], f: CatalogFilters): DealTileItem[] {
@@ -124,6 +127,7 @@ export function applyFilters(items: DealTileItem[], f: CatalogFilters): DealTile
   return items.filter((t) => {
     if (f.concerns.length && (!t.concernSlug || !f.concerns.includes(t.concernSlug))) return false;
     if (f.brands.length && !t.brandKeys.some((k) => f.brands.includes(k))) return false;
+    if (f.minDiscount && t.maxDiscount < f.minDiscount) return false;
     if (q) {
       const hay = `${t.title} ${t.supplier} ${t.concernName ?? ''} ${t.brands.join(' ')}`.toLowerCase();
       if (!hay.includes(q)) return false;

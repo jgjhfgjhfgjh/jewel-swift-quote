@@ -27,6 +27,7 @@ import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
+import { PublicAlertsRow } from '@/components/deals/catalog/PublicAlertsRow';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, type CatalogSortKey, type CatalogView,
@@ -85,7 +86,9 @@ export default function Deals() {
   const alertsApi = useDealAlerts();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<CatalogSortKey>('ending');
-  const [view, setView] = useState<CatalogView>('grid');
+  /* Výchozí je ŘÁDKOVÉ zobrazení (pokyn) — obchodník skenuje dávky jako
+     seznam zboží; mřížka je přepínač v řídicí liště. */
+  const [view, setView] = useState<CatalogView>('list');
   const location = useLocation();
   const dash = d.catalog.dash;
 
@@ -182,6 +185,7 @@ export default function Deals() {
       ...filters.concerns.map((s) => byConcern.get(s) ?? s),
       ...filters.brands.map((k) => byBrand.get(k) ?? toDisplayName(k)),
       ...(filters.search.trim() ? [`„${filters.search.trim()}"`] : []),
+      ...(filters.minDiscount ? [`−${filters.minDiscount} %`] : []),
     ];
   }, [filters, concernTiles, brandTiles]);
 
@@ -195,6 +199,23 @@ export default function Deals() {
   const goToAlerts = () => {
     if (!user) { openAuthModal('register'); return; }
     navigate('/#gbd-alerts-concerns');
+  };
+
+  /* „GoDeal" v KPI dlaždici — vždy odroluje na dávky. Když zrovna nic neběží,
+     spadne na nejbližší další sekci, aby tlačítko nikdy nekliklo naprázdno. */
+  const goLiveDeals = () =>
+    scrollTo(
+      sections.live.length ? 'deals-live'
+        : sections.upcoming.length ? 'deals-upcoming'
+          : 'deals-closed',
+    );
+
+  /* KPI „živá nejvyšší sleva" je zároveň filtr: klik nechá v katalogu jen
+     dávky s touto slevou, druhý klik ho zase pustí. */
+  const topDiscountOn = filters.minDiscount > 0;
+  const toggleTopDiscount = () => {
+    setFilters((f) => ({ ...f, minDiscount: f.minDiscount ? 0 : kpis.maxDiscount }));
+    scrollTo('catalog');
   };
 
   /* Ceník na stránce — bez platebního flow (jako homepage): nepřihlášený
@@ -319,20 +340,21 @@ export default function Deals() {
                 label: dash.kpiLive,
                 value: String(kpis.liveCount),
                 liveDot: kpis.liveCount > 0,
-                /* modrá jako eyebrow EarlyAccessCard — živé dávky a Early
-                   Access drží v katalogu jednu akcentní barvu */
-                accent: true,
-                /* nula živých dealů = nejslabší místo dashboardu → konverzní
-                   bod (alert); jinak zkratka dolů na sekci živých dealů */
-                action: kpis.liveCount === 0
-                  ? { label: dash.kpiLiveAlert, onClick: goToAlerts }
-                  : { label: dash.kpiLiveSeeAll, onClick: () => scrollTo('deals-live'), icon: 'arrow' },
+                /* každá dlaždice má vlastní pastel — modrá zůstává živým
+                   dávkám (stejná rodina jako eyebrow Early Access) */
+                tone: 'blue',
+                /* jeden a týž vstup do zboží: GoDeal odroluje na dealy (pokyn) */
+                action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
               },
-              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
+              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—', tone: 'violet' },
               {
                 label: dash.kpiDiscount,
                 value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
-                gradient: kpis.maxDiscount > 0,
+                tone: 'rose',
+                /* dlaždice je rovnou ovladač — odfiltruje dávky s touto slevou */
+                onClick: kpis.maxDiscount ? toggleTopDiscount : undefined,
+                active: topDiscountOn,
+                hint: dash.kpiDiscountHint,
               },
               kpis.nextDeadline
                 ? {
@@ -344,7 +366,7 @@ export default function Deals() {
                       label: dash.kpiNextStart,
                       value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
                     }
-                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
+                  : { label: dash.kpiConcerns, value: String(CONCERNS.length), tone: 'mint' },
             ]}
           />
         )}
@@ -418,9 +440,19 @@ export default function Deals() {
                 </div>
               )}
 
-              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: firstSection === 'live', id: 'deals-live' })}
-              {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: firstSection === 'upcoming' })}
-              {renderSection(d.catalog.rows.closed, sections.closed, { lead: firstSection === 'closed' })}
+              {/* NAD kategoriemi (pokyn): dva pruhy přes celou šíři, které
+                  nepatří žádné sekci — nejdřív veřejné alerty zdarma, pod nimi
+                  upsell Early Access. V mřížce zůstává EA první dlaždicí. */}
+              {view === 'list' && (
+                <div className="flex flex-col gap-2.5 pt-9">
+                  <PublicAlertsRow onClick={goToAlerts} />
+                  <EarlyAccessCard variant="row" />
+                </div>
+              )}
+
+              {renderSection(dash.secLive, sections.live, { liveDot: true, lead: view === 'grid' && firstSection === 'live', id: 'deals-live' })}
+              {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: view === 'grid' && firstSection === 'upcoming', id: 'deals-upcoming' })}
+              {renderSection(d.catalog.rows.closed, sections.closed, { lead: view === 'grid' && firstSection === 'closed', id: 'deals-closed' })}
             </>
           )}
         </main>
