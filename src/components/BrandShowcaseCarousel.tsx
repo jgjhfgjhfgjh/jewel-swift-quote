@@ -164,8 +164,31 @@ function BrandCard({
         )}
       </div>
 
-      {/* bottom spacer */}
-      <div className={`${compact ? 'p-1.5' : 'p-4'} shrink-0`} />
+      {/* CTA pod logem — obtažená pilulka ve stylu CreateBigDeal (bez plusu).
+          Silný hover: plocha se invertuje a pilulka se nadzvedne. Klik nesmí
+          propadnout do karty (ta jinak vede na detail značky), proto
+          stopPropagation. V kompaktním filtru CTA není — karta je ovladač. */}
+      {compact ? (
+        <div className="p-1.5 shrink-0" />
+      ) : (
+        <div className="flex shrink-0 justify-center px-4 pb-5 pt-1">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
+            }}
+            className={`inline-flex items-center rounded-full border px-5 py-2 text-[13px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+              dark
+                ? 'border-white/35 text-white hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_12px_28px_-8px_rgba(255,255,255,0.45)]'
+                : 'border-zinc-300 text-zinc-900 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)]'
+            }`}
+          >
+            GoBigDeal
+          </button>
+        </div>
+      )}
 
     </div>
   );
