@@ -314,7 +314,7 @@ export default function Deals() {
       {/* Na mobilu spacing beze změny (CTA se tam na první screen vejde),
           od sm výš těsně pod navbar (h-14) — na širokých, ale nízkých
           oknech se jinak CTA karet i řazení propadnou pod ohyb */}
-      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+5.25rem)]">
+      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+4.5rem)]">
         <BrandShowcaseCarousel
           dealFilter={{ selectedKeys: filters.brands, onToggle: toggleBrand }}
         />

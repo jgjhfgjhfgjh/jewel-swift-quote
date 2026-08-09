@@ -206,11 +206,12 @@ function BrandCard({
           značky, ve filtru dávek PŘEPÍNÁ filtr a po zapnutí se přepíše na
           „Filter" (plná pilulka + křížek). Klik nesmí propadnout do
           karty, proto stopPropagation. Kompaktní katalogový filtr CTA nemá —
-          tam je ovladačem karta. */}
+          tam je ovladačem karta. Ve filtru dávek má o kousek vyšší spodní
+          odsazení (pb-7) — nesmí ležet na spodní hraně screenu. */}
       {compact ? (
         <div className="p-1.5 shrink-0" />
       ) : (
-        <div className="flex shrink-0 justify-center px-5 pb-5 pt-6">
+        <div className={`flex shrink-0 justify-center px-5 pt-6 ${asDealFilter ? 'pb-7' : 'pb-5'}`}>
           {/* font-sans (Inter) přebíjí Montserrat, který carousel dědí
               z rodičovského stylu; šipka se na hover rozjede doprava */}
           <button
