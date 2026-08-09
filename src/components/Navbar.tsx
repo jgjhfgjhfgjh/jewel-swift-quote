@@ -691,10 +691,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             </>
           ) : !loading ? (
             /* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace
-               (černá). Nahoře na homepage je od xl nese hero (vpravo od
-               psaného řádku), takže navbar má prostor; jakmile uživatel
-               odscrolluje z hera pryč, pilulky se sem vrátí. */
-            <div className={`flex items-center ${heroCarriesGuestCta ? 'xl:hidden' : ''}`}>
+               (černá). Přihlásit je v navbaru vždy a úplně napravo; registraci
+               nahoře na homepage nese hero (za claimem), takže se tu od sm
+               skryje a vrátí se, jakmile uživatel z hera odscrolluje. */
+            <div className="flex items-center">
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
@@ -707,7 +707,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               {/* relative + caption absolutně pod tlačítkem → černá CTA se svisle
                   zarovná s Přihlásit (caption ji nesune nahoru); nad videem se
                   pilulka invertuje (bílá s tmavým textem) */}
-              <div className="relative flex items-center shrink-0 ml-1">
+              <div className={`relative flex items-center shrink-0 ml-1 ${heroCarriesGuestCta ? 'sm:hidden' : ''}`}>
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}

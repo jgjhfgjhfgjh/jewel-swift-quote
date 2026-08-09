@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -24,7 +24,6 @@ import { DropshipFlowMap } from '@/components/DropshipFlowMap';
 import { AgentLogoRow } from '@/components/AgentLogoRow';
 import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
 import { HomeHero } from '@/components/HomeHero';
-import { HeroRotatingText } from '@/components/HeroRotatingText';
 import { GatewaySections } from '@/components/GatewaySections';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -227,37 +226,31 @@ const Index = () => {
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
                     na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
-                <div className="relative min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
-                  <HeroRotatingText />
-                  {/* Guest CTA — v hero vpravo od psaného řádku; navbar je o ně
-                      nahoře na homepage ochuzený a má tak prostor (po
-                      odscrollování se do navbaru vrátí). Odsazení 11.8em je
-                      v písmu hero řádku, takže se za něj vejde i nejdelší
-                      fráze („Automate and Save Hours" = 11.33em). Až od xl —
-                      na užších oknech by se cluster do zbylé šířky nevešel. */}
+                {/* třetí řádek už nerotuje — konstantní gradientový claim
+                    (rotátor HeroRotatingText zůstal v repu, jen se nepoužívá) */}
+                <div className="relative font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
+                  <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+                    Around the world
+                  </span>
+                  {/* Registrační CTA — v hero hned za claimem; navbar ho nahoře
+                      na homepage nemá (po odscrollování se tam vrátí).
+                      Odsazení 8.1em je v písmu hero řádku, takže za konstantní
+                      claim („Around the world" = 7.47em) drží odstup na každé
+                      šířce. Pod sm ne — tam je blok přes celou šířku. */}
                   {!user && !authLoading && (
-                    <div className="absolute left-[11.8em] top-1/2 hidden -translate-y-1/2 xl:block">
-                      <div className="flex items-center text-base">
+                    <div className="absolute left-[8.1em] top-1/2 hidden -translate-y-1/2 sm:block">
+                      <div className="relative flex items-center text-base">
                         <Button
-                          size="sm"
-                          onClick={() => openAuthModal('login')}
-                          className="h-9 shrink-0 rounded-full bg-transparent px-5 text-sm font-semibold text-white shadow-none transition-all hover:bg-white/10"
+                          onClick={() => openAuthModal('b2b')}
+                          className="group h-11 shrink-0 gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
                         >
-                          Přihlásit
+                          Get B2B access
+                          <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
                         </Button>
                         {/* caption absolutně pod pilulkou → nesune ji nahoru */}
-                        <div className="relative ml-1 flex shrink-0 items-center">
-                          <Button
-                            size="sm"
-                            onClick={() => openAuthModal('b2b')}
-                            className="h-9 shrink-0 rounded-full bg-white px-5 text-sm font-semibold text-zinc-900 transition-all hover:bg-zinc-200"
-                          >
-                            B2B registration
-                          </Button>
-                          <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap text-[9px] leading-none tracking-wide text-white/70">
-                            Verify Account in 24h
-                          </span>
-                        </div>
+                        <span className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap text-[10px] leading-none tracking-wide text-white/70">
+                          Verify Account in 24h
+                        </span>
                       </div>
                     </div>
                   )}
