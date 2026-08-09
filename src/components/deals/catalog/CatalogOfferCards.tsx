@@ -8,16 +8,18 @@ const scrollToPricing = () =>
   document.getElementById('gbd-pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 /**
- * Trojice nabídkových karet nad KPI lištou — tři vstupy do dealů, seřazené
- * podle ceny vstupu: alerty zdarma → Early Access (48 h náskok) → SplitDeal
- * (skupinový nákup).
+ * Čtveřice nabídkových karet nad KPI lištou — čtyři vstupy do dealů,
+ * seřazené podle ceny vstupu: alerty zdarma → Early Access (48 h náskok) →
+ * WantDeal (obrácený tok) → SplitDeal (skupinový nákup).
  *
  * Anatomie i materiál jsou SHODNÉ s KPI dlaždicí pod nimi (vlasový rámeček
  * na 4% bílé, eyebrow místo labelu, headline místo hodnoty, akce u pravé
- * hrany) — pás nad katalogem tak čte jako jedna lišta o dvou řadách.
+ * hrany) — čtyři karty stojí přesně nad čtyřmi dlaždicemi a pás nad
+ * katalogem čte jako jedna lišta o dvou řadách.
  *
- * SplitDeal je z té trojice jediný, kde vzniká obchod, který by jinak vůbec
- * neexistoval: malý obchodník sám MOQ nedá, ve složeném objemu ano.
+ * Karty jsou ZÁMĚRNĚ bez barev: chrom katalogu je tmavý a jediné, co v něm
+ * svítí, je bílá. Barevný eyebrow by z každé karty dělal jinou značku, i když
+ * jde o čtyři vstupy do jedné věci.
  */
 export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
   const navigate = useNavigate();
@@ -30,7 +32,6 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
     {
       key: 'alerts',
       icon: Bell,
-      tone: 'text-blue-400',
       eyebrow: d.alertRowEyebrow,
       title: promo.alertTitle,
       sub: promo.alertSub,
@@ -40,7 +41,6 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
     {
       key: 'ea',
       icon: Lock,
-      tone: 'text-blue-500',
       eyebrow: d.eyebrowPro,
       title: t.early.headingLead,
       sub: t.early.headingMuted,
@@ -50,7 +50,6 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
     {
       key: 'want',
       icon: Megaphone,
-      tone: 'text-amber-400',
       eyebrow: d.wantEyebrow,
       title: d.wantTitle,
       sub: d.wantSub,
@@ -60,7 +59,6 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
     {
       key: 'split',
       icon: Users,
-      tone: 'text-emerald-400',
       eyebrow: d.splitEyebrow,
       title: d.splitTitle,
       sub: d.splitSub,
@@ -81,7 +79,7 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
           {/* eyebrow a akce sdílí první řádek (jako label a GoDeal v KPI),
               pod ním dvouřádkový text — karta se tím vejde do výšky KPI */}
           <span className="flex items-center gap-3">
-            <span className={`flex min-w-0 flex-1 items-center gap-1.5 truncate text-[11px] font-bold uppercase tracking-widest ${c.tone}`}>
+            <span className="flex min-w-0 flex-1 items-center gap-1.5 truncate text-[11px] font-medium uppercase tracking-widest text-zinc-500">
               <c.icon className="h-3 w-3 shrink-0" /> {c.eyebrow}
             </span>
             <span className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-zinc-300 underline-offset-2 transition-colors group-hover/offer:text-white group-hover/offer:underline">
