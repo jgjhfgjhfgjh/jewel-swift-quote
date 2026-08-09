@@ -147,20 +147,30 @@ export function DealListRow({
           v jedné svislé lince.
           Na MOBILU se blok vynechává (pokyn) — řádek je tam plný a název dávky
           potřebuje šířku víc než evidenční značka. */}
-      <span className="hidden h-11 w-[96px] shrink-0 flex-col items-center justify-center leading-none sm:flex">
+      <span className="relative hidden h-11 w-[116px] shrink-0 flex-col items-center justify-center leading-none sm:flex">
         {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
             a výrazně větší než ostatní chrom řádku */}
-        <GoBigDealLogo className="text-[14px] text-zinc-900" />
-        {/* pod značkou je stav dávky: připravovaná dávka ještě číslo nemá,
-            takže tu stojí prostý text „Připravujeme" (dřív byl v pilulce
-            vpravo), evidovaná dávka nese své číslo — malé, černé, tenké */}
-        <span
-          className={`mt-1 font-sans text-[10px] font-light tracking-wide ${
-            item.dealNo ? 'text-zinc-900' : 'text-slate-400'
-          }`}
-        >
-          {item.dealNo ? `nr. ${item.dealNo}` : c.upcoming}
-        </span>
+        <GoBigDealLogo className={`text-[14px] text-zinc-900 ${item.dealNo ? '' : 'opacity-45'}`} />
+        {/* pod značkou číslo dávky — malé, černé, tenké. Připravovaná dávka
+            číslo ještě nemá, tam řádek zůstane prázdný a stav řekne razítko. */}
+        {item.dealNo && (
+          <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-900">
+            nr. {item.dealNo}
+          </span>
+        )}
+        {/* RAZÍTKO — připravovaná dávka dostane přes značku šikmý červený
+            otisk (pokyn). Průsvitnost a mírné natočení dělají razítko
+            razítkem; leží nad značkou, ale klik nechytá. */}
+        {!item.dealNo && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[13deg]
+                       whitespace-nowrap rounded-[2px] border-[1.5px] border-rose-600/55 px-1.5 py-[2px]
+                       text-[8px] font-black uppercase leading-none tracking-[0.08em] text-rose-600/85"
+          >
+            {c.upcoming}
+          </span>
+        )}
       </span>
 
       <span className="min-w-0 flex-1">
