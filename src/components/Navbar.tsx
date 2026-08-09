@@ -269,6 +269,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   // Tmavá stránka (onDark) drží inverzní variantu trvale — header je nad
   // černým obsahem; otevřené mega menu ji vypíná stejně jako na homepage.
   const overVideo = ((location.pathname === '/' && isHome && isAtTop) || onDark) && !activeNav;
+  /** Nahoře na homepage nese guest CTA hero — navbar je pak od xl nemá. */
+  const heroCarriesGuestCta = location.pathname === '/' && isHome && isAtTop;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -688,8 +690,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               </DropdownMenu>
             </>
           ) : !loading ? (
-            <>
-              {/* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace (černá) */}
+            /* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace
+               (černá). Nahoře na homepage je od xl nese hero (vpravo od
+               psaného řádku), takže navbar má prostor; jakmile uživatel
+               odscrolluje z hera pryč, pilulky se sem vrátí. */
+            <div className={`flex items-center ${heroCarriesGuestCta ? 'xl:hidden' : ''}`}>
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
@@ -718,7 +723,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   Verify Account in 24h
                 </span>
               </div>
-            </>
+            </div>
           ) : null}
 
           {/* Hamburger — mobil/tablet only; desktop má vše v mega menu / pod panáčkem */}

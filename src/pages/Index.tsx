@@ -14,6 +14,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useStore } from '@/lib/store';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
@@ -226,8 +227,40 @@ const Index = () => {
                 {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
                     na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
-                <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
+                <div className="relative min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
+                  {/* Guest CTA — v hero vpravo od psaného řádku; navbar je o ně
+                      nahoře na homepage ochuzený a má tak prostor (po
+                      odscrollování se do navbaru vrátí). Odsazení 11.8em je
+                      v písmu hero řádku, takže se za něj vejde i nejdelší
+                      fráze („Automate and Save Hours" = 11.33em). Až od xl —
+                      na užších oknech by se cluster do zbylé šířky nevešel. */}
+                  {!user && !authLoading && (
+                    <div className="absolute left-[11.8em] top-1/2 hidden -translate-y-1/2 xl:block">
+                      <div className="flex items-center text-base">
+                        <Button
+                          size="sm"
+                          onClick={() => openAuthModal('login')}
+                          className="h-9 shrink-0 rounded-full bg-transparent px-5 text-sm font-semibold text-white shadow-none transition-all hover:bg-white/10"
+                        >
+                          Přihlásit
+                        </Button>
+                        {/* caption absolutně pod pilulkou → nesune ji nahoru */}
+                        <div className="relative ml-1 flex shrink-0 items-center">
+                          <Button
+                            size="sm"
+                            onClick={() => openAuthModal('b2b')}
+                            className="h-9 shrink-0 rounded-full bg-white px-5 text-sm font-semibold text-zinc-900 transition-all hover:bg-zinc-200"
+                          >
+                            B2B registration
+                          </Button>
+                          <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap text-[9px] leading-none tracking-wide text-white/70">
+                            Verify Account in 24h
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               {/* marquee log pod textem — stejný pás jako na /deals (bílé
