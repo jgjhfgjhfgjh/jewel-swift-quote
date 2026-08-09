@@ -38,6 +38,8 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
             <span className="block truncate text-[11px] font-medium uppercase tracking-widest text-zinc-500">
               {k.label}
             </span>
+            {/* Akce sedí v řádku hodnoty u PRAVÉ hrany (pokyn) — dlaždice
+                s akcí tím drží stejnou výšku jako ty bez ní. */}
             <span className="mt-2.5 flex min-h-[2rem] items-center gap-2.5">
               {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400" />}
               {typeof k.value === 'string' ? (
@@ -47,25 +49,25 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
               ) : (
                 k.value
               )}
+              {k.action && (
+                <button
+                  type="button"
+                  onClick={k.action.onClick}
+                  className="group/kpi ml-auto inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline"
+                >
+                  {k.action.icon === 'arrow' ? (
+                    <>
+                      {k.action.label}
+                      <ArrowRight className="h-3 w-3 transition-transform group-hover/kpi:translate-x-0.5" />
+                    </>
+                  ) : (
+                    <>
+                      <Bell className="h-3 w-3" /> {k.action.label}
+                    </>
+                  )}
+                </button>
+              )}
             </span>
-            {k.action && (
-              <button
-                type="button"
-                onClick={k.action.onClick}
-                className="group/kpi mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline"
-              >
-                {k.action.icon === 'arrow' ? (
-                  <>
-                    {k.action.label}
-                    <ArrowRight className="h-3 w-3 transition-transform group-hover/kpi:translate-x-0.5" />
-                  </>
-                ) : (
-                  <>
-                    <Bell className="h-3 w-3" /> {k.action.label}
-                  </>
-                )}
-              </button>
-            )}
         </div>
       ))}
     </div>
