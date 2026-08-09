@@ -58,8 +58,8 @@ function BrandCard({
   dark?: boolean;
   /** Sdílená instance deal alertů — zvoneček jen ve filter (selectable) módu */
   alertsApi?: DealAlertsApi;
-  /** Karta filtruje dávky: showcase vzhled, ale klik = toggle filtru, ne
-   *  navigace; CTA pod logem odpadá (celá karta JE ovladač). */
+  /** Karta filtruje dávky: showcase vzhled, ale filtr přepíná JEN spodní CTA
+   *  (plocha karty je nekliklá), takže je ovladač jednoznačný. */
   asDealFilter?: boolean;
 }) {
   // In filter (selectable) mode the card is compact — tighter spacing and no
@@ -89,13 +89,80 @@ function BrandCard({
     return () => clearInterval(id);
   }, [visible, n]);
 
+  // Logo a produktová plocha jako bloky — pořadí se PŘEHAZUJE jen ve filtru
+  // dávek (/deals): tam je logo hlavičkou karty a spodek patří výhradně CTA.
+  // Showcase na homepage i kompaktní katalogový filtr zůstávají beze změny
+  // (produkt nahoře, logo pod ním).
+  const logoBlock = (
+    <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} ${asDealFilter ? 'mt-6 sm:mt-8' : ''} flex items-center justify-center shrink-0 ${scale}`}>
+      {brand.domain ? (
+        <BrandLogo
+          name={brand.name}
+          domain={brand.domain}
+          width={400}
+          height={160}
+          className={`max-h-full object-contain ${
+            dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
+          } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
+          fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
+        />
+      ) : (
+        <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
+      )}
+    </div>
+  );
+
+  const imageBlock = (
+    <div
+      className={`relative mx-4 flex-1 ${
+        asDealFilter
+          ? 'mb-2 mt-3 origin-center sm:mt-4'
+          : `mb-4 origin-bottom ${compact ? 'mt-3' : 'mt-6 sm:mt-8'}`
+      } ${scale}`}
+    >
+      {n === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center p-2">
+          <span className={`font-display text-xl font-black tracking-tight text-center ${dark ? 'text-white/25' : 'text-muted-foreground/30'}`}>
+            {brand.name}
+          </span>
+        </div>
+      )}
+      {brand.products.map((p, i) => (
+        <div
+          key={p.id}
+          aria-hidden={i !== idx}
+          className={`absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-700 ease-in-out ${
+            i === idx ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <img
+            src={p.img}
+            alt={p.name}
+            loading="lazy"
+            draggable={false}
+            className="max-h-full max-w-full object-contain"
+            // Feather maska: bílé JPG pozadí (CDN bez CORS → nelze vyříznout
+            // pixelově) se na černé rozpustí do měkkého oválu místo tvrdého
+            // obdélníku; barvy produktu zůstávají beze změny.
+            style={dark ? {
+              maskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
+            } : undefined}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div
       ref={rootRef}
       data-card
-      onClick={() => (selectable || asDealFilter ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
-      aria-pressed={selectable || asDealFilter ? active : undefined}
-      className={`group/card relative flex flex-col cursor-pointer transition-shadow ${cardClass} ${
+      onClick={asDealFilter ? undefined : () => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
+      aria-pressed={selectable ? active : undefined}
+      className={`group/card relative flex flex-col transition-shadow ${cardClass} ${
+        asDealFilter ? 'cursor-default' : 'cursor-pointer'
+      } ${
         compact ? 'overflow-hidden rounded-2xl bg-white shadow-sm' : ''
       } ${
         (selectable || asDealFilter) && active
@@ -103,8 +170,9 @@ function BrandCard({
           : compact ? 'ring-1 ring-zinc-200/60' : ''
       }`}
     >
-      {/* Active-filter check — same blue fajfka used on the homepage bullets */}
-      {(selectable || asDealFilter) && active && (
+      {/* Active-filter check — same blue fajfka used on the homepage bullets.
+          Ve filtru dávek se nekreslí: stav nese samo CTA („Deal selected"). */}
+      {selectable && active && (
         <div className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
           <Check className="h-4 w-4 text-blue-600" strokeWidth={3} />
         </div>
@@ -122,86 +190,61 @@ function BrandCard({
         />
       )}
 
-      {/* Crossfading product image — hlavní plocha nahoře */}
-      <div className={`relative flex-1 mx-4 mb-4 origin-bottom ${compact ? 'mt-3' : 'mt-6 sm:mt-8'} ${scale}`}>
-        {n === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center p-2">
-            <span className={`font-display text-xl font-black tracking-tight text-center ${dark ? 'text-white/25' : 'text-muted-foreground/30'}`}>
-              {brand.name}
-            </span>
-          </div>
-        )}
-        {brand.products.map((p, i) => (
-          <div
-            key={p.id}
-            aria-hidden={i !== idx}
-            className={`absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-700 ease-in-out ${
-              i === idx ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img
-              src={p.img}
-              alt={p.name}
-              loading="lazy"
-              draggable={false}
-              className="max-h-full max-w-full object-contain"
-              // Feather maska: bílé JPG pozadí (CDN bez CORS → nelze vyříznout
-              // pixelově) se na černé rozpustí do měkkého oválu místo tvrdého
-              // obdélníku; barvy produktu zůstávají beze změny.
-              style={dark ? {
-                maskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
-                WebkitMaskImage: 'radial-gradient(ellipse 62% 62% at center, black 55%, transparent 98%)',
-              } : undefined}
-            />
-          </div>
-        ))}
-      </div>
+      {asDealFilter ? (
+        <>
+          {logoBlock}
+          {imageBlock}
+        </>
+      ) : (
+        <>
+          {imageBlock}
+          {logoBlock}
+        </>
+      )}
 
-      {/* Brand logo — pod produkty (popisky modelů odstraněny) */}
-      <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
-        {brand.domain ? (
-          <BrandLogo
-            name={brand.name}
-            domain={brand.domain}
-            width={400}
-            height={160}
-            className={`max-h-full object-contain ${
-              dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
-            } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
-            fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
-          />
-        ) : (
-          <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
-        )}
-      </div>
-
-      {/* CTA pod logem — obtažená pilulka ve stylu CreateBigDeal (bez plusu).
-          Silný hover: plocha se invertuje a pilulka se nadzvedne. Klik nesmí
-          propadnout do karty (ta jinak vede na detail značky), proto
-          stopPropagation. V kompaktním filtru CTA není — karta je ovladač. */}
-      {compact || asDealFilter ? (
-        <div className={`${compact ? 'p-1.5' : 'p-4'} shrink-0`} />
+      {/* CTA — jediný ovladač na spodku karty. Na showcase vede na dealy
+          značky, ve filtru dávek PŘEPÍNÁ filtr a po zapnutí se přepíše na
+          „Deal selected" (plná pilulka + fajfka). Klik nesmí propadnout do
+          karty, proto stopPropagation. Kompaktní katalogový filtr CTA nemá —
+          tam je ovladačem karta. */}
+      {compact ? (
+        <div className="p-1.5 shrink-0" />
       ) : (
         <div className="flex shrink-0 justify-center px-5 pb-5 pt-6">
           {/* font-sans (Inter) přebíjí Montserrat, který carousel dědí
               z rodičovského stylu; šipka se na hover rozjede doprava */}
           <button
             type="button"
+            aria-pressed={asDealFilter ? active : undefined}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
+              if (asDealFilter) onSelect?.();
+              else navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
             }}
             /* iOS podstínění: dvouvrstvý měkký stín i v klidu (jako karty
                dealů), na hover se prohloubí a pilulka se nadzvedne */
             className={`group/cta inline-flex w-full items-center justify-center gap-2 rounded-full border px-7 py-2.5 font-sans text-sm font-semibold tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
-              dark
-                ? 'border-white/35 text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.55),0_2px_6px_rgba(0,0,0,0.35)] hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
-                : 'border-zinc-300 bg-white text-zinc-900 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.16),0_2px_6px_rgba(15,23,42,0.07)] hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
+              asDealFilter && active
+                ? dark
+                  ? 'border-white bg-white text-zinc-900 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
+                  : 'border-zinc-900 bg-zinc-900 text-white shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
+                : dark
+                  ? 'border-white/35 text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.55),0_2px_6px_rgba(0,0,0,0.35)] hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
+                  : 'border-zinc-300 bg-white text-zinc-900 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.16),0_2px_6px_rgba(15,23,42,0.07)] hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
             }`}
           >
-            GoBigDeal
-            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-1" />
+            {asDealFilter && active ? (
+              <>
+                Deal selected
+                <Check className="h-4 w-4 shrink-0" strokeWidth={3} />
+              </>
+            ) : (
+              <>
+                GoBigDeal
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-1" />
+              </>
+            )}
           </button>
         </div>
       )}
