@@ -329,7 +329,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     { id: 'mcp', label: 'MCP Server', onSelect: () => go('/feed?to=mcp') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
     { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
-    { id: 'create', label: 'CreateBigDeal', tone: 'violet', onSelect: openCreateDealDialog },
+    /* obal, ne holá reference: onSelect dostává událost a ta by se poslala
+       jako popis opakované dávky (viz openCreateDealDialog) */
+    { id: 'create', label: 'CreateBigDeal', tone: 'violet', onSelect: () => openCreateDealDialog() },
   ];
 
   const handleLogout = async () => {
@@ -421,7 +423,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               otevře popup s poptávkou. Klidový stav bere barvu z kontextu
               jako text navigace; plus je symbol akce. */}
           <button
-            onClick={openCreateDealDialog}
+            onClick={() => openCreateDealDialog()}
             title="CreateBigDeal"
             className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)] ${
               overVideo ? 'border-white/40 text-white' : 'border-zinc-300 text-zinc-900'

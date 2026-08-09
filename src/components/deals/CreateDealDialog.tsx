@@ -48,16 +48,25 @@ const useCreateDealStore = create<CreateDealState>((set) => ({
  * a přiloží do poptávky, aby obchod nemusel dohledávat, o kterou dávku jde.
  */
 export function openCreateDealDialog(repeatOf?: string) {
-  useCreateDealStore.setState({ open: true, repeatOf: repeatOf ?? null });
+  /* Kontrola typu je schválně tady: funkce visí i přímo na onClick
+     (`onClick={openCreateDealDialog}`), takže jí React pošle klikací událost.
+     Ta by se pak vykreslila jako potomek a shodila by celý dialog do bílé
+     stránky — proto bereme jen řetězec. */
+  const label = typeof repeatOf === 'string' && repeatOf.trim() ? repeatOf : null;
+  useCreateDealStore.setState({ open: true, repeatOf: label });
 }
 
 /* ── Segmentace ──────────────────────────────────────────────────────────
    Pět situací odpovídá segmentům na /suppliers — stejná strategie, jen
    posunutá do produktu, takže se dodavatel pozná v obojím stejně.        */
-type SituationId = 'pressure' | 'stocked' | 'brand' | 'seasonal' | 'entry';
+type SituationId = 'try' | 'pressure' | 'stocked' | 'brand' | 'seasonal' | 'entry';
 type SizeId = 'under100' | 'to1k' | 'to10k' | 'over10k';
 
 const SITUATIONS: { id: SituationId; label: string }[] = [
+  /* Nejnižší schod jako první: „jen to zkouším" není segment nouze, ale
+     nejčastější důvod prvního kontaktu — kdo se v něm pozná, nemusí
+     předstírat problém, aby mohl pokračovat. */
+  { id: 'try', label: 'We just want to try a new channel.' },
   { id: 'pressure', label: 'Cash is tight and the year is closing.' },
   { id: 'stocked', label: 'The warehouse is full. Cash isn’t the issue.' },
   { id: 'brand', label: 'We’re the brand, and distribution is the point.' },
@@ -74,6 +83,8 @@ const SIZES: { id: SizeId; label: string }[] = [
 
 /** Závěrečná věta podle situace — jiná vrstva argumentů pro každý segment. */
 const OUTCOME: Record<SituationId, string> = {
+  try:
+    'One lot is enough to see how the channel behaves. You keep your price list, your customers and your terms — nothing changes on your side until the deal closes.',
   pressure:
     'We price closeout lots quickly and take them whole. One buyer, one invoice, one shipment — you don’t chase small orders to clear a pallet.',
   stocked:
