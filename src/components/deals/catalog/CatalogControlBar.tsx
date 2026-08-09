@@ -6,6 +6,62 @@ export type CatalogSortKey = 'ending' | 'discount' | 'models' | 'newest';
 export type CatalogView = 'grid' | 'list';
 
 /**
+ * Pilulky řazení — samostatně, protože na /deals stojí NAHOŘE na bílé ploše
+ * (nad zaobleným nájezdem do tmavé zóny), zatímco řídicí lišta zůstává dole
+ * v tmavé části. `variant` jen převrací barvy, tvar zůstává stejný:
+ * aktivní = plná pilulka v inverzní barvě, klid = tlumený text.
+ */
+export function SortPills({
+  sort,
+  onSort,
+  variant = 'dark',
+  className = '',
+}: {
+  sort: CatalogSortKey;
+  onSort: (s: CatalogSortKey) => void;
+  variant?: 'dark' | 'light';
+  className?: string;
+}) {
+  const lang = useStore((s) => s.lang);
+  const s = dealsI18n[lang].catalog.dash;
+  const light = variant === 'light';
+
+  const sorts: { key: CatalogSortKey; label: string }[] = [
+    { key: 'ending', label: s.sortEnding },
+    { key: 'discount', label: s.sortDiscount },
+    { key: 'models', label: s.sortModels },
+    { key: 'newest', label: s.sortNewest },
+  ];
+
+  return (
+    <div
+      className={`flex items-center gap-1 overflow-x-auto
+                  [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
+    >
+      {sorts.map((o) => (
+        <button
+          key={o.key}
+          type="button"
+          aria-pressed={sort === o.key}
+          onClick={() => onSort(o.key)}
+          className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            sort === o.key
+              ? light
+                ? 'bg-zinc-900 text-white'
+                : 'bg-white text-zinc-900'
+              : light
+                ? 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
+                : 'text-zinc-400 hover:bg-white/10 hover:text-white'
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/**
  * Řídicí lišta dashboardu — řazení, přepínač mřížka/seznam, počet výsledků
  * a zrušení filtrů. Tmavá varianta na matně černé ploše: aktivní stav je
  * INVERZNÍ (bílá pilulka, černý text), klid tlumeně zinc, počty v mono písmu.
@@ -35,38 +91,11 @@ export function CatalogControlBar({
   const d = dealsI18n[lang];
   const s = d.catalog.dash;
 
-  const sorts: { key: CatalogSortKey; label: string }[] = [
-    { key: 'ending', label: s.sortEnding },
-    { key: 'discount', label: s.sortDiscount },
-    { key: 'models', label: s.sortModels },
-    { key: 'newest', label: s.sortNewest },
-  ];
-
   return (
     <div className="sticky top-0 z-30 border-b border-white/10 bg-[#0B1215]/90 py-3 backdrop-blur supports-[backdrop-filter]:bg-[#0B1215]/75">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        {/* řazení — segmenty jako pilulky, na úzkém displeji scrollují */}
-        <div
-          className="flex items-center gap-1 overflow-x-auto
-                     [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {sorts.map((o) => (
-            <button
-              key={o.key}
-              type="button"
-              aria-pressed={sort === o.key}
-              onClick={() => onSort(o.key)}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                sort === o.key
-                  ? 'bg-white text-zinc-900'
-                  : 'text-zinc-400 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              {o.label}
-            </button>
-          ))}
-        </div>
-
+        {/* Řazení tu už není — pilulky stojí nahoře na bílé ploše (SortPills).
+            Lišta drží jen počet výsledků, zrušení filtrů a přepínač zobrazení. */}
         <div className="ml-auto flex items-center gap-2.5">
           {activeCount > 0 && (
             <>

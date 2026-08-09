@@ -22,6 +22,7 @@ import {
   type CatalogFilters, type DealTileItem,
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
+import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
 import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
@@ -30,7 +31,7 @@ import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import { CatalogOfferCards } from '@/components/deals/catalog/CatalogOfferCards';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
-  CatalogControlBar, type CatalogSortKey, type CatalogView,
+  CatalogControlBar, SortPills, type CatalogSortKey, type CatalogView,
 } from '@/components/deals/catalog/CatalogControlBar';
 import { DealTile } from '@/components/deals/catalog/DealTile';
 import { DealListRow } from '@/components/deals/catalog/DealListRow';
@@ -301,11 +302,27 @@ export default function Deals() {
        filtry, řídicí lišta) je tmavý hairline, ZBOŽÍ je bílé: karty a řádky
        dávek zůstávají bílé a na černé ploše vystoupí nejvíc. Landing sekce
        níž si barvu kreslí samy a na tuhle plochu plynule navazují. */
-    <div className="min-h-screen bg-[#0B1215] font-sans selection:bg-white selection:text-zinc-900">
-      {/* navbar v inverzní variantě — stránka je celá tmavá, tmavé logo
-          i „Přihlásit" by na ní zmizely (stejně jako /alerts a /dropshipping) */}
-      <Navbar onDark />
+    <div className="min-h-screen bg-white font-sans selection:bg-zinc-900 selection:text-white">
+      {/* Navbar BEZ onDark — stránka nově začíná bílou hlavou, takže chrom
+          navigace musí být tmavý (inverzní varianta by na bílé zmizela). */}
+      <Navbar />
       <BackButton />
+
+      {/* ═══ BÍLÁ HLAVA — první screen: značkový carousel jako filtr dávek
+             a hned pod ním řazení. Obojí drží bílou plochu, zbytek stránky
+             pokračuje tmavou zónou se zaobleným nájezdem. ═══ */}
+      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+8rem)]">
+        <BrandShowcaseCarousel
+          dealFilter={{ selectedKeys: filters.brands, onToggle: toggleBrand }}
+        />
+        <div className="px-5 pt-5 sm:px-8 lg:px-12">
+          <SortPills variant="light" sort={sort} onSort={setSort} />
+        </div>
+      </section>
+
+      {/* ═══ TMAVÁ ZÓNA — zaoblený nájezd na bílé hlavě; odsud dolů si sekce
+             kreslí barvu samy (střídání bílá ↔ obsidián). ═══ */}
+      <div className="mt-8 rounded-t-[1.75rem] bg-[#0B1215] pt-4 sm:mt-10 sm:rounded-t-[2.75rem] sm:pt-6">
 
       {/* ═══ DASHBOARD — stránka ZAČÍNÁ stavem trhu a seznamem dávek (pokyn):
              obchodník přichází pro zboží, ne pro headline. Hero se značkou
@@ -317,7 +334,7 @@ export default function Deals() {
              zdarma a je to nejnižší schod konverze, tak stojí nad vším.
              Horní odsazení počítá s plovoucím BackButtonem (fixed, top
              72/112 px) — jinak by mu jeho skleněný kroužek seděl na rohu. ── */}
-      <div className="px-5 pt-[calc(var(--ann-offset,0px)+7.5rem)] sm:px-8 sm:pt-[calc(var(--ann-offset,0px)+10rem)] lg:px-12">
+      <div className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
         <CatalogOfferCards onAlerts={goToAlerts} />
       </div>
 
@@ -703,6 +720,8 @@ export default function Deals() {
             </div>
           </div>
         </section>
+      </div>
+      {/* ↑ konec tmavé zóny (zaoblený nájezd otevřený pod bílou hlavou) */}
       </div>
 
       <ScrollToTopButton />
