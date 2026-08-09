@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Check, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, ArrowRight, X } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
@@ -171,7 +171,7 @@ function BrandCard({
       }`}
     >
       {/* Active-filter check — same blue fajfka used on the homepage bullets.
-          Ve filtru dávek se nekreslí: stav nese samo CTA („Deal selected"). */}
+          Ve filtru dávek se nekreslí: stav nese samo CTA („Filter" + křížek). */}
       {selectable && active && (
         <div className="absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-blue-100">
           <Check className="h-4 w-4 text-blue-600" strokeWidth={3} />
@@ -204,7 +204,7 @@ function BrandCard({
 
       {/* CTA — jediný ovladač na spodku karty. Na showcase vede na dealy
           značky, ve filtru dávek PŘEPÍNÁ filtr a po zapnutí se přepíše na
-          „Deal selected" (plná pilulka + fajfka). Klik nesmí propadnout do
+          „Filter" (plná pilulka + křížek). Klik nesmí propadnout do
           karty, proto stopPropagation. Kompaktní katalogový filtr CTA nemá —
           tam je ovladačem karta. */}
       {compact ? (
@@ -235,9 +235,10 @@ function BrandCard({
             }`}
           >
             {asDealFilter && active ? (
+              /* zapnutý filtr — křížek říká, že klik ho zase sundá */
               <>
-                Deal selected
-                <Check className="h-4 w-4 shrink-0" strokeWidth={3} />
+                Filter
+                <X className="h-4 w-4 shrink-0" strokeWidth={3} />
               </>
             ) : (
               <>
