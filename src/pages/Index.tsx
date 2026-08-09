@@ -254,9 +254,11 @@ const Index = () => {
                       centrovaný sloupec max-w-[1000px], text vlevo */}
                   <div className="mx-auto max-w-[1000px] text-left">
                     {/* velikost = (šířka viewportu − padding stránky) / šířka textu
-                        v em — drží jeden řádek na sm+ */}
-                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)] text-foreground">
-                      Sell the brands people already want.
+                        v em — drží jeden řádek na sm+. Strop 3rem: text měří
+                        19,9 em, takže při 48 px zabere 957 px a vejde se do
+                        měřítka 1000 px; při 3.5rem už by se zalomil. */}
+                    <h2 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(1.5rem,calc((100vw-120px)/20),3rem)] text-foreground">
+                      Buy and sell the brands people already want.
                     </h2>
                     <p className="mt-4 font-sans text-base font-light leading-relaxed text-muted-foreground sm:mt-5 sm:text-xl">
                       Swarovski, Pandora, Tommy Hilfiger, Guess, Versace, Armani

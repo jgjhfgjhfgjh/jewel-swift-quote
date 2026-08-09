@@ -162,10 +162,9 @@ export function HomeTopDeals() {
             závěr věty), stejné zarovnání jako dropship sekce výše */}
         <div className="mx-auto max-w-[1000px] text-left">
           <h2 className="font-sans font-extralight tracking-tight leading-[1.15] text-[clamp(1.5rem,calc((100vw-120px)/22),3.5rem)]">
-            <span className="text-white">Deals </span>
-            <span className="text-zinc-400">with </span>
+            <span className="text-white">BigDeals </span>
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              bigger wholesale discount
+              ending first
             </span>
           </h2>
         </div>
