@@ -160,7 +160,10 @@ export function DealListRow({
         )}
         {/* RAZÍTKO — připravovaná dávka dostane přes značku šikmý červený
             otisk (pokyn). Průsvitnost a mírné natočení dělají razítko
-            razítkem; leží nad značkou, ale klik nechytá. */}
+            razítkem; leží nad značkou, ale klik nechytá.
+            Text je VŽDY anglicky („In the works") jako zbytek chromu řádku
+            (48 h Early Access, Set alert free) — proto natvrdo z `en`,
+            ne z aktuálního jazyka. */}
         {!item.dealNo && (
           <span
             aria-hidden
@@ -168,7 +171,7 @@ export function DealListRow({
                        whitespace-nowrap rounded-[2px] border-[1.5px] border-rose-600/55 px-1.5 py-[2px]
                        text-[8px] font-black uppercase leading-none tracking-[0.08em] text-rose-600/85"
           >
-            {c.upcoming}
+            {dealsI18n.en.catalog.tile.upcoming}
           </span>
         )}
       </span>
