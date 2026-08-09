@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, ArrowRight } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { useInfiniteCarousel } from '@/hooks/useInfiniteCarousel';
@@ -171,7 +171,9 @@ function BrandCard({
       {compact ? (
         <div className="p-1.5 shrink-0" />
       ) : (
-        <div className="flex shrink-0 justify-center px-4 pb-5 pt-1">
+        <div className="flex shrink-0 justify-center px-5 pb-5 pt-1">
+          {/* font-sans (Inter) přebíjí Montserrat, který carousel dědí
+              z rodičovského stylu; šipka se na hover rozjede doprava */}
           <button
             type="button"
             onClick={(e) => {
@@ -179,13 +181,14 @@ function BrandCard({
               e.stopPropagation();
               navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
             }}
-            className={`inline-flex items-center rounded-full border px-5 py-2 text-[13px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+            className={`group/cta inline-flex w-full items-center justify-center gap-2 rounded-full border px-7 py-2.5 font-sans text-sm font-semibold tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
               dark
                 ? 'border-white/35 text-white hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_12px_28px_-8px_rgba(255,255,255,0.45)]'
                 : 'border-zinc-300 text-zinc-900 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)]'
             }`}
           >
             GoBigDeal
+            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-1" />
           </button>
         </div>
       )}
