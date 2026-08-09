@@ -94,7 +94,7 @@ function BrandCard({
   // Showcase na homepage i kompaktní katalogový filtr zůstávají beze změny
   // (produkt nahoře, logo pod ním).
   const logoBlock = (
-    <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} ${asDealFilter ? 'mt-6 sm:mt-8' : ''} flex items-center justify-center shrink-0 ${scale}`}>
+    <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} ${asDealFilter ? 'mt-6 sm:mt-4' : ''} flex items-center justify-center shrink-0 ${scale}`}>
       {brand.domain ? (
         <BrandLogo
           name={brand.name}

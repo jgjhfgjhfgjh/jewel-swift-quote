@@ -42,7 +42,7 @@ interface NavbarProps {
   onDark?: boolean;
 }
 
-/* Desktop nav — 5 položek s chevronem, každá otevírá mega menu.
+/* Desktop nav — položky s chevronem, každá otevírá mega menu.
    path = přímá navigace klikem; bez path klik jen přepíná panel.
    Speciální "cesty" v panelech: auth:login / auth:b2b / catalog:open. */
 const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
@@ -51,6 +51,7 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
      vrátit řádek): { id: 'products', label: 'Products' }, */
   { id: 'mcp',          label: 'MCP Server',   path: '/feed?to=mcp' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
+  { id: 'alerts',       label: 'Alerts',       path: '/alerts' },
   { id: 'my-deal',      label: 'MyDeal' },
   /* CreateBigDeal není v hlavní nav — je to CTA ukotvené vpravo (tam, kde
      dřív sedělo Suppliers). Neotevírá mega menu; klik otevře popup
@@ -66,6 +67,23 @@ const MY_DEAL_ITEMS: { label: string; sub: string; path: string }[] = [
   { label: 'Saved products', sub: 'Everything you starred in the catalog', path: '/favorites' },
   { label: 'Account settings', sub: 'Company details, delivery and invoicing', path: '/ucet' },
 ];
+
+/* Alerts — hlídací pes dealů. Levý sloupec = co si hlídám (úrovně, které
+   /alerts opravdu umí: koncern, značka, konkrétní model), pravý = jak se to
+   ke mně dostane. Čísla jen ověřená (65+ značek, 48 h náskok). */
+const ALERT_WATCH: { label: string; sub: string; path: string }[] = [
+  { label: 'Watch a concern', sub: 'One switch covers every brand in the group', path: '/alerts' },
+  { label: 'Watch a brand', sub: '65+ brands in the live feed — pick the ones you resell', path: '/alerts' },
+  { label: 'Watch a single model', sub: 'The exact reference you keep selling out of', path: '/alerts' },
+];
+const ALERT_DELIVERY: { label: string; sub: string; path: string }[] = [
+  { label: 'Deal drop alerts', sub: 'Every GoBigDeal the moment it goes public — free forever', path: '/alerts' },
+  { label: 'Early Access · 48 h head start', sub: 'Everyone gets the alert. You get it 48 hours early.', path: '/#gbd-pricing' },
+  { label: 'One account, every device', sub: 'Alerts live in your account, not in a browser', path: '/alerts' },
+];
+/** Panely mají u odkazů klíč `desc`, mobilní seznamy `sub` — jeden zdroj copy. */
+const asLinks = (items: { label: string; sub: string; path: string }[]) =>
+  items.map(({ label, sub, path }) => ({ label, desc: sub, path }));
 
 /* Mobile sheet — iOS grouped list zrcadlící desktopové mega menu: sekce =
    panely (Products sdílí PRODUCT_ITEMS 1:1), skupiny = bílé zaoblené karty
@@ -129,6 +147,17 @@ const NAV_PANELS: Record<string, NavPanel> = {
     heading: 'GoBigDeal',
     desc: '',
     cta: { label: '', path: '/deals' },
+  },
+  /* Alerts — standardní dvousloupcový panel (heading + desc + CTA vlevo,
+     odkazy vpravo). Copy drží tón webu: čtenář hrdina, tvrzení kryté číslem. */
+  'alerts': {
+    heading: 'Deal alerts',
+    desc: 'Know the moment a deal drops. Watch a whole concern, a single brand, or one model — and let us tell you instead of refreshing the page.',
+    cols: [
+      { title: 'What you watch', links: asLinks(ALERT_WATCH) },
+      { title: 'How it reaches you', links: asLinks(ALERT_DELIVERY) },
+    ],
+    cta: { label: 'Manage your alerts', path: '/alerts' },
   },
   /* MyDeal — obsah se renderuje z MY_DEAL_ITEMS, tohle je jen existence gate. */
   'my-deal': {
@@ -315,8 +344,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   };
 
   /* Mobilní kategorie — jediná úroveň, kterou menu ukazuje; zbytek se
-     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, MyDeal
-     a CreateBigDeal (akce, proto pastelově fialová). */
+     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, Alerts,
+     MyDeal a CreateBigDeal (akce, proto pastelově fialová). */
   const MOBILE_CATS: {
     id: string;
     label: string;
@@ -328,6 +357,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     { id: 'why', label: 'Why', onSelect: () => go('/') },
     { id: 'mcp', label: 'MCP Server', onSelect: () => go('/feed?to=mcp') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
+    { id: 'alerts', label: 'Alerts', items: [...ALERT_DELIVERY, ...ALERT_WATCH] },
     { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
     /* obal, ne holá reference: onSelect dostává událost a ta by se poslala
        jako popis opakované dávky (viz openCreateDealDialog) */
@@ -366,8 +396,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         </Link>
 
         {/* Desktop nav — položky s chevronem otevírají mega menu; v katalogu je nahrazuje vyhledávání */}
+        {/* Pod xl jede nav v těsnější sazbě — pět položek s chevronem se
+            spolu s pravým clusterem musí vejít i do 1024 px bez přetečení */}
         {!showSearch && (
-          <nav className="hidden lg:flex items-center gap-1 ml-5 relative z-10">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 ml-3 xl:ml-5 relative z-10">
             {NAV_ITEMS.map((item) => {
               const active = activeNav === item.id;
               // GoBigDeal je vlajková položka → nad videem plně bílá (ostatní
@@ -391,7 +423,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                       setActiveNav(active ? null : item.id);
                     }
                   }}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
+                  className={`flex items-center gap-1 px-2 py-2 font-sans text-[15px] transition-colors xl:gap-1.5 xl:px-3.5 xl:text-[17px] ${
                     isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
                   } ${
                     overVideo

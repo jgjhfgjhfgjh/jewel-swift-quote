@@ -311,7 +311,10 @@ export default function Deals() {
       {/* ═══ BÍLÁ HLAVA — první screen: značkový carousel jako filtr dávek
              a hned pod ním řazení. Obojí drží bílou plochu, zbytek stránky
              pokračuje tmavou zónou se zaobleným nájezdem. ═══ */}
-      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+8rem)]">
+      {/* Na mobilu spacing beze změny (CTA se tam na první screen vejde),
+          od sm výš těsně pod navbar (h-14) — na širokých, ale nízkých
+          oknech se jinak CTA karet i řazení propadnou pod ohyb */}
+      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+5.25rem)]">
         <BrandShowcaseCarousel
           dealFilter={{ selectedKeys: filters.brands, onToggle: toggleBrand }}
         />
