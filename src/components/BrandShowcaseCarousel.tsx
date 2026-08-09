@@ -171,7 +171,7 @@ function BrandCard({
       {compact ? (
         <div className="p-1.5 shrink-0" />
       ) : (
-        <div className="flex shrink-0 justify-center px-5 pb-5 pt-1">
+        <div className="flex shrink-0 justify-center px-5 pb-5 pt-6">
           {/* font-sans (Inter) přebíjí Montserrat, který carousel dědí
               z rodičovského stylu; šipka se na hover rozjede doprava */}
           <button
@@ -181,10 +181,12 @@ function BrandCard({
               e.stopPropagation();
               navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
             }}
+            /* iOS podstínění: dvouvrstvý měkký stín i v klidu (jako karty
+               dealů), na hover se prohloubí a pilulka se nadzvedne */
             className={`group/cta inline-flex w-full items-center justify-center gap-2 rounded-full border px-7 py-2.5 font-sans text-sm font-semibold tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
               dark
-                ? 'border-white/35 text-white hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_12px_28px_-8px_rgba(255,255,255,0.45)]'
-                : 'border-zinc-300 text-zinc-900 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)]'
+                ? 'border-white/35 text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.55),0_2px_6px_rgba(0,0,0,0.35)] hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
+                : 'border-zinc-300 bg-white text-zinc-900 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.16),0_2px_6px_rgba(15,23,42,0.07)] hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
             }`}
           >
             GoBigDeal
