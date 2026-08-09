@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Bell, BellRing, Layers, Lock, Tag } from 'lucide-react';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -39,6 +38,10 @@ export function DealListRow({
   const c = d.catalog.tile;
   const dash = d.catalog.dash;
 
+  /* Běžící dávka nese značku a číslo; ostatní stavy místo nich ukazují,
+     v jakém stavu dávka je (viz slot na začátku řádku). */
+  const isLive = item.kind === 'live';
+
   /* Hlídač KONKRÉTNÍ dávky (level 'deal', target = slug). Funguje i u
      uzavřené dávky — tam je to projev zájmu o repete. */
   const watchTarget = item.slug ?? item.id;
@@ -59,14 +62,6 @@ export function DealListRow({
     const name = toDisplayName(b);
     return { name, domain: getBrandByName(name)?.domain };
   });
-
-  /* MOBIL: místo řady log jedna pozice, kde se značky střídají. */
-  const [brandIdx, setBrandIdx] = useState(0);
-  useEffect(() => {
-    if (brandLogos.length < 2) return;
-    const id = setInterval(() => setBrandIdx((i) => (i + 1) % brandLogos.length), 2200);
-    return () => clearInterval(id);
-  }, [brandLogos.length]);
 
 
   const status =
@@ -134,7 +129,9 @@ export function DealListRow({
         }`}
       >
         {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
-        {c.closed}
+        {/* stav („Uzavřeno") říká slot na začátku řádku, tady tedy stojí
+            AKCE — stejný popisek jako u připravovaných dávek */}
+        {watching ? dash.alertOn : dash.alertFree}
       </span>
     );
 
@@ -148,26 +145,35 @@ export function DealListRow({
           Na MOBILU se blok vynechává (pokyn) — řádek je tam plný a název dávky
           potřebuje šířku víc než evidenční značka. */}
       <span className="relative hidden h-11 w-[116px] shrink-0 flex-col items-center justify-center leading-none sm:flex">
-        {item.dealNo ? (
+        {isLive ? (
           <>
             {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
                 a výrazně větší než ostatní chrom řádku, pod ní evidenční
                 číslo dávky malým tenkým písmem */}
             <GoBigDealLogo className="text-[14px] text-zinc-900" />
             <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-900">
-              nr. {item.dealNo}
+              nr. {item.dealNo ?? '—'}
             </span>
           </>
         ) : (
-          /* RAZÍTKO — připravovaná dávka číslo ani značku nemá (pokyn):
-             ve slotu stojí samotný šikmý červený otisk se stavem dávky
-             v jazyce stránky. */
-          <span
-            className="-rotate-[13deg] whitespace-nowrap rounded-[2px] border-[1.5px] border-rose-600/55 px-1.5 py-[3px]
-                       text-[8px] font-black uppercase leading-none tracking-[0.08em] text-rose-600/85"
-          >
-            {c.upcoming}
-          </span>
+          /* STAV místo značky: dávka, která neběží, se pozná dřív, než ji
+             člověk začne číst. Prostý tučný text (pokyn) — červený
+             u připravovaných, šedý u uzavřených. Číslo pod ním zůstává,
+             pokud ho dávka má. */
+          <>
+            <span
+              className={`text-center text-[12px] font-bold leading-tight tracking-tight ${
+                item.kind === 'closed' ? 'text-slate-400' : 'text-red-600'
+              }`}
+            >
+              {item.kind === 'closed' ? c.closed : c.upcoming}
+            </span>
+            {item.dealNo && (
+              <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-slate-400">
+                nr. {item.dealNo}
+              </span>
+            )}
+          </>
         )}
       </span>
 
@@ -205,20 +211,9 @@ export function DealListRow({
         ))}
       </span>
 
-      {/* MOBIL: jedna pozice, značky se v ní střídají (řada by se nevešla) */}
-      {brandLogos.length > 0 && (
-        <span className="flex w-[62px] shrink-0 items-center justify-end sm:hidden">
-          <BrandLogo
-            key={brandLogos[brandIdx % brandLogos.length].name}
-            name={brandLogos[brandIdx % brandLogos.length].name}
-            domain={brandLogos[brandIdx % brandLogos.length].domain ?? ''}
-            width={200}
-            height={80}
-            className="h-4 w-auto max-w-full animate-in fade-in object-contain duration-500 [mix-blend-mode:multiply]"
-            fallbackClassName="truncate text-[10px] font-bold leading-none text-zinc-900"
-          />
-        </span>
-      )}
+      {/* MOBIL nemá loga značek vůbec (pokyn): střídačka log ukrajovala
+          z názvu dávky tolik, že celý řádek byl nečitelný. Značky drží
+          desktop, na mobilu zůstává název, sleva a stav. */}
 
       {/* počty — jen desktop, na mobilu je řádek už tak plný */}
       {item.kind !== 'teaser' && (
