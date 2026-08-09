@@ -105,6 +105,14 @@ export interface DealsText {
       /** Eyebrow veřejného alertového řádku nad katalogem (bílý pruh nad
           Early Access); text řádku bere zavedené `promo.alert*`. */
       alertRowEyebrow: string;
+      /** Trojice nabídkových karet nad KPI lištou — krátké akce do rohu karty. */
+      offerAlertCta: string;
+      offerEaCta: string;
+      /** SplitDeal — skupinový nákup na MOQ. */
+      splitEyebrow: string;
+      splitTitle: string;
+      splitSub: string;
+      splitCta: string;
       /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
@@ -350,6 +358,12 @@ const cs: DealsText = {
       kpiLiveSeeAll: 'Zobrazit vše',
       kpiLiveGo: 'GoDeal',
       alertRowEyebrow: 'Alerty zdarma',
+      offerAlertCta: 'Nastavit alert',
+      offerEaCta: 'Zobrazit',
+      splitEyebrow: 'SplitDeal',
+      splitTitle: 'Skupinový nákup.',
+      splitSub: 'Několik obchodníků složí objem na MOQ, kterou by sami nedali.',
+      splitCta: 'Otevřít SplitDeal',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
       earlyBadgeShort: '48 h',
@@ -598,6 +612,12 @@ const en: DealsText = {
       kpiLiveSeeAll: 'See all',
       kpiLiveGo: 'GoDeal',
       alertRowEyebrow: 'Free alerts',
+      offerAlertCta: 'Set alert',
+      offerEaCta: 'See Early Access',
+      splitEyebrow: 'SplitDeal',
+      splitTitle: 'Group buying.',
+      splitSub: 'Small retailers pool volume to reach an MOQ none of them could hit alone.',
+      splitCta: 'Open SplitDeal',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
       earlyBadgeShort: '48h',

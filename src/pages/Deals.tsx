@@ -27,7 +27,7 @@ import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
-import { PublicAlertsRow } from '@/components/deals/catalog/PublicAlertsRow';
+import { CatalogOfferCards } from '@/components/deals/catalog/CatalogOfferCards';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, type CatalogSortKey, type CatalogView,
@@ -318,7 +318,7 @@ export default function Deals() {
              Horní odsazení počítá s plovoucím BackButtonem (fixed, top
              72/112 px) — jinak by mu jeho skleněný kroužek seděl na rohu. ── */}
       <div className="px-5 pt-[calc(var(--ann-offset,0px)+7.5rem)] sm:px-8 sm:pt-[calc(var(--ann-offset,0px)+10rem)] lg:px-12">
-        <PublicAlertsRow onClick={goToAlerts} />
+        <CatalogOfferCards onAlerts={goToAlerts} />
       </div>
 
       {/* ── 2. KPI lišta — stav trhu: čísla dřív než filtry, obchodník hned
@@ -429,14 +429,9 @@ export default function Deals() {
                 </div>
               )}
 
-              {/* NAD kategoriemi (pokyn): upsell Early Access jako samostatný
-                  pruh, který nepatří žádné sekci. Alerty zdarma odsud odešly
-                  úplně nahoru nad KPI. V mřížce zůstává EA první dlaždicí. */}
-              {view === 'list' && (
-                <div className="pt-9">
-                  <EarlyAccessCard variant="row" />
-                </div>
-              )}
+              {/* Early Access pruh tu už nestojí — přesunul se nahoru mezi
+                  nabídkové karty nad KPI (alerty / EA / SplitDeal). V mřížce
+                  zůstává EA první dlaždicí sekce. */}
 
               {renderSection(dash.secLive, sections.live, { liveDot: true, lead: view === 'grid' && firstSection === 'live', id: 'deals-live' })}
               {renderSection(d.catalog.rows.upcoming, sections.upcoming, { lead: view === 'grid' && firstSection === 'upcoming', id: 'deals-upcoming' })}

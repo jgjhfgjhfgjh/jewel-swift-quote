@@ -29,6 +29,7 @@ const Suppliers = lazy(() => import("./pages/Suppliers.tsx"));
 const AccountSettings = lazy(() => import("./pages/AccountSettings.tsx"));
 const Orders = lazy(() => import("./pages/Orders.tsx"));
 const MyDeals = lazy(() => import("./pages/MyDeals.tsx"));
+const SplitDeal = lazy(() => import("./pages/SplitDeal.tsx"));
 const AdminErp = lazy(() => import("./pages/AdminErp.tsx"));
 const PartnerLayout = lazy(() => import("./pages/partner/PartnerLayout.tsx"));
 const PartnerDashboard = lazy(() => import("./pages/partner/PartnerDashboard.tsx"));
@@ -137,6 +138,8 @@ const App = () => (
               <Route path="/koncerny/:slug" element={<ConcernDetail />} />
               {/* DEAL offers — closeout catalogs */}
               <Route path="/deals" element={<Deals />} />
+              {/* SplitDeal — skupinovy nakup na MOQ */}
+              <Route path="/splitdeal" element={<SplitDeal />} />
               <Route path="/deals/:slug" element={<DealDetail />} />
               <Route path="/objednavka/:token" element={<PrestigeOrderStatus />} />
               <Route path="/pruvodce-peci" element={<PrestigeCareGuide />} />
