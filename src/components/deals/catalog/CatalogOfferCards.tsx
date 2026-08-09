@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Lock, Users } from 'lucide-react';
+import { ArrowRight, Bell, Lock, Megaphone, Users } from 'lucide-react';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
@@ -48,6 +48,16 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
       onClick: scrollToPricing,
     },
     {
+      key: 'want',
+      icon: Megaphone,
+      tone: 'text-amber-400',
+      eyebrow: d.wantEyebrow,
+      title: d.wantTitle,
+      sub: d.wantSub,
+      cta: d.wantCta,
+      onClick: () => navigate('/wantdeal'),
+    },
+    {
       key: 'split',
       icon: Users,
       tone: 'text-emerald-400',
@@ -60,7 +70,7 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
       {cards.map((c) => (
         <button
           key={c.key}

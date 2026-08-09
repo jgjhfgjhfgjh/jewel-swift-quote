@@ -113,6 +113,11 @@ export interface DealsText {
       splitTitle: string;
       splitSub: string;
       splitCta: string;
+      /** WantDeal — obrácený tok: poptávkové inzeráty a reverzní aukce. */
+      wantEyebrow: string;
+      wantTitle: string;
+      wantSub: string;
+      wantCta: string;
       /** Upsell pill na připravovaných kartách (zámek + 48 h náskok). */
       earlyBadge: string;
       /** Nápověda v pillu (hover) — co se stane po kliknutí. */
@@ -364,6 +369,10 @@ const cs: DealsText = {
       splitTitle: 'Skupinový nákup.',
       splitSub: 'Několik obchodníků složí objem na MOQ, kterou by sami nedali.',
       splitCta: 'Otevřít SplitDeal',
+      wantEyebrow: 'WantDeal',
+      wantTitle: 'Sháním.',
+      wantSub: 'Zveřejníte poptávku, prodávající se ozvou. Anonymně na obou stranách.',
+      wantCta: 'Otevřít WantDeal',
       earlyBadge: '48 h Early Access',
       earlyBadgeHint: 'Zobrazit ceník',
       earlyBadgeShort: '48 h',
@@ -618,6 +627,10 @@ const en: DealsText = {
       splitTitle: 'Group buying.',
       splitSub: 'Small retailers pool volume to reach an MOQ none of them could hit alone.',
       splitCta: 'Open SplitDeal',
+      wantEyebrow: 'WantDeal',
+      wantTitle: 'Wanted.',
+      wantSub: 'Post what you need and sellers come to you. Anonymous on both sides.',
+      wantCta: 'Open WantDeal',
       earlyBadge: '48h Early Access',
       earlyBadgeHint: 'See pricing',
       earlyBadgeShort: '48h',
