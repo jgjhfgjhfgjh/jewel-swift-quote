@@ -202,31 +202,31 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         role="dialog"
         aria-modal="true"
         onClick={close}
-        className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+        className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/40 backdrop-blur-md animate-in fade-in duration-200"
       >
         <div className="flex min-h-full items-start sm:items-center justify-center p-4 py-10">
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative z-[20001] w-full max-w-md rounded-2xl bg-card shadow-2xl border border-border/60 overflow-hidden animate-in zoom-in-95 duration-200"
+            className="relative z-[20001] w-full max-w-md overflow-hidden rounded-[1.75rem] bg-white shadow-[0_32px_80px_-20px_rgba(15,23,42,0.35),0_8px_20px_rgba(15,23,42,0.10)] ring-1 ring-zinc-900/[0.06] animate-in zoom-in-95 duration-200"
           >
             <button
               type="button"
               aria-label={a.closeLabel}
               onClick={(e) => { e.stopPropagation(); close(); }}
-              className="absolute right-3 top-3 z-[20002] flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-900 shadow-md transition hover:bg-white border border-border/40"
+              className="absolute right-4 top-4 z-[20002] flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
-            <div className="px-8 py-10 text-center space-y-4">
+            <div className="space-y-4 px-7 py-10 text-center">
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
                 <MailCheck className="h-7 w-7 text-primary" />
               </span>
-              <h2 className="font-display text-2xl font-semibold tracking-tight">Potvrďte svůj e-mail</h2>
+              <h2 className="font-sans text-[22px] font-semibold tracking-tight text-zinc-900">Potvrďte svůj e-mail</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Poslali jsme potvrzovací odkaz na <strong className="text-foreground">{sentTo}</strong>.
                 Klikněte na něj a budete rovnou přihlášeni. Pokud e-mail nevidíte, zkontrolujte i složku spam.
               </p>
-              <Button onClick={close} className="w-full h-10 font-semibold">Rozumím</Button>
+              <Button onClick={close} className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5">Rozumím</Button>
               <button
                 type="button"
                 onClick={() => { setSentTo(null); setTab('login'); }}
@@ -248,14 +248,14 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
       aria-modal="true"
       aria-label={h.catalogAccess}
       onClick={close}
-      className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[20000] overflow-y-auto overscroll-contain bg-black/40 backdrop-blur-md animate-in fade-in duration-200"
     >
       {/* Centering container — allows card to scroll within viewport when too tall */}
       <div className="flex min-h-full items-start sm:items-center justify-center p-4 py-10">
       {/* Card */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative z-[20001] w-full max-w-md rounded-2xl bg-card shadow-2xl border border-border/60 overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative z-[20001] w-full max-w-md overflow-hidden rounded-[1.75rem] bg-white shadow-[0_32px_80px_-20px_rgba(15,23,42,0.35),0_8px_20px_rgba(15,23,42,0.10)] ring-1 ring-zinc-900/[0.06] animate-in zoom-in-95 duration-200"
       >
         {/* Close — anchored to card top-right so it always scrolls with content */}
         <button
@@ -265,17 +265,17 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
             e.stopPropagation();
             close();
           }}
-          className="absolute right-3 top-3 z-[20002] flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-900 shadow-md transition hover:bg-white border border-border/40"
+          className="absolute right-4 top-4 z-[20002] flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
         {/* Header — title + subtitle adapt to current tab */}
-        <div className="px-8 pt-8 pb-6 bg-gradient-to-b from-primary/5 to-transparent">
-          <h2 className="font-display text-2xl font-semibold tracking-tight pr-10">
+        <div className="px-7 pb-5 pt-8">
+          <h2 className="pr-10 font-sans text-[22px] font-semibold tracking-tight text-zinc-900">
             {tab === 'b2b' ? 'B2B registrace partnera' : tab === 'register' ? 'Vytvořit účet' : 'Přihlášení'}
           </h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">
+          <p className="mt-1.5 text-[13px] leading-snug text-zinc-500">
             {tab === 'b2b'
               ? 'Plný přístup k velkoobchodním cenám. Schválení do 24 hodin.'
               : tab === 'register'
@@ -285,34 +285,34 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         </div>
 
         {/* Tabs — 3 levels: Přihlášení | Vytvořit účet | B2B */}
-        <div className="px-8">
-          <div className="flex p-1 bg-muted rounded-lg gap-0.5">
+        <div className="px-7">
+          <div className="flex gap-1 rounded-full bg-zinc-100 p-1">
             <button
               onClick={() => { setError(''); setTab('login'); }}
-              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
+              className={`flex-1 rounded-full py-2 text-xs font-semibold transition-all sm:text-[13px] ${
                 tab === 'login'
-                  ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-white text-zinc-900 shadow-[0_1px_3px_rgba(15,23,42,0.12)]'
+                  : 'text-zinc-500 hover:text-zinc-900'
               }`}
             >
               Přihlášení
             </button>
             <button
               onClick={() => { setError(''); setTab('register'); }}
-              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
+              className={`flex-1 rounded-full py-2 text-xs font-semibold transition-all sm:text-[13px] ${
                 tab === 'register'
-                  ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-white text-zinc-900 shadow-[0_1px_3px_rgba(15,23,42,0.12)]'
+                  : 'text-zinc-500 hover:text-zinc-900'
               }`}
             >
               Vytvořit účet
             </button>
             <button
               onClick={() => { setError(''); setTab('b2b'); }}
-              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition-all ${
+              className={`flex-1 rounded-full py-2 text-xs font-semibold transition-all sm:text-[13px] ${
                 tab === 'b2b'
-                  ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-white text-zinc-900 shadow-[0_1px_3px_rgba(15,23,42,0.12)]'
+                  : 'text-zinc-500 hover:text-zinc-900'
               }`}
             >
               B2B registrace
@@ -321,29 +321,29 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
         </div>
 
         {/* Content */}
-        <div className="px-8 py-6 space-y-5">
+        <div className="space-y-5 px-7 py-6">
           {tab === 'login' ? (
             resetMode ? (
               <div className="space-y-4">
                 <div className="text-center">
-                  <h3 className="font-display text-lg font-semibold">Obnova hesla</h3>
+                  <h3 className="font-sans text-[17px] font-semibold text-zinc-900">Obnova hesla</h3>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Zadejte e-mail a pošleme vám odkaz pro nastavení nového hesla.
                   </p>
                 </div>
                 {resetSent ? (
                   <>
-                    <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-xs text-emerald-800 leading-relaxed">
+                    <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-[13px] leading-relaxed text-emerald-800 ring-1 ring-emerald-100">
                       Pokud účet s tímto e-mailem existuje, poslali jsme na <strong>{email}</strong> odkaz pro obnovu hesla. Zkontrolujte i složku spam.
                     </div>
-                    <Button type="button" onClick={() => { setResetMode(false); setResetSent(false); }} className="w-full h-10 font-semibold">
+                    <Button type="button" onClick={() => { setResetMode(false); setResetSent(false); }} className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5">
                       Zpět na přihlášení
                     </Button>
                   </>
                 ) : (
                   <form onSubmit={handleResetPassword} className="space-y-3">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                      <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                         <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
                       </label>
                       <Input
@@ -352,15 +352,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="h-10"
+                        className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                       />
                     </div>
                     {error && (
-                      <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                      <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-[13px] font-medium text-red-600 ring-1 ring-red-100">
                         {error}
                       </p>
                     )}
-                    <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                    <Button type="submit" className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5" disabled={loading}>
                       {loading ? 'Odesílám…' : 'Poslat odkaz pro obnovu'}
                     </Button>
                     <button
@@ -376,7 +376,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
             ) : (
             <>
               {tip && (
-                <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 flex items-start gap-3">
+                <div className="flex items-start gap-3 rounded-2xl bg-blue-50 px-4 py-3 ring-1 ring-blue-100">
                   <Eye className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
                   <div className="text-xs text-blue-800 leading-relaxed">
                     <span>{tip}</span>
@@ -404,7 +404,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
               <div className="space-y-2">
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('google')}
                   disabled={!!socialLoading}
                 >
@@ -418,7 +418,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('apple')}
                   disabled={!!socialLoading}
                 >
@@ -429,7 +429,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('linkedin_oidc')}
                   disabled={!!socialLoading}
                 >
@@ -442,10 +442,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
+                  <span className="w-full border-t border-zinc-200" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground tracking-wider">
+                  <span className="bg-white px-2 tracking-wider text-zinc-400">
                     {a.separatorText}
                   </span>
                 </div>
@@ -453,7 +453,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
                   </label>
                   <Input
@@ -462,11 +462,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Lock className="h-3.5 w-3.5" /> {a.passwordLabel}
                   </label>
                   <PasswordInput
@@ -474,15 +474,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 {error && (
-                  <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                  <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-[13px] font-medium text-red-600 ring-1 ring-red-100">
                     {error}
                   </p>
                 )}
-                <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                <Button type="submit" className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5" disabled={loading}>
                   {loading ? h.signingIn : 'Přihlásit'}
                 </Button>
                 <button
@@ -533,7 +533,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
               <div className="space-y-2">
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('google')}
                   disabled={!!socialLoading}
                 >
@@ -547,7 +547,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('apple')}
                   disabled={!!socialLoading}
                 >
@@ -558,7 +558,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full h-10 gap-2"
+                  className="h-11 w-full gap-2 rounded-full border-zinc-200 bg-white text-[15px] font-medium text-zinc-900 hover:bg-zinc-50"
                   onClick={() => handleSocialAuth('linkedin_oidc')}
                   disabled={!!socialLoading}
                 >
@@ -571,10 +571,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
+                  <span className="w-full border-t border-zinc-200" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground tracking-wider">
+                  <span className="bg-white px-2 tracking-wider text-zinc-400">
                     {a.separatorText}
                   </span>
                 </div>
@@ -582,7 +582,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
               <form onSubmit={handleRegister} className="space-y-3">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
                   </label>
                   <Input
@@ -591,11 +591,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Lock className="h-3.5 w-3.5" /> Heslo
                   </label>
                   <PasswordInput
@@ -604,11 +604,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Lock className="h-3.5 w-3.5" /> Heslo znovu
                   </label>
                   <PasswordInput
@@ -617,15 +617,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 {error && (
-                  <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                  <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-[13px] font-medium text-red-600 ring-1 ring-red-100">
                     {error}
                   </p>
                 )}
-                <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                <Button type="submit" className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5" disabled={loading}>
                   {loading ? 'Vytvářím účet…' : 'Vytvořit účet'}
                 </Button>
               </form>
@@ -671,7 +671,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
 
               <form onSubmit={handleB2BRegister} className="space-y-3">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     Název firmy *
                   </label>
                   <Input
@@ -680,11 +680,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     IČO *
                   </label>
                   <Input
@@ -696,11 +696,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     onChange={(e) => setIco(e.target.value.replace(/\D/g, ''))}
                     required
                     maxLength={8}
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Mail className="h-3.5 w-3.5" /> {a.emailLabel}
                   </label>
                   <Input
@@ -709,11 +709,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Lock className="h-3.5 w-3.5" /> Heslo
                   </label>
                   <PasswordInput
@@ -722,11 +722,11 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <label className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-500">
                     <Lock className="h-3.5 w-3.5" /> Heslo znovu
                   </label>
                   <PasswordInput
@@ -735,15 +735,15 @@ export function AuthModal({ open, onOpenChange, defaultTab = 'login', onLoginSuc
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="h-10"
+                    className="h-11 rounded-xl border-transparent bg-zinc-100 text-[15px] placeholder:text-zinc-400 focus-visible:bg-white focus-visible:ring-zinc-900/15 focus-visible:ring-offset-0"
                   />
                 </div>
                 {error && (
-                  <p className="text-xs text-destructive font-medium bg-destructive/10 px-3 py-2 rounded-md">
+                  <p className="rounded-xl bg-red-50 px-3.5 py-2.5 text-[13px] font-medium text-red-600 ring-1 ring-red-100">
                     {error}
                   </p>
                 )}
-                <Button type="submit" className="w-full h-10 font-semibold" disabled={loading}>
+                <Button type="submit" className="h-11 w-full rounded-full text-[15px] font-semibold shadow-[0_10px_24px_-8px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5" disabled={loading}>
                   {loading ? 'Odesílám…' : 'Registrovat se jako B2B partner'}
                 </Button>
               </form>
