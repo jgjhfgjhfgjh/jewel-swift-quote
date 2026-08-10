@@ -4,7 +4,7 @@ import { useMyDeals } from '@/hooks/useMyDeals';
 
 /* Karty panelu — stejný tvar, stín i hover jako v GoBigDeal mega menu. */
 const CARD =
-  'group/my flex h-[150px] flex-col rounded-[1.25rem] border border-slate-200/70 bg-white p-5 text-left transition-all duration-300 ease-out ' +
+  'group/my flex h-[158px] flex-col rounded-[1.25rem] border border-slate-200/70 bg-white p-5 text-left transition-all duration-300 ease-out ' +
   'shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)] hover:-translate-y-1.5 hover:border-slate-300 ' +
   'hover:shadow-[0_36px_64px_-18px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.12)]';
 

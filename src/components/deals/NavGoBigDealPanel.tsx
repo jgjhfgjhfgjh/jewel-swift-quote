@@ -10,9 +10,13 @@ import { CountdownTimer } from './CountdownTimer';
 /* Karty panelu mají PŘESNĚ stejný tvar, stín i hover jako karty v MyDeal —
    jeden vizuální jazyk napříč mega menu. */
 const CARD_BASE =
-  'group/deal flex h-[150px] flex-col rounded-[1.25rem] border p-4 text-left transition-all duration-300 ease-out ' +
+  'group/deal flex h-[158px] flex-col rounded-[1.25rem] border p-5 text-left transition-all duration-300 ease-out ' +
   'shadow-[0_12px_32px_-8px_rgba(15,23,42,0.16),0_3px_8px_rgba(15,23,42,0.07)] hover:-translate-y-1.5 ' +
   'hover:shadow-[0_36px_64px_-18px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.12)]';
+/** Titulek / podtitulek / akční řádek — přesně jako karty v MyDeal. */
+const CARD_TITLE = 'text-[15px] font-semibold tracking-tight';
+const CARD_SUB = 'mt-1.5 text-[13px] leading-snug';
+const CARD_ACTION = 'mt-auto inline-flex items-center gap-1.5 pt-4 text-[13px] font-semibold';
 const CARD_LIGHT = 'border-slate-200/70 bg-white hover:border-slate-300';
 /* Černá karta = barvy velkých karet z předchozí verze panelu (#151B1E). */
 const CARD_DARK = 'border-[#2C3235] bg-[#151B1E] hover:border-[#494F51] hover:bg-[#1C2325]';
@@ -80,13 +84,13 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
           onClick={() => go('/deals')}
           className={`${CARD_BASE} ${CARD_DARK} ${CARD_W} shrink-0`}
         >
-          <span className="text-[15px] font-semibold tracking-tight text-white">All Deals</span>
-          <span className="mt-1.5 text-[13px] leading-snug text-zinc-400">
+          <span className={`${CARD_TITLE} text-white`}>All Deals</span>
+          <span className={`${CARD_SUB} text-zinc-400`}>
             {totalCount > 0
               ? `${totalCount} ${totalCount === 1 ? 'deal' : 'deals'}${liveCount > 0 ? ` · ${liveCount} live` : ''}`
               : 'The full closeout catalog'}
           </span>
-          <span className="mt-auto inline-flex items-center gap-1.5 text-[13px] font-semibold text-white">
+          <span className={`${CARD_ACTION} text-white`}>
             Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
           </span>
         </button>
@@ -113,11 +117,11 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
             <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-500">
               <c.icon className="h-3 w-3 shrink-0" /> {c.eyebrow}
             </span>
-            <span className="mt-2 line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-white">
+            <span className={`${CARD_TITLE} mt-2 line-clamp-1 leading-snug text-white`}>
               {c.title}
             </span>
-            <span className="mt-1 line-clamp-2 text-[13px] leading-snug text-zinc-400">{c.sub}</span>
-            <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-[13px] font-semibold text-white">
+            <span className={`${CARD_SUB} line-clamp-2 text-zinc-400`}>{c.sub}</span>
+            <span className={`${CARD_ACTION} text-white`}>
               {c.cta}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
             </span>
@@ -173,7 +177,9 @@ function Carousel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Miniatura dealu — logo koncernu, název, stav (odpočet / start / uzavřeno). */
+/** Dlaždice dealu — TÝŽ tvar i anatomie jako karty v MyDeal: hlavička
+ *  (logo koncernu + sleva), titulek, spodní akční řádek. Stav dávky nese
+ *  levá strana akčního řádku. */
 function DealMiniCard({ item, onOpen }: { item: DealTileItem; onOpen: () => void }) {
   const closed = item.kind === 'closed';
 
@@ -194,49 +200,54 @@ function DealMiniCard({ item, onOpen }: { item: DealTileItem; onOpen: () => void
         </span>
       )}
 
-      {/* horní řádek: logo koncernu + sleva */}
-      <div className="flex items-start justify-between gap-2">
-        <span className="flex h-6 min-w-0 flex-1 items-center">
+      {/* Hlavička jako u MyDeal: logo koncernu na místě ikony, sleva vpravo
+          na místě odznaku „kolik jich běží". */}
+      <span className="flex items-center gap-2">
+        <span className="flex h-5 min-w-0 flex-1 items-center">
           {item.concernDomain ? (
             <BrandLogo
               name={item.concernName ?? item.supplier}
               domain={item.concernDomain}
               width={200}
               height={80}
-              className="max-h-5 max-w-full object-contain opacity-90 [mix-blend-mode:multiply]"
-              fallbackClassName="truncate text-[10px] font-bold uppercase tracking-wider text-slate-500"
+              className="max-h-5 max-w-[110px] object-contain opacity-90 [mix-blend-mode:multiply]"
+              fallbackClassName="truncate text-[11px] font-bold uppercase tracking-wider text-slate-500"
             />
           ) : (
-            <span className="truncate text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="truncate text-[11px] font-bold uppercase tracking-wider text-slate-500">
               {item.supplier}
             </span>
           )}
         </span>
         {item.maxDiscount > 0 && (
-          <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 font-mono text-[10px] font-bold text-red-600 ring-1 ring-red-100">
+          <span className="ml-auto shrink-0 font-mono text-[11px] font-semibold text-red-600">
             −{item.maxDiscount} %
           </span>
         )}
-      </div>
+      </span>
 
-      {/* název dealu */}
-      <span className="mt-2 line-clamp-2 text-[13px] font-semibold leading-snug tracking-tight text-zinc-900">
+      {/* název dealu — titulek karty (stejná velikost i váha jako v MyDeal) */}
+      <span className={`${CARD_TITLE} mt-1.5 line-clamp-2 leading-snug text-zinc-900`}>
         {item.title}
       </span>
 
-      {/* stav — odpočet jen u skutečně živého dealu */}
-      <span className="mt-auto flex items-center gap-1.5 pt-2">
-        {item.kind === 'live' && item.deadline ? (
-          <CountdownTimer deadline={item.deadline} variant="compact" lang="en" />
-        ) : item.kind === 'upcoming' ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-600">
-            <Lock className="h-2.5 w-2.5" /> Opens soon
-          </span>
-        ) : (
-          <span className="rounded-full border border-slate-200 px-2 py-0.5 text-[10px] font-medium text-slate-400">
-            Closed
-          </span>
-        )}
+      {/* akční řádek jako v MyDeal, jen vlevo nese stav dávky —
+          odpočet patří jen dealu, který opravdu běží */}
+      <span className={`${CARD_ACTION} w-full justify-between text-zinc-900`}>
+        <span className="min-w-0 truncate font-medium text-zinc-500">
+          {item.kind === 'live' && item.deadline ? (
+            <CountdownTimer deadline={item.deadline} variant="compact" lang="en" />
+          ) : item.kind === 'upcoming' ? (
+            <span className="inline-flex items-center gap-1">
+              <Lock className="h-3 w-3 shrink-0" /> Opens soon
+            </span>
+          ) : (
+            'Closed'
+          )}
+        </span>
+        <span className="inline-flex shrink-0 items-center gap-1.5">
+          Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
+        </span>
       </span>
     </button>
   );
