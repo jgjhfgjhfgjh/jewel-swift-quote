@@ -51,7 +51,8 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
      vrátit řádek): { id: 'products', label: 'Products' }, */
   { id: 'mcp',          label: 'MCP Server',   path: '/feed?to=mcp' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
-  { id: 'alerts',       label: 'Alerts',       path: '/alerts' },
+  /* Alerts je dočasně skrytý (panel i ALERT_* data zůstávají — stačí vrátit
+     řádek): { id: 'alerts', label: 'Alerts', path: '/alerts' }, */
   { id: 'my-deal',      label: 'MyDeal' },
   /* CreateBigDeal není v hlavní nav — je to CTA ukotvené vpravo (tam, kde
      dřív sedělo Suppliers). Neotevírá mega menu; klik otevře popup
@@ -269,8 +270,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   // Tmavá stránka (onDark) drží inverzní variantu trvale — header je nad
   // černým obsahem; otevřené mega menu ji vypíná stejně jako na homepage.
   const overVideo = ((location.pathname === '/' && isHome && isAtTop) || onDark) && !activeNav;
-  /** Nahoře na homepage nese guest CTA hero — navbar je pak od xl nemá. */
-  const heroCarriesGuestCta = location.pathname === '/' && isHome && isAtTop;
 
   // Sync isAtTop when switching back to home view
   useEffect(() => {
@@ -346,8 +345,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   };
 
   /* Mobilní kategorie — jediná úroveň, kterou menu ukazuje; zbytek se
-     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, Alerts,
-     MyDeal a CreateBigDeal (akce, proto pastelově fialová). */
+     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, MyDeal
+     a CreateBigDeal (akce, proto pastelově fialová). */
   const MOBILE_CATS: {
     id: string;
     label: string;
@@ -359,7 +358,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     { id: 'why', label: 'Why', onSelect: () => go('/') },
     { id: 'mcp', label: 'MCP Server', onSelect: () => go('/feed?to=mcp') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
-    { id: 'alerts', label: 'Alerts', items: [...ALERT_DELIVERY, ...ALERT_WATCH] },
+    /* skryté spolu s desktopovou položkou:
+    { id: 'alerts', label: 'Alerts', items: [...ALERT_DELIVERY, ...ALERT_WATCH] }, */
     { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
     /* obal, ne holá reference: onSelect dostává událost a ta by se poslala
        jako popis opakované dávky (viz openCreateDealDialog) */
@@ -398,10 +398,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
         </Link>
 
         {/* Desktop nav — položky s chevronem otevírají mega menu; v katalogu je nahrazuje vyhledávání */}
-        {/* Pod xl jede nav v těsnější sazbě — pět položek s chevronem se
-            spolu s pravým clusterem musí vejít i do 1024 px bez přetečení */}
         {!showSearch && (
-          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 ml-3 xl:ml-5 relative z-10">
+          <nav className="hidden lg:flex items-center gap-1 ml-5 relative z-10">
             {NAV_ITEMS.map((item) => {
               const active = activeNav === item.id;
               // GoBigDeal je vlajková položka → nad videem plně bílá (ostatní
@@ -425,7 +423,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                       setActiveNav(active ? null : item.id);
                     }
                   }}
-                  className={`flex items-center gap-1 px-2 py-2 font-sans text-[15px] transition-colors xl:gap-1.5 xl:px-3.5 xl:text-[17px] ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 font-sans text-[17px] transition-colors ${
                     isFlagship && !overVideo ? 'font-semibold' : 'font-medium'
                   } ${
                     overVideo
@@ -690,11 +688,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               </DropdownMenu>
             </>
           ) : !loading ? (
-            /* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace
-               (černá). Přihlásit je v navbaru vždy a úplně napravo; registraci
-               nahoře na homepage nese hero (za claimem), takže se tu od sm
-               skryje a vrátí se, jakmile uživatel z hera odscrolluje. */
-            <div className="flex items-center">
+            <>
+              {/* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace (černá) */}
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
@@ -707,7 +702,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               {/* relative + caption absolutně pod tlačítkem → černá CTA se svisle
                   zarovná s Přihlásit (caption ji nesune nahoru); nad videem se
                   pilulka invertuje (bílá s tmavým textem) */}
-              <div className={`relative flex items-center shrink-0 ml-1 ${heroCarriesGuestCta ? 'sm:hidden' : ''}`}>
+              <div className="relative flex items-center shrink-0 ml-1">
                 <Button
                   size="sm"
                   onClick={() => openAuth('b2b')}
@@ -723,7 +718,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   Verify Account in 24h
                 </span>
               </div>
-            </div>
+            </>
           ) : null}
 
           {/* Hamburger — mobil/tablet only; desktop má vše v mega menu / pod panáčkem */}
