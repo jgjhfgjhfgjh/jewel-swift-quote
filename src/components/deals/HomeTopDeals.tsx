@@ -16,7 +16,7 @@ import { WILDCARD } from '@/lib/alerts';
 import { useBrandCatalog } from '@/hooks/useBrandCatalog';
 import { sortByBrandPriority } from '@/lib/brandOrder';
 import { openEarlyAccessUpsell } from './EarlyAccessUpsell';
-import { GbdPricing } from './GbdPricing';
+import { GbdPricing, type GbdPricingTier } from './GbdPricing';
 import {
   Dialog,
   DialogContent,
@@ -141,7 +141,7 @@ export function HomeTopDeals() {
 
   // Placené tarify zatím nemají platební flow — nepřihlášený jde do
   // registrace, přihlášený na /deals; Enterprise píše obchodu.
-  const handleTier = (id: 'drop' | 'pro' | 'enterprise' | 'explore') => {
+  const handleTier = (id: GbdPricingTier | 'explore') => {
     if (id === 'explore') {
       setExploreOpen(true);
     } else if (id === 'enterprise') {

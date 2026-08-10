@@ -10,16 +10,17 @@ import { Gbd } from '@/components/GoBigDealLogo';
  * Early Access = totéž o 48 hodin dřív. Akce tarifů řeší volající přes
  * `onTier` (stránky se liší auth/navigační logikou).
  *
- * Ekonomika (proč to drží pohromadě): odemčení stojí 129 €, takže
- *  · 1 deal měsíčně → kredit se vyplatí (129 € < 209 €),
- *  · od 2 dealů měsíčně → Early Access ročně (209 €/měs < 258 €),
- *  · od 4 dealů nebo bez závazku → Early Access měsíčně (399 €).
+ * Čtyři úrovně podle toho, co partner smí dělat:
+ *  · Public Drop (zdarma) — jen dívat se a dostávat alerty,
+ *  · Trade Access (170 €/měs) — plný obchodní toolkit: Split, Want, Create,
+ *  · Early Access (250 €/měs) — totéž + alerty a dealy o 48 h dřív,
+ *  · Dealer (zdarma) — kdo sám vypisuje dealy, neplatí nic.
  */
 
-export type GbdPricingTier = 'drop' | 'pro' | 'enterprise';
+export type GbdPricingTier = 'drop' | 'trade' | 'pro' | 'dealer' | 'enterprise';
 
 interface Tier {
-  id: 'drop' | 'pro';
+  id: 'drop' | 'trade' | 'pro' | 'dealer';
   name: string;
   /** Cena při měsíční platbě (u Early Access se přepíná na roční sazbu) */
   price?: string;
@@ -43,29 +44,57 @@ const TIERS: Tier[] = [
     price: 'Free',
     note: 'no card needed',
     features: [
+      <>Browse every <Gbd /> once it goes public</>,
       'Drop alerts the moment a deal goes live',
-      <>Every <Gbd /> once it goes public</>,
-      'Wholesale prices from 1 unit',
     ],
     cta: 'Start free',
   },
   {
-    id: 'pro',
-    name: 'Early Access',
-    price: '€399',
+    id: 'trade',
+    name: 'Trade Access',
+    price: '€170',
     period: '/month',
     note: 'cancel anytime',
-    priceAnnual: '€209',
-    wasAnnual: '€399',
-    noteAnnual: 'billed yearly · €2 508',
+    priceAnnual: '€83.33',
+    wasAnnual: '€170',
+    noteAnnual: 'billed yearly · €1 000',
+    features: [
+      <>Browse every <Gbd /> once it goes public</>,
+      'Concern, brand and model alerts',
+      'Split Deal — buy together, hit the MOQ',
+      'Want Deal — post what you need',
+      'Create Deal — publish your own offer',
+    ],
+    cta: 'Start trading',
+  },
+  {
+    id: 'pro',
+    name: 'Early Access',
+    price: '€250',
+    period: '/month',
+    note: 'cancel anytime',
+    priceAnnual: '€125',
+    wasAnnual: '€250',
+    noteAnnual: 'billed yearly · €1 500',
     features: [
       'The same alerts — 48 hours earlier',
-      'Every deal open before it goes public',
-      'Concern, brand and model alerts',
-      'First pick while stock lasts',
-      'Dedicated account manager',
+      'Split Deal — buy together, hit the MOQ',
+      'Want Deal — post what you need',
+      'Create Deal — publish your own offer',
+      'Create Split Deal — open a group buy',
     ],
     cta: 'Get early access',
+  },
+  {
+    id: 'dealer',
+    name: 'Dealer',
+    price: 'Free',
+    note: 'no fee to list',
+    features: [
+      'Create Deal — publish your own offer',
+      'Create Split Deal — open a group buy',
+    ],
+    cta: 'Start selling',
   },
 ];
 
@@ -94,7 +123,7 @@ export function GbdPricing({
         <div className="inline-flex rounded-full bg-white/10 p-1 text-sm font-medium">
           {([
             ['monthly', 'Monthly'],
-            ['annual', 'Yearly · save 48%'],
+            ['annual', 'Yearly · save 50%'],
           ] as const).map(([key, label]) => (
             <button
               key={key}
@@ -110,14 +139,14 @@ export function GbdPricing({
         </div>
       </div>
 
-      <div className="mx-auto mt-6 grid max-w-[760px] grid-cols-1 gap-4 pt-3 sm:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 gap-4 pt-3 sm:grid-cols-2 lg:grid-cols-4">
         {TIERS.map((tier) => (
           <PricingCard key={tier.id} tier={tier} annual={annual} onSelect={() => onTier(tier.id)} />
         ))}
       </div>
 
       {/* Enterprise — bez ceny, proto samostatný proužek pod kartami */}
-      <div className="mx-auto mt-4 flex max-w-[760px] flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center">
+      <div className="mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center">
         <div>
           <p className="text-lg font-semibold tracking-tight text-white">Enterprise</p>
           <p className="mt-1 text-sm text-zinc-400">
@@ -169,7 +198,8 @@ function PricingCard({ tier, onSelect, annual }: { tier: Tier; onSelect: () => v
         {tier.features.map((f, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
             <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-            {f}
+            {/* text musí být JEDEN flex item, jinak se fragmenty s <Gbd /> rozpadnou na sloupce */}
+            <span>{f}</span>
           </li>
         ))}
       </ul>
