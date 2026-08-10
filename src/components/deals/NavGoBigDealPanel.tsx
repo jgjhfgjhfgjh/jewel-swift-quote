@@ -18,21 +18,19 @@ const CARD_TITLE = 'text-[15px] font-semibold tracking-tight';
 const CARD_SUB = 'mt-1.5 text-[13px] leading-snug';
 const CARD_ACTION = 'mt-auto inline-flex items-center gap-1.5 pt-4 text-[13px] font-semibold';
 const CARD_LIGHT = 'border-slate-200/70 bg-white hover:border-slate-300';
-/* Černá karta = barvy velkých karet z předchozí verze panelu (#151B1E). */
-const CARD_DARK = 'border-[#2C3235] bg-[#151B1E] hover:border-[#494F51] hover:bg-[#1C2325]';
 
 /** Šířka karty v kolotoči — pět karet na běžném desktopu, zbytek se odjede. */
 const CARD_W = 'w-[clamp(190px,17vw,248px)]';
 
 /**
  * GoBigDeal mega menu — dvě řady:
- *  1) kolotoč dealů (živé → připravované → uzavřené), v čele černá karta
- *     „All Deals" jako vstup do celého katalogu,
- *  2) čtyři vstupy do dealů — TÁŽ čtveřice, která na /deals stojí nad KPI
- *     lištou (alerty, Early Access, WantDeal, SplitDeal), tady ale v černém
- *     provedení karty „All Deals", protože panel je bílý.
+ *  1) nahoře čtyři vstupy do dealů — TÁŽ čtveřice, která na /deals stojí
+ *     nad KPI lištou (alerty, Early Access, Want Deal, Split Deal),
+ *  2) pod nimi kolotoč dealů (živé → připravované → uzavřené), v čele karta
+ *     „All Deals" jako vstup do celého katalogu.
  *
- * Karty sdílejí tvar, stínování i hover s kartami v MyDeal panelu.
+ * Karty sdílejí s MyDeal panelem VŠECHNO — tvar, bílý materiál, stín,
+ * hover i typografii.
  * Nikdy nepředstírá živou nabídku: odpočet nese jen deal, který opravdu běží,
  * uzavřené jsou ztlumené a označené.
  */
@@ -77,56 +75,58 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex flex-col">
-      {/* ── 1. řada — kolotoč dealů, černá All Deals v čele ── */}
-      <Carousel>
-        <button
-          type="button"
-          onClick={() => go('/deals')}
-          className={`${CARD_BASE} ${CARD_DARK} ${CARD_W} shrink-0`}
-        >
-          <span className={`${CARD_TITLE} text-white`}>All Deals</span>
-          <span className={`${CARD_SUB} text-zinc-400`}>
-            {totalCount > 0
-              ? `${totalCount} ${totalCount === 1 ? 'deal' : 'deals'}${liveCount > 0 ? ` · ${liveCount} live` : ''}`
-              : 'The full closeout catalog'}
-          </span>
-          <span className={`${CARD_ACTION} text-white`}>
-            Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
-          </span>
-        </button>
-
-        {tiles.map((item) => (
-          <DealMiniCard
-            key={item.id}
-            item={item}
-            onOpen={() => (item.slug ? go(`/deals/${item.slug}`) : go('/deals'))}
-          />
-        ))}
-      </Carousel>
-
-      {/* ── 2. řada — čtyři vstupy do dealů (shodné s lištou nad KPI
-             na /deals), tady v černém provedení karty All Deals ── */}
-      <div className="mt-4 grid grid-cols-4 gap-4">
+      {/* ── 1. řada — čtyři vstupy do dealů (shodné s lištou nad KPI na
+             /deals), v bílém materiálu karet z MyDeal ── */}
+      <div className="grid grid-cols-4 gap-4 px-0.5 pt-1">
         {offers.map((c) => (
           <button
             key={c.key}
             type="button"
             onClick={offerAction[c.key]}
-            className={`${CARD_BASE} ${CARD_DARK}`}
+            className={`${CARD_BASE} ${CARD_LIGHT}`}
           >
-            <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-500">
+            <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-400">
               <c.icon className="h-3 w-3 shrink-0" /> {c.eyebrow}
             </span>
-            <span className={`${CARD_TITLE} mt-2 line-clamp-1 leading-snug text-white`}>
+            <span className={`${CARD_TITLE} mt-2 line-clamp-1 leading-snug text-zinc-900`}>
               {c.title}
             </span>
-            <span className={`${CARD_SUB} line-clamp-2 text-zinc-400`}>{c.sub}</span>
-            <span className={`${CARD_ACTION} text-white`}>
+            <span className={`${CARD_SUB} line-clamp-2 text-zinc-500`}>{c.sub}</span>
+            <span className={`${CARD_ACTION} text-zinc-900`}>
               {c.cta}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
             </span>
           </button>
         ))}
+      </div>
+
+      {/* ── 2. řada — kolotoč dealů, All Deals v čele ── */}
+      <div className="mt-1">
+        <Carousel>
+          <button
+            type="button"
+            onClick={() => go('/deals')}
+            className={`${CARD_BASE} ${CARD_LIGHT} ${CARD_W} shrink-0`}
+          >
+            <span className={`${CARD_TITLE} text-zinc-900`}>All Deals</span>
+            <span className={`${CARD_SUB} text-zinc-500`}>
+              {totalCount > 0
+                ? `${totalCount} ${totalCount === 1 ? 'deal' : 'deals'}${liveCount > 0 ? ` · ${liveCount} live` : ''}`
+                : 'The full closeout catalog'}
+            </span>
+            <span className={`${CARD_ACTION} text-zinc-900`}>
+              Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
+            </span>
+          </button>
+
+          {tiles.map((item) => (
+            <DealMiniCard
+              key={item.id}
+              item={item}
+              onOpen={() => (item.slug ? go(`/deals/${item.slug}`) : go('/deals'))}
+            />
+          ))}
+        </Carousel>
       </div>
     </div>
   );
