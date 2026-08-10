@@ -1,11 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Lock, Megaphone, Users } from 'lucide-react';
+import { ArrowRight, Bell, Lock, Megaphone, Users, type LucideIcon } from 'lucide-react';
 import { dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 
 /** Ceník Early Access je přímo na stránce — CTA na něj odroluje. */
 const scrollToPricing = () =>
   document.getElementById('gbd-pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+export type OfferCardContent = {
+  key: 'alerts' | 'ea' | 'want' | 'split';
+  icon: LucideIcon;
+  eyebrow: string;
+  title: string;
+  sub: string;
+  cta: string;
+};
+
+/**
+ * Obsah čtyř vstupů do dealů — sdílí ho lišta nad KPI na /deals i GoBigDeal
+ * mega menu. Akce si dodává každé místo samo (na stránce se roluje k ceníku,
+ * v menu se naviguje), copy ale musí zůstat jedna.
+ *
+ * Pořadí je podle ceny vstupu: alerty zdarma → Early Access (48 h náskok) →
+ * WantDeal (obrácený tok) → SplitDeal (skupinový nákup).
+ */
+export function useOfferCardsContent(): OfferCardContent[] {
+  const lang = useStore((s) => s.lang);
+  const t = dealsI18n[lang];
+  const promo = t.catalog.promo;
+  const d = t.catalog.dash;
+
+  return [
+    { key: 'alerts', icon: Bell, eyebrow: d.alertRowEyebrow, title: promo.alertTitle, sub: promo.alertSub, cta: d.offerAlertCta },
+    { key: 'ea', icon: Lock, eyebrow: d.eyebrowPro, title: t.early.headingLead, sub: t.early.headingMuted, cta: d.offerEaCta },
+    { key: 'want', icon: Megaphone, eyebrow: d.wantEyebrow, title: d.wantTitle, sub: d.wantSub, cta: d.wantCta },
+    { key: 'split', icon: Users, eyebrow: d.splitEyebrow, title: d.splitTitle, sub: d.splitSub, cta: d.splitCta },
+  ];
+}
 
 /**
  * Čtveřice nabídkových karet nad KPI lištou — čtyři vstupy do dealů,
@@ -23,49 +54,14 @@ const scrollToPricing = () =>
  */
 export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
   const navigate = useNavigate();
-  const lang = useStore((s) => s.lang);
-  const t = dealsI18n[lang];
-  const promo = t.catalog.promo;
-  const d = t.catalog.dash;
+  const cards = useOfferCardsContent();
 
-  const cards = [
-    {
-      key: 'alerts',
-      icon: Bell,
-      eyebrow: d.alertRowEyebrow,
-      title: promo.alertTitle,
-      sub: promo.alertSub,
-      cta: d.offerAlertCta,
-      onClick: onAlerts,
-    },
-    {
-      key: 'ea',
-      icon: Lock,
-      eyebrow: d.eyebrowPro,
-      title: t.early.headingLead,
-      sub: t.early.headingMuted,
-      cta: d.offerEaCta,
-      onClick: scrollToPricing,
-    },
-    {
-      key: 'want',
-      icon: Megaphone,
-      eyebrow: d.wantEyebrow,
-      title: d.wantTitle,
-      sub: d.wantSub,
-      cta: d.wantCta,
-      onClick: () => navigate('/wantdeal'),
-    },
-    {
-      key: 'split',
-      icon: Users,
-      eyebrow: d.splitEyebrow,
-      title: d.splitTitle,
-      sub: d.splitSub,
-      cta: d.splitCta,
-      onClick: () => navigate('/splitdeal'),
-    },
-  ];
+  const action: Record<OfferCardContent['key'], () => void> = {
+    alerts: onAlerts,
+    ea: scrollToPricing,
+    want: () => navigate('/wantdeal'),
+    split: () => navigate('/splitdeal'),
+  };
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
@@ -73,7 +69,7 @@ export function CatalogOfferCards({ onAlerts }: { onAlerts: () => void }) {
         <button
           key={c.key}
           type="button"
-          onClick={c.onClick}
+          onClick={action[c.key]}
           className="group/offer flex w-full flex-col items-stretch rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-4 text-left transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.07] sm:p-5"
         >
           {/* eyebrow a akce sdílí první řádek (jako label a GoDeal v KPI),

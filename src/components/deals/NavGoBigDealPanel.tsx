@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Bell, Lock } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useDeals } from '@/hooks/useDeals';
 import { buildCatalog, type DealTileItem } from '@/lib/dealCatalog';
 import { BrandLogo } from '@/components/BrandLogo';
+import { useOfferCardsContent, type OfferCardContent } from '@/components/deals/catalog/CatalogOfferCards';
 import { CountdownTimer } from './CountdownTimer';
 
 /* Karty panelu mají PŘESNĚ stejný tvar, stín i hover jako karty v MyDeal —
@@ -16,14 +17,18 @@ const CARD_LIGHT = 'border-slate-200/70 bg-white hover:border-slate-300';
 /* Černá karta = barvy velkých karet z předchozí verze panelu (#151B1E). */
 const CARD_DARK = 'border-[#2C3235] bg-[#151B1E] hover:border-[#494F51] hover:bg-[#1C2325]';
 
-/** Kolik miniatur se vejde vedle černé karty (2 řady po 5). */
-const MAX_TILES = 9;
+/** Šířka karty v kolotoči — pět karet na běžném desktopu, zbytek se odjede. */
+const CARD_W = 'w-[clamp(190px,17vw,248px)]';
 
 /**
- * GoBigDeal mega menu — mřížka miniatur dealů (živé, připravované i uzavřené)
- * plus černá karta „All Deals" jako vstup do celého katalogu. Karty sdílejí
- * tvar, stínování i hover s kartami v MyDeal panelu.
+ * GoBigDeal mega menu — dvě řady:
+ *  1) kolotoč dealů (živé → připravované → uzavřené), v čele černá karta
+ *     „All Deals" jako vstup do celého katalogu,
+ *  2) čtyři vstupy do dealů — TÁŽ čtveřice, která na /deals stojí nad KPI
+ *     lištou (alerty, Early Access, WantDeal, SplitDeal), tady ale v černém
+ *     provedení karty „All Deals", protože panel je bílý.
  *
+ * Karty sdílejí tvar, stínování i hover s kartami v MyDeal panelu.
  * Nikdy nepředstírá živou nabídku: odpočet nese jen deal, který opravdu běží,
  * uzavřené jsou ztlumené a označené.
  */
@@ -40,7 +45,8 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
   const catalog = useMemo(() => buildCatalog(deals, productCounts, () => ''), [deals, productCounts]);
 
   /* Reálné dealy (teasery koncernů sem nepatří) v pořadí živé → připravované
-     → uzavřené; uvnitř skupiny podle nejbližšího termínu. */
+     → uzavřené; uvnitř skupiny podle nejbližšího termínu. Kolotoč je nemusí
+     ořezávat — co se nevejde, to se odjede. */
   const tiles = useMemo(() => {
     const rank = { live: 0, upcoming: 1, closed: 2, teaser: 3 } as const;
     return catalog
@@ -51,26 +57,29 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
         const at = new Date(a.deadline ?? a.startsAt ?? 0).getTime();
         const bt = new Date(b.deadline ?? b.startsAt ?? 0).getTime();
         return a.kind === 'closed' ? bt - at : at - bt;
-      })
-      .slice(0, MAX_TILES);
+      });
   }, [catalog]);
 
   const liveCount = catalog.filter((t) => t.kind === 'live').length;
-  const totalCount = catalog.filter((t) => t.kind !== 'teaser').length;
+  const totalCount = tiles.length;
+
+  const offers = useOfferCardsContent();
+  const offerAction: Record<OfferCardContent['key'], () => void> = {
+    alerts: () => go('/alerts'),
+    ea: () => go('/#gbd-pricing'),
+    want: () => go('/wantdeal'),
+    split: () => go('/splitdeal'),
+  };
 
   return (
     <div className="flex flex-col">
-      <div className="grid grid-cols-5 gap-4">
-        {tiles.map((item) => (
-          <DealMiniCard
-            key={item.id}
-            item={item}
-            onOpen={() => (item.slug ? go(`/deals/${item.slug}`) : go('/deals'))}
-          />
-        ))}
-
-        {/* Černá karta — vstup do celého katalogu dealů */}
-        <button type="button" onClick={() => go('/deals')} className={`${CARD_BASE} ${CARD_DARK}`}>
+      {/* ── 1. řada — kolotoč dealů, černá All Deals v čele ── */}
+      <Carousel>
+        <button
+          type="button"
+          onClick={() => go('/deals')}
+          className={`${CARD_BASE} ${CARD_DARK} ${CARD_W} shrink-0`}
+        >
           <span className="text-[15px] font-semibold tracking-tight text-white">All Deals</span>
           <span className="mt-1.5 text-[13px] leading-snug text-zinc-400">
             {totalCount > 0
@@ -81,30 +90,85 @@ export function NavGoBigDealPanel({ onNavigate }: { onNavigate?: () => void }) {
             Open <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
           </span>
         </button>
+
+        {tiles.map((item) => (
+          <DealMiniCard
+            key={item.id}
+            item={item}
+            onOpen={() => (item.slug ? go(`/deals/${item.slug}`) : go('/deals'))}
+          />
+        ))}
+      </Carousel>
+
+      {/* ── 2. řada — čtyři vstupy do dealů (shodné s lištou nad KPI
+             na /deals), tady v černém provedení karty All Deals ── */}
+      <div className="mt-4 grid grid-cols-4 gap-4">
+        {offers.map((c) => (
+          <button
+            key={c.key}
+            type="button"
+            onClick={offerAction[c.key]}
+            className={`${CARD_BASE} ${CARD_DARK}`}
+          >
+            <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-widest text-zinc-500">
+              <c.icon className="h-3 w-3 shrink-0" /> {c.eyebrow}
+            </span>
+            <span className="mt-2 line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-white">
+              {c.title}
+            </span>
+            <span className="mt-1 line-clamp-2 text-[13px] leading-snug text-zinc-400">{c.sub}</span>
+            <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-[13px] font-semibold text-white">
+              {c.cta}
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/deal:translate-x-0.5" />
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Vodorovný kolotoč karet — šipky se objeví až při hoveru nad řadou. */
+function Carousel({ children }: { children: React.ReactNode }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior: 'smooth' });
+  };
+
+  return (
+    <div className="group/carousel relative">
+      <div
+        ref={trackRef}
+        /* pt/pb — karty se na hover zvedají a stín nesmí být uříznutý */
+        className="flex gap-4 overflow-x-auto scroll-smooth px-0.5 pb-3 pt-1
+                   [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {children}
       </div>
 
-      {/* Patička — free drop alert (nejnižší schod konverze) */}
-      <div className="mt-4 flex items-center justify-between gap-4 border-t border-slate-200 pt-2.5">
-        <button
-          type="button"
-          onClick={() => go('/alerts')}
-          className="group inline-flex items-center gap-1.5 text-[13px] transition-colors"
-        >
-          <Bell className="h-3.5 w-3.5 text-zinc-400 transition-colors group-hover:text-zinc-900" />
-          <span className="font-medium text-zinc-700 transition-colors group-hover:text-zinc-900">
-            Deal drop alerts — free forever.
-          </span>
-          <span className="hidden font-normal text-zinc-500 xl:inline">One email when a deal goes live.</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => go('/#gbd-pricing')}
-          className="group inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold text-zinc-700 transition-colors hover:text-zinc-900"
-        >
-          Early Access · 48 h head start
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={() => scroll(-1)}
+        aria-label="Předchozí dealy"
+        className="absolute left-1 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full
+                   bg-white/85 text-zinc-700 opacity-0 shadow-md backdrop-blur-sm transition-all
+                   hover:bg-white group-hover/carousel:opacity-100"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        onClick={() => scroll(1)}
+        aria-label="Další dealy"
+        className="absolute right-1 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full
+                   bg-white/85 text-zinc-700 opacity-0 shadow-md backdrop-blur-sm transition-all
+                   hover:bg-white group-hover/carousel:opacity-100"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
     </div>
   );
 }
@@ -117,7 +181,7 @@ function DealMiniCard({ item, onOpen }: { item: DealTileItem; onOpen: () => void
     <button
       type="button"
       onClick={onOpen}
-      className={`relative overflow-hidden ${CARD_BASE} ${CARD_LIGHT} ${closed ? 'opacity-70 hover:opacity-100' : ''}`}
+      className={`relative shrink-0 overflow-hidden ${CARD_W} ${CARD_BASE} ${CARD_LIGHT} ${closed ? 'opacity-70 hover:opacity-100' : ''}`}
     >
       {/* UZAVŘENÁ dávka — stejné razítko jako na kartách katalogu. Miniatura
           nemá fotku, takže bílý nápis by na světlé kartě zmizel: razítko je
