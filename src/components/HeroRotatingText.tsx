@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 const PHRASES = [
   'Sell Easier',
   'Buy Smarter',
+  'Around The World',
 ];
 
 const TYPE_MS = 65;
