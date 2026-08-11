@@ -400,11 +400,10 @@ export default function Deals() {
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
       <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
-          /* CTA na PRVNÍ pozici lišty (pokyn): zadání dávky a moje dávky
-             stojí dřív než hledání a filtry — je to jediná akce, kterou tu
-             dodavatel dělá. Výška h-11 sedí s hledáním i filtry v jedné řadě. */
-          leading={
-            <span className="flex shrink-0 items-center gap-2">
+          /* CTA u PRAVÉ hrany lišty (pokyn) — v jedné řadě s hledáním
+             a filtry, výška h-11 sedí se zbytkem řady. */
+          trailing={
+            <>
               <button
                 type="button"
                 onClick={() => openCreateDealDialog()}
@@ -422,7 +421,7 @@ export default function Deals() {
               >
                 <Briefcase className="h-4 w-4" /> MyDeal
               </button>
-            </span>
+            </>
           }
           search={filters.search}
           onSearch={(search) => setFilters((f) => ({ ...f, search }))}
