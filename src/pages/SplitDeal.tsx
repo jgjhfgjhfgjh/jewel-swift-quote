@@ -8,6 +8,7 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { useDeals } from '@/hooks/useDeals';
 import { useSplitDeals, type SplitPool } from '@/hooks/useSplitDeals';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
+import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 
 /* Obsidián — stejná plocha jako /deals, /alerts a /my-deals. */
@@ -175,6 +176,10 @@ export default function SplitDeal() {
       </section>
 
       <div className="mx-auto max-w-5xl px-6 pb-24">
+        {/* přepínač kanálů — stejný jako na /deals, aby byl trh vidět celý */}
+        <div className="pt-8">
+          <DealChannelPills active="split" className="w-fit" />
+        </div>
         {/* ── Mechanika ── */}
         <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {STEPS.map((s, i) => (

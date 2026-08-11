@@ -6,6 +6,7 @@ import { useStore } from '@/lib/store';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useWantDeals, type NewWantDeal } from '@/hooks/useWantDeals';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
+import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
 import type { WantListing } from '@/lib/wantDeals';
 
 /* Obsidián — stejná plocha jako /deals, /splitdeal a /my-deals. */
@@ -218,6 +219,10 @@ export default function WantDeal() {
       </section>
 
       <div className="mx-auto max-w-5xl px-6 pb-24">
+        {/* přepínač kanálů — stejný jako na /deals, aby byl trh vidět celý */}
+        <div className="pt-8">
+          <DealChannelPills active="want" className="w-fit" />
+        </div>
         {/* ── Dvě podoby ── */}
         <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {[

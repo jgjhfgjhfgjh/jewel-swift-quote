@@ -31,6 +31,7 @@ import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import { CatalogPromoBanners } from '@/components/deals/catalog/CatalogPromoBanners';
+import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, SortPills, type CatalogSortKey, type CatalogView,
@@ -394,7 +395,13 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+      {/* ── 1. Přepínač kanálů — první prvek tmavé plochy (pokyn): odsud
+             je vidět na poptávkovou i skupinovou nástěnku. ── */}
+      <div className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+        <DealChannelPills active="all" className="w-fit" />
+      </div>
+
+      {/* ── 2. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
       <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
@@ -411,7 +418,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 2. Obsah přes celou šíři ── */}
+      {/* ── 3. Obsah přes celou šíři ── */}
       <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (
