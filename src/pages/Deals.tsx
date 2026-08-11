@@ -252,7 +252,7 @@ export default function Deals() {
     opts: { liveDot?: boolean; lead?: boolean; id?: string } = {},
   ) =>
     items.length === 0 ? null : (
-      <section id={opts.id} className="scroll-mt-24 pt-9">
+      <section id={opts.id} className="scroll-mt-24 pt-4">
         <div className="flex items-center gap-2.5">
           {opts.liveDot && <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />}
           <h2 className="font-sans text-lg font-medium tracking-tighter text-white">{title}</h2>
@@ -382,16 +382,17 @@ export default function Deals() {
           <CatalogPromoBanners onAlerts={goToAlerts} />
         </div>
 
-        {/* řazení TĚSNĚ pod dashboardem (pokyn) — patří k číslům nad sebou,
-            ne ke kartám dole, proto malý odstup nahoru a velký dolů */}
-        <div className="px-5 pt-2.5 sm:px-8 sm:pt-3 lg:px-12">
+        {/* řazení je NALEPENÉ na dashboard pod sebou (pokyn): patří k dávkám,
+            které řadí, ne ke kartám nad sebou — proto velký odstup nahoru
+            a jen minimální dolů k tmavé ploše */}
+        <div className="px-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
           <SortPills variant="light" sort={sort} onSort={setSort} />
         </div>
       </section>
 
       {/* ═══ TMAVÁ ZÓNA — zaoblený nájezd na bílé hlavě; odsud dolů si sekce
              kreslí barvu samy (střídání bílá ↔ obsidián). ═══ */}
-      <div className="mt-12 rounded-t-[1.75rem] bg-[#0B1215] pt-4 sm:mt-16 sm:rounded-t-[2.75rem] sm:pt-6">
+      <div className="mt-3 rounded-t-[1.75rem] bg-[#0B1215] pt-4 sm:mt-4 sm:rounded-t-[2.75rem] sm:pt-6">
 
       {/* ═══ DASHBOARD — stránka ZAČÍNÁ stavem trhu a seznamem dávek (pokyn):
              obchodník přichází pro zboží, ne pro headline. Hero se značkou
