@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 /** Rotating hero phrases — typed out, held, deleted, next. */
 const PHRASES = [
-  'Sell Faster',
   'Buy Smarter',
+  'Sell Faster',
   'Around The World',
 ];
 
