@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Bell, BellRing, Layers, Lock, Tag } from 'lucide-react';
-import { BrandLogo } from '@/components/BrandLogo';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
-import { getBrandByName } from '@/data/brands';
-import { toDisplayName } from '@/lib/brandNormalize';
 import { countLabel, dealsI18n } from '@/lib/i18n-deals';
 import { useStore } from '@/lib/store';
 import type { DealTileItem } from '@/lib/dealCatalog';
@@ -54,14 +51,6 @@ export function DealListRow({
       if (!ok) onRequireAuth?.();
     });
   };
-
-  /* Značky dávky pro řadu log před textem — na mobilu se řádek nesmí ucpat,
-     proto jen dvě; od md čtyři. Doména z rejstříku značek, bez ní textový
-     fallback (BrandLogo si ho vykreslí sám). */
-  const brandLogos = item.brands.slice(0, 4).map((b) => {
-    const name = toDisplayName(b);
-    return { name, domain: getBrandByName(name)?.domain };
-  });
 
 
   const status =
@@ -188,28 +177,8 @@ export function DealListRow({
         </span>
       </span>
 
-      {/* LOGA ZNAČEK v dávce — v mezeře ZA textem (dle reference), zarovnaná
-          doprava, takže končí těsně před stavovými pilulkami. Platí i pro
-          připravované dávky, kde značky nese koncern. */}
-      <span className="hidden shrink-0 items-center justify-end gap-3 sm:flex">
-        {brandLogos.map((b, i) => (
-          <BrandLogo
-            key={b.name}
-            name={b.name}
-            domain={b.domain ?? ''}
-            width={200}
-            height={80}
-            /* pevná výška → značky mají napříč řádky stejnou vizuální váhu;
-               od třetí se logo objeví až od lg, aby se řádek neucpal */
-            className={`h-4 w-auto max-w-[72px] object-contain invert mix-blend-screen ${
-              i >= 2 ? 'hidden lg:block' : ''
-            }`}
-            fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-white ${
-              i >= 2 ? 'hidden lg:block' : ''
-            }`}
-          />
-        ))}
-      </span>
+      {/* Loga značek z řádku odešla (pokyn) — počet značek nese mono údaj
+          níž, takže se informace neztratila. */}
 
       {/* MOBIL nemá loga značek vůbec (pokyn): střídačka log ukrajovala
           z názvu dávky tolik, že celý řádek byl nečitelný. Značky drží
