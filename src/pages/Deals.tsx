@@ -410,8 +410,8 @@ export default function Deals() {
                 type="button"
                 onClick={() => openCreateDealDialog()}
                 className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-white px-4 text-[13px] font-semibold text-zinc-900
-                           shadow-[0_12px_30px_-12px_rgba(255,255,255,0.45)] transition-all duration-200
-                           hover:bg-zinc-100 hover:shadow-[0_18px_38px_-12px_rgba(255,255,255,0.6)]"
+                           shadow-[0_0_22px_-6px_rgba(255,255,255,0.45)] transition-all duration-200
+                           hover:bg-zinc-100 hover:shadow-[0_0_28px_-4px_rgba(255,255,255,0.6)]"
               >
                 <Plus className="h-4 w-4" /> CreateBigDeal
               </button>
