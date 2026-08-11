@@ -381,14 +381,16 @@ export default function Deals() {
           <CatalogPromoBanners onAlerts={goToAlerts} />
         </div>
 
-        <div className="px-5 pt-5 sm:px-8 lg:px-12">
+        {/* řazení TĚSNĚ pod dashboardem (pokyn) — patří k číslům nad sebou,
+            ne ke kartám dole, proto malý odstup nahoru a velký dolů */}
+        <div className="px-5 pt-2.5 sm:px-8 sm:pt-3 lg:px-12">
           <SortPills variant="light" sort={sort} onSort={setSort} />
         </div>
       </section>
 
       {/* ═══ TMAVÁ ZÓNA — zaoblený nájezd na bílé hlavě; odsud dolů si sekce
              kreslí barvu samy (střídání bílá ↔ obsidián). ═══ */}
-      <div className="mt-8 rounded-t-[1.75rem] bg-[#0B1215] pt-4 sm:mt-10 sm:rounded-t-[2.75rem] sm:pt-6">
+      <div className="mt-12 rounded-t-[1.75rem] bg-[#0B1215] pt-4 sm:mt-16 sm:rounded-t-[2.75rem] sm:pt-6">
 
       {/* ═══ DASHBOARD — stránka ZAČÍNÁ stavem trhu a seznamem dávek (pokyn):
              obchodník přichází pro zboží, ne pro headline. Hero se značkou
