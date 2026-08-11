@@ -19,7 +19,7 @@ import { NavMyDealPanel } from '@/components/deals/NavMyDealPanel';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
-import { NavShowcaseCarousel } from '@/components/NavShowcaseCarousel';
+import { NavWhyCards } from '@/components/NavWhyCards';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
 import { ConcernLogoRow } from '@/components/ConcernLogoRow';
@@ -772,10 +772,10 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             onMouseLeave={handlePanelLeave}
           >
             {activeNav === 'why-swelt' ? (
-              /* Why Swelt — jen full-width kolotoč prázdných placeholder karet,
+              /* Why Swelt — dvě full-width karty (Buyers / Sellers),
                  bez levého sloupce (heading/desc/CTA) */
               <div className="px-6 py-6">
-                <NavShowcaseCarousel />
+                <NavWhyCards />
               </div>
             ) : activeNav === 'katalog' ? (
               /* Katalog — dvě police (koncerny + značky), CTA až pod nimi.
