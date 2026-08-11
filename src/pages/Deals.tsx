@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ArrowRight, Bell, Check, MousePointerClick, Layers, Plus, TrendingUp,
+  ArrowRight, Bell, Briefcase, Check, MousePointerClick, Layers, Plus, TrendingUp,
   Clock, Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
@@ -396,28 +396,34 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Vstup do tmavé plochy (pokyn): vpravo nad přepínačem stojí
-             výrazné CreateBigDeal. Bílá pilulka je na obsidiánu to
-             nejvýraznější, co stránka má — a zadání dávky je jediná akce,
-             kterou tu dodavatel dělá. ── */}
-      <div className="flex flex-col items-end gap-3 px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
-        <button
-          type="button"
-          onClick={() => openCreateDealDialog()}
-          /* o 30 % menší než původní pilulka (pokyn) — 40 → 28 px */
-          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-white px-3.5 text-[10px] font-semibold text-zinc-900
-                     shadow-[0_10px_26px_-10px_rgba(255,255,255,0.45)] transition-all duration-200
-                     hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_16px_34px_-10px_rgba(255,255,255,0.6)]"
-        >
-          <Plus className="h-3 w-3" /> CreateBigDeal
-        </button>
-        <DealChannelPills active="all" className="w-fit" />
-      </div>
-
-      {/* ── 2. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+      {/* ── 1. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
       <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
+          /* CTA na PRVNÍ pozici lišty (pokyn): zadání dávky a moje dávky
+             stojí dřív než hledání a filtry — je to jediná akce, kterou tu
+             dodavatel dělá. Výška h-11 sedí s hledáním i filtry v jedné řadě. */
+          leading={
+            <span className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => openCreateDealDialog()}
+                className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-white px-4 text-[13px] font-semibold text-zinc-900
+                           shadow-[0_12px_30px_-12px_rgba(255,255,255,0.45)] transition-all duration-200
+                           hover:bg-zinc-100 hover:shadow-[0_18px_38px_-12px_rgba(255,255,255,0.6)]"
+              >
+                <Plus className="h-4 w-4" /> CreateBigDeal
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/my-deals')}
+                className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-white/20 px-4 text-[13px] font-semibold text-white
+                           transition-colors duration-200 hover:border-white/40 hover:bg-white/10"
+              >
+                <Briefcase className="h-4 w-4" /> MyDeal
+              </button>
+            </span>
+          }
           search={filters.search}
           onSearch={(search) => setFilters((f) => ({ ...f, search }))}
           concerns={concernTiles}
@@ -431,7 +437,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 3. Obsah přes celou šíři ── */}
+      {/* ── 2. Obsah přes celou šíři ── */}
       <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (
@@ -465,6 +471,7 @@ export default function Deals() {
           ) : (
             <>
               <CatalogControlBar
+              channels={<DealChannelPills active="all" />}
                 resultCount={filtered.length}
                 activeCount={activeLabels.length}
                 activeLabels={activeLabels}

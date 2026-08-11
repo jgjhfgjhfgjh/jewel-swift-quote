@@ -42,6 +42,7 @@ export function CatalogFilterNav({
   onToggleBrand,
   onClearConcerns,
   onClearBrands,
+  leading,
 }: {
   search: string;
   onSearch: (next: string) => void;
@@ -53,6 +54,8 @@ export function CatalogFilterNav({
   onToggleBrand: (key: string) => void;
   onClearConcerns: () => void;
   onClearBrands: () => void;
+  /** Akce na PRVNÍ pozici lišty (pokyn) — CreateBigDeal a MyDeal. */
+  leading?: React.ReactNode;
 }) {
   const lang = useStore((s) => s.lang);
   const d = dealsI18n[lang];
@@ -80,6 +83,7 @@ export function CatalogFilterNav({
     <div>
       {/* ── lišta: hledání + expanzní tlačítka ── */}
       <div className="flex flex-wrap items-center gap-2">
+        {leading}
         <div className="min-w-[220px] flex-1 sm:max-w-sm">
           <CatalogSearch value={search} onChange={onSearch} compact />
         </div>

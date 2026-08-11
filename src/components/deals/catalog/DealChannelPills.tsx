@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, Layers, Megaphone, Users } from 'lucide-react';
+import { Layers, Megaphone, Users } from 'lucide-react';
 
-export type DealChannel = 'all' | 'want' | 'split' | 'my';
+export type DealChannel = 'all' | 'want' | 'split';
 
 /* Tři kanály obchodu — každý má vlastní nástěnku, přepínač je proto
    navigační: aktivní pilulka říká, kde stojím, ostatní tam vedou. */
@@ -9,16 +9,17 @@ const CHANNELS: { key: DealChannel; label: string; icon: typeof Layers; path: st
   { key: 'all', label: 'AllDeal', icon: Layers, path: '/deals' },
   { key: 'want', label: 'WantDeal', icon: Megaphone, path: '/wantdeal' },
   { key: 'split', label: 'SplitDeal', icon: Users, path: '/splitdeal' },
-  /* MyDeal je vlastní zóna účtu (moje dávky), ne kanál trhu — v přepínači
-     ale patří k ostatním: je to čtvrtá nástěnka, mezi kterými se chodí. */
-  { key: 'my', label: 'MyDeal', icon: Briefcase, path: '/my-deals' },
+  /* MyDeal v přepínači není: není to kanál trhu, ale vlastní zóna účtu —
+     žije jako CTA vedle CreateBigDeal (pokyn). */
 ];
 
 /**
- * Přepínač kanálů — AllDeal (nabídka), WantDeal (poptávka), SplitDeal
- * (skupinový nákup) a MyDeal (moje dávky). Stojí na začátku tmavé plochy
- * /deals a stejně tak v hlavičce ostatních nástěnek, takže je z každé
- * vidět na zbylé tři.
+ * Přepínač kanálů — AllDeal (nabídka), WantDeal (poptávka) a SplitDeal
+ * (skupinový nákup). Na /deals sedí v řídicí liště hned vedle přepínače
+ * zobrazení (pokyn), na ostatních nástěnkách v jejich hlavičce.
+ *
+ * `active` je volitelný: na stránce, která žádným kanálem není (MyDeal),
+ * se řada ukáže bez zvýraznění a slouží jako cesta zpátky do trhu.
  *
  * Aktivní pilulka je INVERZNÍ (bílá na černé) — stejný jazyk jako řazení
  * v řídicí liště, jen o patro výš.
@@ -27,7 +28,7 @@ export function DealChannelPills({
   active,
   className = '',
 }: {
-  active: DealChannel;
+  active?: DealChannel;
   className?: string;
 }) {
   const navigate = useNavigate();

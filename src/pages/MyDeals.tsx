@@ -116,7 +116,9 @@ export default function MyDeals() {
       <div className="mx-auto max-w-5xl px-6 pb-24">
         {/* přepínač nástěnek — stejný jako na ostatních třech */}
         <div className="flex justify-end pt-8">
-          <DealChannelPills active="my" className="w-fit" />
+          {/* MyDeal není kanál trhu — řada tu stojí bez zvýraznění, jako
+              cesta zpátky mezi dealy */}
+          <DealChannelPills className="w-fit" />
         </div>
         {!user && !authLoading ? (
           /* ── Nepřihlášený ── */
