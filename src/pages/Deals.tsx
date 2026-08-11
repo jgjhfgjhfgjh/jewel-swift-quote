@@ -30,7 +30,7 @@ import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import { CatalogPromoBanners } from '@/components/deals/catalog/CatalogPromoBanners';
-import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
+import { CreateBigDealButton } from '@/components/deals/CreateBigDealButton';
 import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
 import { AlertTierPills } from '@/components/deals/catalog/AlertTierPills';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
@@ -403,15 +403,9 @@ export default function Deals() {
              a filtry, výška h-11 sedí se zbytkem řady. */
           trailing={
             <>
-              <button
-                type="button"
-                onClick={() => openCreateDealDialog()}
-                className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-white px-4 text-[13px] font-semibold text-zinc-900
-                           shadow-[0_0_22px_-6px_rgba(255,255,255,0.45)] transition-all duration-200
-                           hover:bg-zinc-100 hover:shadow-[0_0_28px_-4px_rgba(255,255,255,0.6)]"
-              >
-                <Plus className="h-4 w-4" /> CreateBigDeal
-              </button>
+              {/* 1:1 s CTA v navigaci — stejná komponenta, tedy i stejné
+                  písmo, velikost a chování (pokyn) */}
+              <CreateBigDealButton />
               <button
                 type="button"
                 onClick={() => navigate('/my-deals')}

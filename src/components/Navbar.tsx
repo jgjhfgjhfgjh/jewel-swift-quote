@@ -19,6 +19,7 @@ import { NavMyDealPanel } from '@/components/deals/NavMyDealPanel';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
 import { openSupplierGate } from '@/components/suppliers/SupplierGateDialog';
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
+import { CreateBigDealButton } from '@/components/deals/CreateBigDealButton';
 import { NavWhyCards } from '@/components/NavWhyCards';
 import { GoBigDealLogo, Gbd } from '@/components/GoBigDealLogo';
 import { BrandLogoRow } from '@/components/BrandLogoRow';
@@ -454,18 +455,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               Suppliers). NEOTVÍRÁ mega menu: hover ho vyplní bíle, klik
               otevře popup s poptávkou. Klidový stav bere barvu z kontextu
               jako text navigace; plus je symbol akce. */}
-          <button
-            onClick={() => openCreateDealDialog()}
-            title="CreateBigDeal"
-            className={`hidden lg:inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-1.5 font-sans text-[15px] font-semibold transition-all duration-200 hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_10px_24px_-8px_rgba(15,23,42,0.35)] ${
-              overVideo ? 'border-white/40 text-white' : 'border-zinc-300 text-zinc-900'
-            }`}
-          >
-            <Plus className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-            {/* pod xl jen plus — s popiskem by pravý cluster na 1024 px
-                přetekl a stránka by scrollovala do strany */}
-            <span className="hidden xl:inline">CreateBigDeal</span>
-          </button>
+          {/* jedno sdílené CTA — stejné tlačítko nese i /deals; pod xl jen
+              plus, s popiskem by pravý cluster na 1024 px přetekl */}
+          <CreateBigDealButton
+            className="hidden lg:inline-flex"
+            labelClassName="hidden xl:inline"
+            tone={overVideo ? 'text-white' : 'text-zinc-900'}
+          />
           <span
             aria-hidden
             className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
