@@ -43,11 +43,11 @@ const CARD_CLASS =
  *  so mobile matches the shrunk desktop instead of a full-width showcase card */
 const CARD_CLASS_COMPACT =
   'shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] h-[210px] sm:h-[230px] lg:h-[240px]';
-/** Mini sizing (/deals) — osminová showcase karta (pokyn): 480 px výšky
- *  showcase se scvrkne na ~60 px, takže z pásu je úzká značková stuha.
- *  V téhle velikosti se vejde jen logo, produktová fotka ne. */
+/** Mini sizing (/deals) — TŘETINOVÁ showcase karta (pokyn): 480 px výšky
+ *  showcase se scvrkne na 160 px. Menší už být nemůže — pod tuhle mez
+ *  přestane mít produktová fotka smysl a ze stuhy je jen řada popisků. */
 const CARD_CLASS_MINI =
-  'shrink-0 w-[54px] h-[49px] sm:w-[58px] sm:h-[55px] lg:w-[62px] lg:h-[60px]';
+  'shrink-0 w-[110px] h-[130px] sm:w-[124px] sm:h-[146px] lg:w-[144px] lg:h-[160px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
@@ -99,7 +99,7 @@ function BrandCard({
   // Showcase na homepage i kompaktní katalogový filtr zůstávají beze změny
   // (produkt nahoře, logo pod ním).
   const logoBlock = (
-    <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
+    <div className={`${compact ? 'h-10 px-3' : mini ? 'h-8 px-2' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
       {brand.domain ? (
         <BrandLogo
           name={brand.name}
@@ -108,18 +108,18 @@ function BrandCard({
           height={160}
           className={`max-h-full object-contain ${
             dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
-          } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
-          fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
+          } ${compact || mini ? 'max-w-full' : 'max-w-[180px]'}`}
+          fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : mini ? 'text-[11px]' : 'text-lg'}`}
         />
       ) : (
-        <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
+        <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : mini ? 'text-[11px]' : 'text-lg'}`}>{brand.name}</span>
       )}
     </div>
   );
 
   const imageBlock = (
     <div
-      className={`relative mx-4 mb-4 flex-1 origin-bottom ${compact ? 'mt-3' : 'mt-6 sm:mt-8'} ${scale}`}
+      className={`relative flex-1 origin-bottom ${mini ? 'mx-2 mb-1.5 mt-3' : 'mx-4 mb-4'} ${compact ? 'mt-3' : mini ? '' : 'mt-6 sm:mt-8'} ${scale}`}
     >
       {n === 0 && (
         <div className="absolute inset-0 flex items-center justify-center p-2">
@@ -191,30 +191,10 @@ function BrandCard({
         />
       )}
 
-      {mini ? (
-        /* stuha: logo vyplní celou (osminovou) kartu */
-        <div className="flex h-full w-full items-center justify-center px-1.5">
-          {brand.domain ? (
-            <BrandLogo
-              name={brand.name}
-              domain={brand.domain}
-              width={400}
-              height={160}
-              className={`max-h-full max-w-full object-contain ${dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'}`}
-              fallbackClassName={`truncate text-[8px] font-black leading-tight tracking-tight ${dark ? 'text-white' : 'text-foreground'}`}
-            />
-          ) : (
-            <span className={`truncate text-[8px] font-black leading-tight tracking-tight ${dark ? 'text-white' : 'text-foreground'}`}>
-              {brand.name}
-            </span>
-          )}
-        </div>
-      ) : (
-        <>
-          {imageBlock}
-          {logoBlock}
-        </>
-      )}
+      <>
+        {imageBlock}
+        {logoBlock}
+      </>
 
       {/* CTA — jediný ovladač na spodku karty; vede na dealy značky. Klik
           nesmí propadnout do karty, proto stopPropagation.
