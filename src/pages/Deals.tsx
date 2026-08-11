@@ -404,11 +404,12 @@ export default function Deals() {
         <button
           type="button"
           onClick={() => openCreateDealDialog()}
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-zinc-900
-                     shadow-[0_14px_36px_-12px_rgba(255,255,255,0.45)] transition-all duration-200
-                     hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_20px_44px_-12px_rgba(255,255,255,0.6)]"
+          /* o 30 % menší než původní pilulka (pokyn) — 40 → 28 px */
+          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-white px-3.5 text-[10px] font-semibold text-zinc-900
+                     shadow-[0_10px_26px_-10px_rgba(255,255,255,0.45)] transition-all duration-200
+                     hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_16px_34px_-10px_rgba(255,255,255,0.6)]"
         >
-          <Plus className="h-4 w-4" /> CreateBigDeal
+          <Plus className="h-3 w-3" /> CreateBigDeal
         </button>
         <DealChannelPills active="all" className="w-fit" />
       </div>

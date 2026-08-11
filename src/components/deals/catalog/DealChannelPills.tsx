@@ -36,7 +36,8 @@ export function DealChannelPills({
     <div
       role="tablist"
       aria-label="Deal channels"
-      className={`flex items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-white/[0.04] p-1
+      /* o 30 % menší než původní řada (pokyn) — pilulka 36 → 25 px */
+      className={`flex items-center gap-0.5 overflow-x-auto rounded-full border border-white/10 bg-white/[0.04] p-0.5
                   [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
     >
       {CHANNELS.map((c) => (
@@ -46,13 +47,13 @@ export function DealChannelPills({
           role="tab"
           aria-selected={active === c.key}
           onClick={() => active !== c.key && navigate(c.path)}
-          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+          className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-medium transition-colors ${
             active === c.key
               ? 'bg-white text-zinc-900'
               : 'text-zinc-400 hover:bg-white/10 hover:text-white'
           }`}
         >
-          <c.icon className="h-3.5 w-3.5 shrink-0" />
+          <c.icon className="h-2.5 w-2.5 shrink-0" />
           {c.label}
         </button>
       ))}
