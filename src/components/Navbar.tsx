@@ -49,7 +49,7 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why' },
   /* Products je dočasně skrytý (panel i PRODUCT_ITEMS zůstávají — stačí
      vrátit řádek): { id: 'products', label: 'Products' }, */
-  { id: 'mcp',          label: 'MCP Server',   path: '/feed?to=mcp' },
+  { id: 'mcp',          label: 'Connectivity', path: '/feed?to=mcp' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   /* Alerts je dočasně skrytý (panel i ALERT_* data zůstávají — stačí vrátit
      řádek): { id: 'alerts', label: 'Alerts', path: '/alerts' }, */
@@ -345,7 +345,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
   };
 
   /* Mobilní kategorie — jediná úroveň, kterou menu ukazuje; zbytek se
-     skládá pod ně. Zrcadlí desktop: Why, MCP Server, GoBigDeal, MyDeal
+     skládá pod ně. Zrcadlí desktop: Why, Connectivity, GoBigDeal, MyDeal
      a CreateBigDeal (akce, proto pastelově fialová). */
   const MOBILE_CATS: {
     id: string;
@@ -356,7 +356,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     tone?: 'violet';
   }[] = [
     { id: 'why', label: 'Why', onSelect: () => go('/') },
-    { id: 'mcp', label: 'MCP Server', onSelect: () => go('/feed?to=mcp') },
+    { id: 'mcp', label: 'Connectivity', onSelect: () => go('/feed?to=mcp') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
     /* skryté spolu s desktopovou položkou:
     { id: 'alerts', label: 'Alerts', items: [...ALERT_DELIVERY, ...ALERT_WATCH] }, */
