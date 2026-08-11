@@ -396,11 +396,11 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Vstupní řada tmavé plochy (pokyn): vlevo výrazné CreateBigDeal,
-             vpravo přepínač nástěnek. Bílá pilulka je na obsidiánu to
+      {/* ── 1. Vstup do tmavé plochy (pokyn): vpravo nad přepínačem stojí
+             výrazné CreateBigDeal. Bílá pilulka je na obsidiánu to
              nejvýraznější, co stránka má — a zadání dávky je jediná akce,
              kterou tu dodavatel dělá. ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+      <div className="flex flex-col items-end gap-3 px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
         <button
           type="button"
           onClick={() => openCreateDealDialog()}
