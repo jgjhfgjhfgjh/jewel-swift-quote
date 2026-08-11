@@ -397,7 +397,7 @@ export default function Deals() {
 
       {/* ── 1. Přepínač kanálů — první prvek tmavé plochy (pokyn): odsud
              je vidět na poptávkovou i skupinovou nástěnku. ── */}
-      <div className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+      <div className="flex justify-end px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
         <DealChannelPills active="all" className="w-fit" />
       </div>
 

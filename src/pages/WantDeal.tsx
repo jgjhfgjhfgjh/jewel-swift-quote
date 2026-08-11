@@ -220,7 +220,7 @@ export default function WantDeal() {
 
       <div className="mx-auto max-w-5xl px-6 pb-24">
         {/* přepínač kanálů — stejný jako na /deals, aby byl trh vidět celý */}
-        <div className="pt-8">
+        <div className="flex justify-end pt-8">
           <DealChannelPills active="want" className="w-fit" />
         </div>
         {/* ── Dvě podoby ── */}

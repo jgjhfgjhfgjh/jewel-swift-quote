@@ -177,7 +177,7 @@ export default function SplitDeal() {
 
       <div className="mx-auto max-w-5xl px-6 pb-24">
         {/* přepínač kanálů — stejný jako na /deals, aby byl trh vidět celý */}
-        <div className="pt-8">
+        <div className="flex justify-end pt-8">
           <DealChannelPills active="split" className="w-fit" />
         </div>
         {/* ── Mechanika ── */}
