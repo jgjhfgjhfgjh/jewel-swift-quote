@@ -1,3 +1,5 @@
+import { Layers } from 'lucide-react';
+
 /**
  * Wordmark „GoBigdeal" (zkušební logo, bez ikony).
  *
@@ -17,13 +19,34 @@ export function Gbd({ suffix = '' }: { suffix?: string }) {
   return <span className="whitespace-nowrap font-bold">GoBigDeal{suffix}</span>;
 }
 
-export function GoBigDealLogo({ className = '' }: { className?: string }) {
+/**
+ * HLAVNÍ IKONA značky (pokyn) — vrstvy (Layers): dávky naskládané na sobě.
+ * Stojí před wordmarkem a později poslouží jako ikona aplikace GoBigDeal
+ * na cihličce v menu — proto žije jako samostatný export, aby šla vysadit
+ * i bez textu (favicon, app tile, splash).
+ *
+ * Velikost i barva jedou z `currentColor` a `1em` — ikona se škáluje
+ * s font-size wordmarku, se kterým stojí.
+ */
+export function GoBigDealMark({ className = '' }: { className?: string }) {
+  return <Layers className={`inline-block h-[1em] w-[1em] shrink-0 ${className}`} aria-hidden />;
+}
+
+export function GoBigDealLogo({
+  className = '',
+  withMark = true,
+}: {
+  className?: string;
+  /** `false` = jen wordmark (místa, kde ikonu nese už okolí). */
+  withMark?: boolean;
+}) {
   return (
     <span
-      className={`inline-flex items-baseline whitespace-nowrap font-sans font-black tracking-tight leading-none ${className}`}
+      className={`inline-flex items-center gap-[0.3em] whitespace-nowrap font-sans font-black tracking-tight leading-none ${className}`}
       aria-label="GoBigDeal"
     >
-      GoBigDeal
+      {withMark && <GoBigDealMark />}
+      <span>GoBigDeal</span>
     </span>
   );
 }
