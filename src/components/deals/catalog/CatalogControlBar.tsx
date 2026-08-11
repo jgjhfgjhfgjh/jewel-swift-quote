@@ -76,6 +76,7 @@ export function CatalogControlBar({
   view,
   onView,
   channels,
+  tiers,
 }: {
   resultCount: number;
   /** Počet běžících filtrů (koncerny + značky + hledání). */
@@ -89,6 +90,8 @@ export function CatalogControlBar({
   onView: (v: CatalogView) => void;
   /** Přepínač kanálů — stojí TĚSNĚ u přepínače zobrazení (pokyn). */
   channels?: React.ReactNode;
+  /** Přepínač úrovní alertu — VLEVO, na stejné lince jako kanály (pokyn). */
+  tiers?: React.ReactNode;
 }) {
   const lang = useStore((s) => s.lang);
   const d = dealsI18n[lang];
@@ -100,6 +103,7 @@ export function CatalogControlBar({
        řádek pozadí a usekával jeho záři. */
     <div className="sticky top-0 z-30 bg-[#0B1215] py-3">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        {tiers}
         {/* Řazení tu už není — pilulky stojí nahoře na bílé ploše (SortPills).
             Lišta drží jen počet výsledků, zrušení filtrů a přepínač zobrazení. */}
         <div className="ml-auto flex items-center gap-2.5">

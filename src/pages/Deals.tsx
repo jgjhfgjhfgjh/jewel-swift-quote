@@ -33,6 +33,7 @@ import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import { CatalogPromoBanners } from '@/components/deals/catalog/CatalogPromoBanners';
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
 import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
+import { AlertTierPills } from '@/components/deals/catalog/AlertTierPills';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, SortPills, type CatalogSortKey, type CatalogView,
@@ -472,6 +473,7 @@ export default function Deals() {
           ) : (
             <>
               <CatalogControlBar
+              tiers={<AlertTierPills hasEarlyAccess={hasEarlyAccess} onFreeAlert={goToAlerts} />}
               channels={<DealChannelPills active="all" />}
                 resultCount={filtered.length}
                 activeCount={activeLabels.length}
