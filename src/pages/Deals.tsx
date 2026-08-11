@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Bell, Check, MousePointerClick, Layers, Plus, TrendingUp,
-  Clock, Package, CreditCard, Banknote, FileText, ListOrdered, SearchX, Users,
+  Clock, Package, CreditCard, Banknote, FileText, ListOrdered, SearchX,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BackButton } from '@/components/BackButton';
@@ -396,33 +396,20 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Vstupní řada tmavé plochy (pokyn): vlevo výrazné CreateDeal,
+      {/* ── 1. Vstupní řada tmavé plochy (pokyn): vlevo výrazné CreateBigDeal,
              vpravo přepínač nástěnek. Bílá pilulka je na obsidiánu to
              nejvýraznější, co stránka má — a zadání dávky je jediná akce,
              kterou tu dodavatel dělá. ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
-        <span className="flex flex-wrap items-center gap-2.5">
-          <button
-            type="button"
-            onClick={() => openCreateDealDialog()}
-            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-zinc-900
-                       shadow-[0_14px_36px_-12px_rgba(255,255,255,0.45)] transition-all duration-200
-                       hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_20px_44px_-12px_rgba(255,255,255,0.6)]"
-          >
-            <Plus className="h-4 w-4" /> CreateDeal
-          </button>
-          {/* SplitDeal se nezaklada formularem — vznika prvnim zavazkem
-              k bezici davce, takze CTA vede na nastenku poolu. Proto je
-              obrysove: je to druha akce, ne druha primarni. */}
-          <button
-            type="button"
-            onClick={() => navigate('/splitdeal')}
-            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-white/25 px-5 text-sm font-semibold text-white
-                       transition-all duration-200 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10"
-          >
-            <Users className="h-4 w-4" /> CreateSplitDeal
-          </button>
-        </span>
+        <button
+          type="button"
+          onClick={() => openCreateDealDialog()}
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-zinc-900
+                     shadow-[0_14px_36px_-12px_rgba(255,255,255,0.45)] transition-all duration-200
+                     hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_20px_44px_-12px_rgba(255,255,255,0.6)]"
+        >
+          <Plus className="h-4 w-4" /> CreateBigDeal
+        </button>
         <DealChannelPills active="all" className="w-fit" />
       </div>
 
