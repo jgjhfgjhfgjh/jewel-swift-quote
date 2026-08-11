@@ -68,15 +68,16 @@ Tento soubor je orientační mapa pro Claude Code. Cílem je dostat budoucí ses
 │      └─ admin-user-credentials/ — admin RPC pro práci s creds
 ├─ sync/                — Node CLI skripty (sync-feed.js, translate-feed.js) — alternativa k edge function
 ├─ _archive/            — staré verze (např. intelligence/Intelligence.tsx — NEpoužívá se v App.tsx)
-├─ .mcp.json            — MCP servery sdílené oběma stroji: `supabase` (oficiální
-│                         @supabase/mcp-server-supabase) a `swelt-admin-context`
-│                         (vlastní, api/mcp.ts). Tokeny NIKDY natvrdo — repo je
-│                         veřejné, hodnoty jdou přes ${SUPABASE_ACCESS_TOKEN}
-│                         a ${MCP_TOKEN} z prostředí.
+├─ .githooks/           — sdílené git hooky (pre-push). Aktivují se až po
+│                         `git config core.hooksPath .githooks` — viz sekce
+│                         „Práce ze dvou zařízení"
+├─ .claude/
+│  ├─ skills/           — projektové copy skilly (swelt / bigdealsupplier)
+│  └─ SESSION.md        — kdo na čem právě dělá, předávka mezi stroji
 ├─ vercel.json          — SPA rewrites + dva denní crony (06:00 a 07:00 UTC)
 ├─ vite.config.ts       — alias @ → ./src, dev port 8080
 ├─ vitest.config.ts     — jsdom prostředí, setup v src/test/setup.ts
-├─ playwright.config.ts — E2E (Lovable preset)
+├─ playwright.config.ts — E2E (@playwright/test, testDir e2e/)
 ├─ tailwind.config.ts   — design tokeny (gold barvy, fonty)
 ├─ components.json      — shadcn config (alias @/components atd.)
 └─ .env                 — VITE_SUPABASE_URL / _PUBLISHABLE_KEY / _PROJECT_ID
@@ -177,6 +178,79 @@ Tabulky `products`, `feed_config`, `feed_sync_logs`, `translation_cache` na živ
 **Automatizace deal nabídek** ([automation/README.md](automation/README.md)): Gmail Apps Script (`gmail-deal-export.gs`) kopíruje přílohy do Storage → hodinová Claude routine (`deal-agent-prompt.md`) volá edge function `import-deal`.
 
 **Lovable OAuth** ([src/integrations/lovable/index.ts](src/integrations/lovable/index.ts)): wrapper kolem `@lovable.dev/cloud-auth-js`, po OAuth callbacku ručně předá tokeny do `supabase.auth.setSession()`.
+
+---
+
+## Práce ze dvou zařízení — ČTI PŘED PRVNÍM ZÁSAHEM
+
+Na projektu se pracuje **ze dvou strojů pod dvěma účty Claude Code, často současně**.
+Session Claude Code se mezi stroji nepřenáší — jediné, co se přenáší, je **repo**.
+Všechno níže existuje proto, aby si ty dva stroje navzájem nepřepsaly práci.
+
+### Proč to má tak přísná pravidla
+
+**Push do `main` je okamžitý produkční deploy.** Vercel je napojený na GitHub a každý
+commit na `main` nasazuje na produkci (ověřeno v historii deploymentů — všechny mají
+`target: production`, `githubCommitRef: main`). Neexistuje žádný mezikrok, kde by se to
+dalo zkontrolovat. Proto se na `main` netlačí rozdělaná práce.
+
+**Už se to jednou stalo.** 2026-08-11 byl tenhle stroj **56 commitů pozadu** a nevěděl
+o tom: `git status` hlásil „up to date", protože se od 7. 8. neudělal `fetch` —
+`git status` porovnává jen s lokální kopií remote ref, ne se skutečným GitHubem.
+Zároveň tu ležely 4 rozpracované soubory bez commitu. Zachráněno bez ztráty jen proto,
+že se ty dvě sady změn náhodou nepotkaly ve stejném souboru.
+
+### Začátek session — VŽDY, bez výjimky
+
+```bash
+git fetch --all --prune && git status -sb
+```
+
+`git status` **sám o sobě nestačí** — bez `fetch` lže. Když výstup hlásí `[behind N]`,
+**nezačínej pracovat**; nejdřív se srovnej (`git pull --rebase`). Zkontroluj taky
+[.claude/SESSION.md](.claude/SESSION.md), jestli druhý stroj neohlásil rozdělanou práci
+v oblasti, kam se chystáš.
+
+### Konec session
+
+Nikdy nenechávej rozdělanou práci jen lokálně — druhý stroj o ní nemá jak vědět.
+Buď to dokonči a pushni, nebo pushni jako WIP na vlastní větev. Do
+[.claude/SESSION.md](.claude/SESSION.md) zapiš, co je rozdělané a proč.
+
+### Větve
+
+Práce jde do **feature větve, ne do `main`**. Prefix podle stroje, ať je z názvu vidět,
+kdo ji rozdělal:
+
+| Stroj | Prefix | Git identita |
+|-------|--------|--------------|
+| PC (Windows, `C:\Users\Lukas\projects`) | `pc/…` | `swelt.partner <tomekmichal@mail.ch>` |
+| druhý stroj | `nb/…` | `tomek <brgrs.cz@gmail.com>` |
+
+Vercel na každou pushnutou větev udělá **preview deploy s vlastní URL**. Tam se změna
+prohlédne. Do `main` se mergne, až je odsouhlasená — teprve ten merge je produkce.
+Dva stroje si tím pádem nemůžou přepsat produkci, každý má vlastní preview.
+
+### Nastavení stroje (jednorázově, na KAŽDÉM stroji zvlášť)
+
+Git config a `core.hooksPath` jsou lokální — necommitují se, takže se samy nepřenesou.
+Na novém stroji spusť:
+
+```bash
+git config core.hooksPath .githooks && git config pull.rebase true && git config push.autoSetupRemote true
+```
+
+Samotný hook [.githooks/pre-push](.githooks/pre-push) **v repu je** — sdílí se, per stroj
+se jen zapíná. Blokuje push do `main` ve chvíli, kdy lokální `main` není potomkem
+`origin/main`, tedy přesně ten scénář z 11. 8. Když opravdu potřebuješ pushnout i tak,
+`git push --no-verify` ho obejde — ale to znamená, že přepisuješ cizí práci.
+
+### Supabase
+
+**Migrace a `apply_migration` spouštěj jen z jednoho stroje.** Schéma živé DB je sdílené
+a nemá branch — dva stroje, které do něj sáhnou nezávisle, vyrobí drift mezi živou DB
+a migracemi v repu. Přesně to je bolístka č. 6 níže. Změnu schématu vždy commitni jako
+soubor v `supabase/migrations/`, nikdy ji nenech žít jen v živé DB.
 
 ---
 

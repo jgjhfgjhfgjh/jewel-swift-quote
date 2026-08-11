@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# Blokuje push do main, kdyz by prepsal praci, kterou tenhle stroj jeste nema.
+#
+# Na projektu se pracuje ze dvou stroju a push do main je okamzity produkcni
+# deploy na Vercelu. 2026-08-11 byl jeden stroj 56 commitu pozadu, aniz o tom
+# vedel — `git status` bez `fetch` porovnava jen s lokalni kopii remote ref.
+# Push z takoveho stavu bud git odmitne, nebo (s --force) sezere cizi praci.
+#
+# Aktivace (per stroj, neprenese se commitem):
+#   git config core.hooksPath .githooks
+#
+# Obejiti, kdyz opravdu vis, co delas:
+#   git push --no-verify
+
+remote_name="$1"
+protected="refs/heads/main"
+zero="0000000000000000000000000000000000000000"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+	[ "$remote_ref" = "$protected" ] || continue
+	[ "$local_sha" = "$zero" ] && continue   # mazani vetve resi git sam
+
+	# Bez fetche bychom kontrolovali proti stejne zastarale kopii, ktera problem
+	# zpusobila. Kdyz fetch selze (offline), radeji push nepustime.
+	if ! git fetch --quiet "$remote_name" main 2>/dev/null; then
+		echo "pre-push: nepodarilo se stahnout $remote_name/main — offline?" >&2
+		echo "          Bez overeni proti remote se do main netlaci." >&2
+		exit 1
+	fi
+
+	upstream=$(git rev-parse --verify --quiet FETCH_HEAD) || continue
+
+	# Push je bezpecny, jen kdyz spicka remote main uz je soucasti toho, co tlacime.
+	if git merge-base --is-ancestor "$upstream" "$local_sha"; then
+		continue
+	fi
+
+	behind=$(git rev-list --count "$local_sha..$upstream")
+	echo "" >&2
+	echo "  PUSH DO MAIN ZABLOKOVAN" >&2
+	echo "" >&2
+	echo "  $remote_name/main ma $behind commitu, ktere tenhle stroj nema." >&2
+	echo "  Pushnout ted znamena bud odmitnuti od gitu, nebo (s --force)" >&2
+	echo "  smazani prace druheho stroje — a rovnou na produkci." >&2
+	echo "" >&2
+	echo "  Srovnej se nejdriv:" >&2
+	echo "      git pull --rebase origin main" >&2
+	echo "" >&2
+	exit 1
+done
+
+exit 0

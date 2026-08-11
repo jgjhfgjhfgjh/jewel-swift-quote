@@ -1,0 +1,3 @@
+# Git hooky musi mit LF i na Windows — shell skript s CRLF skonci na
+# "bad interpreter" a hook se ticho preskoci, cimz prijdeme o ochranu main.
+.githooks/* text eol=lf
