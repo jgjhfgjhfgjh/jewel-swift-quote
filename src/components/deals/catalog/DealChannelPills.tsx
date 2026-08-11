@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Layers, Megaphone, Users } from 'lucide-react';
+import { Briefcase, Layers, Megaphone, Users } from 'lucide-react';
 
-export type DealChannel = 'all' | 'want' | 'split';
+export type DealChannel = 'all' | 'want' | 'split' | 'my';
 
 /* Tři kanály obchodu — každý má vlastní nástěnku, přepínač je proto
    navigační: aktivní pilulka říká, kde stojím, ostatní tam vedou. */
@@ -9,12 +9,16 @@ const CHANNELS: { key: DealChannel; label: string; icon: typeof Layers; path: st
   { key: 'all', label: 'AllDeal', icon: Layers, path: '/deals' },
   { key: 'want', label: 'WantDeal', icon: Megaphone, path: '/wantdeal' },
   { key: 'split', label: 'SplitDeal', icon: Users, path: '/splitdeal' },
+  /* MyDeal je vlastní zóna účtu (moje dávky), ne kanál trhu — v přepínači
+     ale patří k ostatním: je to čtvrtá nástěnka, mezi kterými se chodí. */
+  { key: 'my', label: 'MyDeal', icon: Briefcase, path: '/my-deals' },
 ];
 
 /**
- * Přepínač kanálů — AllDeal (nabídka), WantDeal (poptávka) a SplitDeal
- * (skupinový nákup). Stojí na začátku tmavé plochy /deals a stejně tak
- * v hlavičce obou zbylých nástěnek, takže je z každé vidět na ostatní dvě.
+ * Přepínač kanálů — AllDeal (nabídka), WantDeal (poptávka), SplitDeal
+ * (skupinový nákup) a MyDeal (moje dávky). Stojí na začátku tmavé plochy
+ * /deals a stejně tak v hlavičce ostatních nástěnek, takže je z každé
+ * vidět na zbylé tři.
  *
  * Aktivní pilulka je INVERZNÍ (bílá na černé) — stejný jazyk jako řazení
  * v řídicí liště, jen o patro výš.

@@ -80,14 +80,14 @@ export function DealListRow({
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); scrollToPricing(); }
           }}
-          className="group/ea relative inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50/95 px-2.5 py-1 text-[11px] font-bold text-blue-700
-                     transition-all duration-200 hover:scale-[1.05] hover:border-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.5)]
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+          className="group/ea relative inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/15 px-2.5 py-1 text-[11px] font-bold text-blue-300
+                     transition-all duration-200 hover:scale-[1.05] hover:border-blue-400 hover:bg-blue-500 hover:text-white hover:shadow-[0_6px_16px_-4px_rgba(37,99,235,0.55)]
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]"
         >
           <Lock className="h-3 w-3" />
           <span className="sm:hidden">{d.catalog.dash.earlyBadgeShort}</span>
           <span className="hidden sm:inline">{d.catalog.dash.earlyBadge}</span>
-          <span className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-full bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover/ea:opacity-100 group-focus-visible/ea:opacity-100">
+          <span className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-zinc-900 opacity-0 shadow-lg transition-opacity duration-200 group-hover/ea:opacity-100 group-focus-visible/ea:opacity-100">
             {d.catalog.dash.earlyBadgeHint}
           </span>
         </span>
@@ -104,8 +104,8 @@ export function DealListRow({
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleWatch(e); }}
           className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium transition-colors md:px-2.5 ${
             watching
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:text-zinc-900'
+              ? 'border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
+              : 'border-white/15 bg-white/[0.06] text-zinc-400 hover:border-white/30 hover:text-white'
           }`}
         >
           {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
@@ -124,8 +124,8 @@ export function DealListRow({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleWatch(e); }}
         className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
           watching
-            ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-            : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:text-zinc-900'
+            ? 'border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
+            : 'border-white/15 text-zinc-500 hover:border-white/30 hover:text-white'
         }`}
       >
         {watching ? <BellRing className="h-3 w-3" /> : <Bell className="h-3 w-3" />}
@@ -150,8 +150,8 @@ export function DealListRow({
             {/* značka nese hlavní váhu — je to obrandování dávky, proto černá
                 a výrazně větší než ostatní chrom řádku, pod ní evidenční
                 číslo dávky malým tenkým písmem */}
-            <GoBigDealLogo className="text-[14px] text-zinc-900" />
-            <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-900">
+            <GoBigDealLogo className="text-[14px] text-white" />
+            <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-400">
               nr. {item.dealNo ?? '—'}
             </span>
           </>
@@ -163,13 +163,13 @@ export function DealListRow({
           <>
             <span
               className={`text-center text-[12px] font-bold leading-tight tracking-tight ${
-                item.kind === 'closed' ? 'text-slate-400' : 'text-red-600'
+                item.kind === 'closed' ? 'text-zinc-500' : 'text-red-400'
               }`}
             >
               {item.kind === 'closed' ? c.closed : c.upcoming}
             </span>
             {item.dealNo && (
-              <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-slate-400">
+              <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-500">
                 nr. {item.dealNo}
               </span>
             )}
@@ -179,11 +179,11 @@ export function DealListRow({
 
       <span className="min-w-0 flex-1">
         {item.supplier && (
-          <span className="block truncate text-[10px] font-medium uppercase tracking-widest text-slate-400">
+          <span className="block truncate text-[10px] font-medium uppercase tracking-widest text-zinc-500">
             {item.supplier}
           </span>
         )}
-        <span className="mt-0.5 block truncate text-sm font-medium tracking-tight text-zinc-900">
+        <span className="mt-0.5 block truncate text-sm font-medium tracking-tight text-white">
           {item.title}
         </span>
       </span>
@@ -201,10 +201,10 @@ export function DealListRow({
             height={80}
             /* pevná výška → značky mají napříč řádky stejnou vizuální váhu;
                od třetí se logo objeví až od lg, aby se řádek neucpal */
-            className={`h-4 w-auto max-w-[72px] object-contain [mix-blend-mode:multiply] ${
+            className={`h-4 w-auto max-w-[72px] object-contain invert mix-blend-screen ${
               i >= 2 ? 'hidden lg:block' : ''
             }`}
-            fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-zinc-900 ${
+            fallbackClassName={`whitespace-nowrap text-[10px] font-bold leading-none text-white ${
               i >= 2 ? 'hidden lg:block' : ''
             }`}
           />
@@ -217,34 +217,34 @@ export function DealListRow({
 
       {/* počty — jen desktop, na mobilu je řádek už tak plný */}
       {item.kind !== 'teaser' && (
-        <span className="hidden shrink-0 items-center gap-3 font-mono text-[11px] text-slate-500 md:flex">
+        <span className="hidden shrink-0 items-center gap-3 font-mono text-[11px] text-zinc-500 md:flex">
           {item.models > 0 && (
             <span className="flex items-center gap-1">
-              <Layers className="h-3 w-3 text-slate-400" /> {countLabel(lang, item.models, 'models')}
+              <Layers className="h-3 w-3 text-zinc-600" /> {countLabel(lang, item.models, 'models')}
             </span>
           )}
           <span className="flex items-center gap-1">
-            <Tag className="h-3 w-3 text-slate-400" /> {countLabel(lang, item.brands.length, 'brands')}
+            <Tag className="h-3 w-3 text-zinc-600" /> {countLabel(lang, item.brands.length, 'brands')}
           </span>
         </span>
       )}
 
       {item.maxDiscount > 0 && (
-        <span className="shrink-0 rounded-full bg-red-50 px-2.5 py-1 font-mono text-[11px] font-bold text-red-600 ring-1 ring-red-100">
+        <span className="shrink-0 rounded-full bg-red-500/10 px-2.5 py-1 font-mono text-[11px] font-bold text-red-400 ring-1 ring-red-500/25">
           −{item.maxDiscount} %
         </span>
       )}
       <span className="flex shrink-0 items-center gap-1.5">{status}</span>
-      <ArrowRight className="hidden h-4 w-4 shrink-0 text-slate-300 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-zinc-900 sm:block" />
+      <ArrowRight className="hidden h-4 w-4 shrink-0 text-zinc-600 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-white sm:block" />
     </>
   );
 
-  /* Stejná logika jako u dlaždice: na černé ploše dělá hloubku bílé halo
-     při hoveru, ne slate stín (ten by nebyl vidět). */
+  /* Řádek je TMAVÝ (pokyn) — stejný materiál jako chrom stránky: vlasový
+     bílý rámeček na 4% bílé ploše. Hloubku nedělá stín (na obsidiánu není
+     vidět), ale zesvětlení rámečku a plochy při hoveru. */
   const shell =
-    'group flex w-full items-center gap-3 rounded-[1.25rem] bg-white px-3.5 py-3 text-left ' +
-    'shadow-[0_10px_28px_-10px_rgba(0,0,0,0.75)] ' +
-    'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_50px_-16px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.14),0_0_36px_-12px_rgba(255,255,255,0.22)] sm:gap-4 sm:px-4 ' +
+    'group flex w-full items-center gap-3 rounded-[1.25rem] border border-white/10 bg-white/[0.04] px-3.5 py-3 text-left ' +
+    'transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.07] sm:gap-4 sm:px-4 ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1215]';
 
   if (item.kind === 'teaser' || !item.slug) {

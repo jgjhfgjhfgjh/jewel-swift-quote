@@ -10,6 +10,7 @@ import { useStore } from '@/lib/store';
 import { useMyDeals, type MyDeal } from '@/hooks/useMyDeals';
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
 import { CountdownTimer } from '@/components/deals/CountdownTimer';
+import { DealChannelPills } from '@/components/deals/catalog/DealChannelPills';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 
 /* Obsidián — stejná plocha jako /deals a /alerts. */
@@ -113,6 +114,10 @@ export default function MyDeals() {
       </section>
 
       <div className="mx-auto max-w-5xl px-6 pb-24">
+        {/* přepínač nástěnek — stejný jako na ostatních třech */}
+        <div className="flex justify-end pt-8">
+          <DealChannelPills active="my" className="w-fit" />
+        </div>
         {!user && !authLoading ? (
           /* ── Nepřihlášený ── */
           <div className="flex flex-col items-center px-6 py-20 text-center">
