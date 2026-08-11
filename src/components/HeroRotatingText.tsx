@@ -2,12 +2,8 @@ import { useEffect, useState } from 'react';
 
 /** Rotating hero phrases — typed out, held, deleted, next. */
 const PHRASES = [
-  'Launch Faster',
-  'Sell More',
-  'Everywhere',
-  'Grow Around Europe',
-  'Connect to AI Agents',
-  'Automate and Save Hours',
+  'Sell Easier',
+  'Buy Smarter',
 ];
 
 const TYPE_MS = 65;
