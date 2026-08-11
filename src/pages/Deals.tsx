@@ -12,6 +12,8 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
+import { useSplitDeals } from '@/hooks/useSplitDeals';
+import { useWantDeals } from '@/hooks/useWantDeals';
 import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
 import { toDisplayName } from '@/lib/brandNormalize';
@@ -28,7 +30,7 @@ import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
-import { CatalogOfferCards } from '@/components/deals/catalog/CatalogOfferCards';
+import { CatalogPromoBanners } from '@/components/deals/catalog/CatalogPromoBanners';
 import { GbdPricing, type GbdPricingTier } from '@/components/deals/GbdPricing';
 import {
   CatalogControlBar, SortPills, type CatalogSortKey, type CatalogView,
@@ -85,6 +87,10 @@ export default function Deals() {
   /* JEDNA sdílená instance alertů pro všechny karty i řádky — každá karta
      by jinak tahala vlastní dotaz na deal_alerts. */
   const alertsApi = useDealAlerts();
+  /* Zásadní KPI pod carouselem tahají čísla ze VŠECH TŘÍ kanálů, ne jen
+     z dávek — proto tu žijí i pooly a poptávky. */
+  const { pools } = useSplitDeals(deals);
+  const { listings: wantListings } = useWantDeals();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<CatalogSortKey>('ending');
   /* Výchozí je ŘÁDKOVÉ zobrazení (pokyn) — obchodník skenuje dávky jako
@@ -138,6 +144,9 @@ export default function Deals() {
       /* modely POUZE z živých dávek — KPI má říkat, co je teď k mání */
       models: live.reduce((n, t) => n + t.models, 0),
       maxDiscount: catalog.reduce((m, t) => Math.max(m, t.maxDiscount), 0),
+      /* „live top discount" je z BĚŽÍCÍCH dávek — sleva z uzavřené dávky
+         už si nikdo nekoupí, takže do zásadního KPI nepatří. */
+      liveMaxDiscount: live.reduce((m, t) => Math.max(m, t.maxDiscount), 0),
       nextDeadline: live.map((t) => t.deadline).filter(Boolean).sort()[0],
       nextStart: real
         .filter((t) => t.kind === 'upcoming' && t.startsAt)
@@ -318,6 +327,58 @@ export default function Deals() {
         {/* výkladní skříň značek — bez CTA a bez filtrování (pokyn);
             filtr značek žije ve filtrační liště níž */}
         <BrandShowcaseCarousel dealShowcase />
+
+        {/* ZÁSADNÍ KPI (pokyn) — tři kanály a nejvyšší živá sleva. Stojí
+            hned pod carouselem v bílé hlavě, dřív než filtry i řazení:
+            obchodník musí vidět, jestli se dnes vůbec vyplatí dívat.
+            V tmavé zóně už žádná KPI lišta není. */}
+        <div id="catalog" className="scroll-mt-16 px-5 pt-5 sm:px-8 lg:px-12">
+          {loading ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-zinc-100" />
+              ))}
+            </div>
+          ) : (
+            <CatalogKpis
+              variant="light"
+              items={[
+                {
+                  label: dash.kpiAllDeals,
+                  value: String(kpis.liveCount),
+                  liveDot: kpis.liveCount > 0,
+                  action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
+                },
+                {
+                  label: dash.kpiWant,
+                  value: String(wantListings.length),
+                  liveDot: wantListings.length > 0,
+                  action: { label: dash.kpiOpen, onClick: () => navigate('/wantdeal'), icon: 'arrow' },
+                },
+                {
+                  /* živý SplitDeal = pool, do kterého už někdo vstoupil;
+                     každá běžící dávka je jinak „otevřená" a číslo by jen
+                     opisovalo první dlaždici */
+                  label: dash.kpiSplit,
+                  value: String(pools.filter((p) => p.participants > 0).length),
+                  liveDot: pools.some((p) => p.participants > 0),
+                  action: { label: dash.kpiOpen, onClick: () => navigate('/splitdeal'), icon: 'arrow' },
+                },
+                {
+                  label: dash.kpiDiscount,
+                  value: kpis.liveMaxDiscount ? `−${kpis.liveMaxDiscount} %` : '—',
+                },
+              ]}
+            />
+          )}
+        </div>
+
+        {/* dva bannery vedle sebe (pokyn): alerty zdarma a Early Access —
+            dva schody téhož, proto stojí v jedné řadě pod KPI */}
+        <div className="px-5 pt-3 sm:px-8 sm:pt-4 lg:px-12">
+          <CatalogPromoBanners onAlerts={goToAlerts} />
+        </div>
+
         <div className="px-5 pt-5 sm:px-8 lg:px-12">
           <SortPills variant="light" sort={sort} onSort={setSort} />
         </div>
@@ -333,55 +394,7 @@ export default function Deals() {
              `id="catalog"` sedí TADY (ne na hero) — CTA „otevřít katalog"
              z landing sekcí musí vést na dávky, ne na logo. ═══ */}
 
-      {/* ── 1. Alertový pruh — ÚPLNĚ PRVNÍ prvek stránky (pokyn): alert je
-             zdarma a je to nejnižší schod konverze, tak stojí nad vším.
-             Horní odsazení počítá s plovoucím BackButtonem (fixed, top
-             72/112 px) — jinak by mu jeho skleněný kroužek seděl na rohu. ── */}
-      <div className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
-        <CatalogOfferCards onAlerts={goToAlerts} />
-      </div>
-
-      {/* ── 2. KPI lišta — stav trhu: čísla dřív než filtry, obchodník hned
-             vidí, jestli se dnes vyplatí dívat ── */}
-      <div id="catalog" className="scroll-mt-16 px-5 pt-3 sm:px-8 sm:pt-4 lg:px-12">
-        {loading ? (
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-white/[0.06]" />
-            ))}
-          </div>
-        ) : (
-          <CatalogKpis
-            items={[
-              {
-                label: dash.kpiLive,
-                value: String(kpis.liveCount),
-                liveDot: kpis.liveCount > 0,
-                /* jeden a týž vstup do zboží: GoDeal odroluje na dealy (pokyn) */
-                action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
-              },
-              { label: dash.kpiModels, value: kpis.models ? String(kpis.models) : '—' },
-              {
-                label: dash.kpiDiscount,
-                value: kpis.maxDiscount ? `−${kpis.maxDiscount} %` : '—',
-              },
-              kpis.nextDeadline
-                ? {
-                    label: dash.kpiDeadline,
-                    value: <CountdownTimer deadline={kpis.nextDeadline} variant="compact" lang={lang} />,
-                  }
-                : kpis.nextStart
-                  ? {
-                      label: dash.kpiNextStart,
-                      value: <CountdownTimer deadline={kpis.nextStart} variant="compact" lang={lang} />,
-                    }
-                  : { label: dash.kpiConcerns, value: String(CONCERNS.length) },
-            ]}
-          />
-        )}
-      </div>
-
-      {/* ── 3. Filtrační nav lišta s expanzemi — společná pro všechny šířky
+      {/* ── 1. Filtrační nav lišta s expanzemi — společná pro všechny šířky
              (nahradila sidebar, karty tak jedou přes celou šíři) ── */}
       <div className="px-5 pt-5 sm:px-8 lg:px-12">
         <CatalogFilterNav
@@ -398,7 +411,7 @@ export default function Deals() {
         />
       </div>
 
-      {/* ── 4. Obsah přes celou šíři ── */}
+      {/* ── 2. Obsah přes celou šíři ── */}
       <div className="px-5 pb-10 pt-4 sm:px-8 sm:pb-16 lg:px-12">
         <main className="min-w-0">
           {loading ? (

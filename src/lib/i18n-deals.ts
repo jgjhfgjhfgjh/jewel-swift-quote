@@ -133,6 +133,11 @@ export interface DealsText {
       alertFree: string;
       alertOn: string;
       kpiLive: string;
+      /** Zásadní KPI pod carouselem (bílá hlava /deals). */
+      kpiAllDeals: string;
+      kpiWant: string;
+      kpiSplit: string;
+      kpiOpen: string;
       kpiModels: string;
       kpiDiscount: string;
       kpiDeadline: string;
@@ -382,6 +387,10 @@ const cs: DealsText = {
       alertFree: 'Set alert free',
       alertOn: 'Alert on',
       kpiLive: 'Živé dealy',
+      kpiAllDeals: 'Všechny dealy',
+      kpiWant: 'Živé WantDealy',
+      kpiSplit: 'Živé SplitDealy',
+      kpiOpen: 'Otevřít',
       kpiModels: 'Modelů v živých dávkách',
       kpiDiscount: 'Živá nejvyšší sleva',
       kpiDeadline: 'Nejbližší uzávěrka',
@@ -640,6 +649,10 @@ const en: DealsText = {
       alertFree: 'Set alert free',
       alertOn: 'Alert on',
       kpiLive: 'Live deals',
+      kpiAllDeals: 'All deals',
+      kpiWant: 'Live WantDeals',
+      kpiSplit: 'Live SplitDeals',
+      kpiOpen: 'Open',
       kpiModels: 'Models in live deals',
       kpiDiscount: 'Live top discount',
       kpiDeadline: 'Next deadline',

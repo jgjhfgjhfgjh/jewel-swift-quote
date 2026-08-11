@@ -20,22 +20,35 @@ export interface CatalogKpi {
 }
 
 /**
- * KPI lišta dashboardu — tmavá hairline varianta na matně černé ploše:
- * dlaždice jsou jen jemně prosvětlené pole s vlasovým rámečkem, hodnoty bílou
- * typografií, živý stav značí zelená pulsující tečka. Chrom stránky je záměrně
- * tmavý — bílé zůstávají jen karty dávek.
+ * KPI lišta dashboardu — dlaždice s vlasovým rámečkem, velkou hodnotou
+ * a drobnou akcí u pravé hrany; živý stav značí zelená pulsující tečka.
+ *
+ * `variant="dark"` (výchozí) je pro obsidiánový chrom stránky, `"light"`
+ * pro BÍLOU hlavu /deals pod carouselem — tam by prosvětlená pole zmizela,
+ * takže dlaždice drží bílá plocha s šedým rámečkem.
  */
-export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
+export function CatalogKpis({
+  items,
+  variant = 'dark',
+}: {
+  items: CatalogKpi[];
+  variant?: 'dark' | 'light';
+}) {
+  const light = variant === 'light';
   return (
     <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
       {items.map((k, i) => (
         <div
           key={k.label}
-          className={`relative flex w-full flex-col items-stretch rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-4 text-left transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.07] sm:p-5 ${
+          className={`relative flex w-full flex-col items-stretch rounded-[1.25rem] border p-4 text-left transition-colors duration-200 sm:p-5 ${
+            light
+              ? 'border-zinc-200 bg-white hover:border-zinc-300'
+              : 'border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.07]'
+          } ${
             MOBILE_ORDER[i] ?? ''
           } sm:order-none`}
         >
-            <span className="block truncate text-[11px] font-medium uppercase tracking-widest text-zinc-500">
+            <span className={`block truncate text-[11px] font-medium uppercase tracking-widest ${light ? 'text-zinc-400' : 'text-zinc-500'}`}>
               {k.label}
             </span>
             {/* Akce sedí v řádku hodnoty u PRAVÉ hrany (pokyn) — dlaždice
@@ -43,7 +56,7 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
             <span className="mt-2.5 flex min-h-[2rem] items-center gap-2.5">
               {k.liveDot && <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-400" />}
               {typeof k.value === 'string' ? (
-                <span className="font-sans text-[1.6rem] font-medium leading-none tracking-tighter text-white sm:text-3xl">
+                <span className={`font-sans text-[1.6rem] font-medium leading-none tracking-tighter sm:text-3xl ${light ? 'text-zinc-900' : 'text-white'}`}>
                   {k.value}
                 </span>
               ) : (
@@ -53,7 +66,7 @@ export function CatalogKpis({ items }: { items: CatalogKpi[] }) {
                 <button
                   type="button"
                   onClick={k.action.onClick}
-                  className="group/kpi ml-auto inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-zinc-300 underline-offset-2 transition-colors hover:text-white hover:underline"
+                  className={`group/kpi ml-auto inline-flex shrink-0 items-center gap-1.5 text-xs font-medium underline-offset-2 transition-colors hover:underline ${light ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-300 hover:text-white'}`}
                 >
                   {k.action.icon === 'arrow' ? (
                     <>
