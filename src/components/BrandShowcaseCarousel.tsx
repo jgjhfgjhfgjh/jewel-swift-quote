@@ -30,10 +30,10 @@ interface BrandShowcaseCarouselProps {
   /** Dark variant (homepage černý panel): černá loga a texty bílé (invert+screen),
    *  produktové fotky s feather maskou, aby bílé JPG pozadí nesvítilo na černé. */
   dark?: boolean;
-  /** /deals: SHOWCASE vzhled (velké karty), ale klik filtruje dávky podle
-   *  kanonického klíče značky. Na rozdíl od `selectable` (kompaktní katalogový
-   *  filtr nad produkty) tu jde o filtr DEALŮ, proto vlastní prop. */
-  dealFilter?: { selectedKeys: string[]; onToggle: (key: string) => void };
+  /** /deals: showcase vzhled s logem v hlavičce karty a BEZ CTA (pokyn).
+   *  Pás je tam čistá výkladní skříň — karty nefiltrují ani nikam nevedou,
+   *  filtrování obstarává filtrační lišta pod carouselem. */
+  dealShowcase?: boolean;
 }
 
 /** Showcase sizing (homepage) — identical to the hero banner cards */
@@ -165,7 +165,7 @@ function BrandCard({
       } ${
         compact ? 'overflow-hidden rounded-2xl bg-white shadow-sm' : ''
       } ${
-        (selectable || asDealFilter) && active
+        selectable && active
           ? 'rounded-2xl ring-2 ring-blue-500'
           : compact ? 'ring-1 ring-zinc-200/60' : ''
       }`}
@@ -202,51 +202,34 @@ function BrandCard({
         </>
       )}
 
-      {/* CTA — jediný ovladač na spodku karty. Na showcase vede na dealy
-          značky, ve filtru dávek PŘEPÍNÁ filtr a po zapnutí se přepíše na
-          „Filter" (plná pilulka + křížek). Klik nesmí propadnout do
-          karty, proto stopPropagation. Kompaktní katalogový filtr CTA nemá —
-          tam je ovladačem karta. Ve filtru dávek má o kousek vyšší spodní
-          odsazení (pb-7) — nesmí ležet na spodní hraně screenu. */}
-      {compact ? (
+      {/* CTA — jediný ovladač na spodku karty; vede na dealy značky. Klik
+          nesmí propadnout do karty, proto stopPropagation.
+          NEMÁ ho kompaktní katalogový filtr (tam je ovladačem karta) ani
+          pás na /deals (pokyn) — tam je carousel čistá výkladní skříň,
+          filtrování obstarává filtrační lišta pod ním. */}
+      {compact || asDealFilter ? (
         <div className="p-1.5 shrink-0" />
       ) : (
-        <div className={`flex shrink-0 justify-center px-5 pt-6 ${asDealFilter ? 'pb-7' : 'pb-5'}`}>
+        <div className="flex shrink-0 justify-center px-5 pb-5 pt-6">
           {/* font-sans (Inter) přebíjí Montserrat, který carousel dědí
               z rodičovského stylu; šipka se na hover rozjede doprava */}
           <button
             type="button"
-            aria-pressed={asDealFilter ? active : undefined}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (asDealFilter) onSelect?.();
-              else navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
+              navigate(`/deals?brand=${encodeURIComponent(brand.key)}`);
             }}
             /* iOS podstínění: dvouvrstvý měkký stín i v klidu (jako karty
                dealů), na hover se prohloubí a pilulka se nadzvedne */
             className={`group/cta inline-flex w-full items-center justify-center gap-2 rounded-full border px-7 py-2.5 font-sans text-sm font-semibold tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
-              asDealFilter && active
-                ? dark
-                  ? 'border-white bg-white text-zinc-900 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
-                  : 'border-zinc-900 bg-zinc-900 text-white shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
-                : dark
+              dark
                   ? 'border-white/35 text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.55),0_2px_6px_rgba(0,0,0,0.35)] hover:border-white hover:bg-white hover:text-zinc-900 hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.35),0_6px_14px_rgba(0,0,0,0.4)]'
                   : 'border-zinc-300 bg-white text-zinc-900 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.16),0_2px_6px_rgba(15,23,42,0.07)] hover:border-zinc-900 hover:bg-zinc-900 hover:text-white hover:shadow-[0_20px_40px_-10px_rgba(15,23,42,0.35),0_6px_14px_rgba(15,23,42,0.14)]'
             }`}
           >
-            {asDealFilter && active ? (
-              /* zapnutý filtr — křížek říká, že klik ho zase sundá */
-              <>
-                Filter
-                <X className="h-4 w-4 shrink-0" strokeWidth={3} />
-              </>
-            ) : (
-              <>
-                GoBigDeal
-                <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-1" />
-              </>
-            )}
+            GoBigDeal
+            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-1" />
           </button>
         </div>
       )}
@@ -257,7 +240,7 @@ function BrandCard({
 
 /* ─── Carousel ─── */
 export function BrandShowcaseCarousel({
-  selectable, selectedBrands, onToggleBrand, dark, dealFilter,
+  selectable, selectedBrands, onToggleBrand, dark, dealShowcase,
 }: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
   // Jedna sdílená instance alertů pro všechny karty (zvonečky jen ve filtru)
@@ -290,9 +273,8 @@ export function BrandShowcaseCarousel({
   // A brand is "active" when any of its raw manufacturer strings is selected
   // in the filter bar. Toggling adds/removes all of them at once.
   const selectedSet = useMemo(() => new Set(selectedBrands ?? []), [selectedBrands]);
-  const dealKeySet = useMemo(() => new Set(dealFilter?.selectedKeys ?? []), [dealFilter?.selectedKeys]);
   const isActive = (b: BrandCardData) =>
-    dealFilter ? dealKeySet.has(b.key) : b.rawManufacturers.some((m) => selectedSet.has(m));
+    b.rawManufacturers.some((m) => selectedSet.has(m));
 
   // Render the brand cards 3× for a seamless infinite loop
   const loop = useMemo(() => [...brands, ...brands, ...brands], [brands]);
@@ -352,10 +334,10 @@ export function BrandShowcaseCarousel({
             key={`${brand.key}-${i}`}
             brand={brand}
             selectable={selectable}
-            asDealFilter={!!dealFilter}
-            active={(selectable || !!dealFilter) && isActive(brand)}
+            asDealFilter={!!dealShowcase}
+            active={selectable && isActive(brand)}
             onSelect={() =>
-              dealFilter ? dealFilter.onToggle(brand.key) : onToggleBrand?.(brand.rawManufacturers)
+              onToggleBrand?.(brand.rawManufacturers)
             }
             dark={dark}
             alertsApi={selectable ? alertsApi : undefined}

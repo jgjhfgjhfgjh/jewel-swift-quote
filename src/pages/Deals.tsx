@@ -315,9 +315,9 @@ export default function Deals() {
           od sm výš těsně pod navbar (h-14) — na širokých, ale nízkých
           oknech se jinak CTA karet i řazení propadnou pod ohyb */}
       <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+4.5rem)]">
-        <BrandShowcaseCarousel
-          dealFilter={{ selectedKeys: filters.brands, onToggle: toggleBrand }}
-        />
+        {/* výkladní skříň značek — bez CTA a bez filtrování (pokyn);
+            filtr značek žije ve filtrační liště níž */}
+        <BrandShowcaseCarousel dealShowcase />
         <div className="px-5 pt-5 sm:px-8 lg:px-12">
           <SortPills variant="light" sort={sort} onSort={setSort} />
         </div>
