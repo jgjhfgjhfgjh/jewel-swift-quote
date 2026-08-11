@@ -30,10 +30,6 @@ interface BrandShowcaseCarouselProps {
   /** Dark variant (homepage černý panel): černá loga a texty bílé (invert+screen),
    *  produktové fotky s feather maskou, aby bílé JPG pozadí nesvítilo na černé. */
   dark?: boolean;
-  /** /deals: showcase vzhled s logem v hlavičce karty a BEZ CTA (pokyn).
-   *  Pás je tam čistá výkladní skříň — karty nefiltrují ani nikam nevedou,
-   *  filtrování obstarává filtrační lišta pod carouselem. */
-  dealShowcase?: boolean;
 }
 
 /** Showcase sizing (homepage) — identical to the hero banner cards */
@@ -43,18 +39,13 @@ const CARD_CLASS =
  *  so mobile matches the shrunk desktop instead of a full-width showcase card */
 const CARD_CLASS_COMPACT =
   'shrink-0 w-[150px] sm:w-[190px] lg:w-[210px] h-[210px] sm:h-[230px] lg:h-[240px]';
-/** Mini sizing (/deals) — TŘETINOVÁ showcase karta (pokyn): 480 px výšky
- *  showcase se scvrkne na 160 px. Menší už být nemůže — pod tuhle mez
- *  přestane mít produktová fotka smysl a ze stuhy je jen řada popisků. */
-const CARD_CLASS_MINI =
-  'shrink-0 w-[110px] h-[130px] sm:w-[124px] sm:h-[146px] lg:w-[144px] lg:h-[160px]';
 /** Product crossfade interval — faster than the brand-detail page (3500 ms) */
 const ROTATE_MS = 1800;
 
 
 /* ─── Single brand card — logo + crossfading products + CTA ─── */
 function BrandCard({
-  brand, selectable, active, onSelect, dark, alertsApi, mini,
+  brand, selectable, active, onSelect, dark, alertsApi,
 }: {
   brand: BrandCardData;
   selectable?: boolean;
@@ -63,15 +54,12 @@ function BrandCard({
   dark?: boolean;
   /** Sdílená instance deal alertů — zvoneček jen ve filter (selectable) módu */
   alertsApi?: DealAlertsApi;
-  /** /deals: osminová „stuha" — jen logo, žádná fotka, CTA ani proklik. */
-  mini?: boolean;
 }) {
   // In filter (selectable) mode the card is compact — tighter spacing and no
   // centre-scale animation, so it reads as a control rather than a showcase.
   const compact = !!selectable;
-  const cardClass = compact ? CARD_CLASS_COMPACT : mini ? CARD_CLASS_MINI : CARD_CLASS;
-  /* zvětšení prostřední karty dává smysl jen u velkého showcase */
-  const scale = compact || mini ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110';
+  const cardClass = compact ? CARD_CLASS_COMPACT : CARD_CLASS;
+  const scale = compact ? '' : 'transition-transform duration-500 ease-out group-data-[center]/card:scale-110';
   const navigate = useNavigate();
   const rootRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
@@ -99,7 +87,7 @@ function BrandCard({
   // Showcase na homepage i kompaktní katalogový filtr zůstávají beze změny
   // (produkt nahoře, logo pod ním).
   const logoBlock = (
-    <div className={`${compact ? 'h-10 px-3' : mini ? 'h-8 px-2' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
+    <div className={`${compact ? 'h-10 px-3' : 'h-14 sm:h-16 px-6'} flex items-center justify-center shrink-0 ${scale}`}>
       {brand.domain ? (
         <BrandLogo
           name={brand.name}
@@ -108,18 +96,18 @@ function BrandCard({
           height={160}
           className={`max-h-full object-contain ${
             dark ? 'invert mix-blend-screen' : '[mix-blend-mode:multiply]'
-          } ${compact || mini ? 'max-w-full' : 'max-w-[180px]'}`}
-          fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : mini ? 'text-[11px]' : 'text-lg'}`}
+          } ${compact ? 'max-w-full' : 'max-w-[180px]'}`}
+          fallbackClassName={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}
         />
       ) : (
-        <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : mini ? 'text-[11px]' : 'text-lg'}`}>{brand.name}</span>
+        <span className={`font-display font-black tracking-tight truncate max-w-full ${dark ? 'text-white' : 'text-foreground'} ${compact ? 'text-sm' : 'text-lg'}`}>{brand.name}</span>
       )}
     </div>
   );
 
   const imageBlock = (
     <div
-      className={`relative flex-1 origin-bottom ${mini ? 'mx-2 mb-1.5 mt-3' : 'mx-4 mb-4'} ${compact ? 'mt-3' : mini ? '' : 'mt-6 sm:mt-8'} ${scale}`}
+      className={`relative mx-4 mb-4 flex-1 origin-bottom ${compact ? 'mt-3' : 'mt-6 sm:mt-8'} ${scale}`}
     >
       {n === 0 && (
         <div className="absolute inset-0 flex items-center justify-center p-2">
@@ -159,11 +147,9 @@ function BrandCard({
     <div
       ref={rootRef}
       data-card
-      onClick={mini ? undefined : () => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
+      onClick={() => (selectable ? onSelect?.() : navigate(`/brands/${brand.slug}`))}
       aria-pressed={selectable ? active : undefined}
-      className={`group/card relative flex flex-col transition-shadow ${cardClass} ${
-        mini ? 'cursor-default' : 'cursor-pointer'
-      } ${
+      className={`group/card relative flex cursor-pointer flex-col transition-shadow ${cardClass} ${
         compact ? 'overflow-hidden rounded-2xl bg-white shadow-sm' : ''
       } ${
         selectable && active
@@ -201,7 +187,7 @@ function BrandCard({
           NEMÁ ho kompaktní katalogový filtr (tam je ovladačem karta) ani
           pás na /deals (pokyn) — tam je carousel čistá výkladní skříň,
           filtrování obstarává filtrační lišta pod ním. */}
-      {compact || mini ? (
+      {compact ? (
         <div className="p-1.5 shrink-0" />
       ) : (
         <div className="flex shrink-0 justify-center px-5 pb-5 pt-6">
@@ -234,7 +220,7 @@ function BrandCard({
 
 /* ─── Carousel ─── */
 export function BrandShowcaseCarousel({
-  selectable, selectedBrands, onToggleBrand, dark, dealShowcase,
+  selectable, selectedBrands, onToggleBrand, dark,
 }: BrandShowcaseCarouselProps = {}) {
   const { data: catalog = [] } = useBrandCatalog();
   // Jedna sdílená instance alertů pro všechny karty (zvonečky jen ve filtru)
@@ -328,7 +314,6 @@ export function BrandShowcaseCarousel({
             key={`${brand.key}-${i}`}
             brand={brand}
             selectable={selectable}
-            mini={!!dealShowcase}
             active={selectable && isActive(brand)}
             onSelect={() =>
               onToggleBrand?.(brand.rawManufacturers)

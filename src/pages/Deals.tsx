@@ -24,7 +24,6 @@ import {
   type CatalogFilters, type DealTileItem,
 } from '@/lib/dealCatalog';
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
-import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
 import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
 import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
@@ -320,19 +319,15 @@ export default function Deals() {
       <Navbar />
       <BackButton />
 
-      {/* ═══ BÍLÁ HLAVA — první screen: značkový carousel jako filtr dávek
-             a hned pod ním řazení. Obojí drží bílou plochu, zbytek stránky
-             pokračuje tmavou zónou se zaobleným nájezdem. ═══ */}
+      {/* ═══ BÍLÁ HLAVA — první screen: zásadní KPI, dva bannery a řazení
+             (značkový carousel odsud vypadl, pokyn). Bílou plochu střídá
+             tmavá zóna se zaobleným nájezdem. ═══ */}
       {/* Na mobilu spacing beze změny (CTA se tam na první screen vejde),
           od sm výš těsně pod navbar (h-14) — na širokých, ale nízkých
           oknech se jinak CTA karet i řazení propadnou pod ohyb */}
       <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+4.5rem)]">
-        {/* výkladní skříň značek — bez CTA a bez filtrování (pokyn);
-            filtr značek žije ve filtrační liště níž */}
-        <BrandShowcaseCarousel dealShowcase />
-
-        {/* ZÁSADNÍ KPI (pokyn) — tři kanály a nejvyšší živá sleva. Stojí
-            hned pod carouselem v bílé hlavě, dřív než filtry i řazení:
+        {/* ZÁSADNÍ KPI (pokyn) — tři kanály a nejvyšší živá sleva. Otevírají
+            bílou hlavu, dřív než filtry i řazení:
             obchodník musí vidět, jestli se dnes vůbec vyplatí dívat.
             V tmavé zóně už žádná KPI lišta není. */}
         <div id="catalog" className="scroll-mt-16 px-5 pt-5 sm:px-8 lg:px-12">

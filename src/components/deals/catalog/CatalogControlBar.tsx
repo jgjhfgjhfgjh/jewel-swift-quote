@@ -98,10 +98,12 @@ export function CatalogControlBar({
   const s = d.catalog.dash;
 
   return (
-    /* Pozadí je STEJNÝ obsidián jako plocha kolem a bez spodní linky:
-       poloprůhledný pás s rámečkem se pod CTA nad ním kreslil jako druhý
-       řádek pozadí a usekával jeho záři. */
-    <div className="sticky top-0 z-30 bg-[#0B1215] py-3">
+    /* Pozadí je STEJNÝ obsidián jako plocha kolem — poloprůhledný pás
+       s rámečkem se pod CTA nad ním kreslil jako druhý řádek pozadí
+       a usekával jeho záři.
+       HORNÍ vlasová linka (pokyn) odděluje přepínače od hledání a CTA nad
+       nimi; větší odstup nahoře dá záři CTA prostor doznít. */
+    <div className="sticky top-0 z-30 mt-6 border-t border-white/10 bg-[#0B1215] pb-3 pt-4 sm:mt-8">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         {tiers}
         {/* Řazení tu už není — pilulky stojí nahoře na bílé ploše (SortPills).
