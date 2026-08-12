@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -18,9 +19,9 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
 import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
-import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
 import { HeroRotatingText } from '@/components/HeroRotatingText';
 import PerWordCrossfade from '@/components/ui/per-word-crossfade';
+import { CreateBigDealButton } from '@/components/deals/CreateBigDealButton';
 import { HeroDealDashboard } from '@/components/home/HeroDealDashboard';
 import {
   ForBuyersSection, WantDealStrip, ForSellersSection, ConnectivitySection, TrustEndingSection,
@@ -105,6 +106,7 @@ function HeroVideo() {
 
 
 const Index = () => {
+  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuthContext();
   const { manufacturers, categories, availableParams, loading } = useProducts();
   const { wishlistIds, toggle: toggleWishlist } = useWishlist();
@@ -249,13 +251,40 @@ const Index = () => {
                 <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
                   <HeroRotatingText />
                 </div>
-              </div>
-              {/* marquee log pod textem — stejný pás jako na /deals (bílé
-                  siluety, lehce průhledné), přes celou šířku videa. Pevná
-                  výška = žádný layout skok; jede ze statického rejstříku,
-                  takže je vidět hned při načtení stránky. */}
-              <div className="relative z-10 -mx-6 mt-5 h-9 translate-y-[8vh] sm:mt-7 sm:h-10 sm:translate-y-0">
-                <BrandMarquee all />
+                {/* CTA pod textem (nahradily marquee log, pokyn): B2B
+                    registrace s verifikačním captionem + CreateBigDeal.
+                    Přihlášený registraci nepotřebuje — dostane Browse deals. */}
+                {/* gap-y-6: na mobilu se dvojice zalomí a pod B2B pilulkou
+                    visí verifikační caption — druhý řádek mu nesmí sedět
+                    na hlavě */}
+                <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-6 sm:mt-10">
+                  {user ? (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/deals')}
+                      className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
+                    >
+                      Browse deals
+                      <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
+                    </button>
+                  ) : (
+                    <div className="relative flex shrink-0 items-center">
+                      <button
+                        type="button"
+                        onClick={() => openAuthModal('b2b')}
+                        className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
+                      >
+                        B2B registration
+                        <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
+                      </button>
+                      <span className="absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[10px] leading-none tracking-wide text-white/60">
+                        Verify Account in 24h
+                      </span>
+                    </div>
+                  )}
+                  {/* 1:1 s CTA v navigaci — stejná komponenta, tvar i chování */}
+                  <CreateBigDealButton className="h-11 px-6 text-[15px]" />
+                </div>
               </div>
               {/* scroll cue — výš, aby ho nepřekryla následující sekce */}
               <ChevronDown className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
