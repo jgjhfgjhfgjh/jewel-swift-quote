@@ -56,11 +56,13 @@ const NAV_ITEMS: { id: string; label: string; path?: string }[] = [
   { id: 'why-swelt',    label: 'Why' },
   /* Products je dočasně skrytý (panel i PRODUCT_ITEMS zůstávají — stačí
      vrátit řádek): { id: 'products', label: 'Products' }, */
-  { id: 'mcp',          label: 'Connectivity', path: '/feed?to=mcp' },
+  /* Pricing = ceník Early Access na homepage (kotva #gbd-pricing) */
+  { id: 'pricing',      label: 'Pricing',      path: '/#gbd-pricing' },
   { id: 'top-deals',    label: 'GoBigDeal',    path: '/deals' },
   /* Alerts je dočasně skrytý (panel i ALERT_* data zůstávají — stačí vrátit
      řádek): { id: 'alerts', label: 'Alerts', path: '/alerts' }, */
   { id: 'my-deal',      label: 'MyDeal' },
+  { id: 'mcp',          label: 'Connectivity', path: '/feed?to=mcp' },
   /* CreateBigDeal není v hlavní nav — je to CTA ukotvené vpravo (tam, kde
      dřív sedělo Suppliers). Neotevírá mega menu; klik otevře popup
      CreateDealDialog. */
@@ -364,11 +366,12 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     tone?: 'violet';
   }[] = [
     { id: 'why', label: 'Why', onSelect: () => go('/') },
-    { id: 'mcp', label: 'Connectivity', onSelect: () => go('/feed?to=mcp') },
+    { id: 'pricing', label: 'Pricing', onSelect: () => go('/#gbd-pricing') },
     { id: 'gbd', label: 'GoBigDeal', items: MOBILE_GBD_ITEMS },
     /* skryté spolu s desktopovou položkou:
     { id: 'alerts', label: 'Alerts', items: [...ALERT_DELIVERY, ...ALERT_WATCH] }, */
     { id: 'my-deal', label: 'MyDeal', items: MY_DEAL_ITEMS },
+    { id: 'mcp', label: 'Connectivity', onSelect: () => go('/feed?to=mcp') },
     /* obal, ne holá reference: onSelect dostává událost a ta by se poslala
        jako popis opakované dávky (viz openCreateDealDialog) */
     { id: 'create', label: 'CreateBigDeal', tone: 'violet', onSelect: () => openCreateDealDialog() },
@@ -463,16 +466,21 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               otevře popup s poptávkou. Klidový stav bere barvu z kontextu
               jako text navigace; plus je symbol akce. */}
           {/* jedno sdílené CTA — stejné tlačítko nese i /deals; pod xl jen
-              plus, s popiskem by pravý cluster na 1024 px přetekl */}
-          <CreateBigDealButton
-            className="hidden lg:inline-flex"
-            labelClassName="hidden xl:inline"
-            tone={overVideo ? 'text-white' : 'text-zinc-900'}
-          />
-          <span
-            aria-hidden
-            className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
-          />
+              plus, s popiskem by pravý cluster na 1024 px přetekl.
+              Na HOMEPAGE se nezobrazuje (pokyn) — CTA tam nese hero. */}
+          {location.pathname !== '/' && (
+            <>
+              <CreateBigDealButton
+                className="hidden lg:inline-flex"
+                labelClassName="hidden xl:inline"
+                tone={overVideo ? 'text-white' : 'text-zinc-900'}
+              />
+              <span
+                aria-hidden
+                className={`hidden lg:block h-4 w-px mx-1.5 ${overVideo ? 'bg-white/25' : 'bg-zinc-200'}`}
+              />
+            </>
+          )}
 
           {/* Globe / Language switcher — desktop only */}
           <DropdownMenu>
