@@ -102,11 +102,11 @@ export function HeroDealDashboard() {
   const { user } = useAuthContext();
 
   return (
-    <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col overflow-hidden bg-[#0b0d10] pt-14">
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-[#0b0d10]">
       {/* ── Dashboard v perspektivě — nahoře, zdola ho pohltí mlha ── */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-[calc(var(--ann-offset,0px)+4.5rem)] flex justify-center [perspective:1600px]"
+        className="pointer-events-none absolute inset-x-0 top-8 flex justify-center [perspective:1600px] sm:top-10"
       >
         <motion.div
           initial={reduce ? { opacity: 0 } : { opacity: 0, y: 70, rotateX: 26 }}
@@ -168,11 +168,11 @@ export function HeroDealDashboard() {
 
       {/* ── Copy přes mlhu + duální CTA ── */}
       <div className="relative z-10 mt-auto flex flex-col items-center px-6 pb-[12vh] text-center sm:pb-[10vh]">
-        <h1 className=" font-sans font-extralight tracking-tight leading-[1.08] text-white text-[clamp(2.4rem,8vw,3.2rem)] sm:text-[clamp(3.2rem,6.5vw,5rem)]">
+        <h2 className="font-sans font-extralight tracking-tight leading-[1.08] text-white text-[clamp(2.4rem,8vw,3.2rem)] sm:text-[clamp(3.2rem,6.5vw,5rem)]">
           <PerWordCrossfade stagger={90}>Catch the deal.</PerWordCrossfade>
           <br />
           <PerWordCrossfade delay={420} stagger={90}>Or drop your own.</PerWordCrossfade>
-        </h1>
+        </h2>
         <p className="mt-5 max-w-xl text-[15px] font-light leading-relaxed text-zinc-400 sm:text-lg">
           The B2B exchange for closeout batches. One price, one deadline, verified
           traders across Europe — when the timer runs out, the deal is gone.

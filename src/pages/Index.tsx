@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
@@ -17,6 +18,9 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { BrandShowcaseCarousel } from '@/components/BrandShowcaseCarousel';
 import { ConcernFilterCarousel } from '@/components/ConcernFilterCarousel';
 import { HomeTopDeals } from '@/components/deals/HomeTopDeals';
+import { BrandMarquee } from '@/components/deals/catalog/BrandMarquee';
+import { HeroRotatingText } from '@/components/HeroRotatingText';
+import PerWordCrossfade from '@/components/ui/per-word-crossfade';
 import { HeroDealDashboard } from '@/components/home/HeroDealDashboard';
 import {
   ForBuyersSection, WantDealStrip, ForSellersSection, ConnectivitySection, TrustEndingSection,
@@ -24,6 +28,81 @@ import {
 import { HomeFooter } from '@/components/HomeFooter';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { useRef } from 'react';
+
+/** Hero video s vynuceným autoplay pro mobily — neprůstřelná varianta.
+ *
+ *  1) iOS rozhoduje o autoplay v okamžiku, kdy začne load. React ale nastavuje
+ *     `muted` jen jako DOM property, ne atribut → src proto nenastavujeme
+ *     v JSX, ale až v efektu PO ručním doplnění muted atributu.
+ *  2) play() se opakuje při loadeddata/canplaythrough, návratu na kartu
+ *     a při každém dotyku/kliku (Low Power Mode povolí play až po gestu).
+ *  3) Když je autoplay přesto zablokované, video PŘEKRYJEME čistým posterem —
+ *     nativní play ikona tak není nikdy vidět; po prvním dotyku se video
+ *     spustí a poster zmizí.
+ *
+ *  Src i poster musí zůstat same-origin (Vercel edge CDN): remote Supabase
+ *  startoval na mobilu tak pomalu, že iOS autoplay vzdal. */
+function HeroVideo() {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.setAttribute('muted', '');
+    // src až teď — při začátku loadu už muted atribut existuje
+    if (!v.src) {
+      v.src = '/hero-video.mp4';
+      v.load();
+    }
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => setBlocked(false)).catch(() => setBlocked(v.paused));
+      }
+    };
+    tryPlay();
+    const onReady = () => { if (v.paused) tryPlay(); };
+    v.addEventListener('loadeddata', onReady);
+    v.addEventListener('canplaythrough', onReady);
+    const onVis = () => { if (!document.hidden && v.paused) tryPlay(); };
+    document.addEventListener('visibilitychange', onVis);
+    const onInput = () => { if (v.paused) tryPlay(); };
+    window.addEventListener('touchstart', onInput, { passive: true });
+    window.addEventListener('click', onInput);
+    return () => {
+      v.removeEventListener('loadeddata', onReady);
+      v.removeEventListener('canplaythrough', onReady);
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('touchstart', onInput);
+      window.removeEventListener('click', onInput);
+    };
+  }, []);
+
+  const mediaClass = 'pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom';
+
+  return (
+    <>
+      <video
+        ref={ref}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        disablePictureInPicture
+        controls={false}
+        poster="/hero-poster.jpg"
+        className={mediaClass}
+      />
+      {/* autoplay zablokované → čistý poster překryje nativní play overlay */}
+      {blocked && <img src="/hero-poster.jpg" alt="" aria-hidden className={mediaClass} />}
+    </>
+  );
+}
+
 
 const Index = () => {
   const { user, loading: authLoading } = useAuthContext();
@@ -123,9 +202,67 @@ const Index = () => {
                 (nic se neořezává nahoře ani dole), obsah stránky se posune níž */}
             {/* bg tmavé — než video/poster nakreslí první pixel, je pod
                 overlayem tma místo šedé (overlay na bílé = šedý záblesk) */}
-            {/* First screen — GoBigDeal hero: motion karta s mockup
-                dashboardem pod mlhou, duální CTA (Browse / CreateBigDeal)
-                a drop-alert mikrolink. Viz HeroDealDashboard. */}
+            {/* First screen: subtract the announcement-bar offset so nothing gets
+                pushed below the fold; pb lifts the headline slightly above the
+                true viewport centre. Navbar is a single compact h-14 row now. */}
+            {/* -mt-14 + pt-14: sekce (a video) sahá až k hornímu okraji stránky
+                pod průhledný navbar; obsah zůstává pod ním. */}
+            {/* min-h drží i poměr videa (1928×1076 → 55.9vw): na širokých
+                monitorech je sekce vyšší než obrazovka a video je vidět CELÉ
+                (nic se neořezává nahoře ani dole), obsah stránky se posune níž */}
+            {/* bg tmavé — než video/poster nakreslí první pixel, je pod
+                overlayem tma místo šedé (overlay na bílé = šedý záblesk) */}
+            <section className="relative -mt-14 flex min-h-[max(calc(100svh-var(--ann-offset,0px)),55.9vw)] flex-col justify-center overflow-hidden bg-[#0b0d10] px-6 pb-[10vh] pt-14 sm:pb-[8vh]">
+              {/* fullscreen video přes celou první sekci + tmavý overlay,
+                  aby bílé texty (a bílý navbar nad videem) zůstaly čitelné */}
+              <HeroVideo />
+              <div aria-hidden className="absolute inset-0 z-0 bg-black/40" />
+              {/* Size follows viewport HEIGHT (clamp on vh) so it stays big on
+                  tall displays but never overflows short / zoomed ones; mobile
+                  clamps on vw so "smarter tools" line fits on one line.
+                  Inter Extra Light (200). Blok je vycentrovaný (w-fit podle H1),
+                  řádky uvnitř zarovnané doleva; psaný řádek má na sm+ nulovou
+                  šířku, aby psaní neměnilo šířku bloku (přetéká doprava). */}
+              {/* blok posunutý lehce dolů (menší pb sekce) a doleva (translate) */}
+              {/* širší druhý řádek skoro vyplní šířku — větší posun by se na
+                  1280px ořezával; -1vw nechá blok jemně vlevo od středu.
+                  Na mobilu jede blok (i marquee níže) o 8vh dolů — nad
+                  textem je volný prostor, translate nemění výšku sekce. */}
+              <div className="relative z-10 w-full sm:w-fit mx-auto text-left translate-y-[8vh] sm:translate-y-0 sm:-translate-x-[5vw]">
+                {/* min(12.5vh,6.3vw) — vh drží velikost na vysokých oknech,
+                    vw pojistka brání zalomení řádku „smarter tools…" na
+                    užších desktopech */}
+                {/* headline nabíhá po slovech (PerWordCrossfade) — druhý řádek
+                    startuje, když se první rozjede, gradientová fráze pod ním
+                    pak navazuje (startDelay). Zalomení řádku drží <br />, proto
+                    dva bloky místo jednoho řetězce. */}
+                <h1 className="font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] text-white">
+                  <PerWordCrossfade stagger={90}>Buy and sell with</PerWordCrossfade>
+                  <br />
+                  <PerWordCrossfade delay={360} stagger={90}>
+                    smarter tools for modern teams
+                  </PerWordCrossfade>
+                </h1>
+                {/* na mobilu rezerva 2 řádků (min-h) — delší fráze se zalomí do
+                    předrezervovaného místa, blok nemění výšku a text neodskočí;
+                    na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
+                <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
+                  <HeroRotatingText />
+                </div>
+              </div>
+              {/* marquee log pod textem — stejný pás jako na /deals (bílé
+                  siluety, lehce průhledné), přes celou šířku videa. Pevná
+                  výška = žádný layout skok; jede ze statického rejstříku,
+                  takže je vidět hned při načtení stránky. */}
+              <div className="relative z-10 -mx-6 mt-5 h-9 translate-y-[8vh] sm:mt-7 sm:h-10 sm:translate-y-0">
+                <BrandMarquee all />
+              </div>
+              {/* scroll cue — výš, aby ho nepřekryla následující sekce */}
+              <ChevronDown className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-10 h-6 w-6 animate-bounce text-white/80" aria-hidden />
+            </section>
+            {/* První sekce POD videem — motion karta s mockup dashboardem
+                pod mlhou a duálním CTA (B2B registrace / CreateBigDeal).
+                Viz HeroDealDashboard. */}
             <HeroDealDashboard />
             {/* Second screen: brand showcase — bílá karta (headline, karusel,
                 B2B CTA), pod ní černá karta se „Ship" headline a budoucí
