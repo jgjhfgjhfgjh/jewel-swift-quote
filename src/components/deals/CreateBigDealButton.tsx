@@ -1,22 +1,23 @@
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
 
-/* Duhový obrys — začíná v modré značky a končí v teplé růžové, takže se čte
-   jako duha, ale nespadne mimo paletu webu. */
-const RAINBOW = 'linear-gradient(90deg,#3b82f6,#22d3ee,#34d399,#facc15,#fb7185)';
-/* Plus je TŘÍBAREVNÝ shora dolů (pokyn): modrá → zelená → žlutá. Svislý
-   proužek nese celý přechod, vodorovný sedí uprostřed, takže je celý
-   v prostřední zelené — kříž tak v místě křížení drží jednu barvu. */
+/* Obrys jede TÝMŽ přechodem jako gradientový řádek v heru
+   (from-blue-500 via-cyan-400 to-emerald-400) — jedna značková škála,
+   ne druhá paleta navíc. */
+const BRAND_GRADIENT = 'linear-gradient(90deg,#3b82f6,#22d3ee,#34d399)';
+/* Plus nese stejný přechod shora dolů; vodorovný proužek sedí uprostřed,
+   takže je celý v prostřední tyrkysové a kříž v místě křížení drží
+   jednu barvu. */
 /* Barvy jdou TŘÍDAMI, ne inline stylem: inline styl by přebil hover
    variantu a plus by na bílém tlačítku zůstal barevný. */
-const PLUS_V = 'bg-[linear-gradient(180deg,#3b82f6_0%,#22c55e_50%,#facc15_100%)] group-hover/cbd:bg-none group-hover/cbd:bg-zinc-900';
-const PLUS_H = 'bg-[#22c55e] group-hover/cbd:bg-zinc-900';
+const PLUS_V = 'bg-[linear-gradient(180deg,#3b82f6_0%,#22d3ee_50%,#34d399_100%)] group-hover/cbd:bg-none group-hover/cbd:bg-zinc-900';
+const PLUS_H = 'bg-[#22d3ee] group-hover/cbd:bg-zinc-900';
 
-/* Duhový prstenec s PRŮHLEDNÝM vnitřkem: gradient přes celou plochu, z něhož
+/* Gradientový prstenec s PRŮHLEDNÝM vnitřkem: gradient přes celou plochu, z něhož
    maska vyřízne vnitřek (content-box). Dvouvrstvé pozadí s background-clip
    by nestačilo — vnitřní vrstva by musela být neprůhledná a tlačítko by
    přestalo fungovat na bílé navigaci i na obsidiánu zároveň. */
 const RING_STYLE: React.CSSProperties = {
-  background: RAINBOW,
+  background: BRAND_GRADIENT,
   padding: 1,
   WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
   WebkitMaskComposite: 'xor',
@@ -30,7 +31,7 @@ const RING_STYLE: React.CSSProperties = {
  *
  * V klidu je průhledné: barvu nese jen OBRYS a znaménko plus (pokyn).
  * Hover zůstává beze změny proti dřívějšku — plná bílá pilulka s tmavým
- * textem; duhový prstenec se přitom vytratí a plus zčerná.
+ * textem; gradientový prstenec se přitom vytratí a plus zčerná.
  *
  * Plus je schválně ze dvou proužků, ne z lucide ikony: SVG stroke se
  * gradientem obarvit nedá bez sdíleného <defs>, proužky ano.

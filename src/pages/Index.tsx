@@ -236,7 +236,7 @@ const Index = () => {
                     předrezervovaného místa, blok nemění výšku a text neodskočí;
                     na sm+ je řádek jednořádkový (w-0 + nowrap), rezerva zbytečná */}
                 <div className="min-h-[2.2em] font-sans font-extralight tracking-tight leading-[1.1] text-[clamp(2rem,8.5vw,2.75rem)] sm:min-h-0 sm:text-[clamp(3.5rem,min(12.5vh,6.3vw),7.75rem)] sm:w-0 sm:whitespace-nowrap text-white">
-                  <HeroRotatingText startDelay={900} />
+                  <HeroRotatingText />
                 </div>
               </div>
               {/* marquee log pod textem — stejný pás jako na /deals (bílé
