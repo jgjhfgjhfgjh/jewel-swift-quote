@@ -34,6 +34,12 @@ const SHOW_WISHLIST = false;    // srdíčko (oblíbené) v pravém clusteru
 const SHOW_CART = false;        // ikona košíku v pravém clusteru
 const SHOW_PARTNER_HUB = false; // CTA Partner Hub (desktop i mobilní menu)
 
+/** Klik na nav položku s cílem → hover neotevírá menu, dokud kurzor
+ *  neodejde. ZÁMĚRNĚ mimo komponentu: routa se překreslí novým Navbarem
+ *  a instanční ref by se ztratil, takže by mega menu naskočilo znovu nad
+ *  právě otevřenou stránkou. */
+let hoverSuppressed = false;
+
 interface NavbarProps {
   wishlistCount?: number;
   onOpenWishlist?: () => void;
@@ -254,8 +260,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
 
   const lastScrollY = useRef(0);
   const navCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  /** Klik na nav položku s cílem → hover neotevírá, dokud kurzor neodejde. */
-  const hoverSuppressedRef = useRef(false);
+  /* Potlačení hoveru po prokliku žije v modulu (viz hoverSuppressed) —
+     přechodem na jinou routu se Navbar přemountuje a instanční ref by se
+     ztratil, takže by se menu otevřelo znovu nad čerstvě načtenou stránkou. */
   const desktopMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const menuOpenRef = useRef(false);
@@ -327,13 +334,13 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
     // Po prokliku na landing zůstává kurzor nad položkou a překreslení
     // stránky pošle nový mouseenter — bez téhle pojistky by se mega menu
     // hned zase otevřelo přes právě otevřenou stránku.
-    if (hoverSuppressedRef.current) return;
+    if (hoverSuppressed) return;
     if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
     setActiveNav(path);
   };
 
   const handleNavLeave = () => {
-    hoverSuppressedRef.current = false;
+    hoverSuppressed = false;
     navCloseTimer.current = setTimeout(() => setActiveNav(null), 120);
   };
 
@@ -416,7 +423,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                   onClick={() => {
                     if (item.path) {
                       // menu zajede a nesmí se po překreslení landingu vrátit
-                      hoverSuppressedRef.current = true;
+                      hoverSuppressed = true;
                       if (navCloseTimer.current) clearTimeout(navCloseTimer.current);
                       setActiveNav(null);
                       navigate(item.path);
@@ -762,7 +769,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               vertikální velikosti jako Why Swelt (jehož výšku určuje karusel karet:
               clamp(260,26vw,360) + padding). */}
           <div
-            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:block min-h-[clamp(320px,30vw,412px)]"
+            className="absolute left-0 right-0 z-[95] bg-white border-b border-zinc-200 shadow-2xl hidden lg:flex lg:flex-col min-h-[clamp(320px,30vw,412px)]"
             style={{ top: headerHeight }}
             onMouseEnter={handlePanelEnter}
             onMouseLeave={handlePanelLeave}
@@ -800,11 +807,11 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
                 <NavMyDealPanel go={go} />
               </div>
             ) : activeNav === 'top-deals' ? (
-              /* GoBigDeal — obsidianová předsíň /deals: headline strip se
-                 živými čísly, spotlight končícího dealu, Live by concern
-                 (poctivé počty), Early Access karta a patička s free drop
-                 alertem. Viz NavGoBigDealPanel. */
-              <div className="px-6 pt-4 pb-4">
+              /* GoBigDeal — čtyři vstupy do dealů (alerty, Early Access,
+                 Want Deal, Split Deal). Do samotných dávek vede klik na
+                 položku v navigaci, ne panel. Jedna řada karet se svisle
+                 vycentruje, aby nevisela u horní hrany. */
+              <div className="flex flex-1 items-center px-6 py-4">
                 <NavGoBigDealPanel onNavigate={() => setActiveNav(null)} />
               </div>
             ) : activeNav === 'products' ? (
