@@ -1,23 +1,19 @@
 import { openCreateDealDialog } from '@/components/deals/CreateDealDialog';
 
-/* Obrys jede TÝMŽ přechodem jako gradientový řádek v heru
-   (from-blue-500 via-cyan-400 to-emerald-400) — jedna značková škála,
-   ne druhá paleta navíc. */
-const BRAND_GRADIENT = 'linear-gradient(90deg,#3b82f6,#22d3ee,#34d399)';
-/* Plus nese stejný přechod shora dolů; vodorovný proužek sedí uprostřed,
-   takže je celý v prostřední tyrkysové a kříž v místě křížení drží
-   jednu barvu. */
+/* Obrys ani plus nemají vlastní barvu — berou ji z textu tlačítka
+   (currentColor). Nad videem a na obsidiánu jsou tedy bílé, na bílé
+   navigaci tmavé; žádný gradient. */
 /* Barvy jdou TŘÍDAMI, ne inline stylem: inline styl by přebil hover
-   variantu a plus by na bílém tlačítku zůstal barevný. */
-const PLUS_V = 'bg-[linear-gradient(180deg,#3b82f6_0%,#22d3ee_50%,#34d399_100%)] group-hover/cbd:bg-none group-hover/cbd:bg-zinc-900';
-const PLUS_H = 'bg-[#22d3ee] group-hover/cbd:bg-zinc-900';
+   variantu a plus by na bílém tlačítku zůstal světlý. */
+const PLUS_V = 'bg-current group-hover/cbd:bg-zinc-900';
+const PLUS_H = 'bg-current group-hover/cbd:bg-zinc-900';
 
-/* Gradientový prstenec s PRŮHLEDNÝM vnitřkem: gradient přes celou plochu, z něhož
-   maska vyřízne vnitřek (content-box). Dvouvrstvé pozadí s background-clip
+/* Prstenec s PRŮHLEDNÝM vnitřkem: plocha v barvě textu, z níž maska
+   vyřízne vnitřek (content-box). Dvouvrstvé pozadí s background-clip
    by nestačilo — vnitřní vrstva by musela být neprůhledná a tlačítko by
    přestalo fungovat na bílé navigaci i na obsidiánu zároveň. */
 const RING_STYLE: React.CSSProperties = {
-  background: BRAND_GRADIENT,
+  background: 'currentColor',
   padding: 1,
   WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
   WebkitMaskComposite: 'xor',
@@ -29,12 +25,13 @@ const RING_STYLE: React.CSSProperties = {
  * CTA CreateBigDeal — JEDNO tlačítko pro navigaci i pro /deals (dřív dvě
  * kopie, které se rozcházely), takže jsou tvarem, písmem i chováním 1:1.
  *
- * V klidu je průhledné: barvu nese jen OBRYS a znaménko plus (pokyn).
- * Hover zůstává beze změny proti dřívějšku — plná bílá pilulka s tmavým
- * textem; gradientový prstenec se přitom vytratí a plus zčerná.
+ * V klidu je průhledné a bílé: obrys, plus i popisek berou barvu z textu
+ * tlačítka (nad videem a na obsidiánu bílá, na bílé navigaci tmavá).
+ * Hover je beze změny — plná bílá pilulka s tmavým textem, prstenec se
+ * přitom vytratí a plus zčerná.
  *
- * Plus je schválně ze dvou proužků, ne z lucide ikony: SVG stroke se
- * gradientem obarvit nedá bez sdíleného <defs>, proužky ano.
+ * Plus je schválně ze dvou proužků, ne z lucide ikony — drží tak přesně
+ * tloušťku i barvu obrysu.
  */
 export function CreateBigDealButton({
   className = '',
@@ -64,7 +61,7 @@ export function CreateBigDealButton({
       <span
         aria-hidden
         style={RING_STYLE}
-        className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-200 group-hover/cbd:opacity-0"
+        className="pointer-events-none absolute inset-0 rounded-full opacity-40 transition-opacity duration-200 group-hover/cbd:opacity-0"
       />
       <span className="relative h-4 w-4 shrink-0">
         <span className={`absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded-full transition-colors ${PLUS_H}`} />
