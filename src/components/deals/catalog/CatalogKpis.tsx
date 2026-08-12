@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Bell } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 
 /* Na MOBILU se první dvě dlaždice prohodí: nejdůležitější („živé dealy")
    patří do pravého sloupce, tedy blíž palci pravačky. Od sm výš zůstává
@@ -17,6 +18,34 @@ export interface CatalogKpi {
       („Živé dealy: 0" → alert) nebo zkratka na sekci („GoDeal" → scroll).
       `icon` volí zvoneček (alert, výchozí) nebo šipku (navigace). */
   action?: { label: string; onClick: () => void; icon?: 'bell' | 'arrow' };
+  /** Gradientová motion křivka u pravé hrany hodnoty — dekor z hero
+      mockupu (nakreslí se tahem při zobrazení, tvar je pevný). */
+  spark?: boolean;
+}
+
+/** Křivka ve značkovém gradientu — pathLength se dokreslí tahem (motion). */
+function KpiSpark({ id, reduce }: { id: string; reduce: boolean }) {
+  return (
+    <svg viewBox="0 0 64 24" className="h-6 w-16 shrink-0 overflow-visible" aria-hidden>
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#3b82f6" />
+          <stop offset="0.5" stopColor="#22d3ee" />
+          <stop offset="1" stopColor="#34d399" />
+        </linearGradient>
+      </defs>
+      <motion.path
+        d="M0 20 L10 16 L20 18 L30 10 L40 12 L52 5 L64 2"
+        fill="none"
+        stroke={`url(#${id})`}
+        strokeWidth="2"
+        strokeLinecap="round"
+        initial={reduce ? false : { pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.8, delay: 0.5, ease: 'easeOut' }}
+      />
+    </svg>
+  );
 }
 
 /**
@@ -35,6 +64,7 @@ export function CatalogKpis({
   variant?: 'dark' | 'light';
 }) {
   const light = variant === 'light';
+  const reduce = useReducedMotion();
   return (
     <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
       {items.map((k, i) => (
@@ -61,6 +91,12 @@ export function CatalogKpis({
                 </span>
               ) : (
                 k.value
+              )}
+              {/* křivka sedí mezi hodnotou a akcí; bez akce jde k pravé hraně */}
+              {k.spark && (
+                <span className={k.action ? '' : 'ml-auto'}>
+                  <KpiSpark id={`kpi-spark-${i}`} reduce={!!reduce} />
+                </span>
               )}
               {k.action && (
                 <button

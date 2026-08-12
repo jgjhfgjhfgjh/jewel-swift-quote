@@ -23,8 +23,7 @@ export function Gbd({ suffix = '' }: { suffix?: string }) {
  * `tone="red"` je stavová varianta pro připravované dávky (červený gradient).
  *
  * Velikost jede z `em`, takže se tečka škáluje s font-size wordmarku,
- * se kterým stojí. Ve favicone ji zastupuje točící se zeměkoule
- * (viz lib/faviconGlobe).
+ * se kterým stojí. Stejná tečka je i faviconou webu (public/favicon.svg).
  */
 export function GoBigDealMark({
   className = '',
