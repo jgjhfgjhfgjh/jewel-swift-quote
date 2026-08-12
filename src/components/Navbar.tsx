@@ -692,7 +692,9 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
             </>
           ) : !loading ? (
             <>
-              {/* Guest CTAs — iOS pilulky: Přihlásit (světlá) + B2B registrace (černá) */}
+              {/* Guest CTA — jen Přihlásit. B2B registrace (černá pilulka
+                  s captionem „Verify Account in 24h") se přesunula do hera
+                  jako primární CTA — v nav by byla dvakrát. */}
               <Button
                 size="sm"
                 onClick={() => openAuth('login')}
@@ -702,25 +704,6 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, whiteLogo = false, o
               >
                 Přihlásit
               </Button>
-              {/* relative + caption absolutně pod tlačítkem → černá CTA se svisle
-                  zarovná s Přihlásit (caption ji nesune nahoru); nad videem se
-                  pilulka invertuje (bílá s tmavým textem) */}
-              <div className="relative flex items-center shrink-0 ml-1">
-                <Button
-                  size="sm"
-                  onClick={() => openAuth('b2b')}
-                  className={`h-8 px-3 sm:h-9 sm:px-5 rounded-full font-semibold text-[11px] sm:text-sm transition-all shrink-0 ${
-                    overVideo ? 'text-zinc-900 bg-white hover:bg-zinc-200' : 'text-white bg-black hover:bg-zinc-800'
-                  }`}
-                >
-                  B2B registration
-                </Button>
-                <span className={`hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1 text-[9px] leading-none tracking-wide whitespace-nowrap ${
-                  overVideo ? 'text-white/70' : 'text-muted-foreground'
-                }`}>
-                  Verify Account in 24h
-                </span>
-              </div>
             </>
           ) : null}
 

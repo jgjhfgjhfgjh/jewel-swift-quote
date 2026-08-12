@@ -4,6 +4,8 @@ import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight, Bell, ChevronDown, Search } from 'lucide-react';
 import PerWordCrossfade from '@/components/ui/per-word-crossfade';
 import { CreateBigDealButton } from '@/components/deals/CreateBigDealButton';
+import { useStore } from '@/lib/store';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 /* ── GoBigDeal hero — motion karta s mockup dashboardem pod mlhou ──
  *
@@ -95,6 +97,8 @@ function MockDealCard({ discount, seconds, wide }: { discount: string; seconds: 
 export function HeroDealDashboard() {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
+  const { openAuthModal } = useStore();
+  const { user } = useAuthContext();
 
   return (
     <section className="relative -mt-14 flex min-h-[calc(100svh-var(--ann-offset,0px))] flex-col overflow-hidden bg-[#0b0d10] pt-14">
@@ -177,24 +181,45 @@ export function HeroDealDashboard() {
           traders across Europe — when the timer runs out, the deal is gone.
         </p>
 
+        {/* Primární CTA: host → B2B registrace (navbar ji už nenese, zůstal
+            tam jen Přihlásit); caption o verifikaci visí absolutně pod
+            pilulkou, ať nesune layout. Přihlášený registraci nepotřebuje —
+            dostane Browse deals. Vedle vždy CreateBigDeal. */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate('/deals')}
-            className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
-          >
-            Browse deals
-            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
-          </button>
+          {user ? (
+            <button
+              type="button"
+              onClick={() => navigate('/deals')}
+              className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
+            >
+              Browse deals
+              <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
+            </button>
+          ) : (
+            <div className="relative flex shrink-0 items-center">
+              <button
+                type="button"
+                onClick={() => openAuthModal('b2b')}
+                className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-7 text-[15px] font-semibold text-zinc-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-0.5 hover:bg-zinc-100 hover:shadow-[0_18px_40px_-10px_rgba(0,0,0,0.65)]"
+              >
+                B2B registration
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-1" />
+              </button>
+              <span className="absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[10px] leading-none tracking-wide text-white/60">
+                Verify Account in 24h
+              </span>
+            </div>
+          )}
           {/* stejná komponenta jako v navigaci — tvar, písmo i chování 1:1 */}
           <CreateBigDealButton className="h-11 px-6 text-[15px]" />
         </div>
 
-        {/* nejnižší schod konverze — drop alert zdarma */}
+        {/* nejnižší schod konverze — drop alert zdarma (mt-7: pod primární
+            pilulkou visí verifikační caption, mikrolink mu nesmí sedět na hlavě) */}
         <button
           type="button"
           onClick={() => navigate('/alerts')}
-          className="group mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-zinc-500 transition-colors hover:text-white"
+          className="group mt-7 inline-flex items-center gap-1.5 text-[13px] font-medium text-zinc-500 transition-colors hover:text-white"
         >
           <Bell className="h-3.5 w-3.5" />
           One email when a deal drops — free forever.
