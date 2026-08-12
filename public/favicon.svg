@@ -1,11 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- GoBigDeal mark — vrstvy (davky naskladane na sobe) na obsidianove
-       dlazdici #0B1215; stejny znak stoji pred wordmarkem v UI a pozdeji
-       na cihlicce aplikace. Zdroj tvaru: lucide "layers". -->
-  <rect width="64" height="64" rx="14" fill="#0B1215"/>
-  <g transform="translate(8 8) scale(2)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
-    <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/>
-    <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>
+  <!-- Statický snímek zeměkoule — animovaný běh kreslí lib/faviconGlobe -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset=".5" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <clipPath id="c"><circle cx="32" cy="32" r="26"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="26" fill="url(#g)"/>
+  <g clip-path="url(#c)" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="2.2">
+    <ellipse cx="32" cy="32" rx="25.5" ry="6.2"/>
+    <ellipse cx="32" cy="17.8" rx="21" ry="5"/>
+    <ellipse cx="32" cy="46.2" rx="21" ry="5"/>
+    <ellipse cx="32" cy="32" rx="20.4" ry="26"/>
+    <ellipse cx="32" cy="32" rx="7.2" ry="26"/>
   </g>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.4"/>
 </svg>

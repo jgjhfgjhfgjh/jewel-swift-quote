@@ -5,6 +5,7 @@ import { ArrowRight, Bell, ChevronDown, Search } from 'lucide-react';
 import PerWordCrossfade from '@/components/ui/per-word-crossfade';
 import { CreateBigDealButton } from '@/components/deals/CreateBigDealButton';
 import { useStore } from '@/lib/store';
+import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 /* ── GoBigDeal hero — motion karta s mockup dashboardem pod mlhou ──
@@ -118,10 +119,9 @@ export function HeroDealDashboard() {
             transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
             className="rounded-[1.75rem] border border-white/10 bg-gradient-to-b from-[#12161b] to-[#0d1014] p-5 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.9)] sm:p-6"
           >
-            {/* horní lišta dashboardu */}
+            {/* horní lišta dashboardu — gradientovou tečku nese samo logo */}
             <div className="flex items-center gap-3">
-              <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400" />
-              <span className="font-sans text-sm font-bold tracking-tight text-white">GoBigDeal</span>
+              <GoBigDealLogo className="text-sm text-white" />
               <div className="ml-3 hidden items-center gap-1 sm:flex">
                 <span className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-zinc-900">Live</span>
                 <span className="rounded-full px-3 py-1 text-[11px] font-medium text-zinc-400">Ending first</span>
@@ -168,10 +168,7 @@ export function HeroDealDashboard() {
 
       {/* ── Copy přes mlhu + duální CTA ── */}
       <div className="relative z-10 mt-auto flex flex-col items-center px-6 pb-[12vh] text-center sm:pb-[10vh]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
-          Peer-to-peer wholesale deals
-        </p>
-        <h1 className="mt-3 font-sans font-extralight tracking-tight leading-[1.08] text-white text-[clamp(2.4rem,8vw,3.2rem)] sm:text-[clamp(3.2rem,6.5vw,5rem)]">
+        <h1 className=" font-sans font-extralight tracking-tight leading-[1.08] text-white text-[clamp(2.4rem,8vw,3.2rem)] sm:text-[clamp(3.2rem,6.5vw,5rem)]">
           <PerWordCrossfade stagger={90}>Catch the deal.</PerWordCrossfade>
           <br />
           <PerWordCrossfade delay={420} stagger={90}>Or drop your own.</PerWordCrossfade>
@@ -214,17 +211,6 @@ export function HeroDealDashboard() {
           <CreateBigDealButton className="h-11 px-6 text-[15px]" />
         </div>
 
-        {/* nejnižší schod konverze — drop alert zdarma (mt-7: pod primární
-            pilulkou visí verifikační caption, mikrolink mu nesmí sedět na hlavě) */}
-        <button
-          type="button"
-          onClick={() => navigate('/alerts')}
-          className="group mt-7 inline-flex items-center gap-1.5 text-[13px] font-medium text-zinc-500 transition-colors hover:text-white"
-        >
-          <Bell className="h-3.5 w-3.5" />
-          One email when a deal drops — free forever.
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </button>
       </div>
 
       <ChevronDown

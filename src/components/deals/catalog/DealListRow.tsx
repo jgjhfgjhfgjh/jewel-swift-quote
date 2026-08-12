@@ -144,24 +144,28 @@ export function DealListRow({
               nr. {item.dealNo ?? '—'}
             </span>
           </>
-        ) : (
-          /* STAV místo značky: dávka, která neběží, se pozná dřív, než ji
-             člověk začne číst. Prostý tučný text (pokyn) — červený
-             u připravovaných, šedý u uzavřených. Číslo pod ním zůstává,
-             pokud ho dávka má. */
+        ) : item.kind === 'closed' ? (
+          /* UZAVŘENÁ dávka: stav prostým šedým textem — pozná se dřív,
+             než ji člověk začne číst. Číslo pod ním zůstává, pokud je. */
           <>
-            <span
-              className={`text-center text-[12px] font-bold leading-tight tracking-tight ${
-                item.kind === 'closed' ? 'text-zinc-500' : 'text-red-400'
-              }`}
-            >
-              {item.kind === 'closed' ? c.closed : c.upcoming}
+            <span className="text-center text-[12px] font-bold leading-tight tracking-tight text-zinc-500">
+              {c.closed}
             </span>
             {item.dealNo && (
               <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-500">
                 nr. {item.dealNo}
               </span>
             )}
+          </>
+        ) : (
+          /* PŘIPRAVOVANÁ dávka: místo textu „In the works" značka s ČERVENÝM
+             gradientovým indikátorem (pokyn) — tečka před wordmarkem nese
+             stav, evidenční číslo zůstává pod ní. */
+          <>
+            <GoBigDealLogo className="text-[14px] text-white" markTone="red" />
+            <span className="mt-1 font-sans text-[10px] font-light tracking-wide text-zinc-400">
+              nr. {item.dealNo ?? '—'}
+            </span>
           </>
         )}
       </span>

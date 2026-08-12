@@ -133,6 +133,10 @@ export interface DealsText {
       alertFree: string;
       alertOn: string;
       kpiLive: string;
+      /** Tab „Živé" v dashboardové hlavě /deals. */
+      tabLive: string;
+      /** KPI dlaždice — dávky s uzávěrkou dnes. */
+      kpiClosingToday: string;
       /** Zásadní KPI pod carouselem (bílá hlava /deals). */
       kpiAllDeals: string;
       kpiWant: string;
@@ -387,6 +391,8 @@ const cs: DealsText = {
       alertFree: 'Set alert free',
       alertOn: 'Alert on',
       kpiLive: 'Živé dealy',
+      tabLive: 'Živé',
+      kpiClosingToday: 'Končí dnes',
       kpiAllDeals: 'Všechny dealy',
       kpiWant: 'Živé WantDealy',
       kpiSplit: 'Živé SplitDealy',
@@ -649,6 +655,8 @@ const en: DealsText = {
       alertFree: 'Set alert free',
       alertOn: 'Alert on',
       kpiLive: 'Live deals',
+      tabLive: 'Live',
+      kpiClosingToday: 'Closing today',
       kpiAllDeals: 'All deals',
       kpiWant: 'Live WantDeals',
       kpiSplit: 'Live SplitDeals',

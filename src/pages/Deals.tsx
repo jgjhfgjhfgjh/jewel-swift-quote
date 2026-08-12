@@ -12,8 +12,6 @@ import { useAuthContext } from '@/contexts/AuthContext';
 import { dealsI18n, fillTemplate } from '@/lib/i18n-deals';
 import { useDeals } from '@/hooks/useDeals';
 import { useDealAlerts } from '@/hooks/useDealAlerts';
-import { useSplitDeals } from '@/hooks/useSplitDeals';
-import { useWantDeals } from '@/hooks/useWantDeals';
 import { useEarlyAccess } from '@/hooks/useEarlyAccess';
 import { sortedTiers, DEFAULT_TIERS } from '@/lib/deals';
 import { toDisplayName } from '@/lib/brandNormalize';
@@ -26,7 +24,7 @@ import {
 import { GoBigDealLogo } from '@/components/GoBigDealLogo';
 import { BrandSpotlight } from '@/components/deals/catalog/BrandSpotlight';
 import { CrystalBackdrop } from '@/components/deals/catalog/CrystalBackdrop';
-import { CatalogKpis } from '@/components/deals/catalog/CatalogKpis';
+import { CatalogDashboardHead } from '@/components/deals/catalog/CatalogDashboardHead';
 import { CatalogFilterNav } from '@/components/deals/catalog/CatalogFilterNav';
 import { EarlyAccessCard } from '@/components/deals/catalog/EarlyAccessCard';
 import { CatalogPromoBanners } from '@/components/deals/catalog/CatalogPromoBanners';
@@ -89,10 +87,6 @@ export default function Deals() {
   /* JEDNA sdílená instance alertů pro všechny karty i řádky — každá karta
      by jinak tahala vlastní dotaz na deal_alerts. */
   const alertsApi = useDealAlerts();
-  /* Zásadní KPI pod carouselem tahají čísla ze VŠECH TŘÍ kanálů, ne jen
-     z dávek — proto tu žijí i pooly a poptávky. */
-  const { pools } = useSplitDeals(deals);
-  const { listings: wantListings } = useWantDeals();
   const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<CatalogSortKey>('ending');
   /* Výchozí je ŘÁDKOVÉ zobrazení (pokyn) — obchodník skenuje dávky jako
@@ -143,6 +137,10 @@ export default function Deals() {
     const live = real.filter((t) => t.kind === 'live');
     return {
       liveCount: live.length,
+      /* uzávěrka DNES (lokální kalendářní den) — „stihni to do večera" */
+      closingToday: live.filter(
+        (t) => t.deadline && new Date(t.deadline).toDateString() === new Date().toDateString(),
+      ).length,
       /* modely POUZE z živých dávek — KPI má říkat, co je teď k mání */
       models: live.reduce((n, t) => n + t.models, 0),
       maxDiscount: catalog.reduce((m, t) => Math.max(m, t.maxDiscount), 0),
@@ -214,6 +212,16 @@ export default function Deals() {
 
   /* „GoDeal" v KPI dlaždici — vždy odroluje na dávky. Když zrovna nic neběží,
      spadne na nejbližší další sekci, aby tlačítko nikdy nekliklo naprázdno. */
+  /* Iniciály do kolečka v dashboardové hlavě — z e-mailu (jmeno.prijmeni@…
+     → JP), jinak první dvě písmena. Host nemá nic → ikonka + přihlášení. */
+  const initials = useMemo(() => {
+    const e = user?.email;
+    if (!e) return null;
+    const parts = e.split('@')[0].split(/[._-]+/).filter(Boolean);
+    const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : e.slice(0, 2);
+    return raw.toUpperCase();
+  }, [user]);
+
   const goLiveDeals = () =>
     scrollTo(
       sections.live.length ? 'deals-live'
@@ -314,9 +322,9 @@ export default function Deals() {
        dávek zůstávají bílé a na černé ploše vystoupí nejvíc. Landing sekce
        níž si barvu kreslí samy a na tuhle plochu plynule navazují. */
     <div className="min-h-screen bg-white font-sans selection:bg-zinc-900 selection:text-white">
-      {/* Navbar BEZ onDark — stránka nově začíná bílou hlavou, takže chrom
-          navigace musí být tmavý (inverzní varianta by na bílé zmizela). */}
-      <Navbar />
+      {/* Stránka začíná TMAVOU dashboardovou hlavou (mockup z homepage
+          hera) → navigace jede v inverzní bílé variantě. */}
+      <Navbar onDark />
       <BackButton />
 
       {/* ═══ BÍLÁ HLAVA — první screen: zásadní KPI, dva bannery a řazení
@@ -325,55 +333,50 @@ export default function Deals() {
       {/* Na mobilu spacing beze změny (CTA se tam na první screen vejde),
           od sm výš těsně pod navbar (h-14) — na širokých, ale nízkých
           oknech se jinak CTA karet i řazení propadnou pod ohyb */}
-      <section className="pt-[calc(var(--ann-offset,0px)+6.5rem)] sm:pt-[calc(var(--ann-offset,0px)+4.5rem)]">
-        {/* ZÁSADNÍ KPI (pokyn) — tři kanály a nejvyšší živá sleva. Otevírají
-            bílou hlavu, dřív než filtry i řazení:
-            obchodník musí vidět, jestli se dnes vůbec vyplatí dívat.
-            V tmavé zóně už žádná KPI lišta není. */}
-        <div id="catalog" className="scroll-mt-16 px-5 pt-5 sm:px-8 lg:px-12">
-          {loading ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-[92px] animate-pulse rounded-[1.25rem] bg-zinc-100" />
-              ))}
-            </div>
-          ) : (
-            <CatalogKpis
-              variant="light"
-              items={[
-                {
-                  label: dash.kpiAllDeals,
-                  value: String(kpis.liveCount),
-                  liveDot: kpis.liveCount > 0,
-                  action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
-                },
-                {
-                  label: dash.kpiWant,
-                  value: String(wantListings.length),
-                  liveDot: wantListings.length > 0,
-                  action: { label: dash.kpiOpen, onClick: () => navigate('/wantdeal'), icon: 'arrow' },
-                },
-                {
-                  /* živý SplitDeal = pool, do kterého už někdo vstoupil;
-                     každá běžící dávka je jinak „otevřená" a číslo by jen
-                     opisovalo první dlaždici */
-                  label: dash.kpiSplit,
-                  value: String(pools.filter((p) => p.participants > 0).length),
-                  liveDot: pools.some((p) => p.participants > 0),
-                  action: { label: dash.kpiOpen, onClick: () => navigate('/splitdeal'), icon: 'arrow' },
-                },
-                {
-                  label: dash.kpiDiscount,
-                  value: kpis.liveMaxDiscount ? `−${kpis.liveMaxDiscount} %` : '—',
-                },
-              ]}
-            />
-          )}
+      {/* ═══ DASHBOARDOVÁ HLAVA — tmavá, 1:1 s mockup kartou z homepage
+             hera (pokyn): gradientový indikátor + logo, taby, malé hledání,
+             zvoneček, iniciály; pod tím čtyři reálná KPI. ═══ */}
+      <section className="bg-[#0B1215] pb-6 pt-[calc(var(--ann-offset,0px)+4.75rem)] sm:pb-8">
+        <div id="catalog" className="scroll-mt-16 px-5 sm:px-8 lg:px-12">
+          <CatalogDashboardHead
+            tabs={[
+              { key: 'live', label: dash.tabLive, active: true, onClick: goLiveDeals },
+              { key: 'ending', label: dash.sortEnding, onClick: () => { setSort('ending'); goLiveDeals(); } },
+              { key: 'want', label: 'Want Deals', onClick: () => navigate('/wantdeal') },
+              { key: 'split', label: 'Split Deals', onClick: () => navigate('/splitdeal') },
+            ]}
+            search={filters.search}
+            onSearch={(search) => setFilters((f) => ({ ...f, search }))}
+            searchPlaceholder={d.catalog.searchPlaceholder}
+            onBell={() => navigate('/alerts')}
+            bellActive={alertsApi.alerts.length > 0}
+            initials={initials}
+            onAvatar={() => (user ? navigate('/ucet') : openAuthModal('login'))}
+            loading={loading}
+            kpis={[
+              {
+                label: dash.kpiLive,
+                value: String(kpis.liveCount),
+                liveDot: kpis.liveCount > 0,
+                action: { label: dash.kpiLiveGo, onClick: goLiveDeals, icon: 'arrow' },
+              },
+              { label: dash.kpiClosingToday, value: String(kpis.closingToday) },
+              {
+                label: dash.kpiDiscount,
+                value: kpis.liveMaxDiscount ? `−${kpis.liveMaxDiscount} %` : '—',
+              },
+              { label: dash.kpiModels, value: String(kpis.models) },
+            ]}
+          />
         </div>
+      </section>
 
+      {/* ═══ BÍLÁ SEKCE — bannery a řazení; zaoblený nájezd na tmavé hlavě ═══ */}
+      <div className="bg-[#0B1215]">
+      <section className="w-full rounded-t-[1.75rem] bg-white pt-8 sm:rounded-t-[2.75rem] sm:pt-10">
         {/* dva bannery vedle sebe (pokyn): alerty zdarma a Early Access —
-            dva schody téhož, proto stojí v jedné řadě pod KPI */}
-        <div className="px-5 pt-3 sm:px-8 sm:pt-4 lg:px-12">
+            dva schody téhož, proto stojí v jedné řadě */}
+        <div className="px-5 sm:px-8 lg:px-12">
           <CatalogPromoBanners onAlerts={goToAlerts} />
         </div>
 
@@ -384,6 +387,7 @@ export default function Deals() {
           <SortPills variant="light" sort={sort} onSort={setSort} />
         </div>
       </section>
+      </div>
 
       {/* ═══ TMAVÁ ZÓNA — zaoblený nájezd na bílé hlavě; odsud dolů si sekce
              kreslí barvu samy (střídání bílá ↔ obsidián). ═══ */}

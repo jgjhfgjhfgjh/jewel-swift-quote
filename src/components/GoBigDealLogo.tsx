@@ -1,5 +1,3 @@
-import { Layers } from 'lucide-react';
-
 /**
  * Wordmark „GoBigdeal" (zkušební logo, bez ikony).
  *
@@ -20,32 +18,50 @@ export function Gbd({ suffix = '' }: { suffix?: string }) {
 }
 
 /**
- * HLAVNÍ IKONA značky (pokyn) — vrstvy (Layers): dávky naskládané na sobě.
- * Stojí před wordmarkem a později poslouží jako ikona aplikace GoBigDeal
- * na cihličce v menu — proto žije jako samostatný export, aby šla vysadit
- * i bez textu (favicon, app tile, splash).
+ * HLAVNÍ IKONA značky (pokyn) — gradientový INDIKÁTOR: stejná tečka, jakou
+ * nesou řádky dealů, jen ve značkové škále (modrá → tyrkys → smaragd).
+ * `tone="red"` je stavová varianta pro připravované dávky (červený gradient).
  *
- * Velikost i barva jedou z `currentColor` a `1em` — ikona se škáluje
- * s font-size wordmarku, se kterým stojí.
+ * Velikost jede z `em`, takže se tečka škáluje s font-size wordmarku,
+ * se kterým stojí. Ve favicone ji zastupuje točící se zeměkoule
+ * (viz lib/faviconGlobe).
  */
-export function GoBigDealMark({ className = '' }: { className?: string }) {
-  return <Layers className={`inline-block h-[1em] w-[1em] shrink-0 ${className}`} aria-hidden />;
+export function GoBigDealMark({
+  className = '',
+  tone = 'brand',
+}: {
+  className?: string;
+  tone?: 'brand' | 'red';
+}) {
+  return (
+    <span
+      aria-hidden
+      className={`inline-block h-[0.55em] w-[0.55em] shrink-0 rounded-full ${
+        tone === 'red'
+          ? 'bg-gradient-to-r from-red-500 to-rose-400'
+          : 'bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400'
+      } ${className}`}
+    />
+  );
 }
 
 export function GoBigDealLogo({
   className = '',
   withMark = true,
+  markTone = 'brand',
 }: {
   className?: string;
   /** `false` = jen wordmark (místa, kde ikonu nese už okolí). */
   withMark?: boolean;
+  /** Barva indikátoru — `red` značí připravovanou dávku na řádcích dealů. */
+  markTone?: 'brand' | 'red';
 }) {
   return (
     <span
       className={`inline-flex items-center gap-[0.3em] whitespace-nowrap font-sans font-black tracking-tight leading-none ${className}`}
       aria-label="GoBigDeal"
     >
-      {withMark && <GoBigDealMark />}
+      {withMark && <GoBigDealMark tone={markTone} />}
       <span>GoBigDeal</span>
     </span>
   );
