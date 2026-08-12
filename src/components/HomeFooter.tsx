@@ -152,7 +152,7 @@ export function HomeFooter() {
           <FLink to="/feed">Product feed</FLink>
           <FLink to="/feed?to=mcp">MCP Server</FLink>
           <li><button onClick={() => setGatewayOpen(true)} className="text-[#b3b3b3] hover:text-white transition-colors">AI advisor 24/7</button></li>
-          <li><a href="mailto:info@swelt.cz" className="text-[#b3b3b3] hover:text-white transition-colors">info@swelt.cz</a></li>
+          <li><a href="mailto:support@gobigdeal.com" className="text-[#b3b3b3] hover:text-white transition-colors">support@gobigdeal.com</a></li>
         </FooterCol>
       </div>
 
